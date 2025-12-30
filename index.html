@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HSK Master - Learn Chinese HSK 1-6</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <header>
+        <nav class="navbar">
+            <div class="container">
+                <h1 class="logo">HSK Master</h1>
+                <ul class="nav-menu">
+                    <li><a href="#home" class="nav-link active">Home</a></li>
+                    <li><a href="#levels" class="nav-link">Levels</a></li>
+                    <li><a href="#practice" class="nav-link">Practice</a></li>
+                    <li><a href="#progress" class="nav-link">Progress</a></li>
+                </ul>
+            </div>
+        </nav>
+    </header>
+
+    <main>
+        <!-- Home Section -->
+        <section id="home" class="section active">
+            <div class="container">
+                <div class="hero">
+                    <h2>Master Chinese with HSK Levels 1-6</h2>
+                    <p>Your comprehensive guide to learning Chinese through the HSK (Hanyu Shuiping Kaoshi) examination system</p>
+                    <button class="btn btn-primary" onclick="navigateTo('levels')">Start Learning</button>
+                </div>
+                
+                <div class="features">
+                    <div class="feature-card">
+                        <div class="feature-icon">📚</div>
+                        <h3>Structured Learning</h3>
+                        <p>Progress through HSK 1 to HSK 6 systematically</p>
+                    </div>
+                    <div class="feature-card">
+                        <div class="feature-icon">✍️</div>
+                        <h3>Practice Exercises</h3>
+                        <p>Interactive quizzes and vocabulary drills</p>
+                    </div>
+                    <div class="feature-card">
+                        <div class="feature-icon">📊</div>
+                        <h3>Track Progress</h3>
+                        <p>Monitor your learning journey and achievements</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Levels Section -->
+        <section id="levels" class="section">
+            <div class="container">
+                <h2>Choose Your HSK Level</h2>
+                <p class="section-description">Select a level to start learning vocabulary and practicing</p>
+                
+                <div class="levels-grid">
+                    <div class="level-card" onclick="selectLevel(1)">
+                        <div class="level-header">
+                            <h3>HSK 1</h3>
+                            <span class="level-badge">Beginner</span>
+                        </div>
+                        <p class="level-info">150 words</p>
+                        <p>Basic Chinese for everyday communication</p>
+                        <button class="btn btn-secondary">Start HSK 1</button>
+                    </div>
+                    
+                    <div class="level-card" onclick="selectLevel(2)">
+                        <div class="level-header">
+                            <h3>HSK 2</h3>
+                            <span class="level-badge">Elementary</span>
+                        </div>
+                        <p class="level-info">300 words</p>
+                        <p>Simple conversations and basic topics</p>
+                        <button class="btn btn-secondary">Start HSK 2</button>
+                    </div>
+                    
+                    <div class="level-card" onclick="selectLevel(3)">
+                        <div class="level-header">
+                            <h3>HSK 3</h3>
+                            <span class="level-badge">Intermediate</span>
+                        </div>
+                        <p class="level-info">600 words</p>
+                        <p>Daily life, work, and study communication</p>
+                        <button class="btn btn-secondary">Start HSK 3</button>
+                    </div>
+                    
+                    <div class="level-card" onclick="selectLevel(4)">
+                        <div class="level-header">
+                            <h3>HSK 4</h3>
+                            <span class="level-badge">Upper Intermediate</span>
+                        </div>
+                        <p class="level-info">1200 words</p>
+                        <p>Fluent discussion on various topics</p>
+                        <button class="btn btn-secondary">Start HSK 4</button>
+                    </div>
+                    
+                    <div class="level-card" onclick="selectLevel(5)">
+                        <div class="level-header">
+                            <h3>HSK 5</h3>
+                            <span class="level-badge">Advanced</span>
+                        </div>
+                        <p class="level-info">2500 words</p>
+                        <p>Read newspapers and watch Chinese films</p>
+                        <button class="btn btn-secondary">Start HSK 5</button>
+                    </div>
+                    
+                    <div class="level-card" onclick="selectLevel(6)">
+                        <div class="level-header">
+                            <h3>HSK 6</h3>
+                            <span class="level-badge">Mastery</span>
+                        </div>
+                        <p class="level-info">5000+ words</p>
+                        <p>Express yourself fluently in Chinese</p>
+                        <button class="btn btn-secondary">Start HSK 6</button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Practice Section -->
+        <section id="practice" class="section">
+            <div class="container">
+                <h2>Practice Mode</h2>
+                <div id="practice-content">
+                    <div class="practice-intro">
+                        <p>Select an HSK level from the Levels section to start practicing</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Progress Section -->
+        <section id="progress" class="section">
+            <div class="container">
+                <h2>Your Progress</h2>
+                <div class="progress-dashboard">
+                    <div class="progress-stats">
+                        <div class="stat-card">
+                            <h3 id="words-learned">0</h3>
+                            <p>Words Learned</p>
+                        </div>
+                        <div class="stat-card">
+                            <h3 id="quizzes-completed">0</h3>
+                            <p>Quizzes Completed</p>
+                        </div>
+                        <div class="stat-card">
+                            <h3 id="current-level">-</h3>
+                            <p>Current Level</p>
+                        </div>
+                    </div>
+                    
+                    <div class="level-progress">
+                        <h3>Progress by Level</h3>
+                        <div id="level-progress-bars"></div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <div class="container">
+            <p>&copy; 2025 HSK Master. All rights reserved.</p>
+            <p>Master Chinese from HSK 1 to HSK 6</p>
+        </div>
+    </footer>
+
+    <script src="js/data.js"></script>
+    <script src="js/app.js"></script>
+</body>
+</html>

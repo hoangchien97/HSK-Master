@@ -1,0 +1,166 @@
+// HSK Vocabulary Data
+const HSK_DATA = {
+    1: {
+        name: "HSK 1",
+        totalWords: 150,
+        vocabulary: [
+            { chinese: "你好", pinyin: "nǐ hǎo", english: "hello" },
+            { chinese: "谢谢", pinyin: "xiè xiè", english: "thank you" },
+            { chinese: "再见", pinyin: "zài jiàn", english: "goodbye" },
+            { chinese: "是", pinyin: "shì", english: "to be" },
+            { chinese: "不", pinyin: "bù", english: "no, not" },
+            { chinese: "我", pinyin: "wǒ", english: "I, me" },
+            { chinese: "你", pinyin: "nǐ", english: "you" },
+            { chinese: "他", pinyin: "tā", english: "he, him" },
+            { chinese: "她", pinyin: "tā", english: "she, her" },
+            { chinese: "们", pinyin: "men", english: "plural marker" },
+            { chinese: "好", pinyin: "hǎo", english: "good, well" },
+            { chinese: "吗", pinyin: "ma", english: "question particle" },
+            { chinese: "的", pinyin: "de", english: "possessive particle" },
+            { chinese: "呢", pinyin: "ne", english: "question particle" },
+            { chinese: "什么", pinyin: "shén me", english: "what" },
+            { chinese: "叫", pinyin: "jiào", english: "to be called" },
+            { chinese: "名字", pinyin: "míng zì", english: "name" },
+            { chinese: "中国", pinyin: "zhōng guó", english: "China" },
+            { chinese: "人", pinyin: "rén", english: "person, people" },
+            { chinese: "爱", pinyin: "ài", english: "to love" }
+        ]
+    },
+    2: {
+        name: "HSK 2",
+        totalWords: 300,
+        vocabulary: [
+            { chinese: "现在", pinyin: "xiàn zài", english: "now, at present" },
+            { chinese: "时候", pinyin: "shí hòu", english: "time, moment" },
+            { chinese: "开始", pinyin: "kāi shǐ", english: "to begin, to start" },
+            { chinese: "介绍", pinyin: "jiè shào", english: "to introduce" },
+            { chinese: "认识", pinyin: "rèn shi", english: "to know, recognize" },
+            { chinese: "高兴", pinyin: "gāo xìng", english: "happy, glad" },
+            { chinese: "朋友", pinyin: "péng yǒu", english: "friend" },
+            { chinese: "家", pinyin: "jiā", english: "home, family" },
+            { chinese: "学校", pinyin: "xué xiào", english: "school" },
+            { chinese: "老师", pinyin: "lǎo shī", english: "teacher" },
+            { chinese: "学生", pinyin: "xué shēng", english: "student" },
+            { chinese: "工作", pinyin: "gōng zuò", english: "work, job" },
+            { chinese: "公司", pinyin: "gōng sī", english: "company" },
+            { chinese: "学习", pinyin: "xué xí", english: "to study, to learn" },
+            { chinese: "汉语", pinyin: "hàn yǔ", english: "Chinese language" },
+            { chinese: "觉得", pinyin: "jué de", english: "to think, to feel" },
+            { chinese: "容易", pinyin: "róng yì", english: "easy" },
+            { chinese: "难", pinyin: "nán", english: "difficult" },
+            { chinese: "意思", pinyin: "yì si", english: "meaning" },
+            { chinese: "帮助", pinyin: "bāng zhù", english: "to help" }
+        ]
+    },
+    3: {
+        name: "HSK 3",
+        totalWords: 600,
+        vocabulary: [
+            { chinese: "突然", pinyin: "tū rán", english: "suddenly" },
+            { chinese: "决定", pinyin: "jué dìng", english: "to decide, decision" },
+            { chinese: "影响", pinyin: "yǐng xiǎng", english: "influence, effect" },
+            { chinese: "同意", pinyin: "tóng yì", english: "to agree" },
+            { chinese: "努力", pinyin: "nǔ lì", english: "to work hard" },
+            { chinese: "成功", pinyin: "chéng gōng", english: "success, to succeed" },
+            { chinese: "失败", pinyin: "shī bài", english: "failure, to fail" },
+            { chinese: "经验", pinyin: "jīng yàn", english: "experience" },
+            { chinese: "环境", pinyin: "huán jìng", english: "environment" },
+            { chinese: "要求", pinyin: "yāo qiú", english: "requirement, to require" },
+            { chinese: "发现", pinyin: "fā xiàn", english: "to discover, to find" },
+            { chinese: "解决", pinyin: "jiě jué", english: "to solve, to resolve" },
+            { chinese: "困难", pinyin: "kùn nán", english: "difficult, difficulty" },
+            { chinese: "简单", pinyin: "jiǎn dān", english: "simple" },
+            { chinese: "复杂", pinyin: "fù zá", english: "complex, complicated" },
+            { chinese: "认真", pinyin: "rèn zhēn", english: "serious, earnest" },
+            { chinese: "积极", pinyin: "jī jí", english: "active, positive" },
+            { chinese: "态度", pinyin: "tài dù", english: "attitude" },
+            { chinese: "表示", pinyin: "biǎo shì", english: "to express, to indicate" },
+            { chinese: "关系", pinyin: "guān xì", english: "relationship" }
+        ]
+    },
+    4: {
+        name: "HSK 4",
+        totalWords: 1200,
+        vocabulary: [
+            { chinese: "按照", pinyin: "àn zhào", english: "according to, in accordance with" },
+            { chinese: "安排", pinyin: "ān pái", english: "to arrange, arrangement" },
+            { chinese: "保证", pinyin: "bǎo zhèng", english: "to guarantee, to ensure" },
+            { chinese: "标准", pinyin: "biāo zhǔn", english: "standard, criterion" },
+            { chinese: "采取", pinyin: "cǎi qǔ", english: "to adopt, to take" },
+            { chinese: "承认", pinyin: "chéng rèn", english: "to admit, to acknowledge" },
+            { chinese: "出版", pinyin: "chū bǎn", english: "to publish" },
+            { chinese: "传统", pinyin: "chuán tǒng", english: "tradition, traditional" },
+            { chinese: "促进", pinyin: "cù jìn", english: "to promote, to advance" },
+            { chinese: "道德", pinyin: "dào dé", english: "morality, ethics" },
+            { chinese: "等待", pinyin: "děng dài", english: "to wait, to await" },
+            { chinese: "独立", pinyin: "dú lì", english: "independent, independence" },
+            { chinese: "反对", pinyin: "fǎn duì", english: "to oppose, to object" },
+            { chinese: "范围", pinyin: "fàn wéi", english: "scope, range" },
+            { chinese: "分析", pinyin: "fēn xī", english: "to analyze, analysis" },
+            { chinese: "丰富", pinyin: "fēng fù", english: "rich, abundant" },
+            { chinese: "改革", pinyin: "gǎi gé", english: "reform" },
+            { chinese: "观念", pinyin: "guān niàn", english: "concept, idea" },
+            { chinese: "广泛", pinyin: "guǎng fàn", english: "extensive, widespread" },
+            { chinese: "国际", pinyin: "guó jì", english: "international" }
+        ]
+    },
+    5: {
+        name: "HSK 5",
+        totalWords: 2500,
+        vocabulary: [
+            { chinese: "爆发", pinyin: "bào fā", english: "to break out, to erupt" },
+            { chinese: "悲观", pinyin: "bēi guān", english: "pessimistic" },
+            { chinese: "彼此", pinyin: "bǐ cǐ", english: "each other, one another" },
+            { chinese: "编辑", pinyin: "biān jí", english: "to edit, editor" },
+            { chinese: "辩论", pinyin: "biàn lùn", english: "debate, to debate" },
+            { chinese: "标志", pinyin: "biāo zhì", english: "sign, symbol" },
+            { chinese: "博士", pinyin: "bó shì", english: "doctor (PhD)" },
+            { chinese: "不断", pinyin: "bú duàn", english: "continuously, constantly" },
+            { chinese: "不见得", pinyin: "bú jiàn de", english: "not necessarily" },
+            { chinese: "不耐烦", pinyin: "bú nài fán", english: "impatient" },
+            { chinese: "财产", pinyin: "cái chǎn", english: "property, assets" },
+            { chinese: "采访", pinyin: "cǎi fǎng", english: "to interview" },
+            { chinese: "参考", pinyin: "cān kǎo", english: "reference, to refer to" },
+            { chinese: "操场", pinyin: "cāo chǎng", english: "playground, sports field" },
+            { chinese: "策略", pinyin: "cè lüè", english: "strategy" },
+            { chinese: "差别", pinyin: "chā bié", english: "difference, distinction" },
+            { chinese: "朝代", pinyin: "cháo dài", english: "dynasty" },
+            { chinese: "沉默", pinyin: "chén mò", english: "silent, silence" },
+            { chinese: "成熟", pinyin: "chéng shú", english: "mature, ripe" },
+            { chinese: "诚恳", pinyin: "chéng kěn", english: "sincere, honest" }
+        ]
+    },
+    6: {
+        name: "HSK 6",
+        totalWords: 5000,
+        vocabulary: [
+            { chinese: "哀悼", pinyin: "āi dào", english: "to mourn, to grieve" },
+            { chinese: "暧昧", pinyin: "ài mèi", english: "ambiguous, vague" },
+            { chinese: "安详", pinyin: "ān xiáng", english: "serene, composed" },
+            { chinese: "按理说", pinyin: "àn lǐ shuō", english: "logically speaking" },
+            { chinese: "黯然", pinyin: "àn rán", english: "dim, gloomy" },
+            { chinese: "昂贵", pinyin: "áng guì", english: "expensive, costly" },
+            { chinese: "凹凸", pinyin: "āo tū", english: "uneven, bumpy" },
+            { chinese: "奥秘", pinyin: "ào mì", english: "mystery, secret" },
+            { chinese: "巴不得", pinyin: "bā bu de", english: "to be eager for" },
+            { chinese: "扳", pinyin: "bān", english: "to pull, to turn" },
+            { chinese: "颁布", pinyin: "bān bù", english: "to promulgate, to issue" },
+            { chinese: "斑", pinyin: "bān", english: "spot, speck" },
+            { chinese: "拌", pinyin: "bàn", english: "to mix, to blend" },
+            { chinese: "半途而废", pinyin: "bàn tú ér fèi", english: "to give up halfway" },
+            { chinese: "包庇", pinyin: "bāo bì", english: "to shield, to harbor" },
+            { chinese: "包袱", pinyin: "bāo fu", english: "bundle, burden" },
+            { chinese: "饱经沧桑", pinyin: "bǎo jīng cāng sāng", english: "to have experienced many vicissitudes" },
+            { chinese: "保守", pinyin: "bǎo shǒu", english: "conservative" },
+            { chinese: "抱负", pinyin: "bào fù", english: "aspiration, ambition" },
+            { chinese: "暴露", pinyin: "bào lù", english: "to expose, to reveal" }
+        ]
+    }
+};
+
+// Export data (compatible with both module and non-module environments)
+if (typeof module !== 'undefined' && module.exports) {
+    module.exports = HSK_DATA;
+} else {
+    window.hskData = HSK_DATA;
+}
