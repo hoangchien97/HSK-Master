@@ -11,12 +11,21 @@ let userProgress = {
     }
 };
 
+// Constants
+const COMPLETION_THRESHOLD = 70;
+
 // Load progress from localStorage
 function loadProgress() {
     const saved = localStorage.getItem('hskProgress');
     if (saved) {
-        userProgress = JSON.parse(saved);
-        updateProgressDisplay();
+        try {
+            userProgress = JSON.parse(saved);
+            updateProgressDisplay();
+        } catch (error) {
+            console.error('Failed to load progress data:', error);
+            // Reset to default if data is corrupted
+            localStorage.removeItem('hskProgress');
+        }
     }
 }
 
@@ -109,11 +118,13 @@ function showVocabulary() {
     html += '</div>';
     display.innerHTML = html;
     
-    // Mark words as learned
-    userProgress.wordsLearned = Math.max(
-        userProgress.wordsLearned,
-        levelData.vocabulary.length
-    );
+    // Mark words as learned - track cumulative unique words across all levels
+    const totalWordsInLevel = levelData.vocabulary.length;
+    const previousWords = userProgress.wordsLearned || 0;
+    // Only add new words if this represents progress
+    if (totalWordsInLevel > previousWords) {
+        userProgress.wordsLearned = totalWordsInLevel;
+    }
     saveProgress();
 }
 
@@ -269,7 +280,7 @@ function updateProgressDisplay() {
     
     // Determine current level
     const completedLevels = Object.entries(userProgress.levelProgress)
-        .filter(([_, progress]) => progress >= 70)
+        .filter(([_, progress]) => progress >= COMPLETION_THRESHOLD)
         .map(([level, _]) => level);
     
     const currentLevelDisplay = completedLevels.length > 0 

@@ -1,5 +1,5 @@
 // HSK Vocabulary Data
-const hskData = {
+const HSK_DATA = {
     1: {
         name: "HSK 1",
         totalWords: 150,
@@ -158,5 +158,9 @@ const hskData = {
     }
 };
 
-// Store data globally
-window.hskData = hskData;
+// Export data (compatible with both module and non-module environments)
+if (typeof module !== 'undefined' && module.exports) {
+    module.exports = HSK_DATA;
+} else {
+    window.hskData = HSK_DATA;
+}
