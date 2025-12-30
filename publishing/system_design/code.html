@@ -1,0 +1,404 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Trang tổng quan Design System</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;700;900&amp;family=Noto+Sans+SC:wght@300;400;500;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#ec131e",
+                        "primary-hover": "#c91019",
+                        "background-light": "#f8f6f6",
+                        "background-dark": "#221011",
+                        "surface-light": "#ffffff",
+                        "surface-dark": "#2d1a1b",
+                        "text-main": "#181111",
+                        "text-muted": "#896163",
+                    },
+                    fontFamily: {
+                        "display": ["Inter", "Noto Sans SC", "sans-serif"],
+                        "body": ["Inter", "Noto Sans SC", "sans-serif"],
+                    },
+                    borderRadius: {"DEFAULT": "0.375rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px"},
+                },
+            },
+        }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .symbol-filled {
+            font-variation-settings: 'FILL' 1, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+    </style>
+</head>
+<body class="bg-background-light dark:bg-background-dark text-text-main font-display antialiased min-h-screen flex flex-col lg:flex-row">
+<!-- Mobile Header -->
+<div class="lg:hidden p-4 bg-surface-light border-b border-gray-200 flex justify-between items-center sticky top-0 z-50">
+<div class="font-bold text-xl text-primary flex items-center gap-2">
+<span class="material-symbols-outlined text-3xl">school</span>
+<span>Design System</span>
+</div>
+<button class="text-text-main p-2">
+<span class="material-symbols-outlined">menu</span>
+</button>
+</div>
+<!-- Sidebar Navigation -->
+<aside class="hidden lg:flex flex-col w-64 bg-surface-light border-r border-gray-200 h-screen sticky top-0 overflow-y-auto">
+<div class="p-6 flex flex-col gap-1">
+<h1 class="text-text-main text-lg font-bold leading-normal flex items-center gap-2">
+<span class="material-symbols-outlined text-primary">school</span>
+                CLP Design System
+            </h1>
+<p class="text-text-muted text-xs font-medium leading-normal">v1.0.0 • Chinese Learning Platform</p>
+</div>
+<nav class="flex-1 px-4 pb-6 flex flex-col gap-2">
+<a class="flex items-center gap-3 px-3 py-2 rounded-lg bg-primary/10 text-primary transition-colors" href="#overview">
+<span class="material-symbols-outlined text-[20px]">dashboard</span>
+<span class="text-sm font-medium">Overview</span>
+</a>
+<div class="pt-4 pb-2 px-3 text-xs font-semibold text-text-muted uppercase tracking-wider">Foundation</div>
+<a class="flex items-center gap-3 px-3 py-2 rounded-lg hover:bg-gray-100 text-text-main transition-colors" href="#colors">
+<span class="material-symbols-outlined text-[20px]">palette</span>
+<span class="text-sm font-medium">Color Palette</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2 rounded-lg hover:bg-gray-100 text-text-main transition-colors" href="#typography">
+<span class="material-symbols-outlined text-[20px]">text_fields</span>
+<span class="text-sm font-medium">Typography</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2 rounded-lg hover:bg-gray-100 text-text-main transition-colors" href="#icons">
+<span class="material-symbols-outlined text-[20px]">sentiment_satisfied</span>
+<span class="text-sm font-medium">Icons</span>
+</a>
+<div class="pt-4 pb-2 px-3 text-xs font-semibold text-text-muted uppercase tracking-wider">Components</div>
+<a class="flex items-center gap-3 px-3 py-2 rounded-lg hover:bg-gray-100 text-text-main transition-colors" href="#buttons">
+<span class="material-symbols-outlined text-[20px]">smart_button</span>
+<span class="text-sm font-medium">Buttons</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2 rounded-lg hover:bg-gray-100 text-text-main transition-colors" href="#structure">
+<span class="material-symbols-outlined text-[20px]">web</span>
+<span class="text-sm font-medium">Header &amp; Footer</span>
+</a>
+</nav>
+</aside>
+<!-- Main Content -->
+<main class="flex-1 overflow-x-hidden">
+<div class="max-w-[1200px] mx-auto p-6 lg:p-12 flex flex-col gap-16">
+<!-- Page Heading -->
+<section class="flex flex-col gap-4 border-b border-gray-200 pb-10" id="overview">
+<div class="flex flex-col gap-2">
+<span class="text-primary font-bold tracking-wider uppercase text-sm">Design Language</span>
+<h1 class="text-text-main text-4xl lg:text-5xl font-black leading-tight tracking-tight">Design System Overview</h1>
+</div>
+<p class="text-text-muted text-lg font-normal max-w-2xl leading-relaxed">
+                    Visual guidelines and core components for the Chinese Learning Platform. This system ensures consistency across learning modules, vocabulary tools, and cultural lessons.
+                </p>
+</section>
+<!-- 1. Color Palette -->
+<section class="flex flex-col gap-6" id="colors">
+<div class="flex flex-col gap-1">
+<h2 class="text-text-main text-2xl font-bold">1. Color Palette</h2>
+<p class="text-text-muted">Core colors used to establish brand identity and hierarchy. The primary red reflects cultural significance.</p>
+</div>
+<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+<!-- Primary Red -->
+<div class="flex flex-col gap-3 group">
+<div class="h-32 rounded-xl bg-primary shadow-sm flex items-end p-4 group-hover:shadow-md transition-shadow">
+<span class="bg-white/90 text-primary text-xs font-bold px-2 py-1 rounded backdrop-blur-sm">Primary</span>
+</div>
+<div class="flex flex-col">
+<span class="font-bold text-text-main">Imperial Red</span>
+<span class="text-text-muted text-sm font-mono uppercase">#ec131e</span>
+<span class="text-text-muted text-xs">Action, Brand, Highlight</span>
+</div>
+</div>
+<!-- Gradient -->
+<div class="flex flex-col gap-3 group">
+<div class="h-32 rounded-xl bg-gradient-to-br from-yellow-400 to-primary shadow-sm flex items-end p-4 group-hover:shadow-md transition-shadow">
+<span class="bg-white/90 text-primary text-xs font-bold px-2 py-1 rounded backdrop-blur-sm">Highlight Gradient</span>
+</div>
+<div class="flex flex-col">
+<span class="font-bold text-text-main">Sunrise Gradient</span>
+<span class="text-text-muted text-sm font-mono uppercase">from-yellow-400 to-red-600</span>
+<span class="text-text-muted text-xs">Premium, Success, Attention</span>
+</div>
+</div>
+<!-- Dark Neutral -->
+<div class="flex flex-col gap-3 group">
+<div class="h-32 rounded-xl bg-[#1f2937] shadow-sm flex items-end p-4 group-hover:shadow-md transition-shadow">
+<span class="bg-white/90 text-[#1f2937] text-xs font-bold px-2 py-1 rounded backdrop-blur-sm">Neutral Dark</span>
+</div>
+<div class="flex flex-col">
+<span class="font-bold text-text-main">Ink Black</span>
+<span class="text-text-muted text-sm font-mono uppercase">#1f2937</span>
+<span class="text-text-muted text-xs">Headings, Strong Text</span>
+</div>
+</div>
+<!-- Light Neutral -->
+<div class="flex flex-col gap-3 group">
+<div class="h-32 rounded-xl bg-[#e5e7eb] border border-gray-200 shadow-sm flex items-end p-4 group-hover:shadow-md transition-shadow">
+<span class="bg-white/90 text-text-main text-xs font-bold px-2 py-1 rounded backdrop-blur-sm">Neutral Light</span>
+</div>
+<div class="flex flex-col">
+<span class="font-bold text-text-main">Cloud Gray</span>
+<span class="text-text-muted text-sm font-mono uppercase">#e5e7eb</span>
+<span class="text-text-muted text-xs">Borders, Dividers, Subtle BG</span>
+</div>
+</div>
+</div>
+</section>
+<!-- 2. Typography -->
+<section class="flex flex-col gap-6" id="typography">
+<div class="flex flex-col gap-1">
+<h2 class="text-text-main text-2xl font-bold">2. Typography</h2>
+<p class="text-text-muted">Type scale using Inter for English and Noto Sans SC for Chinese characters to ensure legibility.</p>
+</div>
+<div class="bg-surface-light rounded-xl border border-gray-200 overflow-hidden divide-y divide-gray-100 shadow-sm">
+<!-- H1 -->
+<div class="p-6 grid grid-cols-1 md:grid-cols-12 gap-4 items-center">
+<div class="col-span-3 text-text-muted text-sm font-mono">H1 / Bold / 36px</div>
+<div class="col-span-9">
+<h1 class="text-4xl font-bold text-text-main">Learning Chinese Made Simple<br/><span class="text-primary font-normal">让学习中文变得简单</span></h1>
+</div>
+</div>
+<!-- H2 -->
+<div class="p-6 grid grid-cols-1 md:grid-cols-12 gap-4 items-center">
+<div class="col-span-3 text-text-muted text-sm font-mono">H2 / Bold / 30px</div>
+<div class="col-span-9">
+<h2 class="text-3xl font-bold text-text-main">Course Structure &amp; Modules<br/><span class="text-text-muted text-2xl font-normal">课程结构与模块</span></h2>
+</div>
+</div>
+<!-- H3 -->
+<div class="p-6 grid grid-cols-1 md:grid-cols-12 gap-4 items-center">
+<div class="col-span-3 text-text-muted text-sm font-mono">H3 / Medium / 24px</div>
+<div class="col-span-9">
+<h3 class="text-2xl font-medium text-text-main">Vocabulary Practice <span class="text-text-muted">词汇练习</span></h3>
+</div>
+</div>
+<!-- Body -->
+<div class="p-6 grid grid-cols-1 md:grid-cols-12 gap-4 items-center">
+<div class="col-span-3 text-text-muted text-sm font-mono">Body / Regular / 16px</div>
+<div class="col-span-9">
+<p class="text-base text-text-muted leading-relaxed max-w-2xl">
+                                Our platform uses an immersive approach to help you master Mandarin Chinese. Start with basic tones and progress to complex grammar structures. <br/>
+                                我们的平台采用沉浸式方法帮助您掌握普通话。从基本声调开始，逐步进阶到复杂的语法结构。
+                            </p>
+</div>
+</div>
+</div>
+</section>
+<!-- 3. Buttons -->
+<section class="flex flex-col gap-6" id="buttons">
+<div class="flex flex-col gap-1">
+<h2 class="text-text-main text-2xl font-bold">3. Buttons</h2>
+<p class="text-text-muted">Interactive elements with clear states for hover, active, and disabled actions.</p>
+</div>
+<div class="bg-surface-light p-8 rounded-xl border border-gray-200 shadow-sm">
+<div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+<!-- Primary Column -->
+<div class="flex flex-col gap-4">
+<span class="text-sm font-semibold text-text-muted uppercase tracking-wider">Primary</span>
+<div class="flex flex-col gap-4 items-start">
+<button class="bg-primary hover:bg-primary-hover text-white px-6 py-3 rounded-lg font-medium transition-colors w-full md:w-auto flex justify-center items-center gap-2">
+                                    Start Learning
+                                    <span class="material-symbols-outlined text-[20px]">arrow_forward</span>
+</button>
+<button class="bg-primary hover:bg-primary-hover text-white px-6 py-3 rounded-lg font-medium transition-colors w-full md:w-auto opacity-50 cursor-not-allowed">
+                                    Disabled
+                                </button>
+</div>
+</div>
+<!-- Secondary Column -->
+<div class="flex flex-col gap-4">
+<span class="text-sm font-semibold text-text-muted uppercase tracking-wider">Secondary</span>
+<div class="flex flex-col gap-4 items-start">
+<button class="bg-white border border-gray-300 hover:border-primary hover:text-primary text-text-main px-6 py-3 rounded-lg font-medium transition-all w-full md:w-auto">
+                                    View Courses
+                                </button>
+<button class="bg-white border border-gray-200 text-gray-300 px-6 py-3 rounded-lg font-medium cursor-not-allowed w-full md:w-auto">
+                                    Unavailable
+                                </button>
+</div>
+</div>
+<!-- Ghost/Icon Column -->
+<div class="flex flex-col gap-4">
+<span class="text-sm font-semibold text-text-muted uppercase tracking-wider">Ghost &amp; Icon</span>
+<div class="flex flex-col gap-4 items-start">
+<button class="text-text-main hover:text-primary hover:bg-primary/5 px-4 py-2 rounded-lg font-medium transition-colors flex items-center gap-2">
+<span class="material-symbols-outlined text-[20px]">play_circle</span>
+                                    Watch Demo
+                                </button>
+<button class="text-text-muted hover:text-primary transition-colors flex items-center gap-1 text-sm">
+                                    Learn more <span class="material-symbols-outlined text-[16px]">chevron_right</span>
+</button>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- 5. Icons -->
+<section class="flex flex-col gap-6" id="icons">
+<div class="flex flex-col gap-1">
+<h2 class="text-text-main text-2xl font-bold">4. Iconography</h2>
+<p class="text-text-muted">Consistent iconography using Material Symbols for navigation and actions.</p>
+</div>
+<div class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-8 gap-4">
+<div class="flex flex-col items-center justify-center p-4 bg-surface-light rounded-lg border border-gray-200 hover:border-primary/50 transition-colors aspect-square gap-2">
+<span class="material-symbols-outlined text-primary text-3xl">language</span>
+<span class="text-xs text-text-muted">Language</span>
+</div>
+<div class="flex flex-col items-center justify-center p-4 bg-surface-light rounded-lg border border-gray-200 hover:border-primary/50 transition-colors aspect-square gap-2">
+<span class="material-symbols-outlined text-text-main text-3xl">translate</span>
+<span class="text-xs text-text-muted">Translate</span>
+</div>
+<div class="flex flex-col items-center justify-center p-4 bg-surface-light rounded-lg border border-gray-200 hover:border-primary/50 transition-colors aspect-square gap-2">
+<span class="material-symbols-outlined text-text-main text-3xl">school</span>
+<span class="text-xs text-text-muted">Learn</span>
+</div>
+<div class="flex flex-col items-center justify-center p-4 bg-surface-light rounded-lg border border-gray-200 hover:border-primary/50 transition-colors aspect-square gap-2">
+<span class="material-symbols-outlined text-text-main text-3xl">quiz</span>
+<span class="text-xs text-text-muted">Quiz</span>
+</div>
+<div class="flex flex-col items-center justify-center p-4 bg-surface-light rounded-lg border border-gray-200 hover:border-primary/50 transition-colors aspect-square gap-2">
+<span class="material-symbols-outlined text-text-main text-3xl">arrow_upward</span>
+<span class="text-xs text-text-muted">Scroll Top</span>
+</div>
+<div class="flex flex-col items-center justify-center p-4 bg-surface-light rounded-lg border border-gray-200 hover:border-primary/50 transition-colors aspect-square gap-2">
+<span class="material-symbols-outlined text-text-main text-3xl">mail</span>
+<span class="text-xs text-text-muted">Contact</span>
+</div>
+<div class="flex flex-col items-center justify-center p-4 bg-surface-light rounded-lg border border-gray-200 hover:border-primary/50 transition-colors aspect-square gap-2">
+<span class="material-symbols-outlined text-text-main text-3xl">public</span>
+<span class="text-xs text-text-muted">Social</span>
+</div>
+<div class="flex flex-col items-center justify-center p-4 bg-surface-light rounded-lg border border-gray-200 hover:border-primary/50 transition-colors aspect-square gap-2">
+<span class="material-symbols-outlined text-text-main text-3xl">login</span>
+<span class="text-xs text-text-muted">Login</span>
+</div>
+</div>
+</section>
+<!-- 4. Header & Footer Structure -->
+<section class="flex flex-col gap-6" id="structure">
+<div class="flex flex-col gap-1">
+<h2 class="text-text-main text-2xl font-bold">5. Layout Components</h2>
+<p class="text-text-muted">Simplified representations of global navigation and footer elements.</p>
+</div>
+<!-- Header Preview -->
+<div class="flex flex-col gap-4">
+<h3 class="text-lg font-semibold text-text-main">Global Header</h3>
+<div class="w-full bg-white rounded-lg border border-gray-200 shadow-sm overflow-hidden">
+<!-- Top Bar (Optional Contact Info) -->
+<div class="bg-background-dark text-white/80 text-xs px-6 py-2 flex justify-between items-center">
+<div class="flex gap-4">
+<span class="flex items-center gap-1"><span class="material-symbols-outlined text-[14px]">mail</span> support@chineselearning.com</span>
+</div>
+<div class="flex gap-3">
+<span class="material-symbols-outlined text-[14px]">public</span>
+<span class="material-symbols-outlined text-[14px]">share</span>
+</div>
+</div>
+<!-- Main Nav -->
+<div class="px-6 py-4 flex justify-between items-center bg-white">
+<div class="flex items-center gap-8">
+<!-- Logo -->
+<div class="flex items-center gap-2">
+<div class="w-8 h-8 rounded bg-primary flex items-center justify-center text-white font-bold text-lg">C</div>
+<span class="font-bold text-xl tracking-tight">Chinese<span class="text-primary">Master</span></span>
+</div>
+<!-- Links -->
+<div class="hidden md:flex gap-6 text-sm font-medium text-text-main">
+<span class="text-primary cursor-pointer border-b-2 border-primary pb-0.5">Home</span>
+<span class="hover:text-primary cursor-pointer transition-colors">Courses</span>
+<span class="hover:text-primary cursor-pointer transition-colors">Tutors</span>
+<span class="hover:text-primary cursor-pointer transition-colors">Pricing</span>
+</div>
+</div>
+<!-- Actions -->
+<div class="flex items-center gap-4">
+<button class="flex items-center gap-1 text-sm font-medium hover:text-primary">
+<span class="material-symbols-outlined text-[18px]">language</span>
+                                    EN/CN
+                                </button>
+<button class="hidden sm:block px-4 py-2 bg-primary text-white text-sm font-medium rounded hover:bg-primary-hover transition-colors">Get Started</button>
+</div>
+</div>
+</div>
+</div>
+<!-- Footer Preview -->
+<div class="flex flex-col gap-4 mt-4">
+<h3 class="text-lg font-semibold text-text-main">Global Footer</h3>
+<div class="w-full bg-background-dark text-white rounded-lg overflow-hidden shadow-sm">
+<div class="p-8 grid grid-cols-1 md:grid-cols-4 gap-8">
+<!-- Brand col -->
+<div class="flex flex-col gap-4">
+<div class="flex items-center gap-2">
+<div class="w-8 h-8 rounded bg-primary flex items-center justify-center text-white font-bold">C</div>
+<span class="font-bold text-xl">ChineseMaster</span>
+</div>
+<p class="text-sm text-gray-400">Master the language of the future with our immersive platform.</p>
+<div class="flex gap-3 mt-2">
+<div class="w-8 h-8 rounded-full bg-white/10 flex items-center justify-center hover:bg-primary transition-colors cursor-pointer">
+<span class="material-symbols-outlined text-[16px]">public</span>
+</div>
+<div class="w-8 h-8 rounded-full bg-white/10 flex items-center justify-center hover:bg-primary transition-colors cursor-pointer">
+<span class="material-symbols-outlined text-[16px]">share</span>
+</div>
+</div>
+</div>
+<!-- Links col 1 -->
+<div class="flex flex-col gap-3">
+<h4 class="font-bold text-sm text-gray-200 uppercase tracking-wider">Learn</h4>
+<span class="text-sm text-gray-400 hover:text-white cursor-pointer">Beginner Course</span>
+<span class="text-sm text-gray-400 hover:text-white cursor-pointer">HSK Preparation</span>
+<span class="text-sm text-gray-400 hover:text-white cursor-pointer">Vocabulary</span>
+</div>
+<!-- Links col 2 -->
+<div class="flex flex-col gap-3">
+<h4 class="font-bold text-sm text-gray-200 uppercase tracking-wider">Company</h4>
+<span class="text-sm text-gray-400 hover:text-white cursor-pointer">About Us</span>
+<span class="text-sm text-gray-400 hover:text-white cursor-pointer">Careers</span>
+<span class="text-sm text-gray-400 hover:text-white cursor-pointer">Contact</span>
+</div>
+<!-- Newsletter -->
+<div class="flex flex-col gap-3">
+<h4 class="font-bold text-sm text-gray-200 uppercase tracking-wider">Stay Updated</h4>
+<div class="flex gap-2">
+<input class="w-full px-3 py-2 rounded text-black text-sm focus:ring-2 focus:ring-primary focus:outline-none" placeholder="Email address" type="email"/>
+<button class="bg-primary px-3 py-2 rounded hover:bg-primary-hover transition-colors">
+<span class="material-symbols-outlined text-white">arrow_forward</span>
+</button>
+</div>
+</div>
+</div>
+<div class="border-t border-white/10 p-4 flex justify-between items-center text-xs text-gray-500">
+<span>© 2023 ChineseMaster. All rights reserved.</span>
+<div class="flex gap-4">
+<span>Privacy Policy</span>
+<span>Terms of Service</span>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- Footer of DS Page -->
+<div class="mt-10 py-6 border-t border-gray-200 text-center text-text-muted text-sm">
+                Design System v1.0 • Internal Use Only
+            </div>
+</div>
+</main>
+<!-- Floating Scroll to top (Demo) -->
+<div class="fixed bottom-8 right-8 z-50">
+<button class="bg-primary text-white w-12 h-12 rounded-full shadow-lg flex items-center justify-center hover:bg-primary-hover transition-all hover:-translate-y-1">
+<span class="material-symbols-outlined">arrow_upward</span>
+</button>
+</div>
+</body></html>
