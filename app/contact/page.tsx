@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { submitContact } from "./actions.ts";
+import { submitContact } from "./actions";
 
 export const metadata: Metadata = {
   title: "Liên hệ Trung tâm tiếng Trung | Tư vấn khóa học",
