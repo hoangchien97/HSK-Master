@@ -1,4 +1,4 @@
-import Button from "../components/Button";
+import { Button } from "../components/shared";
 
 export default function SystemDesignPage() {
   return (

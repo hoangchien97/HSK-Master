@@ -1,8 +1,10 @@
-import HeroSlideShow from "./components/HeroSlideShow";
-import HSKLevelsSection from "./components/HSKLevelsSection";
-import CoursesSection from "./components/CoursesSection";
-import WhyChooseUsSection from "./components/WhyChooseUsSection";
-import CTASection from "./components/CTASection";
+import {
+  HeroSlideShow,
+  HSKLevelsSection,
+  CoursesSection,
+  WhyChooseUsSection,
+  CTASection,
+} from "./components/home";
 
 export const revalidate = 3600;
 

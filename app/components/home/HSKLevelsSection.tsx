@@ -1,5 +1,5 @@
 import HSKLevelCard, { type HSKLevel } from './HSKLevelCard';
-import SectionHeader from './SectionHeader';
+import SectionHeader from '../shared/SectionHeader';
 
 const hskLevels: HSKLevel[] = [
   {

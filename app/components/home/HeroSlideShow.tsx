@@ -118,13 +118,13 @@ export default function HeroSlideShow() {
                   <div className={`absolute inset-0 bg-gradient-to-r ${slide.overlayGradient}`} />
 
                   {/* Content */}
-                  <div className="relative z-10 px-6 py-8 md:px-12 lg:px-24 max-w-3xl w-full">
+                  <div className="relative z-10 px-6 py-8 md:px-12 lg:px-24 max-w-4xl w-full">
                     <span
                       className={`inline-block py-1.5 px-3 rounded ${slide.badgeColor} text-xs font-bold uppercase tracking-wider mb-4 md:mb-6 shadow-sm`}
                     >
                       {slide.badge}
                     </span>
-                    
+
                     {/* Title with Gradient */}
                     <h2 className="text-3xl md:text-4xl lg:text-5xl font-extrabold text-white mb-4 md:mb-6 leading-tight drop-shadow-sm">
                       <span className="block md:inline">Chinh phục </span>
@@ -136,12 +136,12 @@ export default function HeroSlideShow() {
                         Dễ dàng & Hiệu quả
                       </span>
                     </h2>
-                    
+
                     {/* Description - Hidden on Mobile */}
                     <p className="hidden md:block text-gray-100 text-base lg:text-lg mb-6 md:mb-8 max-w-xl font-medium drop-shadow-md">
                       {slide.description}
                     </p>
-                    
+
                     {/* CTA Buttons - Hidden on Mobile */}
                     <div className="hidden md:flex flex-wrap gap-3 md:gap-4">
                       <Link

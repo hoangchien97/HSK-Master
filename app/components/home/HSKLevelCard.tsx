@@ -83,9 +83,6 @@ export default function HSKLevelCard({ level }: HSKLevelCardProps) {
         <span>Bắt đầu học HSK {level.level}</span>
         <span className="material-symbols-outlined text-[18px]">arrow_forward</span>
       </div>
-
-      {/* Spacer for consistent height */}
-      <div aria-hidden="true" className="mt-4 h-[44px] w-full" />
     </Link>
   );
 }
