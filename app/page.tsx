@@ -1,5 +1,8 @@
-import { prisma } from "@/lib/prisma";
-import Link from "next/link";
+import HeroSlideShow from "./components/HeroSlideShow";
+import HSKLevelsSection from "./components/HSKLevelsSection";
+import CoursesSection from "./components/CoursesSection";
+import WhyChooseUsSection from "./components/WhyChooseUsSection";
+import CTASection from "./components/CTASection";
 
 export const revalidate = 3600;
 
@@ -10,31 +13,22 @@ export const metadata = {
 };
 
 export default async function Home() {
-  const courses = await prisma.course.findMany({
-    include: { category: true },
-  });
-
   return (
-    <main className="container mx-auto p-6">
-      <h1 className="text-4xl font-bold">
-        Trung tâm tiếng Trung – Lộ trình HSK bài bản
-      </h1>
+    <main className="flex-1">
+      {/* Hero Slideshow Section */}
+      <HeroSlideShow />
 
-      <section className="mt-8">
-        <h2 className="text-2xl font-semibold">Khoá học nổi bật</h2>
-        <ul className="mt-4 space-y-3">
-          {courses.map((c) => (
-            <li key={c.id}>
-              <Link
-                href={`/courses/${c.slug}`}
-                className="text-blue-600 underline"
-              >
-                {c.title}
-              </Link>
-            </li>
-          ))}
-        </ul>
-      </section>
+      {/* HSK Levels Section */}
+      <HSKLevelsSection />
+
+      {/* Courses Section */}
+      <CoursesSection />
+
+      {/* Why Choose Us Section */}
+      <WhyChooseUsSection />
+
+      {/* CTA Section (Before Footer) */}
+      <CTASection />
     </main>
   );
 }

@@ -6,7 +6,7 @@ export default function LanguageSwitcher() {
   const [language, setLanguage] = useState<'VN' | 'CN'>('VN');
 
   return (
-    <div className="flex items-center bg-gray-100 rounded-lg p-1 dark:bg-surface-dark border border-border-light dark:border-border-dark">
+    <div className="flex items-center bg-gray-100 rounded-lg h-8 p-1 dark:bg-surface-dark border border-border-light dark:border-border-dark">
       <button
         onClick={() => setLanguage('VN')}
         className={`px-3 py-1 rounded-md text-xs font-bold transition-all border cursor-pointer ${

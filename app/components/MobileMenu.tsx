@@ -10,6 +10,14 @@ interface MobileMenuProps {
   onClose: () => void;
 }
 
+const navigationItems = [
+  { name: 'Trang chủ', icon: 'home', path: '/' },
+  { name: 'Khóa học', icon: 'school', path: '/courses' },
+  { name: 'Giới thiệu', icon: 'info', path: '/about' },
+  { name: 'Liên hệ', icon: 'mail', path: '/contact' },
+  { name: 'Tài liệu', icon: 'book', path: '/vocabulary' },
+];
+
 export default function MobileMenu({ isOpen, onClose }: MobileMenuProps) {
   const pathname = usePathname();
 
@@ -89,70 +97,21 @@ export default function MobileMenu({ isOpen, onClose }: MobileMenuProps) {
 
         {/* Navigation Menu - Scrollable */}
         <nav className="flex-1 p-4 space-y-2 overflow-y-auto">
-          <Link
-            href="/"
-            onClick={onClose}
-            className={`flex items-center gap-3 px-4 py-3 rounded-lg font-semibold shadow-sm transition-all cursor-pointer ${
-              isActive('/')
-                ? 'bg-gradient-to-r from-yellow-400 to-red-600 text-white'
-                : 'text-text-main-light dark:text-text-main-dark hover:bg-gradient-to-r hover:from-yellow-400 hover:to-red-600 hover:text-white'
-            }`}
-          >
-            <span className="material-symbols-outlined">home</span>
-            <span>Trang chủ</span>
-          </Link>
-
-          <Link
-            href="/courses"
-            onClick={onClose}
-            className={`flex items-center gap-3 px-4 py-3 rounded-lg font-semibold shadow-sm transition-all cursor-pointer ${
-              isActive('/courses')
-                ? 'bg-gradient-to-r from-yellow-400 to-red-600 text-white'
-                : 'text-text-main-light dark:text-text-main-dark hover:bg-gradient-to-r hover:from-yellow-400 hover:to-red-600 hover:text-white'
-            }`}
-          >
-            <span className="material-symbols-outlined">school</span>
-            <span>Khóa học</span>
-          </Link>
-
-          <Link
-            href="/about"
-            onClick={onClose}
-            className={`flex items-center gap-3 px-4 py-3 rounded-lg font-semibold shadow-sm transition-all cursor-pointer ${
-              isActive('/about')
-                ? 'bg-gradient-to-r from-yellow-400 to-red-600 text-white'
-                : 'text-text-main-light dark:text-text-main-dark hover:bg-gradient-to-r hover:from-yellow-400 hover:to-red-600 hover:text-white'
-            }`}
-          >
-            <span className="material-symbols-outlined">info</span>
-            <span>Giới thiệu</span>
-          </Link>
-
-          <Link
-            href="/contact"
-            onClick={onClose}
-            className={`flex items-center gap-3 px-4 py-3 rounded-lg font-semibold shadow-sm transition-all cursor-pointer ${
-              isActive('/contact')
-                ? 'bg-gradient-to-r from-yellow-400 to-red-600 text-white'
-                : 'text-text-main-light dark:text-text-main-dark hover:bg-gradient-to-r hover:from-yellow-400 hover:to-red-600 hover:text-white'
-            }`}
-          >
-            <span className="material-symbols-outlined">mail</span>
-            <span>Liên hệ</span>
-          </Link>
-
-          <Link
-            href="/vocabulary"
-            onClick={onClose}
-            className={`flex items-center gap-3 px-4 py-3 rounded-lg font-semibold shadow-sm transition-all cursor-pointer ${
-              isActive('/vocabulary')
-                ? 'bg-gradient-to-r from-yellow-400 to-red-600 text-white'
-                : 'text-text-main-light dark:text-text-main-dark hover:bg-gradient-to-r hover:from-yellow-400 hover:to-red-600 hover:text-white'
-            }`}
-          >
-            <span className="material-symbols-outlined">book</span>
-            <span>Tài liệu</span>
-          </Link>
+          {navigationItems.map((item) => (
+            <Link
+              key={item.path}
+              href={item.path}
+              onClick={onClose}
+              className={`flex items-center gap-3 px-4 py-3 rounded-lg font-semibold shadow-sm transition-all cursor-pointer ${
+                isActive(item.path)
+                  ? 'bg-gradient-to-r from-yellow-400 to-red-600 text-white'
+                  : 'text-text-main-light dark:text-text-main-dark hover:bg-gradient-to-r hover:from-yellow-400 hover:to-red-600 hover:text-white'
+              }`}
+            >
+              <span className="material-symbols-outlined">{item.icon}</span>
+              <span>{item.name}</span>
+            </Link>
+          ))}
         </nav>
 
         {/* CTA Button */}

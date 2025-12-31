@@ -1,4 +1,5 @@
 import Link from "next/link";
+import Button from "./Button";
 
 export default function Footer() {
   return (
@@ -91,12 +92,15 @@ export default function Footer() {
                 placeholder="Email của bạn"
                 type="email"
               />
-              <button
-                className="w-full rounded-lg bg-white px-3 py-2 text-sm font-bold text-red-600 shadow-sm hover:bg-gray-100 transition-colors"
+              <Button
                 type="submit"
+                variant="secondary"
+                size="sm"
+                fullWidth
+                className="!bg-white !text-red-600 hover:!bg-gray-100"
               >
                 Gửi ngay
-              </button>
+              </Button>
             </form>
           </div>
         </div>

@@ -5,6 +5,15 @@ import { usePathname } from "next/navigation";
 import { useState } from "react";
 import LanguageSwitcher from "./LanguageSwitcher";
 import MobileMenu from "./MobileMenu";
+import Button from "./Button";
+
+const navigationItems = [
+  { name: 'Trang chủ', path: '/' },
+  { name: 'Khóa học', path: '/courses' },
+  { name: 'Tài liệu', path: '/vocabulary' },
+  { name: 'Giới thiệu', path: '/about' },
+  { name: 'Liên hệ', path: '/contact' },
+];
 
 export default function Header() {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
@@ -57,36 +66,19 @@ export default function Header() {
         {/* Right Section - Navigation + Language + CTA */}
         <div className="flex items-center gap-4">
           <nav className="hidden lg:flex items-center gap-6 mr-2">
-            <Link
-              href="/"
-              className={`text-sm font-semibold transition-colors cursor-pointer ${
-                isActive('/')
-                  ? 'text-red-600'
-                  : 'text-text-main-light dark:text-text-main-dark hover:text-red-600'
-              }`}
-            >
-              Trang chủ
-            </Link>
-            <Link
-              href="/courses"
-              className={`text-sm font-semibold transition-colors cursor-pointer ${
-                isActive('/courses')
-                  ? 'text-red-600'
-                  : 'text-text-main-light dark:text-text-main-dark hover:text-red-600'
-              }`}
-            >
-              Khóa học
-            </Link>
-            <Link
-              href="/vocabulary"
-              className={`text-sm font-semibold transition-colors cursor-pointer ${
-                isActive('/vocabulary')
-                  ? 'text-red-600'
-                  : 'text-text-main-light dark:text-text-main-dark hover:text-red-600'
-              }`}
-            >
-              Tài liệu
-            </Link>
+            {navigationItems.map((item) => (
+              <Link
+                key={item.path}
+                href={item.path}
+                className={`text-sm font-semibold transition-colors cursor-pointer ${
+                  isActive(item.path)
+                    ? 'text-red-600'
+                    : 'text-text-main-light dark:text-text-main-dark hover:text-red-600'
+                }`}
+              >
+                {item.name}
+              </Link>
+            ))}
           </nav>
 
           {/* Language Switcher - Desktop Only */}
@@ -96,11 +88,10 @@ export default function Header() {
 
           {/* CTA Button */}
           <div className="flex items-center gap-3">
-            <Link
-              href="/courses"
-              className="hidden sm:flex h-9 items-center justify-center rounded-lg bg-gradient-to-r from-yellow-400 to-red-600 px-5 text-sm font-bold text-white shadow-md hover:opacity-90 hover:shadow-lg transition-all"
-            >
-              Bắt đầu học
+            <Link href="/courses" className="hidden sm:flex">
+              <Button variant="gradient" size="sm">
+                Bắt đầu học
+              </Button>
             </Link>
           </div>
         </div>
