@@ -5,3 +5,8 @@ export { default as Footer } from './Footer';
 export { default as LanguageSwitcher } from './LanguageSwitcher';
 export { default as MobileMenu } from './MobileMenu';
 export { default as SectionHeader } from './SectionHeader';
+export { default as Breadcrumb } from './Breadcrumb';
+export { default as Input } from './Input';
+export { default as Select } from './Select';
+export { default as Textarea } from './Textarea';
+export { default as ScrollToTop } from './ScrollToTop';

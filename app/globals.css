@@ -99,6 +99,28 @@
   --gradient-brand: linear-gradient(to right, #facc15, #dc2626);
 }
 
+html {
+  scroll-behavior: smooth;
+}
+
+/* Custom Scrollbar with Gradient (Yellow to Red) */
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: linear-gradient(to bottom, #facc15, #dc2626); /* Yellow-400 to Red-600 */
+  border-radius: 6px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: linear-gradient(to bottom, #eab308, #b91c1c); /* Yellow-500 to Red-700 */
+}
+
 body {
   font-family: var(--font-vietnamese);
 }
