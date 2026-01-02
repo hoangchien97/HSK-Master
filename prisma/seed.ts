@@ -19,6 +19,7 @@ async function main() {
     data: {
       name: "Tiếng Trung Cơ Bản",
       slug: "tieng-trung-co-ban",
+      description: "Các khóa học tiếng Trung dành cho người mới bắt đầu, từ cơ bản đến trung cấp. Phù hợp cho học viên chưa có nền tảng hoặc muốn củng cố kiến thức nền.",
     },
   })
 
@@ -26,6 +27,7 @@ async function main() {
     data: {
       name: "Tiếng Trung Nâng Cao",
       slug: "tieng-trung-nang-cao",
+      description: "Các khóa học tiếng Trung nâng cao, chuyên sâu cho học viên đã có nền tảng vững. Tập trung vào kỹ năng giao tiếp chuyên nghiệp và HSK cấp cao.",
     },
   })
 
@@ -101,11 +103,6 @@ async function main() {
 
   console.log("✅ Seed FULL completed")
 }
-
-main()
-  .catch(console.error)
-  .finally(() => prisma.$disconnect())
-
 
 main()
   .catch((e) => {

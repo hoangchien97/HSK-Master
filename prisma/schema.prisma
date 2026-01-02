@@ -1,6 +1,5 @@
 generator client {
   provider = "prisma-client-js"
-  output     = "./generated"
 }
 
 datasource db {
@@ -8,52 +7,47 @@ datasource db {
 }
 
 model Category {
-  id        String   @id @default(uuid())
-  name      String
-  slug      String   @unique
-  createdAt DateTime @default(now())
-
-  courses   Course[]
+  id          String   @id @default(uuid())
+  name        String
+  slug        String   @unique
+  description String?
+  createdAt   DateTime @default(now())
+  courses     Course[]
 }
 
 model Course {
-  id          String   @id @default(uuid())
-  title       String
-  slug        String   @unique
-  description String?
-  level       String? // HSK 1, HSK 2, giao tiếp...
-  isPublished Boolean  @default(true)
-  createdAt   DateTime @default(now())
-
-  categoryId  String
-  category    Category @relation(fields: [categoryId], references: [id])
-
-  lessons     Lesson[]
+  id            String         @id @default(uuid())
+  title         String
+  slug          String         @unique
+  description   String?
+  level         String?
+  createdAt     DateTime       @default(now())
+  categoryId    String
+  isPublished   Boolean        @default(true)
+  category      Category       @relation(fields: [categoryId], references: [id])
+  lessons       Lesson[]
   registrations Registration[]
 }
 
 model Lesson {
-  id        String   @id @default(uuid())
-  title     String
-  order     Int
-  createdAt DateTime @default(now())
-
-  courseId  String
-  course    Course   @relation(fields: [courseId], references: [id])
-
+  id           String       @id @default(uuid())
+  courseId     String
+  title        String
+  createdAt    DateTime     @default(now())
+  order        Int
+  course       Course       @relation(fields: [courseId], references: [id])
   vocabularies Vocabulary[]
 }
 
 model Vocabulary {
   id        String   @id @default(uuid())
+  lessonId  String
   word      String
   pinyin    String?
   meaning   String
   audioUrl  String?
   createdAt DateTime @default(now())
-
-  lessonId  String
-  lesson    Lesson  @relation(fields: [lessonId], references: [id])
+  lesson    Lesson   @relation(fields: [lessonId], references: [id])
 }
 
 model Registration {
@@ -63,7 +57,6 @@ model Registration {
   email     String?
   note      String?
   createdAt DateTime @default(now())
-
   courseId  String?
-  course    Course? @relation(fields: [courseId], references: [id])
+  course    Course?  @relation(fields: [courseId], references: [id])
 }
