@@ -1,41 +1,9 @@
 import SectionHeader from '../shared/SectionHeader';
+import { getFeatures } from '@/app/services';
 
-const features = [
-  {
-    id: 1,
-    icon: '📚',
-    iconBg: 'bg-blue-100 dark:bg-blue-900/30',
-    iconColor: 'text-blue-600 dark:text-blue-400',
-    title: 'HSK 1-6 Hoàn chỉnh',
-    description: 'Chương trình học từ cơ bản đến nâng cao',
-  },
-  {
-    id: 2,
-    icon: '👥',
-    iconBg: 'bg-green-100 dark:bg-green-900/30',
-    iconColor: 'text-green-600 dark:text-green-400',
-    title: 'Lớp học nhỏ',
-    description: 'Tối đa 4-6 học viên để đảm bảo chất lượng',
-  },
-  {
-    id: 3,
-    icon: '🏅',
-    iconBg: 'bg-purple-100 dark:bg-purple-900/30',
-    iconColor: 'text-purple-600 dark:text-purple-400',
-    title: '5 năm kinh nghiệm',
-    description: 'Giáo viên có kinh nghiệm và tận tâm',
-  },
-  {
-    id: 4,
-    icon: '⏰',
-    iconBg: 'bg-orange-100 dark:bg-orange-900/30',
-    iconColor: 'text-orange-600 dark:text-orange-400',
-    title: 'Linh hoạt thời gian',
-    description: 'Lịch học phù hợp với công việc của bạn',
-  },
-];
+export default async function WhyChooseUsSection() {
+  const features = await getFeatures();
 
-export default function WhyChooseUsSection() {
   return (
     <section className="py-16 bg-gradient-to-br from-red-50 via-orange-50 to-yellow-50 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">

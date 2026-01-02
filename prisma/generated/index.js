@@ -106,7 +106,15 @@ exports.Prisma.CourseScalarFieldEnum = {
   title: 'title',
   slug: 'slug',
   description: 'description',
+  image: 'image',
+  instructor: 'instructor',
+  instructorAvatar: 'instructorAvatar',
+  price: 'price',
+  originalPrice: 'originalPrice',
+  students: 'students',
+  rating: 'rating',
   level: 'level',
+  tag: 'tag',
   createdAt: 'createdAt',
   categoryId: 'categoryId',
   isPublished: 'isPublished'
@@ -140,6 +148,66 @@ exports.Prisma.RegistrationScalarFieldEnum = {
   courseId: 'courseId'
 };
 
+exports.Prisma.HeroSlideScalarFieldEnum = {
+  id: 'id',
+  image: 'image',
+  badge: 'badge',
+  badgeColor: 'badgeColor',
+  title: 'title',
+  description: 'description',
+  primaryCtaText: 'primaryCtaText',
+  primaryCtaHref: 'primaryCtaHref',
+  secondaryCtaText: 'secondaryCtaText',
+  secondaryCtaHref: 'secondaryCtaHref',
+  overlayGradient: 'overlayGradient',
+  order: 'order',
+  isActive: 'isActive',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
+exports.Prisma.HSKLevelScalarFieldEnum = {
+  id: 'id',
+  level: 'level',
+  title: 'title',
+  badge: 'badge',
+  badgeColor: 'badgeColor',
+  description: 'description',
+  vocabularyCount: 'vocabularyCount',
+  targetAudience: 'targetAudience',
+  targetIcon: 'targetIcon',
+  accentColor: 'accentColor',
+  bgGradient: 'bgGradient',
+  href: 'href',
+  order: 'order',
+  isActive: 'isActive',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
+exports.Prisma.FeatureScalarFieldEnum = {
+  id: 'id',
+  icon: 'icon',
+  iconBg: 'iconBg',
+  iconColor: 'iconColor',
+  title: 'title',
+  description: 'description',
+  order: 'order',
+  isActive: 'isActive',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
+exports.Prisma.CtaStatScalarFieldEnum = {
+  id: 'id',
+  value: 'value',
+  label: 'label',
+  order: 'order',
+  isActive: 'isActive',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
 exports.Prisma.SortOrder = {
   asc: 'asc',
   desc: 'desc'
@@ -161,7 +229,11 @@ exports.Prisma.ModelName = {
   Course: 'Course',
   Lesson: 'Lesson',
   Vocabulary: 'Vocabulary',
-  Registration: 'Registration'
+  Registration: 'Registration',
+  HeroSlide: 'HeroSlide',
+  HSKLevel: 'HSKLevel',
+  Feature: 'Feature',
+  CtaStat: 'CtaStat'
 };
 /**
  * Create the Client
@@ -171,10 +243,10 @@ const config = {
   "clientVersion": "7.2.0",
   "engineVersion": "0c8ef2ce45c83248ab3df073180d5eda9e8be7a3",
   "activeProvider": "postgresql",
-  "inlineSchema": "generator client {\n  provider = \"prisma-client-js\"\n  output   = \"./generated\"\n}\n\ndatasource db {\n  provider = \"postgresql\"\n}\n\nmodel Category {\n  id          String   @id @default(uuid())\n  name        String\n  slug        String   @unique\n  description String?\n  createdAt   DateTime @default(now())\n  courses     Course[]\n}\n\nmodel Course {\n  id            String         @id @default(uuid())\n  title         String\n  slug          String         @unique\n  description   String?\n  level         String?\n  createdAt     DateTime       @default(now())\n  categoryId    String\n  isPublished   Boolean        @default(true)\n  category      Category       @relation(fields: [categoryId], references: [id])\n  lessons       Lesson[]\n  registrations Registration[]\n}\n\nmodel Lesson {\n  id           String       @id @default(uuid())\n  courseId     String\n  title        String\n  createdAt    DateTime     @default(now())\n  order        Int\n  course       Course       @relation(fields: [courseId], references: [id])\n  vocabularies Vocabulary[]\n}\n\nmodel Vocabulary {\n  id        String   @id @default(uuid())\n  lessonId  String\n  word      String\n  pinyin    String?\n  meaning   String\n  audioUrl  String?\n  createdAt DateTime @default(now())\n  lesson    Lesson   @relation(fields: [lessonId], references: [id])\n}\n\nmodel Registration {\n  id        String   @id @default(uuid())\n  name      String\n  phone     String\n  email     String?\n  note      String?\n  createdAt DateTime @default(now())\n  courseId  String?\n  course    Course?  @relation(fields: [courseId], references: [id])\n}\n"
+  "inlineSchema": "generator client {\n  provider = \"prisma-client-js\"\n  output   = \"./generated\"\n}\n\ndatasource db {\n  provider = \"postgresql\"\n}\n\nmodel Category {\n  id          String   @id @default(uuid())\n  name        String\n  slug        String   @unique\n  description String?\n  createdAt   DateTime @default(now())\n  courses     Course[]\n}\n\nmodel Course {\n  id               String         @id @default(uuid())\n  title            String\n  slug             String         @unique\n  description      String?\n  image            String?\n  instructor       String?\n  instructorAvatar String?\n  price            String?\n  originalPrice    String?\n  students         String?\n  rating           String?\n  level            String?\n  tag              String?\n  createdAt        DateTime       @default(now())\n  categoryId       String\n  isPublished      Boolean        @default(true)\n  category         Category       @relation(fields: [categoryId], references: [id])\n  lessons          Lesson[]\n  registrations    Registration[]\n}\n\nmodel Lesson {\n  id           String       @id @default(uuid())\n  courseId     String\n  title        String\n  createdAt    DateTime     @default(now())\n  order        Int\n  course       Course       @relation(fields: [courseId], references: [id])\n  vocabularies Vocabulary[]\n}\n\nmodel Vocabulary {\n  id        String   @id @default(uuid())\n  lessonId  String\n  word      String\n  pinyin    String?\n  meaning   String\n  audioUrl  String?\n  createdAt DateTime @default(now())\n  lesson    Lesson   @relation(fields: [lessonId], references: [id])\n}\n\nmodel Registration {\n  id        String   @id @default(uuid())\n  name      String\n  phone     String\n  email     String?\n  note      String?\n  createdAt DateTime @default(now())\n  courseId  String?\n  course    Course?  @relation(fields: [courseId], references: [id])\n}\n\n// Hero Slideshow\nmodel HeroSlide {\n  id               String   @id @default(uuid())\n  image            String\n  badge            String\n  badgeColor       String\n  title            String\n  description      String\n  primaryCtaText   String\n  primaryCtaHref   String\n  secondaryCtaText String?\n  secondaryCtaHref String?\n  overlayGradient  String\n  order            Int\n  isActive         Boolean  @default(true)\n  createdAt        DateTime @default(now())\n  updatedAt        DateTime @updatedAt\n}\n\n// HSK Levels\nmodel HSKLevel {\n  id              String   @id @default(uuid())\n  level           Int      @unique\n  title           String\n  badge           String\n  badgeColor      String\n  description     String\n  vocabularyCount String\n  targetAudience  String\n  targetIcon      String\n  accentColor     String\n  bgGradient      String\n  href            String\n  order           Int\n  isActive        Boolean  @default(true)\n  createdAt       DateTime @default(now())\n  updatedAt       DateTime @updatedAt\n}\n\n// Why Choose Us Features\nmodel Feature {\n  id          String   @id @default(uuid())\n  icon        String\n  iconBg      String\n  iconColor   String\n  title       String\n  description String\n  order       Int\n  isActive    Boolean  @default(true)\n  createdAt   DateTime @default(now())\n  updatedAt   DateTime @updatedAt\n}\n\n// CTA Section Stats\nmodel CtaStat {\n  id        String   @id @default(uuid())\n  value     String\n  label     String\n  order     Int\n  isActive  Boolean  @default(true)\n  createdAt DateTime @default(now())\n  updatedAt DateTime @updatedAt\n}\n"
 }
 
-config.runtimeDataModel = JSON.parse("{\"models\":{\"Category\":{\"fields\":[{\"name\":\"id\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"name\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"slug\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"description\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"createdAt\",\"kind\":\"scalar\",\"type\":\"DateTime\"},{\"name\":\"courses\",\"kind\":\"object\",\"type\":\"Course\",\"relationName\":\"CategoryToCourse\"}],\"dbName\":null},\"Course\":{\"fields\":[{\"name\":\"id\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"title\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"slug\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"description\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"level\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"createdAt\",\"kind\":\"scalar\",\"type\":\"DateTime\"},{\"name\":\"categoryId\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"isPublished\",\"kind\":\"scalar\",\"type\":\"Boolean\"},{\"name\":\"category\",\"kind\":\"object\",\"type\":\"Category\",\"relationName\":\"CategoryToCourse\"},{\"name\":\"lessons\",\"kind\":\"object\",\"type\":\"Lesson\",\"relationName\":\"CourseToLesson\"},{\"name\":\"registrations\",\"kind\":\"object\",\"type\":\"Registration\",\"relationName\":\"CourseToRegistration\"}],\"dbName\":null},\"Lesson\":{\"fields\":[{\"name\":\"id\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"courseId\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"title\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"createdAt\",\"kind\":\"scalar\",\"type\":\"DateTime\"},{\"name\":\"order\",\"kind\":\"scalar\",\"type\":\"Int\"},{\"name\":\"course\",\"kind\":\"object\",\"type\":\"Course\",\"relationName\":\"CourseToLesson\"},{\"name\":\"vocabularies\",\"kind\":\"object\",\"type\":\"Vocabulary\",\"relationName\":\"LessonToVocabulary\"}],\"dbName\":null},\"Vocabulary\":{\"fields\":[{\"name\":\"id\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"lessonId\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"word\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"pinyin\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"meaning\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"audioUrl\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"createdAt\",\"kind\":\"scalar\",\"type\":\"DateTime\"},{\"name\":\"lesson\",\"kind\":\"object\",\"type\":\"Lesson\",\"relationName\":\"LessonToVocabulary\"}],\"dbName\":null},\"Registration\":{\"fields\":[{\"name\":\"id\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"name\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"phone\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"email\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"note\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"createdAt\",\"kind\":\"scalar\",\"type\":\"DateTime\"},{\"name\":\"courseId\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"course\",\"kind\":\"object\",\"type\":\"Course\",\"relationName\":\"CourseToRegistration\"}],\"dbName\":null}},\"enums\":{},\"types\":{}}")
+config.runtimeDataModel = JSON.parse("{\"models\":{\"Category\":{\"fields\":[{\"name\":\"id\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"name\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"slug\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"description\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"createdAt\",\"kind\":\"scalar\",\"type\":\"DateTime\"},{\"name\":\"courses\",\"kind\":\"object\",\"type\":\"Course\",\"relationName\":\"CategoryToCourse\"}],\"dbName\":null},\"Course\":{\"fields\":[{\"name\":\"id\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"title\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"slug\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"description\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"image\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"instructor\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"instructorAvatar\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"price\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"originalPrice\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"students\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"rating\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"level\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"tag\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"createdAt\",\"kind\":\"scalar\",\"type\":\"DateTime\"},{\"name\":\"categoryId\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"isPublished\",\"kind\":\"scalar\",\"type\":\"Boolean\"},{\"name\":\"category\",\"kind\":\"object\",\"type\":\"Category\",\"relationName\":\"CategoryToCourse\"},{\"name\":\"lessons\",\"kind\":\"object\",\"type\":\"Lesson\",\"relationName\":\"CourseToLesson\"},{\"name\":\"registrations\",\"kind\":\"object\",\"type\":\"Registration\",\"relationName\":\"CourseToRegistration\"}],\"dbName\":null},\"Lesson\":{\"fields\":[{\"name\":\"id\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"courseId\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"title\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"createdAt\",\"kind\":\"scalar\",\"type\":\"DateTime\"},{\"name\":\"order\",\"kind\":\"scalar\",\"type\":\"Int\"},{\"name\":\"course\",\"kind\":\"object\",\"type\":\"Course\",\"relationName\":\"CourseToLesson\"},{\"name\":\"vocabularies\",\"kind\":\"object\",\"type\":\"Vocabulary\",\"relationName\":\"LessonToVocabulary\"}],\"dbName\":null},\"Vocabulary\":{\"fields\":[{\"name\":\"id\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"lessonId\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"word\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"pinyin\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"meaning\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"audioUrl\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"createdAt\",\"kind\":\"scalar\",\"type\":\"DateTime\"},{\"name\":\"lesson\",\"kind\":\"object\",\"type\":\"Lesson\",\"relationName\":\"LessonToVocabulary\"}],\"dbName\":null},\"Registration\":{\"fields\":[{\"name\":\"id\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"name\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"phone\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"email\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"note\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"createdAt\",\"kind\":\"scalar\",\"type\":\"DateTime\"},{\"name\":\"courseId\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"course\",\"kind\":\"object\",\"type\":\"Course\",\"relationName\":\"CourseToRegistration\"}],\"dbName\":null},\"HeroSlide\":{\"fields\":[{\"name\":\"id\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"image\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"badge\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"badgeColor\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"title\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"description\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"primaryCtaText\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"primaryCtaHref\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"secondaryCtaText\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"secondaryCtaHref\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"overlayGradient\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"order\",\"kind\":\"scalar\",\"type\":\"Int\"},{\"name\":\"isActive\",\"kind\":\"scalar\",\"type\":\"Boolean\"},{\"name\":\"createdAt\",\"kind\":\"scalar\",\"type\":\"DateTime\"},{\"name\":\"updatedAt\",\"kind\":\"scalar\",\"type\":\"DateTime\"}],\"dbName\":null},\"HSKLevel\":{\"fields\":[{\"name\":\"id\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"level\",\"kind\":\"scalar\",\"type\":\"Int\"},{\"name\":\"title\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"badge\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"badgeColor\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"description\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"vocabularyCount\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"targetAudience\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"targetIcon\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"accentColor\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"bgGradient\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"href\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"order\",\"kind\":\"scalar\",\"type\":\"Int\"},{\"name\":\"isActive\",\"kind\":\"scalar\",\"type\":\"Boolean\"},{\"name\":\"createdAt\",\"kind\":\"scalar\",\"type\":\"DateTime\"},{\"name\":\"updatedAt\",\"kind\":\"scalar\",\"type\":\"DateTime\"}],\"dbName\":null},\"Feature\":{\"fields\":[{\"name\":\"id\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"icon\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"iconBg\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"iconColor\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"title\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"description\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"order\",\"kind\":\"scalar\",\"type\":\"Int\"},{\"name\":\"isActive\",\"kind\":\"scalar\",\"type\":\"Boolean\"},{\"name\":\"createdAt\",\"kind\":\"scalar\",\"type\":\"DateTime\"},{\"name\":\"updatedAt\",\"kind\":\"scalar\",\"type\":\"DateTime\"}],\"dbName\":null},\"CtaStat\":{\"fields\":[{\"name\":\"id\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"value\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"label\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"order\",\"kind\":\"scalar\",\"type\":\"Int\"},{\"name\":\"isActive\",\"kind\":\"scalar\",\"type\":\"Boolean\"},{\"name\":\"createdAt\",\"kind\":\"scalar\",\"type\":\"DateTime\"},{\"name\":\"updatedAt\",\"kind\":\"scalar\",\"type\":\"DateTime\"}],\"dbName\":null}},\"enums\":{},\"types\":{}}")
 defineDmmfProperty(exports.Prisma, config.runtimeDataModel)
 config.compilerWasm = {
       getRuntime: async () => require('./query_compiler_bg.js'),

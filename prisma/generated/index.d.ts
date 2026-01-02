@@ -38,6 +38,26 @@ export type Vocabulary = $Result.DefaultSelection<Prisma.$VocabularyPayload>
  * 
  */
 export type Registration = $Result.DefaultSelection<Prisma.$RegistrationPayload>
+/**
+ * Model HeroSlide
+ * 
+ */
+export type HeroSlide = $Result.DefaultSelection<Prisma.$HeroSlidePayload>
+/**
+ * Model HSKLevel
+ * 
+ */
+export type HSKLevel = $Result.DefaultSelection<Prisma.$HSKLevelPayload>
+/**
+ * Model Feature
+ * 
+ */
+export type Feature = $Result.DefaultSelection<Prisma.$FeaturePayload>
+/**
+ * Model CtaStat
+ * 
+ */
+export type CtaStat = $Result.DefaultSelection<Prisma.$CtaStatPayload>
 
 /**
  * ##  Prisma Client ʲˢ
@@ -205,6 +225,46 @@ export class PrismaClient<
     * ```
     */
   get registration(): Prisma.RegistrationDelegate<ExtArgs, ClientOptions>;
+
+  /**
+   * `prisma.heroSlide`: Exposes CRUD operations for the **HeroSlide** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more HeroSlides
+    * const heroSlides = await prisma.heroSlide.findMany()
+    * ```
+    */
+  get heroSlide(): Prisma.HeroSlideDelegate<ExtArgs, ClientOptions>;
+
+  /**
+   * `prisma.hSKLevel`: Exposes CRUD operations for the **HSKLevel** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more HSKLevels
+    * const hSKLevels = await prisma.hSKLevel.findMany()
+    * ```
+    */
+  get hSKLevel(): Prisma.HSKLevelDelegate<ExtArgs, ClientOptions>;
+
+  /**
+   * `prisma.feature`: Exposes CRUD operations for the **Feature** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more Features
+    * const features = await prisma.feature.findMany()
+    * ```
+    */
+  get feature(): Prisma.FeatureDelegate<ExtArgs, ClientOptions>;
+
+  /**
+   * `prisma.ctaStat`: Exposes CRUD operations for the **CtaStat** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more CtaStats
+    * const ctaStats = await prisma.ctaStat.findMany()
+    * ```
+    */
+  get ctaStat(): Prisma.CtaStatDelegate<ExtArgs, ClientOptions>;
 }
 
 export namespace Prisma {
@@ -643,7 +703,11 @@ export namespace Prisma {
     Course: 'Course',
     Lesson: 'Lesson',
     Vocabulary: 'Vocabulary',
-    Registration: 'Registration'
+    Registration: 'Registration',
+    HeroSlide: 'HeroSlide',
+    HSKLevel: 'HSKLevel',
+    Feature: 'Feature',
+    CtaStat: 'CtaStat'
   };
 
   export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -659,7 +723,7 @@ export namespace Prisma {
       omit: GlobalOmitOptions
     }
     meta: {
-      modelProps: "category" | "course" | "lesson" | "vocabulary" | "registration"
+      modelProps: "category" | "course" | "lesson" | "vocabulary" | "registration" | "heroSlide" | "hSKLevel" | "feature" | "ctaStat"
       txIsolationLevel: Prisma.TransactionIsolationLevel
     }
     model: {
@@ -1033,6 +1097,302 @@ export namespace Prisma {
           }
         }
       }
+      HeroSlide: {
+        payload: Prisma.$HeroSlidePayload<ExtArgs>
+        fields: Prisma.HeroSlideFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.HeroSlideFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$HeroSlidePayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.HeroSlideFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$HeroSlidePayload>
+          }
+          findFirst: {
+            args: Prisma.HeroSlideFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$HeroSlidePayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.HeroSlideFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$HeroSlidePayload>
+          }
+          findMany: {
+            args: Prisma.HeroSlideFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$HeroSlidePayload>[]
+          }
+          create: {
+            args: Prisma.HeroSlideCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$HeroSlidePayload>
+          }
+          createMany: {
+            args: Prisma.HeroSlideCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.HeroSlideCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$HeroSlidePayload>[]
+          }
+          delete: {
+            args: Prisma.HeroSlideDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$HeroSlidePayload>
+          }
+          update: {
+            args: Prisma.HeroSlideUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$HeroSlidePayload>
+          }
+          deleteMany: {
+            args: Prisma.HeroSlideDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.HeroSlideUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateManyAndReturn: {
+            args: Prisma.HeroSlideUpdateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$HeroSlidePayload>[]
+          }
+          upsert: {
+            args: Prisma.HeroSlideUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$HeroSlidePayload>
+          }
+          aggregate: {
+            args: Prisma.HeroSlideAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateHeroSlide>
+          }
+          groupBy: {
+            args: Prisma.HeroSlideGroupByArgs<ExtArgs>
+            result: $Utils.Optional<HeroSlideGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.HeroSlideCountArgs<ExtArgs>
+            result: $Utils.Optional<HeroSlideCountAggregateOutputType> | number
+          }
+        }
+      }
+      HSKLevel: {
+        payload: Prisma.$HSKLevelPayload<ExtArgs>
+        fields: Prisma.HSKLevelFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.HSKLevelFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$HSKLevelPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.HSKLevelFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$HSKLevelPayload>
+          }
+          findFirst: {
+            args: Prisma.HSKLevelFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$HSKLevelPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.HSKLevelFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$HSKLevelPayload>
+          }
+          findMany: {
+            args: Prisma.HSKLevelFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$HSKLevelPayload>[]
+          }
+          create: {
+            args: Prisma.HSKLevelCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$HSKLevelPayload>
+          }
+          createMany: {
+            args: Prisma.HSKLevelCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.HSKLevelCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$HSKLevelPayload>[]
+          }
+          delete: {
+            args: Prisma.HSKLevelDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$HSKLevelPayload>
+          }
+          update: {
+            args: Prisma.HSKLevelUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$HSKLevelPayload>
+          }
+          deleteMany: {
+            args: Prisma.HSKLevelDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.HSKLevelUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateManyAndReturn: {
+            args: Prisma.HSKLevelUpdateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$HSKLevelPayload>[]
+          }
+          upsert: {
+            args: Prisma.HSKLevelUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$HSKLevelPayload>
+          }
+          aggregate: {
+            args: Prisma.HSKLevelAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateHSKLevel>
+          }
+          groupBy: {
+            args: Prisma.HSKLevelGroupByArgs<ExtArgs>
+            result: $Utils.Optional<HSKLevelGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.HSKLevelCountArgs<ExtArgs>
+            result: $Utils.Optional<HSKLevelCountAggregateOutputType> | number
+          }
+        }
+      }
+      Feature: {
+        payload: Prisma.$FeaturePayload<ExtArgs>
+        fields: Prisma.FeatureFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.FeatureFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$FeaturePayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.FeatureFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$FeaturePayload>
+          }
+          findFirst: {
+            args: Prisma.FeatureFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$FeaturePayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.FeatureFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$FeaturePayload>
+          }
+          findMany: {
+            args: Prisma.FeatureFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$FeaturePayload>[]
+          }
+          create: {
+            args: Prisma.FeatureCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$FeaturePayload>
+          }
+          createMany: {
+            args: Prisma.FeatureCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.FeatureCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$FeaturePayload>[]
+          }
+          delete: {
+            args: Prisma.FeatureDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$FeaturePayload>
+          }
+          update: {
+            args: Prisma.FeatureUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$FeaturePayload>
+          }
+          deleteMany: {
+            args: Prisma.FeatureDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.FeatureUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateManyAndReturn: {
+            args: Prisma.FeatureUpdateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$FeaturePayload>[]
+          }
+          upsert: {
+            args: Prisma.FeatureUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$FeaturePayload>
+          }
+          aggregate: {
+            args: Prisma.FeatureAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateFeature>
+          }
+          groupBy: {
+            args: Prisma.FeatureGroupByArgs<ExtArgs>
+            result: $Utils.Optional<FeatureGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.FeatureCountArgs<ExtArgs>
+            result: $Utils.Optional<FeatureCountAggregateOutputType> | number
+          }
+        }
+      }
+      CtaStat: {
+        payload: Prisma.$CtaStatPayload<ExtArgs>
+        fields: Prisma.CtaStatFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.CtaStatFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CtaStatPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.CtaStatFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CtaStatPayload>
+          }
+          findFirst: {
+            args: Prisma.CtaStatFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CtaStatPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.CtaStatFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CtaStatPayload>
+          }
+          findMany: {
+            args: Prisma.CtaStatFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CtaStatPayload>[]
+          }
+          create: {
+            args: Prisma.CtaStatCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CtaStatPayload>
+          }
+          createMany: {
+            args: Prisma.CtaStatCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.CtaStatCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CtaStatPayload>[]
+          }
+          delete: {
+            args: Prisma.CtaStatDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CtaStatPayload>
+          }
+          update: {
+            args: Prisma.CtaStatUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CtaStatPayload>
+          }
+          deleteMany: {
+            args: Prisma.CtaStatDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.CtaStatUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateManyAndReturn: {
+            args: Prisma.CtaStatUpdateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CtaStatPayload>[]
+          }
+          upsert: {
+            args: Prisma.CtaStatUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CtaStatPayload>
+          }
+          aggregate: {
+            args: Prisma.CtaStatAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateCtaStat>
+          }
+          groupBy: {
+            args: Prisma.CtaStatGroupByArgs<ExtArgs>
+            result: $Utils.Optional<CtaStatGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.CtaStatCountArgs<ExtArgs>
+            result: $Utils.Optional<CtaStatCountAggregateOutputType> | number
+          }
+        }
+      }
     }
   } & {
     other: {
@@ -1146,6 +1506,10 @@ export namespace Prisma {
     lesson?: LessonOmit
     vocabulary?: VocabularyOmit
     registration?: RegistrationOmit
+    heroSlide?: HeroSlideOmit
+    hSKLevel?: HSKLevelOmit
+    feature?: FeatureOmit
+    ctaStat?: CtaStatOmit
   }
 
   /* Types for Logging */
@@ -2412,7 +2776,15 @@ export namespace Prisma {
     title: string | null
     slug: string | null
     description: string | null
+    image: string | null
+    instructor: string | null
+    instructorAvatar: string | null
+    price: string | null
+    originalPrice: string | null
+    students: string | null
+    rating: string | null
     level: string | null
+    tag: string | null
     createdAt: Date | null
     categoryId: string | null
     isPublished: boolean | null
@@ -2423,7 +2795,15 @@ export namespace Prisma {
     title: string | null
     slug: string | null
     description: string | null
+    image: string | null
+    instructor: string | null
+    instructorAvatar: string | null
+    price: string | null
+    originalPrice: string | null
+    students: string | null
+    rating: string | null
     level: string | null
+    tag: string | null
     createdAt: Date | null
     categoryId: string | null
     isPublished: boolean | null
@@ -2434,7 +2814,15 @@ export namespace Prisma {
     title: number
     slug: number
     description: number
+    image: number
+    instructor: number
+    instructorAvatar: number
+    price: number
+    originalPrice: number
+    students: number
+    rating: number
     level: number
+    tag: number
     createdAt: number
     categoryId: number
     isPublished: number
@@ -2447,7 +2835,15 @@ export namespace Prisma {
     title?: true
     slug?: true
     description?: true
+    image?: true
+    instructor?: true
+    instructorAvatar?: true
+    price?: true
+    originalPrice?: true
+    students?: true
+    rating?: true
     level?: true
+    tag?: true
     createdAt?: true
     categoryId?: true
     isPublished?: true
@@ -2458,7 +2854,15 @@ export namespace Prisma {
     title?: true
     slug?: true
     description?: true
+    image?: true
+    instructor?: true
+    instructorAvatar?: true
+    price?: true
+    originalPrice?: true
+    students?: true
+    rating?: true
     level?: true
+    tag?: true
     createdAt?: true
     categoryId?: true
     isPublished?: true
@@ -2469,7 +2873,15 @@ export namespace Prisma {
     title?: true
     slug?: true
     description?: true
+    image?: true
+    instructor?: true
+    instructorAvatar?: true
+    price?: true
+    originalPrice?: true
+    students?: true
+    rating?: true
     level?: true
+    tag?: true
     createdAt?: true
     categoryId?: true
     isPublished?: true
@@ -2553,7 +2965,15 @@ export namespace Prisma {
     title: string
     slug: string
     description: string | null
+    image: string | null
+    instructor: string | null
+    instructorAvatar: string | null
+    price: string | null
+    originalPrice: string | null
+    students: string | null
+    rating: string | null
     level: string | null
+    tag: string | null
     createdAt: Date
     categoryId: string
     isPublished: boolean
@@ -2581,7 +3001,15 @@ export namespace Prisma {
     title?: boolean
     slug?: boolean
     description?: boolean
+    image?: boolean
+    instructor?: boolean
+    instructorAvatar?: boolean
+    price?: boolean
+    originalPrice?: boolean
+    students?: boolean
+    rating?: boolean
     level?: boolean
+    tag?: boolean
     createdAt?: boolean
     categoryId?: boolean
     isPublished?: boolean
@@ -2596,7 +3024,15 @@ export namespace Prisma {
     title?: boolean
     slug?: boolean
     description?: boolean
+    image?: boolean
+    instructor?: boolean
+    instructorAvatar?: boolean
+    price?: boolean
+    originalPrice?: boolean
+    students?: boolean
+    rating?: boolean
     level?: boolean
+    tag?: boolean
     createdAt?: boolean
     categoryId?: boolean
     isPublished?: boolean
@@ -2608,7 +3044,15 @@ export namespace Prisma {
     title?: boolean
     slug?: boolean
     description?: boolean
+    image?: boolean
+    instructor?: boolean
+    instructorAvatar?: boolean
+    price?: boolean
+    originalPrice?: boolean
+    students?: boolean
+    rating?: boolean
     level?: boolean
+    tag?: boolean
     createdAt?: boolean
     categoryId?: boolean
     isPublished?: boolean
@@ -2620,13 +3064,21 @@ export namespace Prisma {
     title?: boolean
     slug?: boolean
     description?: boolean
+    image?: boolean
+    instructor?: boolean
+    instructorAvatar?: boolean
+    price?: boolean
+    originalPrice?: boolean
+    students?: boolean
+    rating?: boolean
     level?: boolean
+    tag?: boolean
     createdAt?: boolean
     categoryId?: boolean
     isPublished?: boolean
   }
 
-  export type CourseOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "title" | "slug" | "description" | "level" | "createdAt" | "categoryId" | "isPublished", ExtArgs["result"]["course"]>
+  export type CourseOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "title" | "slug" | "description" | "image" | "instructor" | "instructorAvatar" | "price" | "originalPrice" | "students" | "rating" | "level" | "tag" | "createdAt" | "categoryId" | "isPublished", ExtArgs["result"]["course"]>
   export type CourseInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     category?: boolean | CategoryDefaultArgs<ExtArgs>
     lessons?: boolean | Course$lessonsArgs<ExtArgs>
@@ -2652,7 +3104,15 @@ export namespace Prisma {
       title: string
       slug: string
       description: string | null
+      image: string | null
+      instructor: string | null
+      instructorAvatar: string | null
+      price: string | null
+      originalPrice: string | null
+      students: string | null
+      rating: string | null
       level: string | null
+      tag: string | null
       createdAt: Date
       categoryId: string
       isPublished: boolean
@@ -3086,7 +3546,15 @@ export namespace Prisma {
     readonly title: FieldRef<"Course", 'String'>
     readonly slug: FieldRef<"Course", 'String'>
     readonly description: FieldRef<"Course", 'String'>
+    readonly image: FieldRef<"Course", 'String'>
+    readonly instructor: FieldRef<"Course", 'String'>
+    readonly instructorAvatar: FieldRef<"Course", 'String'>
+    readonly price: FieldRef<"Course", 'String'>
+    readonly originalPrice: FieldRef<"Course", 'String'>
+    readonly students: FieldRef<"Course", 'String'>
+    readonly rating: FieldRef<"Course", 'String'>
     readonly level: FieldRef<"Course", 'String'>
+    readonly tag: FieldRef<"Course", 'String'>
     readonly createdAt: FieldRef<"Course", 'DateTime'>
     readonly categoryId: FieldRef<"Course", 'String'>
     readonly isPublished: FieldRef<"Course", 'Boolean'>
@@ -6862,6 +7330,4490 @@ export namespace Prisma {
 
 
   /**
+   * Model HeroSlide
+   */
+
+  export type AggregateHeroSlide = {
+    _count: HeroSlideCountAggregateOutputType | null
+    _avg: HeroSlideAvgAggregateOutputType | null
+    _sum: HeroSlideSumAggregateOutputType | null
+    _min: HeroSlideMinAggregateOutputType | null
+    _max: HeroSlideMaxAggregateOutputType | null
+  }
+
+  export type HeroSlideAvgAggregateOutputType = {
+    order: number | null
+  }
+
+  export type HeroSlideSumAggregateOutputType = {
+    order: number | null
+  }
+
+  export type HeroSlideMinAggregateOutputType = {
+    id: string | null
+    image: string | null
+    badge: string | null
+    badgeColor: string | null
+    title: string | null
+    description: string | null
+    primaryCtaText: string | null
+    primaryCtaHref: string | null
+    secondaryCtaText: string | null
+    secondaryCtaHref: string | null
+    overlayGradient: string | null
+    order: number | null
+    isActive: boolean | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type HeroSlideMaxAggregateOutputType = {
+    id: string | null
+    image: string | null
+    badge: string | null
+    badgeColor: string | null
+    title: string | null
+    description: string | null
+    primaryCtaText: string | null
+    primaryCtaHref: string | null
+    secondaryCtaText: string | null
+    secondaryCtaHref: string | null
+    overlayGradient: string | null
+    order: number | null
+    isActive: boolean | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type HeroSlideCountAggregateOutputType = {
+    id: number
+    image: number
+    badge: number
+    badgeColor: number
+    title: number
+    description: number
+    primaryCtaText: number
+    primaryCtaHref: number
+    secondaryCtaText: number
+    secondaryCtaHref: number
+    overlayGradient: number
+    order: number
+    isActive: number
+    createdAt: number
+    updatedAt: number
+    _all: number
+  }
+
+
+  export type HeroSlideAvgAggregateInputType = {
+    order?: true
+  }
+
+  export type HeroSlideSumAggregateInputType = {
+    order?: true
+  }
+
+  export type HeroSlideMinAggregateInputType = {
+    id?: true
+    image?: true
+    badge?: true
+    badgeColor?: true
+    title?: true
+    description?: true
+    primaryCtaText?: true
+    primaryCtaHref?: true
+    secondaryCtaText?: true
+    secondaryCtaHref?: true
+    overlayGradient?: true
+    order?: true
+    isActive?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type HeroSlideMaxAggregateInputType = {
+    id?: true
+    image?: true
+    badge?: true
+    badgeColor?: true
+    title?: true
+    description?: true
+    primaryCtaText?: true
+    primaryCtaHref?: true
+    secondaryCtaText?: true
+    secondaryCtaHref?: true
+    overlayGradient?: true
+    order?: true
+    isActive?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type HeroSlideCountAggregateInputType = {
+    id?: true
+    image?: true
+    badge?: true
+    badgeColor?: true
+    title?: true
+    description?: true
+    primaryCtaText?: true
+    primaryCtaHref?: true
+    secondaryCtaText?: true
+    secondaryCtaHref?: true
+    overlayGradient?: true
+    order?: true
+    isActive?: true
+    createdAt?: true
+    updatedAt?: true
+    _all?: true
+  }
+
+  export type HeroSlideAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which HeroSlide to aggregate.
+     */
+    where?: HeroSlideWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of HeroSlides to fetch.
+     */
+    orderBy?: HeroSlideOrderByWithRelationInput | HeroSlideOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: HeroSlideWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` HeroSlides from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` HeroSlides.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned HeroSlides
+    **/
+    _count?: true | HeroSlideCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to average
+    **/
+    _avg?: HeroSlideAvgAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to sum
+    **/
+    _sum?: HeroSlideSumAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: HeroSlideMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: HeroSlideMaxAggregateInputType
+  }
+
+  export type GetHeroSlideAggregateType<T extends HeroSlideAggregateArgs> = {
+        [P in keyof T & keyof AggregateHeroSlide]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateHeroSlide[P]>
+      : GetScalarType<T[P], AggregateHeroSlide[P]>
+  }
+
+
+
+
+  export type HeroSlideGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: HeroSlideWhereInput
+    orderBy?: HeroSlideOrderByWithAggregationInput | HeroSlideOrderByWithAggregationInput[]
+    by: HeroSlideScalarFieldEnum[] | HeroSlideScalarFieldEnum
+    having?: HeroSlideScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: HeroSlideCountAggregateInputType | true
+    _avg?: HeroSlideAvgAggregateInputType
+    _sum?: HeroSlideSumAggregateInputType
+    _min?: HeroSlideMinAggregateInputType
+    _max?: HeroSlideMaxAggregateInputType
+  }
+
+  export type HeroSlideGroupByOutputType = {
+    id: string
+    image: string
+    badge: string
+    badgeColor: string
+    title: string
+    description: string
+    primaryCtaText: string
+    primaryCtaHref: string
+    secondaryCtaText: string | null
+    secondaryCtaHref: string | null
+    overlayGradient: string
+    order: number
+    isActive: boolean
+    createdAt: Date
+    updatedAt: Date
+    _count: HeroSlideCountAggregateOutputType | null
+    _avg: HeroSlideAvgAggregateOutputType | null
+    _sum: HeroSlideSumAggregateOutputType | null
+    _min: HeroSlideMinAggregateOutputType | null
+    _max: HeroSlideMaxAggregateOutputType | null
+  }
+
+  type GetHeroSlideGroupByPayload<T extends HeroSlideGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<HeroSlideGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof HeroSlideGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], HeroSlideGroupByOutputType[P]>
+            : GetScalarType<T[P], HeroSlideGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type HeroSlideSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    image?: boolean
+    badge?: boolean
+    badgeColor?: boolean
+    title?: boolean
+    description?: boolean
+    primaryCtaText?: boolean
+    primaryCtaHref?: boolean
+    secondaryCtaText?: boolean
+    secondaryCtaHref?: boolean
+    overlayGradient?: boolean
+    order?: boolean
+    isActive?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+  }, ExtArgs["result"]["heroSlide"]>
+
+  export type HeroSlideSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    image?: boolean
+    badge?: boolean
+    badgeColor?: boolean
+    title?: boolean
+    description?: boolean
+    primaryCtaText?: boolean
+    primaryCtaHref?: boolean
+    secondaryCtaText?: boolean
+    secondaryCtaHref?: boolean
+    overlayGradient?: boolean
+    order?: boolean
+    isActive?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+  }, ExtArgs["result"]["heroSlide"]>
+
+  export type HeroSlideSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    image?: boolean
+    badge?: boolean
+    badgeColor?: boolean
+    title?: boolean
+    description?: boolean
+    primaryCtaText?: boolean
+    primaryCtaHref?: boolean
+    secondaryCtaText?: boolean
+    secondaryCtaHref?: boolean
+    overlayGradient?: boolean
+    order?: boolean
+    isActive?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+  }, ExtArgs["result"]["heroSlide"]>
+
+  export type HeroSlideSelectScalar = {
+    id?: boolean
+    image?: boolean
+    badge?: boolean
+    badgeColor?: boolean
+    title?: boolean
+    description?: boolean
+    primaryCtaText?: boolean
+    primaryCtaHref?: boolean
+    secondaryCtaText?: boolean
+    secondaryCtaHref?: boolean
+    overlayGradient?: boolean
+    order?: boolean
+    isActive?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+  }
+
+  export type HeroSlideOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "image" | "badge" | "badgeColor" | "title" | "description" | "primaryCtaText" | "primaryCtaHref" | "secondaryCtaText" | "secondaryCtaHref" | "overlayGradient" | "order" | "isActive" | "createdAt" | "updatedAt", ExtArgs["result"]["heroSlide"]>
+
+  export type $HeroSlidePayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "HeroSlide"
+    objects: {}
+    scalars: $Extensions.GetPayloadResult<{
+      id: string
+      image: string
+      badge: string
+      badgeColor: string
+      title: string
+      description: string
+      primaryCtaText: string
+      primaryCtaHref: string
+      secondaryCtaText: string | null
+      secondaryCtaHref: string | null
+      overlayGradient: string
+      order: number
+      isActive: boolean
+      createdAt: Date
+      updatedAt: Date
+    }, ExtArgs["result"]["heroSlide"]>
+    composites: {}
+  }
+
+  type HeroSlideGetPayload<S extends boolean | null | undefined | HeroSlideDefaultArgs> = $Result.GetResult<Prisma.$HeroSlidePayload, S>
+
+  type HeroSlideCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<HeroSlideFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: HeroSlideCountAggregateInputType | true
+    }
+
+  export interface HeroSlideDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['HeroSlide'], meta: { name: 'HeroSlide' } }
+    /**
+     * Find zero or one HeroSlide that matches the filter.
+     * @param {HeroSlideFindUniqueArgs} args - Arguments to find a HeroSlide
+     * @example
+     * // Get one HeroSlide
+     * const heroSlide = await prisma.heroSlide.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends HeroSlideFindUniqueArgs>(args: SelectSubset<T, HeroSlideFindUniqueArgs<ExtArgs>>): Prisma__HeroSlideClient<$Result.GetResult<Prisma.$HeroSlidePayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find one HeroSlide that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {HeroSlideFindUniqueOrThrowArgs} args - Arguments to find a HeroSlide
+     * @example
+     * // Get one HeroSlide
+     * const heroSlide = await prisma.heroSlide.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends HeroSlideFindUniqueOrThrowArgs>(args: SelectSubset<T, HeroSlideFindUniqueOrThrowArgs<ExtArgs>>): Prisma__HeroSlideClient<$Result.GetResult<Prisma.$HeroSlidePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first HeroSlide that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {HeroSlideFindFirstArgs} args - Arguments to find a HeroSlide
+     * @example
+     * // Get one HeroSlide
+     * const heroSlide = await prisma.heroSlide.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends HeroSlideFindFirstArgs>(args?: SelectSubset<T, HeroSlideFindFirstArgs<ExtArgs>>): Prisma__HeroSlideClient<$Result.GetResult<Prisma.$HeroSlidePayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first HeroSlide that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {HeroSlideFindFirstOrThrowArgs} args - Arguments to find a HeroSlide
+     * @example
+     * // Get one HeroSlide
+     * const heroSlide = await prisma.heroSlide.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends HeroSlideFindFirstOrThrowArgs>(args?: SelectSubset<T, HeroSlideFindFirstOrThrowArgs<ExtArgs>>): Prisma__HeroSlideClient<$Result.GetResult<Prisma.$HeroSlidePayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find zero or more HeroSlides that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {HeroSlideFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all HeroSlides
+     * const heroSlides = await prisma.heroSlide.findMany()
+     * 
+     * // Get first 10 HeroSlides
+     * const heroSlides = await prisma.heroSlide.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const heroSlideWithIdOnly = await prisma.heroSlide.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends HeroSlideFindManyArgs>(args?: SelectSubset<T, HeroSlideFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$HeroSlidePayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+
+    /**
+     * Create a HeroSlide.
+     * @param {HeroSlideCreateArgs} args - Arguments to create a HeroSlide.
+     * @example
+     * // Create one HeroSlide
+     * const HeroSlide = await prisma.heroSlide.create({
+     *   data: {
+     *     // ... data to create a HeroSlide
+     *   }
+     * })
+     * 
+     */
+    create<T extends HeroSlideCreateArgs>(args: SelectSubset<T, HeroSlideCreateArgs<ExtArgs>>): Prisma__HeroSlideClient<$Result.GetResult<Prisma.$HeroSlidePayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Create many HeroSlides.
+     * @param {HeroSlideCreateManyArgs} args - Arguments to create many HeroSlides.
+     * @example
+     * // Create many HeroSlides
+     * const heroSlide = await prisma.heroSlide.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends HeroSlideCreateManyArgs>(args?: SelectSubset<T, HeroSlideCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many HeroSlides and returns the data saved in the database.
+     * @param {HeroSlideCreateManyAndReturnArgs} args - Arguments to create many HeroSlides.
+     * @example
+     * // Create many HeroSlides
+     * const heroSlide = await prisma.heroSlide.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many HeroSlides and only return the `id`
+     * const heroSlideWithIdOnly = await prisma.heroSlide.createManyAndReturn({
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends HeroSlideCreateManyAndReturnArgs>(args?: SelectSubset<T, HeroSlideCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$HeroSlidePayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Delete a HeroSlide.
+     * @param {HeroSlideDeleteArgs} args - Arguments to delete one HeroSlide.
+     * @example
+     * // Delete one HeroSlide
+     * const HeroSlide = await prisma.heroSlide.delete({
+     *   where: {
+     *     // ... filter to delete one HeroSlide
+     *   }
+     * })
+     * 
+     */
+    delete<T extends HeroSlideDeleteArgs>(args: SelectSubset<T, HeroSlideDeleteArgs<ExtArgs>>): Prisma__HeroSlideClient<$Result.GetResult<Prisma.$HeroSlidePayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Update one HeroSlide.
+     * @param {HeroSlideUpdateArgs} args - Arguments to update one HeroSlide.
+     * @example
+     * // Update one HeroSlide
+     * const heroSlide = await prisma.heroSlide.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends HeroSlideUpdateArgs>(args: SelectSubset<T, HeroSlideUpdateArgs<ExtArgs>>): Prisma__HeroSlideClient<$Result.GetResult<Prisma.$HeroSlidePayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Delete zero or more HeroSlides.
+     * @param {HeroSlideDeleteManyArgs} args - Arguments to filter HeroSlides to delete.
+     * @example
+     * // Delete a few HeroSlides
+     * const { count } = await prisma.heroSlide.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends HeroSlideDeleteManyArgs>(args?: SelectSubset<T, HeroSlideDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more HeroSlides.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {HeroSlideUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many HeroSlides
+     * const heroSlide = await prisma.heroSlide.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends HeroSlideUpdateManyArgs>(args: SelectSubset<T, HeroSlideUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more HeroSlides and returns the data updated in the database.
+     * @param {HeroSlideUpdateManyAndReturnArgs} args - Arguments to update many HeroSlides.
+     * @example
+     * // Update many HeroSlides
+     * const heroSlide = await prisma.heroSlide.updateManyAndReturn({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Update zero or more HeroSlides and only return the `id`
+     * const heroSlideWithIdOnly = await prisma.heroSlide.updateManyAndReturn({
+     *   select: { id: true },
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    updateManyAndReturn<T extends HeroSlideUpdateManyAndReturnArgs>(args: SelectSubset<T, HeroSlideUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$HeroSlidePayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Create or update one HeroSlide.
+     * @param {HeroSlideUpsertArgs} args - Arguments to update or create a HeroSlide.
+     * @example
+     * // Update or create a HeroSlide
+     * const heroSlide = await prisma.heroSlide.upsert({
+     *   create: {
+     *     // ... data to create a HeroSlide
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the HeroSlide we want to update
+     *   }
+     * })
+     */
+    upsert<T extends HeroSlideUpsertArgs>(args: SelectSubset<T, HeroSlideUpsertArgs<ExtArgs>>): Prisma__HeroSlideClient<$Result.GetResult<Prisma.$HeroSlidePayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+
+    /**
+     * Count the number of HeroSlides.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {HeroSlideCountArgs} args - Arguments to filter HeroSlides to count.
+     * @example
+     * // Count the number of HeroSlides
+     * const count = await prisma.heroSlide.count({
+     *   where: {
+     *     // ... the filter for the HeroSlides we want to count
+     *   }
+     * })
+    **/
+    count<T extends HeroSlideCountArgs>(
+      args?: Subset<T, HeroSlideCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], HeroSlideCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a HeroSlide.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {HeroSlideAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends HeroSlideAggregateArgs>(args: Subset<T, HeroSlideAggregateArgs>): Prisma.PrismaPromise<GetHeroSlideAggregateType<T>>
+
+    /**
+     * Group by HeroSlide.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {HeroSlideGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends HeroSlideGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: HeroSlideGroupByArgs['orderBy'] }
+        : { orderBy?: HeroSlideGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, HeroSlideGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetHeroSlideGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the HeroSlide model
+   */
+  readonly fields: HeroSlideFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for HeroSlide.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__HeroSlideClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the HeroSlide model
+   */
+  interface HeroSlideFieldRefs {
+    readonly id: FieldRef<"HeroSlide", 'String'>
+    readonly image: FieldRef<"HeroSlide", 'String'>
+    readonly badge: FieldRef<"HeroSlide", 'String'>
+    readonly badgeColor: FieldRef<"HeroSlide", 'String'>
+    readonly title: FieldRef<"HeroSlide", 'String'>
+    readonly description: FieldRef<"HeroSlide", 'String'>
+    readonly primaryCtaText: FieldRef<"HeroSlide", 'String'>
+    readonly primaryCtaHref: FieldRef<"HeroSlide", 'String'>
+    readonly secondaryCtaText: FieldRef<"HeroSlide", 'String'>
+    readonly secondaryCtaHref: FieldRef<"HeroSlide", 'String'>
+    readonly overlayGradient: FieldRef<"HeroSlide", 'String'>
+    readonly order: FieldRef<"HeroSlide", 'Int'>
+    readonly isActive: FieldRef<"HeroSlide", 'Boolean'>
+    readonly createdAt: FieldRef<"HeroSlide", 'DateTime'>
+    readonly updatedAt: FieldRef<"HeroSlide", 'DateTime'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * HeroSlide findUnique
+   */
+  export type HeroSlideFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the HeroSlide
+     */
+    select?: HeroSlideSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the HeroSlide
+     */
+    omit?: HeroSlideOmit<ExtArgs> | null
+    /**
+     * Filter, which HeroSlide to fetch.
+     */
+    where: HeroSlideWhereUniqueInput
+  }
+
+  /**
+   * HeroSlide findUniqueOrThrow
+   */
+  export type HeroSlideFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the HeroSlide
+     */
+    select?: HeroSlideSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the HeroSlide
+     */
+    omit?: HeroSlideOmit<ExtArgs> | null
+    /**
+     * Filter, which HeroSlide to fetch.
+     */
+    where: HeroSlideWhereUniqueInput
+  }
+
+  /**
+   * HeroSlide findFirst
+   */
+  export type HeroSlideFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the HeroSlide
+     */
+    select?: HeroSlideSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the HeroSlide
+     */
+    omit?: HeroSlideOmit<ExtArgs> | null
+    /**
+     * Filter, which HeroSlide to fetch.
+     */
+    where?: HeroSlideWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of HeroSlides to fetch.
+     */
+    orderBy?: HeroSlideOrderByWithRelationInput | HeroSlideOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for HeroSlides.
+     */
+    cursor?: HeroSlideWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` HeroSlides from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` HeroSlides.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of HeroSlides.
+     */
+    distinct?: HeroSlideScalarFieldEnum | HeroSlideScalarFieldEnum[]
+  }
+
+  /**
+   * HeroSlide findFirstOrThrow
+   */
+  export type HeroSlideFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the HeroSlide
+     */
+    select?: HeroSlideSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the HeroSlide
+     */
+    omit?: HeroSlideOmit<ExtArgs> | null
+    /**
+     * Filter, which HeroSlide to fetch.
+     */
+    where?: HeroSlideWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of HeroSlides to fetch.
+     */
+    orderBy?: HeroSlideOrderByWithRelationInput | HeroSlideOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for HeroSlides.
+     */
+    cursor?: HeroSlideWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` HeroSlides from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` HeroSlides.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of HeroSlides.
+     */
+    distinct?: HeroSlideScalarFieldEnum | HeroSlideScalarFieldEnum[]
+  }
+
+  /**
+   * HeroSlide findMany
+   */
+  export type HeroSlideFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the HeroSlide
+     */
+    select?: HeroSlideSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the HeroSlide
+     */
+    omit?: HeroSlideOmit<ExtArgs> | null
+    /**
+     * Filter, which HeroSlides to fetch.
+     */
+    where?: HeroSlideWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of HeroSlides to fetch.
+     */
+    orderBy?: HeroSlideOrderByWithRelationInput | HeroSlideOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing HeroSlides.
+     */
+    cursor?: HeroSlideWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` HeroSlides from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` HeroSlides.
+     */
+    skip?: number
+    distinct?: HeroSlideScalarFieldEnum | HeroSlideScalarFieldEnum[]
+  }
+
+  /**
+   * HeroSlide create
+   */
+  export type HeroSlideCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the HeroSlide
+     */
+    select?: HeroSlideSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the HeroSlide
+     */
+    omit?: HeroSlideOmit<ExtArgs> | null
+    /**
+     * The data needed to create a HeroSlide.
+     */
+    data: XOR<HeroSlideCreateInput, HeroSlideUncheckedCreateInput>
+  }
+
+  /**
+   * HeroSlide createMany
+   */
+  export type HeroSlideCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many HeroSlides.
+     */
+    data: HeroSlideCreateManyInput | HeroSlideCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * HeroSlide createManyAndReturn
+   */
+  export type HeroSlideCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the HeroSlide
+     */
+    select?: HeroSlideSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the HeroSlide
+     */
+    omit?: HeroSlideOmit<ExtArgs> | null
+    /**
+     * The data used to create many HeroSlides.
+     */
+    data: HeroSlideCreateManyInput | HeroSlideCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * HeroSlide update
+   */
+  export type HeroSlideUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the HeroSlide
+     */
+    select?: HeroSlideSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the HeroSlide
+     */
+    omit?: HeroSlideOmit<ExtArgs> | null
+    /**
+     * The data needed to update a HeroSlide.
+     */
+    data: XOR<HeroSlideUpdateInput, HeroSlideUncheckedUpdateInput>
+    /**
+     * Choose, which HeroSlide to update.
+     */
+    where: HeroSlideWhereUniqueInput
+  }
+
+  /**
+   * HeroSlide updateMany
+   */
+  export type HeroSlideUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update HeroSlides.
+     */
+    data: XOR<HeroSlideUpdateManyMutationInput, HeroSlideUncheckedUpdateManyInput>
+    /**
+     * Filter which HeroSlides to update
+     */
+    where?: HeroSlideWhereInput
+    /**
+     * Limit how many HeroSlides to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * HeroSlide updateManyAndReturn
+   */
+  export type HeroSlideUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the HeroSlide
+     */
+    select?: HeroSlideSelectUpdateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the HeroSlide
+     */
+    omit?: HeroSlideOmit<ExtArgs> | null
+    /**
+     * The data used to update HeroSlides.
+     */
+    data: XOR<HeroSlideUpdateManyMutationInput, HeroSlideUncheckedUpdateManyInput>
+    /**
+     * Filter which HeroSlides to update
+     */
+    where?: HeroSlideWhereInput
+    /**
+     * Limit how many HeroSlides to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * HeroSlide upsert
+   */
+  export type HeroSlideUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the HeroSlide
+     */
+    select?: HeroSlideSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the HeroSlide
+     */
+    omit?: HeroSlideOmit<ExtArgs> | null
+    /**
+     * The filter to search for the HeroSlide to update in case it exists.
+     */
+    where: HeroSlideWhereUniqueInput
+    /**
+     * In case the HeroSlide found by the `where` argument doesn't exist, create a new HeroSlide with this data.
+     */
+    create: XOR<HeroSlideCreateInput, HeroSlideUncheckedCreateInput>
+    /**
+     * In case the HeroSlide was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<HeroSlideUpdateInput, HeroSlideUncheckedUpdateInput>
+  }
+
+  /**
+   * HeroSlide delete
+   */
+  export type HeroSlideDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the HeroSlide
+     */
+    select?: HeroSlideSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the HeroSlide
+     */
+    omit?: HeroSlideOmit<ExtArgs> | null
+    /**
+     * Filter which HeroSlide to delete.
+     */
+    where: HeroSlideWhereUniqueInput
+  }
+
+  /**
+   * HeroSlide deleteMany
+   */
+  export type HeroSlideDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which HeroSlides to delete
+     */
+    where?: HeroSlideWhereInput
+    /**
+     * Limit how many HeroSlides to delete.
+     */
+    limit?: number
+  }
+
+  /**
+   * HeroSlide without action
+   */
+  export type HeroSlideDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the HeroSlide
+     */
+    select?: HeroSlideSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the HeroSlide
+     */
+    omit?: HeroSlideOmit<ExtArgs> | null
+  }
+
+
+  /**
+   * Model HSKLevel
+   */
+
+  export type AggregateHSKLevel = {
+    _count: HSKLevelCountAggregateOutputType | null
+    _avg: HSKLevelAvgAggregateOutputType | null
+    _sum: HSKLevelSumAggregateOutputType | null
+    _min: HSKLevelMinAggregateOutputType | null
+    _max: HSKLevelMaxAggregateOutputType | null
+  }
+
+  export type HSKLevelAvgAggregateOutputType = {
+    level: number | null
+    order: number | null
+  }
+
+  export type HSKLevelSumAggregateOutputType = {
+    level: number | null
+    order: number | null
+  }
+
+  export type HSKLevelMinAggregateOutputType = {
+    id: string | null
+    level: number | null
+    title: string | null
+    badge: string | null
+    badgeColor: string | null
+    description: string | null
+    vocabularyCount: string | null
+    targetAudience: string | null
+    targetIcon: string | null
+    accentColor: string | null
+    bgGradient: string | null
+    href: string | null
+    order: number | null
+    isActive: boolean | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type HSKLevelMaxAggregateOutputType = {
+    id: string | null
+    level: number | null
+    title: string | null
+    badge: string | null
+    badgeColor: string | null
+    description: string | null
+    vocabularyCount: string | null
+    targetAudience: string | null
+    targetIcon: string | null
+    accentColor: string | null
+    bgGradient: string | null
+    href: string | null
+    order: number | null
+    isActive: boolean | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type HSKLevelCountAggregateOutputType = {
+    id: number
+    level: number
+    title: number
+    badge: number
+    badgeColor: number
+    description: number
+    vocabularyCount: number
+    targetAudience: number
+    targetIcon: number
+    accentColor: number
+    bgGradient: number
+    href: number
+    order: number
+    isActive: number
+    createdAt: number
+    updatedAt: number
+    _all: number
+  }
+
+
+  export type HSKLevelAvgAggregateInputType = {
+    level?: true
+    order?: true
+  }
+
+  export type HSKLevelSumAggregateInputType = {
+    level?: true
+    order?: true
+  }
+
+  export type HSKLevelMinAggregateInputType = {
+    id?: true
+    level?: true
+    title?: true
+    badge?: true
+    badgeColor?: true
+    description?: true
+    vocabularyCount?: true
+    targetAudience?: true
+    targetIcon?: true
+    accentColor?: true
+    bgGradient?: true
+    href?: true
+    order?: true
+    isActive?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type HSKLevelMaxAggregateInputType = {
+    id?: true
+    level?: true
+    title?: true
+    badge?: true
+    badgeColor?: true
+    description?: true
+    vocabularyCount?: true
+    targetAudience?: true
+    targetIcon?: true
+    accentColor?: true
+    bgGradient?: true
+    href?: true
+    order?: true
+    isActive?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type HSKLevelCountAggregateInputType = {
+    id?: true
+    level?: true
+    title?: true
+    badge?: true
+    badgeColor?: true
+    description?: true
+    vocabularyCount?: true
+    targetAudience?: true
+    targetIcon?: true
+    accentColor?: true
+    bgGradient?: true
+    href?: true
+    order?: true
+    isActive?: true
+    createdAt?: true
+    updatedAt?: true
+    _all?: true
+  }
+
+  export type HSKLevelAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which HSKLevel to aggregate.
+     */
+    where?: HSKLevelWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of HSKLevels to fetch.
+     */
+    orderBy?: HSKLevelOrderByWithRelationInput | HSKLevelOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: HSKLevelWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` HSKLevels from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` HSKLevels.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned HSKLevels
+    **/
+    _count?: true | HSKLevelCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to average
+    **/
+    _avg?: HSKLevelAvgAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to sum
+    **/
+    _sum?: HSKLevelSumAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: HSKLevelMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: HSKLevelMaxAggregateInputType
+  }
+
+  export type GetHSKLevelAggregateType<T extends HSKLevelAggregateArgs> = {
+        [P in keyof T & keyof AggregateHSKLevel]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateHSKLevel[P]>
+      : GetScalarType<T[P], AggregateHSKLevel[P]>
+  }
+
+
+
+
+  export type HSKLevelGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: HSKLevelWhereInput
+    orderBy?: HSKLevelOrderByWithAggregationInput | HSKLevelOrderByWithAggregationInput[]
+    by: HSKLevelScalarFieldEnum[] | HSKLevelScalarFieldEnum
+    having?: HSKLevelScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: HSKLevelCountAggregateInputType | true
+    _avg?: HSKLevelAvgAggregateInputType
+    _sum?: HSKLevelSumAggregateInputType
+    _min?: HSKLevelMinAggregateInputType
+    _max?: HSKLevelMaxAggregateInputType
+  }
+
+  export type HSKLevelGroupByOutputType = {
+    id: string
+    level: number
+    title: string
+    badge: string
+    badgeColor: string
+    description: string
+    vocabularyCount: string
+    targetAudience: string
+    targetIcon: string
+    accentColor: string
+    bgGradient: string
+    href: string
+    order: number
+    isActive: boolean
+    createdAt: Date
+    updatedAt: Date
+    _count: HSKLevelCountAggregateOutputType | null
+    _avg: HSKLevelAvgAggregateOutputType | null
+    _sum: HSKLevelSumAggregateOutputType | null
+    _min: HSKLevelMinAggregateOutputType | null
+    _max: HSKLevelMaxAggregateOutputType | null
+  }
+
+  type GetHSKLevelGroupByPayload<T extends HSKLevelGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<HSKLevelGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof HSKLevelGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], HSKLevelGroupByOutputType[P]>
+            : GetScalarType<T[P], HSKLevelGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type HSKLevelSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    level?: boolean
+    title?: boolean
+    badge?: boolean
+    badgeColor?: boolean
+    description?: boolean
+    vocabularyCount?: boolean
+    targetAudience?: boolean
+    targetIcon?: boolean
+    accentColor?: boolean
+    bgGradient?: boolean
+    href?: boolean
+    order?: boolean
+    isActive?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+  }, ExtArgs["result"]["hSKLevel"]>
+
+  export type HSKLevelSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    level?: boolean
+    title?: boolean
+    badge?: boolean
+    badgeColor?: boolean
+    description?: boolean
+    vocabularyCount?: boolean
+    targetAudience?: boolean
+    targetIcon?: boolean
+    accentColor?: boolean
+    bgGradient?: boolean
+    href?: boolean
+    order?: boolean
+    isActive?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+  }, ExtArgs["result"]["hSKLevel"]>
+
+  export type HSKLevelSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    level?: boolean
+    title?: boolean
+    badge?: boolean
+    badgeColor?: boolean
+    description?: boolean
+    vocabularyCount?: boolean
+    targetAudience?: boolean
+    targetIcon?: boolean
+    accentColor?: boolean
+    bgGradient?: boolean
+    href?: boolean
+    order?: boolean
+    isActive?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+  }, ExtArgs["result"]["hSKLevel"]>
+
+  export type HSKLevelSelectScalar = {
+    id?: boolean
+    level?: boolean
+    title?: boolean
+    badge?: boolean
+    badgeColor?: boolean
+    description?: boolean
+    vocabularyCount?: boolean
+    targetAudience?: boolean
+    targetIcon?: boolean
+    accentColor?: boolean
+    bgGradient?: boolean
+    href?: boolean
+    order?: boolean
+    isActive?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+  }
+
+  export type HSKLevelOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "level" | "title" | "badge" | "badgeColor" | "description" | "vocabularyCount" | "targetAudience" | "targetIcon" | "accentColor" | "bgGradient" | "href" | "order" | "isActive" | "createdAt" | "updatedAt", ExtArgs["result"]["hSKLevel"]>
+
+  export type $HSKLevelPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "HSKLevel"
+    objects: {}
+    scalars: $Extensions.GetPayloadResult<{
+      id: string
+      level: number
+      title: string
+      badge: string
+      badgeColor: string
+      description: string
+      vocabularyCount: string
+      targetAudience: string
+      targetIcon: string
+      accentColor: string
+      bgGradient: string
+      href: string
+      order: number
+      isActive: boolean
+      createdAt: Date
+      updatedAt: Date
+    }, ExtArgs["result"]["hSKLevel"]>
+    composites: {}
+  }
+
+  type HSKLevelGetPayload<S extends boolean | null | undefined | HSKLevelDefaultArgs> = $Result.GetResult<Prisma.$HSKLevelPayload, S>
+
+  type HSKLevelCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<HSKLevelFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: HSKLevelCountAggregateInputType | true
+    }
+
+  export interface HSKLevelDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['HSKLevel'], meta: { name: 'HSKLevel' } }
+    /**
+     * Find zero or one HSKLevel that matches the filter.
+     * @param {HSKLevelFindUniqueArgs} args - Arguments to find a HSKLevel
+     * @example
+     * // Get one HSKLevel
+     * const hSKLevel = await prisma.hSKLevel.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends HSKLevelFindUniqueArgs>(args: SelectSubset<T, HSKLevelFindUniqueArgs<ExtArgs>>): Prisma__HSKLevelClient<$Result.GetResult<Prisma.$HSKLevelPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find one HSKLevel that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {HSKLevelFindUniqueOrThrowArgs} args - Arguments to find a HSKLevel
+     * @example
+     * // Get one HSKLevel
+     * const hSKLevel = await prisma.hSKLevel.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends HSKLevelFindUniqueOrThrowArgs>(args: SelectSubset<T, HSKLevelFindUniqueOrThrowArgs<ExtArgs>>): Prisma__HSKLevelClient<$Result.GetResult<Prisma.$HSKLevelPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first HSKLevel that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {HSKLevelFindFirstArgs} args - Arguments to find a HSKLevel
+     * @example
+     * // Get one HSKLevel
+     * const hSKLevel = await prisma.hSKLevel.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends HSKLevelFindFirstArgs>(args?: SelectSubset<T, HSKLevelFindFirstArgs<ExtArgs>>): Prisma__HSKLevelClient<$Result.GetResult<Prisma.$HSKLevelPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first HSKLevel that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {HSKLevelFindFirstOrThrowArgs} args - Arguments to find a HSKLevel
+     * @example
+     * // Get one HSKLevel
+     * const hSKLevel = await prisma.hSKLevel.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends HSKLevelFindFirstOrThrowArgs>(args?: SelectSubset<T, HSKLevelFindFirstOrThrowArgs<ExtArgs>>): Prisma__HSKLevelClient<$Result.GetResult<Prisma.$HSKLevelPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find zero or more HSKLevels that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {HSKLevelFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all HSKLevels
+     * const hSKLevels = await prisma.hSKLevel.findMany()
+     * 
+     * // Get first 10 HSKLevels
+     * const hSKLevels = await prisma.hSKLevel.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const hSKLevelWithIdOnly = await prisma.hSKLevel.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends HSKLevelFindManyArgs>(args?: SelectSubset<T, HSKLevelFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$HSKLevelPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+
+    /**
+     * Create a HSKLevel.
+     * @param {HSKLevelCreateArgs} args - Arguments to create a HSKLevel.
+     * @example
+     * // Create one HSKLevel
+     * const HSKLevel = await prisma.hSKLevel.create({
+     *   data: {
+     *     // ... data to create a HSKLevel
+     *   }
+     * })
+     * 
+     */
+    create<T extends HSKLevelCreateArgs>(args: SelectSubset<T, HSKLevelCreateArgs<ExtArgs>>): Prisma__HSKLevelClient<$Result.GetResult<Prisma.$HSKLevelPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Create many HSKLevels.
+     * @param {HSKLevelCreateManyArgs} args - Arguments to create many HSKLevels.
+     * @example
+     * // Create many HSKLevels
+     * const hSKLevel = await prisma.hSKLevel.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends HSKLevelCreateManyArgs>(args?: SelectSubset<T, HSKLevelCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many HSKLevels and returns the data saved in the database.
+     * @param {HSKLevelCreateManyAndReturnArgs} args - Arguments to create many HSKLevels.
+     * @example
+     * // Create many HSKLevels
+     * const hSKLevel = await prisma.hSKLevel.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many HSKLevels and only return the `id`
+     * const hSKLevelWithIdOnly = await prisma.hSKLevel.createManyAndReturn({
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends HSKLevelCreateManyAndReturnArgs>(args?: SelectSubset<T, HSKLevelCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$HSKLevelPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Delete a HSKLevel.
+     * @param {HSKLevelDeleteArgs} args - Arguments to delete one HSKLevel.
+     * @example
+     * // Delete one HSKLevel
+     * const HSKLevel = await prisma.hSKLevel.delete({
+     *   where: {
+     *     // ... filter to delete one HSKLevel
+     *   }
+     * })
+     * 
+     */
+    delete<T extends HSKLevelDeleteArgs>(args: SelectSubset<T, HSKLevelDeleteArgs<ExtArgs>>): Prisma__HSKLevelClient<$Result.GetResult<Prisma.$HSKLevelPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Update one HSKLevel.
+     * @param {HSKLevelUpdateArgs} args - Arguments to update one HSKLevel.
+     * @example
+     * // Update one HSKLevel
+     * const hSKLevel = await prisma.hSKLevel.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends HSKLevelUpdateArgs>(args: SelectSubset<T, HSKLevelUpdateArgs<ExtArgs>>): Prisma__HSKLevelClient<$Result.GetResult<Prisma.$HSKLevelPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Delete zero or more HSKLevels.
+     * @param {HSKLevelDeleteManyArgs} args - Arguments to filter HSKLevels to delete.
+     * @example
+     * // Delete a few HSKLevels
+     * const { count } = await prisma.hSKLevel.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends HSKLevelDeleteManyArgs>(args?: SelectSubset<T, HSKLevelDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more HSKLevels.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {HSKLevelUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many HSKLevels
+     * const hSKLevel = await prisma.hSKLevel.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends HSKLevelUpdateManyArgs>(args: SelectSubset<T, HSKLevelUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more HSKLevels and returns the data updated in the database.
+     * @param {HSKLevelUpdateManyAndReturnArgs} args - Arguments to update many HSKLevels.
+     * @example
+     * // Update many HSKLevels
+     * const hSKLevel = await prisma.hSKLevel.updateManyAndReturn({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Update zero or more HSKLevels and only return the `id`
+     * const hSKLevelWithIdOnly = await prisma.hSKLevel.updateManyAndReturn({
+     *   select: { id: true },
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    updateManyAndReturn<T extends HSKLevelUpdateManyAndReturnArgs>(args: SelectSubset<T, HSKLevelUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$HSKLevelPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Create or update one HSKLevel.
+     * @param {HSKLevelUpsertArgs} args - Arguments to update or create a HSKLevel.
+     * @example
+     * // Update or create a HSKLevel
+     * const hSKLevel = await prisma.hSKLevel.upsert({
+     *   create: {
+     *     // ... data to create a HSKLevel
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the HSKLevel we want to update
+     *   }
+     * })
+     */
+    upsert<T extends HSKLevelUpsertArgs>(args: SelectSubset<T, HSKLevelUpsertArgs<ExtArgs>>): Prisma__HSKLevelClient<$Result.GetResult<Prisma.$HSKLevelPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+
+    /**
+     * Count the number of HSKLevels.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {HSKLevelCountArgs} args - Arguments to filter HSKLevels to count.
+     * @example
+     * // Count the number of HSKLevels
+     * const count = await prisma.hSKLevel.count({
+     *   where: {
+     *     // ... the filter for the HSKLevels we want to count
+     *   }
+     * })
+    **/
+    count<T extends HSKLevelCountArgs>(
+      args?: Subset<T, HSKLevelCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], HSKLevelCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a HSKLevel.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {HSKLevelAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends HSKLevelAggregateArgs>(args: Subset<T, HSKLevelAggregateArgs>): Prisma.PrismaPromise<GetHSKLevelAggregateType<T>>
+
+    /**
+     * Group by HSKLevel.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {HSKLevelGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends HSKLevelGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: HSKLevelGroupByArgs['orderBy'] }
+        : { orderBy?: HSKLevelGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, HSKLevelGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetHSKLevelGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the HSKLevel model
+   */
+  readonly fields: HSKLevelFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for HSKLevel.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__HSKLevelClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the HSKLevel model
+   */
+  interface HSKLevelFieldRefs {
+    readonly id: FieldRef<"HSKLevel", 'String'>
+    readonly level: FieldRef<"HSKLevel", 'Int'>
+    readonly title: FieldRef<"HSKLevel", 'String'>
+    readonly badge: FieldRef<"HSKLevel", 'String'>
+    readonly badgeColor: FieldRef<"HSKLevel", 'String'>
+    readonly description: FieldRef<"HSKLevel", 'String'>
+    readonly vocabularyCount: FieldRef<"HSKLevel", 'String'>
+    readonly targetAudience: FieldRef<"HSKLevel", 'String'>
+    readonly targetIcon: FieldRef<"HSKLevel", 'String'>
+    readonly accentColor: FieldRef<"HSKLevel", 'String'>
+    readonly bgGradient: FieldRef<"HSKLevel", 'String'>
+    readonly href: FieldRef<"HSKLevel", 'String'>
+    readonly order: FieldRef<"HSKLevel", 'Int'>
+    readonly isActive: FieldRef<"HSKLevel", 'Boolean'>
+    readonly createdAt: FieldRef<"HSKLevel", 'DateTime'>
+    readonly updatedAt: FieldRef<"HSKLevel", 'DateTime'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * HSKLevel findUnique
+   */
+  export type HSKLevelFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the HSKLevel
+     */
+    select?: HSKLevelSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the HSKLevel
+     */
+    omit?: HSKLevelOmit<ExtArgs> | null
+    /**
+     * Filter, which HSKLevel to fetch.
+     */
+    where: HSKLevelWhereUniqueInput
+  }
+
+  /**
+   * HSKLevel findUniqueOrThrow
+   */
+  export type HSKLevelFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the HSKLevel
+     */
+    select?: HSKLevelSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the HSKLevel
+     */
+    omit?: HSKLevelOmit<ExtArgs> | null
+    /**
+     * Filter, which HSKLevel to fetch.
+     */
+    where: HSKLevelWhereUniqueInput
+  }
+
+  /**
+   * HSKLevel findFirst
+   */
+  export type HSKLevelFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the HSKLevel
+     */
+    select?: HSKLevelSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the HSKLevel
+     */
+    omit?: HSKLevelOmit<ExtArgs> | null
+    /**
+     * Filter, which HSKLevel to fetch.
+     */
+    where?: HSKLevelWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of HSKLevels to fetch.
+     */
+    orderBy?: HSKLevelOrderByWithRelationInput | HSKLevelOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for HSKLevels.
+     */
+    cursor?: HSKLevelWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` HSKLevels from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` HSKLevels.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of HSKLevels.
+     */
+    distinct?: HSKLevelScalarFieldEnum | HSKLevelScalarFieldEnum[]
+  }
+
+  /**
+   * HSKLevel findFirstOrThrow
+   */
+  export type HSKLevelFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the HSKLevel
+     */
+    select?: HSKLevelSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the HSKLevel
+     */
+    omit?: HSKLevelOmit<ExtArgs> | null
+    /**
+     * Filter, which HSKLevel to fetch.
+     */
+    where?: HSKLevelWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of HSKLevels to fetch.
+     */
+    orderBy?: HSKLevelOrderByWithRelationInput | HSKLevelOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for HSKLevels.
+     */
+    cursor?: HSKLevelWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` HSKLevels from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` HSKLevels.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of HSKLevels.
+     */
+    distinct?: HSKLevelScalarFieldEnum | HSKLevelScalarFieldEnum[]
+  }
+
+  /**
+   * HSKLevel findMany
+   */
+  export type HSKLevelFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the HSKLevel
+     */
+    select?: HSKLevelSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the HSKLevel
+     */
+    omit?: HSKLevelOmit<ExtArgs> | null
+    /**
+     * Filter, which HSKLevels to fetch.
+     */
+    where?: HSKLevelWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of HSKLevels to fetch.
+     */
+    orderBy?: HSKLevelOrderByWithRelationInput | HSKLevelOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing HSKLevels.
+     */
+    cursor?: HSKLevelWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` HSKLevels from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` HSKLevels.
+     */
+    skip?: number
+    distinct?: HSKLevelScalarFieldEnum | HSKLevelScalarFieldEnum[]
+  }
+
+  /**
+   * HSKLevel create
+   */
+  export type HSKLevelCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the HSKLevel
+     */
+    select?: HSKLevelSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the HSKLevel
+     */
+    omit?: HSKLevelOmit<ExtArgs> | null
+    /**
+     * The data needed to create a HSKLevel.
+     */
+    data: XOR<HSKLevelCreateInput, HSKLevelUncheckedCreateInput>
+  }
+
+  /**
+   * HSKLevel createMany
+   */
+  export type HSKLevelCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many HSKLevels.
+     */
+    data: HSKLevelCreateManyInput | HSKLevelCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * HSKLevel createManyAndReturn
+   */
+  export type HSKLevelCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the HSKLevel
+     */
+    select?: HSKLevelSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the HSKLevel
+     */
+    omit?: HSKLevelOmit<ExtArgs> | null
+    /**
+     * The data used to create many HSKLevels.
+     */
+    data: HSKLevelCreateManyInput | HSKLevelCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * HSKLevel update
+   */
+  export type HSKLevelUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the HSKLevel
+     */
+    select?: HSKLevelSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the HSKLevel
+     */
+    omit?: HSKLevelOmit<ExtArgs> | null
+    /**
+     * The data needed to update a HSKLevel.
+     */
+    data: XOR<HSKLevelUpdateInput, HSKLevelUncheckedUpdateInput>
+    /**
+     * Choose, which HSKLevel to update.
+     */
+    where: HSKLevelWhereUniqueInput
+  }
+
+  /**
+   * HSKLevel updateMany
+   */
+  export type HSKLevelUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update HSKLevels.
+     */
+    data: XOR<HSKLevelUpdateManyMutationInput, HSKLevelUncheckedUpdateManyInput>
+    /**
+     * Filter which HSKLevels to update
+     */
+    where?: HSKLevelWhereInput
+    /**
+     * Limit how many HSKLevels to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * HSKLevel updateManyAndReturn
+   */
+  export type HSKLevelUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the HSKLevel
+     */
+    select?: HSKLevelSelectUpdateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the HSKLevel
+     */
+    omit?: HSKLevelOmit<ExtArgs> | null
+    /**
+     * The data used to update HSKLevels.
+     */
+    data: XOR<HSKLevelUpdateManyMutationInput, HSKLevelUncheckedUpdateManyInput>
+    /**
+     * Filter which HSKLevels to update
+     */
+    where?: HSKLevelWhereInput
+    /**
+     * Limit how many HSKLevels to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * HSKLevel upsert
+   */
+  export type HSKLevelUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the HSKLevel
+     */
+    select?: HSKLevelSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the HSKLevel
+     */
+    omit?: HSKLevelOmit<ExtArgs> | null
+    /**
+     * The filter to search for the HSKLevel to update in case it exists.
+     */
+    where: HSKLevelWhereUniqueInput
+    /**
+     * In case the HSKLevel found by the `where` argument doesn't exist, create a new HSKLevel with this data.
+     */
+    create: XOR<HSKLevelCreateInput, HSKLevelUncheckedCreateInput>
+    /**
+     * In case the HSKLevel was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<HSKLevelUpdateInput, HSKLevelUncheckedUpdateInput>
+  }
+
+  /**
+   * HSKLevel delete
+   */
+  export type HSKLevelDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the HSKLevel
+     */
+    select?: HSKLevelSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the HSKLevel
+     */
+    omit?: HSKLevelOmit<ExtArgs> | null
+    /**
+     * Filter which HSKLevel to delete.
+     */
+    where: HSKLevelWhereUniqueInput
+  }
+
+  /**
+   * HSKLevel deleteMany
+   */
+  export type HSKLevelDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which HSKLevels to delete
+     */
+    where?: HSKLevelWhereInput
+    /**
+     * Limit how many HSKLevels to delete.
+     */
+    limit?: number
+  }
+
+  /**
+   * HSKLevel without action
+   */
+  export type HSKLevelDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the HSKLevel
+     */
+    select?: HSKLevelSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the HSKLevel
+     */
+    omit?: HSKLevelOmit<ExtArgs> | null
+  }
+
+
+  /**
+   * Model Feature
+   */
+
+  export type AggregateFeature = {
+    _count: FeatureCountAggregateOutputType | null
+    _avg: FeatureAvgAggregateOutputType | null
+    _sum: FeatureSumAggregateOutputType | null
+    _min: FeatureMinAggregateOutputType | null
+    _max: FeatureMaxAggregateOutputType | null
+  }
+
+  export type FeatureAvgAggregateOutputType = {
+    order: number | null
+  }
+
+  export type FeatureSumAggregateOutputType = {
+    order: number | null
+  }
+
+  export type FeatureMinAggregateOutputType = {
+    id: string | null
+    icon: string | null
+    iconBg: string | null
+    iconColor: string | null
+    title: string | null
+    description: string | null
+    order: number | null
+    isActive: boolean | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type FeatureMaxAggregateOutputType = {
+    id: string | null
+    icon: string | null
+    iconBg: string | null
+    iconColor: string | null
+    title: string | null
+    description: string | null
+    order: number | null
+    isActive: boolean | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type FeatureCountAggregateOutputType = {
+    id: number
+    icon: number
+    iconBg: number
+    iconColor: number
+    title: number
+    description: number
+    order: number
+    isActive: number
+    createdAt: number
+    updatedAt: number
+    _all: number
+  }
+
+
+  export type FeatureAvgAggregateInputType = {
+    order?: true
+  }
+
+  export type FeatureSumAggregateInputType = {
+    order?: true
+  }
+
+  export type FeatureMinAggregateInputType = {
+    id?: true
+    icon?: true
+    iconBg?: true
+    iconColor?: true
+    title?: true
+    description?: true
+    order?: true
+    isActive?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type FeatureMaxAggregateInputType = {
+    id?: true
+    icon?: true
+    iconBg?: true
+    iconColor?: true
+    title?: true
+    description?: true
+    order?: true
+    isActive?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type FeatureCountAggregateInputType = {
+    id?: true
+    icon?: true
+    iconBg?: true
+    iconColor?: true
+    title?: true
+    description?: true
+    order?: true
+    isActive?: true
+    createdAt?: true
+    updatedAt?: true
+    _all?: true
+  }
+
+  export type FeatureAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which Feature to aggregate.
+     */
+    where?: FeatureWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Features to fetch.
+     */
+    orderBy?: FeatureOrderByWithRelationInput | FeatureOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: FeatureWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Features from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Features.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned Features
+    **/
+    _count?: true | FeatureCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to average
+    **/
+    _avg?: FeatureAvgAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to sum
+    **/
+    _sum?: FeatureSumAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: FeatureMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: FeatureMaxAggregateInputType
+  }
+
+  export type GetFeatureAggregateType<T extends FeatureAggregateArgs> = {
+        [P in keyof T & keyof AggregateFeature]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateFeature[P]>
+      : GetScalarType<T[P], AggregateFeature[P]>
+  }
+
+
+
+
+  export type FeatureGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: FeatureWhereInput
+    orderBy?: FeatureOrderByWithAggregationInput | FeatureOrderByWithAggregationInput[]
+    by: FeatureScalarFieldEnum[] | FeatureScalarFieldEnum
+    having?: FeatureScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: FeatureCountAggregateInputType | true
+    _avg?: FeatureAvgAggregateInputType
+    _sum?: FeatureSumAggregateInputType
+    _min?: FeatureMinAggregateInputType
+    _max?: FeatureMaxAggregateInputType
+  }
+
+  export type FeatureGroupByOutputType = {
+    id: string
+    icon: string
+    iconBg: string
+    iconColor: string
+    title: string
+    description: string
+    order: number
+    isActive: boolean
+    createdAt: Date
+    updatedAt: Date
+    _count: FeatureCountAggregateOutputType | null
+    _avg: FeatureAvgAggregateOutputType | null
+    _sum: FeatureSumAggregateOutputType | null
+    _min: FeatureMinAggregateOutputType | null
+    _max: FeatureMaxAggregateOutputType | null
+  }
+
+  type GetFeatureGroupByPayload<T extends FeatureGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<FeatureGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof FeatureGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], FeatureGroupByOutputType[P]>
+            : GetScalarType<T[P], FeatureGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type FeatureSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    icon?: boolean
+    iconBg?: boolean
+    iconColor?: boolean
+    title?: boolean
+    description?: boolean
+    order?: boolean
+    isActive?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+  }, ExtArgs["result"]["feature"]>
+
+  export type FeatureSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    icon?: boolean
+    iconBg?: boolean
+    iconColor?: boolean
+    title?: boolean
+    description?: boolean
+    order?: boolean
+    isActive?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+  }, ExtArgs["result"]["feature"]>
+
+  export type FeatureSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    icon?: boolean
+    iconBg?: boolean
+    iconColor?: boolean
+    title?: boolean
+    description?: boolean
+    order?: boolean
+    isActive?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+  }, ExtArgs["result"]["feature"]>
+
+  export type FeatureSelectScalar = {
+    id?: boolean
+    icon?: boolean
+    iconBg?: boolean
+    iconColor?: boolean
+    title?: boolean
+    description?: boolean
+    order?: boolean
+    isActive?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+  }
+
+  export type FeatureOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "icon" | "iconBg" | "iconColor" | "title" | "description" | "order" | "isActive" | "createdAt" | "updatedAt", ExtArgs["result"]["feature"]>
+
+  export type $FeaturePayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "Feature"
+    objects: {}
+    scalars: $Extensions.GetPayloadResult<{
+      id: string
+      icon: string
+      iconBg: string
+      iconColor: string
+      title: string
+      description: string
+      order: number
+      isActive: boolean
+      createdAt: Date
+      updatedAt: Date
+    }, ExtArgs["result"]["feature"]>
+    composites: {}
+  }
+
+  type FeatureGetPayload<S extends boolean | null | undefined | FeatureDefaultArgs> = $Result.GetResult<Prisma.$FeaturePayload, S>
+
+  type FeatureCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<FeatureFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: FeatureCountAggregateInputType | true
+    }
+
+  export interface FeatureDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['Feature'], meta: { name: 'Feature' } }
+    /**
+     * Find zero or one Feature that matches the filter.
+     * @param {FeatureFindUniqueArgs} args - Arguments to find a Feature
+     * @example
+     * // Get one Feature
+     * const feature = await prisma.feature.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends FeatureFindUniqueArgs>(args: SelectSubset<T, FeatureFindUniqueArgs<ExtArgs>>): Prisma__FeatureClient<$Result.GetResult<Prisma.$FeaturePayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find one Feature that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {FeatureFindUniqueOrThrowArgs} args - Arguments to find a Feature
+     * @example
+     * // Get one Feature
+     * const feature = await prisma.feature.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends FeatureFindUniqueOrThrowArgs>(args: SelectSubset<T, FeatureFindUniqueOrThrowArgs<ExtArgs>>): Prisma__FeatureClient<$Result.GetResult<Prisma.$FeaturePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first Feature that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {FeatureFindFirstArgs} args - Arguments to find a Feature
+     * @example
+     * // Get one Feature
+     * const feature = await prisma.feature.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends FeatureFindFirstArgs>(args?: SelectSubset<T, FeatureFindFirstArgs<ExtArgs>>): Prisma__FeatureClient<$Result.GetResult<Prisma.$FeaturePayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first Feature that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {FeatureFindFirstOrThrowArgs} args - Arguments to find a Feature
+     * @example
+     * // Get one Feature
+     * const feature = await prisma.feature.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends FeatureFindFirstOrThrowArgs>(args?: SelectSubset<T, FeatureFindFirstOrThrowArgs<ExtArgs>>): Prisma__FeatureClient<$Result.GetResult<Prisma.$FeaturePayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find zero or more Features that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {FeatureFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all Features
+     * const features = await prisma.feature.findMany()
+     * 
+     * // Get first 10 Features
+     * const features = await prisma.feature.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const featureWithIdOnly = await prisma.feature.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends FeatureFindManyArgs>(args?: SelectSubset<T, FeatureFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$FeaturePayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+
+    /**
+     * Create a Feature.
+     * @param {FeatureCreateArgs} args - Arguments to create a Feature.
+     * @example
+     * // Create one Feature
+     * const Feature = await prisma.feature.create({
+     *   data: {
+     *     // ... data to create a Feature
+     *   }
+     * })
+     * 
+     */
+    create<T extends FeatureCreateArgs>(args: SelectSubset<T, FeatureCreateArgs<ExtArgs>>): Prisma__FeatureClient<$Result.GetResult<Prisma.$FeaturePayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Create many Features.
+     * @param {FeatureCreateManyArgs} args - Arguments to create many Features.
+     * @example
+     * // Create many Features
+     * const feature = await prisma.feature.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends FeatureCreateManyArgs>(args?: SelectSubset<T, FeatureCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many Features and returns the data saved in the database.
+     * @param {FeatureCreateManyAndReturnArgs} args - Arguments to create many Features.
+     * @example
+     * // Create many Features
+     * const feature = await prisma.feature.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many Features and only return the `id`
+     * const featureWithIdOnly = await prisma.feature.createManyAndReturn({
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends FeatureCreateManyAndReturnArgs>(args?: SelectSubset<T, FeatureCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$FeaturePayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Delete a Feature.
+     * @param {FeatureDeleteArgs} args - Arguments to delete one Feature.
+     * @example
+     * // Delete one Feature
+     * const Feature = await prisma.feature.delete({
+     *   where: {
+     *     // ... filter to delete one Feature
+     *   }
+     * })
+     * 
+     */
+    delete<T extends FeatureDeleteArgs>(args: SelectSubset<T, FeatureDeleteArgs<ExtArgs>>): Prisma__FeatureClient<$Result.GetResult<Prisma.$FeaturePayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Update one Feature.
+     * @param {FeatureUpdateArgs} args - Arguments to update one Feature.
+     * @example
+     * // Update one Feature
+     * const feature = await prisma.feature.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends FeatureUpdateArgs>(args: SelectSubset<T, FeatureUpdateArgs<ExtArgs>>): Prisma__FeatureClient<$Result.GetResult<Prisma.$FeaturePayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Delete zero or more Features.
+     * @param {FeatureDeleteManyArgs} args - Arguments to filter Features to delete.
+     * @example
+     * // Delete a few Features
+     * const { count } = await prisma.feature.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends FeatureDeleteManyArgs>(args?: SelectSubset<T, FeatureDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more Features.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {FeatureUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many Features
+     * const feature = await prisma.feature.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends FeatureUpdateManyArgs>(args: SelectSubset<T, FeatureUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more Features and returns the data updated in the database.
+     * @param {FeatureUpdateManyAndReturnArgs} args - Arguments to update many Features.
+     * @example
+     * // Update many Features
+     * const feature = await prisma.feature.updateManyAndReturn({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Update zero or more Features and only return the `id`
+     * const featureWithIdOnly = await prisma.feature.updateManyAndReturn({
+     *   select: { id: true },
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    updateManyAndReturn<T extends FeatureUpdateManyAndReturnArgs>(args: SelectSubset<T, FeatureUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$FeaturePayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Create or update one Feature.
+     * @param {FeatureUpsertArgs} args - Arguments to update or create a Feature.
+     * @example
+     * // Update or create a Feature
+     * const feature = await prisma.feature.upsert({
+     *   create: {
+     *     // ... data to create a Feature
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the Feature we want to update
+     *   }
+     * })
+     */
+    upsert<T extends FeatureUpsertArgs>(args: SelectSubset<T, FeatureUpsertArgs<ExtArgs>>): Prisma__FeatureClient<$Result.GetResult<Prisma.$FeaturePayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+
+    /**
+     * Count the number of Features.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {FeatureCountArgs} args - Arguments to filter Features to count.
+     * @example
+     * // Count the number of Features
+     * const count = await prisma.feature.count({
+     *   where: {
+     *     // ... the filter for the Features we want to count
+     *   }
+     * })
+    **/
+    count<T extends FeatureCountArgs>(
+      args?: Subset<T, FeatureCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], FeatureCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a Feature.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {FeatureAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends FeatureAggregateArgs>(args: Subset<T, FeatureAggregateArgs>): Prisma.PrismaPromise<GetFeatureAggregateType<T>>
+
+    /**
+     * Group by Feature.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {FeatureGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends FeatureGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: FeatureGroupByArgs['orderBy'] }
+        : { orderBy?: FeatureGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, FeatureGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetFeatureGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the Feature model
+   */
+  readonly fields: FeatureFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for Feature.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__FeatureClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the Feature model
+   */
+  interface FeatureFieldRefs {
+    readonly id: FieldRef<"Feature", 'String'>
+    readonly icon: FieldRef<"Feature", 'String'>
+    readonly iconBg: FieldRef<"Feature", 'String'>
+    readonly iconColor: FieldRef<"Feature", 'String'>
+    readonly title: FieldRef<"Feature", 'String'>
+    readonly description: FieldRef<"Feature", 'String'>
+    readonly order: FieldRef<"Feature", 'Int'>
+    readonly isActive: FieldRef<"Feature", 'Boolean'>
+    readonly createdAt: FieldRef<"Feature", 'DateTime'>
+    readonly updatedAt: FieldRef<"Feature", 'DateTime'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * Feature findUnique
+   */
+  export type FeatureFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Feature
+     */
+    select?: FeatureSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Feature
+     */
+    omit?: FeatureOmit<ExtArgs> | null
+    /**
+     * Filter, which Feature to fetch.
+     */
+    where: FeatureWhereUniqueInput
+  }
+
+  /**
+   * Feature findUniqueOrThrow
+   */
+  export type FeatureFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Feature
+     */
+    select?: FeatureSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Feature
+     */
+    omit?: FeatureOmit<ExtArgs> | null
+    /**
+     * Filter, which Feature to fetch.
+     */
+    where: FeatureWhereUniqueInput
+  }
+
+  /**
+   * Feature findFirst
+   */
+  export type FeatureFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Feature
+     */
+    select?: FeatureSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Feature
+     */
+    omit?: FeatureOmit<ExtArgs> | null
+    /**
+     * Filter, which Feature to fetch.
+     */
+    where?: FeatureWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Features to fetch.
+     */
+    orderBy?: FeatureOrderByWithRelationInput | FeatureOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for Features.
+     */
+    cursor?: FeatureWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Features from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Features.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of Features.
+     */
+    distinct?: FeatureScalarFieldEnum | FeatureScalarFieldEnum[]
+  }
+
+  /**
+   * Feature findFirstOrThrow
+   */
+  export type FeatureFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Feature
+     */
+    select?: FeatureSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Feature
+     */
+    omit?: FeatureOmit<ExtArgs> | null
+    /**
+     * Filter, which Feature to fetch.
+     */
+    where?: FeatureWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Features to fetch.
+     */
+    orderBy?: FeatureOrderByWithRelationInput | FeatureOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for Features.
+     */
+    cursor?: FeatureWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Features from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Features.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of Features.
+     */
+    distinct?: FeatureScalarFieldEnum | FeatureScalarFieldEnum[]
+  }
+
+  /**
+   * Feature findMany
+   */
+  export type FeatureFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Feature
+     */
+    select?: FeatureSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Feature
+     */
+    omit?: FeatureOmit<ExtArgs> | null
+    /**
+     * Filter, which Features to fetch.
+     */
+    where?: FeatureWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Features to fetch.
+     */
+    orderBy?: FeatureOrderByWithRelationInput | FeatureOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing Features.
+     */
+    cursor?: FeatureWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Features from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Features.
+     */
+    skip?: number
+    distinct?: FeatureScalarFieldEnum | FeatureScalarFieldEnum[]
+  }
+
+  /**
+   * Feature create
+   */
+  export type FeatureCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Feature
+     */
+    select?: FeatureSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Feature
+     */
+    omit?: FeatureOmit<ExtArgs> | null
+    /**
+     * The data needed to create a Feature.
+     */
+    data: XOR<FeatureCreateInput, FeatureUncheckedCreateInput>
+  }
+
+  /**
+   * Feature createMany
+   */
+  export type FeatureCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many Features.
+     */
+    data: FeatureCreateManyInput | FeatureCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * Feature createManyAndReturn
+   */
+  export type FeatureCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Feature
+     */
+    select?: FeatureSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the Feature
+     */
+    omit?: FeatureOmit<ExtArgs> | null
+    /**
+     * The data used to create many Features.
+     */
+    data: FeatureCreateManyInput | FeatureCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * Feature update
+   */
+  export type FeatureUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Feature
+     */
+    select?: FeatureSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Feature
+     */
+    omit?: FeatureOmit<ExtArgs> | null
+    /**
+     * The data needed to update a Feature.
+     */
+    data: XOR<FeatureUpdateInput, FeatureUncheckedUpdateInput>
+    /**
+     * Choose, which Feature to update.
+     */
+    where: FeatureWhereUniqueInput
+  }
+
+  /**
+   * Feature updateMany
+   */
+  export type FeatureUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update Features.
+     */
+    data: XOR<FeatureUpdateManyMutationInput, FeatureUncheckedUpdateManyInput>
+    /**
+     * Filter which Features to update
+     */
+    where?: FeatureWhereInput
+    /**
+     * Limit how many Features to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * Feature updateManyAndReturn
+   */
+  export type FeatureUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Feature
+     */
+    select?: FeatureSelectUpdateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the Feature
+     */
+    omit?: FeatureOmit<ExtArgs> | null
+    /**
+     * The data used to update Features.
+     */
+    data: XOR<FeatureUpdateManyMutationInput, FeatureUncheckedUpdateManyInput>
+    /**
+     * Filter which Features to update
+     */
+    where?: FeatureWhereInput
+    /**
+     * Limit how many Features to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * Feature upsert
+   */
+  export type FeatureUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Feature
+     */
+    select?: FeatureSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Feature
+     */
+    omit?: FeatureOmit<ExtArgs> | null
+    /**
+     * The filter to search for the Feature to update in case it exists.
+     */
+    where: FeatureWhereUniqueInput
+    /**
+     * In case the Feature found by the `where` argument doesn't exist, create a new Feature with this data.
+     */
+    create: XOR<FeatureCreateInput, FeatureUncheckedCreateInput>
+    /**
+     * In case the Feature was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<FeatureUpdateInput, FeatureUncheckedUpdateInput>
+  }
+
+  /**
+   * Feature delete
+   */
+  export type FeatureDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Feature
+     */
+    select?: FeatureSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Feature
+     */
+    omit?: FeatureOmit<ExtArgs> | null
+    /**
+     * Filter which Feature to delete.
+     */
+    where: FeatureWhereUniqueInput
+  }
+
+  /**
+   * Feature deleteMany
+   */
+  export type FeatureDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which Features to delete
+     */
+    where?: FeatureWhereInput
+    /**
+     * Limit how many Features to delete.
+     */
+    limit?: number
+  }
+
+  /**
+   * Feature without action
+   */
+  export type FeatureDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Feature
+     */
+    select?: FeatureSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Feature
+     */
+    omit?: FeatureOmit<ExtArgs> | null
+  }
+
+
+  /**
+   * Model CtaStat
+   */
+
+  export type AggregateCtaStat = {
+    _count: CtaStatCountAggregateOutputType | null
+    _avg: CtaStatAvgAggregateOutputType | null
+    _sum: CtaStatSumAggregateOutputType | null
+    _min: CtaStatMinAggregateOutputType | null
+    _max: CtaStatMaxAggregateOutputType | null
+  }
+
+  export type CtaStatAvgAggregateOutputType = {
+    order: number | null
+  }
+
+  export type CtaStatSumAggregateOutputType = {
+    order: number | null
+  }
+
+  export type CtaStatMinAggregateOutputType = {
+    id: string | null
+    value: string | null
+    label: string | null
+    order: number | null
+    isActive: boolean | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type CtaStatMaxAggregateOutputType = {
+    id: string | null
+    value: string | null
+    label: string | null
+    order: number | null
+    isActive: boolean | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type CtaStatCountAggregateOutputType = {
+    id: number
+    value: number
+    label: number
+    order: number
+    isActive: number
+    createdAt: number
+    updatedAt: number
+    _all: number
+  }
+
+
+  export type CtaStatAvgAggregateInputType = {
+    order?: true
+  }
+
+  export type CtaStatSumAggregateInputType = {
+    order?: true
+  }
+
+  export type CtaStatMinAggregateInputType = {
+    id?: true
+    value?: true
+    label?: true
+    order?: true
+    isActive?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type CtaStatMaxAggregateInputType = {
+    id?: true
+    value?: true
+    label?: true
+    order?: true
+    isActive?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type CtaStatCountAggregateInputType = {
+    id?: true
+    value?: true
+    label?: true
+    order?: true
+    isActive?: true
+    createdAt?: true
+    updatedAt?: true
+    _all?: true
+  }
+
+  export type CtaStatAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which CtaStat to aggregate.
+     */
+    where?: CtaStatWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of CtaStats to fetch.
+     */
+    orderBy?: CtaStatOrderByWithRelationInput | CtaStatOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: CtaStatWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` CtaStats from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` CtaStats.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned CtaStats
+    **/
+    _count?: true | CtaStatCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to average
+    **/
+    _avg?: CtaStatAvgAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to sum
+    **/
+    _sum?: CtaStatSumAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: CtaStatMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: CtaStatMaxAggregateInputType
+  }
+
+  export type GetCtaStatAggregateType<T extends CtaStatAggregateArgs> = {
+        [P in keyof T & keyof AggregateCtaStat]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateCtaStat[P]>
+      : GetScalarType<T[P], AggregateCtaStat[P]>
+  }
+
+
+
+
+  export type CtaStatGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: CtaStatWhereInput
+    orderBy?: CtaStatOrderByWithAggregationInput | CtaStatOrderByWithAggregationInput[]
+    by: CtaStatScalarFieldEnum[] | CtaStatScalarFieldEnum
+    having?: CtaStatScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: CtaStatCountAggregateInputType | true
+    _avg?: CtaStatAvgAggregateInputType
+    _sum?: CtaStatSumAggregateInputType
+    _min?: CtaStatMinAggregateInputType
+    _max?: CtaStatMaxAggregateInputType
+  }
+
+  export type CtaStatGroupByOutputType = {
+    id: string
+    value: string
+    label: string
+    order: number
+    isActive: boolean
+    createdAt: Date
+    updatedAt: Date
+    _count: CtaStatCountAggregateOutputType | null
+    _avg: CtaStatAvgAggregateOutputType | null
+    _sum: CtaStatSumAggregateOutputType | null
+    _min: CtaStatMinAggregateOutputType | null
+    _max: CtaStatMaxAggregateOutputType | null
+  }
+
+  type GetCtaStatGroupByPayload<T extends CtaStatGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<CtaStatGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof CtaStatGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], CtaStatGroupByOutputType[P]>
+            : GetScalarType<T[P], CtaStatGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type CtaStatSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    value?: boolean
+    label?: boolean
+    order?: boolean
+    isActive?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+  }, ExtArgs["result"]["ctaStat"]>
+
+  export type CtaStatSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    value?: boolean
+    label?: boolean
+    order?: boolean
+    isActive?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+  }, ExtArgs["result"]["ctaStat"]>
+
+  export type CtaStatSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    value?: boolean
+    label?: boolean
+    order?: boolean
+    isActive?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+  }, ExtArgs["result"]["ctaStat"]>
+
+  export type CtaStatSelectScalar = {
+    id?: boolean
+    value?: boolean
+    label?: boolean
+    order?: boolean
+    isActive?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+  }
+
+  export type CtaStatOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "value" | "label" | "order" | "isActive" | "createdAt" | "updatedAt", ExtArgs["result"]["ctaStat"]>
+
+  export type $CtaStatPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "CtaStat"
+    objects: {}
+    scalars: $Extensions.GetPayloadResult<{
+      id: string
+      value: string
+      label: string
+      order: number
+      isActive: boolean
+      createdAt: Date
+      updatedAt: Date
+    }, ExtArgs["result"]["ctaStat"]>
+    composites: {}
+  }
+
+  type CtaStatGetPayload<S extends boolean | null | undefined | CtaStatDefaultArgs> = $Result.GetResult<Prisma.$CtaStatPayload, S>
+
+  type CtaStatCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<CtaStatFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: CtaStatCountAggregateInputType | true
+    }
+
+  export interface CtaStatDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['CtaStat'], meta: { name: 'CtaStat' } }
+    /**
+     * Find zero or one CtaStat that matches the filter.
+     * @param {CtaStatFindUniqueArgs} args - Arguments to find a CtaStat
+     * @example
+     * // Get one CtaStat
+     * const ctaStat = await prisma.ctaStat.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends CtaStatFindUniqueArgs>(args: SelectSubset<T, CtaStatFindUniqueArgs<ExtArgs>>): Prisma__CtaStatClient<$Result.GetResult<Prisma.$CtaStatPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find one CtaStat that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {CtaStatFindUniqueOrThrowArgs} args - Arguments to find a CtaStat
+     * @example
+     * // Get one CtaStat
+     * const ctaStat = await prisma.ctaStat.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends CtaStatFindUniqueOrThrowArgs>(args: SelectSubset<T, CtaStatFindUniqueOrThrowArgs<ExtArgs>>): Prisma__CtaStatClient<$Result.GetResult<Prisma.$CtaStatPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first CtaStat that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {CtaStatFindFirstArgs} args - Arguments to find a CtaStat
+     * @example
+     * // Get one CtaStat
+     * const ctaStat = await prisma.ctaStat.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends CtaStatFindFirstArgs>(args?: SelectSubset<T, CtaStatFindFirstArgs<ExtArgs>>): Prisma__CtaStatClient<$Result.GetResult<Prisma.$CtaStatPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first CtaStat that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {CtaStatFindFirstOrThrowArgs} args - Arguments to find a CtaStat
+     * @example
+     * // Get one CtaStat
+     * const ctaStat = await prisma.ctaStat.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends CtaStatFindFirstOrThrowArgs>(args?: SelectSubset<T, CtaStatFindFirstOrThrowArgs<ExtArgs>>): Prisma__CtaStatClient<$Result.GetResult<Prisma.$CtaStatPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find zero or more CtaStats that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {CtaStatFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all CtaStats
+     * const ctaStats = await prisma.ctaStat.findMany()
+     * 
+     * // Get first 10 CtaStats
+     * const ctaStats = await prisma.ctaStat.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const ctaStatWithIdOnly = await prisma.ctaStat.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends CtaStatFindManyArgs>(args?: SelectSubset<T, CtaStatFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$CtaStatPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+
+    /**
+     * Create a CtaStat.
+     * @param {CtaStatCreateArgs} args - Arguments to create a CtaStat.
+     * @example
+     * // Create one CtaStat
+     * const CtaStat = await prisma.ctaStat.create({
+     *   data: {
+     *     // ... data to create a CtaStat
+     *   }
+     * })
+     * 
+     */
+    create<T extends CtaStatCreateArgs>(args: SelectSubset<T, CtaStatCreateArgs<ExtArgs>>): Prisma__CtaStatClient<$Result.GetResult<Prisma.$CtaStatPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Create many CtaStats.
+     * @param {CtaStatCreateManyArgs} args - Arguments to create many CtaStats.
+     * @example
+     * // Create many CtaStats
+     * const ctaStat = await prisma.ctaStat.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends CtaStatCreateManyArgs>(args?: SelectSubset<T, CtaStatCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many CtaStats and returns the data saved in the database.
+     * @param {CtaStatCreateManyAndReturnArgs} args - Arguments to create many CtaStats.
+     * @example
+     * // Create many CtaStats
+     * const ctaStat = await prisma.ctaStat.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many CtaStats and only return the `id`
+     * const ctaStatWithIdOnly = await prisma.ctaStat.createManyAndReturn({
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends CtaStatCreateManyAndReturnArgs>(args?: SelectSubset<T, CtaStatCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$CtaStatPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Delete a CtaStat.
+     * @param {CtaStatDeleteArgs} args - Arguments to delete one CtaStat.
+     * @example
+     * // Delete one CtaStat
+     * const CtaStat = await prisma.ctaStat.delete({
+     *   where: {
+     *     // ... filter to delete one CtaStat
+     *   }
+     * })
+     * 
+     */
+    delete<T extends CtaStatDeleteArgs>(args: SelectSubset<T, CtaStatDeleteArgs<ExtArgs>>): Prisma__CtaStatClient<$Result.GetResult<Prisma.$CtaStatPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Update one CtaStat.
+     * @param {CtaStatUpdateArgs} args - Arguments to update one CtaStat.
+     * @example
+     * // Update one CtaStat
+     * const ctaStat = await prisma.ctaStat.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends CtaStatUpdateArgs>(args: SelectSubset<T, CtaStatUpdateArgs<ExtArgs>>): Prisma__CtaStatClient<$Result.GetResult<Prisma.$CtaStatPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Delete zero or more CtaStats.
+     * @param {CtaStatDeleteManyArgs} args - Arguments to filter CtaStats to delete.
+     * @example
+     * // Delete a few CtaStats
+     * const { count } = await prisma.ctaStat.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends CtaStatDeleteManyArgs>(args?: SelectSubset<T, CtaStatDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more CtaStats.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {CtaStatUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many CtaStats
+     * const ctaStat = await prisma.ctaStat.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends CtaStatUpdateManyArgs>(args: SelectSubset<T, CtaStatUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more CtaStats and returns the data updated in the database.
+     * @param {CtaStatUpdateManyAndReturnArgs} args - Arguments to update many CtaStats.
+     * @example
+     * // Update many CtaStats
+     * const ctaStat = await prisma.ctaStat.updateManyAndReturn({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Update zero or more CtaStats and only return the `id`
+     * const ctaStatWithIdOnly = await prisma.ctaStat.updateManyAndReturn({
+     *   select: { id: true },
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    updateManyAndReturn<T extends CtaStatUpdateManyAndReturnArgs>(args: SelectSubset<T, CtaStatUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$CtaStatPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Create or update one CtaStat.
+     * @param {CtaStatUpsertArgs} args - Arguments to update or create a CtaStat.
+     * @example
+     * // Update or create a CtaStat
+     * const ctaStat = await prisma.ctaStat.upsert({
+     *   create: {
+     *     // ... data to create a CtaStat
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the CtaStat we want to update
+     *   }
+     * })
+     */
+    upsert<T extends CtaStatUpsertArgs>(args: SelectSubset<T, CtaStatUpsertArgs<ExtArgs>>): Prisma__CtaStatClient<$Result.GetResult<Prisma.$CtaStatPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+
+    /**
+     * Count the number of CtaStats.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {CtaStatCountArgs} args - Arguments to filter CtaStats to count.
+     * @example
+     * // Count the number of CtaStats
+     * const count = await prisma.ctaStat.count({
+     *   where: {
+     *     // ... the filter for the CtaStats we want to count
+     *   }
+     * })
+    **/
+    count<T extends CtaStatCountArgs>(
+      args?: Subset<T, CtaStatCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], CtaStatCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a CtaStat.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {CtaStatAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends CtaStatAggregateArgs>(args: Subset<T, CtaStatAggregateArgs>): Prisma.PrismaPromise<GetCtaStatAggregateType<T>>
+
+    /**
+     * Group by CtaStat.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {CtaStatGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends CtaStatGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: CtaStatGroupByArgs['orderBy'] }
+        : { orderBy?: CtaStatGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, CtaStatGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetCtaStatGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the CtaStat model
+   */
+  readonly fields: CtaStatFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for CtaStat.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__CtaStatClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the CtaStat model
+   */
+  interface CtaStatFieldRefs {
+    readonly id: FieldRef<"CtaStat", 'String'>
+    readonly value: FieldRef<"CtaStat", 'String'>
+    readonly label: FieldRef<"CtaStat", 'String'>
+    readonly order: FieldRef<"CtaStat", 'Int'>
+    readonly isActive: FieldRef<"CtaStat", 'Boolean'>
+    readonly createdAt: FieldRef<"CtaStat", 'DateTime'>
+    readonly updatedAt: FieldRef<"CtaStat", 'DateTime'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * CtaStat findUnique
+   */
+  export type CtaStatFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CtaStat
+     */
+    select?: CtaStatSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the CtaStat
+     */
+    omit?: CtaStatOmit<ExtArgs> | null
+    /**
+     * Filter, which CtaStat to fetch.
+     */
+    where: CtaStatWhereUniqueInput
+  }
+
+  /**
+   * CtaStat findUniqueOrThrow
+   */
+  export type CtaStatFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CtaStat
+     */
+    select?: CtaStatSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the CtaStat
+     */
+    omit?: CtaStatOmit<ExtArgs> | null
+    /**
+     * Filter, which CtaStat to fetch.
+     */
+    where: CtaStatWhereUniqueInput
+  }
+
+  /**
+   * CtaStat findFirst
+   */
+  export type CtaStatFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CtaStat
+     */
+    select?: CtaStatSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the CtaStat
+     */
+    omit?: CtaStatOmit<ExtArgs> | null
+    /**
+     * Filter, which CtaStat to fetch.
+     */
+    where?: CtaStatWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of CtaStats to fetch.
+     */
+    orderBy?: CtaStatOrderByWithRelationInput | CtaStatOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for CtaStats.
+     */
+    cursor?: CtaStatWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` CtaStats from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` CtaStats.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of CtaStats.
+     */
+    distinct?: CtaStatScalarFieldEnum | CtaStatScalarFieldEnum[]
+  }
+
+  /**
+   * CtaStat findFirstOrThrow
+   */
+  export type CtaStatFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CtaStat
+     */
+    select?: CtaStatSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the CtaStat
+     */
+    omit?: CtaStatOmit<ExtArgs> | null
+    /**
+     * Filter, which CtaStat to fetch.
+     */
+    where?: CtaStatWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of CtaStats to fetch.
+     */
+    orderBy?: CtaStatOrderByWithRelationInput | CtaStatOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for CtaStats.
+     */
+    cursor?: CtaStatWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` CtaStats from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` CtaStats.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of CtaStats.
+     */
+    distinct?: CtaStatScalarFieldEnum | CtaStatScalarFieldEnum[]
+  }
+
+  /**
+   * CtaStat findMany
+   */
+  export type CtaStatFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CtaStat
+     */
+    select?: CtaStatSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the CtaStat
+     */
+    omit?: CtaStatOmit<ExtArgs> | null
+    /**
+     * Filter, which CtaStats to fetch.
+     */
+    where?: CtaStatWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of CtaStats to fetch.
+     */
+    orderBy?: CtaStatOrderByWithRelationInput | CtaStatOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing CtaStats.
+     */
+    cursor?: CtaStatWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` CtaStats from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` CtaStats.
+     */
+    skip?: number
+    distinct?: CtaStatScalarFieldEnum | CtaStatScalarFieldEnum[]
+  }
+
+  /**
+   * CtaStat create
+   */
+  export type CtaStatCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CtaStat
+     */
+    select?: CtaStatSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the CtaStat
+     */
+    omit?: CtaStatOmit<ExtArgs> | null
+    /**
+     * The data needed to create a CtaStat.
+     */
+    data: XOR<CtaStatCreateInput, CtaStatUncheckedCreateInput>
+  }
+
+  /**
+   * CtaStat createMany
+   */
+  export type CtaStatCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many CtaStats.
+     */
+    data: CtaStatCreateManyInput | CtaStatCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * CtaStat createManyAndReturn
+   */
+  export type CtaStatCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CtaStat
+     */
+    select?: CtaStatSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the CtaStat
+     */
+    omit?: CtaStatOmit<ExtArgs> | null
+    /**
+     * The data used to create many CtaStats.
+     */
+    data: CtaStatCreateManyInput | CtaStatCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * CtaStat update
+   */
+  export type CtaStatUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CtaStat
+     */
+    select?: CtaStatSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the CtaStat
+     */
+    omit?: CtaStatOmit<ExtArgs> | null
+    /**
+     * The data needed to update a CtaStat.
+     */
+    data: XOR<CtaStatUpdateInput, CtaStatUncheckedUpdateInput>
+    /**
+     * Choose, which CtaStat to update.
+     */
+    where: CtaStatWhereUniqueInput
+  }
+
+  /**
+   * CtaStat updateMany
+   */
+  export type CtaStatUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update CtaStats.
+     */
+    data: XOR<CtaStatUpdateManyMutationInput, CtaStatUncheckedUpdateManyInput>
+    /**
+     * Filter which CtaStats to update
+     */
+    where?: CtaStatWhereInput
+    /**
+     * Limit how many CtaStats to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * CtaStat updateManyAndReturn
+   */
+  export type CtaStatUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CtaStat
+     */
+    select?: CtaStatSelectUpdateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the CtaStat
+     */
+    omit?: CtaStatOmit<ExtArgs> | null
+    /**
+     * The data used to update CtaStats.
+     */
+    data: XOR<CtaStatUpdateManyMutationInput, CtaStatUncheckedUpdateManyInput>
+    /**
+     * Filter which CtaStats to update
+     */
+    where?: CtaStatWhereInput
+    /**
+     * Limit how many CtaStats to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * CtaStat upsert
+   */
+  export type CtaStatUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CtaStat
+     */
+    select?: CtaStatSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the CtaStat
+     */
+    omit?: CtaStatOmit<ExtArgs> | null
+    /**
+     * The filter to search for the CtaStat to update in case it exists.
+     */
+    where: CtaStatWhereUniqueInput
+    /**
+     * In case the CtaStat found by the `where` argument doesn't exist, create a new CtaStat with this data.
+     */
+    create: XOR<CtaStatCreateInput, CtaStatUncheckedCreateInput>
+    /**
+     * In case the CtaStat was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<CtaStatUpdateInput, CtaStatUncheckedUpdateInput>
+  }
+
+  /**
+   * CtaStat delete
+   */
+  export type CtaStatDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CtaStat
+     */
+    select?: CtaStatSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the CtaStat
+     */
+    omit?: CtaStatOmit<ExtArgs> | null
+    /**
+     * Filter which CtaStat to delete.
+     */
+    where: CtaStatWhereUniqueInput
+  }
+
+  /**
+   * CtaStat deleteMany
+   */
+  export type CtaStatDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which CtaStats to delete
+     */
+    where?: CtaStatWhereInput
+    /**
+     * Limit how many CtaStats to delete.
+     */
+    limit?: number
+  }
+
+  /**
+   * CtaStat without action
+   */
+  export type CtaStatDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CtaStat
+     */
+    select?: CtaStatSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the CtaStat
+     */
+    omit?: CtaStatOmit<ExtArgs> | null
+  }
+
+
+  /**
    * Enums
    */
 
@@ -6891,7 +11843,15 @@ export namespace Prisma {
     title: 'title',
     slug: 'slug',
     description: 'description',
+    image: 'image',
+    instructor: 'instructor',
+    instructorAvatar: 'instructorAvatar',
+    price: 'price',
+    originalPrice: 'originalPrice',
+    students: 'students',
+    rating: 'rating',
     level: 'level',
+    tag: 'tag',
     createdAt: 'createdAt',
     categoryId: 'categoryId',
     isPublished: 'isPublished'
@@ -6935,6 +11895,78 @@ export namespace Prisma {
   };
 
   export type RegistrationScalarFieldEnum = (typeof RegistrationScalarFieldEnum)[keyof typeof RegistrationScalarFieldEnum]
+
+
+  export const HeroSlideScalarFieldEnum: {
+    id: 'id',
+    image: 'image',
+    badge: 'badge',
+    badgeColor: 'badgeColor',
+    title: 'title',
+    description: 'description',
+    primaryCtaText: 'primaryCtaText',
+    primaryCtaHref: 'primaryCtaHref',
+    secondaryCtaText: 'secondaryCtaText',
+    secondaryCtaHref: 'secondaryCtaHref',
+    overlayGradient: 'overlayGradient',
+    order: 'order',
+    isActive: 'isActive',
+    createdAt: 'createdAt',
+    updatedAt: 'updatedAt'
+  };
+
+  export type HeroSlideScalarFieldEnum = (typeof HeroSlideScalarFieldEnum)[keyof typeof HeroSlideScalarFieldEnum]
+
+
+  export const HSKLevelScalarFieldEnum: {
+    id: 'id',
+    level: 'level',
+    title: 'title',
+    badge: 'badge',
+    badgeColor: 'badgeColor',
+    description: 'description',
+    vocabularyCount: 'vocabularyCount',
+    targetAudience: 'targetAudience',
+    targetIcon: 'targetIcon',
+    accentColor: 'accentColor',
+    bgGradient: 'bgGradient',
+    href: 'href',
+    order: 'order',
+    isActive: 'isActive',
+    createdAt: 'createdAt',
+    updatedAt: 'updatedAt'
+  };
+
+  export type HSKLevelScalarFieldEnum = (typeof HSKLevelScalarFieldEnum)[keyof typeof HSKLevelScalarFieldEnum]
+
+
+  export const FeatureScalarFieldEnum: {
+    id: 'id',
+    icon: 'icon',
+    iconBg: 'iconBg',
+    iconColor: 'iconColor',
+    title: 'title',
+    description: 'description',
+    order: 'order',
+    isActive: 'isActive',
+    createdAt: 'createdAt',
+    updatedAt: 'updatedAt'
+  };
+
+  export type FeatureScalarFieldEnum = (typeof FeatureScalarFieldEnum)[keyof typeof FeatureScalarFieldEnum]
+
+
+  export const CtaStatScalarFieldEnum: {
+    id: 'id',
+    value: 'value',
+    label: 'label',
+    order: 'order',
+    isActive: 'isActive',
+    createdAt: 'createdAt',
+    updatedAt: 'updatedAt'
+  };
+
+  export type CtaStatScalarFieldEnum = (typeof CtaStatScalarFieldEnum)[keyof typeof CtaStatScalarFieldEnum]
 
 
   export const SortOrder: {
@@ -7095,7 +12127,15 @@ export namespace Prisma {
     title?: StringFilter<"Course"> | string
     slug?: StringFilter<"Course"> | string
     description?: StringNullableFilter<"Course"> | string | null
+    image?: StringNullableFilter<"Course"> | string | null
+    instructor?: StringNullableFilter<"Course"> | string | null
+    instructorAvatar?: StringNullableFilter<"Course"> | string | null
+    price?: StringNullableFilter<"Course"> | string | null
+    originalPrice?: StringNullableFilter<"Course"> | string | null
+    students?: StringNullableFilter<"Course"> | string | null
+    rating?: StringNullableFilter<"Course"> | string | null
     level?: StringNullableFilter<"Course"> | string | null
+    tag?: StringNullableFilter<"Course"> | string | null
     createdAt?: DateTimeFilter<"Course"> | Date | string
     categoryId?: StringFilter<"Course"> | string
     isPublished?: BoolFilter<"Course"> | boolean
@@ -7109,7 +12149,15 @@ export namespace Prisma {
     title?: SortOrder
     slug?: SortOrder
     description?: SortOrderInput | SortOrder
+    image?: SortOrderInput | SortOrder
+    instructor?: SortOrderInput | SortOrder
+    instructorAvatar?: SortOrderInput | SortOrder
+    price?: SortOrderInput | SortOrder
+    originalPrice?: SortOrderInput | SortOrder
+    students?: SortOrderInput | SortOrder
+    rating?: SortOrderInput | SortOrder
     level?: SortOrderInput | SortOrder
+    tag?: SortOrderInput | SortOrder
     createdAt?: SortOrder
     categoryId?: SortOrder
     isPublished?: SortOrder
@@ -7126,7 +12174,15 @@ export namespace Prisma {
     NOT?: CourseWhereInput | CourseWhereInput[]
     title?: StringFilter<"Course"> | string
     description?: StringNullableFilter<"Course"> | string | null
+    image?: StringNullableFilter<"Course"> | string | null
+    instructor?: StringNullableFilter<"Course"> | string | null
+    instructorAvatar?: StringNullableFilter<"Course"> | string | null
+    price?: StringNullableFilter<"Course"> | string | null
+    originalPrice?: StringNullableFilter<"Course"> | string | null
+    students?: StringNullableFilter<"Course"> | string | null
+    rating?: StringNullableFilter<"Course"> | string | null
     level?: StringNullableFilter<"Course"> | string | null
+    tag?: StringNullableFilter<"Course"> | string | null
     createdAt?: DateTimeFilter<"Course"> | Date | string
     categoryId?: StringFilter<"Course"> | string
     isPublished?: BoolFilter<"Course"> | boolean
@@ -7140,7 +12196,15 @@ export namespace Prisma {
     title?: SortOrder
     slug?: SortOrder
     description?: SortOrderInput | SortOrder
+    image?: SortOrderInput | SortOrder
+    instructor?: SortOrderInput | SortOrder
+    instructorAvatar?: SortOrderInput | SortOrder
+    price?: SortOrderInput | SortOrder
+    originalPrice?: SortOrderInput | SortOrder
+    students?: SortOrderInput | SortOrder
+    rating?: SortOrderInput | SortOrder
     level?: SortOrderInput | SortOrder
+    tag?: SortOrderInput | SortOrder
     createdAt?: SortOrder
     categoryId?: SortOrder
     isPublished?: SortOrder
@@ -7157,7 +12221,15 @@ export namespace Prisma {
     title?: StringWithAggregatesFilter<"Course"> | string
     slug?: StringWithAggregatesFilter<"Course"> | string
     description?: StringNullableWithAggregatesFilter<"Course"> | string | null
+    image?: StringNullableWithAggregatesFilter<"Course"> | string | null
+    instructor?: StringNullableWithAggregatesFilter<"Course"> | string | null
+    instructorAvatar?: StringNullableWithAggregatesFilter<"Course"> | string | null
+    price?: StringNullableWithAggregatesFilter<"Course"> | string | null
+    originalPrice?: StringNullableWithAggregatesFilter<"Course"> | string | null
+    students?: StringNullableWithAggregatesFilter<"Course"> | string | null
+    rating?: StringNullableWithAggregatesFilter<"Course"> | string | null
     level?: StringNullableWithAggregatesFilter<"Course"> | string | null
+    tag?: StringNullableWithAggregatesFilter<"Course"> | string | null
     createdAt?: DateTimeWithAggregatesFilter<"Course"> | Date | string
     categoryId?: StringWithAggregatesFilter<"Course"> | string
     isPublished?: BoolWithAggregatesFilter<"Course"> | boolean
@@ -7353,6 +12425,362 @@ export namespace Prisma {
     courseId?: StringNullableWithAggregatesFilter<"Registration"> | string | null
   }
 
+  export type HeroSlideWhereInput = {
+    AND?: HeroSlideWhereInput | HeroSlideWhereInput[]
+    OR?: HeroSlideWhereInput[]
+    NOT?: HeroSlideWhereInput | HeroSlideWhereInput[]
+    id?: StringFilter<"HeroSlide"> | string
+    image?: StringFilter<"HeroSlide"> | string
+    badge?: StringFilter<"HeroSlide"> | string
+    badgeColor?: StringFilter<"HeroSlide"> | string
+    title?: StringFilter<"HeroSlide"> | string
+    description?: StringFilter<"HeroSlide"> | string
+    primaryCtaText?: StringFilter<"HeroSlide"> | string
+    primaryCtaHref?: StringFilter<"HeroSlide"> | string
+    secondaryCtaText?: StringNullableFilter<"HeroSlide"> | string | null
+    secondaryCtaHref?: StringNullableFilter<"HeroSlide"> | string | null
+    overlayGradient?: StringFilter<"HeroSlide"> | string
+    order?: IntFilter<"HeroSlide"> | number
+    isActive?: BoolFilter<"HeroSlide"> | boolean
+    createdAt?: DateTimeFilter<"HeroSlide"> | Date | string
+    updatedAt?: DateTimeFilter<"HeroSlide"> | Date | string
+  }
+
+  export type HeroSlideOrderByWithRelationInput = {
+    id?: SortOrder
+    image?: SortOrder
+    badge?: SortOrder
+    badgeColor?: SortOrder
+    title?: SortOrder
+    description?: SortOrder
+    primaryCtaText?: SortOrder
+    primaryCtaHref?: SortOrder
+    secondaryCtaText?: SortOrderInput | SortOrder
+    secondaryCtaHref?: SortOrderInput | SortOrder
+    overlayGradient?: SortOrder
+    order?: SortOrder
+    isActive?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type HeroSlideWhereUniqueInput = Prisma.AtLeast<{
+    id?: string
+    AND?: HeroSlideWhereInput | HeroSlideWhereInput[]
+    OR?: HeroSlideWhereInput[]
+    NOT?: HeroSlideWhereInput | HeroSlideWhereInput[]
+    image?: StringFilter<"HeroSlide"> | string
+    badge?: StringFilter<"HeroSlide"> | string
+    badgeColor?: StringFilter<"HeroSlide"> | string
+    title?: StringFilter<"HeroSlide"> | string
+    description?: StringFilter<"HeroSlide"> | string
+    primaryCtaText?: StringFilter<"HeroSlide"> | string
+    primaryCtaHref?: StringFilter<"HeroSlide"> | string
+    secondaryCtaText?: StringNullableFilter<"HeroSlide"> | string | null
+    secondaryCtaHref?: StringNullableFilter<"HeroSlide"> | string | null
+    overlayGradient?: StringFilter<"HeroSlide"> | string
+    order?: IntFilter<"HeroSlide"> | number
+    isActive?: BoolFilter<"HeroSlide"> | boolean
+    createdAt?: DateTimeFilter<"HeroSlide"> | Date | string
+    updatedAt?: DateTimeFilter<"HeroSlide"> | Date | string
+  }, "id">
+
+  export type HeroSlideOrderByWithAggregationInput = {
+    id?: SortOrder
+    image?: SortOrder
+    badge?: SortOrder
+    badgeColor?: SortOrder
+    title?: SortOrder
+    description?: SortOrder
+    primaryCtaText?: SortOrder
+    primaryCtaHref?: SortOrder
+    secondaryCtaText?: SortOrderInput | SortOrder
+    secondaryCtaHref?: SortOrderInput | SortOrder
+    overlayGradient?: SortOrder
+    order?: SortOrder
+    isActive?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    _count?: HeroSlideCountOrderByAggregateInput
+    _avg?: HeroSlideAvgOrderByAggregateInput
+    _max?: HeroSlideMaxOrderByAggregateInput
+    _min?: HeroSlideMinOrderByAggregateInput
+    _sum?: HeroSlideSumOrderByAggregateInput
+  }
+
+  export type HeroSlideScalarWhereWithAggregatesInput = {
+    AND?: HeroSlideScalarWhereWithAggregatesInput | HeroSlideScalarWhereWithAggregatesInput[]
+    OR?: HeroSlideScalarWhereWithAggregatesInput[]
+    NOT?: HeroSlideScalarWhereWithAggregatesInput | HeroSlideScalarWhereWithAggregatesInput[]
+    id?: StringWithAggregatesFilter<"HeroSlide"> | string
+    image?: StringWithAggregatesFilter<"HeroSlide"> | string
+    badge?: StringWithAggregatesFilter<"HeroSlide"> | string
+    badgeColor?: StringWithAggregatesFilter<"HeroSlide"> | string
+    title?: StringWithAggregatesFilter<"HeroSlide"> | string
+    description?: StringWithAggregatesFilter<"HeroSlide"> | string
+    primaryCtaText?: StringWithAggregatesFilter<"HeroSlide"> | string
+    primaryCtaHref?: StringWithAggregatesFilter<"HeroSlide"> | string
+    secondaryCtaText?: StringNullableWithAggregatesFilter<"HeroSlide"> | string | null
+    secondaryCtaHref?: StringNullableWithAggregatesFilter<"HeroSlide"> | string | null
+    overlayGradient?: StringWithAggregatesFilter<"HeroSlide"> | string
+    order?: IntWithAggregatesFilter<"HeroSlide"> | number
+    isActive?: BoolWithAggregatesFilter<"HeroSlide"> | boolean
+    createdAt?: DateTimeWithAggregatesFilter<"HeroSlide"> | Date | string
+    updatedAt?: DateTimeWithAggregatesFilter<"HeroSlide"> | Date | string
+  }
+
+  export type HSKLevelWhereInput = {
+    AND?: HSKLevelWhereInput | HSKLevelWhereInput[]
+    OR?: HSKLevelWhereInput[]
+    NOT?: HSKLevelWhereInput | HSKLevelWhereInput[]
+    id?: StringFilter<"HSKLevel"> | string
+    level?: IntFilter<"HSKLevel"> | number
+    title?: StringFilter<"HSKLevel"> | string
+    badge?: StringFilter<"HSKLevel"> | string
+    badgeColor?: StringFilter<"HSKLevel"> | string
+    description?: StringFilter<"HSKLevel"> | string
+    vocabularyCount?: StringFilter<"HSKLevel"> | string
+    targetAudience?: StringFilter<"HSKLevel"> | string
+    targetIcon?: StringFilter<"HSKLevel"> | string
+    accentColor?: StringFilter<"HSKLevel"> | string
+    bgGradient?: StringFilter<"HSKLevel"> | string
+    href?: StringFilter<"HSKLevel"> | string
+    order?: IntFilter<"HSKLevel"> | number
+    isActive?: BoolFilter<"HSKLevel"> | boolean
+    createdAt?: DateTimeFilter<"HSKLevel"> | Date | string
+    updatedAt?: DateTimeFilter<"HSKLevel"> | Date | string
+  }
+
+  export type HSKLevelOrderByWithRelationInput = {
+    id?: SortOrder
+    level?: SortOrder
+    title?: SortOrder
+    badge?: SortOrder
+    badgeColor?: SortOrder
+    description?: SortOrder
+    vocabularyCount?: SortOrder
+    targetAudience?: SortOrder
+    targetIcon?: SortOrder
+    accentColor?: SortOrder
+    bgGradient?: SortOrder
+    href?: SortOrder
+    order?: SortOrder
+    isActive?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type HSKLevelWhereUniqueInput = Prisma.AtLeast<{
+    id?: string
+    level?: number
+    AND?: HSKLevelWhereInput | HSKLevelWhereInput[]
+    OR?: HSKLevelWhereInput[]
+    NOT?: HSKLevelWhereInput | HSKLevelWhereInput[]
+    title?: StringFilter<"HSKLevel"> | string
+    badge?: StringFilter<"HSKLevel"> | string
+    badgeColor?: StringFilter<"HSKLevel"> | string
+    description?: StringFilter<"HSKLevel"> | string
+    vocabularyCount?: StringFilter<"HSKLevel"> | string
+    targetAudience?: StringFilter<"HSKLevel"> | string
+    targetIcon?: StringFilter<"HSKLevel"> | string
+    accentColor?: StringFilter<"HSKLevel"> | string
+    bgGradient?: StringFilter<"HSKLevel"> | string
+    href?: StringFilter<"HSKLevel"> | string
+    order?: IntFilter<"HSKLevel"> | number
+    isActive?: BoolFilter<"HSKLevel"> | boolean
+    createdAt?: DateTimeFilter<"HSKLevel"> | Date | string
+    updatedAt?: DateTimeFilter<"HSKLevel"> | Date | string
+  }, "id" | "level">
+
+  export type HSKLevelOrderByWithAggregationInput = {
+    id?: SortOrder
+    level?: SortOrder
+    title?: SortOrder
+    badge?: SortOrder
+    badgeColor?: SortOrder
+    description?: SortOrder
+    vocabularyCount?: SortOrder
+    targetAudience?: SortOrder
+    targetIcon?: SortOrder
+    accentColor?: SortOrder
+    bgGradient?: SortOrder
+    href?: SortOrder
+    order?: SortOrder
+    isActive?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    _count?: HSKLevelCountOrderByAggregateInput
+    _avg?: HSKLevelAvgOrderByAggregateInput
+    _max?: HSKLevelMaxOrderByAggregateInput
+    _min?: HSKLevelMinOrderByAggregateInput
+    _sum?: HSKLevelSumOrderByAggregateInput
+  }
+
+  export type HSKLevelScalarWhereWithAggregatesInput = {
+    AND?: HSKLevelScalarWhereWithAggregatesInput | HSKLevelScalarWhereWithAggregatesInput[]
+    OR?: HSKLevelScalarWhereWithAggregatesInput[]
+    NOT?: HSKLevelScalarWhereWithAggregatesInput | HSKLevelScalarWhereWithAggregatesInput[]
+    id?: StringWithAggregatesFilter<"HSKLevel"> | string
+    level?: IntWithAggregatesFilter<"HSKLevel"> | number
+    title?: StringWithAggregatesFilter<"HSKLevel"> | string
+    badge?: StringWithAggregatesFilter<"HSKLevel"> | string
+    badgeColor?: StringWithAggregatesFilter<"HSKLevel"> | string
+    description?: StringWithAggregatesFilter<"HSKLevel"> | string
+    vocabularyCount?: StringWithAggregatesFilter<"HSKLevel"> | string
+    targetAudience?: StringWithAggregatesFilter<"HSKLevel"> | string
+    targetIcon?: StringWithAggregatesFilter<"HSKLevel"> | string
+    accentColor?: StringWithAggregatesFilter<"HSKLevel"> | string
+    bgGradient?: StringWithAggregatesFilter<"HSKLevel"> | string
+    href?: StringWithAggregatesFilter<"HSKLevel"> | string
+    order?: IntWithAggregatesFilter<"HSKLevel"> | number
+    isActive?: BoolWithAggregatesFilter<"HSKLevel"> | boolean
+    createdAt?: DateTimeWithAggregatesFilter<"HSKLevel"> | Date | string
+    updatedAt?: DateTimeWithAggregatesFilter<"HSKLevel"> | Date | string
+  }
+
+  export type FeatureWhereInput = {
+    AND?: FeatureWhereInput | FeatureWhereInput[]
+    OR?: FeatureWhereInput[]
+    NOT?: FeatureWhereInput | FeatureWhereInput[]
+    id?: StringFilter<"Feature"> | string
+    icon?: StringFilter<"Feature"> | string
+    iconBg?: StringFilter<"Feature"> | string
+    iconColor?: StringFilter<"Feature"> | string
+    title?: StringFilter<"Feature"> | string
+    description?: StringFilter<"Feature"> | string
+    order?: IntFilter<"Feature"> | number
+    isActive?: BoolFilter<"Feature"> | boolean
+    createdAt?: DateTimeFilter<"Feature"> | Date | string
+    updatedAt?: DateTimeFilter<"Feature"> | Date | string
+  }
+
+  export type FeatureOrderByWithRelationInput = {
+    id?: SortOrder
+    icon?: SortOrder
+    iconBg?: SortOrder
+    iconColor?: SortOrder
+    title?: SortOrder
+    description?: SortOrder
+    order?: SortOrder
+    isActive?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type FeatureWhereUniqueInput = Prisma.AtLeast<{
+    id?: string
+    AND?: FeatureWhereInput | FeatureWhereInput[]
+    OR?: FeatureWhereInput[]
+    NOT?: FeatureWhereInput | FeatureWhereInput[]
+    icon?: StringFilter<"Feature"> | string
+    iconBg?: StringFilter<"Feature"> | string
+    iconColor?: StringFilter<"Feature"> | string
+    title?: StringFilter<"Feature"> | string
+    description?: StringFilter<"Feature"> | string
+    order?: IntFilter<"Feature"> | number
+    isActive?: BoolFilter<"Feature"> | boolean
+    createdAt?: DateTimeFilter<"Feature"> | Date | string
+    updatedAt?: DateTimeFilter<"Feature"> | Date | string
+  }, "id">
+
+  export type FeatureOrderByWithAggregationInput = {
+    id?: SortOrder
+    icon?: SortOrder
+    iconBg?: SortOrder
+    iconColor?: SortOrder
+    title?: SortOrder
+    description?: SortOrder
+    order?: SortOrder
+    isActive?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    _count?: FeatureCountOrderByAggregateInput
+    _avg?: FeatureAvgOrderByAggregateInput
+    _max?: FeatureMaxOrderByAggregateInput
+    _min?: FeatureMinOrderByAggregateInput
+    _sum?: FeatureSumOrderByAggregateInput
+  }
+
+  export type FeatureScalarWhereWithAggregatesInput = {
+    AND?: FeatureScalarWhereWithAggregatesInput | FeatureScalarWhereWithAggregatesInput[]
+    OR?: FeatureScalarWhereWithAggregatesInput[]
+    NOT?: FeatureScalarWhereWithAggregatesInput | FeatureScalarWhereWithAggregatesInput[]
+    id?: StringWithAggregatesFilter<"Feature"> | string
+    icon?: StringWithAggregatesFilter<"Feature"> | string
+    iconBg?: StringWithAggregatesFilter<"Feature"> | string
+    iconColor?: StringWithAggregatesFilter<"Feature"> | string
+    title?: StringWithAggregatesFilter<"Feature"> | string
+    description?: StringWithAggregatesFilter<"Feature"> | string
+    order?: IntWithAggregatesFilter<"Feature"> | number
+    isActive?: BoolWithAggregatesFilter<"Feature"> | boolean
+    createdAt?: DateTimeWithAggregatesFilter<"Feature"> | Date | string
+    updatedAt?: DateTimeWithAggregatesFilter<"Feature"> | Date | string
+  }
+
+  export type CtaStatWhereInput = {
+    AND?: CtaStatWhereInput | CtaStatWhereInput[]
+    OR?: CtaStatWhereInput[]
+    NOT?: CtaStatWhereInput | CtaStatWhereInput[]
+    id?: StringFilter<"CtaStat"> | string
+    value?: StringFilter<"CtaStat"> | string
+    label?: StringFilter<"CtaStat"> | string
+    order?: IntFilter<"CtaStat"> | number
+    isActive?: BoolFilter<"CtaStat"> | boolean
+    createdAt?: DateTimeFilter<"CtaStat"> | Date | string
+    updatedAt?: DateTimeFilter<"CtaStat"> | Date | string
+  }
+
+  export type CtaStatOrderByWithRelationInput = {
+    id?: SortOrder
+    value?: SortOrder
+    label?: SortOrder
+    order?: SortOrder
+    isActive?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type CtaStatWhereUniqueInput = Prisma.AtLeast<{
+    id?: string
+    AND?: CtaStatWhereInput | CtaStatWhereInput[]
+    OR?: CtaStatWhereInput[]
+    NOT?: CtaStatWhereInput | CtaStatWhereInput[]
+    value?: StringFilter<"CtaStat"> | string
+    label?: StringFilter<"CtaStat"> | string
+    order?: IntFilter<"CtaStat"> | number
+    isActive?: BoolFilter<"CtaStat"> | boolean
+    createdAt?: DateTimeFilter<"CtaStat"> | Date | string
+    updatedAt?: DateTimeFilter<"CtaStat"> | Date | string
+  }, "id">
+
+  export type CtaStatOrderByWithAggregationInput = {
+    id?: SortOrder
+    value?: SortOrder
+    label?: SortOrder
+    order?: SortOrder
+    isActive?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    _count?: CtaStatCountOrderByAggregateInput
+    _avg?: CtaStatAvgOrderByAggregateInput
+    _max?: CtaStatMaxOrderByAggregateInput
+    _min?: CtaStatMinOrderByAggregateInput
+    _sum?: CtaStatSumOrderByAggregateInput
+  }
+
+  export type CtaStatScalarWhereWithAggregatesInput = {
+    AND?: CtaStatScalarWhereWithAggregatesInput | CtaStatScalarWhereWithAggregatesInput[]
+    OR?: CtaStatScalarWhereWithAggregatesInput[]
+    NOT?: CtaStatScalarWhereWithAggregatesInput | CtaStatScalarWhereWithAggregatesInput[]
+    id?: StringWithAggregatesFilter<"CtaStat"> | string
+    value?: StringWithAggregatesFilter<"CtaStat"> | string
+    label?: StringWithAggregatesFilter<"CtaStat"> | string
+    order?: IntWithAggregatesFilter<"CtaStat"> | number
+    isActive?: BoolWithAggregatesFilter<"CtaStat"> | boolean
+    createdAt?: DateTimeWithAggregatesFilter<"CtaStat"> | Date | string
+    updatedAt?: DateTimeWithAggregatesFilter<"CtaStat"> | Date | string
+  }
+
   export type CategoryCreateInput = {
     id?: string
     name: string
@@ -7418,7 +12846,15 @@ export namespace Prisma {
     title: string
     slug: string
     description?: string | null
+    image?: string | null
+    instructor?: string | null
+    instructorAvatar?: string | null
+    price?: string | null
+    originalPrice?: string | null
+    students?: string | null
+    rating?: string | null
     level?: string | null
+    tag?: string | null
     createdAt?: Date | string
     isPublished?: boolean
     category: CategoryCreateNestedOneWithoutCoursesInput
@@ -7431,7 +12867,15 @@ export namespace Prisma {
     title: string
     slug: string
     description?: string | null
+    image?: string | null
+    instructor?: string | null
+    instructorAvatar?: string | null
+    price?: string | null
+    originalPrice?: string | null
+    students?: string | null
+    rating?: string | null
     level?: string | null
+    tag?: string | null
     createdAt?: Date | string
     categoryId: string
     isPublished?: boolean
@@ -7444,7 +12888,15 @@ export namespace Prisma {
     title?: StringFieldUpdateOperationsInput | string
     slug?: StringFieldUpdateOperationsInput | string
     description?: NullableStringFieldUpdateOperationsInput | string | null
+    image?: NullableStringFieldUpdateOperationsInput | string | null
+    instructor?: NullableStringFieldUpdateOperationsInput | string | null
+    instructorAvatar?: NullableStringFieldUpdateOperationsInput | string | null
+    price?: NullableStringFieldUpdateOperationsInput | string | null
+    originalPrice?: NullableStringFieldUpdateOperationsInput | string | null
+    students?: NullableStringFieldUpdateOperationsInput | string | null
+    rating?: NullableStringFieldUpdateOperationsInput | string | null
     level?: NullableStringFieldUpdateOperationsInput | string | null
+    tag?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     isPublished?: BoolFieldUpdateOperationsInput | boolean
     category?: CategoryUpdateOneRequiredWithoutCoursesNestedInput
@@ -7457,7 +12909,15 @@ export namespace Prisma {
     title?: StringFieldUpdateOperationsInput | string
     slug?: StringFieldUpdateOperationsInput | string
     description?: NullableStringFieldUpdateOperationsInput | string | null
+    image?: NullableStringFieldUpdateOperationsInput | string | null
+    instructor?: NullableStringFieldUpdateOperationsInput | string | null
+    instructorAvatar?: NullableStringFieldUpdateOperationsInput | string | null
+    price?: NullableStringFieldUpdateOperationsInput | string | null
+    originalPrice?: NullableStringFieldUpdateOperationsInput | string | null
+    students?: NullableStringFieldUpdateOperationsInput | string | null
+    rating?: NullableStringFieldUpdateOperationsInput | string | null
     level?: NullableStringFieldUpdateOperationsInput | string | null
+    tag?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     categoryId?: StringFieldUpdateOperationsInput | string
     isPublished?: BoolFieldUpdateOperationsInput | boolean
@@ -7470,7 +12930,15 @@ export namespace Prisma {
     title: string
     slug: string
     description?: string | null
+    image?: string | null
+    instructor?: string | null
+    instructorAvatar?: string | null
+    price?: string | null
+    originalPrice?: string | null
+    students?: string | null
+    rating?: string | null
     level?: string | null
+    tag?: string | null
     createdAt?: Date | string
     categoryId: string
     isPublished?: boolean
@@ -7481,7 +12949,15 @@ export namespace Prisma {
     title?: StringFieldUpdateOperationsInput | string
     slug?: StringFieldUpdateOperationsInput | string
     description?: NullableStringFieldUpdateOperationsInput | string | null
+    image?: NullableStringFieldUpdateOperationsInput | string | null
+    instructor?: NullableStringFieldUpdateOperationsInput | string | null
+    instructorAvatar?: NullableStringFieldUpdateOperationsInput | string | null
+    price?: NullableStringFieldUpdateOperationsInput | string | null
+    originalPrice?: NullableStringFieldUpdateOperationsInput | string | null
+    students?: NullableStringFieldUpdateOperationsInput | string | null
+    rating?: NullableStringFieldUpdateOperationsInput | string | null
     level?: NullableStringFieldUpdateOperationsInput | string | null
+    tag?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     isPublished?: BoolFieldUpdateOperationsInput | boolean
   }
@@ -7491,7 +12967,15 @@ export namespace Prisma {
     title?: StringFieldUpdateOperationsInput | string
     slug?: StringFieldUpdateOperationsInput | string
     description?: NullableStringFieldUpdateOperationsInput | string | null
+    image?: NullableStringFieldUpdateOperationsInput | string | null
+    instructor?: NullableStringFieldUpdateOperationsInput | string | null
+    instructorAvatar?: NullableStringFieldUpdateOperationsInput | string | null
+    price?: NullableStringFieldUpdateOperationsInput | string | null
+    originalPrice?: NullableStringFieldUpdateOperationsInput | string | null
+    students?: NullableStringFieldUpdateOperationsInput | string | null
+    rating?: NullableStringFieldUpdateOperationsInput | string | null
     level?: NullableStringFieldUpdateOperationsInput | string | null
+    tag?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     categoryId?: StringFieldUpdateOperationsInput | string
     isPublished?: BoolFieldUpdateOperationsInput | boolean
@@ -7694,6 +13178,426 @@ export namespace Prisma {
     courseId?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
+  export type HeroSlideCreateInput = {
+    id?: string
+    image: string
+    badge: string
+    badgeColor: string
+    title: string
+    description: string
+    primaryCtaText: string
+    primaryCtaHref: string
+    secondaryCtaText?: string | null
+    secondaryCtaHref?: string | null
+    overlayGradient: string
+    order: number
+    isActive?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type HeroSlideUncheckedCreateInput = {
+    id?: string
+    image: string
+    badge: string
+    badgeColor: string
+    title: string
+    description: string
+    primaryCtaText: string
+    primaryCtaHref: string
+    secondaryCtaText?: string | null
+    secondaryCtaHref?: string | null
+    overlayGradient: string
+    order: number
+    isActive?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type HeroSlideUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    image?: StringFieldUpdateOperationsInput | string
+    badge?: StringFieldUpdateOperationsInput | string
+    badgeColor?: StringFieldUpdateOperationsInput | string
+    title?: StringFieldUpdateOperationsInput | string
+    description?: StringFieldUpdateOperationsInput | string
+    primaryCtaText?: StringFieldUpdateOperationsInput | string
+    primaryCtaHref?: StringFieldUpdateOperationsInput | string
+    secondaryCtaText?: NullableStringFieldUpdateOperationsInput | string | null
+    secondaryCtaHref?: NullableStringFieldUpdateOperationsInput | string | null
+    overlayGradient?: StringFieldUpdateOperationsInput | string
+    order?: IntFieldUpdateOperationsInput | number
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type HeroSlideUncheckedUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    image?: StringFieldUpdateOperationsInput | string
+    badge?: StringFieldUpdateOperationsInput | string
+    badgeColor?: StringFieldUpdateOperationsInput | string
+    title?: StringFieldUpdateOperationsInput | string
+    description?: StringFieldUpdateOperationsInput | string
+    primaryCtaText?: StringFieldUpdateOperationsInput | string
+    primaryCtaHref?: StringFieldUpdateOperationsInput | string
+    secondaryCtaText?: NullableStringFieldUpdateOperationsInput | string | null
+    secondaryCtaHref?: NullableStringFieldUpdateOperationsInput | string | null
+    overlayGradient?: StringFieldUpdateOperationsInput | string
+    order?: IntFieldUpdateOperationsInput | number
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type HeroSlideCreateManyInput = {
+    id?: string
+    image: string
+    badge: string
+    badgeColor: string
+    title: string
+    description: string
+    primaryCtaText: string
+    primaryCtaHref: string
+    secondaryCtaText?: string | null
+    secondaryCtaHref?: string | null
+    overlayGradient: string
+    order: number
+    isActive?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type HeroSlideUpdateManyMutationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    image?: StringFieldUpdateOperationsInput | string
+    badge?: StringFieldUpdateOperationsInput | string
+    badgeColor?: StringFieldUpdateOperationsInput | string
+    title?: StringFieldUpdateOperationsInput | string
+    description?: StringFieldUpdateOperationsInput | string
+    primaryCtaText?: StringFieldUpdateOperationsInput | string
+    primaryCtaHref?: StringFieldUpdateOperationsInput | string
+    secondaryCtaText?: NullableStringFieldUpdateOperationsInput | string | null
+    secondaryCtaHref?: NullableStringFieldUpdateOperationsInput | string | null
+    overlayGradient?: StringFieldUpdateOperationsInput | string
+    order?: IntFieldUpdateOperationsInput | number
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type HeroSlideUncheckedUpdateManyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    image?: StringFieldUpdateOperationsInput | string
+    badge?: StringFieldUpdateOperationsInput | string
+    badgeColor?: StringFieldUpdateOperationsInput | string
+    title?: StringFieldUpdateOperationsInput | string
+    description?: StringFieldUpdateOperationsInput | string
+    primaryCtaText?: StringFieldUpdateOperationsInput | string
+    primaryCtaHref?: StringFieldUpdateOperationsInput | string
+    secondaryCtaText?: NullableStringFieldUpdateOperationsInput | string | null
+    secondaryCtaHref?: NullableStringFieldUpdateOperationsInput | string | null
+    overlayGradient?: StringFieldUpdateOperationsInput | string
+    order?: IntFieldUpdateOperationsInput | number
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type HSKLevelCreateInput = {
+    id?: string
+    level: number
+    title: string
+    badge: string
+    badgeColor: string
+    description: string
+    vocabularyCount: string
+    targetAudience: string
+    targetIcon: string
+    accentColor: string
+    bgGradient: string
+    href: string
+    order: number
+    isActive?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type HSKLevelUncheckedCreateInput = {
+    id?: string
+    level: number
+    title: string
+    badge: string
+    badgeColor: string
+    description: string
+    vocabularyCount: string
+    targetAudience: string
+    targetIcon: string
+    accentColor: string
+    bgGradient: string
+    href: string
+    order: number
+    isActive?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type HSKLevelUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    level?: IntFieldUpdateOperationsInput | number
+    title?: StringFieldUpdateOperationsInput | string
+    badge?: StringFieldUpdateOperationsInput | string
+    badgeColor?: StringFieldUpdateOperationsInput | string
+    description?: StringFieldUpdateOperationsInput | string
+    vocabularyCount?: StringFieldUpdateOperationsInput | string
+    targetAudience?: StringFieldUpdateOperationsInput | string
+    targetIcon?: StringFieldUpdateOperationsInput | string
+    accentColor?: StringFieldUpdateOperationsInput | string
+    bgGradient?: StringFieldUpdateOperationsInput | string
+    href?: StringFieldUpdateOperationsInput | string
+    order?: IntFieldUpdateOperationsInput | number
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type HSKLevelUncheckedUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    level?: IntFieldUpdateOperationsInput | number
+    title?: StringFieldUpdateOperationsInput | string
+    badge?: StringFieldUpdateOperationsInput | string
+    badgeColor?: StringFieldUpdateOperationsInput | string
+    description?: StringFieldUpdateOperationsInput | string
+    vocabularyCount?: StringFieldUpdateOperationsInput | string
+    targetAudience?: StringFieldUpdateOperationsInput | string
+    targetIcon?: StringFieldUpdateOperationsInput | string
+    accentColor?: StringFieldUpdateOperationsInput | string
+    bgGradient?: StringFieldUpdateOperationsInput | string
+    href?: StringFieldUpdateOperationsInput | string
+    order?: IntFieldUpdateOperationsInput | number
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type HSKLevelCreateManyInput = {
+    id?: string
+    level: number
+    title: string
+    badge: string
+    badgeColor: string
+    description: string
+    vocabularyCount: string
+    targetAudience: string
+    targetIcon: string
+    accentColor: string
+    bgGradient: string
+    href: string
+    order: number
+    isActive?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type HSKLevelUpdateManyMutationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    level?: IntFieldUpdateOperationsInput | number
+    title?: StringFieldUpdateOperationsInput | string
+    badge?: StringFieldUpdateOperationsInput | string
+    badgeColor?: StringFieldUpdateOperationsInput | string
+    description?: StringFieldUpdateOperationsInput | string
+    vocabularyCount?: StringFieldUpdateOperationsInput | string
+    targetAudience?: StringFieldUpdateOperationsInput | string
+    targetIcon?: StringFieldUpdateOperationsInput | string
+    accentColor?: StringFieldUpdateOperationsInput | string
+    bgGradient?: StringFieldUpdateOperationsInput | string
+    href?: StringFieldUpdateOperationsInput | string
+    order?: IntFieldUpdateOperationsInput | number
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type HSKLevelUncheckedUpdateManyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    level?: IntFieldUpdateOperationsInput | number
+    title?: StringFieldUpdateOperationsInput | string
+    badge?: StringFieldUpdateOperationsInput | string
+    badgeColor?: StringFieldUpdateOperationsInput | string
+    description?: StringFieldUpdateOperationsInput | string
+    vocabularyCount?: StringFieldUpdateOperationsInput | string
+    targetAudience?: StringFieldUpdateOperationsInput | string
+    targetIcon?: StringFieldUpdateOperationsInput | string
+    accentColor?: StringFieldUpdateOperationsInput | string
+    bgGradient?: StringFieldUpdateOperationsInput | string
+    href?: StringFieldUpdateOperationsInput | string
+    order?: IntFieldUpdateOperationsInput | number
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type FeatureCreateInput = {
+    id?: string
+    icon: string
+    iconBg: string
+    iconColor: string
+    title: string
+    description: string
+    order: number
+    isActive?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type FeatureUncheckedCreateInput = {
+    id?: string
+    icon: string
+    iconBg: string
+    iconColor: string
+    title: string
+    description: string
+    order: number
+    isActive?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type FeatureUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    icon?: StringFieldUpdateOperationsInput | string
+    iconBg?: StringFieldUpdateOperationsInput | string
+    iconColor?: StringFieldUpdateOperationsInput | string
+    title?: StringFieldUpdateOperationsInput | string
+    description?: StringFieldUpdateOperationsInput | string
+    order?: IntFieldUpdateOperationsInput | number
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type FeatureUncheckedUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    icon?: StringFieldUpdateOperationsInput | string
+    iconBg?: StringFieldUpdateOperationsInput | string
+    iconColor?: StringFieldUpdateOperationsInput | string
+    title?: StringFieldUpdateOperationsInput | string
+    description?: StringFieldUpdateOperationsInput | string
+    order?: IntFieldUpdateOperationsInput | number
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type FeatureCreateManyInput = {
+    id?: string
+    icon: string
+    iconBg: string
+    iconColor: string
+    title: string
+    description: string
+    order: number
+    isActive?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type FeatureUpdateManyMutationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    icon?: StringFieldUpdateOperationsInput | string
+    iconBg?: StringFieldUpdateOperationsInput | string
+    iconColor?: StringFieldUpdateOperationsInput | string
+    title?: StringFieldUpdateOperationsInput | string
+    description?: StringFieldUpdateOperationsInput | string
+    order?: IntFieldUpdateOperationsInput | number
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type FeatureUncheckedUpdateManyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    icon?: StringFieldUpdateOperationsInput | string
+    iconBg?: StringFieldUpdateOperationsInput | string
+    iconColor?: StringFieldUpdateOperationsInput | string
+    title?: StringFieldUpdateOperationsInput | string
+    description?: StringFieldUpdateOperationsInput | string
+    order?: IntFieldUpdateOperationsInput | number
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type CtaStatCreateInput = {
+    id?: string
+    value: string
+    label: string
+    order: number
+    isActive?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type CtaStatUncheckedCreateInput = {
+    id?: string
+    value: string
+    label: string
+    order: number
+    isActive?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type CtaStatUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    value?: StringFieldUpdateOperationsInput | string
+    label?: StringFieldUpdateOperationsInput | string
+    order?: IntFieldUpdateOperationsInput | number
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type CtaStatUncheckedUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    value?: StringFieldUpdateOperationsInput | string
+    label?: StringFieldUpdateOperationsInput | string
+    order?: IntFieldUpdateOperationsInput | number
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type CtaStatCreateManyInput = {
+    id?: string
+    value: string
+    label: string
+    order: number
+    isActive?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type CtaStatUpdateManyMutationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    value?: StringFieldUpdateOperationsInput | string
+    label?: StringFieldUpdateOperationsInput | string
+    order?: IntFieldUpdateOperationsInput | number
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type CtaStatUncheckedUpdateManyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    value?: StringFieldUpdateOperationsInput | string
+    label?: StringFieldUpdateOperationsInput | string
+    order?: IntFieldUpdateOperationsInput | number
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
   export type StringFilter<$PrismaModel = never> = {
     equals?: string | StringFieldRefInput<$PrismaModel>
     in?: string[] | ListStringFieldRefInput<$PrismaModel>
@@ -7859,7 +13763,15 @@ export namespace Prisma {
     title?: SortOrder
     slug?: SortOrder
     description?: SortOrder
+    image?: SortOrder
+    instructor?: SortOrder
+    instructorAvatar?: SortOrder
+    price?: SortOrder
+    originalPrice?: SortOrder
+    students?: SortOrder
+    rating?: SortOrder
     level?: SortOrder
+    tag?: SortOrder
     createdAt?: SortOrder
     categoryId?: SortOrder
     isPublished?: SortOrder
@@ -7870,7 +13782,15 @@ export namespace Prisma {
     title?: SortOrder
     slug?: SortOrder
     description?: SortOrder
+    image?: SortOrder
+    instructor?: SortOrder
+    instructorAvatar?: SortOrder
+    price?: SortOrder
+    originalPrice?: SortOrder
+    students?: SortOrder
+    rating?: SortOrder
     level?: SortOrder
+    tag?: SortOrder
     createdAt?: SortOrder
     categoryId?: SortOrder
     isPublished?: SortOrder
@@ -7881,7 +13801,15 @@ export namespace Prisma {
     title?: SortOrder
     slug?: SortOrder
     description?: SortOrder
+    image?: SortOrder
+    instructor?: SortOrder
+    instructorAvatar?: SortOrder
+    price?: SortOrder
+    originalPrice?: SortOrder
+    students?: SortOrder
+    rating?: SortOrder
     level?: SortOrder
+    tag?: SortOrder
     createdAt?: SortOrder
     categoryId?: SortOrder
     isPublished?: SortOrder
@@ -8037,6 +13965,220 @@ export namespace Prisma {
     note?: SortOrder
     createdAt?: SortOrder
     courseId?: SortOrder
+  }
+
+  export type HeroSlideCountOrderByAggregateInput = {
+    id?: SortOrder
+    image?: SortOrder
+    badge?: SortOrder
+    badgeColor?: SortOrder
+    title?: SortOrder
+    description?: SortOrder
+    primaryCtaText?: SortOrder
+    primaryCtaHref?: SortOrder
+    secondaryCtaText?: SortOrder
+    secondaryCtaHref?: SortOrder
+    overlayGradient?: SortOrder
+    order?: SortOrder
+    isActive?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type HeroSlideAvgOrderByAggregateInput = {
+    order?: SortOrder
+  }
+
+  export type HeroSlideMaxOrderByAggregateInput = {
+    id?: SortOrder
+    image?: SortOrder
+    badge?: SortOrder
+    badgeColor?: SortOrder
+    title?: SortOrder
+    description?: SortOrder
+    primaryCtaText?: SortOrder
+    primaryCtaHref?: SortOrder
+    secondaryCtaText?: SortOrder
+    secondaryCtaHref?: SortOrder
+    overlayGradient?: SortOrder
+    order?: SortOrder
+    isActive?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type HeroSlideMinOrderByAggregateInput = {
+    id?: SortOrder
+    image?: SortOrder
+    badge?: SortOrder
+    badgeColor?: SortOrder
+    title?: SortOrder
+    description?: SortOrder
+    primaryCtaText?: SortOrder
+    primaryCtaHref?: SortOrder
+    secondaryCtaText?: SortOrder
+    secondaryCtaHref?: SortOrder
+    overlayGradient?: SortOrder
+    order?: SortOrder
+    isActive?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type HeroSlideSumOrderByAggregateInput = {
+    order?: SortOrder
+  }
+
+  export type HSKLevelCountOrderByAggregateInput = {
+    id?: SortOrder
+    level?: SortOrder
+    title?: SortOrder
+    badge?: SortOrder
+    badgeColor?: SortOrder
+    description?: SortOrder
+    vocabularyCount?: SortOrder
+    targetAudience?: SortOrder
+    targetIcon?: SortOrder
+    accentColor?: SortOrder
+    bgGradient?: SortOrder
+    href?: SortOrder
+    order?: SortOrder
+    isActive?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type HSKLevelAvgOrderByAggregateInput = {
+    level?: SortOrder
+    order?: SortOrder
+  }
+
+  export type HSKLevelMaxOrderByAggregateInput = {
+    id?: SortOrder
+    level?: SortOrder
+    title?: SortOrder
+    badge?: SortOrder
+    badgeColor?: SortOrder
+    description?: SortOrder
+    vocabularyCount?: SortOrder
+    targetAudience?: SortOrder
+    targetIcon?: SortOrder
+    accentColor?: SortOrder
+    bgGradient?: SortOrder
+    href?: SortOrder
+    order?: SortOrder
+    isActive?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type HSKLevelMinOrderByAggregateInput = {
+    id?: SortOrder
+    level?: SortOrder
+    title?: SortOrder
+    badge?: SortOrder
+    badgeColor?: SortOrder
+    description?: SortOrder
+    vocabularyCount?: SortOrder
+    targetAudience?: SortOrder
+    targetIcon?: SortOrder
+    accentColor?: SortOrder
+    bgGradient?: SortOrder
+    href?: SortOrder
+    order?: SortOrder
+    isActive?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type HSKLevelSumOrderByAggregateInput = {
+    level?: SortOrder
+    order?: SortOrder
+  }
+
+  export type FeatureCountOrderByAggregateInput = {
+    id?: SortOrder
+    icon?: SortOrder
+    iconBg?: SortOrder
+    iconColor?: SortOrder
+    title?: SortOrder
+    description?: SortOrder
+    order?: SortOrder
+    isActive?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type FeatureAvgOrderByAggregateInput = {
+    order?: SortOrder
+  }
+
+  export type FeatureMaxOrderByAggregateInput = {
+    id?: SortOrder
+    icon?: SortOrder
+    iconBg?: SortOrder
+    iconColor?: SortOrder
+    title?: SortOrder
+    description?: SortOrder
+    order?: SortOrder
+    isActive?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type FeatureMinOrderByAggregateInput = {
+    id?: SortOrder
+    icon?: SortOrder
+    iconBg?: SortOrder
+    iconColor?: SortOrder
+    title?: SortOrder
+    description?: SortOrder
+    order?: SortOrder
+    isActive?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type FeatureSumOrderByAggregateInput = {
+    order?: SortOrder
+  }
+
+  export type CtaStatCountOrderByAggregateInput = {
+    id?: SortOrder
+    value?: SortOrder
+    label?: SortOrder
+    order?: SortOrder
+    isActive?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type CtaStatAvgOrderByAggregateInput = {
+    order?: SortOrder
+  }
+
+  export type CtaStatMaxOrderByAggregateInput = {
+    id?: SortOrder
+    value?: SortOrder
+    label?: SortOrder
+    order?: SortOrder
+    isActive?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type CtaStatMinOrderByAggregateInput = {
+    id?: SortOrder
+    value?: SortOrder
+    label?: SortOrder
+    order?: SortOrder
+    isActive?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type CtaStatSumOrderByAggregateInput = {
+    order?: SortOrder
   }
 
   export type CourseCreateNestedManyWithoutCategoryInput = {
@@ -8443,7 +14585,15 @@ export namespace Prisma {
     title: string
     slug: string
     description?: string | null
+    image?: string | null
+    instructor?: string | null
+    instructorAvatar?: string | null
+    price?: string | null
+    originalPrice?: string | null
+    students?: string | null
+    rating?: string | null
     level?: string | null
+    tag?: string | null
     createdAt?: Date | string
     isPublished?: boolean
     lessons?: LessonCreateNestedManyWithoutCourseInput
@@ -8455,7 +14605,15 @@ export namespace Prisma {
     title: string
     slug: string
     description?: string | null
+    image?: string | null
+    instructor?: string | null
+    instructorAvatar?: string | null
+    price?: string | null
+    originalPrice?: string | null
+    students?: string | null
+    rating?: string | null
     level?: string | null
+    tag?: string | null
     createdAt?: Date | string
     isPublished?: boolean
     lessons?: LessonUncheckedCreateNestedManyWithoutCourseInput
@@ -8496,7 +14654,15 @@ export namespace Prisma {
     title?: StringFilter<"Course"> | string
     slug?: StringFilter<"Course"> | string
     description?: StringNullableFilter<"Course"> | string | null
+    image?: StringNullableFilter<"Course"> | string | null
+    instructor?: StringNullableFilter<"Course"> | string | null
+    instructorAvatar?: StringNullableFilter<"Course"> | string | null
+    price?: StringNullableFilter<"Course"> | string | null
+    originalPrice?: StringNullableFilter<"Course"> | string | null
+    students?: StringNullableFilter<"Course"> | string | null
+    rating?: StringNullableFilter<"Course"> | string | null
     level?: StringNullableFilter<"Course"> | string | null
+    tag?: StringNullableFilter<"Course"> | string | null
     createdAt?: DateTimeFilter<"Course"> | Date | string
     categoryId?: StringFilter<"Course"> | string
     isPublished?: BoolFilter<"Course"> | boolean
@@ -8665,7 +14831,15 @@ export namespace Prisma {
     title: string
     slug: string
     description?: string | null
+    image?: string | null
+    instructor?: string | null
+    instructorAvatar?: string | null
+    price?: string | null
+    originalPrice?: string | null
+    students?: string | null
+    rating?: string | null
     level?: string | null
+    tag?: string | null
     createdAt?: Date | string
     isPublished?: boolean
     category: CategoryCreateNestedOneWithoutCoursesInput
@@ -8677,7 +14851,15 @@ export namespace Prisma {
     title: string
     slug: string
     description?: string | null
+    image?: string | null
+    instructor?: string | null
+    instructorAvatar?: string | null
+    price?: string | null
+    originalPrice?: string | null
+    students?: string | null
+    rating?: string | null
     level?: string | null
+    tag?: string | null
     createdAt?: Date | string
     categoryId: string
     isPublished?: boolean
@@ -8733,7 +14915,15 @@ export namespace Prisma {
     title?: StringFieldUpdateOperationsInput | string
     slug?: StringFieldUpdateOperationsInput | string
     description?: NullableStringFieldUpdateOperationsInput | string | null
+    image?: NullableStringFieldUpdateOperationsInput | string | null
+    instructor?: NullableStringFieldUpdateOperationsInput | string | null
+    instructorAvatar?: NullableStringFieldUpdateOperationsInput | string | null
+    price?: NullableStringFieldUpdateOperationsInput | string | null
+    originalPrice?: NullableStringFieldUpdateOperationsInput | string | null
+    students?: NullableStringFieldUpdateOperationsInput | string | null
+    rating?: NullableStringFieldUpdateOperationsInput | string | null
     level?: NullableStringFieldUpdateOperationsInput | string | null
+    tag?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     isPublished?: BoolFieldUpdateOperationsInput | boolean
     category?: CategoryUpdateOneRequiredWithoutCoursesNestedInput
@@ -8745,7 +14935,15 @@ export namespace Prisma {
     title?: StringFieldUpdateOperationsInput | string
     slug?: StringFieldUpdateOperationsInput | string
     description?: NullableStringFieldUpdateOperationsInput | string | null
+    image?: NullableStringFieldUpdateOperationsInput | string | null
+    instructor?: NullableStringFieldUpdateOperationsInput | string | null
+    instructorAvatar?: NullableStringFieldUpdateOperationsInput | string | null
+    price?: NullableStringFieldUpdateOperationsInput | string | null
+    originalPrice?: NullableStringFieldUpdateOperationsInput | string | null
+    students?: NullableStringFieldUpdateOperationsInput | string | null
+    rating?: NullableStringFieldUpdateOperationsInput | string | null
     level?: NullableStringFieldUpdateOperationsInput | string | null
+    tag?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     categoryId?: StringFieldUpdateOperationsInput | string
     isPublished?: BoolFieldUpdateOperationsInput | boolean
@@ -8834,7 +15032,15 @@ export namespace Prisma {
     title: string
     slug: string
     description?: string | null
+    image?: string | null
+    instructor?: string | null
+    instructorAvatar?: string | null
+    price?: string | null
+    originalPrice?: string | null
+    students?: string | null
+    rating?: string | null
     level?: string | null
+    tag?: string | null
     createdAt?: Date | string
     isPublished?: boolean
     category: CategoryCreateNestedOneWithoutCoursesInput
@@ -8846,7 +15052,15 @@ export namespace Prisma {
     title: string
     slug: string
     description?: string | null
+    image?: string | null
+    instructor?: string | null
+    instructorAvatar?: string | null
+    price?: string | null
+    originalPrice?: string | null
+    students?: string | null
+    rating?: string | null
     level?: string | null
+    tag?: string | null
     createdAt?: Date | string
     categoryId: string
     isPublished?: boolean
@@ -8874,7 +15088,15 @@ export namespace Prisma {
     title?: StringFieldUpdateOperationsInput | string
     slug?: StringFieldUpdateOperationsInput | string
     description?: NullableStringFieldUpdateOperationsInput | string | null
+    image?: NullableStringFieldUpdateOperationsInput | string | null
+    instructor?: NullableStringFieldUpdateOperationsInput | string | null
+    instructorAvatar?: NullableStringFieldUpdateOperationsInput | string | null
+    price?: NullableStringFieldUpdateOperationsInput | string | null
+    originalPrice?: NullableStringFieldUpdateOperationsInput | string | null
+    students?: NullableStringFieldUpdateOperationsInput | string | null
+    rating?: NullableStringFieldUpdateOperationsInput | string | null
     level?: NullableStringFieldUpdateOperationsInput | string | null
+    tag?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     isPublished?: BoolFieldUpdateOperationsInput | boolean
     category?: CategoryUpdateOneRequiredWithoutCoursesNestedInput
@@ -8886,7 +15108,15 @@ export namespace Prisma {
     title?: StringFieldUpdateOperationsInput | string
     slug?: StringFieldUpdateOperationsInput | string
     description?: NullableStringFieldUpdateOperationsInput | string | null
+    image?: NullableStringFieldUpdateOperationsInput | string | null
+    instructor?: NullableStringFieldUpdateOperationsInput | string | null
+    instructorAvatar?: NullableStringFieldUpdateOperationsInput | string | null
+    price?: NullableStringFieldUpdateOperationsInput | string | null
+    originalPrice?: NullableStringFieldUpdateOperationsInput | string | null
+    students?: NullableStringFieldUpdateOperationsInput | string | null
+    rating?: NullableStringFieldUpdateOperationsInput | string | null
     level?: NullableStringFieldUpdateOperationsInput | string | null
+    tag?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     categoryId?: StringFieldUpdateOperationsInput | string
     isPublished?: BoolFieldUpdateOperationsInput | boolean
@@ -8898,7 +15128,15 @@ export namespace Prisma {
     title: string
     slug: string
     description?: string | null
+    image?: string | null
+    instructor?: string | null
+    instructorAvatar?: string | null
+    price?: string | null
+    originalPrice?: string | null
+    students?: string | null
+    rating?: string | null
     level?: string | null
+    tag?: string | null
     createdAt?: Date | string
     isPublished?: boolean
   }
@@ -8908,7 +15146,15 @@ export namespace Prisma {
     title?: StringFieldUpdateOperationsInput | string
     slug?: StringFieldUpdateOperationsInput | string
     description?: NullableStringFieldUpdateOperationsInput | string | null
+    image?: NullableStringFieldUpdateOperationsInput | string | null
+    instructor?: NullableStringFieldUpdateOperationsInput | string | null
+    instructorAvatar?: NullableStringFieldUpdateOperationsInput | string | null
+    price?: NullableStringFieldUpdateOperationsInput | string | null
+    originalPrice?: NullableStringFieldUpdateOperationsInput | string | null
+    students?: NullableStringFieldUpdateOperationsInput | string | null
+    rating?: NullableStringFieldUpdateOperationsInput | string | null
     level?: NullableStringFieldUpdateOperationsInput | string | null
+    tag?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     isPublished?: BoolFieldUpdateOperationsInput | boolean
     lessons?: LessonUpdateManyWithoutCourseNestedInput
@@ -8920,7 +15166,15 @@ export namespace Prisma {
     title?: StringFieldUpdateOperationsInput | string
     slug?: StringFieldUpdateOperationsInput | string
     description?: NullableStringFieldUpdateOperationsInput | string | null
+    image?: NullableStringFieldUpdateOperationsInput | string | null
+    instructor?: NullableStringFieldUpdateOperationsInput | string | null
+    instructorAvatar?: NullableStringFieldUpdateOperationsInput | string | null
+    price?: NullableStringFieldUpdateOperationsInput | string | null
+    originalPrice?: NullableStringFieldUpdateOperationsInput | string | null
+    students?: NullableStringFieldUpdateOperationsInput | string | null
+    rating?: NullableStringFieldUpdateOperationsInput | string | null
     level?: NullableStringFieldUpdateOperationsInput | string | null
+    tag?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     isPublished?: BoolFieldUpdateOperationsInput | boolean
     lessons?: LessonUncheckedUpdateManyWithoutCourseNestedInput
@@ -8932,7 +15186,15 @@ export namespace Prisma {
     title?: StringFieldUpdateOperationsInput | string
     slug?: StringFieldUpdateOperationsInput | string
     description?: NullableStringFieldUpdateOperationsInput | string | null
+    image?: NullableStringFieldUpdateOperationsInput | string | null
+    instructor?: NullableStringFieldUpdateOperationsInput | string | null
+    instructorAvatar?: NullableStringFieldUpdateOperationsInput | string | null
+    price?: NullableStringFieldUpdateOperationsInput | string | null
+    originalPrice?: NullableStringFieldUpdateOperationsInput | string | null
+    students?: NullableStringFieldUpdateOperationsInput | string | null
+    rating?: NullableStringFieldUpdateOperationsInput | string | null
     level?: NullableStringFieldUpdateOperationsInput | string | null
+    tag?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     isPublished?: BoolFieldUpdateOperationsInput | boolean
   }

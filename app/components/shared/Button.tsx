@@ -1,6 +1,6 @@
 import React from 'react';
 
-export type ButtonVariant = 'primary' | 'secondary' | 'ghost' | 'gradient';
+export type ButtonVariant = 'primary' | 'secondary' | 'ghost' | 'gradient' | 'white' | 'outline-white';
 export type ButtonSize = 'sm' | 'md' | 'lg';
 
 export interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
@@ -44,6 +44,12 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
       gradient: disabled
         ? 'bg-gradient-to-r from-yellow-400 to-red-600 text-white opacity-50 cursor-not-allowed'
         : 'bg-gradient-to-r from-yellow-400 to-red-600 hover:opacity-90 hover:shadow-lg text-white focus:ring-primary',
+      white: disabled
+        ? 'bg-white text-red-600 opacity-50 cursor-not-allowed'
+        : 'bg-white text-red-600 hover:bg-gray-50 hover:shadow-xl shadow-lg focus:ring-white font-bold',
+      'outline-white': disabled
+        ? 'bg-transparent border-2 border-white/30 text-white/50 cursor-not-allowed'
+        : 'bg-transparent border-2 border-white/50 text-white hover:bg-white/10 hover:border-white focus:ring-white font-bold',
     };
 
     // Size styles
@@ -63,9 +69,9 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
         className={`${baseStyles} ${variantStyles[variant]} ${sizeStyles[size]} ${widthStyles} ${className}`}
         {...props}
       >
-        {icon && iconPosition === 'left' && <span className="flex-shrink-0">{icon}</span>}
+        {icon && iconPosition === 'left' && <span className="flex items-center flex-shrink-0">{icon}</span>}
         <span>{children}</span>
-        {icon && iconPosition === 'right' && <span className="flex-shrink-0">{icon}</span>}
+        {icon && iconPosition === 'right' && <span className="flex items-center flex-shrink-0">{icon}</span>}
       </button>
     );
   }

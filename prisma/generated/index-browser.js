@@ -133,7 +133,15 @@ exports.Prisma.CourseScalarFieldEnum = {
   title: 'title',
   slug: 'slug',
   description: 'description',
+  image: 'image',
+  instructor: 'instructor',
+  instructorAvatar: 'instructorAvatar',
+  price: 'price',
+  originalPrice: 'originalPrice',
+  students: 'students',
+  rating: 'rating',
   level: 'level',
+  tag: 'tag',
   createdAt: 'createdAt',
   categoryId: 'categoryId',
   isPublished: 'isPublished'
@@ -167,6 +175,66 @@ exports.Prisma.RegistrationScalarFieldEnum = {
   courseId: 'courseId'
 };
 
+exports.Prisma.HeroSlideScalarFieldEnum = {
+  id: 'id',
+  image: 'image',
+  badge: 'badge',
+  badgeColor: 'badgeColor',
+  title: 'title',
+  description: 'description',
+  primaryCtaText: 'primaryCtaText',
+  primaryCtaHref: 'primaryCtaHref',
+  secondaryCtaText: 'secondaryCtaText',
+  secondaryCtaHref: 'secondaryCtaHref',
+  overlayGradient: 'overlayGradient',
+  order: 'order',
+  isActive: 'isActive',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
+exports.Prisma.HSKLevelScalarFieldEnum = {
+  id: 'id',
+  level: 'level',
+  title: 'title',
+  badge: 'badge',
+  badgeColor: 'badgeColor',
+  description: 'description',
+  vocabularyCount: 'vocabularyCount',
+  targetAudience: 'targetAudience',
+  targetIcon: 'targetIcon',
+  accentColor: 'accentColor',
+  bgGradient: 'bgGradient',
+  href: 'href',
+  order: 'order',
+  isActive: 'isActive',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
+exports.Prisma.FeatureScalarFieldEnum = {
+  id: 'id',
+  icon: 'icon',
+  iconBg: 'iconBg',
+  iconColor: 'iconColor',
+  title: 'title',
+  description: 'description',
+  order: 'order',
+  isActive: 'isActive',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
+exports.Prisma.CtaStatScalarFieldEnum = {
+  id: 'id',
+  value: 'value',
+  label: 'label',
+  order: 'order',
+  isActive: 'isActive',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
 exports.Prisma.SortOrder = {
   asc: 'asc',
   desc: 'desc'
@@ -188,7 +256,11 @@ exports.Prisma.ModelName = {
   Course: 'Course',
   Lesson: 'Lesson',
   Vocabulary: 'Vocabulary',
-  Registration: 'Registration'
+  Registration: 'Registration',
+  HeroSlide: 'HeroSlide',
+  HSKLevel: 'HSKLevel',
+  Feature: 'Feature',
+  CtaStat: 'CtaStat'
 };
 
 /**

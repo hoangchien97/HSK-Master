@@ -17,17 +17,25 @@ model Category {
 }
 
 model Course {
-  id            String         @id @default(uuid())
-  title         String
-  slug          String         @unique
-  description   String?
-  level         String?
-  createdAt     DateTime       @default(now())
-  categoryId    String
-  isPublished   Boolean        @default(true)
-  category      Category       @relation(fields: [categoryId], references: [id])
-  lessons       Lesson[]
-  registrations Registration[]
+  id               String         @id @default(uuid())
+  title            String
+  slug             String         @unique
+  description      String?
+  image            String?
+  instructor       String?
+  instructorAvatar String?
+  price            String?
+  originalPrice    String?
+  students         String?
+  rating           String?
+  level            String?
+  tag              String?
+  createdAt        DateTime       @default(now())
+  categoryId       String
+  isPublished      Boolean        @default(true)
+  category         Category       @relation(fields: [categoryId], references: [id])
+  lessons          Lesson[]
+  registrations    Registration[]
 }
 
 model Lesson {
@@ -60,4 +68,68 @@ model Registration {
   createdAt DateTime @default(now())
   courseId  String?
   course    Course?  @relation(fields: [courseId], references: [id])
+}
+
+// Hero Slideshow
+model HeroSlide {
+  id               String   @id @default(uuid())
+  image            String
+  badge            String
+  badgeColor       String
+  title            String
+  description      String
+  primaryCtaText   String
+  primaryCtaHref   String
+  secondaryCtaText String?
+  secondaryCtaHref String?
+  overlayGradient  String
+  order            Int
+  isActive         Boolean  @default(true)
+  createdAt        DateTime @default(now())
+  updatedAt        DateTime @updatedAt
+}
+
+// HSK Levels
+model HSKLevel {
+  id              String   @id @default(uuid())
+  level           Int      @unique
+  title           String
+  badge           String
+  badgeColor      String
+  description     String
+  vocabularyCount String
+  targetAudience  String
+  targetIcon      String
+  accentColor     String
+  bgGradient      String
+  href            String
+  order           Int
+  isActive        Boolean  @default(true)
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+}
+
+// Why Choose Us Features
+model Feature {
+  id          String   @id @default(uuid())
+  icon        String
+  iconBg      String
+  iconColor   String
+  title       String
+  description String
+  order       Int
+  isActive    Boolean  @default(true)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+// CTA Section Stats
+model CtaStat {
+  id        String   @id @default(uuid())
+  value     String
+  label     String
+  order     Int
+  isActive  Boolean  @default(true)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }
