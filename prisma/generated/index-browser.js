@@ -134,27 +134,27 @@ exports.Prisma.CourseScalarFieldEnum = {
   slug: 'slug',
   description: 'description',
   level: 'level',
-  isPublished: 'isPublished',
   createdAt: 'createdAt',
-  categoryId: 'categoryId'
+  categoryId: 'categoryId',
+  isPublished: 'isPublished'
 };
 
 exports.Prisma.LessonScalarFieldEnum = {
   id: 'id',
+  courseId: 'courseId',
   title: 'title',
-  order: 'order',
   createdAt: 'createdAt',
-  courseId: 'courseId'
+  order: 'order'
 };
 
 exports.Prisma.VocabularyScalarFieldEnum = {
   id: 'id',
+  lessonId: 'lessonId',
   word: 'word',
   pinyin: 'pinyin',
   meaning: 'meaning',
   audioUrl: 'audioUrl',
-  createdAt: 'createdAt',
-  lessonId: 'lessonId'
+  createdAt: 'createdAt'
 };
 
 exports.Prisma.RegistrationScalarFieldEnum = {

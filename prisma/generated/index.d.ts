@@ -2413,9 +2413,9 @@ export namespace Prisma {
     slug: string | null
     description: string | null
     level: string | null
-    isPublished: boolean | null
     createdAt: Date | null
     categoryId: string | null
+    isPublished: boolean | null
   }
 
   export type CourseMaxAggregateOutputType = {
@@ -2424,9 +2424,9 @@ export namespace Prisma {
     slug: string | null
     description: string | null
     level: string | null
-    isPublished: boolean | null
     createdAt: Date | null
     categoryId: string | null
+    isPublished: boolean | null
   }
 
   export type CourseCountAggregateOutputType = {
@@ -2435,9 +2435,9 @@ export namespace Prisma {
     slug: number
     description: number
     level: number
-    isPublished: number
     createdAt: number
     categoryId: number
+    isPublished: number
     _all: number
   }
 
@@ -2448,9 +2448,9 @@ export namespace Prisma {
     slug?: true
     description?: true
     level?: true
-    isPublished?: true
     createdAt?: true
     categoryId?: true
+    isPublished?: true
   }
 
   export type CourseMaxAggregateInputType = {
@@ -2459,9 +2459,9 @@ export namespace Prisma {
     slug?: true
     description?: true
     level?: true
-    isPublished?: true
     createdAt?: true
     categoryId?: true
+    isPublished?: true
   }
 
   export type CourseCountAggregateInputType = {
@@ -2470,9 +2470,9 @@ export namespace Prisma {
     slug?: true
     description?: true
     level?: true
-    isPublished?: true
     createdAt?: true
     categoryId?: true
+    isPublished?: true
     _all?: true
   }
 
@@ -2554,9 +2554,9 @@ export namespace Prisma {
     slug: string
     description: string | null
     level: string | null
-    isPublished: boolean
     createdAt: Date
     categoryId: string
+    isPublished: boolean
     _count: CourseCountAggregateOutputType | null
     _min: CourseMinAggregateOutputType | null
     _max: CourseMaxAggregateOutputType | null
@@ -2582,9 +2582,9 @@ export namespace Prisma {
     slug?: boolean
     description?: boolean
     level?: boolean
-    isPublished?: boolean
     createdAt?: boolean
     categoryId?: boolean
+    isPublished?: boolean
     category?: boolean | CategoryDefaultArgs<ExtArgs>
     lessons?: boolean | Course$lessonsArgs<ExtArgs>
     registrations?: boolean | Course$registrationsArgs<ExtArgs>
@@ -2597,9 +2597,9 @@ export namespace Prisma {
     slug?: boolean
     description?: boolean
     level?: boolean
-    isPublished?: boolean
     createdAt?: boolean
     categoryId?: boolean
+    isPublished?: boolean
     category?: boolean | CategoryDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["course"]>
 
@@ -2609,9 +2609,9 @@ export namespace Prisma {
     slug?: boolean
     description?: boolean
     level?: boolean
-    isPublished?: boolean
     createdAt?: boolean
     categoryId?: boolean
+    isPublished?: boolean
     category?: boolean | CategoryDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["course"]>
 
@@ -2621,12 +2621,12 @@ export namespace Prisma {
     slug?: boolean
     description?: boolean
     level?: boolean
-    isPublished?: boolean
     createdAt?: boolean
     categoryId?: boolean
+    isPublished?: boolean
   }
 
-  export type CourseOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "title" | "slug" | "description" | "level" | "isPublished" | "createdAt" | "categoryId", ExtArgs["result"]["course"]>
+  export type CourseOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "title" | "slug" | "description" | "level" | "createdAt" | "categoryId" | "isPublished", ExtArgs["result"]["course"]>
   export type CourseInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     category?: boolean | CategoryDefaultArgs<ExtArgs>
     lessons?: boolean | Course$lessonsArgs<ExtArgs>
@@ -2653,9 +2653,9 @@ export namespace Prisma {
       slug: string
       description: string | null
       level: string | null
-      isPublished: boolean
       createdAt: Date
       categoryId: string
+      isPublished: boolean
     }, ExtArgs["result"]["course"]>
     composites: {}
   }
@@ -3087,9 +3087,9 @@ export namespace Prisma {
     readonly slug: FieldRef<"Course", 'String'>
     readonly description: FieldRef<"Course", 'String'>
     readonly level: FieldRef<"Course", 'String'>
-    readonly isPublished: FieldRef<"Course", 'Boolean'>
     readonly createdAt: FieldRef<"Course", 'DateTime'>
     readonly categoryId: FieldRef<"Course", 'String'>
+    readonly isPublished: FieldRef<"Course", 'Boolean'>
   }
     
 
@@ -3574,26 +3574,26 @@ export namespace Prisma {
 
   export type LessonMinAggregateOutputType = {
     id: string | null
-    title: string | null
-    order: number | null
-    createdAt: Date | null
     courseId: string | null
+    title: string | null
+    createdAt: Date | null
+    order: number | null
   }
 
   export type LessonMaxAggregateOutputType = {
     id: string | null
-    title: string | null
-    order: number | null
-    createdAt: Date | null
     courseId: string | null
+    title: string | null
+    createdAt: Date | null
+    order: number | null
   }
 
   export type LessonCountAggregateOutputType = {
     id: number
-    title: number
-    order: number
-    createdAt: number
     courseId: number
+    title: number
+    createdAt: number
+    order: number
     _all: number
   }
 
@@ -3608,26 +3608,26 @@ export namespace Prisma {
 
   export type LessonMinAggregateInputType = {
     id?: true
-    title?: true
-    order?: true
-    createdAt?: true
     courseId?: true
+    title?: true
+    createdAt?: true
+    order?: true
   }
 
   export type LessonMaxAggregateInputType = {
     id?: true
-    title?: true
-    order?: true
-    createdAt?: true
     courseId?: true
+    title?: true
+    createdAt?: true
+    order?: true
   }
 
   export type LessonCountAggregateInputType = {
     id?: true
-    title?: true
-    order?: true
-    createdAt?: true
     courseId?: true
+    title?: true
+    createdAt?: true
+    order?: true
     _all?: true
   }
 
@@ -3719,10 +3719,10 @@ export namespace Prisma {
 
   export type LessonGroupByOutputType = {
     id: string
-    title: string
-    order: number
-    createdAt: Date
     courseId: string
+    title: string
+    createdAt: Date
+    order: number
     _count: LessonCountAggregateOutputType | null
     _avg: LessonAvgAggregateOutputType | null
     _sum: LessonSumAggregateOutputType | null
@@ -3746,10 +3746,10 @@ export namespace Prisma {
 
   export type LessonSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
-    title?: boolean
-    order?: boolean
-    createdAt?: boolean
     courseId?: boolean
+    title?: boolean
+    createdAt?: boolean
+    order?: boolean
     course?: boolean | CourseDefaultArgs<ExtArgs>
     vocabularies?: boolean | Lesson$vocabulariesArgs<ExtArgs>
     _count?: boolean | LessonCountOutputTypeDefaultArgs<ExtArgs>
@@ -3757,31 +3757,31 @@ export namespace Prisma {
 
   export type LessonSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
-    title?: boolean
-    order?: boolean
-    createdAt?: boolean
     courseId?: boolean
+    title?: boolean
+    createdAt?: boolean
+    order?: boolean
     course?: boolean | CourseDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["lesson"]>
 
   export type LessonSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
-    title?: boolean
-    order?: boolean
-    createdAt?: boolean
     courseId?: boolean
+    title?: boolean
+    createdAt?: boolean
+    order?: boolean
     course?: boolean | CourseDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["lesson"]>
 
   export type LessonSelectScalar = {
     id?: boolean
-    title?: boolean
-    order?: boolean
-    createdAt?: boolean
     courseId?: boolean
+    title?: boolean
+    createdAt?: boolean
+    order?: boolean
   }
 
-  export type LessonOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "title" | "order" | "createdAt" | "courseId", ExtArgs["result"]["lesson"]>
+  export type LessonOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "courseId" | "title" | "createdAt" | "order", ExtArgs["result"]["lesson"]>
   export type LessonInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     course?: boolean | CourseDefaultArgs<ExtArgs>
     vocabularies?: boolean | Lesson$vocabulariesArgs<ExtArgs>
@@ -3802,10 +3802,10 @@ export namespace Prisma {
     }
     scalars: $Extensions.GetPayloadResult<{
       id: string
-      title: string
-      order: number
-      createdAt: Date
       courseId: string
+      title: string
+      createdAt: Date
+      order: number
     }, ExtArgs["result"]["lesson"]>
     composites: {}
   }
@@ -4232,10 +4232,10 @@ export namespace Prisma {
    */
   interface LessonFieldRefs {
     readonly id: FieldRef<"Lesson", 'String'>
-    readonly title: FieldRef<"Lesson", 'String'>
-    readonly order: FieldRef<"Lesson", 'Int'>
-    readonly createdAt: FieldRef<"Lesson", 'DateTime'>
     readonly courseId: FieldRef<"Lesson", 'String'>
+    readonly title: FieldRef<"Lesson", 'String'>
+    readonly createdAt: FieldRef<"Lesson", 'DateTime'>
+    readonly order: FieldRef<"Lesson", 'Int'>
   }
     
 
@@ -4686,64 +4686,64 @@ export namespace Prisma {
 
   export type VocabularyMinAggregateOutputType = {
     id: string | null
+    lessonId: string | null
     word: string | null
     pinyin: string | null
     meaning: string | null
     audioUrl: string | null
     createdAt: Date | null
-    lessonId: string | null
   }
 
   export type VocabularyMaxAggregateOutputType = {
     id: string | null
+    lessonId: string | null
     word: string | null
     pinyin: string | null
     meaning: string | null
     audioUrl: string | null
     createdAt: Date | null
-    lessonId: string | null
   }
 
   export type VocabularyCountAggregateOutputType = {
     id: number
+    lessonId: number
     word: number
     pinyin: number
     meaning: number
     audioUrl: number
     createdAt: number
-    lessonId: number
     _all: number
   }
 
 
   export type VocabularyMinAggregateInputType = {
     id?: true
+    lessonId?: true
     word?: true
     pinyin?: true
     meaning?: true
     audioUrl?: true
     createdAt?: true
-    lessonId?: true
   }
 
   export type VocabularyMaxAggregateInputType = {
     id?: true
+    lessonId?: true
     word?: true
     pinyin?: true
     meaning?: true
     audioUrl?: true
     createdAt?: true
-    lessonId?: true
   }
 
   export type VocabularyCountAggregateInputType = {
     id?: true
+    lessonId?: true
     word?: true
     pinyin?: true
     meaning?: true
     audioUrl?: true
     createdAt?: true
-    lessonId?: true
     _all?: true
   }
 
@@ -4821,12 +4821,12 @@ export namespace Prisma {
 
   export type VocabularyGroupByOutputType = {
     id: string
+    lessonId: string
     word: string
     pinyin: string | null
     meaning: string
     audioUrl: string | null
     createdAt: Date
-    lessonId: string
     _count: VocabularyCountAggregateOutputType | null
     _min: VocabularyMinAggregateOutputType | null
     _max: VocabularyMaxAggregateOutputType | null
@@ -4848,48 +4848,48 @@ export namespace Prisma {
 
   export type VocabularySelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
+    lessonId?: boolean
     word?: boolean
     pinyin?: boolean
     meaning?: boolean
     audioUrl?: boolean
     createdAt?: boolean
-    lessonId?: boolean
     lesson?: boolean | LessonDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["vocabulary"]>
 
   export type VocabularySelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
+    lessonId?: boolean
     word?: boolean
     pinyin?: boolean
     meaning?: boolean
     audioUrl?: boolean
     createdAt?: boolean
-    lessonId?: boolean
     lesson?: boolean | LessonDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["vocabulary"]>
 
   export type VocabularySelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
+    lessonId?: boolean
     word?: boolean
     pinyin?: boolean
     meaning?: boolean
     audioUrl?: boolean
     createdAt?: boolean
-    lessonId?: boolean
     lesson?: boolean | LessonDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["vocabulary"]>
 
   export type VocabularySelectScalar = {
     id?: boolean
+    lessonId?: boolean
     word?: boolean
     pinyin?: boolean
     meaning?: boolean
     audioUrl?: boolean
     createdAt?: boolean
-    lessonId?: boolean
   }
 
-  export type VocabularyOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "word" | "pinyin" | "meaning" | "audioUrl" | "createdAt" | "lessonId", ExtArgs["result"]["vocabulary"]>
+  export type VocabularyOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "lessonId" | "word" | "pinyin" | "meaning" | "audioUrl" | "createdAt", ExtArgs["result"]["vocabulary"]>
   export type VocabularyInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     lesson?: boolean | LessonDefaultArgs<ExtArgs>
   }
@@ -4907,12 +4907,12 @@ export namespace Prisma {
     }
     scalars: $Extensions.GetPayloadResult<{
       id: string
+      lessonId: string
       word: string
       pinyin: string | null
       meaning: string
       audioUrl: string | null
       createdAt: Date
-      lessonId: string
     }, ExtArgs["result"]["vocabulary"]>
     composites: {}
   }
@@ -5338,12 +5338,12 @@ export namespace Prisma {
    */
   interface VocabularyFieldRefs {
     readonly id: FieldRef<"Vocabulary", 'String'>
+    readonly lessonId: FieldRef<"Vocabulary", 'String'>
     readonly word: FieldRef<"Vocabulary", 'String'>
     readonly pinyin: FieldRef<"Vocabulary", 'String'>
     readonly meaning: FieldRef<"Vocabulary", 'String'>
     readonly audioUrl: FieldRef<"Vocabulary", 'String'>
     readonly createdAt: FieldRef<"Vocabulary", 'DateTime'>
-    readonly lessonId: FieldRef<"Vocabulary", 'String'>
   }
     
 
@@ -6892,9 +6892,9 @@ export namespace Prisma {
     slug: 'slug',
     description: 'description',
     level: 'level',
-    isPublished: 'isPublished',
     createdAt: 'createdAt',
-    categoryId: 'categoryId'
+    categoryId: 'categoryId',
+    isPublished: 'isPublished'
   };
 
   export type CourseScalarFieldEnum = (typeof CourseScalarFieldEnum)[keyof typeof CourseScalarFieldEnum]
@@ -6902,10 +6902,10 @@ export namespace Prisma {
 
   export const LessonScalarFieldEnum: {
     id: 'id',
+    courseId: 'courseId',
     title: 'title',
-    order: 'order',
     createdAt: 'createdAt',
-    courseId: 'courseId'
+    order: 'order'
   };
 
   export type LessonScalarFieldEnum = (typeof LessonScalarFieldEnum)[keyof typeof LessonScalarFieldEnum]
@@ -6913,12 +6913,12 @@ export namespace Prisma {
 
   export const VocabularyScalarFieldEnum: {
     id: 'id',
+    lessonId: 'lessonId',
     word: 'word',
     pinyin: 'pinyin',
     meaning: 'meaning',
     audioUrl: 'audioUrl',
-    createdAt: 'createdAt',
-    lessonId: 'lessonId'
+    createdAt: 'createdAt'
   };
 
   export type VocabularyScalarFieldEnum = (typeof VocabularyScalarFieldEnum)[keyof typeof VocabularyScalarFieldEnum]
@@ -7096,9 +7096,9 @@ export namespace Prisma {
     slug?: StringFilter<"Course"> | string
     description?: StringNullableFilter<"Course"> | string | null
     level?: StringNullableFilter<"Course"> | string | null
-    isPublished?: BoolFilter<"Course"> | boolean
     createdAt?: DateTimeFilter<"Course"> | Date | string
     categoryId?: StringFilter<"Course"> | string
+    isPublished?: BoolFilter<"Course"> | boolean
     category?: XOR<CategoryScalarRelationFilter, CategoryWhereInput>
     lessons?: LessonListRelationFilter
     registrations?: RegistrationListRelationFilter
@@ -7110,9 +7110,9 @@ export namespace Prisma {
     slug?: SortOrder
     description?: SortOrderInput | SortOrder
     level?: SortOrderInput | SortOrder
-    isPublished?: SortOrder
     createdAt?: SortOrder
     categoryId?: SortOrder
+    isPublished?: SortOrder
     category?: CategoryOrderByWithRelationInput
     lessons?: LessonOrderByRelationAggregateInput
     registrations?: RegistrationOrderByRelationAggregateInput
@@ -7127,9 +7127,9 @@ export namespace Prisma {
     title?: StringFilter<"Course"> | string
     description?: StringNullableFilter<"Course"> | string | null
     level?: StringNullableFilter<"Course"> | string | null
-    isPublished?: BoolFilter<"Course"> | boolean
     createdAt?: DateTimeFilter<"Course"> | Date | string
     categoryId?: StringFilter<"Course"> | string
+    isPublished?: BoolFilter<"Course"> | boolean
     category?: XOR<CategoryScalarRelationFilter, CategoryWhereInput>
     lessons?: LessonListRelationFilter
     registrations?: RegistrationListRelationFilter
@@ -7141,9 +7141,9 @@ export namespace Prisma {
     slug?: SortOrder
     description?: SortOrderInput | SortOrder
     level?: SortOrderInput | SortOrder
-    isPublished?: SortOrder
     createdAt?: SortOrder
     categoryId?: SortOrder
+    isPublished?: SortOrder
     _count?: CourseCountOrderByAggregateInput
     _max?: CourseMaxOrderByAggregateInput
     _min?: CourseMinOrderByAggregateInput
@@ -7158,9 +7158,9 @@ export namespace Prisma {
     slug?: StringWithAggregatesFilter<"Course"> | string
     description?: StringNullableWithAggregatesFilter<"Course"> | string | null
     level?: StringNullableWithAggregatesFilter<"Course"> | string | null
-    isPublished?: BoolWithAggregatesFilter<"Course"> | boolean
     createdAt?: DateTimeWithAggregatesFilter<"Course"> | Date | string
     categoryId?: StringWithAggregatesFilter<"Course"> | string
+    isPublished?: BoolWithAggregatesFilter<"Course"> | boolean
   }
 
   export type LessonWhereInput = {
@@ -7168,20 +7168,20 @@ export namespace Prisma {
     OR?: LessonWhereInput[]
     NOT?: LessonWhereInput | LessonWhereInput[]
     id?: StringFilter<"Lesson"> | string
-    title?: StringFilter<"Lesson"> | string
-    order?: IntFilter<"Lesson"> | number
-    createdAt?: DateTimeFilter<"Lesson"> | Date | string
     courseId?: StringFilter<"Lesson"> | string
+    title?: StringFilter<"Lesson"> | string
+    createdAt?: DateTimeFilter<"Lesson"> | Date | string
+    order?: IntFilter<"Lesson"> | number
     course?: XOR<CourseScalarRelationFilter, CourseWhereInput>
     vocabularies?: VocabularyListRelationFilter
   }
 
   export type LessonOrderByWithRelationInput = {
     id?: SortOrder
-    title?: SortOrder
-    order?: SortOrder
-    createdAt?: SortOrder
     courseId?: SortOrder
+    title?: SortOrder
+    createdAt?: SortOrder
+    order?: SortOrder
     course?: CourseOrderByWithRelationInput
     vocabularies?: VocabularyOrderByRelationAggregateInput
   }
@@ -7191,20 +7191,20 @@ export namespace Prisma {
     AND?: LessonWhereInput | LessonWhereInput[]
     OR?: LessonWhereInput[]
     NOT?: LessonWhereInput | LessonWhereInput[]
-    title?: StringFilter<"Lesson"> | string
-    order?: IntFilter<"Lesson"> | number
-    createdAt?: DateTimeFilter<"Lesson"> | Date | string
     courseId?: StringFilter<"Lesson"> | string
+    title?: StringFilter<"Lesson"> | string
+    createdAt?: DateTimeFilter<"Lesson"> | Date | string
+    order?: IntFilter<"Lesson"> | number
     course?: XOR<CourseScalarRelationFilter, CourseWhereInput>
     vocabularies?: VocabularyListRelationFilter
   }, "id">
 
   export type LessonOrderByWithAggregationInput = {
     id?: SortOrder
-    title?: SortOrder
-    order?: SortOrder
-    createdAt?: SortOrder
     courseId?: SortOrder
+    title?: SortOrder
+    createdAt?: SortOrder
+    order?: SortOrder
     _count?: LessonCountOrderByAggregateInput
     _avg?: LessonAvgOrderByAggregateInput
     _max?: LessonMaxOrderByAggregateInput
@@ -7217,10 +7217,10 @@ export namespace Prisma {
     OR?: LessonScalarWhereWithAggregatesInput[]
     NOT?: LessonScalarWhereWithAggregatesInput | LessonScalarWhereWithAggregatesInput[]
     id?: StringWithAggregatesFilter<"Lesson"> | string
-    title?: StringWithAggregatesFilter<"Lesson"> | string
-    order?: IntWithAggregatesFilter<"Lesson"> | number
-    createdAt?: DateTimeWithAggregatesFilter<"Lesson"> | Date | string
     courseId?: StringWithAggregatesFilter<"Lesson"> | string
+    title?: StringWithAggregatesFilter<"Lesson"> | string
+    createdAt?: DateTimeWithAggregatesFilter<"Lesson"> | Date | string
+    order?: IntWithAggregatesFilter<"Lesson"> | number
   }
 
   export type VocabularyWhereInput = {
@@ -7228,23 +7228,23 @@ export namespace Prisma {
     OR?: VocabularyWhereInput[]
     NOT?: VocabularyWhereInput | VocabularyWhereInput[]
     id?: StringFilter<"Vocabulary"> | string
+    lessonId?: StringFilter<"Vocabulary"> | string
     word?: StringFilter<"Vocabulary"> | string
     pinyin?: StringNullableFilter<"Vocabulary"> | string | null
     meaning?: StringFilter<"Vocabulary"> | string
     audioUrl?: StringNullableFilter<"Vocabulary"> | string | null
     createdAt?: DateTimeFilter<"Vocabulary"> | Date | string
-    lessonId?: StringFilter<"Vocabulary"> | string
     lesson?: XOR<LessonScalarRelationFilter, LessonWhereInput>
   }
 
   export type VocabularyOrderByWithRelationInput = {
     id?: SortOrder
+    lessonId?: SortOrder
     word?: SortOrder
     pinyin?: SortOrderInput | SortOrder
     meaning?: SortOrder
     audioUrl?: SortOrderInput | SortOrder
     createdAt?: SortOrder
-    lessonId?: SortOrder
     lesson?: LessonOrderByWithRelationInput
   }
 
@@ -7253,23 +7253,23 @@ export namespace Prisma {
     AND?: VocabularyWhereInput | VocabularyWhereInput[]
     OR?: VocabularyWhereInput[]
     NOT?: VocabularyWhereInput | VocabularyWhereInput[]
+    lessonId?: StringFilter<"Vocabulary"> | string
     word?: StringFilter<"Vocabulary"> | string
     pinyin?: StringNullableFilter<"Vocabulary"> | string | null
     meaning?: StringFilter<"Vocabulary"> | string
     audioUrl?: StringNullableFilter<"Vocabulary"> | string | null
     createdAt?: DateTimeFilter<"Vocabulary"> | Date | string
-    lessonId?: StringFilter<"Vocabulary"> | string
     lesson?: XOR<LessonScalarRelationFilter, LessonWhereInput>
   }, "id">
 
   export type VocabularyOrderByWithAggregationInput = {
     id?: SortOrder
+    lessonId?: SortOrder
     word?: SortOrder
     pinyin?: SortOrderInput | SortOrder
     meaning?: SortOrder
     audioUrl?: SortOrderInput | SortOrder
     createdAt?: SortOrder
-    lessonId?: SortOrder
     _count?: VocabularyCountOrderByAggregateInput
     _max?: VocabularyMaxOrderByAggregateInput
     _min?: VocabularyMinOrderByAggregateInput
@@ -7280,12 +7280,12 @@ export namespace Prisma {
     OR?: VocabularyScalarWhereWithAggregatesInput[]
     NOT?: VocabularyScalarWhereWithAggregatesInput | VocabularyScalarWhereWithAggregatesInput[]
     id?: StringWithAggregatesFilter<"Vocabulary"> | string
+    lessonId?: StringWithAggregatesFilter<"Vocabulary"> | string
     word?: StringWithAggregatesFilter<"Vocabulary"> | string
     pinyin?: StringNullableWithAggregatesFilter<"Vocabulary"> | string | null
     meaning?: StringWithAggregatesFilter<"Vocabulary"> | string
     audioUrl?: StringNullableWithAggregatesFilter<"Vocabulary"> | string | null
     createdAt?: DateTimeWithAggregatesFilter<"Vocabulary"> | Date | string
-    lessonId?: StringWithAggregatesFilter<"Vocabulary"> | string
   }
 
   export type RegistrationWhereInput = {
@@ -7419,8 +7419,8 @@ export namespace Prisma {
     slug: string
     description?: string | null
     level?: string | null
-    isPublished?: boolean
     createdAt?: Date | string
+    isPublished?: boolean
     category: CategoryCreateNestedOneWithoutCoursesInput
     lessons?: LessonCreateNestedManyWithoutCourseInput
     registrations?: RegistrationCreateNestedManyWithoutCourseInput
@@ -7432,9 +7432,9 @@ export namespace Prisma {
     slug: string
     description?: string | null
     level?: string | null
-    isPublished?: boolean
     createdAt?: Date | string
     categoryId: string
+    isPublished?: boolean
     lessons?: LessonUncheckedCreateNestedManyWithoutCourseInput
     registrations?: RegistrationUncheckedCreateNestedManyWithoutCourseInput
   }
@@ -7445,8 +7445,8 @@ export namespace Prisma {
     slug?: StringFieldUpdateOperationsInput | string
     description?: NullableStringFieldUpdateOperationsInput | string | null
     level?: NullableStringFieldUpdateOperationsInput | string | null
-    isPublished?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    isPublished?: BoolFieldUpdateOperationsInput | boolean
     category?: CategoryUpdateOneRequiredWithoutCoursesNestedInput
     lessons?: LessonUpdateManyWithoutCourseNestedInput
     registrations?: RegistrationUpdateManyWithoutCourseNestedInput
@@ -7458,9 +7458,9 @@ export namespace Prisma {
     slug?: StringFieldUpdateOperationsInput | string
     description?: NullableStringFieldUpdateOperationsInput | string | null
     level?: NullableStringFieldUpdateOperationsInput | string | null
-    isPublished?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     categoryId?: StringFieldUpdateOperationsInput | string
+    isPublished?: BoolFieldUpdateOperationsInput | boolean
     lessons?: LessonUncheckedUpdateManyWithoutCourseNestedInput
     registrations?: RegistrationUncheckedUpdateManyWithoutCourseNestedInput
   }
@@ -7471,9 +7471,9 @@ export namespace Prisma {
     slug: string
     description?: string | null
     level?: string | null
-    isPublished?: boolean
     createdAt?: Date | string
     categoryId: string
+    isPublished?: boolean
   }
 
   export type CourseUpdateManyMutationInput = {
@@ -7482,8 +7482,8 @@ export namespace Prisma {
     slug?: StringFieldUpdateOperationsInput | string
     description?: NullableStringFieldUpdateOperationsInput | string | null
     level?: NullableStringFieldUpdateOperationsInput | string | null
-    isPublished?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    isPublished?: BoolFieldUpdateOperationsInput | boolean
   }
 
   export type CourseUncheckedUpdateManyInput = {
@@ -7492,68 +7492,68 @@ export namespace Prisma {
     slug?: StringFieldUpdateOperationsInput | string
     description?: NullableStringFieldUpdateOperationsInput | string | null
     level?: NullableStringFieldUpdateOperationsInput | string | null
-    isPublished?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     categoryId?: StringFieldUpdateOperationsInput | string
+    isPublished?: BoolFieldUpdateOperationsInput | boolean
   }
 
   export type LessonCreateInput = {
     id?: string
     title: string
-    order: number
     createdAt?: Date | string
+    order: number
     course: CourseCreateNestedOneWithoutLessonsInput
     vocabularies?: VocabularyCreateNestedManyWithoutLessonInput
   }
 
   export type LessonUncheckedCreateInput = {
     id?: string
-    title: string
-    order: number
-    createdAt?: Date | string
     courseId: string
+    title: string
+    createdAt?: Date | string
+    order: number
     vocabularies?: VocabularyUncheckedCreateNestedManyWithoutLessonInput
   }
 
   export type LessonUpdateInput = {
     id?: StringFieldUpdateOperationsInput | string
     title?: StringFieldUpdateOperationsInput | string
-    order?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    order?: IntFieldUpdateOperationsInput | number
     course?: CourseUpdateOneRequiredWithoutLessonsNestedInput
     vocabularies?: VocabularyUpdateManyWithoutLessonNestedInput
   }
 
   export type LessonUncheckedUpdateInput = {
     id?: StringFieldUpdateOperationsInput | string
-    title?: StringFieldUpdateOperationsInput | string
-    order?: IntFieldUpdateOperationsInput | number
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     courseId?: StringFieldUpdateOperationsInput | string
+    title?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    order?: IntFieldUpdateOperationsInput | number
     vocabularies?: VocabularyUncheckedUpdateManyWithoutLessonNestedInput
   }
 
   export type LessonCreateManyInput = {
     id?: string
-    title: string
-    order: number
-    createdAt?: Date | string
     courseId: string
+    title: string
+    createdAt?: Date | string
+    order: number
   }
 
   export type LessonUpdateManyMutationInput = {
     id?: StringFieldUpdateOperationsInput | string
     title?: StringFieldUpdateOperationsInput | string
-    order?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    order?: IntFieldUpdateOperationsInput | number
   }
 
   export type LessonUncheckedUpdateManyInput = {
     id?: StringFieldUpdateOperationsInput | string
-    title?: StringFieldUpdateOperationsInput | string
-    order?: IntFieldUpdateOperationsInput | number
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     courseId?: StringFieldUpdateOperationsInput | string
+    title?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    order?: IntFieldUpdateOperationsInput | number
   }
 
   export type VocabularyCreateInput = {
@@ -7568,12 +7568,12 @@ export namespace Prisma {
 
   export type VocabularyUncheckedCreateInput = {
     id?: string
+    lessonId: string
     word: string
     pinyin?: string | null
     meaning: string
     audioUrl?: string | null
     createdAt?: Date | string
-    lessonId: string
   }
 
   export type VocabularyUpdateInput = {
@@ -7588,22 +7588,22 @@ export namespace Prisma {
 
   export type VocabularyUncheckedUpdateInput = {
     id?: StringFieldUpdateOperationsInput | string
+    lessonId?: StringFieldUpdateOperationsInput | string
     word?: StringFieldUpdateOperationsInput | string
     pinyin?: NullableStringFieldUpdateOperationsInput | string | null
     meaning?: StringFieldUpdateOperationsInput | string
     audioUrl?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    lessonId?: StringFieldUpdateOperationsInput | string
   }
 
   export type VocabularyCreateManyInput = {
     id?: string
+    lessonId: string
     word: string
     pinyin?: string | null
     meaning: string
     audioUrl?: string | null
     createdAt?: Date | string
-    lessonId: string
   }
 
   export type VocabularyUpdateManyMutationInput = {
@@ -7617,12 +7617,12 @@ export namespace Prisma {
 
   export type VocabularyUncheckedUpdateManyInput = {
     id?: StringFieldUpdateOperationsInput | string
+    lessonId?: StringFieldUpdateOperationsInput | string
     word?: StringFieldUpdateOperationsInput | string
     pinyin?: NullableStringFieldUpdateOperationsInput | string | null
     meaning?: StringFieldUpdateOperationsInput | string
     audioUrl?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    lessonId?: StringFieldUpdateOperationsInput | string
   }
 
   export type RegistrationCreateInput = {
@@ -7860,9 +7860,9 @@ export namespace Prisma {
     slug?: SortOrder
     description?: SortOrder
     level?: SortOrder
-    isPublished?: SortOrder
     createdAt?: SortOrder
     categoryId?: SortOrder
+    isPublished?: SortOrder
   }
 
   export type CourseMaxOrderByAggregateInput = {
@@ -7871,9 +7871,9 @@ export namespace Prisma {
     slug?: SortOrder
     description?: SortOrder
     level?: SortOrder
-    isPublished?: SortOrder
     createdAt?: SortOrder
     categoryId?: SortOrder
+    isPublished?: SortOrder
   }
 
   export type CourseMinOrderByAggregateInput = {
@@ -7882,9 +7882,9 @@ export namespace Prisma {
     slug?: SortOrder
     description?: SortOrder
     level?: SortOrder
-    isPublished?: SortOrder
     createdAt?: SortOrder
     categoryId?: SortOrder
+    isPublished?: SortOrder
   }
 
   export type BoolWithAggregatesFilter<$PrismaModel = never> = {
@@ -7923,10 +7923,10 @@ export namespace Prisma {
 
   export type LessonCountOrderByAggregateInput = {
     id?: SortOrder
-    title?: SortOrder
-    order?: SortOrder
-    createdAt?: SortOrder
     courseId?: SortOrder
+    title?: SortOrder
+    createdAt?: SortOrder
+    order?: SortOrder
   }
 
   export type LessonAvgOrderByAggregateInput = {
@@ -7935,18 +7935,18 @@ export namespace Prisma {
 
   export type LessonMaxOrderByAggregateInput = {
     id?: SortOrder
-    title?: SortOrder
-    order?: SortOrder
-    createdAt?: SortOrder
     courseId?: SortOrder
+    title?: SortOrder
+    createdAt?: SortOrder
+    order?: SortOrder
   }
 
   export type LessonMinOrderByAggregateInput = {
     id?: SortOrder
-    title?: SortOrder
-    order?: SortOrder
-    createdAt?: SortOrder
     courseId?: SortOrder
+    title?: SortOrder
+    createdAt?: SortOrder
+    order?: SortOrder
   }
 
   export type LessonSumOrderByAggregateInput = {
@@ -7976,32 +7976,32 @@ export namespace Prisma {
 
   export type VocabularyCountOrderByAggregateInput = {
     id?: SortOrder
+    lessonId?: SortOrder
     word?: SortOrder
     pinyin?: SortOrder
     meaning?: SortOrder
     audioUrl?: SortOrder
     createdAt?: SortOrder
-    lessonId?: SortOrder
   }
 
   export type VocabularyMaxOrderByAggregateInput = {
     id?: SortOrder
+    lessonId?: SortOrder
     word?: SortOrder
     pinyin?: SortOrder
     meaning?: SortOrder
     audioUrl?: SortOrder
     createdAt?: SortOrder
-    lessonId?: SortOrder
   }
 
   export type VocabularyMinOrderByAggregateInput = {
     id?: SortOrder
+    lessonId?: SortOrder
     word?: SortOrder
     pinyin?: SortOrder
     meaning?: SortOrder
     audioUrl?: SortOrder
     createdAt?: SortOrder
-    lessonId?: SortOrder
   }
 
   export type CourseNullableScalarRelationFilter = {
@@ -8444,8 +8444,8 @@ export namespace Prisma {
     slug: string
     description?: string | null
     level?: string | null
-    isPublished?: boolean
     createdAt?: Date | string
+    isPublished?: boolean
     lessons?: LessonCreateNestedManyWithoutCourseInput
     registrations?: RegistrationCreateNestedManyWithoutCourseInput
   }
@@ -8456,8 +8456,8 @@ export namespace Prisma {
     slug: string
     description?: string | null
     level?: string | null
-    isPublished?: boolean
     createdAt?: Date | string
+    isPublished?: boolean
     lessons?: LessonUncheckedCreateNestedManyWithoutCourseInput
     registrations?: RegistrationUncheckedCreateNestedManyWithoutCourseInput
   }
@@ -8497,9 +8497,9 @@ export namespace Prisma {
     slug?: StringFilter<"Course"> | string
     description?: StringNullableFilter<"Course"> | string | null
     level?: StringNullableFilter<"Course"> | string | null
-    isPublished?: BoolFilter<"Course"> | boolean
     createdAt?: DateTimeFilter<"Course"> | Date | string
     categoryId?: StringFilter<"Course"> | string
+    isPublished?: BoolFilter<"Course"> | boolean
   }
 
   export type CategoryCreateWithoutCoursesInput = {
@@ -8526,16 +8526,16 @@ export namespace Prisma {
   export type LessonCreateWithoutCourseInput = {
     id?: string
     title: string
-    order: number
     createdAt?: Date | string
+    order: number
     vocabularies?: VocabularyCreateNestedManyWithoutLessonInput
   }
 
   export type LessonUncheckedCreateWithoutCourseInput = {
     id?: string
     title: string
-    order: number
     createdAt?: Date | string
+    order: number
     vocabularies?: VocabularyUncheckedCreateNestedManyWithoutLessonInput
   }
 
@@ -8625,10 +8625,10 @@ export namespace Prisma {
     OR?: LessonScalarWhereInput[]
     NOT?: LessonScalarWhereInput | LessonScalarWhereInput[]
     id?: StringFilter<"Lesson"> | string
-    title?: StringFilter<"Lesson"> | string
-    order?: IntFilter<"Lesson"> | number
-    createdAt?: DateTimeFilter<"Lesson"> | Date | string
     courseId?: StringFilter<"Lesson"> | string
+    title?: StringFilter<"Lesson"> | string
+    createdAt?: DateTimeFilter<"Lesson"> | Date | string
+    order?: IntFilter<"Lesson"> | number
   }
 
   export type RegistrationUpsertWithWhereUniqueWithoutCourseInput = {
@@ -8666,8 +8666,8 @@ export namespace Prisma {
     slug: string
     description?: string | null
     level?: string | null
-    isPublished?: boolean
     createdAt?: Date | string
+    isPublished?: boolean
     category: CategoryCreateNestedOneWithoutCoursesInput
     registrations?: RegistrationCreateNestedManyWithoutCourseInput
   }
@@ -8678,9 +8678,9 @@ export namespace Prisma {
     slug: string
     description?: string | null
     level?: string | null
-    isPublished?: boolean
     createdAt?: Date | string
     categoryId: string
+    isPublished?: boolean
     registrations?: RegistrationUncheckedCreateNestedManyWithoutCourseInput
   }
 
@@ -8734,8 +8734,8 @@ export namespace Prisma {
     slug?: StringFieldUpdateOperationsInput | string
     description?: NullableStringFieldUpdateOperationsInput | string | null
     level?: NullableStringFieldUpdateOperationsInput | string | null
-    isPublished?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    isPublished?: BoolFieldUpdateOperationsInput | boolean
     category?: CategoryUpdateOneRequiredWithoutCoursesNestedInput
     registrations?: RegistrationUpdateManyWithoutCourseNestedInput
   }
@@ -8746,9 +8746,9 @@ export namespace Prisma {
     slug?: StringFieldUpdateOperationsInput | string
     description?: NullableStringFieldUpdateOperationsInput | string | null
     level?: NullableStringFieldUpdateOperationsInput | string | null
-    isPublished?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     categoryId?: StringFieldUpdateOperationsInput | string
+    isPublished?: BoolFieldUpdateOperationsInput | boolean
     registrations?: RegistrationUncheckedUpdateManyWithoutCourseNestedInput
   }
 
@@ -8773,28 +8773,28 @@ export namespace Prisma {
     OR?: VocabularyScalarWhereInput[]
     NOT?: VocabularyScalarWhereInput | VocabularyScalarWhereInput[]
     id?: StringFilter<"Vocabulary"> | string
+    lessonId?: StringFilter<"Vocabulary"> | string
     word?: StringFilter<"Vocabulary"> | string
     pinyin?: StringNullableFilter<"Vocabulary"> | string | null
     meaning?: StringFilter<"Vocabulary"> | string
     audioUrl?: StringNullableFilter<"Vocabulary"> | string | null
     createdAt?: DateTimeFilter<"Vocabulary"> | Date | string
-    lessonId?: StringFilter<"Vocabulary"> | string
   }
 
   export type LessonCreateWithoutVocabulariesInput = {
     id?: string
     title: string
-    order: number
     createdAt?: Date | string
+    order: number
     course: CourseCreateNestedOneWithoutLessonsInput
   }
 
   export type LessonUncheckedCreateWithoutVocabulariesInput = {
     id?: string
-    title: string
-    order: number
-    createdAt?: Date | string
     courseId: string
+    title: string
+    createdAt?: Date | string
+    order: number
   }
 
   export type LessonCreateOrConnectWithoutVocabulariesInput = {
@@ -8816,17 +8816,17 @@ export namespace Prisma {
   export type LessonUpdateWithoutVocabulariesInput = {
     id?: StringFieldUpdateOperationsInput | string
     title?: StringFieldUpdateOperationsInput | string
-    order?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    order?: IntFieldUpdateOperationsInput | number
     course?: CourseUpdateOneRequiredWithoutLessonsNestedInput
   }
 
   export type LessonUncheckedUpdateWithoutVocabulariesInput = {
     id?: StringFieldUpdateOperationsInput | string
-    title?: StringFieldUpdateOperationsInput | string
-    order?: IntFieldUpdateOperationsInput | number
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     courseId?: StringFieldUpdateOperationsInput | string
+    title?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    order?: IntFieldUpdateOperationsInput | number
   }
 
   export type CourseCreateWithoutRegistrationsInput = {
@@ -8835,8 +8835,8 @@ export namespace Prisma {
     slug: string
     description?: string | null
     level?: string | null
-    isPublished?: boolean
     createdAt?: Date | string
+    isPublished?: boolean
     category: CategoryCreateNestedOneWithoutCoursesInput
     lessons?: LessonCreateNestedManyWithoutCourseInput
   }
@@ -8847,9 +8847,9 @@ export namespace Prisma {
     slug: string
     description?: string | null
     level?: string | null
-    isPublished?: boolean
     createdAt?: Date | string
     categoryId: string
+    isPublished?: boolean
     lessons?: LessonUncheckedCreateNestedManyWithoutCourseInput
   }
 
@@ -8875,8 +8875,8 @@ export namespace Prisma {
     slug?: StringFieldUpdateOperationsInput | string
     description?: NullableStringFieldUpdateOperationsInput | string | null
     level?: NullableStringFieldUpdateOperationsInput | string | null
-    isPublished?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    isPublished?: BoolFieldUpdateOperationsInput | boolean
     category?: CategoryUpdateOneRequiredWithoutCoursesNestedInput
     lessons?: LessonUpdateManyWithoutCourseNestedInput
   }
@@ -8887,9 +8887,9 @@ export namespace Prisma {
     slug?: StringFieldUpdateOperationsInput | string
     description?: NullableStringFieldUpdateOperationsInput | string | null
     level?: NullableStringFieldUpdateOperationsInput | string | null
-    isPublished?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     categoryId?: StringFieldUpdateOperationsInput | string
+    isPublished?: BoolFieldUpdateOperationsInput | boolean
     lessons?: LessonUncheckedUpdateManyWithoutCourseNestedInput
   }
 
@@ -8899,8 +8899,8 @@ export namespace Prisma {
     slug: string
     description?: string | null
     level?: string | null
-    isPublished?: boolean
     createdAt?: Date | string
+    isPublished?: boolean
   }
 
   export type CourseUpdateWithoutCategoryInput = {
@@ -8909,8 +8909,8 @@ export namespace Prisma {
     slug?: StringFieldUpdateOperationsInput | string
     description?: NullableStringFieldUpdateOperationsInput | string | null
     level?: NullableStringFieldUpdateOperationsInput | string | null
-    isPublished?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    isPublished?: BoolFieldUpdateOperationsInput | boolean
     lessons?: LessonUpdateManyWithoutCourseNestedInput
     registrations?: RegistrationUpdateManyWithoutCourseNestedInput
   }
@@ -8921,8 +8921,8 @@ export namespace Prisma {
     slug?: StringFieldUpdateOperationsInput | string
     description?: NullableStringFieldUpdateOperationsInput | string | null
     level?: NullableStringFieldUpdateOperationsInput | string | null
-    isPublished?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    isPublished?: BoolFieldUpdateOperationsInput | boolean
     lessons?: LessonUncheckedUpdateManyWithoutCourseNestedInput
     registrations?: RegistrationUncheckedUpdateManyWithoutCourseNestedInput
   }
@@ -8933,15 +8933,15 @@ export namespace Prisma {
     slug?: StringFieldUpdateOperationsInput | string
     description?: NullableStringFieldUpdateOperationsInput | string | null
     level?: NullableStringFieldUpdateOperationsInput | string | null
-    isPublished?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    isPublished?: BoolFieldUpdateOperationsInput | boolean
   }
 
   export type LessonCreateManyCourseInput = {
     id?: string
     title: string
-    order: number
     createdAt?: Date | string
+    order: number
   }
 
   export type RegistrationCreateManyCourseInput = {
@@ -8956,24 +8956,24 @@ export namespace Prisma {
   export type LessonUpdateWithoutCourseInput = {
     id?: StringFieldUpdateOperationsInput | string
     title?: StringFieldUpdateOperationsInput | string
-    order?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    order?: IntFieldUpdateOperationsInput | number
     vocabularies?: VocabularyUpdateManyWithoutLessonNestedInput
   }
 
   export type LessonUncheckedUpdateWithoutCourseInput = {
     id?: StringFieldUpdateOperationsInput | string
     title?: StringFieldUpdateOperationsInput | string
-    order?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    order?: IntFieldUpdateOperationsInput | number
     vocabularies?: VocabularyUncheckedUpdateManyWithoutLessonNestedInput
   }
 
   export type LessonUncheckedUpdateManyWithoutCourseInput = {
     id?: StringFieldUpdateOperationsInput | string
     title?: StringFieldUpdateOperationsInput | string
-    order?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    order?: IntFieldUpdateOperationsInput | number
   }
 
   export type RegistrationUpdateWithoutCourseInput = {
