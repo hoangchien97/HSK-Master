@@ -45,3 +45,12 @@ Danh sách bài học	/courses/[slug]/lessons	ISR	Long-tail
 Chi tiết bài học	/lessons/[id]	SSR	Dynamic
 Từ vựng	/vocabulary	SSR	Search
 Đăng ký	/register	SSR	Form submit
+
+
+Step1: Thay đổi Schema + Seed ( migration v2)
+Thay đổi
+Step2:Tạo migration v2
+npx prisma migrate dev --name v2_add_role_to_user
+Step3:Update seed cho schema mớ
+Bước 4: Chạy lại seed
+npx prisma db seed
