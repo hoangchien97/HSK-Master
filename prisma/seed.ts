@@ -7,6 +7,8 @@ async function main() {
   console.log("🌱 Seeding full education data...")
 
   // Clear existing data
+  await prisma.photo.deleteMany()
+  await prisma.album.deleteMany()
   await prisma.vocabulary.deleteMany()
   await prisma.lesson.deleteMany()
   await prisma.course.deleteMany()
@@ -384,6 +386,94 @@ async function main() {
         value: "98%",
         label: "Hài lòng",
         order: 3,
+      },
+    ]
+  })
+
+  // ============= Photo Albums =============
+  const album1 = await prisma.album.create({
+    data: {
+      title: "Lớp học HSK 1 vui vẻ",
+      description: "Ảnh lớp học HSK cấp độ 1",
+      thumbnail: "https://images.unsplash.com/photo-1522202176988-66273c2fd55f?w=800&h=600&fit=crop",
+      photoCount: 2,
+      order: 1,
+    },
+  })
+
+  await prisma.photo.createMany({
+    data: [
+      {
+        albumId: album1.id,
+        url: "https://images.unsplash.com/photo-1522202176988-66273c2fd55f?w=1920&h=1080&fit=crop",
+        title: "Học viên trong lớp",
+        description: "Các bạn học viên đang học tiếng Trung",
+        order: 1,
+      },
+      {
+        albumId: album1.id,
+        url: "https://images.unsplash.com/photo-1523240795612-9a054b0db644?w=1920&h=1080&fit=crop",
+        title: "Hoạt động nhóm",
+        description: "Học viên thảo luận và làm bài tập nhóm",
+        order: 2,
+      },
+    ]
+  })
+
+  const album2 = await prisma.album.create({
+    data: {
+      title: "Thực hành thư pháp",
+      description: "Ảnh hoạt động văn hóa",
+      thumbnail: "https://images.unsplash.com/photo-1455390582262-044cdead277a?w=800&h=600&fit=crop",
+      photoCount: 2,
+      order: 2,
+    },
+  })
+
+  await prisma.photo.createMany({
+    data: [
+      {
+        albumId: album2.id,
+        url: "https://images.unsplash.com/photo-1455390582262-044cdead277a?w=1920&h=1080&fit=crop",
+        title: "Viết thư pháp",
+        description: "Học viên thực hành viết chữ Hán",
+        order: 1,
+      },
+      {
+        albumId: album2.id,
+        url: "https://images.unsplash.com/photo-1516979187457-637abb4f9353?w=1920&h=1080&fit=crop",
+        title: "Học từ vựng",
+        description: "Luyện tập từ vựng và phát âm",
+        order: 2,
+      },
+    ]
+  })
+
+  const album3 = await prisma.album.create({
+    data: {
+      title: "Hoạt động ngoại khóa",
+      description: "Các hoạt động văn hóa và giao lưu",
+      thumbnail: "https://images.unsplash.com/photo-1523050854058-8df90110c9f1?w=800&h=600&fit=crop",
+      photoCount: 2,
+      order: 3,
+    },
+  })
+
+  await prisma.photo.createMany({
+    data: [
+      {
+        albumId: album3.id,
+        url: "https://images.unsplash.com/photo-1523050854058-8df90110c9f1?w=1920&h=1080&fit=crop",
+        title: "Thảo luận nhóm",
+        description: "Học viên thảo luận dự án",
+        order: 1,
+      },
+      {
+        albumId: album3.id,
+        url: "https://images.unsplash.com/photo-1531545514256-b1400bc00f31?w=1920&h=1080&fit=crop",
+        title: "Học cùng giáo viên",
+        description: "Giáo viên hướng dẫn học viên",
+        order: 2,
       },
     ]
   })

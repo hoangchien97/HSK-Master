@@ -3,6 +3,7 @@ import {
   HSKLevelsSection,
   CoursesSection,
   WhyChooseUsSection,
+  GallerySection,
   CTASection,
 } from "./components/home";
 
@@ -28,6 +29,9 @@ export default async function Home() {
 
       {/* Why Choose Us Section */}
       <WhyChooseUsSection />
+
+      {/* Gallery Section */}
+      <GallerySection />
 
       {/* CTA Section (Before Footer) */}
       <CTASection />

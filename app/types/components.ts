@@ -51,3 +51,23 @@ export interface Filter {
   label: string;
   value: string;
 }
+
+export interface Album {
+  id: string;
+  title: string;
+  description: string | null;
+  thumbnail: string;
+  photoCount: number;
+  order: number;
+  isActive: boolean;
+  photos: Photo[];
+}
+
+export interface Photo {
+  id: string;
+  albumId: string;
+  url: string;
+  title: string | null;
+  description: string | null;
+  order: number;
+}
