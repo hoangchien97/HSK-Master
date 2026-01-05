@@ -14,6 +14,7 @@ import {
   Download,
   Minimize
 } from "lucide-react"
+import Button from "../shared/Button"
 
 interface LightboxSlide {
   id: string
@@ -200,62 +201,83 @@ export function LightboxGallery({ open, close, slides, index }: LightboxGalleryP
         onMouseLeave={resetHideTimer}
       >
         <div className="flex items-center gap-4">
-          <button
+          <Button
             onClick={close}
-            className="flex items-center gap-2 px-4 py-2 bg-black/50 hover:bg-black/70 text-white rounded-lg transition-colors"
+            variant="dark"
+            size="sm"
+            icon={<X className="w-4 h-4" />}
+            iconPosition="left"
           >
-            <X className="w-5 h-5" />
-            <span className="text-sm font-medium">Đóng</span>
-          </button>
+            Đóng
+          </Button>
           <span className="text-white text-sm font-medium px-3 py-2 bg-black/50 rounded-lg">
             {currentIndex + 1} / {slides.length}
           </span>
         </div>
 
         <div className="flex items-center gap-2">
-          <button
+          <Button
             onClick={() => setIsPlaying(!isPlaying)}
-            className="p-2 bg-black/50 hover:bg-black/70 text-white rounded-lg transition-colors"
+            variant="dark"
+            size="sm"
+            className="!p-2 aspect-square"
             title={isPlaying ? "Tạm dừng" : "Phát tự động"}
+            icon={isPlaying ? <Pause className="w-5 h-5" /> : <Play className="w-5 h-5" />}
           >
-            {isPlaying ? <Pause className="w-5 h-5" /> : <Play className="w-5 h-5" />}
-          </button>
-          <button
+            <span className="sr-only">{isPlaying ? "Pause" : "Play"}</span>
+          </Button>
+          <Button
             onClick={handleZoomOut}
             disabled={zoom <= 0.5}
-            className="p-2 bg-black/50 hover:bg-black/70 text-white rounded-lg transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
-            title="Thu nhỏ (Phím -)">
-            <ZoomOut className="w-5 h-5" />
-          </button>
-          <button
+            variant="dark"
+            size="sm"
+            className="!p-2 aspect-square"
+            title="Thu nhỏ (Phím -)"
+            icon={<ZoomOut className="w-5 h-5" />}
+          >
+            <span className="sr-only">Zoom Out</span>
+          </Button>
+          <Button
             onClick={handleZoomIn}
             disabled={zoom >= 3}
-            className="p-2 bg-black/50 hover:bg-black/70 text-white rounded-lg transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+            variant="dark"
+            size="sm"
+            className="!p-2 aspect-square"
             title="Phóng to (Phím +)"
+            icon={<ZoomIn className="w-5 h-5" />}
           >
-            <ZoomIn className="w-5 h-5" />
-          </button>
-          <button
+            <span className="sr-only">Zoom In</span>
+          </Button>
+          <Button
             onClick={handleRotate}
-            className="p-2 bg-black/50 hover:bg-black/70 text-white rounded-lg transition-colors"
+            variant="dark"
+            size="sm"
+            className="!p-2 aspect-square"
             title="Xoay (Phím R)"
+            icon={<RotateCw className="w-5 h-5" />}
           >
-            <RotateCw className="w-5 h-5" />
-          </button>
-          <button
+            <span className="sr-only">Rotate</span>
+          </Button>
+          <Button
             onClick={toggleFullscreen}
-            className="p-2 bg-black/50 hover:bg-black/70 text-white rounded-lg transition-colors"
+            variant="dark"
+            size="sm"
+            className="!p-2 aspect-square"
             title="Toàn màn hình (Phím F)"
+            icon={isFullscreen ? <Minimize className="w-5 h-5" /> : <Maximize className="w-5 h-5" />}
           >
-            {isFullscreen ? <Minimize className="w-5 h-5" /> : <Maximize className="w-5 h-5" />}
-          </button>
-          <button
+            <span className="sr-only">Fullscreen</span>
+          </Button>
+          <Button
             onClick={handleDownload}
-            className="p-2 bg-black/50 hover:bg-black/70 text-white rounded-lg transition-colors"
+            variant="dark"
+            size="sm"
+            className="!p-2 aspect-square"
             title="Tải xuống"
+            icon={<Download className="w-5 h-5" />}
           >
-            <Download className="w-5 h-5" />
-          </button>
+            <span className="sr-only">Download</span>
+          </Button>
         </div>
       </div>
 
@@ -265,13 +287,16 @@ export function LightboxGallery({ open, close, slides, index }: LightboxGalleryP
         onMouseEnter={cancelHideTimer}
         onMouseLeave={resetHideTimer}
       >
-        <button
+        <Button
           onClick={goToPrevious}
-          className={`p-3 bg-black/50 hover:bg-black/70 text-white rounded-lg transition-all duration-300 ${showControls ? "opacity-100" : "opacity-0"}`}
+          variant="dark"
+          size="md"
+          className={`!p-3 aspect-square transition-opacity duration-300 ${showControls ? "opacity-100" : "opacity-0"}`}
           title="Ảnh trước (←)"
+          icon={<ChevronLeft className="w-6 h-6" />}
         >
-          <ChevronLeft className="w-6 h-6" />
-        </button>
+          <span className="sr-only">Previous</span>
+        </Button>
       </div>
 
       <div
@@ -279,13 +304,16 @@ export function LightboxGallery({ open, close, slides, index }: LightboxGalleryP
         onMouseEnter={cancelHideTimer}
         onMouseLeave={resetHideTimer}
       >
-        <button
+        <Button
           onClick={goToNext}
-          className={`p-3 bg-black/50 hover:bg-black/70 text-white rounded-lg transition-all duration-300 ${showControls ? "opacity-100" : "opacity-0"}`}
+          variant="dark"
+          size="md"
+          className={`!p-3 aspect-square transition-opacity duration-300 ${showControls ? "opacity-100" : "opacity-0"}`}
           title="Ảnh kế (→)"
+          icon={<ChevronRight className="w-6 h-6" />}
         >
-          <ChevronRight className="w-6 h-6" />
-        </button>
+          <span className="sr-only">Next</span>
+        </Button>
       </div>
 
       {/* Main Image Container */}
