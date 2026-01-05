@@ -6,7 +6,7 @@ export default async function HSKLevelsSection() {
   const hskLevels = await getHSKLevels();
 
   return (
-    <section className="py-10 bg-gray-50 dark:bg-surface-dark/50">
+    <section className="py-16 bg-linear-to-b from-gray-50 to-white dark:from-gray-900 dark:to-gray-800">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         {/* Section Header */}
         <SectionHeader
@@ -17,11 +17,21 @@ export default async function HSKLevelsSection() {
           tagColor="bg-gradient-to-r from-orange-500/20 to-yellow-500/20 text-orange-600 dark:text-orange-400"
         />
 
-        {/* HSK Level Cards Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {hskLevels.map((level) => (
-            <HSKLevelCard key={level.level} level={level} />
-          ))}
+        {/* Timeline Container */}
+        <div className="relative mt-16">
+          {/* Vertical Timeline Line */}
+          <div className="absolute left-1/2 top-0 bottom-0 w-1 bg-linear-to-b from-orange-300 via-red-400 to-blue-500 dark:from-orange-600 dark:via-red-600 dark:to-blue-600 transform -translate-x-1/2" />
+
+          {/* Timeline Items */}
+          <div className="space-y-6">
+            {hskLevels.map((level, index) => (
+              <HSKLevelCard
+                key={level.level}
+                level={level}
+                isLeft={index % 2 === 0}
+              />
+            ))}
+          </div>
         </div>
       </div>
     </section>
