@@ -86,7 +86,7 @@ export default async function CourseDetail({ params }: Props) {
               {course.description}
             </p>
           </div>
-          <Button 
+          <Button
             variant="gradient"
             size="lg"
             className="min-w-[160px] shadow-lg shadow-orange-500/20 hover:shadow-orange-500/40 transition-all transform hover:-translate-y-0.5"
@@ -242,7 +242,7 @@ export default async function CourseDetail({ params }: Props) {
               Sẵn sàng chinh phục {course.level}?
             </h2>
             <p className="text-[#896161] dark:text-gray-300 text-lg">
-              Tham gia cùng hơn 10,000 học viên đang học tiếng Trung với nền tảng tương tác của chúng tôi. 
+              Tham gia cùng hơn 10,000 học viên đang học tiếng Trung với nền tảng tương tác của chúng tôi.
               Theo dõi tiến độ và nhận chứng chỉ.
             </p>
             <div className="flex flex-col sm:flex-row gap-4 w-full justify-center">
