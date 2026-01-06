@@ -20,7 +20,7 @@ export default async function HSKLevelsSection() {
         {/* Timeline Container */}
         <div className="relative mt-16">
           {/* Vertical Timeline Line */}
-          <div className="absolute left-1/2 top-0 bottom-0 w-1 bg-linear-to-b from-orange-300 via-red-400 to-blue-500 dark:from-orange-600 dark:via-red-600 dark:to-blue-600 transform -translate-x-1/2" />
+          <div className="absolute left-1/2 top-8 bottom-8 w-1 bg-linear-to-b from-orange-300 via-red-400 to-blue-500 dark:from-orange-600 dark:via-red-600 dark:to-blue-600 transform -translate-x-1/2" />
 
           {/* Timeline Items */}
           <div className="space-y-6">

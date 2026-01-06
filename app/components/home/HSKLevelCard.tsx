@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { useState } from "react";
+import { Tooltip } from "@/app/components/shared";
 import {
   Sparkles,
   TrendingUp,
@@ -53,7 +53,6 @@ const levelColors = {
 };
 
 export default function HSKLevelCard({ level, isLeft }: HSKLevelCardProps) {
-  const [showTooltip, setShowTooltip] = useState(false);
   const Icon = levelIcons[level.level as keyof typeof levelIcons] || BookOpen;
   const dotColor = levelColors[level.level as keyof typeof levelColors];
 
@@ -94,24 +93,20 @@ export default function HSKLevelCard({ level, isLeft }: HSKLevelCardProps) {
 
       {/* Timeline Dot with Icon & Tooltip */}
       <div className="relative flex items-center justify-center z-10">
-        <Link
-          href={level.href}
-          className={`w-16 h-16 rounded-full ${dotColor} shadow-2xl flex items-center justify-center border-4 border-white dark:border-gray-900 transition-all hover:scale-125 duration-300 cursor-pointer relative`}
-          onMouseEnter={() => setShowTooltip(true)}
-          onMouseLeave={() => setShowTooltip(false)}
+        <Tooltip
+          content={level.description}
+          placement={!isLeft ? 'left' : 'right'}
+          arrow={true}
+          animation="scale"
+          duration={200}
         >
-          <Icon className="w-7 h-7 text-white" strokeWidth={2.5} />
-          
-          {/* Tooltip */}
-          {showTooltip && (
-            <div className={`absolute ${isLeft ? 'right-20' : 'left-20'} top-1/2 -translate-y-1/2 w-72 bg-gray-900 dark:bg-gray-800 text-white text-sm rounded-lg shadow-2xl p-4 z-50 animate-in fade-in slide-in-from-${isLeft ? 'right' : 'left'}-2 duration-200`}>
-              {/* Arrow */}
-              <div className={`absolute ${isLeft ? 'right-[-8px]' : 'left-[-8px]'} top-1/2 -translate-y-1/2 w-0 h-0 border-t-8 border-t-transparent border-b-8 border-b-transparent ${isLeft ? 'border-r-8 border-r-gray-900 dark:border-r-gray-800' : 'border-l-8 border-l-gray-900 dark:border-l-gray-800'}`} />
-              
-              <p className="leading-relaxed">{level.description}</p>
-            </div>
-          )}
-        </Link>
+          <Link
+            href={level.href}
+            className={`w-16 h-16 rounded-full ${dotColor} shadow-2xl flex items-center justify-center border-4 border-white dark:border-gray-900 transition-all hover:scale-125 duration-300 cursor-pointer relative`}
+          >
+            <Icon className="w-7 h-7 text-white" strokeWidth={2.5} />
+          </Link>
+        </Tooltip>
       </div>
 
       {/* Empty Space (opposite side) */}

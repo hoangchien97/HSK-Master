@@ -17,6 +17,7 @@
   },
   "dependencies": {
     "@prisma/client": "^5.22.0",
+    "@tippyjs/react": "^4.2.6",
     "clsx": "~2.1.1",
     "dotenv": "^17.2.3",
     "embla-carousel": "^8.6.0",
@@ -30,7 +31,8 @@
     "prisma": "^5.22.0",
     "react": "19.2.3",
     "react-dom": "19.2.3",
-    "tailwind-merge": "~3.4.0"
+    "tailwind-merge": "~3.4.0",
+    "tippy.js": "^6.3.7"
   },
   "devDependencies": {
     "@tailwindcss/postcss": "^4",

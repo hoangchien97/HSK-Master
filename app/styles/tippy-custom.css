@@ -1,0 +1,47 @@
+/* Tippy.js custom styles for dark theme */
+.tippy-box[data-theme~='custom'] {
+  background-color: #1f2937;
+  color: white;
+  font-size: 0.875rem;
+  border-radius: 0.5rem;
+  box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+  padding: 1rem;
+  max-width: 18rem;
+}
+
+.tippy-box[data-theme~='custom'][data-placement^='left'] > .tippy-arrow::before {
+  border-left-color: #1f2937;
+}
+
+.tippy-box[data-theme~='custom'][data-placement^='right'] > .tippy-arrow::before {
+  border-right-color: #1f2937;
+}
+
+.tippy-box[data-theme~='custom'][data-placement^='top'] > .tippy-arrow::before {
+  border-top-color: #1f2937;
+}
+
+.tippy-box[data-theme~='custom'][data-placement^='bottom'] > .tippy-arrow::before {
+  border-bottom-color: #1f2937;
+}
+
+/* Dark mode support */
+.dark .tippy-box[data-theme~='custom'] {
+  background-color: #374151;
+}
+
+.dark .tippy-box[data-theme~='custom'][data-placement^='left'] > .tippy-arrow::before {
+  border-left-color: #374151;
+}
+
+.dark .tippy-box[data-theme~='custom'][data-placement^='right'] > .tippy-arrow::before {
+  border-right-color: #374151;
+}
+
+.dark .tippy-box[data-theme~='custom'][data-placement^='top'] > .tippy-arrow::before {
+  border-top-color: #374151;
+}
+
+.dark .tippy-box[data-theme~='custom'][data-placement^='bottom'] > .tippy-arrow::before {
+  border-bottom-color: #374151;
+}
