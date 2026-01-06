@@ -31,12 +31,9 @@ export default function LessonList({
   return (
     <div className="px-0 md:px-4 mt-4">
       <div className="flex items-center justify-between mb-6">
-        <h2 className="text-[#181111] dark:text-white text-[22px] font-bold leading-tight tracking-[-0.015em]">
+        <h2 className="text-sm text-transparent bg-clip-text bg-gradient-to-r text-[24px] font-bold from-yellow-500 to-red-600 font-bold cursor-pointer hover:from-yellow-600 hover:to-red-700 transition-all">
           Chương trình học
         </h2>
-        <span className="text-sm text-transparent bg-clip-text bg-gradient-to-r from-yellow-500 to-red-600 font-bold cursor-pointer hover:from-yellow-600 hover:to-red-700 transition-all">
-          Xem giáo trình
-        </span>
       </div>
       <div className="space-y-4">
         {displayedLessons.map((lesson, index) => (

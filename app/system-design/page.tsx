@@ -1,11 +1,39 @@
 import { Button } from "../components/shared";
+import { Breadcrumb } from "../components/shared";
+
+export const metadata = {
+  title: "System Design | HSK Master",
+  description: "Design system và component library của HSK Master",
+};
 
 export default function SystemDesignPage() {
   return (
-    <div className="min-h-screen bg-background-light">
-      {/* Header */}
-      <div className="border-b border-gray-200 bg-surface-light p-6">
-        <div className="mx-auto max-w-7xl">
+    <main className="flex-1">
+      {/* Breadcrumb                <span className="text-xs px-2 py-1 bg-accent-100 text-accent-700 rounded-full">600 từ</span>
+                <span className="text-xs px-2 py-1 bg-accent-100 text-accent-700 rounded-full">25 bài</span>
+              </div>
+            </div>
+          </div>
+        </section>
+      </div>
+    </main>
+  );
+}/}
+      <div className="bg-gray-50 dark:bg-surface-dark border-b border-border-light dark:border-border-dark">
+        <div className="mx-auto max-w-7xl px-4 py-3 sm:px-6 lg:px-8">
+          <Breadcrumb
+            items={[
+              { label: "Trang chủ", href: "/" },
+              { label: "System Design", href: "/system-design" },
+            ]}
+          />
+        </div>
+      </div>
+
+      {/* Main Content */}
+      <div className="mx-auto max-w-7xl px-4 py-12 sm:px-6 lg:px-8">
+        {/* Header */}
+        <div className="mb-12">
           <span className="text-primary font-bold tracking-wider uppercase text-sm">Design Language</span>
           <h1 className="text-text-main text-4xl lg:text-5xl font-black leading-tight tracking-tight mt-2">
             HSK Master Design System
@@ -14,9 +42,6 @@ export default function SystemDesignPage() {
             Visual guidelines and core components for the Chinese Learning Platform.
           </p>
         </div>
-      </div>
-
-      <div className="mx-auto max-w-7xl p-6 lg:p-12 space-y-16">
         {/* 1. Color Palette */}
         <section className="flex flex-col gap-6" id="colors">
           <div className="flex flex-col gap-1">
@@ -342,6 +367,6 @@ export default function SystemDesignPage() {
           </div>
         </section>
       </div>
-    </div>
+    </main>
   );
 }

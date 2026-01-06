@@ -1,7 +1,7 @@
 import { prisma } from "@/lib/prisma";
-import Link from "next/link";
 import { notFound } from "next/navigation";
 import Button from "@/app/components/shared/Button";
+import { Breadcrumb } from "@/app/components/shared";
 import LessonList from "./LessonList";
 
 export const revalidate = 600; // ISR - revalidate every 10 minutes
@@ -42,35 +42,24 @@ export default async function CourseDetail({ params }: Props) {
   }
 
   return (
-    <main className="flex-grow w-full flex justify-center py-5 px-4 md:px-10">
-      <div className="flex flex-col max-w-[960px] flex-1 w-full gap-8">
-        {/* Breadcrumbs */}
-        <div className="flex flex-wrap items-center gap-2 px-0 md:px-4">
-          <Link
-            href="/"
-            className="text-[#896161] dark:text-gray-400 hover:text-primary text-sm font-medium leading-normal transition-colors"
-          >
-            Trang chủ
-          </Link>
-          <span className="material-symbols-outlined text-[#896161] dark:text-gray-500 text-[16px]">
-            chevron_right
-          </span>
-          <Link
-            href="/courses"
-            className="text-[#896161] dark:text-gray-400 hover:text-primary text-sm font-medium leading-normal transition-colors"
-          >
-            Khóa học
-          </Link>
-          <span className="material-symbols-outlined text-[#896161] dark:text-gray-500 text-[16px]">
-            chevron_right
-          </span>
-          <span className="text-[#181111] dark:text-white text-sm font-bold leading-normal">
-            {course.level}
-          </span>
+    <main className="flex-1">
+      {/* Breadcrumb Section */}
+      <div className="bg-gray-50 dark:bg-surface-dark border-b border-border-light dark:border-border-dark">
+        <div className="mx-auto max-w-7xl px-4 py-3 sm:px-6 lg:px-8">
+          <Breadcrumb
+            items={[
+              { label: "Trang chủ", href: "/" },
+              { label: "Khóa học", href: "/courses" },
+              { label: course.level || course.title, href: `/courses/${course.slug}` },
+            ]}
+          />
         </div>
+      </div>
 
+      {/* Main Content */}
+      <div className="mx-auto max-w-7xl px-4 py-12 sm:px-6 lg:px-8">
         {/* Page Heading & Hero */}
-        <div className="flex flex-col md:flex-row justify-between gap-6 px-0 md:px-4 items-start md:items-center">
+        <div className="flex flex-col md:flex-row justify-between gap-6 items-start md:items-center mb-12">
           <div className="flex flex-col gap-3 max-w-2xl">
             {course.badgeText && (
               <div className="inline-flex items-center gap-2">
@@ -96,8 +85,6 @@ export default async function CourseDetail({ params }: Props) {
             Bắt đầu học
           </Button>
         </div>
-
-        {/* Stats Overview */}
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4 px-0 md:px-4">
           <div className="flex flex-col gap-2 rounded-xl p-5 bg-surface-light dark:bg-surface-dark border border-[#e6dbdb] dark:border-white/10 shadow-sm hover:border-primary/30 transition-colors group">
             <div className="size-10 rounded-full bg-blue-50 dark:bg-blue-900/30 flex items-center justify-center text-blue-600 dark:text-blue-400 mb-1 group-hover:scale-110 transition-transform">
