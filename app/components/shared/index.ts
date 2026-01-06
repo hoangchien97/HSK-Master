@@ -11,3 +11,4 @@ export { default as Select } from './Select';
 export { default as Textarea } from './Textarea';
 export { default as ScrollToTop } from './ScrollToTop';
 export { default as Tooltip } from './Tooltip';
+export { Checkbox } from './Checkbox';

@@ -1,0 +1,3 @@
+-- AlterTable
+ALTER TABLE "Course" ADD COLUMN     "isFeatured" BOOLEAN NOT NULL DEFAULT false,
+ADD COLUMN     "lectures" INTEGER NOT NULL DEFAULT 0;

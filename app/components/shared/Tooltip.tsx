@@ -34,6 +34,9 @@ export default function Tooltip({
   interactive = false,
   disabled = false,
 }: TooltipProps) {
+  // Wrap children in a span to avoid ref issues with React 19
+  const wrappedChildren = <span className="inline-flex">{children}</span>;
+
   return (
     <Tippy
       content={
@@ -56,7 +59,7 @@ export default function Tooltip({
       interactive={interactive}
       disabled={disabled}
     >
-      {children}
+      {wrappedChildren}
     </Tippy>
   );
 }

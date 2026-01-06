@@ -37,9 +37,11 @@ model Course {
   grammarCount     Int            @default(0)
   lessonCount      Int            @default(0)
   durationHours    Int            @default(0)
+  lectures         Int            @default(0)
   createdAt        DateTime       @default(now())
   categoryId       String
   isPublished      Boolean        @default(true)
+  isFeatured       Boolean        @default(false)
   category         Category       @relation(fields: [categoryId], references: [id])
   lessons          Lesson[]
   grammarPoints    GrammarPoint[]

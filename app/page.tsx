@@ -1,7 +1,6 @@
 import {
   HeroSlideShow,
   HSKLevelsSection,
-  CoursesSection,
   WhyChooseUsSection,
   GallerySection,
   CTASection,
@@ -23,9 +22,6 @@ export default async function Home() {
 
       {/* HSK Levels Section */}
       <HSKLevelsSection />
-
-      {/* Courses Section */}
-      <CoursesSection />
 
       {/* Why Choose Us Section */}
       <WhyChooseUsSection />
