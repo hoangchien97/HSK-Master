@@ -7,6 +7,7 @@ async function main() {
   console.log("🌱 Seeding full education data...")
 
   // Clear existing data
+  await prisma.grammarPoint.deleteMany()
   await prisma.photo.deleteMany()
   await prisma.album.deleteMany()
   await prisma.vocabulary.deleteMany()
@@ -44,24 +45,93 @@ async function main() {
   })
 
   // ============= Courses =============
-  const hsk1 = await prisma.course.create({
-    data: {
-      title: "HSK 1 – Tiếng Trung cho người mới bắt đầu",
-      slug: "hsk-1",
-      description: "Khoá học HSK 1 dành cho người chưa biết gì về tiếng Trung. Lộ trình bài bản, dễ hiểu.",
-      level: "HSK 1",
-      categoryId: basic.id,
-    },
+  // Create HSK 1-6 main courses
+  const hskCourses = await prisma.course.createMany({
+    data: [
+      {
+        title: "HSK 1 – Tiếng Trung cho người mới bắt đầu",
+        slug: "hsk-1",
+        description: "Khóa học HSK 1 dành cho người mới bắt đầu. Làm quen với tiếng Trung từ con số 0, học cách chào hỏi và giao tiếp cơ bản.",
+        level: "HSK 1",
+        badgeText: "Mới bắt đầu",
+        badgeColor: "bg-orange-100 text-orange-800 dark:bg-orange-900/30 dark:text-orange-200",
+        vocabularyCount: 150,
+        grammarCount: 45,
+        lessonCount: 25,
+        durationHours: 40,
+        categoryId: basic.id,
+      },
+      {
+        title: "HSK 2 – Giao tiếp tiếng Trung cơ bản",
+        slug: "hsk-2",
+        description: "Giao tiếp cơ bản trong cuộc sống hàng ngày. Nâng cao kỹ năng giao tiếp, mở rộng từ vựng và mẫu câu thông dụng.",
+        level: "HSK 2",
+        badgeText: "Sơ cấp",
+        badgeColor: "bg-orange-100 text-orange-800 dark:bg-orange-900/30 dark:text-orange-200",
+        vocabularyCount: 300,
+        grammarCount: 60,
+        lessonCount: 20,
+        durationHours: 60,
+        categoryId: basic.id,
+      },
+      {
+        title: "HSK 3 – Tiếng Trung trung cấp",
+        slug: "hsk-3",
+        description: "Bước vào giao tiếp nâng cao. Giao tiếp và viết thành thạo hơn trong các tình huống thường gặp.",
+        level: "HSK 3",
+        badgeText: "Trung cấp",
+        badgeColor: "bg-red-100 text-red-800 dark:bg-red-900/30 dark:text-red-200",
+        vocabularyCount: 600,
+        grammarCount: 80,
+        lessonCount: 25,
+        durationHours: 80,
+        categoryId: basic.id,
+      },
+      {
+        title: "HSK 4 – Sẵn sàng du học và làm việc",
+        slug: "hsk-4",
+        description: "Sẵn sàng cho môi trường du học và làm việc. Giao tiếp tự tin trong các tình huống phức tạp.",
+        level: "HSK 4",
+        badgeText: "Du học/Làm việc",
+        badgeColor: "bg-red-100 text-red-800 dark:bg-red-900/30 dark:text-red-200",
+        vocabularyCount: 1200,
+        grammarCount: 120,
+        lessonCount: 30,
+        durationHours: 100,
+        categoryId: advanced.id,
+      },
+      {
+        title: "HSK 5 – Tiếng Trung cao cấp",
+        slug: "hsk-5",
+        description: "Thành thạo giao tiếp chuyên sâu. Đọc báo, xem phim, giao tiếp trong môi trường chuyên nghiệp.",
+        level: "HSK 5",
+        badgeText: "Cao cấp",
+        badgeColor: "bg-indigo-100 text-indigo-800 dark:bg-indigo-900/30 dark:text-indigo-200",
+        vocabularyCount: 2500,
+        grammarCount: 150,
+        lessonCount: 35,
+        durationHours: 120,
+        categoryId: advanced.id,
+      },
+      {
+        title: "HSK 6 – Trình độ chuyên gia",
+        slug: "hsk-6",
+        description: "Đạt trình độ gần như người bản ngữ. Hiểu và sử dụng tiếng Trung trong mọi tình huống phức tạp.",
+        level: "HSK 6",
+        badgeText: "Chuyên gia",
+        badgeColor: "bg-blue-100 text-blue-800 dark:bg-blue-900/30 dark:text-blue-200",
+        vocabularyCount: 5000,
+        grammarCount: 200,
+        lessonCount: 40,
+        durationHours: 150,
+        categoryId: advanced.id,
+      },
+    ],
   })
 
-  const hsk2 = await prisma.course.create({
-    data: {
-      title: "HSK 2 – Giao tiếp tiếng Trung cơ bản",
-      slug: "hsk-2",
-      description: "Nâng cao kỹ năng giao tiếp, mở rộng từ vựng và mẫu câu thông dụng.",
-      level: "HSK 2",
-      categoryId: basic.id,
-    },
+  // Get HSK 1 course for lessons
+  const hsk1 = await prisma.course.findUnique({
+    where: { slug: "hsk-1" },
   })
 
   // Course section courses
@@ -148,20 +218,232 @@ async function main() {
   })
 
   // ============= Lessons =============
-  const lesson1 = await prisma.lesson.create({
-    data: {
-      title: "Bài 1: Chào hỏi trong tiếng Trung",
-      order: 1,
-      courseId: hsk1.id,
-    },
+  const lessons = await prisma.lesson.createMany({
+    data: [
+      {
+        title: "Giới thiệu làm quen Tiếng Trung",
+        titleChinese: "",
+        description: "Các nét và quy tắc viết trong tiếng Trung",
+        order: 1,
+        courseId: hsk1!.id,
+        isLocked: false,
+        progress: 75,
+      },
+      {
+        title: "Tiếng Trung không khó lắm",
+        titleChinese: "",
+        description: "Từ vựng về các thành viên trong gia đình, Cấu trúc câu 不太 + ADJ, Cách hỏi và trả lời với từ 吗？",
+        order: 2,
+        courseId: hsk1!.id,
+        isLocked: false,
+        progress: 60,
+      },
+      {
+        title: "Hẹn ngày mai gặp lại",
+        titleChinese: "",
+        description: "Từ vựng về các ngôn ngữ, Hỏi đáp đi đâu làm gì",
+        order: 3,
+        courseId: hsk1!.id,
+        isLocked: false,
+        progress: 0,
+      },
+      {
+        title: "Học nghe nói bài 1, 2, 3",
+        titleChinese: "",
+        description: "Nắm được cách phân biệt của các vận mẫu và thanh mẫu bài 1,2,3",
+        order: 4,
+        courseId: hsk1!.id,
+        isLocked: true,
+        progress: 0,
+      },
+      {
+        title: "Bạn đi đâu?",
+        titleChinese: "你去哪儿？",
+        description: "Hỏi đáp đi đâu với chữ 哪儿, Hỏi đáp về thứ trong tuần với từ 几, Cách nói lời tạm biệt, xin lỗi",
+        order: 5,
+        courseId: hsk1!.id,
+        isLocked: true,
+        progress: 0,
+      },
+      {
+        title: "Đây là thầy Vương",
+        titleChinese: "这是王老师",
+        description: "Hỏi đáp về công việc, sức khỏe, Cách nói lời cảm ơn",
+        order: 6,
+        courseId: hsk1!.id,
+        isLocked: true,
+        progress: 0,
+      },
+      {
+        title: "Tôi học tiếng Trung",
+        titleChinese: "我学汉语",
+        description: "Hỏi đáp về họ tên, quốc gia, Hỏi đáp với từ 什么",
+        order: 7,
+        courseId: hsk1!.id,
+        isLocked: true,
+        progress: 0,
+      },
+      {
+        title: "Học nghe nói bài 4, 5, 6",
+        titleChinese: "",
+        description: "Nắm được cách phân biệt của các vận mẫu và thanh mẫu bài 4,5",
+        order: 8,
+        courseId: hsk1!.id,
+        isLocked: true,
+        progress: 0,
+      },
+      {
+        title: "KIỂM TRA LẦN 1",
+        titleChinese: "",
+        description: "Kiểm tra tổng hợp kiến thức các bài đã học",
+        order: 9,
+        courseId: hsk1!.id,
+        isLocked: true,
+        progress: 0,
+      },
+      {
+        title: "Bạn ăn gì?",
+        titleChinese: "你吃什么？",
+        description: "Từ vựng về các món ăn, Hỏi đáp về ăn uống, Từ vựng về các buổi trong ngày",
+        order: 10,
+        courseId: hsk1!.id,
+        isLocked: true,
+        progress: 0,
+      },
+      {
+        title: "Một cân táo bao nhiêu tiền?",
+        titleChinese: "一斤苹果多少钱？",
+        description: "Từ vựng về hoa quả, Cách hỏi về số lượng với từ 多少 và 几, Cách hỏi về số tiền với từ 多少钱",
+        order: 11,
+        courseId: hsk1!.id,
+        isLocked: true,
+        progress: 0,
+      },
+      {
+        title: "Tôi đổi nhân dân tệ",
+        titleChinese: "我换人民币",
+        description: "Từ vựng về loại tiền tệ, Cách nói số tiền từ hàng chục tới hàng vạn",
+        order: 12,
+        courseId: hsk1!.id,
+        isLocked: true,
+        progress: 0,
+      },
+      {
+        title: "Học nghe nói bài 7, 8, 9",
+        titleChinese: "",
+        description: "Luyện phản xạ nghe các bài 7, 8, 9",
+        order: 13,
+        courseId: hsk1!.id,
+        isLocked: true,
+        progress: 0,
+      },
+      {
+        title: "Bạn sống ở đâu?",
+        titleChinese: "你住在哪儿？",
+        description: "Hỏi đáp về nơi sống với từ 住, Cách hỏi đáp về số điện thoại",
+        order: 14,
+        courseId: hsk1!.id,
+        isLocked: true,
+        progress: 0,
+      },
+      {
+        title: "Chúng tôi đều là du học sinh",
+        titleChinese: "我们都是留学生",
+        description: "Cách giới thiệu về bản thân, Cách dùng của chữ 都 và 也",
+        order: 15,
+        courseId: hsk1!.id,
+        isLocked: true,
+        progress: 0,
+      },
+      {
+        title: "Bạn học ở đâu?",
+        titleChinese: "你在哪儿学习？",
+        description: "Từ vựng về các kỹ năng trong tiếng Trung, Cách dùng của từ 怎么样、但是",
+        order: 16,
+        courseId: hsk1!.id,
+        isLocked: true,
+        progress: 0,
+      },
+      {
+        title: "Học nghe nói bài 10, 11, 12",
+        titleChinese: "",
+        description: "Luyện phản xạ nghe các bài 10, 11, 12",
+        order: 17,
+        courseId: hsk1!.id,
+        isLocked: true,
+        progress: 0,
+      },
+      {
+        title: "KIỂM TRA LẦN 2",
+        titleChinese: "",
+        description: "Kiểm tra tổng hợp kiến thức các bài đã học",
+        order: 18,
+        courseId: hsk1!.id,
+        isLocked: true,
+        progress: 0,
+      },
+      {
+        title: "Đây có phải là thuốc bắc không?",
+        titleChinese: "这是中药吗？",
+        description: "Từ vựng về các đồ vật cơ bản, Làm quen với lượng từ",
+        order: 19,
+        courseId: hsk1!.id,
+        isLocked: true,
+        progress: 0,
+      },
+      {
+        title: "Xe của bạn là cái mới hay là cái cũ?",
+        titleChinese: "你的车是新的还是旧的？",
+        description: "Từ vựng về các loại xe và động từ đi kèm, Cách dùng của 有一点儿、还是",
+        order: 20,
+        courseId: hsk1!.id,
+        isLocked: true,
+        progress: 0,
+      },
+      {
+        title: "Công ty của bạn có bao nhiêu nhân viên?",
+        titleChinese: "你的公司有多少员工？",
+        description: "Từ vựng về nghề nghiệp, Cách dùng từ 只、大概, Cách nói về sự ước lượng",
+        order: 21,
+        courseId: hsk1!.id,
+        isLocked: true,
+        progress: 0,
+      },
+      {
+        title: "Học nghe nói bài 13, 14, 15",
+        titleChinese: "",
+        description: "Luyện phản xạ nghe các bài 13, 14, 15",
+        order: 22,
+        courseId: hsk1!.id,
+        isLocked: true,
+        progress: 0,
+      },
+      {
+        title: "KIỂM TRA LẦN 3",
+        titleChinese: "",
+        description: "Kiểm tra tổng hợp kiến thức các bài đã học",
+        order: 23,
+        courseId: hsk1!.id,
+        isLocked: true,
+        progress: 0,
+      },
+      {
+        title: "ÔN TẬP",
+        titleChinese: "",
+        description: "Ôn tập tổng hợp toàn bộ khóa học",
+        order: 24,
+        courseId: hsk1!.id,
+        isLocked: true,
+        progress: 0,
+      },
+    ],
   })
 
-  const lesson2 = await prisma.lesson.create({
-    data: {
-      title: "Bài 2: Giới thiệu bản thân",
-      order: 2,
-      courseId: hsk1.id,
-    },
+  const lesson1 = await prisma.lesson.findFirst({
+    where: { courseId: hsk1!.id, order: 1 },
+  })
+  const lesson2 = await prisma.lesson.findFirst({
+    where: { courseId: hsk1!.id, order: 2 },
   })
 
   // ============= Vocabulary =============
@@ -171,32 +453,91 @@ async function main() {
         word: "你好",
         pinyin: "nǐ hǎo",
         meaning: "Xin chào",
-        lessonId: lesson1.id,
+        lessonId: lesson1!.id,
       },
       {
         word: "再见",
         pinyin: "zài jiàn",
         meaning: "Tạm biệt",
-        lessonId: lesson1.id,
+        lessonId: lesson1!.id,
       },
       {
         word: "我",
         pinyin: "wǒ",
         meaning: "Tôi",
-        lessonId: lesson2.id,
+        lessonId: lesson1!.id,
       },
       {
         word: "你",
         pinyin: "nǐ",
         meaning: "Bạn",
-        lessonId: lesson2.id,
+        lessonId: lesson1!.id,
       },
       {
         word: "他",
         pinyin: "tā",
         meaning: "Anh ấy",
-        lessonId: lesson2.id,
-      }
+        lessonId: lesson1!.id,
+      },
+      {
+        word: "谢谢",
+        pinyin: "xiè xiè",
+        meaning: "Cảm ơn",
+        lessonId: lesson2!.id,
+      },
+      {
+        word: "对不起",
+        pinyin: "duì bù qǐ",
+        meaning: "Xin lỗi",
+        lessonId: lesson2!.id,
+      },
+      {
+        word: "没关系",
+        pinyin: "méi guān xì",
+        meaning: "Không sao",
+        lessonId: lesson2!.id,
+      },
+    ],
+  })
+
+  // ============= Grammar Points =============
+  await prisma.grammarPoint.createMany({
+    data: [
+      {
+        title: 'Câu "Shi" (是)',
+        titleChinese: "是",
+        description: "Cấu trúc câu cơ bản sử dụng 是 (là) để nhận dạng và định nghĩa.",
+        order: 1,
+        courseId: hsk1!.id,
+      },
+      {
+        title: 'Câu hỏi với "Ma" (吗)',
+        titleChinese: "吗",
+        description: "Tạo câu hỏi yes/no bằng cách thêm 吗 vào cuối câu khẳng định.",
+        order: 2,
+        courseId: hsk1!.id,
+      },
+      {
+        title: 'Diễn đạt sở hữu với "De" (的)',
+        titleChinese: "的",
+        description: "Sử dụng 的 để thể hiện sở hữu và mối quan hệ giữa các danh từ.",
+        order: 3,
+        courseId: hsk1!.id,
+      },
+      {
+        title: 'Phủ định với "Bu" (不)',
+        titleChinese: "不",
+        description: "Phủ định động từ và tính từ sử dụng 不 (không).",
+        order: 4,
+        courseId: hsk1!.id,
+      },
+      {
+        title: 'Số đếm và Lượng từ',
+        titleChinese: "量词",
+        description: "Học cách đếm và sử dụng lượng từ phù hợp với danh từ.",
+        order: 5,
+        courseId: hsk1!.id,
+      },
     ],
   })
 

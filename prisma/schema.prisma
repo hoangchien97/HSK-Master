@@ -18,33 +18,44 @@ model Category {
 }
 
 model Course {
-  id            String         @id @default(uuid())
-  title         String
-  slug          String         @unique
-  description   String?
-  image         String?
-  instructor    String?
+  id               String         @id @default(uuid())
+  title            String
+  slug             String         @unique
+  description      String?
+  image            String?
+  instructor       String?
   instructorAvatar String?
-  price         String?
-  originalPrice String?
-  students      String?
-  rating        String?
-  level         String?
-  tag           String?
-  createdAt     DateTime       @default(now())
-  categoryId    String
-  isPublished   Boolean        @default(true)
-  category      Category       @relation(fields: [categoryId], references: [id])
-  lessons       Lesson[]
-  registrations Registration[]
+  price            String?
+  originalPrice    String?
+  students         String?
+  rating           String?
+  level            String?
+  tag              String?
+  badgeText        String?
+  badgeColor       String?
+  vocabularyCount  Int            @default(0)
+  grammarCount     Int            @default(0)
+  lessonCount      Int            @default(0)
+  durationHours    Int            @default(0)
+  createdAt        DateTime       @default(now())
+  categoryId       String
+  isPublished      Boolean        @default(true)
+  category         Category       @relation(fields: [categoryId], references: [id])
+  lessons          Lesson[]
+  grammarPoints    GrammarPoint[]
+  registrations    Registration[]
 }
 
 model Lesson {
   id           String       @id @default(uuid())
   courseId     String
   title        String
-  createdAt    DateTime     @default(now())
+  titleChinese String?
+  description  String?
   order        Int
+  isLocked     Boolean      @default(true)
+  progress     Int          @default(0)
+  createdAt    DateTime     @default(now())
   course       Course       @relation(fields: [courseId], references: [id])
   vocabularies Vocabulary[]
 }
@@ -158,4 +169,16 @@ model Photo {
   order       Int
   createdAt   DateTime @default(now())
   album       Album    @relation(fields: [albumId], references: [id], onDelete: Cascade)
+}
+
+// Grammar Points for Courses
+model GrammarPoint {
+  id          String   @id @default(uuid())
+  courseId    String
+  title       String
+  titleChinese String?
+  description String?
+  order       Int
+  createdAt   DateTime @default(now())
+  course      Course   @relation(fields: [courseId], references: [id], onDelete: Cascade)
 }
