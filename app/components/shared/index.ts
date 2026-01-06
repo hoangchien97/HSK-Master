@@ -12,3 +12,5 @@ export { default as Textarea } from './Textarea';
 export { default as ScrollToTop } from './ScrollToTop';
 export { default as Tooltip } from './Tooltip';
 export { Checkbox } from './Checkbox';
+export { default as Badge } from './Badge';
+export { default as Pagination } from './Pagination';

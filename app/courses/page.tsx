@@ -1,5 +1,5 @@
 import { prisma } from "@/lib/prisma";
-import { Breadcrumb } from "../components/shared";
+import { Breadcrumb, Badge, Pagination } from "../components/shared";
 import { CourseFilter, CourseCard } from "../components/courses";
 
 export const revalidate = 600;
@@ -15,9 +15,10 @@ const ITEMS_PER_PAGE = 9;
 export default async function CoursesPage({
   searchParams,
 }: {
-  searchParams: { page?: string };
+  searchParams: Promise<{ page?: string }>;
 }) {
-  const currentPage = Number(searchParams.page) || 1;
+  const params = await searchParams;
+  const currentPage = Number(params.page) || 1;
   const skip = (currentPage - 1) * ITEMS_PER_PAGE;
 
   const [courses, totalCount, categories] = await Promise.all([
@@ -73,37 +74,44 @@ export default async function CoursesPage({
         </div>
 
         {/* Main Layout */}
-        <div className="flex flex-col lg:flex-row gap-8">
+        <div className="flex flex-col lg:flex-row gap-8 relative">
+          {/* Decorative Background Images */}
+          <div className="absolute left-0 top-20 w-32 h-32 opacity-5 dark:opacity-10 pointer-events-none hidden xl:block">
+            <svg viewBox="0 0 200 200" className="text-red-600">
+              <circle cx="100" cy="100" r="80" fill="currentColor" opacity="0.3" />
+              <text x="100" y="120" fontSize="80" fontWeight="bold" textAnchor="middle" fill="currentColor">中</text>
+            </svg>
+          </div>
+          <div className="absolute right-0 top-40 w-32 h-32 opacity-5 dark:opacity-10 pointer-events-none hidden xl:block">
+            <svg viewBox="0 0 200 200" className="text-orange-500">
+              <circle cx="100" cy="100" r="80" fill="currentColor" opacity="0.3" />
+              <text x="100" y="120" fontSize="80" fontWeight="bold" textAnchor="middle" fill="currentColor">文</text>
+            </svg>
+          </div>
+          
           {/* Sidebar Filter */}
           <CourseFilter categories={categories} />
 
           {/* Courses Grid */}
-          <div className="flex-1">
+          <div className="flex-1 relative z-10">
             {/* Filter Tabs & Sort */}
             <div className="mb-6 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
               <div className="flex gap-2 overflow-x-auto pb-2 sm:pb-0 no-scrollbar">
-                <button className="whitespace-nowrap rounded-full bg-brand-gradient px-4 py-1.5 text-sm font-bold text-white shadow-sm">
-                  Tất cả
-                </button>
-                <button className="whitespace-nowrap rounded-full bg-white dark:bg-surface-dark px-4 py-1.5 text-sm font-medium text-text-secondary-light dark:text-text-secondary-dark shadow-sm ring-1 ring-inset ring-border-light dark:ring-border-dark hover:bg-gray-50 dark:hover:bg-gray-800 hover:text-red-600 transition-colors">
-                  HSK 1
-                </button>
-                <button className="whitespace-nowrap rounded-full bg-white dark:bg-surface-dark px-4 py-1.5 text-sm font-medium text-text-secondary-light dark:text-text-secondary-dark shadow-sm ring-1 ring-inset ring-border-light dark:ring-border-dark hover:bg-gray-50 dark:hover:bg-gray-800 hover:text-red-600 transition-colors">
-                  HSK 3
-                </button>
-                <button className="whitespace-nowrap rounded-full bg-white dark:bg-surface-dark px-4 py-1.5 text-sm font-medium text-text-secondary-light dark:text-text-secondary-dark shadow-sm ring-1 ring-inset ring-border-light dark:ring-border-dark hover:bg-gray-50 dark:hover:bg-gray-800 hover:text-red-600 transition-colors">
-                  Luyện HSKK
-                </button>
-                <button className="whitespace-nowrap rounded-full bg-white dark:bg-surface-dark px-4 py-1.5 text-sm font-medium text-text-secondary-light dark:text-text-secondary-dark shadow-sm ring-1 ring-inset ring-border-light dark:ring-border-dark hover:bg-gray-50 dark:hover:bg-gray-800 hover:text-red-600 transition-colors">
-                  Giao tiếp cơ bản
-                </button>
+                {/* <Badge variant="active">Tất cả</Badge>
+                <Badge>HSK 1</Badge>
+                <Badge>HSK 2</Badge>
+                <Badge>HSK 3</Badge>
+                <Badge>HSK 4</Badge>
+                <Badge>HSK 5-6</Badge>
+                <Badge>Luyện HSKK</Badge>
+                <Badge>Giao tiếp</Badge> */}
               </div>
 
-              <div className="flex items-center gap-2 sm:ml-auto">
+              <div className="flex items-center gap-2 sm:ml-auto shrink-0">
                 <span className="text-sm text-text-secondary-light dark:text-text-secondary-dark whitespace-nowrap">
                   Sắp xếp:
                 </span>
-                <select className="block w-full rounded-md border-0 bg-transparent py-1.5 pl-3 pr-8 text-sm text-text-main-light dark:text-white ring-1 ring-inset ring-border-light dark:ring-border-dark focus:ring-2 focus:ring-red-500 cursor-pointer">
+                <select className="block min-w-[140px] rounded-md border-0 bg-white dark:bg-surface-dark py-1.5 pl-3 pr-8 text-sm text-text-main-light dark:text-white ring-1 ring-inset ring-border-light dark:ring-border-dark focus:ring-2 focus:ring-red-500 cursor-pointer">
                   <option>Phổ biến nhất</option>
                   <option>Mới nhất</option>
                   <option>Giá thấp đến cao</option>
@@ -133,84 +141,14 @@ export default async function CoursesPage({
             </div>
 
             {/* Pagination */}
-            {totalPages > 1 && (
-              <div className="mt-10 flex flex-col items-center gap-6">
-                <div className="flex items-center gap-2">
-                  {/* Previous Button */}
-                  <a
-                    href={hasPrevPage ? `?page=${currentPage - 1}` : "#"}
-                    className={`inline-flex items-center justify-center size-10 rounded-lg border transition-colors ${
-                      hasPrevPage
-                        ? "border-border-light dark:border-border-dark hover:bg-gray-50 dark:hover:bg-gray-800 text-text-main-light dark:text-white"
-                        : "border-gray-200 dark:border-gray-700 text-gray-400 dark:text-gray-600 cursor-not-allowed"
-                    }`}
-                    aria-disabled={!hasPrevPage}
-                  >
-                    <span className="material-symbols-outlined text-[20px]">chevron_left</span>
-                  </a>
-
-                  {/* Page Numbers */}
-                  {Array.from({ length: totalPages }, (_, i) => i + 1).map((pageNum) => {
-                    // Show first page, last page, current page, and pages around current
-                    const showPage =
-                      pageNum === 1 ||
-                      pageNum === totalPages ||
-                      (pageNum >= currentPage - 1 && pageNum <= currentPage + 1);
-
-                    const showEllipsis =
-                      (pageNum === 2 && currentPage > 3) ||
-                      (pageNum === totalPages - 1 && currentPage < totalPages - 2);
-
-                    if (showEllipsis) {
-                      return (
-                        <span
-                          key={pageNum}
-                          className="px-2 text-text-secondary-light dark:text-text-secondary-dark"
-                        >
-                          ...
-                        </span>
-                      );
-                    }
-
-                    if (!showPage) return null;
-
-                    return (
-                      <a
-                        key={pageNum}
-                        href={`?page=${pageNum}`}
-                        className={`inline-flex items-center justify-center size-10 rounded-lg font-medium transition-all ${
-                          pageNum === currentPage
-                            ? "bg-brand-gradient text-white shadow-md"
-                            : "border border-border-light dark:border-border-dark hover:bg-gray-50 dark:hover:bg-gray-800 text-text-main-light dark:text-white"
-                        }`}
-                      >
-                        {pageNum}
-                      </a>
-                    );
-                  })}
-
-                  {/* Next Button */}
-                  <a
-                    href={hasNextPage ? `?page=${currentPage + 1}` : "#"}
-                    className={`inline-flex items-center justify-center size-10 rounded-lg border transition-colors ${
-                      hasNextPage
-                        ? "border-border-light dark:border-border-dark hover:bg-gray-50 dark:hover:bg-gray-800 text-text-main-light dark:text-white"
-                        : "border-gray-200 dark:border-gray-700 text-gray-400 dark:text-gray-600 cursor-not-allowed"
-                    }`}
-                    aria-disabled={!hasNextPage}
-                  >
-                    <span className="material-symbols-outlined text-[20px]">chevron_right</span>
-                  </a>
-                </div>
-
-                {/* Page Info */}
-                <p className="text-sm text-text-secondary-light dark:text-text-secondary-dark">
-                  Trang <span className="font-medium text-text-main-light dark:text-white">{currentPage}</span> /{" "}
-                  <span className="font-medium text-text-main-light dark:text-white">{totalPages}</span>
-                  {" "}• Hiển thị {courses.length} trong tổng số {totalCount} khóa học
-                </p>
-              </div>
-            )}
+            <Pagination
+              currentPage={currentPage}
+              totalPages={totalPages}
+              totalItems={totalCount}
+              itemsPerPage={ITEMS_PER_PAGE}
+              currentItemsCount={courses.length}
+              basePath="/courses"
+            />
           </div>
         </div>
       </div>
