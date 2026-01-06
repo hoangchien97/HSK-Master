@@ -88,7 +88,7 @@ export default async function CoursesPage({
               <text x="100" y="120" fontSize="80" fontWeight="bold" textAnchor="middle" fill="currentColor">文</text>
             </svg>
           </div>
-          
+
           {/* Sidebar Filter */}
           <CourseFilter categories={categories} />
 
