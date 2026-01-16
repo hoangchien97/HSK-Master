@@ -1,0 +1,640 @@
+<!DOCTYPE html>
+<html class="light" lang="vi"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Trang tổng quan Design System</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;700;900&amp;family=Noto+Sans+SC:wght@300;400;500;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#ec131e",
+                        "primary-hover": "#c91019",
+                        "background-light": "#f8f6f6",
+                        "background-dark": "#221011",
+                        "surface-light": "#ffffff",
+                        "surface-dark": "#2d1a1b",
+                        "text-main": "#181111",
+                        "text-muted": "#896163",
+                    },
+                    fontFamily: {
+                        "display": ["Inter", "Noto Sans SC", "sans-serif"],
+                        "body": ["Inter", "Noto Sans SC", "sans-serif"],
+                    },
+                    borderRadius: {"DEFAULT": "0.375rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px"},
+                    boxShadow: {
+                        'soft': '0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.03)',
+                        'card': '0 10px 15px -3px rgba(0, 0, 0, 0.05), 0 4px 6px -2px rgba(0, 0, 0, 0.025)',
+                    }
+                },
+            },
+        }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .symbol-filled {
+            font-variation-settings: 'FILL' 1, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }aside::-webkit-scrollbar {
+            width: 6px;
+        }
+        aside::-webkit-scrollbar-track {
+            background: transparent;
+        }
+        aside::-webkit-scrollbar-thumb {
+            background-color: #e5e7eb;
+            border-radius: 20px;
+        }
+    </style>
+</head>
+<body class="bg-background-light text-text-main font-display antialiased min-h-screen flex flex-col lg:flex-row">
+<div class="lg:hidden p-4 bg-surface-light border-b border-gray-200 flex justify-between items-center sticky top-0 z-50">
+<div class="font-bold text-xl text-primary flex items-center gap-2">
+<span class="material-symbols-outlined text-3xl">school</span>
+<span>Design System</span>
+</div>
+<button class="text-text-main p-2">
+<span class="material-symbols-outlined">menu</span>
+</button>
+</div>
+<aside class="hidden lg:flex flex-col w-64 bg-surface-light border-r border-gray-200 h-screen sticky top-0 overflow-y-auto z-40">
+<div class="p-6 flex flex-col gap-1">
+<h1 class="text-text-main text-lg font-bold leading-normal flex items-center gap-2">
+<span class="material-symbols-outlined text-primary">school</span>
+            CLP Design System
+        </h1>
+<p class="text-text-muted text-xs font-medium leading-normal">v2.1.0 • Chinese Learning Platform</p>
+</div>
+<nav class="flex-1 px-4 pb-6 flex flex-col gap-1">
+<a class="flex items-center gap-3 px-3 py-2 rounded-lg bg-primary/10 text-primary transition-colors mb-2" href="#overview">
+<span class="material-symbols-outlined text-[20px]">dashboard</span>
+<span class="text-sm font-medium">Tổng quan</span>
+</a>
+<div class="pt-2 pb-2 px-3 text-xs font-semibold text-text-muted uppercase tracking-wider">Nền tảng (Foundation)</div>
+<a class="flex items-center gap-3 px-3 py-2 rounded-lg hover:bg-gray-100 text-text-main transition-colors" href="#colors">
+<span class="material-symbols-outlined text-[20px]">palette</span>
+<span class="text-sm font-medium">Màu sắc</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2 rounded-lg hover:bg-gray-100 text-text-main transition-colors" href="#typography">
+<span class="material-symbols-outlined text-[20px]">text_fields</span>
+<span class="text-sm font-medium">Typography</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2 rounded-lg hover:bg-gray-100 text-text-main transition-colors" href="#icons">
+<span class="material-symbols-outlined text-[20px]">sentiment_satisfied</span>
+<span class="text-sm font-medium">Icons</span>
+</a>
+<div class="pt-4 pb-2 px-3 text-xs font-semibold text-text-muted uppercase tracking-wider">Components</div>
+<a class="flex items-center gap-3 px-3 py-2 rounded-lg hover:bg-gray-100 text-text-main transition-colors" href="#buttons">
+<span class="material-symbols-outlined text-[20px]">smart_button</span>
+<span class="text-sm font-medium">Buttons</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2 rounded-lg hover:bg-gray-100 text-text-main transition-colors" href="#inputs">
+<span class="material-symbols-outlined text-[20px]">input</span>
+<span class="text-sm font-medium">Input</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2 rounded-lg hover:bg-gray-100 text-text-main transition-colors" href="#select">
+<span class="material-symbols-outlined text-[20px]">arrow_drop_down_circle</span>
+<span class="text-sm font-medium">Select</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2 rounded-lg hover:bg-gray-100 text-text-main transition-colors" href="#checkbox">
+<span class="material-symbols-outlined text-[20px]">check_box</span>
+<span class="text-sm font-medium">Checkbox</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2 rounded-lg hover:bg-gray-100 text-text-main transition-colors" href="#menu">
+<span class="material-symbols-outlined text-[20px]">menu_open</span>
+<span class="text-sm font-medium">Menu</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2 rounded-lg hover:bg-gray-100 text-text-main transition-colors" href="#popover">
+<span class="material-symbols-outlined text-[20px]">tooltip</span>
+<span class="text-sm font-medium">Popover</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2 rounded-lg hover:bg-gray-100 text-text-main transition-colors" href="#cards">
+<span class="material-symbols-outlined text-[20px]">style</span>
+<span class="text-sm font-medium">Cards</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2 rounded-lg hover:bg-gray-100 text-text-main transition-colors" href="#structure">
+<span class="material-symbols-outlined text-[20px]">web</span>
+<span class="text-sm font-medium">Header &amp; Footer</span>
+</a>
+</nav>
+</aside>
+<main class="flex-1 overflow-x-hidden scroll-smooth">
+<div class="max-w-[1200px] mx-auto p-6 lg:p-12 flex flex-col gap-16">
+<section class="flex flex-col gap-4 border-b border-gray-200 pb-10" id="overview">
+<div class="flex flex-col gap-2">
+<span class="text-primary font-bold tracking-wider uppercase text-sm">Ngôn ngữ thiết kế</span>
+<h1 class="text-text-main text-4xl lg:text-5xl font-black leading-tight tracking-tight">Tổng quan Design System</h1>
+</div>
+<p class="text-text-muted text-lg font-normal max-w-2xl leading-relaxed">
+                Hướng dẫn trực quan và các thành phần cốt lõi cho Nền tảng Học tiếng Trung. Hệ thống này đảm bảo tính nhất quán trên các mô-đun học tập, công cụ từ vựng và bài học văn hóa.
+            </p>
+</section>
+<section class="flex flex-col gap-6" id="colors">
+<div class="flex flex-col gap-1">
+<h2 class="text-text-main text-2xl font-bold flex items-center gap-2">
+<span class="w-2 h-8 bg-primary rounded-full"></span>
+                    1. Bảng màu (Color Palette)
+                </h2>
+<p class="text-text-muted">Các màu cốt lõi được sử dụng để thiết lập nhận diện thương hiệu. Màu đỏ chính phản ánh ý nghĩa văn hóa.</p>
+</div>
+<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+<div class="flex flex-col gap-3 group">
+<div class="h-32 rounded-xl bg-primary shadow-sm flex items-end p-4 group-hover:shadow-md transition-shadow relative overflow-hidden">
+<div class="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity"></div>
+<span class="bg-white/90 text-primary text-xs font-bold px-2 py-1 rounded backdrop-blur-sm z-10">Primary</span>
+</div>
+<div class="flex flex-col">
+<span class="font-bold text-text-main">Imperial Red</span>
+<span class="text-text-muted text-sm font-mono uppercase">#ec131e</span>
+<span class="text-text-muted text-xs">Hành động, Thương hiệu</span>
+</div>
+</div>
+<div class="flex flex-col gap-3 group">
+<div class="h-32 rounded-xl bg-gradient-to-br from-yellow-400 to-primary shadow-sm flex items-end p-4 group-hover:shadow-md transition-shadow">
+<span class="bg-white/90 text-primary text-xs font-bold px-2 py-1 rounded backdrop-blur-sm">Highlight Gradient</span>
+</div>
+<div class="flex flex-col">
+<span class="font-bold text-text-main">Sunrise Gradient</span>
+<span class="text-text-muted text-sm font-mono uppercase">Yellow -&gt; Red</span>
+<span class="text-text-muted text-xs">Cao cấp, Nổi bật, Active</span>
+</div>
+</div>
+<div class="flex flex-col gap-3 group">
+<div class="h-32 rounded-xl bg-[#1f2937] shadow-sm flex items-end p-4 group-hover:shadow-md transition-shadow">
+<span class="bg-white/90 text-[#1f2937] text-xs font-bold px-2 py-1 rounded backdrop-blur-sm">Neutral Dark</span>
+</div>
+<div class="flex flex-col">
+<span class="font-bold text-text-main">Ink Black</span>
+<span class="text-text-muted text-sm font-mono uppercase">#1f2937</span>
+<span class="text-text-muted text-xs">Tiêu đề, Văn bản chính</span>
+</div>
+</div>
+<div class="flex flex-col gap-3 group">
+<div class="h-32 rounded-xl bg-[#e5e7eb] border border-gray-200 shadow-sm flex items-end p-4 group-hover:shadow-md transition-shadow">
+<span class="bg-white/90 text-text-main text-xs font-bold px-2 py-1 rounded backdrop-blur-sm">Neutral Light</span>
+</div>
+<div class="flex flex-col">
+<span class="font-bold text-text-main">Cloud Gray</span>
+<span class="text-text-muted text-sm font-mono uppercase">#e5e7eb</span>
+<span class="text-text-muted text-xs">Đường viền, Nền phụ</span>
+</div>
+</div>
+</div>
+</section>
+<section class="flex flex-col gap-6" id="typography">
+<div class="flex flex-col gap-1">
+<h2 class="text-text-main text-2xl font-bold flex items-center gap-2">
+<span class="w-2 h-8 bg-primary rounded-full"></span>
+                    2. Typography
+                </h2>
+<p class="text-text-muted">Sử dụng Inter cho tiếng Anh/Việt và Noto Sans SC cho ký tự tiếng Trung để đảm bảo tính dễ đọc.</p>
+</div>
+<div class="bg-surface-light rounded-xl border border-gray-200 overflow-hidden divide-y divide-gray-100 shadow-sm">
+<div class="p-6 grid grid-cols-1 md:grid-cols-12 gap-4 items-center">
+<div class="col-span-3 text-text-muted text-sm font-mono">H1 / Bold / 36px</div>
+<div class="col-span-9">
+<h1 class="text-4xl font-bold text-text-main">Học tiếng Trung đơn giản<br/><span class="text-primary font-normal">让学习中文变得简单</span></h1>
+</div>
+</div>
+<div class="p-6 grid grid-cols-1 md:grid-cols-12 gap-4 items-center">
+<div class="col-span-3 text-text-muted text-sm font-mono">H2 / Bold / 30px</div>
+<div class="col-span-9">
+<h2 class="text-3xl font-bold text-text-main">Cấu trúc khóa học<br/><span class="text-text-muted text-2xl font-normal">课程结构与模块</span></h2>
+</div>
+</div>
+<div class="p-6 grid grid-cols-1 md:grid-cols-12 gap-4 items-center">
+<div class="col-span-3 text-text-muted text-sm font-mono">Body / Regular / 16px</div>
+<div class="col-span-9">
+<p class="text-base text-text-muted leading-relaxed max-w-2xl">
+                            Nền tảng của chúng tôi sử dụng phương pháp đắm mình để giúp bạn làm chủ tiếng phổ thông. Bắt đầu với các thanh điệu cơ bản và tiến tới cấu trúc ngữ pháp phức tạp. <br/>
+                            我们的平台采用沉浸式方法帮助您掌握普通话。
+                        </p>
+</div>
+</div>
+</div>
+</section>
+<section class="flex flex-col gap-6" id="buttons">
+<div class="flex flex-col gap-1">
+<h2 class="text-text-main text-2xl font-bold flex items-center gap-2">
+<span class="w-2 h-8 bg-primary rounded-full"></span>
+                    3. Nút bấm (Buttons)
+                </h2>
+<p class="text-text-muted">Các trạng thái tương tác rõ ràng cho hover, active, focus và disabled. Sử dụng gradient cho trạng thái nổi bật.</p>
+</div>
+<div class="bg-surface-light p-8 rounded-xl border border-gray-200 shadow-sm overflow-x-auto">
+<table class="w-full min-w-[800px]">
+<thead>
+<tr class="border-b border-gray-100">
+<th class="text-left pb-4 text-sm font-semibold text-text-muted uppercase w-32">Type</th>
+<th class="text-left pb-4 text-sm font-semibold text-text-muted uppercase">Default</th>
+<th class="text-left pb-4 text-sm font-semibold text-text-muted uppercase">Hover</th>
+<th class="text-left pb-4 text-sm font-semibold text-text-muted uppercase">Active</th>
+<th class="text-left pb-4 text-sm font-semibold text-text-muted uppercase">Disabled</th>
+</tr>
+</thead>
+<tbody class="divide-y divide-gray-100">
+<tr>
+<td class="py-6 text-sm font-medium text-text-main">Primary (Gradient)</td>
+<td class="py-6"><button class="px-5 py-2.5 rounded-lg bg-gradient-to-r from-yellow-400 to-primary text-white font-medium shadow-md">Đăng ký ngay</button></td>
+<td class="py-6"><button class="px-5 py-2.5 rounded-lg bg-gradient-to-r from-yellow-300 to-[#d9121c] text-white font-medium shadow-lg scale-105 transform transition-transform cursor-pointer">Đăng ký ngay</button></td>
+<td class="py-6"><button class="px-5 py-2.5 rounded-lg bg-gradient-to-r from-yellow-500 to-[#b00e16] text-white font-medium shadow-inner ring-2 ring-yellow-200">Đăng ký ngay</button></td>
+<td class="py-6"><button class="px-5 py-2.5 rounded-lg bg-gray-200 text-gray-400 font-medium cursor-not-allowed">Đăng ký ngay</button></td>
+</tr>
+<tr>
+<td class="py-6 text-sm font-medium text-text-main">Secondary</td>
+<td class="py-6"><button class="px-5 py-2.5 rounded-lg border border-gray-300 bg-white text-text-main font-medium hover:border-gray-400">Xem khóa học</button></td>
+<td class="py-6"><button class="px-5 py-2.5 rounded-lg border border-primary text-primary bg-primary/5 font-medium cursor-pointer">Xem khóa học</button></td>
+<td class="py-6"><button class="px-5 py-2.5 rounded-lg border border-primary bg-primary/10 text-primary font-medium shadow-inner">Xem khóa học</button></td>
+<td class="py-6"><button class="px-5 py-2.5 rounded-lg border border-gray-100 bg-gray-50 text-gray-300 font-medium cursor-not-allowed">Xem khóa học</button></td>
+</tr>
+<tr>
+<td class="py-6 text-sm font-medium text-text-main">Ghost</td>
+<td class="py-6"><button class="px-4 py-2 rounded-lg text-text-muted hover:text-primary font-medium flex items-center gap-2"><span class="material-symbols-outlined text-[20px]">play_circle</span> Xem demo</button></td>
+<td class="py-6"><button class="px-4 py-2 rounded-lg text-primary bg-red-50 font-medium flex items-center gap-2 cursor-pointer"><span class="material-symbols-outlined text-[20px]">play_circle</span> Xem demo</button></td>
+<td class="py-6"><button class="px-4 py-2 rounded-lg text-primary bg-red-100 font-medium flex items-center gap-2"><span class="material-symbols-outlined text-[20px]">play_circle</span> Xem demo</button></td>
+<td class="py-6"><button class="px-4 py-2 rounded-lg text-gray-300 flex items-center gap-2 cursor-not-allowed"><span class="material-symbols-outlined text-[20px]">play_circle</span> Xem demo</button></td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+<section class="flex flex-col gap-6" id="inputs">
+<div class="flex flex-col gap-1">
+<h2 class="text-text-main text-2xl font-bold flex items-center gap-2">
+<span class="w-2 h-8 bg-primary rounded-full"></span>
+                    4. Ô nhập liệu (Inputs)
+                </h2>
+<p class="text-text-muted">Các trạng thái nhập liệu khác nhau bao gồm mặc định, focus, lỗi và vô hiệu hóa.</p>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-2 gap-8 bg-surface-light p-8 rounded-xl border border-gray-200 shadow-sm">
+<div class="flex flex-col gap-2">
+<label class="text-sm font-medium text-text-main">Tên đăng nhập (Default)</label>
+<input class="w-full px-4 py-2.5 rounded-lg border border-gray-300 focus:border-primary focus:ring-1 focus:ring-primary outline-none transition-all placeholder:text-gray-400 text-sm" placeholder="Nhập tên đăng nhập..." type="text"/>
+<span class="text-xs text-text-muted">Văn bản hỗ trợ cho người dùng.</span>
+</div>
+<div class="flex flex-col gap-2">
+<label class="text-sm font-medium text-primary">Email (Focus State)</label>
+<input class="w-full px-4 py-2.5 rounded-lg border-primary ring-1 ring-primary outline-none transition-all text-sm text-text-main" type="email" value="user@example.com"/>
+</div>
+<div class="flex flex-col gap-2">
+<label class="text-sm font-medium text-red-600">Mật khẩu (Error State)</label>
+<input class="w-full px-4 py-2.5 rounded-lg border-red-500 text-red-600 focus:ring-red-500 outline-none transition-all text-sm" type="password" value="123456"/>
+<span class="text-xs text-red-500 flex items-center gap-1"><span class="material-symbols-outlined text-[14px]">error</span> Mật khẩu quá ngắn.</span>
+</div>
+<div class="flex flex-col gap-2 opacity-70">
+<label class="text-sm font-medium text-gray-500">Mã giới thiệu (Disabled)</label>
+<input class="w-full px-4 py-2.5 rounded-lg border border-gray-200 bg-gray-100 text-gray-400 cursor-not-allowed text-sm" disabled="" placeholder="Không khả dụng" type="text"/>
+</div>
+<div class="flex flex-col gap-2 md:col-span-2">
+<label class="text-sm font-medium text-text-main">Tìm kiếm (Icon Input)</label>
+<div class="relative">
+<span class="material-symbols-outlined absolute left-3 top-2.5 text-gray-400">search</span>
+<input class="w-full pl-10 pr-4 py-2.5 rounded-lg border border-gray-300 focus:border-primary focus:ring-1 focus:ring-primary outline-none transition-all text-sm" placeholder="Tìm kiếm khóa học, từ vựng..." type="text"/>
+</div>
+</div>
+</div>
+</section>
+<section class="flex flex-col gap-6" id="select">
+<div class="flex flex-col gap-1">
+<h2 class="text-text-main text-2xl font-bold flex items-center gap-2">
+<span class="w-2 h-8 bg-primary rounded-full"></span>
+                    5. Lựa chọn (Select)
+                </h2>
+<p class="text-text-muted">Thành phần dropdown chọn đơn. Mô phỏng trạng thái mở.</p>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-3 gap-8 bg-surface-light p-8 rounded-xl border border-gray-200 shadow-sm items-start">
+<div class="flex flex-col gap-2">
+<label class="text-sm font-medium text-text-main">Trình độ (Default)</label>
+<div class="relative">
+<select class="w-full px-4 py-2.5 rounded-lg border border-gray-300 bg-white focus:border-primary focus:ring-1 focus:ring-primary outline-none appearance-none cursor-pointer text-sm text-text-main">
+<option>Chọn trình độ HSK</option>
+<option>HSK 1 - Sơ cấp</option>
+<option>HSK 2 - Sơ cấp</option>
+</select>
+<span class="material-symbols-outlined absolute right-3 top-3 text-gray-500 pointer-events-none text-[20px]">expand_more</span>
+</div>
+</div>
+<div class="flex flex-col gap-2 relative z-10">
+<label class="text-sm font-medium text-primary">Ngôn ngữ (Open State)</label>
+<div class="relative">
+<div class="w-full px-4 py-2.5 rounded-t-lg border border-primary ring-1 ring-primary bg-white text-sm text-text-main flex justify-between items-center cursor-pointer">
+<span>Tiếng Việt</span>
+<span class="material-symbols-outlined text-primary text-[20px] rotate-180">expand_more</span>
+</div>
+<div class="absolute top-full left-0 w-full bg-white border-x border-b border-gray-200 rounded-b-lg shadow-lg flex flex-col py-1">
+<div class="px-4 py-2 bg-primary/5 text-primary text-sm font-medium cursor-pointer flex justify-between items-center">
+<span>Tiếng Việt</span>
+<span class="material-symbols-outlined text-[16px]">check</span>
+</div>
+<div class="px-4 py-2 hover:bg-gray-50 text-text-main text-sm cursor-pointer">English</div>
+<div class="px-4 py-2 hover:bg-gray-50 text-text-main text-sm cursor-pointer">中文 (Giản thể)</div>
+</div>
+</div>
+</div>
+<div class="flex flex-col gap-2">
+<label class="text-sm font-medium text-gray-400">Thời gian (Disabled)</label>
+<div class="relative">
+<select class="w-full px-4 py-2.5 rounded-lg border border-gray-200 bg-gray-100 text-gray-400 cursor-not-allowed appearance-none text-sm" disabled="">
+<option>Không có sẵn</option>
+</select>
+<span class="material-symbols-outlined absolute right-3 top-3 text-gray-300 pointer-events-none text-[20px]">expand_more</span>
+</div>
+</div>
+</div>
+</section>
+<section class="flex flex-col gap-6" id="checkbox">
+<div class="flex flex-col gap-1">
+<h2 class="text-text-main text-2xl font-bold flex items-center gap-2">
+<span class="w-2 h-8 bg-primary rounded-full"></span>
+                    6. Hộp kiểm (Checkbox)
+                </h2>
+<p class="text-text-muted">Sử dụng cho các lựa chọn đa năng hoặc cài đặt bật/tắt.</p>
+</div>
+<div class="flex flex-wrap gap-8 bg-surface-light p-8 rounded-xl border border-gray-200 shadow-sm items-center">
+<label class="flex items-center gap-3 cursor-pointer group">
+<input class="w-5 h-5 text-primary border-gray-300 rounded focus:ring-primary cursor-pointer" type="checkbox"/>
+<span class="text-sm text-text-main group-hover:text-primary transition-colors">Tôi đồng ý điều khoản</span>
+</label>
+<label class="flex items-center gap-3 cursor-pointer">
+<input checked="" class="w-5 h-5 text-primary border-gray-300 rounded focus:ring-primary cursor-pointer" type="checkbox"/>
+<span class="text-sm text-text-main font-medium">Nhận thông báo</span>
+</label>
+<label class="flex items-center gap-3 cursor-not-allowed">
+<input class="w-5 h-5 text-gray-300 border-gray-200 rounded bg-gray-100 cursor-not-allowed" disabled="" type="checkbox"/>
+<span class="text-sm text-gray-400">Tùy chọn bị khóa</span>
+</label>
+<label class="flex items-center gap-3 cursor-not-allowed">
+<input checked="" class="w-5 h-5 text-gray-400 border-gray-200 rounded bg-gray-100 cursor-not-allowed" disabled="" type="checkbox"/>
+<span class="text-sm text-gray-400">Đã chọn (Khóa)</span>
+</label>
+</div>
+</section>
+<section class="grid grid-cols-1 md:grid-cols-2 gap-8">
+<div class="flex flex-col gap-6" id="menu">
+<div class="flex flex-col gap-1">
+<h2 class="text-text-main text-2xl font-bold flex items-center gap-2">
+<span class="w-2 h-8 bg-primary rounded-full"></span>
+                        7. Menu Dropdown
+                    </h2>
+<p class="text-text-muted">Menu hành động với các mục có icon.</p>
+</div>
+<div class="bg-surface-light p-8 rounded-xl border border-gray-200 shadow-sm h-64 flex justify-center items-start">
+<div class="relative mt-2">
+<button class="flex items-center gap-2 px-4 py-2 bg-gray-100 hover:bg-gray-200 rounded-lg text-sm font-medium transition-colors">
+                            Tài khoản
+                            <span class="material-symbols-outlined text-[18px]">expand_more</span>
+</button>
+<div class="absolute top-full left-0 mt-2 w-56 bg-white rounded-lg shadow-xl border border-gray-100 py-1 z-10">
+<div class="px-4 py-3 border-b border-gray-50">
+<p class="text-sm font-medium">Nguyễn Văn A</p>
+<p class="text-xs text-gray-500">hocvien@example.com</p>
+</div>
+<a class="flex items-center gap-3 px-4 py-2 text-sm text-text-main hover:bg-gray-50 hover:text-primary transition-colors" href="#">
+<span class="material-symbols-outlined text-[18px]">person</span> Hồ sơ
+                            </a>
+<a class="flex items-center gap-3 px-4 py-2 text-sm text-text-main bg-primary/5 text-primary transition-colors" href="#">
+<span class="material-symbols-outlined text-[18px]">settings</span> Cài đặt (Hover)
+                            </a>
+<a class="flex items-center gap-3 px-4 py-2 text-sm text-text-main hover:bg-gray-50 hover:text-primary transition-colors" href="#">
+<span class="material-symbols-outlined text-[18px]">credit_card</span> Thanh toán
+                            </a>
+<div class="h-px bg-gray-100 my-1"></div>
+<a class="flex items-center gap-3 px-4 py-2 text-sm text-red-600 hover:bg-red-50 transition-colors" href="#">
+<span class="material-symbols-outlined text-[18px]">logout</span> Đăng xuất
+                            </a>
+</div>
+</div>
+</div>
+</div>
+<div class="flex flex-col gap-6" id="popover">
+<div class="flex flex-col gap-1">
+<h2 class="text-text-main text-2xl font-bold flex items-center gap-2">
+<span class="w-2 h-8 bg-primary rounded-full"></span>
+                        8. Popover / Tooltip
+                    </h2>
+<p class="text-text-muted">Thông tin bổ sung khi hover hoặc click.</p>
+</div>
+<div class="bg-surface-light p-8 rounded-xl border border-gray-200 shadow-sm h-64 flex justify-center items-center">
+<div class="relative group">
+<span class="text-text-main border-b border-dashed border-primary cursor-help">Lộ trình HSK 3</span>
+<div class="absolute bottom-full left-1/2 transform -translate-x-1/2 mb-2 w-64 bg-gray-900 text-white text-xs rounded-lg py-2 px-3 shadow-xl opacity-100 transition-opacity z-20">
+<div class="font-bold mb-1 text-yellow-400">Thông tin lộ trình</div>
+<p>Bao gồm 600 từ vựng và các cấu trúc ngữ pháp trung cấp. Phù hợp cho người học đã hoàn thành HSK 2.</p>
+<div class="absolute top-full left-1/2 transform -translate-x-1/2 border-8 border-transparent border-t-gray-900"></div>
+</div>
+</div>
+</div>
+</div>
+</section>
+<section class="flex flex-col gap-6" id="cards">
+<div class="flex flex-col gap-1">
+<h2 class="text-text-main text-2xl font-bold flex items-center gap-2">
+<span class="w-2 h-8 bg-primary rounded-full"></span>
+                    9. Thẻ thông tin (Cards)
+                </h2>
+<p class="text-text-muted">Các biến thể thẻ sử dụng cho khóa học và phản hồi.</p>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+<div class="bg-white rounded-xl shadow-card overflow-hidden border border-gray-100 hover:shadow-lg transition-shadow duration-300">
+<div class="h-40 bg-gray-200 relative">
+<div class="absolute top-4 right-4 bg-white/90 backdrop-blur-sm px-2 py-1 rounded text-xs font-bold text-primary shadow-sm">Mới</div>
+<div class="w-full h-full flex items-center justify-center text-gray-400 bg-gray-100">
+<span class="material-symbols-outlined text-4xl">image</span>
+</div>
+</div>
+<div class="p-5 flex flex-col gap-3">
+<div class="flex justify-between items-start">
+<div>
+<span class="text-xs font-bold text-primary uppercase tracking-wide">Sơ cấp</span>
+<h3 class="font-bold text-lg text-text-main mt-1">HSK 1: Nhập môn tiếng Trung</h3>
+</div>
+<div class="flex items-center gap-1 text-yellow-500 text-sm font-bold">
+<span>4.9</span> <span class="material-symbols-outlined text-[16px] symbol-filled">star</span>
+</div>
+</div>
+<p class="text-text-muted text-sm line-clamp-2">Làm quen với Pinyin, thanh điệu và 150 từ vựng cơ bản nhất để giao tiếp hàng ngày.</p>
+<div class="mt-2 pt-4 border-t border-gray-100 flex items-center justify-between">
+<div class="flex items-center gap-2">
+<div class="w-8 h-8 rounded-full bg-gray-200 flex items-center justify-center text-xs font-bold text-gray-600">GV</div>
+<span class="text-sm font-medium text-text-main">Thầy Wang</span>
+</div>
+<button class="text-sm font-bold text-primary hover:text-primary-hover flex items-center gap-1 transition-colors">
+                                Chi tiết <span class="material-symbols-outlined text-[16px]">arrow_forward</span>
+</button>
+</div>
+</div>
+</div>
+<div class="bg-gradient-to-br from-white to-orange-50 rounded-xl shadow-soft p-6 border border-orange-100 flex flex-col justify-between h-full">
+<div class="flex flex-col gap-4">
+<span class="material-symbols-outlined text-4xl text-yellow-400/50">format_quote</span>
+<p class="text-text-main font-medium text-lg italic leading-relaxed">
+                            "Phương pháp học qua thẻ nhớ (Flashcards) của Design System này thực sự hiệu quả. Tôi đã nhớ được 50 từ chỉ trong 2 ngày!"
+                        </p>
+</div>
+<div class="flex items-center gap-4 mt-6">
+<div class="w-12 h-12 rounded-full bg-primary/10 flex items-center justify-center text-primary font-bold text-lg border-2 border-white shadow-sm">
+                            H
+                        </div>
+<div class="flex flex-col">
+<span class="font-bold text-text-main">Hoàng Minh</span>
+<span class="text-xs text-text-muted">Học viên HSK 3</span>
+</div>
+</div>
+</div>
+</div>
+</section>
+<section class="flex flex-col gap-6" id="icons">
+<div class="flex flex-col gap-1">
+<h2 class="text-text-main text-2xl font-bold flex items-center gap-2">
+<span class="w-2 h-8 bg-primary rounded-full"></span>
+                    10. Biểu tượng (Iconography)
+                </h2>
+<p class="text-text-muted">Sử dụng Material Symbols nhất quán cho điều hướng và hành động.</p>
+</div>
+<div class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-8 gap-4">
+<div class="flex flex-col items-center justify-center p-4 bg-surface-light rounded-lg border border-gray-200 hover:border-primary/50 transition-colors aspect-square gap-2">
+<span class="material-symbols-outlined text-primary text-3xl">language</span>
+<span class="text-xs text-text-muted">Ngôn ngữ</span>
+</div>
+<div class="flex flex-col items-center justify-center p-4 bg-surface-light rounded-lg border border-gray-200 hover:border-primary/50 transition-colors aspect-square gap-2">
+<span class="material-symbols-outlined text-text-main text-3xl">translate</span>
+<span class="text-xs text-text-muted">Dịch</span>
+</div>
+<div class="flex flex-col items-center justify-center p-4 bg-surface-light rounded-lg border border-gray-200 hover:border-primary/50 transition-colors aspect-square gap-2">
+<span class="material-symbols-outlined text-text-main text-3xl">school</span>
+<span class="text-xs text-text-muted">Học tập</span>
+</div>
+<div class="flex flex-col items-center justify-center p-4 bg-surface-light rounded-lg border border-gray-200 hover:border-primary/50 transition-colors aspect-square gap-2">
+<span class="material-symbols-outlined text-text-main text-3xl">quiz</span>
+<span class="text-xs text-text-muted">Kiểm tra</span>
+</div>
+<div class="flex flex-col items-center justify-center p-4 bg-surface-light rounded-lg border border-gray-200 hover:border-primary/50 transition-colors aspect-square gap-2">
+<span class="material-symbols-outlined text-text-main text-3xl">arrow_upward</span>
+<span class="text-xs text-text-muted">Lên đầu trang</span>
+</div>
+<div class="flex flex-col items-center justify-center p-4 bg-surface-light rounded-lg border border-gray-200 hover:border-primary/50 transition-colors aspect-square gap-2">
+<span class="material-symbols-outlined text-text-main text-3xl">mail</span>
+<span class="text-xs text-text-muted">Liên hệ</span>
+</div>
+<div class="flex flex-col items-center justify-center p-4 bg-surface-light rounded-lg border border-gray-200 hover:border-primary/50 transition-colors aspect-square gap-2">
+<span class="material-symbols-outlined text-text-main text-3xl">public</span>
+<span class="text-xs text-text-muted">Mạng XH</span>
+</div>
+<div class="flex flex-col items-center justify-center p-4 bg-surface-light rounded-lg border border-gray-200 hover:border-primary/50 transition-colors aspect-square gap-2">
+<span class="material-symbols-outlined text-text-main text-3xl">login</span>
+<span class="text-xs text-text-muted">Đăng nhập</span>
+</div>
+</div>
+</section>
+<section class="flex flex-col gap-6" id="structure">
+<div class="flex flex-col gap-1">
+<h2 class="text-text-main text-2xl font-bold flex items-center gap-2">
+<span class="w-2 h-8 bg-primary rounded-full"></span>
+                    11. Cấu trúc Layout
+                </h2>
+<p class="text-text-muted">Mô phỏng đơn giản hóa của thanh điều hướng và chân trang.</p>
+</div>
+<div class="flex flex-col gap-4">
+<h3 class="text-lg font-semibold text-text-main">Global Header</h3>
+<div class="w-full bg-white rounded-lg border border-gray-200 shadow-sm overflow-hidden">
+<div class="bg-background-dark text-white/80 text-xs px-6 py-2 flex justify-between items-center">
+<div class="flex gap-4">
+<span class="flex items-center gap-1"><span class="material-symbols-outlined text-[14px]">mail</span> support@chineselearning.com</span>
+</div>
+<div class="flex gap-3">
+<span class="material-symbols-outlined text-[14px]">public</span>
+<span class="material-symbols-outlined text-[14px]">share</span>
+</div>
+</div>
+<div class="px-6 py-4 flex flex-col md:flex-row justify-between items-center bg-white gap-4 md:gap-0">
+<div class="flex items-center gap-8 w-full md:w-auto justify-between">
+<div class="flex items-center gap-2">
+<div class="w-8 h-8 rounded bg-primary flex items-center justify-center text-white font-bold text-lg">C</div>
+<span class="font-bold text-xl tracking-tight">Chinese<span class="text-primary">Master</span></span>
+</div>
+<span class="md:hidden material-symbols-outlined">menu</span>
+</div>
+<div class="hidden md:flex gap-6 text-sm font-medium text-text-main">
+<span class="text-primary cursor-pointer border-b-2 border-primary pb-0.5">Trang chủ</span>
+<span class="hover:text-primary cursor-pointer transition-colors">Khóa học</span>
+<span class="hover:text-primary cursor-pointer transition-colors">Giáo viên</span>
+<span class="hover:text-primary cursor-pointer transition-colors">Bảng giá</span>
+</div>
+<div class="hidden md:flex items-center gap-4">
+<button class="flex items-center gap-1 text-sm font-medium hover:text-primary">
+<span class="material-symbols-outlined text-[18px]">language</span>
+                                VI/CN
+                            </button>
+<button class="px-4 py-2 bg-gradient-to-r from-yellow-400 to-primary text-white text-sm font-medium rounded hover:opacity-90 transition-opacity">Bắt đầu học</button>
+</div>
+</div>
+</div>
+</div>
+<div class="flex flex-col gap-4 mt-4">
+<h3 class="text-lg font-semibold text-text-main">Global Footer</h3>
+<div class="w-full bg-background-dark text-white rounded-lg overflow-hidden shadow-sm">
+<div class="p-8 grid grid-cols-1 md:grid-cols-4 gap-8">
+<div class="flex flex-col gap-4">
+<div class="flex items-center gap-2">
+<div class="w-8 h-8 rounded bg-primary flex items-center justify-center text-white font-bold">C</div>
+<span class="font-bold text-xl">ChineseMaster</span>
+</div>
+<p class="text-sm text-gray-400">Làm chủ ngôn ngữ tương lai với nền tảng học tập tiên tiến của chúng tôi.</p>
+<div class="flex gap-3 mt-2">
+<div class="w-8 h-8 rounded-full bg-white/10 flex items-center justify-center hover:bg-primary transition-colors cursor-pointer">
+<span class="material-symbols-outlined text-[16px]">public</span>
+</div>
+<div class="w-8 h-8 rounded-full bg-white/10 flex items-center justify-center hover:bg-primary transition-colors cursor-pointer">
+<span class="material-symbols-outlined text-[16px]">share</span>
+</div>
+</div>
+</div>
+<div class="flex flex-col gap-3">
+<h4 class="font-bold text-sm text-gray-200 uppercase tracking-wider">Học tập</h4>
+<span class="text-sm text-gray-400 hover:text-white cursor-pointer">Khóa học sơ cấp</span>
+<span class="text-sm text-gray-400 hover:text-white cursor-pointer">Luyện thi HSK</span>
+<span class="text-sm text-gray-400 hover:text-white cursor-pointer">Từ vựng</span>
+</div>
+<div class="flex flex-col gap-3">
+<h4 class="font-bold text-sm text-gray-200 uppercase tracking-wider">Công ty</h4>
+<span class="text-sm text-gray-400 hover:text-white cursor-pointer">Về chúng tôi</span>
+<span class="text-sm text-gray-400 hover:text-white cursor-pointer">Tuyển dụng</span>
+<span class="text-sm text-gray-400 hover:text-white cursor-pointer">Liên hệ</span>
+</div>
+<div class="flex flex-col gap-3">
+<h4 class="font-bold text-sm text-gray-200 uppercase tracking-wider">Đăng ký nhận tin</h4>
+<div class="flex gap-2">
+<input class="w-full px-3 py-2 rounded text-black text-sm focus:ring-2 focus:ring-primary focus:outline-none" placeholder="Email của bạn" type="email"/>
+<button class="bg-primary px-3 py-2 rounded hover:bg-primary-hover transition-colors">
+<span class="material-symbols-outlined text-white">arrow_forward</span>
+</button>
+</div>
+</div>
+</div>
+<div class="border-t border-white/10 p-4 flex flex-col md:flex-row justify-between items-center text-xs text-gray-500 gap-2 md:gap-0">
+<span>© 2023 ChineseMaster. All rights reserved.</span>
+<div class="flex gap-4">
+<span>Chính sách bảo mật</span>
+<span>Điều khoản dịch vụ</span>
+</div>
+</div>
+</div>
+</div>
+</section>
+<div class="mt-10 py-6 border-t border-gray-200 text-center text-text-muted text-sm">
+            Design System v2.1.0 • Lưu hành nội bộ
+        </div>
+</div>
+</main>
+<div class="fixed bottom-8 right-8 z-50">
+<button class="bg-primary text-white w-12 h-12 rounded-full shadow-lg flex items-center justify-center hover:bg-primary-hover transition-all hover:-translate-y-1">
+<span class="material-symbols-outlined">arrow_upward</span>
+</button>
+</div>
+
+</body></html>

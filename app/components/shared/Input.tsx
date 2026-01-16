@@ -1,47 +1,103 @@
-import { InputHTMLAttributes, forwardRef } from "react";
+"use client";
+
+import { InputHTMLAttributes, forwardRef, ReactNode } from "react";
+import { Search, X } from "lucide-react";
 
 interface InputProps extends InputHTMLAttributes<HTMLInputElement> {
   label?: string;
-  icon?: string;
+  icon?: ReactNode;
   error?: string;
+  helperText?: string;
+  inputSize?: "sm" | "md" | "lg";
+  variant?: "default" | "search";
 }
 
 const Input = forwardRef<HTMLInputElement, InputProps>(
-  ({ label, icon, error, required, className = "", id, ...props }, ref) => {
+  (
+    {
+      label,
+      icon,
+      error,
+      helperText,
+      required,
+      disabled,
+      readOnly,
+      inputSize = "md",
+      variant = "default",
+      className = "",
+      id,
+      ...props
+    },
+    ref
+  ) => {
     const inputId = id || props.name;
+
+    // Size classes
+    const sizeClasses = {
+      sm: "px-3 py-2 text-xs",
+      md: "px-4 py-3 text-sm",
+      lg: "px-5 py-3.5 text-base",
+    };
+
+    // Base classes
+    const baseClasses =
+      "block w-full rounded-xl border-2 font-medium transition-all outline-none";
+
+    // State classes
+    const stateClasses = error
+      ? "border-error-500 bg-error-50/30 text-error-900 placeholder:text-error-400 focus:border-error-600 focus:ring-4 focus:ring-error-100"
+      : disabled
+      ? "border-gray-200 bg-gray-50 text-gray-400 cursor-not-allowed"
+      : readOnly
+      ? "border-gray-200 bg-gray-50 text-gray-700 cursor-default"
+      : "border-gray-200 bg-white text-gray-900 placeholder:text-gray-400 hover:border-primary-300 focus:border-primary-500 focus:ring-4 focus:ring-primary-100";
 
     return (
       <div className="w-full">
         {label && (
           <label
             htmlFor={inputId}
-            className="block text-sm font-semibold leading-6 text-gray-900 dark:text-white mb-2"
+            className="flex items-center gap-1 text-xs font-bold text-gray-700 mb-2"
           >
-            {label} {required && <span className="text-red-500">*</span>}
+            {label}
+            {required && <span className="text-error-500">*</span>}
           </label>
         )}
         <div className="relative">
           {icon && (
-            <div className="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
-              <span className="material-symbols-outlined text-gray-400 text-[20px]">
-                {icon}
-              </span>
+            <div className="absolute inset-y-0 left-0 flex items-center pl-4 pointer-events-none text-gray-400">
+              {icon}
+            </div>
+          )}
+          {variant === "search" && !icon && (
+            <div className="absolute inset-y-0 left-0 flex items-center pl-4 pointer-events-none text-gray-400">
+              <Search className="w-5 h-5" />
             </div>
           )}
           <input
             ref={ref}
             id={inputId}
             required={required}
-            className={`block w-full rounded-lg ${
-              icon ? "pl-10" : "pl-3"
-            } py-2.5 pr-3 text-gray-900 shadow-sm border border-gray-300 placeholder:text-gray-400 focus:border-red-500 focus:ring-2 focus:ring-red-500/20 dark:bg-background-dark dark:border-gray-600 dark:text-white dark:placeholder-gray-500 dark:focus:border-red-500 sm:text-sm sm:leading-6 transition-all outline-none ${className}`}
+            disabled={disabled}
+            readOnly={readOnly}
+            className={`
+              ${baseClasses}
+              ${sizeClasses[inputSize]}
+              ${stateClasses}
+              ${icon || variant === "search" ? "pl-12" : ""}
+              ${className}
+            `}
             {...props}
           />
         </div>
         {error && (
-          <p className="mt-1 text-sm text-red-600 dark:text-red-400">
+          <p className="mt-1.5 text-xs font-medium text-error-600 flex items-center gap-1">
+            <span className="w-1 h-1 bg-error-600 rounded-full"></span>
             {error}
           </p>
+        )}
+        {helperText && !error && (
+          <p className="mt-1.5 text-xs text-gray-500">{helperText}</p>
         )}
       </div>
     );

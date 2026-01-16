@@ -1,54 +1,190 @@
-import { SelectHTMLAttributes, forwardRef } from "react";
+"use client";
 
-interface SelectProps extends SelectHTMLAttributes<HTMLSelectElement> {
-  label?: string;
-  error?: string;
-  options?: { value: string; label: string }[];
+import { useState, useRef, useEffect, ReactNode } from "react";
+import { ChevronDown, ChevronUp, Check } from "lucide-react";
+
+interface SelectOption {
+  value: string;
+  label: string;
+  disabled?: boolean;
 }
 
-const Select = forwardRef<HTMLSelectElement, SelectProps>(
-  (
-    { label, error, required, className = "", id, children, options, ...props },
-    ref
-  ) => {
-    const selectId = id || props.name;
+interface SelectProps {
+  label?: string;
+  error?: string;
+  helperText?: string;
+  options?: SelectOption[];
+  icon?: ReactNode;
+  selectSize?: "sm" | "md" | "lg";
+  required?: boolean;
+  disabled?: boolean;
+  className?: string;
+  value?: string;
+  defaultValue?: string;
+  onChange?: (value: string) => void;
+  placeholder?: string;
+}
 
-    return (
-      <div className="w-full">
-        {label && (
-          <label
-            htmlFor={selectId}
-            className="block text-sm font-semibold leading-6 text-gray-900 dark:text-white mb-2"
-          >
-            {label} {required && <span className="text-red-500">*</span>}
-          </label>
-        )}
-        <div className="relative">
-          <select
-            ref={ref}
-            id={selectId}
-            required={required}
-            className={`block w-full rounded-lg py-2.5 pl-3 pr-10 text-gray-900 shadow-sm border border-gray-300 focus:border-red-500 focus:ring-2 focus:ring-red-500/20 dark:bg-background-dark dark:border-gray-600 dark:text-white dark:focus:border-red-500 sm:text-sm sm:leading-6 cursor-pointer transition-all outline-none appearance-none bg-[url('data:image/svg+xml;charset=UTF-8,%3csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%2224%22%20height%3D%2224%22%20viewBox%3D%220%200%2024%2024%22%20fill%3D%22none%22%20stroke%3D%22%23666%22%20stroke-width%3D%222%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%3E%3cpolyline%20points%3D%226%209%2012%2015%2018%209%22%3E%3c%2Fpolyline%3E%3c%2Fsvg%3E')] bg-[length:20px] bg-[right_0.5rem_center] bg-no-repeat ${className}`}
-            {...props}
-          >
-            {options
-              ? options.map((option) => (
-                  <option key={option.value} value={option.value}>
-                    {option.label}
-                  </option>
-                ))
-              : children}
-          </select>
-        </div>
-        {error && (
-          <p className="mt-1 text-sm text-red-600 dark:text-red-400">
-            {error}
-          </p>
+const Select = ({
+  label,
+  error,
+  helperText,
+  required,
+  disabled,
+  className = "",
+  options = [],
+  icon,
+  selectSize = "md",
+  value: controlledValue,
+  defaultValue = "",
+  onChange,
+  placeholder = "Chọn...",
+}: SelectProps) => {
+  const [isOpen, setIsOpen] = useState(false);
+  const [selectedValue, setSelectedValue] = useState(controlledValue || defaultValue);
+  const dropdownRef = useRef<HTMLDivElement>(null);
+
+  const currentValue = controlledValue !== undefined ? controlledValue : selectedValue;
+  const selectedOption = options.find((opt) => opt.value === currentValue);
+
+  // Size classes
+  const sizeClasses = {
+    sm: "px-3 py-2 text-xs",
+    md: "px-4 py-3 text-sm",
+    lg: "px-5 py-3.5 text-base",
+  };
+
+  // Base classes
+  const baseClasses =
+    "w-full rounded-xl border-2 font-medium transition-all outline-none cursor-pointer flex items-center justify-between";
+
+  // State classes
+  const stateClasses = error
+    ? "border-error-500 bg-error-50/30 text-error-900 focus:border-error-600 focus:ring-4 focus:ring-error-100"
+    : disabled
+    ? "border-gray-200 bg-gray-50 text-gray-400 cursor-not-allowed"
+    : isOpen
+    ? "border-primary-500 ring-4 ring-primary-100"
+    : "border-gray-200 bg-white text-gray-900 hover:border-primary-300";
+
+  // Close dropdown when clicking outside
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
+        setIsOpen(false);
+      }
+    };
+
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, []);
+
+  const handleSelect = (optionValue: string) => {
+    if (disabled) return;
+    
+    setSelectedValue(optionValue);
+    onChange?.(optionValue);
+    setIsOpen(false);
+  };
+
+  const handleToggle = () => {
+    if (!disabled) {
+      setIsOpen(!isOpen);
+    }
+  };
+
+  return (
+    <div className="w-full">
+      {label && (
+        <label className="flex items-center gap-1 text-xs font-bold text-gray-700 mb-2">
+          {label}
+          {required && <span className="text-error-500">*</span>}
+        </label>
+      )}
+      <div className="relative" ref={dropdownRef}>
+        <button
+          type="button"
+          onClick={handleToggle}
+          disabled={disabled}
+          className={`
+            ${baseClasses}
+            ${sizeClasses[selectSize]}
+            ${stateClasses}
+            ${icon ? "pl-12" : ""}
+            pr-12
+            ${className}
+          `}
+        >
+          {icon && (
+            <div className="absolute inset-y-0 left-0 flex items-center pl-4 pointer-events-none text-gray-400">
+              {icon}
+            </div>
+          )}
+          <span className={selectedOption ? "" : "text-gray-400"}>
+            {selectedOption?.label || placeholder}
+          </span>
+          <div className="absolute inset-y-0 right-0 flex items-center pr-4 pointer-events-none">
+            {isOpen ? (
+              <ChevronUp
+                className={`w-5 h-5 transition-colors ${
+                  error ? "text-error-500" : disabled ? "text-gray-300" : "text-primary-500"
+                }`}
+              />
+            ) : (
+              <ChevronDown
+                className={`w-5 h-5 transition-colors ${
+                  error ? "text-error-500" : disabled ? "text-gray-300" : "text-gray-400"
+                }`}
+              />
+            )}
+          </div>
+        </button>
+
+        {/* Dropdown Menu */}
+        {isOpen && !disabled && (
+          <div className="absolute z-50 w-full mt-2 bg-white border-2 border-primary-500 rounded-xl shadow-2xl overflow-hidden">
+            <div className="max-h-60 overflow-y-auto">
+              {options.map((option) => {
+                const isSelected = option.value === currentValue;
+                return (
+                  <button
+                    key={option.value}
+                    type="button"
+                    onClick={() => !option.disabled && handleSelect(option.value)}
+                    disabled={option.disabled}
+                    className={`
+                      w-full px-4 py-3 text-left text-sm font-medium transition-all flex items-center justify-between
+                      ${
+                        option.disabled
+                          ? "text-gray-300 cursor-not-allowed bg-gray-50"
+                          : isSelected
+                          ? "bg-primary-50 text-primary-600 font-bold"
+                          : "text-gray-700 hover:bg-primary-50 hover:text-primary-600"
+                      }
+                      ${!isSelected && !option.disabled ? "cursor-pointer" : ""}
+                    `}
+                  >
+                    <span>{option.label}</span>
+                    {isSelected && <Check className="w-5 h-5 text-primary-500" />}
+                  </button>
+                );
+              })}
+            </div>
+          </div>
         )}
       </div>
-    );
-  }
-);
+      {error && (
+        <p className="mt-1.5 text-xs font-medium text-error-600 flex items-center gap-1">
+          <span className="w-1 h-1 bg-error-600 rounded-full"></span>
+          {error}
+        </p>
+      )}
+      {helperText && !error && (
+        <p className="mt-1.5 text-xs text-gray-500">{helperText}</p>
+      )}
+    </div>
+  );
+};
 
 Select.displayName = "Select";
 

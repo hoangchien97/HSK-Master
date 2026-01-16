@@ -1,24 +1,66 @@
+"use client";
+
 import Link from "next/link";
+import { ChevronLeft, ChevronRight } from "lucide-react";
 
 interface PaginationProps {
   currentPage: number;
   totalPages: number;
-  totalItems: number;
-  itemsPerPage: number;
-  currentItemsCount: number;
+  totalItems?: number;
+  itemsPerPage?: number;
+  currentItemsCount?: number;
   basePath?: string;
+  size?: "sm" | "md" | "lg";
+  shape?: "rounded" | "pill" | "square";
+  showInfo?: boolean;
+  onPageChange?: (page: number) => void;
 }
 
 export default function Pagination({
   currentPage,
   totalPages,
   totalItems,
-  itemsPerPage,
   currentItemsCount,
   basePath = "",
+  size = "md",
+  shape = "rounded",
+  showInfo = false,
+  onPageChange,
 }: PaginationProps) {
   const hasNextPage = currentPage < totalPages;
   const hasPrevPage = currentPage > 1;
+
+  // Size configurations
+  const sizeConfig = {
+    sm: {
+      button: "size-8 text-xs",
+      gap: "gap-1",
+    },
+    md: {
+      button: "size-10 text-sm",
+      gap: "gap-2",
+    },
+    lg: {
+      button: "size-12 text-base",
+      gap: "gap-3",
+    },
+  };
+
+  // Shape configurations
+  const shapeConfig = {
+    rounded: "rounded-xl",
+    pill: "rounded-full",
+    square: "rounded-md",
+  };
+
+  const config = sizeConfig[size];
+  const shapeClass = shapeConfig[shape];
+
+  const handlePageClick = (page: number) => {
+    if (onPageChange) {
+      onPageChange(page);
+    }
+  };
 
   const buildPageUrl = (page: number) => {
     return `${basePath}?page=${page}`;
@@ -27,22 +69,41 @@ export default function Pagination({
   if (totalPages <= 1) return null;
 
   return (
-    <div className="mt-10 flex flex-col items-center gap-6">
-      <div className="flex items-center gap-2">
+    <div className={`flex flex-col items-center ${config.gap}`}>
+      <div className={`flex items-center ${config.gap}`}>
         {/* Previous Button */}
-        <Link
-          href={hasPrevPage ? buildPageUrl(currentPage - 1) : "#"}
-          className={`inline-flex items-center justify-center size-10 rounded-lg border transition-colors ${
-            hasPrevPage
-              ? "border-border-light dark:border-border-dark hover:bg-gray-50 dark:hover:bg-gray-800 text-text-main-light dark:text-white"
-              : "border-gray-200 dark:border-gray-700 text-gray-400 dark:text-gray-600 cursor-not-allowed pointer-events-none"
-          }`}
-          aria-disabled={!hasPrevPage}
-        >
-          <span className="material-symbols-outlined text-[20px]">
-            chevron_left
-          </span>
-        </Link>
+        {onPageChange ? (
+          <button
+            onClick={() => handlePageClick(currentPage - 1)}
+            disabled={!hasPrevPage}
+            className={`
+              inline-flex items-center justify-center ${config.button} ${shapeClass}
+              border-2 font-bold transition-all
+              ${
+                hasPrevPage
+                  ? "border-gray-200 hover:border-primary-300 hover:bg-primary-50 text-gray-700"
+                  : "border-gray-100 text-gray-300 cursor-not-allowed"
+              }
+            `}
+          >
+            <ChevronLeft className="w-4 h-4" />
+          </button>
+        ) : (
+          <Link
+            href={hasPrevPage ? buildPageUrl(currentPage - 1) : "#"}
+            className={`
+              inline-flex items-center justify-center ${config.button} ${shapeClass}
+              border-2 font-bold transition-all
+              ${
+                hasPrevPage
+                  ? "border-gray-200 hover:border-primary-300 hover:bg-primary-50 text-gray-700"
+                  : "border-gray-100 text-gray-300 cursor-not-allowed pointer-events-none"
+              }
+            `}
+          >
+            <ChevronLeft className="w-4 h-4" />
+          </Link>
+        )}
 
         {/* Page Numbers */}
         {Array.from({ length: totalPages }, (_, i) => i + 1).map((pageNum) => {
@@ -58,10 +119,7 @@ export default function Pagination({
 
           if (showEllipsis) {
             return (
-              <span
-                key={pageNum}
-                className="px-2 text-text-secondary-light dark:text-text-secondary-dark"
-              >
+              <span key={pageNum} className="px-2 text-gray-400 font-bold">
                 ...
               </span>
             );
@@ -69,49 +127,79 @@ export default function Pagination({
 
           if (!showPage) return null;
 
-          return (
-            <Link
-              key={pageNum}
-              href={buildPageUrl(pageNum)}
-              className={`inline-flex items-center justify-center size-10 rounded-lg font-bold transition-all ${
-                pageNum === currentPage
-                  ? "bg-gradient-to-br from-red-500 via-orange-500 to-red-600 text-white shadow-lg shadow-red-500/50 dark:shadow-red-900/50 scale-110 ring-2 ring-red-300 dark:ring-red-800"
-                  : "border border-border-light dark:border-border-dark hover:bg-gradient-to-br hover:from-red-50 hover:to-orange-50 dark:hover:from-red-950/30 dark:hover:to-orange-950/30 hover:border-red-300 dark:hover:border-red-700 text-text-main-light dark:text-white"
-              }`}
+          const isActive = pageNum === currentPage;
+
+          const pageButton = (
+            <span
+              className={`
+                inline-flex items-center justify-center ${config.button} ${shapeClass}
+                font-bold transition-all
+                ${
+                  isActive
+                    ? "bg-primary-500 text-white shadow-lg shadow-primary-500/30 scale-110 border-2 border-primary-600"
+                    : "border-2 border-gray-200 hover:border-primary-300 hover:bg-primary-50 text-gray-700"
+                }
+              `}
             >
               {pageNum}
+            </span>
+          );
+
+          return onPageChange ? (
+            <button key={pageNum} onClick={() => handlePageClick(pageNum)}>
+              {pageButton}
+            </button>
+          ) : (
+            <Link key={pageNum} href={buildPageUrl(pageNum)}>
+              {pageButton}
             </Link>
           );
         })}
 
         {/* Next Button */}
-        <Link
-          href={hasNextPage ? buildPageUrl(currentPage + 1) : "#"}
-          className={`inline-flex items-center justify-center size-10 rounded-lg border transition-colors ${
-            hasNextPage
-              ? "border-border-light dark:border-border-dark hover:bg-gray-50 dark:hover:bg-gray-800 text-text-main-light dark:text-white"
-              : "border-gray-200 dark:border-gray-700 text-gray-400 dark:text-gray-600 cursor-not-allowed pointer-events-none"
-          }`}
-          aria-disabled={!hasNextPage}
-        >
-          <span className="material-symbols-outlined text-[20px]">
-            chevron_right
-          </span>
-        </Link>
+        {onPageChange ? (
+          <button
+            onClick={() => handlePageClick(currentPage + 1)}
+            disabled={!hasNextPage}
+            className={`
+              inline-flex items-center justify-center ${config.button} ${shapeClass}
+              border-2 font-bold transition-all
+              ${
+                hasNextPage
+                  ? "border-gray-200 hover:border-primary-300 hover:bg-primary-50 text-gray-700"
+                  : "border-gray-100 text-gray-300 cursor-not-allowed"
+              }
+            `}
+          >
+            <ChevronRight className="w-4 h-4" />
+          </button>
+        ) : (
+          <Link
+            href={hasNextPage ? buildPageUrl(currentPage + 1) : "#"}
+            className={`
+              inline-flex items-center justify-center ${config.button} ${shapeClass}
+              border-2 font-bold transition-all
+              ${
+                hasNextPage
+                  ? "border-gray-200 hover:border-primary-300 hover:bg-primary-50 text-gray-700"
+                  : "border-gray-100 text-gray-300 cursor-not-allowed pointer-events-none"
+              }
+            `}
+          >
+            <ChevronRight className="w-4 h-4" />
+          </Link>
+        )}
       </div>
 
       {/* Page Info */}
-      <p className="text-sm text-text-secondary-light dark:text-text-secondary-dark">
-        Trang{" "}
-        <span className="font-medium text-text-main-light dark:text-white">
-          {currentPage}
-        </span>{" "}
-        /{" "}
-        <span className="font-medium text-text-main-light dark:text-white">
-          {totalPages}
-        </span>{" "}
-        • Hiển thị {currentItemsCount} trong tổng số {totalItems} khóa học
-      </p>
+      {showInfo && totalItems && (
+        <p className="text-sm text-gray-500">
+          Trang <span className="font-bold text-gray-900">{currentPage}</span> /{" "}
+          <span className="font-bold text-gray-900">{totalPages}</span> •{" "}
+          {currentItemsCount && `Hiển thị ${currentItemsCount} trong `}tổng số{" "}
+          {totalItems}
+        </p>
+      )}
     </div>
   );
 }

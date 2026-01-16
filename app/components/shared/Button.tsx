@@ -1,87 +1,156 @@
-import React from 'react';
+import React from "react";
+import LoadingSpinner from "./LoadingSpinner";
 
-export type ButtonVariant = 'primary' | 'secondary' | 'ghost' | 'gradient' | 'white' | 'outline-white' | 'glass';
-export type ButtonSize = 'sm' | 'md' | 'lg';
+export type ButtonVariant =
+  | "primary"
+  | "secondary"
+  | "outline"
+  | "ghost"
+  | "gradient"
+  | "icon-only";
+export type ButtonSize = "sm" | "md" | "lg";
 
-export interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
+export interface ButtonProps
+  extends React.ButtonHTMLAttributes<HTMLButtonElement> {
   variant?: ButtonVariant;
   size?: ButtonSize;
   icon?: React.ReactNode;
-  iconPosition?: 'left' | 'right';
+  iconPosition?: "left" | "right";
   fullWidth?: boolean;
   children?: React.ReactNode;
+  loading?: boolean;
+  badge?: string | number;
+  "aria-label"?: string;
 }
 
 const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
   (
     {
-      variant = 'primary',
-      size = 'md',
+      variant = "primary",
+      size = "md",
       icon,
-      iconPosition = 'right',
+      iconPosition = "right",
       fullWidth = false,
-      className = '',
+      className = "",
       disabled = false,
+      loading = false,
+      badge,
       children,
+      "aria-label": ariaLabel,
       ...props
     },
     ref
   ) => {
-    // Base styles
-    const baseStyles = 'inline-flex items-center justify-center gap-2 rounded-lg font-medium transition-all focus:outline-none focus:ring-2 focus:ring-offset-2';
+    // Validate icon-only variant
+    if (variant === "icon-only" && !ariaLabel) {
+      console.warn(
+        'Button with variant="icon-only" should have an aria-label for accessibility'
+      );
+    }
 
-    // Variant styles
+    // Base styles with focus ring support
+    const baseStyles =
+      "inline-flex items-center justify-center gap-2 font-semibold transition-all duration-200 focus:outline-none focus-visible:ring-4 active:scale-[0.98] disabled:pointer-events-none disabled:opacity-50";
+
+    // Variant styles with all states
     const variantStyles = {
-      primary: disabled
-        ? 'bg-primary text-white opacity-50 cursor-not-allowed'
-        : 'bg-primary hover:bg-primary-hover text-white focus:ring-primary',
-      secondary: disabled
-        ? 'bg-white border border-gray-200 text-gray-300 cursor-not-allowed'
-        : 'bg-white border border-gray-300 hover:border-primary hover:text-primary text-text-main focus:ring-primary',
-      ghost: disabled
-        ? 'text-gray-300 cursor-not-allowed'
-        : 'text-text-main hover:text-primary hover:bg-primary/5 focus:ring-primary',
-      gradient: disabled
-        ? 'bg-gradient-to-r from-yellow-400 to-red-600 text-white opacity-50 cursor-not-allowed'
-        : 'bg-gradient-to-r from-yellow-400 to-red-600 hover:opacity-90 hover:shadow-lg text-white focus:ring-primary',
-      white: disabled
-        ? 'bg-white text-red-600 opacity-50 cursor-not-allowed'
-        : 'bg-white text-red-600 hover:bg-gray-50 hover:shadow-xl shadow-lg focus:ring-white font-bold',
-      'outline-white': disabled
-        ? 'bg-transparent border-2 border-white/30 text-white/50 cursor-not-allowed'
-        : 'bg-transparent border-2 border-white/50 text-white hover:bg-white/10 hover:border-white focus:ring-white font-bold',
-      glass: disabled
-        ? 'bg-black/30 text-white/50 cursor-not-allowed border border-white/10'
-        : 'bg-black/50 hover:bg-black/70 border border-white/20 text-white backdrop-blur-sm hover:scale-105 active:scale-95 transform-gpu transition-all duration-300 focus:ring-primary',
+      primary:
+        "bg-primary-500 text-white shadow-sm " +
+        "hover:bg-primary-600 hover:shadow-md " +
+        "active:bg-primary-700 " +
+        "focus-visible:ring-primary-200",
+
+      secondary:
+        "bg-white border-2 border-gray-300 text-gray-700 shadow-sm " +
+        "hover:border-primary-500 hover:text-primary-600 hover:bg-primary-50 " +
+        "active:border-primary-600 active:bg-primary-100 " +
+        "focus-visible:ring-primary-200",
+
+      outline:
+        "bg-transparent border-2 border-primary-500 text-primary-600 " +
+        "hover:bg-primary-50 " +
+        "active:bg-primary-100 " +
+        "focus-visible:ring-primary-200",
+
+      ghost:
+        "bg-transparent text-gray-700 " +
+        "hover:bg-gray-100 hover:text-gray-900 " +
+        "active:bg-gray-200 " +
+        "focus-visible:ring-gray-200",
+
+      gradient:
+        "bg-gradient-to-r from-yellow-400 to-primary-600 text-white shadow-md " +
+        "hover:from-yellow-300 hover:to-primary-700 hover:shadow-lg hover:scale-[1.02] " +
+        "active:from-yellow-500 active:to-primary-800 " +
+        "focus-visible:ring-yellow-200",
+
+      "icon-only":
+        "bg-transparent text-gray-700 rounded-full " +
+        "hover:bg-gray-100 hover:text-gray-900 " +
+        "active:bg-gray-200 " +
+        "focus-visible:ring-gray-200",
     };
 
     // Size styles
     const sizeStyles = {
-      sm: 'px-3 py-1.5 text-sm',
-      md: 'px-6 py-3 text-base',
-      lg: 'px-8 py-4 text-lg',
+      sm:
+        variant === "icon-only"
+          ? "p-1.5 text-sm"
+          : "px-3 py-1.5 text-sm rounded-lg",
+      md:
+        variant === "icon-only"
+          ? "p-2 text-base"
+          : "px-6 py-2.5 text-base rounded-xl",
+      lg:
+        variant === "icon-only"
+          ? "p-3 text-lg"
+          : "px-8 py-3.5 text-lg rounded-xl",
     };
 
     // Width styles
-    const widthStyles = fullWidth ? 'w-full' : 'w-auto';
+    const widthStyles = fullWidth ? "w-full" : "w-auto";
+
+    // Show loading spinner on left if loading, otherwise show icon if provided
+    const leftContent =
+      loading && iconPosition === "left" ? (
+        <LoadingSpinner />
+      ) : icon && iconPosition === "left" ? (
+        <span className="flex items-center shrink-0">{icon}</span>
+      ) : null;
+
+    // For icon-only variant
+    const iconOnlyContent = loading ? <LoadingSpinner /> : icon;
 
     return (
       <button
         ref={ref}
-        disabled={disabled}
+        disabled={disabled || loading}
+        aria-label={ariaLabel}
         className={`${baseStyles} ${variantStyles[variant]} ${sizeStyles[size]} ${widthStyles} ${className}`}
         {...props}
       >
-        {icon && iconPosition === 'left' && <span className="flex items-center flex-shrink-0">{icon}</span>}
-        {
-          children && <span className={icon ? '' : 'flex items-center'}>{children}</span>
-        }
-        {icon && iconPosition === 'right' && <span className="flex items-center flex-shrink-0">{icon}</span>}
+        {variant === "icon-only" ? (
+          iconOnlyContent
+        ) : (
+          <>
+            {leftContent}
+            {children && <span className="flex items-center">{children}</span>}
+            {badge && (
+              <span className="ml-1 px-2 py-0.5 text-xs font-bold bg-white/20 rounded-full">
+                {badge}
+              </span>
+            )}
+            {icon && iconPosition === "right" && !loading && (
+              <span className="flex items-center shrink-0">{icon}</span>
+            )}
+            {loading && iconPosition === "right" && <LoadingSpinner />}
+          </>
+        )}
       </button>
     );
   }
 );
 
-Button.displayName = 'Button';
+Button.displayName = "Button";
 
 export default Button;

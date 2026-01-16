@@ -1,0 +1,543 @@
+<html class="light" lang="vi"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Hệ thống thiết kế HSK Master Ultimate (Bản Full Chi tiết)</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&amp;family=Noto+Sans+SC:wght@300;400;500;700&amp;family=Fira+Code:wght@400;500&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script src="https://unpkg.com/lucide@latest"></script>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": {
+                            50: '#fff1f2', 100: '#ffe4e6', 200: '#fecdd3', 300: '#fda4af',
+                            400: '#fb7185', 500: '#ec131e', 600: '#e11d48', 700: '#be123c',
+                            800: '#9f1239', 900: '#881337', 950: '#4c0519',
+                        },
+                        "success": { 50: '#f0fdf4', 100: '#dcfce7', 200: '#bbf7d0', 300: '#86efac', 400: '#4ade80', 500: '#10b981', 600: '#059669', 700: '#047857', 800: '#065f46', 900: '#064e3b', 950: '#052e16' },
+                        "warning": { 50: '#fffbeb', 100: '#fef3c7', 200: '#fde68a', 300: '#fcd34d', 400: '#fbbf24', 500: '#f59e0b', 600: '#d97706', 700: '#b45309', 800: '#92400e', 900: '#78350f', 950: '#451a03' },
+                        "error": { 50: '#fef2f2', 100: '#fee2e2', 200: '#fecaca', 300: '#fca5a5', 400: '#f87171', 500: '#ef4444', 600: '#dc2626', 700: '#b91c1c', 800: '#991b1b', 900: '#7f1d1d', 950: '#450a0a' },
+                        "info": { 50: '#eff6ff', 100: '#dbeafe', 200: '#bfdbfe', 300: '#93c5fd', 400: '#60a5fa', 500: '#3b82f6', 600: '#2563eb', 700: '#1d4ed8', 800: '#1e40af', 900: '#1e3a8a', 950: '#172554' },
+                        "secondary": { 50: '#fffbeb', 100: '#fef3c7', 200: '#fde68a', 300: '#fcd34d', 400: '#facc15', 500: '#eab308', 600: '#ca8a04', 700: '#a16207', 800: '#854d0e', 900: '#713f12' },
+                        "sidebar-bg": "#fcfcfc",
+                        "sidebar-text": "#5b4e4e",
+                    },
+                    fontFamily: {
+                        "display": ["Inter", "Noto Sans SC", "sans-serif"],
+                        "body": ["Inter", "Noto Sans SC", "sans-serif"],
+                        "mono": ["Fira Code", "monospace"],
+                    },
+                    boxShadow: {
+                        'soft': '0 2px 8px -2px rgba(0, 0, 0, 0.05), 0 1px 4px -1px rgba(0, 0, 0, 0.03)',
+                        'card': '0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06)',
+                        'elevated': '0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05)',
+                        'floating': '0 8px 30px rgba(0,0,0,0.1)'
+                    }
+                },
+            },
+        }
+    </script>
+<style type="text/tailwindcss">
+        @layer utilities {
+            .gradient-text {
+                background: linear-gradient(90deg, #F59E0B 0%, #EC131E 100%);
+                -webkit-background-clip: text;
+                -webkit-text-fill-color: transparent;
+            }
+            .sidebar-item-active {
+                @apply bg-blue-50 text-blue-600 border-l-4 border-blue-500 font-bold;
+            }
+            .sidebar-item-hover {
+                @apply hover:bg-gray-100 transition-colors cursor-pointer;
+            }
+            .section-header-gradient {
+                @apply border-l-4 border-primary-500 pl-4 py-1;
+            }
+            .no-scrollbar::-webkit-scrollbar { display: none; }
+            .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+        }
+    </style>
+</head>
+<body class="bg-gray-50 text-gray-900 font-display antialiased min-h-screen" x-data="{ activeSection: 'colors' }">
+<header class="lg:hidden bg-white border-b border-gray-200 sticky top-0 z-[100] px-6 h-16 flex items-center justify-between">
+<div class="flex items-center gap-3">
+<div class="bg-primary-500 p-1.5 rounded-lg text-white">
+<i class="w-5 h-5" data-lucide="graduation-cap"></i>
+</div>
+<h1 class="text-lg font-black tracking-tight">HSK Master</h1>
+</div>
+<button class="p-2"><i class="w-6 h-6" data-lucide="menu"></i></button>
+</header>
+<div class="flex">
+<aside class="hidden lg:flex flex-col w-72 h-screen sticky top-0 bg-sidebar-bg border-r border-gray-100 overflow-y-auto no-scrollbar">
+<div class="p-8 pb-4">
+<div class="flex items-center gap-3 mb-8">
+<div class="bg-primary-500 p-2 rounded-xl text-white shadow-lg shadow-primary-100">
+<i class="w-6 h-6" data-lucide="graduation-cap"></i>
+</div>
+<div>
+<h1 class="text-xl font-black tracking-tight">HSK Master</h1>
+<p class="text-[10px] font-bold text-gray-400 uppercase tracking-widest">Ultimate DS v4.0</p>
+</div>
+</div>
+<div class="space-y-8">
+<div>
+<h3 class="text-[11px] font-black text-sidebar-text/50 uppercase tracking-[0.2em] mb-4">Nền tảng (Foundation)</h3>
+<ul class="space-y-1">
+<li>
+<button :class="activeSection === 'colors' ? 'sidebar-item-active' : 'text-sidebar-text'" @click="activeSection = 'colors'" class="w-full flex items-center gap-3 px-3 py-2.5 rounded-r-lg text-sm sidebar-item-hover">
+<i class="w-4 h-4" data-lucide="palette"></i> Màu sắc
+                                </button>
+</li>
+<li>
+<button :class="activeSection === 'typography' ? 'sidebar-item-active' : 'text-sidebar-text'" @click="activeSection = 'typography'" class="w-full flex items-center gap-3 px-3 py-2.5 rounded-r-lg text-sm sidebar-item-hover">
+<i class="w-4 h-4" data-lucide="type"></i> Typography
+                                </button>
+</li>
+<li>
+<button :class="activeSection === 'icons' ? 'sidebar-item-active' : 'text-sidebar-text'" @click="activeSection = 'icons'" class="w-full flex items-center gap-3 px-3 py-2.5 rounded-r-lg text-sm sidebar-item-hover">
+<i class="w-4 h-4" data-lucide="feather"></i> Icons
+                                </button>
+</li>
+</ul>
+</div>
+<div>
+<h3 class="text-[11px] font-black text-sidebar-text/50 uppercase tracking-[0.2em] mb-4">Components</h3>
+<ul class="space-y-1">
+<li>
+<button :class="activeSection === 'buttons' ? 'sidebar-item-active' : 'text-sidebar-text'" @click="activeSection = 'buttons'" class="w-full flex items-center gap-3 px-3 py-2.5 rounded-r-lg text-sm sidebar-item-hover">
+<i class="w-4 h-4" data-lucide="mouse-pointer-2"></i> Buttons
+                                </button>
+</li>
+<li>
+<button :class="activeSection === 'inputs' ? 'sidebar-item-active' : 'text-sidebar-text'" @click="activeSection = 'inputs'" class="w-full flex items-center gap-3 px-3 py-2.5 rounded-r-lg text-sm sidebar-item-hover">
+<i class="w-4 h-4" data-lucide="text-cursor-input"></i> Input &amp; Form
+                                </button>
+</li>
+<li>
+<button :class="activeSection === 'select' ? 'sidebar-item-active' : 'text-sidebar-text'" @click="activeSection = 'select'" class="w-full flex items-center gap-3 px-3 py-2.5 rounded-r-lg text-sm sidebar-item-hover">
+<i class="w-4 h-4" data-lucide="list-filter"></i> Select &amp; Menu
+                                </button>
+</li>
+<li>
+<button :class="activeSection === 'popover' ? 'sidebar-item-active' : 'text-sidebar-text'" @click="activeSection = 'popover'" class="w-full flex items-center gap-3 px-3 py-2.5 rounded-r-lg text-sm sidebar-item-hover">
+<i class="w-4 h-4" data-lucide="message-square"></i> Popover
+                                </button>
+</li>
+<li>
+<button :class="activeSection === 'cards' ? 'sidebar-item-active' : 'text-sidebar-text'" @click="activeSection = 'cards'" class="w-full flex items-center gap-3 px-3 py-2.5 rounded-r-lg text-sm sidebar-item-hover">
+<i class="w-4 h-4" data-lucide="layout-grid"></i> Cards
+                                </button>
+</li>
+<li>
+<button :class="activeSection === 'nav' ? 'sidebar-item-active' : 'text-sidebar-text'" @click="activeSection = 'nav'" class="w-full flex items-center gap-3 px-3 py-2.5 rounded-r-lg text-sm sidebar-item-hover">
+<i class="w-4 h-4" data-lucide="layers"></i> Header &amp; Footer
+                                </button>
+</li>
+</ul>
+</div>
+</div>
+</div>
+<div class="mt-auto p-8">
+<div class="bg-gray-100 p-4 rounded-2xl">
+<p class="text-[10px] font-bold text-gray-400 uppercase mb-2">Trạng thái hệ thống</p>
+<div class="flex items-center gap-2">
+<span class="w-2 h-2 bg-green-500 rounded-full animate-pulse"></span>
+<span class="text-xs font-bold">Hoạt động ổn định</span>
+</div>
+</div>
+</div>
+</aside>
+<main class="flex-1 min-w-0 bg-white min-h-screen">
+<div class="px-8 lg:px-12 py-6 border-b border-gray-50 flex items-center justify-between sticky top-0 bg-white/80 backdrop-blur-md z-50">
+<nav class="flex items-center gap-2 text-xs font-medium text-gray-400">
+<span>Design System</span>
+<i class="w-3 h-3" data-lucide="chevron-right"></i>
+<span class="text-primary-600 font-bold uppercase tracking-widest" x-text="activeSection"></span>
+</nav>
+<div class="flex gap-4">
+<button class="flex items-center gap-2 px-4 py-2 bg-gray-100 text-gray-600 rounded-xl text-xs font-bold hover:bg-gray-200 transition-all"><i class="w-3.5 h-3.5" data-lucide="search"></i> Tìm kiếm</button>
+<button class="flex items-center gap-2 px-4 py-2 bg-primary-500 text-white rounded-xl text-xs font-bold hover:bg-primary-600 shadow-md transition-all shadow-primary-100"><i class="w-3.5 h-3.5" data-lucide="download"></i> Export Figma</button>
+</div>
+</div>
+<div class="p-8 lg:p-12 max-w-6xl mx-auto space-y-20">
+<section class="pb-12 border-b border-gray-100">
+<div class="inline-flex items-center gap-2 text-primary-600 font-bold text-[10px] bg-primary-50 px-3 py-1 rounded-full mb-6 uppercase tracking-[0.2em]">
+                        Documentation Full v4.0
+                    </div>
+<h1 class="text-5xl lg:text-7xl font-black tracking-tighter mb-6 leading-[1.1]">Tài liệu <br/><span class="gradient-text">HSK Master Ultimate</span></h1>
+<p class="text-xl text-gray-500 max-w-3xl leading-relaxed">Hệ thống thiết kế toàn diện nhất cho HSK Master, tích hợp cấu trúc Sidebar điều hướng và các thành phần giao diện chi tiết cho nền tảng giáo dục tiếng Trung cao cấp.</p>
+</section>
+<section class="space-y-10" id="colors" x-show="activeSection === 'colors' || true">
+<div class="section-header-gradient">
+<h2 class="text-3xl font-black tracking-tight">Bảng Màu Hệ Thống</h2>
+<p class="text-gray-500 mt-1">Dải màu 50-950 được tối ưu hóa cho độ tương phản và khả năng tiếp cận.</p>
+</div>
+<div class="grid grid-cols-1 gap-12">
+<div class="bg-white p-8 rounded-3xl shadow-soft border border-gray-100">
+<h3 class="text-sm font-black text-gray-400 uppercase tracking-widest mb-6">Primary - Imperial Red (#EC131E)</h3>
+<div class="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-11 gap-4">
+<template x-for="[i, hex] in [['50','#fff1f2'],['100','#ffe4e6'],['200','#fecdd3'],['300','#fda4af'],['400','#fb7185'],['500','#ec131e'],['600','#e11d48'],['700','#be123c'],['800','#9f1239'],['900','#881337'],['950','#4c0519']]">
+<div class="flex flex-col gap-2">
+<div :class="'h-16 w-full rounded-2xl shadow-sm bg-primary-'+i"></div>
+<div>
+<p class="text-[10px] font-black text-gray-900" x-text="i"></p>
+<p class="text-[9px] font-mono text-gray-400 uppercase" x-text="hex"></p>
+</div>
+</div>
+</template>
+</div>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+<div class="bg-white p-8 rounded-3xl shadow-soft border border-gray-100">
+<h3 class="text-sm font-black text-success-600 uppercase tracking-widest mb-6">Success - Green</h3>
+<div class="grid grid-cols-5 gap-2">
+<div class="h-12 rounded-lg bg-success-50"></div>
+<div class="h-12 rounded-lg bg-success-200"></div>
+<div class="h-12 rounded-lg bg-success-500"></div>
+<div class="h-12 rounded-lg bg-success-700"></div>
+<div class="h-12 rounded-lg bg-success-950"></div>
+</div>
+<div class="mt-4 flex justify-between text-[10px] font-mono text-gray-400"><span>50</span><span>950</span></div>
+</div>
+<div class="bg-white p-8 rounded-3xl shadow-soft border border-gray-100">
+<h3 class="text-sm font-black text-warning-600 uppercase tracking-widest mb-6">Warning - Amber</h3>
+<div class="grid grid-cols-5 gap-2">
+<div class="h-12 rounded-lg bg-warning-50"></div>
+<div class="h-12 rounded-lg bg-warning-200"></div>
+<div class="h-12 rounded-lg bg-warning-500"></div>
+<div class="h-12 rounded-lg bg-warning-700"></div>
+<div class="h-12 rounded-lg bg-warning-950"></div>
+</div>
+<div class="mt-4 flex justify-between text-[10px] font-mono text-gray-400"><span>50</span><span>950</span></div>
+</div>
+<div class="bg-white p-8 rounded-3xl shadow-soft border border-gray-100">
+<h3 class="text-sm font-black text-error-600 uppercase tracking-widest mb-6">Error - Red</h3>
+<div class="grid grid-cols-5 gap-2">
+<div class="h-12 rounded-lg bg-error-50"></div>
+<div class="h-12 rounded-lg bg-error-200"></div>
+<div class="h-12 rounded-lg bg-error-500"></div>
+<div class="h-12 rounded-lg bg-error-700"></div>
+<div class="h-12 rounded-lg bg-error-950"></div>
+</div>
+<div class="mt-4 flex justify-between text-[10px] font-mono text-gray-400"><span>50</span><span>950</span></div>
+</div>
+<div class="bg-white p-8 rounded-3xl shadow-soft border border-gray-100">
+<h3 class="text-sm font-black text-info-600 uppercase tracking-widest mb-6">Info - Blue</h3>
+<div class="grid grid-cols-5 gap-2">
+<div class="h-12 rounded-lg bg-info-50"></div>
+<div class="h-12 rounded-lg bg-info-200"></div>
+<div class="h-12 rounded-lg bg-info-500"></div>
+<div class="h-12 rounded-lg bg-info-700"></div>
+<div class="h-12 rounded-lg bg-info-950"></div>
+</div>
+<div class="mt-4 flex justify-between text-[10px] font-mono text-gray-400"><span>50</span><span>950</span></div>
+</div>
+</div>
+</div>
+</section>
+<section class="space-y-10" id="buttons">
+<div class="section-header-gradient">
+<h2 class="text-3xl font-black tracking-tight">Buttons (Ma trận nút bấm)</h2>
+<p class="text-gray-500 mt-1">Đầy đủ các trạng thái tương tác và biến thể phong cách.</p>
+</div>
+<div class="bg-white p-8 rounded-3xl shadow-soft border border-gray-100 overflow-x-auto">
+<table class="w-full">
+<thead>
+<tr class="text-left text-[10px] font-bold text-gray-400 uppercase tracking-widest">
+<th class="pb-8 pr-6">Loại / Trạng thái</th>
+<th class="pb-8 px-4">Default</th>
+<th class="pb-8 px-4">Hover</th>
+<th class="pb-8 px-4">Focus</th>
+<th class="pb-8 px-4">Active</th>
+<th class="pb-8 px-4">Disabled</th>
+<th class="pb-8 px-4">Loading</th>
+</tr>
+</thead>
+<tbody class="divide-y divide-gray-50">
+<tr class="group">
+<td class="py-6 pr-6"><span class="text-xs font-black text-gray-500">Primary Gradient</span></td>
+<td class="px-4"><button class="px-6 py-2.5 bg-gradient-to-r from-primary-500 to-primary-600 text-white rounded-xl font-bold text-sm shadow-md">Button</button></td>
+<td class="px-4"><button class="px-6 py-2.5 bg-gradient-to-r from-primary-600 to-primary-700 text-white rounded-xl font-bold text-sm shadow-lg -translate-y-0.5 transition-all">Button</button></td>
+<td class="px-4"><button class="px-6 py-2.5 bg-gradient-to-r from-primary-500 to-primary-600 text-white rounded-xl font-bold text-sm ring-4 ring-primary-100">Button</button></td>
+<td class="px-4"><button class="px-6 py-2.5 bg-gradient-to-r from-primary-700 to-primary-800 text-white rounded-xl font-bold text-sm scale-95 transition-all">Button</button></td>
+<td class="px-4"><button class="px-6 py-2.5 bg-gray-200 text-gray-400 rounded-xl font-bold text-sm cursor-not-allowed">Button</button></td>
+<td class="px-4"><button class="px-6 py-2.5 bg-primary-500 text-white rounded-xl font-bold text-sm flex items-center gap-2"><i class="w-4 h-4 animate-spin" data-lucide="loader-2"></i></button></td>
+</tr>
+<tr class="group">
+<td class="py-6 pr-6"><span class="text-xs font-black text-gray-500">Outline</span></td>
+<td class="px-4"><button class="px-6 py-2.5 border-2 border-gray-200 text-gray-700 rounded-xl font-bold text-sm">Action</button></td>
+<td class="px-4"><button class="px-6 py-2.5 border-2 border-primary-500 text-primary-600 rounded-xl bg-primary-50/50 font-bold text-sm">Action</button></td>
+<td class="px-4"><button class="px-6 py-2.5 border-2 border-gray-900 text-gray-900 rounded-xl font-bold text-sm ring-4 ring-gray-100">Action</button></td>
+<td class="px-4"><button class="px-6 py-2.5 border-2 border-primary-700 text-primary-700 rounded-xl bg-primary-100 font-bold text-sm">Action</button></td>
+<td class="px-4"><button class="px-6 py-2.5 border-2 border-gray-100 text-gray-300 rounded-xl font-bold text-sm cursor-not-allowed">Action</button></td>
+<td class="px-4"><button class="px-6 py-2.5 border-2 border-red-500 text-red-500 rounded-xl font-bold text-sm flex items-center gap-2"><i class="w-4 h-4" data-lucide="alert-circle"></i> Error</button></td>
+</tr>
+<tr class="group">
+<td class="py-6 pr-6"><span class="text-xs font-black text-gray-500">Ghost</span></td>
+<td class="px-4"><button class="px-6 py-2.5 text-gray-500 rounded-xl font-bold text-sm hover:bg-gray-100">Ghost</button></td>
+<td class="px-4"><button class="px-6 py-2.5 text-primary-600 bg-primary-50 rounded-xl font-bold text-sm">Ghost</button></td>
+<td class="px-4"><button class="px-6 py-2.5 text-gray-900 bg-gray-100 rounded-xl font-bold text-sm ring-4 ring-gray-200">Ghost</button></td>
+<td class="px-4"><button class="px-6 py-2.5 text-gray-900 bg-gray-200 rounded-xl font-bold text-sm">Ghost</button></td>
+<td class="px-4"><button class="px-6 py-2.5 text-gray-300 rounded-xl font-bold text-sm cursor-not-allowed">Ghost</button></td>
+<td class="px-4"><button class="px-6 py-2.5 text-red-500 bg-red-50 rounded-xl font-bold text-sm">Ghost</button></td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+<section class="space-y-10" id="inputs">
+<div class="section-header-gradient">
+<h2 class="text-3xl font-black tracking-tight">Input &amp; Form States</h2>
+<p class="text-gray-500 mt-1">Trình bày chi tiết các trạng thái tương tác của người dùng.</p>
+</div>
+<div class="grid grid-cols-1 lg:grid-cols-2 gap-10">
+<div class="bg-white p-8 rounded-3xl shadow-soft border border-gray-100 space-y-6">
+<h3 class="text-sm font-black text-gray-400 uppercase tracking-widest mb-4">Input &amp; Search Tags</h3>
+<div class="space-y-4">
+<label class="text-xs font-bold text-gray-700">Tìm kiếm với tags</label>
+<div class="flex flex-wrap items-center gap-2 p-3 border-2 border-primary-500 rounded-2xl bg-white shadow-xl">
+<i class="w-5 h-5 text-gray-400 ml-1" data-lucide="search"></i>
+<div class="bg-primary-500 text-white flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-bold">
+                                        HSK 5 <button><i class="w-3 h-3" data-lucide="x"></i></button>
+</div>
+<div class="bg-primary-500 text-white flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-bold">
+                                        Từ vựng <button><i class="w-3 h-3" data-lucide="x"></i></button>
+</div>
+<input class="flex-1 min-w-[120px] border-none focus:ring-0 text-sm py-1" placeholder="Tìm kiếm tiếp..." type="text"/>
+<button class="text-xs font-bold text-red-500 px-3 py-1.5 hover:bg-red-50 rounded-xl transition-colors">Xóa hết</button>
+</div>
+</div>
+<div class="space-y-4 pt-4">
+<div class="space-y-1.5">
+<label class="text-xs font-bold text-error-500 flex items-center gap-1"><i class="w-3 h-3" data-lucide="alert-circle"></i> Error State</label>
+<input class="w-full px-4 py-3 rounded-xl border-2 border-error-500 bg-error-50/30 focus:ring-0 text-sm" type="text" value="email@invalid"/>
+</div>
+<div class="space-y-1.5">
+<label class="text-xs font-bold text-gray-400">Disabled State</label>
+<input class="w-full px-4 py-3 rounded-xl border border-gray-100 bg-gray-50 cursor-not-allowed text-sm" disabled="" placeholder="Không thể chỉnh sửa" type="text"/>
+</div>
+</div>
+</div>
+<div class="bg-white p-8 rounded-3xl shadow-soft border border-gray-100 space-y-8">
+<h3 class="text-sm font-black text-gray-400 uppercase tracking-widest mb-4">Toggles &amp; Selection</h3>
+<div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
+<div class="space-y-4">
+<p class="text-[10px] font-black text-gray-400 uppercase">Checkbox &amp; Radio</p>
+<label class="flex items-center gap-3 p-3 border-2 border-primary-500 bg-primary-50 rounded-xl cursor-pointer">
+<input checked="" class="w-5 h-5 rounded border-primary-500 text-primary-500 focus:ring-0" type="checkbox"/>
+<span class="text-sm font-bold text-primary-700">Checked</span>
+</label>
+<div class="flex flex-col gap-3">
+<label class="flex items-center gap-3 cursor-pointer"><input checked="" class="w-5 h-5 border-gray-300 text-primary-500 focus:ring-0" name="r1" type="radio"/><span class="text-sm font-medium">Lựa chọn A</span></label>
+<label class="flex items-center gap-3 cursor-pointer"><input class="w-5 h-5 border-gray-300 text-primary-500 focus:ring-0" name="r1" type="radio"/><span class="text-sm font-medium">Lựa chọn B</span></label>
+</div>
+</div>
+<div class="space-y-4">
+<p class="text-[10px] font-black text-gray-400 uppercase">Switches</p>
+<div class="flex items-center justify-between p-3 bg-gray-50 rounded-xl">
+<span class="text-xs font-bold">Thông báo</span>
+<div class="w-10 h-5 bg-primary-500 rounded-full relative cursor-pointer"><div class="absolute right-0.5 top-0.5 w-4 h-4 bg-white rounded-full"></div></div>
+</div>
+<div class="flex items-center justify-between p-3 bg-gray-100 rounded-xl">
+<span class="text-xs font-bold text-gray-400">Dark Mode</span>
+<div class="w-10 h-5 bg-gray-300 rounded-full relative cursor-pointer"><div class="absolute left-0.5 top-0.5 w-4 h-4 bg-white rounded-full"></div></div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</section>
+<section class="space-y-10" id="select">
+<div class="section-header-gradient">
+<h2 class="text-3xl font-black tracking-tight">Select &amp; Popover</h2>
+<p class="text-gray-500 mt-1">Giao diện dropdown và các thành phần hỗ trợ thông tin.</p>
+</div>
+<div class="grid grid-cols-1 lg:grid-cols-2 gap-10">
+<div class="bg-white p-8 rounded-3xl shadow-soft border border-gray-100 min-h-[400px]">
+<h3 class="text-sm font-black text-gray-400 uppercase tracking-widest mb-6">Dropdown Menu (Open State)</h3>
+<div class="relative z-10 max-w-xs">
+<div class="w-full px-4 py-3 rounded-t-2xl border-2 border-primary-500 bg-white flex items-center justify-between shadow-lg">
+<div class="flex items-center gap-2 font-bold text-sm"><i class="w-4 h-4 text-primary-500" data-lucide="book-open"></i> HSK Level 4</div>
+<i class="w-4 h-4 text-primary-500" data-lucide="chevron-up"></i>
+</div>
+<div class="absolute w-full top-full left-0 bg-white border-2 border-t-0 border-primary-500 rounded-b-2xl shadow-2xl overflow-hidden divide-y divide-gray-50">
+<div class="px-4 py-3 hover:bg-primary-50 flex items-center justify-between cursor-pointer group">
+<span class="text-sm font-medium group-hover:text-primary-600 transition-colors">HSK Level 1</span>
+<span class="text-[9px] bg-gray-100 px-2 py-0.5 rounded text-gray-500 font-bold uppercase">150 từ</span>
+</div>
+<div class="px-4 py-3 bg-primary-500 text-white flex items-center justify-between cursor-pointer">
+<span class="text-sm font-bold">HSK Level 4</span>
+<i class="w-4 h-4" data-lucide="check"></i>
+</div>
+<div class="px-4 py-3 hover:bg-primary-50 flex items-center justify-between cursor-pointer group">
+<span class="text-sm font-medium group-hover:text-primary-600 transition-colors">HSK Level 6</span>
+<span class="text-[9px] bg-warning-100 text-warning-700 px-2 py-0.5 rounded font-black uppercase">Expert</span>
+</div>
+</div>
+</div>
+</div>
+<div class="space-y-6">
+<div class="bg-white p-8 rounded-3xl shadow-soft border border-gray-100 relative">
+<h3 class="text-sm font-black text-gray-400 uppercase tracking-widest mb-6">Feedback Helpers</h3>
+<div class="space-y-4">
+<div class="p-4 bg-info-50 border-2 border-info-200 rounded-2xl flex gap-3 shadow-sm">
+<i class="w-5 h-5 text-info-500 mt-0.5 flex-shrink-0" data-lucide="info"></i>
+<div>
+<p class="text-sm text-info-700 font-bold mb-1">Hướng dẫn nhanh</p>
+<p class="text-xs text-info-600 leading-relaxed">Nhấn vào thẻ từ vựng để xem cách phát âm và ví dụ thực tế.</p>
+</div>
+</div>
+<div class="p-4 bg-success-50 border-2 border-success-200 rounded-2xl flex gap-3 shadow-sm">
+<i class="w-5 h-5 text-success-500 mt-0.5 flex-shrink-0" data-lucide="check-circle-2"></i>
+<div>
+<p class="text-sm text-success-700 font-bold mb-1">Đã lưu thành công</p>
+<p class="text-xs text-success-600 leading-relaxed">Tiến độ học tập của bạn đã được đồng bộ hóa với hệ thống.</p>
+</div>
+</div>
+</div>
+</div>
+<div class="bg-white p-6 rounded-3xl shadow-soft border border-gray-100">
+<h3 class="text-[10px] font-black text-gray-400 uppercase tracking-widest mb-4">Complex Pagination</h3>
+<div class="flex items-center gap-2">
+<button class="w-9 h-9 flex items-center justify-center rounded-xl bg-gray-100 text-gray-400 hover:bg-gray-200 transition-all"><i class="w-4 h-4" data-lucide="chevron-left"></i></button>
+<button class="w-9 h-9 flex items-center justify-center rounded-xl bg-white border border-gray-200 text-xs font-bold hover:border-primary-500 transition-all">1</button>
+<span class="px-1 text-gray-300">...</span>
+<button class="w-9 h-9 flex items-center justify-center rounded-xl bg-gradient-to-br from-primary-500 to-primary-600 text-white text-xs font-bold shadow-lg shadow-primary-100">4</button>
+<button class="w-9 h-9 flex items-center justify-center rounded-xl bg-white border border-gray-200 text-xs font-bold hover:border-primary-500 transition-all">5</button>
+<button class="w-9 h-9 flex items-center justify-center rounded-xl bg-white border border-gray-200 text-xs font-bold hover:border-primary-500 transition-all">6</button>
+<span class="px-1 text-gray-300">...</span>
+<button class="w-9 h-9 flex items-center justify-center rounded-xl bg-white border border-gray-200 text-xs font-bold hover:border-primary-500 transition-all">12</button>
+<button class="w-9 h-9 flex items-center justify-center rounded-xl bg-gray-100 text-gray-400 hover:bg-gray-200 transition-all"><i class="w-4 h-4" data-lucide="chevron-right"></i></button>
+</div>
+</div>
+</div>
+</div>
+</section>
+<section class="space-y-10" id="cards">
+<div class="section-header-gradient">
+<h2 class="text-3xl font-black tracking-tight">Cards &amp; Education Roadmap</h2>
+<p class="text-gray-500 mt-1">Các loại thẻ học tập và lộ trình chinh phục HSK.</p>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+<div class="bg-white border border-gray-100 rounded-3xl shadow-soft overflow-hidden group cursor-pointer hover:shadow-elevated transition-all duration-500">
+<div class="relative h-48 overflow-hidden">
+<img class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCG_GAavvBpZsj2vrHCRJgMndA8CFwOZkFSV_sXTCmkb_-XCeAIOWu0TfVipYy7WHkVzSD_pyW2Wk88BrN8AkD7KwR0ZLFMHE5VI2Wa92fzdCvTm49iO4ISIbKHHzViTPibpS3QEVD9fYI7AwEiPgiaOGrzihfFyteTm0fTwxEt2fe6LEFQl7jpVewjnt2DsCVGsM7I7FxC6LN8rTMySWbokXAskPUXC3boPocWgHJ7MA7SyD2DjR6chL3Dg5xYhwWwREqU2N5jOqZy"/>
+<div class="absolute top-4 right-4 bg-white/90 backdrop-blur-sm px-3 py-1.5 rounded-xl text-xs font-bold text-primary-600 flex items-center gap-1 shadow-sm"><i class="w-3 h-3 fill-primary-500" data-lucide="star"></i> 4.9 (1.2k)</div>
+<div class="absolute bottom-4 left-4 flex gap-2">
+<span class="px-3 py-1 bg-primary-600 text-white text-[10px] font-black rounded-lg uppercase tracking-wider">HSK 1-2</span>
+</div>
+</div>
+<div class="p-6">
+<h5 class="text-lg font-black text-gray-900 leading-tight mb-4 group-hover:text-primary-600 transition-colors">Tiếng Trung Căn Bản</h5>
+<div class="flex items-center justify-between text-xs text-gray-500 font-bold border-t border-gray-50 pt-4">
+<div class="flex items-center gap-1.5"><i class="w-4 h-4 text-primary-500" data-lucide="book"></i> 42 Bài</div>
+<div class="flex items-center gap-1.5"><i class="w-4 h-4 text-primary-500" data-lucide="clock"></i> 18 Giờ</div>
+</div>
+</div>
+</div>
+<div class="bg-gradient-to-br from-gray-900 to-black p-8 rounded-3xl shadow-2xl flex flex-col justify-between">
+<div class="flex justify-between items-start">
+<div class="bg-white/10 p-3 rounded-2xl backdrop-blur-md">
+<i class="w-6 h-6 text-white" data-lucide="trending-up"></i>
+</div>
+<span class="text-[10px] font-black text-white/50 uppercase tracking-[0.2em]">Tiến độ học</span>
+</div>
+<div>
+<h4 class="text-4xl font-black text-white mb-1">84%</h4>
+<p class="text-sm text-white/60">Bạn đã hoàn thành HSK 3</p>
+<div class="mt-4 h-2 bg-white/10 rounded-full overflow-hidden">
+<div class="h-full bg-primary-500 w-[84%] rounded-full shadow-[0_0_15px_rgba(236,19,30,0.5)]"></div>
+</div>
+</div>
+</div>
+<div class="bg-blue-600 p-8 rounded-3xl shadow-xl shadow-blue-100 flex flex-col justify-between text-white relative overflow-hidden group">
+<div class="absolute -right-10 -bottom-10 opacity-10 group-hover:scale-125 transition-transform duration-700">
+<i class="w-48 h-48" data-lucide="award"></i>
+</div>
+<div class="relative z-10">
+<h4 class="text-2xl font-black mb-4">Premium Membership</h4>
+<p class="text-sm text-blue-100 leading-relaxed mb-8">Mở khóa toàn bộ 5000+ từ vựng và các bài thi thử HSK độc quyền.</p>
+<button class="bg-white text-blue-600 px-6 py-2.5 rounded-xl font-black text-xs uppercase tracking-widest shadow-lg">Nâng cấp ngay</button>
+</div>
+</div>
+</div>
+</section>
+<section class="space-y-10" id="helpers">
+<div class="section-header-gradient">
+<h2 class="text-3xl font-black tracking-tight">UX Helpers &amp; Skeleton</h2>
+<p class="text-gray-500 mt-1">Các thành phần hỗ trợ trải nghiệm người dùng tinh tế.</p>
+</div>
+<div class="bg-white p-8 rounded-3xl shadow-soft border border-gray-100">
+<div class="grid grid-cols-1 md:grid-cols-2 gap-12">
+<div class="space-y-8">
+<h3 class="text-xs font-black text-gray-400 uppercase tracking-widest">Avatar &amp; Badges</h3>
+<div class="flex flex-wrap items-end gap-6">
+<div class="relative">
+<img class="w-20 h-20 rounded-3xl object-cover ring-4 ring-primary-50 shadow-lg" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCcY34V3pg-e1pKiSvos-UNKsbj0ryGPFK5M4V6DGrgTJRj5Y5PKfGIThlyNh0OWrJUyr2a-3IdKW331yai8hd60Q-i_gmXlXIL8RwsRopM7n-lRAIv2MjgZ2DTr9Ji147Of9ASgJcaY-Fp_fr3nvKFP7unLdt2Ub1LcA0a3txmrdHAFPajAENdYJs4txHJW_9dAiJtgW09f0hX8QwByCpGAomWK13qbHT03Go-oX6QQQIu39tYoQ0w7IFUcqTYV5Uof7pWwxib1zOk"/>
+<span class="absolute -bottom-1 -right-1 w-6 h-6 bg-green-500 border-4 border-white rounded-full"></span>
+</div>
+<div class="relative">
+<div class="w-12 h-12 rounded-full bg-blue-100 flex items-center justify-center text-blue-600 font-black text-sm">JD</div>
+<span class="absolute bottom-0 right-0 w-3.5 h-3.5 bg-warning-500 border-2 border-white rounded-full"></span>
+</div>
+<div class="flex gap-2">
+<span class="px-2 py-1 bg-primary-100 text-primary-700 rounded-lg text-[9px] font-black uppercase tracking-widest">Mới</span>
+<span class="px-2 py-1 bg-purple-100 text-purple-700 rounded-lg text-[9px] font-black uppercase tracking-widest">Premium</span>
+</div>
+</div>
+</div>
+<div class="space-y-8">
+<h3 class="text-xs font-black text-gray-400 uppercase tracking-widest">Loading Skeletons</h3>
+<div class="space-y-4">
+<div class="flex items-center gap-4 animate-pulse">
+<div class="w-12 h-12 bg-gray-100 rounded-2xl"></div>
+<div class="flex-1 space-y-2">
+<div class="h-3 w-3/4 bg-gray-100 rounded-full"></div>
+<div class="h-2 w-1/2 bg-gray-50 rounded-full"></div>
+</div>
+</div>
+<div class="h-32 bg-gray-50/50 border border-gray-100 rounded-2xl flex items-center justify-center">
+<div class="w-8 h-8 border-4 border-primary-500 border-t-transparent rounded-full animate-spin"></div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</section>
+</div>
+<footer class="mt-20 py-20 bg-gray-50 border-t border-gray-200">
+<div class="max-w-6xl mx-auto px-8 lg:px-12 flex flex-col items-center text-center">
+<div class="bg-primary-500 p-3 rounded-2xl text-white shadow-xl shadow-primary-100 mb-8">
+<i class="w-8 h-8" data-lucide="graduation-cap"></i>
+</div>
+<h2 class="text-3xl font-black tracking-tight mb-4">HSK Master Ultimate</h2>
+<p class="text-gray-500 max-w-lg mb-10 leading-relaxed font-medium">Hệ thống thiết kế chuẩn hóa cho trải nghiệm học tập ngôn ngữ hiện đại, tinh tế và tập trung.</p>
+<div class="flex gap-4 mb-12">
+<a class="w-12 h-12 bg-white rounded-2xl shadow-soft flex items-center justify-center text-gray-400 hover:text-primary-500 hover:-translate-y-1 transition-all" href="#"><i data-lucide="github"></i></a>
+<a class="w-12 h-12 bg-white rounded-2xl shadow-soft flex items-center justify-center text-gray-400 hover:text-primary-500 hover:-translate-y-1 transition-all" href="#"><i data-lucide="figma"></i></a>
+<a class="w-12 h-12 bg-white rounded-2xl shadow-soft flex items-center justify-center text-gray-400 hover:text-primary-500 hover:-translate-y-1 transition-all" href="#"><i data-lucide="twitter"></i></a>
+</div>
+<div class="text-[10px] font-black text-gray-400 uppercase tracking-[0.3em]">
+                        © 2024 HSK Master Design System • All Rights Reserved
+                    </div>
+</div>
+</footer>
+</main>
+</div>
+<div class="fixed bottom-8 right-8 z-[200]">
+<button class="bg-white text-gray-900 border border-gray-200 p-4 rounded-2xl shadow-2xl hover:bg-gray-50 transition-all hover:-translate-y-1" onclick="window.scrollTo({top: 0, behavior: 'smooth'})">
+<i class="w-6 h-6" data-lucide="arrow-up"></i>
+</button>
+</div>
+<script defer="" src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+<script>
+        document.addEventListener('DOMContentLoaded', () => {
+            lucide.createIcons();
+        });
+    </script>
+
+</body></html>

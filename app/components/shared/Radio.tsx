@@ -2,20 +2,20 @@
 
 import { InputHTMLAttributes, forwardRef } from "react";
 
-interface CheckboxProps extends InputHTMLAttributes<HTMLInputElement> {
+interface RadioProps extends InputHTMLAttributes<HTMLInputElement> {
   label?: string;
   description?: string;
   error?: string;
-  checkboxSize?: "sm" | "md" | "lg";
+  radioSize?: "sm" | "md" | "lg";
 }
 
-export const Checkbox = forwardRef<HTMLInputElement, CheckboxProps>(
+export const Radio = forwardRef<HTMLInputElement, RadioProps>(
   (
     {
       label,
       description,
       error,
-      checkboxSize = "md",
+      radioSize = "md",
       className = "",
       disabled,
       ...props
@@ -38,12 +38,12 @@ export const Checkbox = forwardRef<HTMLInputElement, CheckboxProps>(
         >
           <input
             ref={ref}
-            type="checkbox"
+            type="radio"
             disabled={disabled}
             className={`
-              ${sizeClasses[checkboxSize]}
+              ${sizeClasses[radioSize]}
               mt-0.5
-              rounded-md border-2
+              border-2
               transition-all
               accent-primary-500
               ${
@@ -94,4 +94,4 @@ export const Checkbox = forwardRef<HTMLInputElement, CheckboxProps>(
   }
 );
 
-Checkbox.displayName = "Checkbox";
+Radio.displayName = "Radio";
