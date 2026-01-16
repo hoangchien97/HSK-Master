@@ -44,12 +44,12 @@ Completely rebuilt with a sidebar navigation system:
    - Complete primary color scale (50-950)
    - Semantic color palettes (Success, Warning, Error, Info)
    - Visual color swatches with hex codes
-   
+
    **✅ Typography**
    - Font family documentation
    - Type scale showcase (Display, H1, H2, H3, Body, Caption)
    - Chinese character support demo
-   
+
    **✅ Icons**
    - Lucide React integration guide
    - Visual icon grid with 14+ icons
@@ -62,35 +62,35 @@ Completely rebuilt with a sidebar navigation system:
    - State demonstrations (default, hover, focus, active, disabled, loading)
    - Content composition examples
    - Usage code examples with syntax highlighting
-   
+
    **✅ Inputs (COMPLETED)**
    - Input states: Default, Focus, Error, Disabled
    - Textarea component
    - Input with icon (search)
    - Input with tags (tag management)
    - Error states with validation messages
-   
+
    **✅ Checkbox, Radio & Switches (COMPLETED)**
    - Checkbox states: Checked, Unchecked, Disabled
    - Multiple selection examples
    - Radio button groups with descriptions
    - Toggle switches: ON, OFF, Disabled states
    - Card-style selection components
-   
+
    **✅ Select & Dropdown (COMPLETED)**
    - Dropdown open/closed states
    - Selected state styling
    - Menu items with badges
    - Error and disabled states
    - Hover interactions
-   
+
    **✅ Pagination (COMPLETED)**
    - Basic numbered pagination
    - Pagination with ellipsis (many pages)
    - Simple prev/next pagination
    - Pagination with results info
    - Various button styles and states
-   
+
    **🚧 Other Components (TODO)**
    - Popover
    - Cards
@@ -195,9 +195,9 @@ interface ButtonProps {
 </Button>
 
 // Icon only with accessibility
-<Button 
-  variant="icon-only" 
-  icon={<Settings />} 
+<Button
+  variant="icon-only"
+  icon={<Settings />}
   aria-label="Settings"
 />
 

@@ -81,7 +81,7 @@ const Select = ({
 
   const handleSelect = (optionValue: string) => {
     if (disabled) return;
-    
+
     setSelectedValue(optionValue);
     onChange?.(optionValue);
     setIsOpen(false);

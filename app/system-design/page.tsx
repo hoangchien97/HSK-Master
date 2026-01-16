@@ -2,12 +2,12 @@
 
 import { useState } from 'react';
 import { Button, Input, Select, Checkbox, Radio, Switch, Pagination } from "../components/shared";
-import { 
-  Palette, 
-  Type, 
-  Feather, 
-  MousePointer2, 
-  TextCursorInput, 
+import {
+  Palette,
+  Type,
+  Feather,
+  MousePointer2,
+  TextCursorInput,
   ListFilter,
   MessageSquare,
   LayoutGrid,
@@ -176,7 +176,7 @@ export default function SystemDesignPage() {
               <span className="gradient-text">HSK Master Ultimate</span>
             </h1>
             <p className="text-xl text-gray-500 max-w-3xl leading-relaxed">
-              Hệ thống thiết kế toàn diện nhất cho HSK Master, tích hợp cấu trúc Sidebar điều hướng 
+              Hệ thống thiết kế toàn diện nhất cho HSK Master, tích hợp cấu trúc Sidebar điều hướng
               và các thành phần giao diện chi tiết cho nền tảng giáo dục tiếng Trung cao cấp.
             </p>
           </section>
@@ -210,8 +210,8 @@ export default function SystemDesignPage() {
                       ['950', '#4c0519']
                     ].map(([shade, hex]) => (
                       <div key={shade} className="flex flex-col gap-2">
-                        <div 
-                          className="h-16 w-full rounded-2xl shadow-sm" 
+                        <div
+                          className="h-16 w-full rounded-2xl shadow-sm"
                           style={{ backgroundColor: hex }}
                         ></div>
                         <div>
@@ -425,7 +425,7 @@ export default function SystemDesignPage() {
                   { Icon: Download, name: 'Download' },
                   { Icon: ChevronRight, name: 'ChevronRight' },
                 ].map(({ Icon, name }) => (
-                  <div 
+                  <div
                     key={name}
                     className="flex flex-col items-center justify-center p-6 bg-white rounded-2xl border border-gray-200 hover:border-primary-300 hover:shadow-lg transition-all aspect-square gap-3 group cursor-pointer"
                   >
@@ -664,9 +664,9 @@ export default function SystemDesignPage() {
                       </div>
                       <div className="bg-gray-800 p-4 rounded-xl">
                         <span className="text-gray-500">{`// Icon only with accessibility`}</span>
-                        <pre className="text-green-400 mt-1">{`<Button 
-  variant="icon-only" 
-  icon={<Settings />} 
+                        <pre className="text-green-400 mt-1">{`<Button
+  variant="icon-only"
+  icon={<Settings />}
   aria-label="Settings"
 />`}</pre>
                       </div>
