@@ -5,107 +5,122 @@ import { InputHTMLAttributes, forwardRef } from "react";
 interface SwitchProps
   extends Omit<InputHTMLAttributes<HTMLInputElement>, "size"> {
   label?: string;
-  description?: string;
+  helperText?: string;
+  error?: string;
   switchSize?: "sm" | "md" | "lg";
+  required?: boolean;
+  disabled?: boolean;
 }
 
 export const Switch = forwardRef<HTMLInputElement, SwitchProps>(
   (
     {
       label,
-      description,
+      helperText,
+      error,
       switchSize = "md",
+      required = false,
+      disabled = false,
       className = "",
-      disabled,
-      checked,
+      id,
       ...props
     },
     ref
   ) => {
-    // Size configurations
+    const inputId = id || props.name;
+
+    // Size configurations for container and thumb
     const sizeConfig = {
       sm: {
-        container: "w-8 h-4",
-        thumb: "w-3 h-3",
-        translate: "translate-x-4",
+        width: "w-8",
+        height: "h-4",
+        thumbSize: "w-3 h-3",
+        thumbTranslate: "translate-x-4",
+        thumbOffset: "left-0.5 top-0.5",
       },
       md: {
-        container: "w-10 h-5",
-        thumb: "w-4 h-4",
-        translate: "translate-x-5",
+        width: "w-10",
+        height: "h-5",
+        thumbSize: "w-4 h-4",
+        thumbTranslate: "translate-x-5",
+        thumbOffset: "left-0.5 top-0.5",
       },
       lg: {
-        container: "w-12 h-6",
-        thumb: "w-5 h-5",
-        translate: "translate-x-6",
+        width: "w-12",
+        height: "h-6",
+        thumbSize: "w-5 h-5",
+        thumbTranslate: "translate-x-6",
+        thumbOffset: "left-0.5 top-0.5",
       },
     };
 
     const config = sizeConfig[switchSize];
 
     return (
-      <div className="flex flex-col gap-1">
-        <label
-          className={`flex items-center justify-between gap-4 ${
-            disabled ? "cursor-not-allowed" : "cursor-pointer"
-          }`}
-        >
-          {(label || description) && (
-            <div className="flex flex-col">
-              {label && (
-                <span
-                  className={`text-sm font-medium ${
-                    disabled ? "text-gray-400" : "text-gray-900"
-                  }`}
-                >
-                  {label}
-                </span>
-              )}
-              {description && (
-                <span className="text-xs text-gray-500 mt-0.5">
-                  {description}
-                </span>
-              )}
-            </div>
-          )}
-          <div className="relative inline-flex items-center">
+      <div className="w-full">
+        {label && (
+          <label
+            htmlFor={inputId}
+            className="flex items-center gap-1 text-xs font-bold text-gray-700 mb-2"
+          >
+            {label}
+            {required && <span className="text-error-500">*</span>}
+          </label>
+        )}
+        
+        <div className="flex items-center gap-3">
+          <label
+            htmlFor={inputId}
+            className={`relative inline-block ${config.width} ${config.height} ${
+              disabled ? "cursor-not-allowed" : "cursor-pointer"
+            }`}
+          >
             <input
               ref={ref}
+              id={inputId}
               type="checkbox"
               disabled={disabled}
-              checked={checked}
               className="sr-only peer"
               {...props}
             />
-            <div
+            
+            {/* Switch background */}
+            <span
               className={`
-                ${config.container}
-                rounded-full
-                transition-all duration-200
+                absolute inset-0 rounded-full transition-colors duration-200
                 ${
                   disabled
-                    ? "bg-gray-200 cursor-not-allowed"
-                    : "peer-checked:bg-primary-500 peer-focus:ring-4 peer-focus:ring-primary-100 bg-gray-300"
+                    ? "bg-gray-200"
+                    : error
+                    ? "bg-error-300 peer-checked:bg-error-500"
+                    : "bg-gray-300 peer-checked:bg-primary-500"
                 }
-                ${className}
+                ${!disabled && "peer-focus:ring-4 peer-focus:ring-primary-100"}
               `}
-            >
-              <div
-                className={`
-                  ${config.thumb}
-                  bg-white
-                  rounded-full
-                  shadow-md
-                  transition-transform duration-200
-                  absolute
-                  top-0.5
-                  left-0.5
-                  ${checked ? config.translate : ""}
-                `}
-              />
-            </div>
-          </div>
-        </label>
+            />
+            
+            {/* Switch thumb */}
+            <span
+              className={`
+                absolute ${config.thumbOffset} ${config.thumbSize}
+                bg-white rounded-full shadow-md
+                transition-transform duration-200 ease-in-out
+                ${!disabled && `peer-checked:${config.thumbTranslate}`}
+              `}
+            />
+          </label>
+        </div>
+
+        {error && (
+          <p className="mt-1.5 text-xs font-medium text-error-600 flex items-center gap-1">
+            <span className="w-1 h-1 bg-error-600 rounded-full"></span>
+            {error}
+          </p>
+        )}
+        
+        {helperText && !error && (
+          <p className="mt-1.5 text-xs text-gray-500">{helperText}</p>
+        )}
       </div>
     );
   }

@@ -10,6 +10,21 @@ type Props = {
   params: Promise<{ slug: string }>;
 };
 
+// Generate static paths for all courses
+export async function generateStaticParams() {
+  try {
+    const courses = await prisma.course.findMany({
+      select: { slug: true },
+    });
+    return courses.map((course) => ({
+      slug: course.slug,
+    }));
+  } catch (error) {
+    console.error("Error generating static params:", error);
+    return [];
+  }
+}
+
 export async function generateMetadata({ params }: Props) {
   const { slug } = await params;
   const course = await prisma.course.findUnique({

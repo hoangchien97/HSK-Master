@@ -1,7 +1,7 @@
 'use client';
 
 import { useState } from 'react';
-import { Button, Input, Select, Checkbox, Radio, Switch, Pagination } from "../components/shared";
+import { Button, Input, Select, Checkbox, Radio, Switch, Pagination, Tooltip } from "../components/shared";
 import {
   Palette,
   Type,
@@ -42,11 +42,10 @@ export default function SystemDesignPage() {
     ],
     components: [
       { id: 'buttons', label: 'Buttons', icon: MousePointer2 },
-      { id: 'inputs', label: 'Input & Form', icon: TextCursorInput },
-      { id: 'select', label: 'Select & Menu', icon: ListFilter },
-      { id: 'checkbox', label: 'Checkbox & Radio', icon: ListFilter },
+      { id: 'forms', label: 'Forms', icon: TextCursorInput },
       { id: 'pagination', label: 'Pagination', icon: LayoutGrid },
-      { id: 'popover', label: 'Popover', icon: MessageSquare },
+      { id: 'tooltip', label: 'Tooltip', icon: MessageSquare },
+      { id: 'loading', label: 'Loading', icon: Layers },
       { id: 'cards', label: 'Cards', icon: LayoutGrid },
       { id: 'nav', label: 'Header & Footer', icon: Layers },
     ],
@@ -440,7 +439,7 @@ export default function SystemDesignPage() {
           )}
 
           {/* Components Sections */}
-          {['buttons', 'inputs', 'select', 'checkbox', 'pagination', 'popover', 'cards', 'nav'].includes(activeSection) && (
+          {['buttons', 'forms', 'pagination', 'tooltip', 'loading', 'cards', 'nav'].includes(activeSection) && (
             <>
               {activeSection === 'buttons' ? (
                 <section className="space-y-10" id="buttons">
@@ -679,11 +678,11 @@ export default function SystemDesignPage() {
                     </div>
                   </div>
                 </section>
-              ) : activeSection === 'inputs' ? (
-                <section className="space-y-10" id="inputs">
+              ) : activeSection === 'forms' ? (
+                <section className="space-y-10" id="forms">
                   <div className="section-header-gradient">
-                    <h2 className="text-3xl font-black tracking-tight">Input & Form States</h2>
-                    <p className="text-gray-500 mt-1">Các trạng thái tương tác của người dùng với component có thể tái sử dụng.</p>
+                    <h2 className="text-3xl font-black tracking-tight">Forms - Input, Select, Checkbox, Radio, Switch</h2>
+                    <p className="text-gray-500 mt-1">Tất cả các component form với các trạng thái và kích thước khác nhau.</p>
                   </div>
 
                   {/* Input States */}
@@ -768,6 +767,46 @@ export default function SystemDesignPage() {
                         inputSize="lg"
                         placeholder="Large size input..."
                         icon={<Search className="w-6 h-6" />}
+                      />
+                    </div>
+                  </div>
+
+                  {/* Select Sizes */}
+                  <div className="bg-white p-8 rounded-3xl shadow-soft border border-gray-100">
+                    <h3 className="text-sm font-black text-gray-400 uppercase tracking-widest mb-6">Select Sizes</h3>
+                    <div className="space-y-6">
+                      <Select
+                        label="Small Select"
+                        selectSize="sm"
+                        placeholder="Small size select..."
+                        icon={<BookOpen className="w-4 h-4" />}
+                        options={[
+                          { value: 'hsk1', label: 'HSK Level 1' },
+                          { value: 'hsk2', label: 'HSK Level 2' },
+                          { value: 'hsk3', label: 'HSK Level 3' },
+                        ]}
+                      />
+                      <Select
+                        label="Medium Select (Default)"
+                        selectSize="md"
+                        placeholder="Medium size select..."
+                        icon={<BookOpen className="w-5 h-5" />}
+                        options={[
+                          { value: 'hsk1', label: 'HSK Level 1' },
+                          { value: 'hsk2', label: 'HSK Level 2' },
+                          { value: 'hsk3', label: 'HSK Level 3' },
+                        ]}
+                      />
+                      <Select
+                        label="Large Select"
+                        selectSize="lg"
+                        placeholder="Large size select..."
+                        icon={<BookOpen className="w-6 h-6" />}
+                        options={[
+                          { value: 'hsk1', label: 'HSK Level 1' },
+                          { value: 'hsk2', label: 'HSK Level 2' },
+                          { value: 'hsk3', label: 'HSK Level 3' },
+                        ]}
                       />
                     </div>
                   </div>
@@ -870,13 +909,6 @@ export default function SystemDesignPage() {
                         </button>
                       </div>
                     </div>
-                  </div>
-                </section>
-              ) : activeSection === 'checkbox' ? (
-                <section className="space-y-10" id="checkbox">
-                  <div className="section-header-gradient">
-                    <h2 className="text-3xl font-black tracking-tight">Checkbox, Radio & Switches</h2>
-                    <p className="text-gray-500 mt-1">Các component lựa chọn và bật/tắt có thể tái sử dụng.</p>
                   </div>
 
                   {/* Checkbox Component */}
@@ -1012,38 +1044,47 @@ export default function SystemDesignPage() {
                   <div className="bg-white p-8 rounded-3xl shadow-soft border border-gray-100">
                     <h3 className="text-sm font-black text-gray-400 uppercase tracking-widest mb-6">Switch Component - All States</h3>
                     <div className="space-y-6">
-                      {/* Switch ON */}
-                      <div className="p-4 bg-primary-50 border border-primary-200 rounded-xl">
+                      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        {/* Default Checked */}
                         <Switch
                           label="Thông báo"
-                          description="Nhận thông báo mới"
+                          helperText="Nhận thông báo mới"
                           defaultChecked
                         />
-                      </div>
 
-                      {/* Switch OFF */}
-                      <div className="p-4 bg-gray-50 border border-gray-200 rounded-xl">
+                        {/* Default Unchecked */}
                         <Switch
                           label="Dark Mode"
-                          description="Chế độ tối"
+                          helperText="Chế độ tối"
                         />
-                      </div>
 
-                      {/* Switch Disabled */}
-                      <div className="p-4 bg-gray-100 border border-gray-200 rounded-xl">
+                        {/* Error State */}
+                        <Switch
+                          label="Xác thực 2 bước"
+                          error="Bạn phải bật tính năng này"
+                          required
+                        />
+
+                        {/* Disabled */}
                         <Switch
                           label="Beta Features"
-                          description="Chưa khả dụng"
+                          helperText="Chưa khả dụng"
                           disabled
                         />
-                      </div>
 
-                      {/* Switch Disabled Checked */}
-                      <div className="p-4 bg-gray-100 border border-gray-200 rounded-xl">
+                        {/* Disabled Checked */}
                         <Switch
                           label="Auto Save"
-                          description="Luôn được bật"
+                          helperText="Luôn được bật"
                           disabled
+                          defaultChecked
+                        />
+
+                        {/* Required */}
+                        <Switch
+                          label="Điều khoản sử dụng"
+                          helperText="Bắt buộc phải đồng ý"
+                          required
                           defaultChecked
                         />
                       </div>
@@ -1051,114 +1092,16 @@ export default function SystemDesignPage() {
                       {/* Sizes */}
                       <div className="pt-6 border-t border-gray-100">
                         <p className="text-xs font-bold text-gray-500 mb-4">Switch Sizes</p>
-                        <div className="flex flex-col gap-4">
-                          <Switch switchSize="sm" label="Small Switch" defaultChecked />
-                          <Switch switchSize="md" label="Medium Switch (Default)" defaultChecked />
-                          <Switch switchSize="lg" label="Large Switch" defaultChecked />
+                        <div className="flex flex-wrap items-center gap-6">
+                          <Switch switchSize="sm" label="Small" defaultChecked />
+                          <Switch switchSize="md" label="Medium (Default)" defaultChecked />
+                          <Switch switchSize="lg" label="Large" defaultChecked />
                         </div>
                       </div>
                     </div>
                   </div>
                 </section>
-              ) : activeSection === 'select' ? (
-                <section className="space-y-10" id="select">
-                  <div className="section-header-gradient">
-                    <h2 className="text-3xl font-black tracking-tight">Select & Dropdown Menu</h2>
-                    <p className="text-gray-500 mt-1">Giao diện dropdown và menu chọn lựa.</p>
-                  </div>
-
-                  {/* Dropdown Open State */}
-                  <div className="bg-white p-8 rounded-3xl shadow-soft border border-gray-100">
-                    <h3 className="text-sm font-black text-gray-400 uppercase tracking-widest mb-6">Dropdown Menu (Open State)</h3>
-                    <div className="max-w-sm">
-                      <label className="text-sm font-medium text-gray-700 mb-2 block">Chọn cấp độ HSK</label>
-                      <div className="relative">
-                        {/* Trigger */}
-                        <div className="w-full px-4 py-3 rounded-t-2xl border-2 border-primary-500 bg-white flex items-center justify-between shadow-lg cursor-pointer">
-                          <div className="flex items-center gap-2 font-bold text-sm">
-                            <LayoutGrid className="w-4 h-4 text-primary-500" />
-                            HSK Level 4
-                          </div>
-                          <ChevronRight className="w-4 h-4 text-primary-500 rotate-90" />
-                        </div>
-
-                        {/* Dropdown */}
-                        <div className="absolute w-full top-full left-0 bg-white border-2 border-t-0 border-primary-500 rounded-b-2xl shadow-2xl overflow-hidden divide-y divide-gray-50 z-10">
-                          <div className="px-4 py-3 hover:bg-primary-50 flex items-center justify-between cursor-pointer group transition-colors">
-                            <span className="text-sm font-medium group-hover:text-primary-600">HSK Level 1</span>
-                            <span className="text-[9px] bg-gray-100 px-2 py-0.5 rounded text-gray-500 font-bold uppercase">150 từ</span>
-                          </div>
-                          <div className="px-4 py-3 hover:bg-primary-50 flex items-center justify-between cursor-pointer group transition-colors">
-                            <span className="text-sm font-medium group-hover:text-primary-600">HSK Level 2</span>
-                            <span className="text-[9px] bg-gray-100 px-2 py-0.5 rounded text-gray-500 font-bold uppercase">300 từ</span>
-                          </div>
-                          <div className="px-4 py-3 hover:bg-primary-50 flex items-center justify-between cursor-pointer group transition-colors">
-                            <span className="text-sm font-medium group-hover:text-primary-600">HSK Level 3</span>
-                            <span className="text-[9px] bg-gray-100 px-2 py-0.5 rounded text-gray-500 font-bold uppercase">600 từ</span>
-                          </div>
-                          <div className="px-4 py-3 bg-primary-500 text-white flex items-center justify-between cursor-pointer">
-                            <span className="text-sm font-bold">HSK Level 4</span>
-                            <Check className="w-4 h-4" />
-                          </div>
-                          <div className="px-4 py-3 hover:bg-primary-50 flex items-center justify-between cursor-pointer group transition-colors">
-                            <span className="text-sm font-medium group-hover:text-primary-600">HSK Level 5</span>
-                            <span className="text-[9px] bg-gray-100 px-2 py-0.5 rounded text-gray-500 font-bold uppercase">2500 từ</span>
-                          </div>
-                          <div className="px-4 py-3 hover:bg-primary-50 flex items-center justify-between cursor-pointer group transition-colors">
-                            <span className="text-sm font-medium group-hover:text-primary-600">HSK Level 6</span>
-                            <span className="text-[9px] bg-gray-100 px-2 py-0.5 rounded text-gray-500 font-bold uppercase">5000 từ</span>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-
-                  {/* Dropdown Closed State */}
-                  <div className="bg-white p-8 rounded-3xl shadow-soft border border-gray-100">
-                    <h3 className="text-sm font-black text-gray-400 uppercase tracking-widest mb-6">Dropdown States</h3>
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                      {/* Default/Closed */}
-                      <div>
-                        <label className="text-sm font-medium text-gray-700 mb-2 block">Default State</label>
-                        <div className="w-full px-4 py-3 rounded-xl border-2 border-gray-200 bg-white flex items-center justify-between cursor-pointer hover:border-gray-300 transition-colors">
-                          <span className="text-sm text-gray-500">Chọn cấp độ...</span>
-                          <ChevronRight className="w-4 h-4 text-gray-400 rotate-90" />
-                        </div>
-                      </div>
-
-                      {/* Selected */}
-                      <div>
-                        <label className="text-sm font-medium text-gray-700 mb-2 block">Selected State</label>
-                        <div className="w-full px-4 py-3 rounded-xl border-2 border-primary-500 bg-primary-50 flex items-center justify-between cursor-pointer">
-                          <span className="text-sm font-bold text-primary-700">HSK Level 3</span>
-                          <ChevronRight className="w-4 h-4 text-primary-500 rotate-90" />
-                        </div>
-                      </div>
-
-                      {/* Disabled */}
-                      <div>
-                        <label className="text-sm font-medium text-gray-400 mb-2 block">Disabled State</label>
-                        <div className="w-full px-4 py-3 rounded-xl border-2 border-gray-100 bg-gray-50 flex items-center justify-between cursor-not-allowed opacity-60">
-                          <span className="text-sm text-gray-400">Không khả dụng</span>
-                          <ChevronRight className="w-4 h-4 text-gray-300 rotate-90" />
-                        </div>
-                      </div>
-
-                      {/* Error */}
-                      <div>
-                        <label className="text-sm font-medium text-error-600 mb-2 flex items-center gap-1">
-                          <AlertCircle className="w-4 h-4" />
-                          Error State
-                        </label>
-                        <div className="w-full px-4 py-3 rounded-xl border-2 border-error-500 bg-error-50 flex items-center justify-between cursor-pointer">
-                          <span className="text-sm text-error-600">Vui lòng chọn...</span>
-                          <ChevronRight className="w-4 h-4 text-error-500 rotate-90" />
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </section>
-              ) : activeSection === 'pagination' ? (
+              )  : activeSection === 'pagination' ? (
                 <section className="space-y-10" id="pagination">
                   <div className="section-header-gradient">
                     <h2 className="text-3xl font-black tracking-tight">Pagination Component</h2>
@@ -1311,6 +1254,300 @@ export default function SystemDesignPage() {
                         showInfo
                         onPageChange={(page) => console.log('Page:', page)}
                       />
+                    </div>
+                  </div>
+                </section>
+              ) : activeSection === 'tooltip' ? (
+                <section className="space-y-10" id="tooltip">
+                  <div className="section-header-gradient">
+                    <h2 className="text-3xl font-black tracking-tight">Tooltip Component</h2>
+                    <p className="text-gray-500 mt-1">Hiển thị thông tin bổ sung khi hover, hỗ trợ title màu vàng và nội dung tùy chỉnh.</p>
+                  </div>
+
+                  {/* Basic Tooltip */}
+                  <div className="bg-white p-8 rounded-3xl shadow-soft border border-gray-100">
+                    <h3 className="text-sm font-black text-gray-400 uppercase tracking-widest mb-6">Basic Tooltip</h3>
+                    <div className="flex flex-wrap items-center gap-8 justify-center py-8">
+                      <Tooltip content="Đây là tooltip đơn giản">
+                        <button className="px-4 py-2 bg-gray-100 rounded-lg font-medium hover:bg-gray-200 transition-colors">
+                          Hover me (Basic)
+                        </button>
+                      </Tooltip>
+
+                      <Tooltip
+                        title="Thông tin quan trọng"
+                        content="Tooltip với tiêu đề màu vàng giúp làm nổi bật thông tin."
+                      >
+                        <button className="px-4 py-2 bg-primary-500 text-white rounded-lg font-medium hover:bg-primary-600 transition-colors">
+                          Hover me (With Title)
+                        </button>
+                      </Tooltip>
+                    </div>
+                  </div>
+
+                  {/* Tooltip Placements */}
+                  <div className="bg-white p-8 rounded-3xl shadow-soft border border-gray-100">
+                    <h3 className="text-sm font-black text-gray-400 uppercase tracking-widest mb-6">Placements</h3>
+                    <div className="grid grid-cols-2 md:grid-cols-4 gap-6 py-8">
+                      <div className="flex justify-center">
+                        <Tooltip content="Tooltip ở trên" placement="top">
+                          <button className="px-4 py-2 bg-gray-100 rounded-lg text-sm font-medium hover:bg-gray-200">
+                            Top
+                          </button>
+                        </Tooltip>
+                      </div>
+                      <div className="flex justify-center">
+                        <Tooltip content="Tooltip ở dưới" placement="bottom">
+                          <button className="px-4 py-2 bg-gray-100 rounded-lg text-sm font-medium hover:bg-gray-200">
+                            Bottom
+                          </button>
+                        </Tooltip>
+                      </div>
+                      <div className="flex justify-center">
+                        <Tooltip content="Tooltip bên trái" placement="left">
+                          <button className="px-4 py-2 bg-gray-100 rounded-lg text-sm font-medium hover:bg-gray-200">
+                            Left
+                          </button>
+                        </Tooltip>
+                      </div>
+                      <div className="flex justify-center">
+                        <Tooltip content="Tooltip bên phải" placement="right">
+                          <button className="px-4 py-2 bg-gray-100 rounded-lg text-sm font-medium hover:bg-gray-200">
+                            Right
+                          </button>
+                        </Tooltip>
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Real Use Cases */}
+                  <div className="bg-white p-8 rounded-3xl shadow-soft border border-gray-100">
+                    <h3 className="text-sm font-black text-gray-400 uppercase tracking-widest mb-6">Real Use Cases</h3>
+                    <div className="space-y-6">
+                      <div className="flex items-center gap-4">
+                        <span className="text-sm font-medium text-gray-700">Lộ trình học:</span>
+                        <Tooltip
+                          title="Lộ trình HSK 3"
+                          content="Bao gồm 600 từ vựng và các cấu trúc ngữ pháp trung cấp. Phù hợp cho người học đã hoàn thành HSK 2."
+                        >
+                          <span className="text-primary-600 border-b border-dashed border-primary-600 cursor-help font-medium">
+                            HSK Level 3
+                          </span>
+                        </Tooltip>
+                      </div>
+
+                      <div className="flex items-center gap-4">
+                        <span className="text-sm font-medium text-gray-700">Giáo viên:</span>
+                        <Tooltip
+                          title="Thầy Wang"
+                          content="10 năm kinh nghiệm giảng dạy tiếng Trung. Chuyên về HSK và giao tiếp thực tế."
+                        >
+                          <div className="flex items-center gap-2 cursor-help">
+                            <div className="w-8 h-8 rounded-full bg-primary-100 flex items-center justify-center text-primary-600 font-bold text-sm">
+                              W
+                            </div>
+                            <span className="text-gray-900 font-medium">Thầy Wang</span>
+                          </div>
+                        </Tooltip>
+                      </div>
+                    </div>
+                  </div>
+                </section>
+              ) : activeSection === 'loading' ? (
+                <section className="space-y-10" id="loading">
+                  <div className="section-header-gradient">
+                    <h2 className="text-3xl font-black tracking-tight">Loading Spinner</h2>
+                    <p className="text-gray-500 mt-1">Spinner animation cho trạng thái loading, có thể tùy chỉnh size và màu sắc.</p>
+                  </div>
+
+                  {/* Basic Spinner */}
+                  <div className="bg-white p-8 rounded-3xl shadow-soft border border-gray-100">
+                    <h3 className="text-sm font-black text-gray-400 uppercase tracking-widest mb-6">Basic Spinner</h3>
+                    <div className="flex items-center justify-center gap-8 py-8">
+                      <div className="flex flex-col items-center gap-3">
+                        <div className="text-gray-600 text-2xl">
+                          <svg
+                            className="animate-spin"
+                            xmlns="http://www.w3.org/2000/svg"
+                            fill="none"
+                            viewBox="0 0 24 24"
+                            width="1em"
+                            height="1em"
+                          >
+                            <circle
+                              className="opacity-25"
+                              cx="12"
+                              cy="12"
+                              r="10"
+                              stroke="currentColor"
+                              strokeWidth="4"
+                            ></circle>
+                            <path
+                              className="opacity-75"
+                              fill="currentColor"
+                              d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+                            ></path>
+                          </svg>
+                        </div>
+                        <span className="text-xs text-gray-500 font-medium">Default</span>
+                      </div>
+
+                      <div className="flex flex-col items-center gap-3">
+                        <div className="text-primary-500 text-3xl">
+                          <svg
+                            className="animate-spin"
+                            xmlns="http://www.w3.org/2000/svg"
+                            fill="none"
+                            viewBox="0 0 24 24"
+                            width="1em"
+                            height="1em"
+                          >
+                            <circle
+                              className="opacity-25"
+                              cx="12"
+                              cy="12"
+                              r="10"
+                              stroke="currentColor"
+                              strokeWidth="4"
+                            ></circle>
+                            <path
+                              className="opacity-75"
+                              fill="currentColor"
+                              d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+                            ></path>
+                          </svg>
+                        </div>
+                        <span className="text-xs text-gray-500 font-medium">Primary</span>
+                      </div>
+
+                      <div className="flex flex-col items-center gap-3">
+                        <div className="text-white text-2xl bg-primary-500 p-4 rounded-xl">
+                          <svg
+                            className="animate-spin"
+                            xmlns="http://www.w3.org/2000/svg"
+                            fill="none"
+                            viewBox="0 0 24 24"
+                            width="1em"
+                            height="1em"
+                          >
+                            <circle
+                              className="opacity-25"
+                              cx="12"
+                              cy="12"
+                              r="10"
+                              stroke="currentColor"
+                              strokeWidth="4"
+                            ></circle>
+                            <path
+                              className="opacity-75"
+                              fill="currentColor"
+                              d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+                            ></path>
+                          </svg>
+                        </div>
+                        <span className="text-xs text-gray-500 font-medium">On Background</span>
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Size Variants */}
+                  <div className="bg-white p-8 rounded-3xl shadow-soft border border-gray-100">
+                    <h3 className="text-sm font-black text-gray-400 uppercase tracking-widest mb-6">Size Variants</h3>
+                    <div className="flex items-center justify-center gap-8 py-8">
+                      <div className="flex flex-col items-center gap-3">
+                        <div className="text-primary-500 text-base">
+                          <svg
+                            className="animate-spin"
+                            xmlns="http://www.w3.org/2000/svg"
+                            fill="none"
+                            viewBox="0 0 24 24"
+                            width="1em"
+                            height="1em"
+                          >
+                            <circle
+                              className="opacity-25"
+                              cx="12"
+                              cy="12"
+                              r="10"
+                              stroke="currentColor"
+                              strokeWidth="4"
+                            ></circle>
+                            <path
+                              className="opacity-75"
+                              fill="currentColor"
+                              d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+                            ></path>
+                          </svg>
+                        </div>
+                        <span className="text-xs text-gray-500 font-medium">Small</span>
+                      </div>
+
+                      <div className="flex flex-col items-center gap-3">
+                        <div className="text-primary-500 text-2xl">
+                          <svg
+                            className="animate-spin"
+                            xmlns="http://www.w3.org/2000/svg"
+                            fill="none"
+                            viewBox="0 0 24 24"
+                            width="1em"
+                            height="1em"
+                          >
+                            <circle
+                              className="opacity-25"
+                              cx="12"
+                              cy="12"
+                              r="10"
+                              stroke="currentColor"
+                              strokeWidth="4"
+                            ></circle>
+                            <path
+                              className="opacity-75"
+                              fill="currentColor"
+                              d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+                            ></path>
+                          </svg>
+                        </div>
+                        <span className="text-xs text-gray-500 font-medium">Medium</span>
+                      </div>
+
+                      <div className="flex flex-col items-center gap-3">
+                        <div className="text-primary-500 text-4xl">
+                          <svg
+                            className="animate-spin"
+                            xmlns="http://www.w3.org/2000/svg"
+                            fill="none"
+                            viewBox="0 0 24 24"
+                            width="1em"
+                            height="1em"
+                          >
+                            <circle
+                              className="opacity-25"
+                              cx="12"
+                              cy="12"
+                              r="10"
+                              stroke="currentColor"
+                              strokeWidth="4"
+                            ></circle>
+                            <path
+                              className="opacity-75"
+                              fill="currentColor"
+                              d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+                            ></path>
+                          </svg>
+                        </div>
+                        <span className="text-xs text-gray-500 font-medium">Large</span>
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* In Button Context */}
+                  <div className="bg-white p-8 rounded-3xl shadow-soft border border-gray-100">
+                    <h3 className="text-sm font-black text-gray-400 uppercase tracking-widest mb-6">In Button Context</h3>
+                    <div className="flex flex-wrap items-center gap-4 justify-center py-8">
+                      <Button loading>Loading...</Button>
+                      <Button variant="secondary" loading>Processing</Button>
+                      <Button variant="outline" loading>Đang tải</Button>
+                      <Button variant="gradient" loading size="lg">Submitting</Button>
                     </div>
                   </div>
                 </section>

@@ -7,6 +7,7 @@ import { ReactElement } from 'react';
 
 interface TooltipProps {
   content: string | ReactElement;
+  title?: string; // Support for yellow title like in code.html
   children: ReactElement;
   placement?: 'top' | 'bottom' | 'left' | 'right' | 'auto';
   arrow?: boolean;
@@ -22,6 +23,7 @@ interface TooltipProps {
 
 export default function Tooltip({
   content,
+  title,
   children,
   placement = 'top',
   arrow = true,
@@ -30,7 +32,7 @@ export default function Tooltip({
   delay = 0,
   theme = 'custom',
   className,
-  maxWidth = 288,
+  maxWidth = 256, // w-64 = 256px
   interactive = false,
   disabled = false,
 }: TooltipProps) {
@@ -40,13 +42,14 @@ export default function Tooltip({
   return (
     <Tippy
       content={
-        typeof content === 'string' ? (
-          <div className="max-w-xs">
-            <p className="leading-relaxed">{content}</p>
-          </div>
-        ) : (
-          content
-        )
+        <div className="leading-relaxed">
+          {title && <div className="tooltip-title">{title}</div>}
+          {typeof content === 'string' ? (
+            <p className="text-xs">{content}</p>
+          ) : (
+            content
+          )}
+        </div>
       }
       placement={placement}
       arrow={arrow}

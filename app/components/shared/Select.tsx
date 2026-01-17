@@ -54,18 +54,25 @@ const Select = ({
     lg: "px-5 py-3.5 text-base",
   };
 
+  // Option size classes
+  const optionSizeClasses = {
+    sm: "px-3 py-2 text-xs",
+    md: "px-4 py-3 text-sm",
+    lg: "px-5 py-3.5 text-base",
+  };
+
   // Base classes
   const baseClasses =
-    "w-full rounded-xl border-2 font-medium transition-all outline-none cursor-pointer flex items-center justify-between";
+    "w-full rounded-xl border-2 font-medium transition-all outline-none flex items-center justify-between";
 
   // State classes
   const stateClasses = error
-    ? "border-error-500 bg-error-50/30 text-error-900 focus:border-error-600 focus:ring-4 focus:ring-error-100"
+    ? "border-error-500 bg-error-50/30 text-error-900 focus:border-error-600 focus:ring-4 focus:ring-error-100 cursor-pointer"
     : disabled
     ? "border-gray-200 bg-gray-50 text-gray-400 cursor-not-allowed"
     : isOpen
-    ? "border-primary-500 ring-4 ring-primary-100"
-    : "border-gray-200 bg-white text-gray-900 hover:border-primary-300";
+    ? "border-primary-500 ring-4 ring-primary-100 cursor-pointer"
+    : "border-gray-200 bg-white text-gray-900 hover:border-primary-300 cursor-pointer";
 
   // Close dropdown when clicking outside
   useEffect(() => {
@@ -153,15 +160,14 @@ const Select = ({
                     onClick={() => !option.disabled && handleSelect(option.value)}
                     disabled={option.disabled}
                     className={`
-                      w-full px-4 py-3 text-left text-sm font-medium transition-all flex items-center justify-between
+                      w-full ${optionSizeClasses[selectSize]} text-left font-medium transition-all flex items-center justify-between
                       ${
                         option.disabled
                           ? "text-gray-300 cursor-not-allowed bg-gray-50"
                           : isSelected
-                          ? "bg-primary-50 text-primary-600 font-bold"
-                          : "text-gray-700 hover:bg-primary-50 hover:text-primary-600"
+                          ? "bg-primary-50 text-primary-600 font-bold cursor-pointer"
+                          : "text-gray-700 hover:bg-primary-50 hover:text-primary-600 cursor-pointer"
                       }
-                      ${!isSelected && !option.disabled ? "cursor-pointer" : ""}
                     `}
                   >
                     <span>{option.label}</span>

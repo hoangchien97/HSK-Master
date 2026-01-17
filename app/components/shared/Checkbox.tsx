@@ -45,18 +45,17 @@ export const Checkbox = forwardRef<HTMLInputElement, CheckboxProps>(
               mt-0.5
               rounded-md border-2
               transition-all
-              accent-primary-500
               ${
                 disabled
                   ? "border-gray-200 bg-gray-50 cursor-not-allowed opacity-50"
                   : error
-                  ? "border-error-500 accent-error-600 focus:ring-4 focus:ring-error-100"
-                  : "border-gray-300 hover:border-primary-400 focus:ring-4 focus:ring-primary-100"
+                  ? "border-error-500 focus:ring-4 focus:ring-error-100 cursor-pointer"
+                  : "border-gray-300 hover:border-primary-400 focus:ring-4 focus:ring-primary-100 cursor-pointer"
               }
               ${className}
             `}
             style={{
-              accentColor: error ? 'var(--error-500)' : disabled ? undefined : '#EC131E'
+              accentColor: error ? '#DC2626' : disabled ? '#D1D5DB' : '#EC131E'
             }}
             {...props}
           />
