@@ -7,7 +7,7 @@ interface SwitchProps
   label?: string;
   helperText?: string;
   error?: string;
-  switchSize?: "sm" | "md" | "lg";
+  size?: "sm" | "md" | "lg";
   required?: boolean;
   disabled?: boolean;
 }
@@ -18,7 +18,7 @@ export const Switch = forwardRef<HTMLInputElement, SwitchProps>(
       label,
       helperText,
       error,
-      switchSize = "md",
+      size = "md",
       required = false,
       disabled = false,
       className = "",
@@ -54,7 +54,7 @@ export const Switch = forwardRef<HTMLInputElement, SwitchProps>(
       },
     };
 
-    const config = sizeConfig[switchSize];
+    const config = sizeConfig[size];
 
     return (
       <div className="w-full">
@@ -67,7 +67,7 @@ export const Switch = forwardRef<HTMLInputElement, SwitchProps>(
             {required && <span className="text-error-500">*</span>}
           </label>
         )}
-        
+
         <div className="flex items-center gap-3">
           <label
             htmlFor={inputId}
@@ -83,7 +83,7 @@ export const Switch = forwardRef<HTMLInputElement, SwitchProps>(
               className="sr-only peer"
               {...props}
             />
-            
+
             {/* Switch background */}
             <span
               className={`
@@ -98,7 +98,7 @@ export const Switch = forwardRef<HTMLInputElement, SwitchProps>(
                 ${!disabled && "peer-focus:ring-4 peer-focus:ring-primary-100"}
               `}
             />
-            
+
             {/* Switch thumb */}
             <span
               className={`
@@ -117,7 +117,7 @@ export const Switch = forwardRef<HTMLInputElement, SwitchProps>(
             {error}
           </p>
         )}
-        
+
         {helperText && !error && (
           <p className="mt-1.5 text-xs text-gray-500">{helperText}</p>
         )}

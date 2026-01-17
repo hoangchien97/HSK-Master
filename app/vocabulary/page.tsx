@@ -1,5 +1,5 @@
 import { prisma } from "@/lib/prisma";
-import { Breadcrumb } from "../components/shared";
+import { Breadcrumb, Input, Tooltip, Badge } from "../components/shared";
 
 export const metadata = {
   title: "Từ vựng tiếng Trung | HSK Master",
@@ -44,20 +44,13 @@ export default async function VocabularyPage({
         </h1>
 
         <form className="mb-8">
-          <div className="relative">
-            <input
-              name="q"
-              defaultValue={q}
-              placeholder="Tìm kiếm từ vựng..."
-              className="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-primary focus:border-primary dark:bg-gray-800 dark:text-white"
-            />
-            <button
-              type="submit"
-              className="absolute right-2 top-1/2 -translate-y-1/2 px-4 py-2 bg-primary text-white rounded-md hover:bg-primary/90 transition-colors"
-            >
-              Tìm kiếm
-            </button>
-          </div>
+          <Input
+            name="q"
+            defaultValue={q}
+            placeholder="Tìm kiếm từ vựng tiếng Trung..."
+            variant="search"
+            inputSize="lg"
+          />
         </form>
 
         <div className="space-y-4">
@@ -69,17 +62,29 @@ export default async function VocabularyPage({
             vocab.map((v) => (
               <div
                 key={v.id}
-                className="border border-gray-200 dark:border-gray-700 rounded-lg p-4 hover:shadow-md transition-shadow"
+                className="border border-gray-200 dark:border-gray-700 rounded-xl p-5 hover:shadow-lg hover:border-primary-300 transition-all bg-white dark:bg-surface-dark"
               >
                 <div className="flex items-start gap-4">
                   <div className="flex-1">
-                    <p className="text-2xl font-bold text-gray-900 dark:text-white mb-1">
-                      {v.word}
-                    </p>
-                    <p className="text-sm text-gray-600 dark:text-gray-400 mb-2">
+                    <div className="flex items-center gap-3 mb-2">
+                      <Tooltip
+                        content="Click để nghe phát âm"
+                        placement="top"
+                      >
+                        <p className="text-3xl font-bold text-gray-900 dark:text-white cursor-pointer hover:text-primary-500 transition-colors">
+                          {v.word}
+                        </p>
+                      </Tooltip>
+                      {v.hskLevel && (
+                        <Badge variant="outline" size="sm">
+                          HSK {v.hskLevel}
+                        </Badge>
+                      )}
+                    </div>
+                    <p className="text-sm text-primary-600 dark:text-primary-400 font-medium mb-3">
                       {v.pinyin}
                     </p>
-                    <p className="text-gray-700 dark:text-gray-300">
+                    <p className="text-base text-gray-700 dark:text-gray-300 leading-relaxed">
                       {v.meaning}
                     </p>
                   </div>

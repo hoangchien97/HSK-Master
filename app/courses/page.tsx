@@ -1,5 +1,5 @@
 import { prisma } from "@/lib/prisma";
-import { Breadcrumb, Badge, Pagination } from "../components/shared";
+import { Breadcrumb, Badge, Pagination, Select } from "../components/shared";
 import { CourseFilter, CourseCard } from "../components/courses";
 
 export const revalidate = 600;
@@ -111,18 +111,23 @@ export default async function CoursesPage({
                 <span className="text-sm text-text-secondary-light dark:text-text-secondary-dark whitespace-nowrap">
                   Sắp xếp:
                 </span>
-                <select className="block min-w-[140px] rounded-md border-0 bg-white dark:bg-surface-dark py-1.5 pl-3 pr-8 text-sm text-text-main-light dark:text-white ring-1 ring-inset ring-border-light dark:ring-border-dark focus:ring-2 focus:ring-red-500 cursor-pointer">
-                  <option>Phổ biến nhất</option>
-                  <option>Mới nhất</option>
-                  <option>Giá thấp đến cao</option>
-                </select>
+                <Select
+                  selectSize="sm"
+                  options={[
+                    { value: 'popular', label: 'Phổ biến nhất' },
+                    { value: 'newest', label: 'Mới nhất' },
+                    { value: 'price-asc', label: 'Giá thấp đến cao' },
+                  ]}
+                  defaultValue="popular"
+                  className="min-w-[140px]"
+                />
               </div>
             </div>
 
             {/* Courses Grid */}
             <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 xl:grid-cols-3">
               {courses.length > 0 ? (
-                courses.map((course) => (
+                courses.map((course: any) => (
                   <CourseCard key={course.id} course={course} />
                 ))
               ) : (

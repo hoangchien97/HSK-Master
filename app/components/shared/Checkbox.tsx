@@ -6,7 +6,7 @@ interface CheckboxProps extends InputHTMLAttributes<HTMLInputElement> {
   label?: string;
   description?: string;
   error?: string;
-  checkboxSize?: "sm" | "md" | "lg";
+  size?: "sm" | "md" | "lg";
 }
 
 export const Checkbox = forwardRef<HTMLInputElement, CheckboxProps>(
@@ -15,7 +15,7 @@ export const Checkbox = forwardRef<HTMLInputElement, CheckboxProps>(
       label,
       description,
       error,
-      checkboxSize = "md",
+      size = "md",
       className = "",
       disabled,
       ...props
@@ -41,7 +41,7 @@ export const Checkbox = forwardRef<HTMLInputElement, CheckboxProps>(
             type="checkbox"
             disabled={disabled}
             className={`
-              ${sizeClasses[checkboxSize]}
+              ${sizeClasses[size]}
               mt-0.5
               rounded-md border-2
               transition-all

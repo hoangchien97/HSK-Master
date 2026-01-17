@@ -15,7 +15,7 @@ interface SelectProps {
   helperText?: string;
   options?: SelectOption[];
   icon?: ReactNode;
-  selectSize?: "sm" | "md" | "lg";
+  size?: "sm" | "md" | "lg";
   required?: boolean;
   disabled?: boolean;
   className?: string;
@@ -34,7 +34,7 @@ const Select = ({
   className = "",
   options = [],
   icon,
-  selectSize = "md",
+  size = "md",
   value: controlledValue,
   defaultValue = "",
   onChange,
@@ -115,7 +115,7 @@ const Select = ({
           disabled={disabled}
           className={`
             ${baseClasses}
-            ${sizeClasses[selectSize]}
+            ${sizeClasses[size]}
             ${stateClasses}
             ${icon ? "pl-12" : ""}
             pr-12
@@ -160,7 +160,7 @@ const Select = ({
                     onClick={() => !option.disabled && handleSelect(option.value)}
                     disabled={option.disabled}
                     className={`
-                      w-full ${optionSizeClasses[selectSize]} text-left font-medium transition-all flex items-center justify-between
+                      w-full ${optionSizeClasses[size]} text-left font-medium transition-all flex items-center justify-between
                       ${
                         option.disabled
                           ? "text-gray-300 cursor-not-allowed bg-gray-50"

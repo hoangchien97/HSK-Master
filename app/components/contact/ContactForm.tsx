@@ -1,6 +1,7 @@
 'use client';
 
 import { Input, Select, Textarea } from '../shared';
+import { User, Phone, Mail } from 'lucide-react';
 
 interface ContactFormProps {
   submitAction: (formData: FormData) => Promise<void>;
@@ -22,7 +23,7 @@ export default function ContactForm({ submitAction }: ContactFormProps) {
             type="text"
             name="name"
             label="Họ và tên"
-            icon="person"
+            icon={<User className="w-5 h-5" />}
             placeholder="Nguyễn Văn A"
             autoComplete="name"
             required
@@ -31,7 +32,7 @@ export default function ContactForm({ submitAction }: ContactFormProps) {
             type="tel"
             name="phone"
             label="Số điện thoại"
-            icon="phone_iphone"
+            icon={<Phone className="w-5 h-5" />}
             placeholder="0909xxxxxx"
             autoComplete="tel"
             required
@@ -42,7 +43,7 @@ export default function ContactForm({ submitAction }: ContactFormProps) {
           type="email"
           name="email"
           label="Email"
-          icon="email"
+          icon={<Mail className="w-5 h-5" />}
           placeholder="example@email.com"
           autoComplete="email"
         />

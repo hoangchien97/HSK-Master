@@ -6,7 +6,7 @@ interface RadioProps extends InputHTMLAttributes<HTMLInputElement> {
   label?: string;
   description?: string;
   error?: string;
-  radioSize?: "sm" | "md" | "lg";
+  size?: "sm" | "md" | "lg";
 }
 
 export const Radio = forwardRef<HTMLInputElement, RadioProps>(
@@ -15,7 +15,7 @@ export const Radio = forwardRef<HTMLInputElement, RadioProps>(
       label,
       description,
       error,
-      radioSize = "md",
+      size = "md",
       className = "",
       disabled,
       ...props
@@ -41,7 +41,7 @@ export const Radio = forwardRef<HTMLInputElement, RadioProps>(
             type="radio"
             disabled={disabled}
             className={`
-              ${sizeClasses[radioSize]}
+              ${sizeClasses[size]}
               mt-0.5
               border-2
               transition-all

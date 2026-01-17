@@ -5,10 +5,10 @@ import { Search, X } from "lucide-react";
 
 interface InputProps extends InputHTMLAttributes<HTMLInputElement> {
   label?: string;
-  icon?: ReactNode;
+  icon?: ReactNode | string; // Support both Lucide icons and Material Icons (string)
   error?: string;
   helperText?: string;
-  inputSize?: "sm" | "md" | "lg";
+  size?: "sm" | "md" | "lg";
   variant?: "default" | "search";
 }
 
@@ -22,7 +22,7 @@ const Input = forwardRef<HTMLInputElement, InputProps>(
       required,
       disabled,
       readOnly,
-      inputSize = "md",
+      size = "md",
       variant = "default",
       className = "",
       id,
@@ -66,7 +66,11 @@ const Input = forwardRef<HTMLInputElement, InputProps>(
         <div className="relative">
           {icon && (
             <div className="absolute inset-y-0 left-0 flex items-center pl-4 pointer-events-none text-gray-400">
-              {icon}
+              {typeof icon === 'string' ? (
+                <span className="material-symbols-outlined text-[20px]">{icon}</span>
+              ) : (
+                icon
+              )}
             </div>
           )}
           {variant === "search" && !icon && (
@@ -82,7 +86,7 @@ const Input = forwardRef<HTMLInputElement, InputProps>(
             readOnly={readOnly}
             className={`
               ${baseClasses}
-              ${sizeClasses[inputSize]}
+              ${sizeClasses[size]}
               ${stateClasses}
               ${icon || variant === "search" ? "pl-12" : ""}
               ${className}
