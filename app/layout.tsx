@@ -2,6 +2,8 @@ import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import { Header, Footer, ScrollToTop } from "./components/shared";
+import * as TooltipPrimitive from '@radix-ui/react-tooltip';
+import NextTopLoader from 'nextjs-toploader';
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -36,10 +38,25 @@ export default function RootLayout({
         className={`${geistSans.variable} ${geistMono.variable} antialiased min-h-screen bg-background-light dark:bg-background-dark text-text-main-light dark:text-text-main-dark flex flex-col`}
         suppressHydrationWarning
       >
-        <Header />
-        <main className="flex-1">{children}</main>
-        <Footer />
-        <ScrollToTop />
+        <NextTopLoader
+          color="#ec131e"
+          initialPosition={0.08}
+          crawlSpeed={200}
+          height={3}
+          crawl={true}
+          showSpinner={false}
+          easing="ease"
+          speed={200}
+          shadow="0 0 10px #ec131e,0 0 5px #ec131e"
+          zIndex={1600}
+          showAtBottom={false}
+        />
+        <TooltipPrimitive.Provider delayDuration={200} skipDelayDuration={100}>
+          <Header />
+          <main className="flex-1">{children}</main>
+          <Footer />
+          <ScrollToTop />
+        </TooltipPrimitive.Provider>
       </body>
     </html>
   );

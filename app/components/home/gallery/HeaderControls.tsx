@@ -45,12 +45,12 @@ export function HeaderControls({
       onMouseEnter={cancelHideTimer}
       onMouseLeave={resetHideTimer}
     >
-      <div className="flex items-center gap-4">
+      <div className="flex items-center gap-3">
         <Button
           onClick={onClose}
-          variant="glass"
-          size="sm"
-          icon={<X className="w-4 h-4" />}
+          variant="icon-only"
+          size="md"
+          icon={<X className="w-5 h-5" />}
           iconPosition="left"
         >
           Đóng
@@ -63,53 +63,55 @@ export function HeaderControls({
       <div className="flex items-center gap-2">
         <Button
           onClick={onTogglePlayback}
-          variant="glass"
-          size="sm"
-          className="p-2! aspect-square"
+          variant="icon-only"
+          size="md"
           title={isPlaying ? "Tạm dừng" : "Phát tự động"}
           icon={isPlaying ? <Pause className="w-5 h-5" /> : <Play className="w-5 h-5" />}
+          aria-label={isPlaying ? "Tạm dừng" : "Phát tự động"}
         />
+        <div className="w-px h-6 bg-white/20" />
         <Button
           onClick={onZoomOut}
           disabled={zoom <= ZOOM_MIN}
-          variant="glass"
-          size="sm"
-          className="p-2! aspect-square"
+          variant="icon-only"
+          size="md"
           title="Thu nhỏ (Phím -)"
           icon={<ZoomOut className="w-5 h-5" />}
+          aria-label="Thu nhỏ"
         />
         <Button
           onClick={onZoomIn}
           disabled={zoom >= ZOOM_MAX}
-          variant="glass"
-          size="sm"
-          className="p-2! aspect-square"
+          variant="icon-only"
+          size="md"
           title="Phóng to (Phím +)"
           icon={<ZoomIn className="w-5 h-5" />}
+          aria-label="Phóng to"
         />
         <Button
           onClick={onRotate}
-          variant="glass"
-          size="sm"
-          className="p-2! aspect-square"
+          variant="icon-only"
+          size="md"
           title="Xoay (Phím R)"
           icon={<RotateCw className="w-5 h-5" />}
+          aria-label="Xoay"
         />
+        <div className="w-px h-6 bg-white/20" />
         <Button
           onClick={onToggleFullscreen}
-          variant="glass"
-          size="sm"
-          className="p-2! aspect-square"
+          variant="icon-only"
+          size="md"
           title="Toàn màn hình (Phím F)"
           icon={isFullscreen ? <Minimize className="w-5 h-5" /> : <Maximize className="w-5 h-5" />}
+          aria-label="Toàn màn hình"
         />
         <Button
           onClick={onDownload}
-          variant="glass"
-          size="sm"
-          className="p-2! aspect-square"
+          variant="icon-only"
+          size="md"
           title="Tải xuống"
           icon={<Download className="w-5 h-5" />}
+          aria-label="Tải xuống"
         />
       </div>
     </div>

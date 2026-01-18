@@ -5,6 +5,7 @@ import {
   GallerySection,
   CTASection,
 } from "./components/home";
+import { AnimatedSection } from "./components/shared/AnimatedSection";
 
 export const revalidate = 3600;
 
@@ -18,19 +19,29 @@ export default async function Home() {
   return (
     <main className="flex-1">
       {/* Hero Slideshow Section */}
-      <HeroSlideShow />
+      <AnimatedSection variant="fadeInUp">
+        <HeroSlideShow />
+      </AnimatedSection>
 
       {/* HSK Levels Section */}
-      <HSKLevelsSection />
+      <AnimatedSection variant="fadeInUp">
+        <HSKLevelsSection />
+      </AnimatedSection>
 
       {/* Why Choose Us Section */}
-      <WhyChooseUsSection />
+      <AnimatedSection variant="fadeInUp">
+        <WhyChooseUsSection />
+      </AnimatedSection>
 
       {/* Gallery Section */}
-      <GallerySection />
+      <AnimatedSection variant="fadeInUp">
+        <GallerySection />
+      </AnimatedSection>
 
       {/* CTA Section (Before Footer) */}
-      <CTASection />
+      <AnimatedSection variant="fadeInUp">
+        <CTASection />
+      </AnimatedSection>
     </main>
   );
 }

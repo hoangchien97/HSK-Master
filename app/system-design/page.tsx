@@ -1,7 +1,9 @@
 'use client';
 
 import { useState } from 'react';
+import { motion } from 'framer-motion';
 import { Button, Input, Select, Checkbox, Radio, Switch, Pagination, Tooltip } from "../components/shared";
+import LoadingSpinner from '../components/shared/LoadingSpinner';
 import {
   Palette,
   Type,
@@ -30,6 +32,62 @@ import {
   User,
   BookOpen
 } from 'lucide-react';
+
+// Animation variants
+const fadeInUp = {
+  hidden: { opacity: 0, y: 40 },
+  visible: { 
+    opacity: 1, 
+    y: 0,
+    transition: { duration: 0.6 }
+  }
+};
+
+const fadeIn = {
+  hidden: { opacity: 0 },
+  visible: { 
+    opacity: 1,
+    transition: { duration: 0.8 }
+  }
+};
+
+const scaleIn = {
+  hidden: { opacity: 0, scale: 0.8 },
+  visible: { 
+    opacity: 1, 
+    scale: 1,
+    transition: { duration: 0.5 }
+  }
+};
+
+const slideInLeft = {
+  hidden: { opacity: 0, x: -50 },
+  visible: { 
+    opacity: 1, 
+    x: 0,
+    transition: { duration: 0.6 }
+  }
+};
+
+const staggerContainer = {
+  hidden: { opacity: 0 },
+  visible: {
+    opacity: 1,
+    transition: {
+      staggerChildren: 0.1,
+      delayChildren: 0.2
+    }
+  }
+};
+
+const staggerItem = {
+  hidden: { opacity: 0, y: 20 },
+  visible: { 
+    opacity: 1, 
+    y: 0,
+    transition: { duration: 0.5 }
+  }
+};
 
 export default function SystemDesignPage() {
   const [activeSection, setActiveSection] = useState<string>('colors');
@@ -166,31 +224,74 @@ export default function SystemDesignPage() {
         {/* Content Sections */}
         <div className="p-8 lg:p-12 max-w-6xl mx-auto space-y-20">
           {/* Hero Section */}
-          <section className="pb-12 border-b border-gray-100">
-            <div className="inline-flex items-center gap-2 text-primary-600 font-bold text-[10px] bg-primary-50 px-3 py-1 rounded-full mb-6 uppercase tracking-[0.2em]">
+          <motion.section 
+            className="pb-12 border-b border-gray-100"
+            initial="hidden"
+            animate="visible"
+            variants={fadeIn}
+          >
+            <motion.div 
+              className="inline-flex items-center gap-2 text-primary-600 font-bold text-[10px] bg-primary-50 px-3 py-1 rounded-full mb-6 uppercase tracking-[0.2em]"
+              initial={{ opacity: 0, scale: 0.8 }}
+              animate={{ opacity: 1, scale: 1 }}
+              transition={{ duration: 0.5, delay: 0.2 }}
+            >
               Design Language
-            </div>
-            <h1 className="text-5xl lg:text-7xl font-black tracking-tighter mb-6 leading-[1.1]">
+            </motion.div>
+            <motion.h1 
+              className="text-5xl lg:text-7xl font-black tracking-tighter mb-6 leading-[1.1]"
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6, delay: 0.3 }}
+            >
               Tài liệu <br />
-              <span className="gradient-text">HSK Master Ultimate</span>
-            </h1>
-            <p className="text-xl text-gray-500 max-w-3xl leading-relaxed">
+              <motion.span 
+                className="gradient-text"
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                transition={{ duration: 0.8, delay: 0.5 }}
+              >
+                HSK Master Ultimate
+              </motion.span>
+            </motion.h1>
+            <motion.p 
+              className="text-xl text-gray-500 max-w-3xl leading-relaxed"
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6, delay: 0.6 }}
+            >
               Hệ thống thiết kế toàn diện nhất cho HSK Master, tích hợp cấu trúc Sidebar điều hướng
               và các thành phần giao diện chi tiết cho nền tảng giáo dục tiếng Trung cao cấp.
-            </p>
-          </section>
+            </motion.p>
+          </motion.section>
 
           {/* 1. Color Palette */}
           {activeSection === 'colors' && (
-            <section className="space-y-10" id="colors">
-              <div className="section-header-gradient">
+            <motion.section 
+              className="space-y-10" 
+              id="colors"
+              initial="hidden"
+              whileInView="visible"
+              viewport={{ once: true, margin: "-100px" }}
+              variants={fadeInUp}
+            >
+              <motion.div 
+                className="section-header-gradient"
+                variants={slideInLeft}
+              >
                 <h2 className="text-3xl font-black tracking-tight">Bảng Màu Hệ Thống</h2>
                 <p className="text-gray-500 mt-1">Dải màu 50-950 được tối ưu hóa cho độ tương phản và khả năng tiếp cận.</p>
-              </div>
+              </motion.div>
 
-              <div className="grid grid-cols-1 gap-12">
+              <motion.div 
+                className="grid grid-cols-1 gap-12"
+                variants={staggerContainer}
+              >
                 {/* Primary Scale */}
-                <div className="bg-white p-8 rounded-3xl shadow-soft border border-gray-100">
+                <motion.div 
+                  className="bg-white p-8 rounded-3xl shadow-soft border border-gray-100"
+                  variants={staggerItem}
+                >
                   <h3 className="text-sm font-black text-gray-400 uppercase tracking-widest mb-6">
                     Primary - Imperial Red (#EC131E)
                   </h3>
@@ -220,10 +321,13 @@ export default function SystemDesignPage() {
                       </div>
                     ))}
                   </div>
-                </div>
+                </motion.div>
 
                 {/* Semantic Colors Grid */}
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                <motion.div 
+                  className="grid grid-cols-1 md:grid-cols-2 gap-8"
+                  variants={staggerContainer}
+                >
                   {/* Success */}
                   <div className="bg-white p-8 rounded-3xl shadow-soft border border-gray-100">
                     <h3 className="text-sm font-black text-success-600 uppercase tracking-widest mb-6">
@@ -291,21 +395,37 @@ export default function SystemDesignPage() {
                       <span>50</span><span>950</span>
                     </div>
                   </div>
-                </div>
-              </div>
-            </section>
+                </motion.div>
+              </motion.div>
+            </motion.section>
           )}
 
           {/* 2. Typography */}
           {activeSection === 'typography' && (
-            <section className="space-y-10" id="typography">
-              <div className="section-header-gradient">
+            <motion.section 
+              className="space-y-10" 
+              id="typography"
+              initial="hidden"
+              whileInView="visible"
+              viewport={{ once: true, margin: "-100px" }}
+              variants={fadeInUp}
+            >
+              <motion.div 
+                className="section-header-gradient"
+                variants={slideInLeft}
+              >
                 <h2 className="text-3xl font-black tracking-tight">Typography</h2>
                 <p className="text-gray-500 mt-1">Font system using Inter for Latin text and Noto Sans SC for Chinese characters.</p>
-              </div>
+              </motion.div>
 
               {/* Font Families */}
-              <div className="bg-white p-8 rounded-3xl shadow-soft border border-gray-100">
+              <motion.div 
+                className="bg-white p-8 rounded-3xl shadow-soft border border-gray-100"
+                variants={scaleIn}
+                whileInView="visible"
+                initial="hidden"
+                viewport={{ once: true }}
+              >
                 <h3 className="text-sm font-black text-gray-400 uppercase tracking-widest mb-6">Font Families</h3>
                 <div className="space-y-6">
                   <div className="flex flex-col gap-2 pb-6 border-b border-gray-100">
@@ -326,10 +446,16 @@ export default function SystemDesignPage() {
                     </p>
                   </div>
                 </div>
-              </div>
+              </motion.div>
 
               {/* Type Scale */}
-              <div className="bg-white p-8 rounded-3xl shadow-soft border border-gray-100">
+              <motion.div 
+                className="bg-white p-8 rounded-3xl shadow-soft border border-gray-100"
+                variants={scaleIn}
+                whileInView="visible"
+                initial="hidden"
+                viewport={{ once: true }}
+              >
                 <h3 className="text-sm font-black text-gray-400 uppercase tracking-widest mb-6">Type Scale</h3>
                 <div className="space-y-8">
                   <div className="flex items-baseline gap-6 pb-6 border-b border-gray-50">
@@ -359,17 +485,27 @@ export default function SystemDesignPage() {
                     <p className="text-sm text-gray-500">Additional information and helper text</p>
                   </div>
                 </div>
-              </div>
-            </section>
+              </motion.div>
+            </motion.section>
           )}
 
           {/* 3. Icons */}
           {activeSection === 'icons' && (
-            <section className="space-y-10" id="icons">
-              <div className="section-header-gradient">
+            <motion.section 
+              className="space-y-10" 
+              id="icons"
+              initial="hidden"
+              whileInView="visible"
+              viewport={{ once: true, margin: "-100px" }}
+              variants={fadeInUp}
+            >
+              <motion.div 
+                className="section-header-gradient"
+                variants={slideInLeft}
+              >
                 <h2 className="text-3xl font-black tracking-tight">Iconography</h2>
                 <p className="text-gray-500 mt-1">Using Lucide React icons for consistent visual language.</p>
-              </div>
+              </motion.div>
 
               {/* Usage Guide */}
               <div className="bg-blue-50 border border-blue-200 rounded-2xl p-8 space-y-4">
@@ -407,7 +543,13 @@ export default function SystemDesignPage() {
               </div>
 
               {/* Icon Grid */}
-              <div className="grid grid-cols-4 md:grid-cols-6 lg:grid-cols-8 gap-4">
+              <motion.div 
+                className="grid grid-cols-4 md:grid-cols-6 lg:grid-cols-8 gap-4"
+                variants={staggerContainer}
+                whileInView="visible"
+                initial="hidden"
+                viewport={{ once: true }}
+              >
                 {[
                   { Icon: GraduationCap, name: 'GraduationCap' },
                   { Icon: Palette, name: 'Palette' },
@@ -434,22 +576,38 @@ export default function SystemDesignPage() {
                     </span>
                   </div>
                 ))}
-              </div>
-            </section>
+              </motion.div>
+            </motion.section>
           )}
 
           {/* Components Sections */}
           {['buttons', 'forms', 'pagination', 'tooltip', 'loading', 'cards', 'nav'].includes(activeSection) && (
             <>
               {activeSection === 'buttons' ? (
-                <section className="space-y-10" id="buttons">
-                  <div className="section-header-gradient">
+                <motion.section 
+                  className="space-y-10" 
+                  id="buttons"
+                  initial="hidden"
+                  whileInView="visible"
+                  viewport={{ once: true, margin: "-100px" }}
+                  variants={fadeInUp}
+                >
+                  <motion.div 
+                    className="section-header-gradient"
+                    variants={slideInLeft}
+                  >
                     <h2 className="text-3xl font-black tracking-tight">Buttons (Ma trận nút bấm)</h2>
                     <p className="text-gray-500 mt-1">Đầy đủ các trạng thái tương tác và biến thể phong cách.</p>
-                  </div>
+                  </motion.div>
 
                   {/* Variants Overview */}
-                  <div className="bg-white p-8 rounded-3xl shadow-soft border border-gray-100">
+                  <motion.div 
+                    className="bg-white p-8 rounded-3xl shadow-soft border border-gray-100"
+                    variants={scaleIn}
+                    whileInView="visible"
+                    initial="hidden"
+                    viewport={{ once: true }}
+                  >
                     <h3 className="text-sm font-black text-gray-400 uppercase tracking-widest mb-6">Button Variants</h3>
                     <div className="flex flex-wrap gap-4">
                       <Button variant="primary">Primary</Button>
@@ -458,17 +616,23 @@ export default function SystemDesignPage() {
                       <Button variant="ghost">Ghost</Button>
                       <Button variant="gradient">Gradient</Button>
                     </div>
-                  </div>
+                  </motion.div>
 
                   {/* Sizes */}
-                  <div className="bg-white p-8 rounded-3xl shadow-soft border border-gray-100">
+                  <motion.div 
+                    className="bg-white p-8 rounded-3xl shadow-soft border border-gray-100"
+                    variants={scaleIn}
+                    whileInView="visible"
+                    initial="hidden"
+                    viewport={{ once: true }}
+                  >
                     <h3 className="text-sm font-black text-gray-400 uppercase tracking-widest mb-6">Sizes</h3>
                     <div className="flex flex-wrap items-center gap-4">
                       <Button variant="primary" size="sm">Small</Button>
                       <Button variant="primary" size="md">Medium (Default)</Button>
                       <Button variant="primary" size="lg">Large</Button>
                     </div>
-                  </div>
+                  </motion.div>
 
                   {/* States Matrix */}
                   <div className="bg-white p-8 rounded-3xl shadow-soft border border-gray-100 overflow-x-auto">
@@ -677,16 +841,32 @@ export default function SystemDesignPage() {
                       </div>
                     </div>
                   </div>
-                </section>
+                </motion.section>
               ) : activeSection === 'forms' ? (
-                <section className="space-y-10" id="forms">
-                  <div className="section-header-gradient">
+                <motion.section 
+                  className="space-y-10" 
+                  id="forms"
+                  initial="hidden"
+                  whileInView="visible"
+                  viewport={{ once: true, margin: "-100px" }}
+                  variants={fadeInUp}
+                >
+                  <motion.div 
+                    className="section-header-gradient"
+                    variants={slideInLeft}
+                  >
                     <h2 className="text-3xl font-black tracking-tight">Forms - Input, Select, Checkbox, Radio, Switch</h2>
                     <p className="text-gray-500 mt-1">Tất cả các component form với các trạng thái và kích thước khác nhau.</p>
-                  </div>
+                  </motion.div>
 
                   {/* Input States */}
-                  <div className="bg-white p-8 rounded-3xl shadow-soft border border-gray-100">
+                  <motion.div 
+                    className="bg-white p-8 rounded-3xl shadow-soft border border-gray-100"
+                    variants={scaleIn}
+                    whileInView="visible"
+                    initial="hidden"
+                    viewport={{ once: true }}
+                  >
                     <h3 className="text-sm font-black text-gray-400 uppercase tracking-widest mb-6">Input Component - All States</h3>
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
                       {/* Default */}
@@ -744,32 +924,38 @@ export default function SystemDesignPage() {
                         icon={<User className="w-5 h-5" />}
                       />
                     </div>
-                  </div>
+                  </motion.div>
 
                   {/* Input Sizes */}
-                  <div className="bg-white p-8 rounded-3xl shadow-soft border border-gray-100">
+                  <motion.div 
+                    className="bg-white p-8 rounded-3xl shadow-soft border border-gray-100"
+                    variants={scaleIn}
+                    whileInView="visible"
+                    initial="hidden"
+                    viewport={{ once: true }}
+                  >
                     <h3 className="text-sm font-black text-gray-400 uppercase tracking-widest mb-6">Input Sizes</h3>
                     <div className="space-y-6">
                       <Input
                         label="Small Input"
-                        inputSize="sm"
+                        size="sm"
                         placeholder="Small size input..."
                         icon={<Search className="w-4 h-4" />}
                       />
                       <Input
                         label="Medium Input (Default)"
-                        inputSize="md"
+                        size="md"
                         placeholder="Medium size input..."
                         icon={<Search className="w-5 h-5" />}
                       />
                       <Input
                         label="Large Input"
-                        inputSize="lg"
+                        size="lg"
                         placeholder="Large size input..."
                         icon={<Search className="w-6 h-6" />}
                       />
                     </div>
-                  </div>
+                  </motion.div>
 
                   {/* Select Sizes */}
                   <div className="bg-white p-8 rounded-3xl shadow-soft border border-gray-100">
@@ -777,7 +963,7 @@ export default function SystemDesignPage() {
                     <div className="space-y-6">
                       <Select
                         label="Small Select"
-                        selectSize="sm"
+                        size="sm"
                         placeholder="Small size select..."
                         icon={<BookOpen className="w-4 h-4" />}
                         options={[
@@ -788,7 +974,7 @@ export default function SystemDesignPage() {
                       />
                       <Select
                         label="Medium Select (Default)"
-                        selectSize="md"
+                        size="md"
                         placeholder="Medium size select..."
                         icon={<BookOpen className="w-5 h-5" />}
                         options={[
@@ -799,7 +985,7 @@ export default function SystemDesignPage() {
                       />
                       <Select
                         label="Large Select"
-                        selectSize="lg"
+                        size="lg"
                         placeholder="Large size select..."
                         icon={<BookOpen className="w-6 h-6" />}
                         options={[
@@ -868,7 +1054,7 @@ export default function SystemDesignPage() {
                         <Select
                           label="Lớp học"
                           required
-                          selectSize="lg"
+                          size="lg"
                           options={[
                             { value: '', label: 'Chọn lớp học...' },
                             { value: 'morning', label: 'Lớp buổi sáng (8:00 - 10:00)' },
@@ -956,9 +1142,9 @@ export default function SystemDesignPage() {
                       <div className="pt-6 border-t border-gray-100">
                         <p className="text-xs font-bold text-gray-500 mb-4">Checkbox Sizes</p>
                         <div className="flex flex-wrap items-center gap-6">
-                          <Checkbox checkboxSize="sm" label="Small" />
-                          <Checkbox checkboxSize="md" label="Medium (Default)" />
-                          <Checkbox checkboxSize="lg" label="Large" />
+                          <Checkbox size="sm" label="Small" />
+                          <Checkbox size="md" label="Medium (Default)" />
+                          <Checkbox size="lg" label="Large" />
                         </div>
                       </div>
 
@@ -1032,9 +1218,9 @@ export default function SystemDesignPage() {
                       <div className="pt-6 border-t border-gray-100">
                         <p className="text-xs font-bold text-gray-500 mb-4">Radio Sizes</p>
                         <div className="flex flex-wrap items-center gap-6">
-                          <Radio name="size-demo" radioSize="sm" label="Small" />
-                          <Radio name="size-demo" radioSize="md" label="Medium" defaultChecked />
-                          <Radio name="size-demo" radioSize="lg" label="Large" />
+                          <Radio name="size-demo" size="sm" label="Small" />
+                          <Radio name="size-demo" size="md" label="Medium" defaultChecked />
+                          <Radio name="size-demo" size="lg" label="Large" />
                         </div>
                       </div>
                     </div>
@@ -1093,20 +1279,30 @@ export default function SystemDesignPage() {
                       <div className="pt-6 border-t border-gray-100">
                         <p className="text-xs font-bold text-gray-500 mb-4">Switch Sizes</p>
                         <div className="flex flex-wrap items-center gap-6">
-                          <Switch switchSize="sm" label="Small" defaultChecked />
-                          <Switch switchSize="md" label="Medium (Default)" defaultChecked />
-                          <Switch switchSize="lg" label="Large" defaultChecked />
+                          <Switch size="sm" label="Small" defaultChecked />
+                          <Switch size="md" label="Medium (Default)" defaultChecked />
+                          <Switch size="lg" label="Large" defaultChecked />
                         </div>
                       </div>
                     </div>
                   </div>
-                </section>
+                </motion.section>
               )  : activeSection === 'pagination' ? (
-                <section className="space-y-10" id="pagination">
-                  <div className="section-header-gradient">
+                <motion.section 
+                  className="space-y-10" 
+                  id="pagination"
+                  initial="hidden"
+                  whileInView="visible"
+                  viewport={{ once: true, margin: "-100px" }}
+                  variants={fadeInUp}
+                >
+                  <motion.div 
+                    className="section-header-gradient"
+                    variants={slideInLeft}
+                  >
                     <h2 className="text-3xl font-black tracking-tight">Pagination Component</h2>
                     <p className="text-gray-500 mt-1">Điều hướng phân trang với nhiều kích thước và hình dạng.</p>
-                  </div>
+                  </motion.div>
 
                   {/* Default Pagination */}
                   <div className="bg-white p-8 rounded-3xl shadow-soft border border-gray-100">
@@ -1256,13 +1452,23 @@ export default function SystemDesignPage() {
                       />
                     </div>
                   </div>
-                </section>
+                </motion.section>
               ) : activeSection === 'tooltip' ? (
-                <section className="space-y-10" id="tooltip">
-                  <div className="section-header-gradient">
+                <motion.section 
+                  className="space-y-10" 
+                  id="tooltip"
+                  initial="hidden"
+                  whileInView="visible"
+                  viewport={{ once: true, margin: "-100px" }}
+                  variants={fadeInUp}
+                >
+                  <motion.div 
+                    className="section-header-gradient"
+                    variants={slideInLeft}
+                  >
                     <h2 className="text-3xl font-black tracking-tight">Tooltip Component</h2>
                     <p className="text-gray-500 mt-1">Hiển thị thông tin bổ sung khi hover, hỗ trợ title màu vàng và nội dung tùy chỉnh.</p>
-                  </div>
+                  </motion.div>
 
                   {/* Basic Tooltip */}
                   <div className="bg-white p-8 rounded-3xl shadow-soft border border-gray-100">
@@ -1352,213 +1558,150 @@ export default function SystemDesignPage() {
                       </div>
                     </div>
                   </div>
-                </section>
+                </motion.section>
               ) : activeSection === 'loading' ? (
-                <section className="space-y-10" id="loading">
-                  <div className="section-header-gradient">
+                <motion.section 
+                  className="space-y-10" 
+                  id="loading"
+                  initial="hidden"
+                  whileInView="visible"
+                  viewport={{ once: true, margin: "-100px" }}
+                  variants={fadeInUp}
+                >
+                  <motion.div 
+                    className="section-header-gradient"
+                    variants={slideInLeft}
+                  >
                     <h2 className="text-3xl font-black tracking-tight">Loading Spinner</h2>
                     <p className="text-gray-500 mt-1">Spinner animation cho trạng thái loading, có thể tùy chỉnh size và màu sắc.</p>
-                  </div>
+                  </motion.div>
 
                   {/* Basic Spinner */}
-                  <div className="bg-white p-8 rounded-3xl shadow-soft border border-gray-100">
+                  <motion.div 
+                    className="bg-white p-8 rounded-3xl shadow-soft border border-gray-100"
+                    variants={scaleIn}
+                    whileInView="visible"
+                    initial="hidden"
+                    viewport={{ once: true }}
+                  >
                     <h3 className="text-sm font-black text-gray-400 uppercase tracking-widest mb-6">Basic Spinner</h3>
                     <div className="flex items-center justify-center gap-8 py-8">
                       <div className="flex flex-col items-center gap-3">
-                        <div className="text-gray-600 text-2xl">
-                          <svg
-                            className="animate-spin"
-                            xmlns="http://www.w3.org/2000/svg"
-                            fill="none"
-                            viewBox="0 0 24 24"
-                            width="1em"
-                            height="1em"
-                          >
-                            <circle
-                              className="opacity-25"
-                              cx="12"
-                              cy="12"
-                              r="10"
-                              stroke="currentColor"
-                              strokeWidth="4"
-                            ></circle>
-                            <path
-                              className="opacity-75"
-                              fill="currentColor"
-                              d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
-                            ></path>
-                          </svg>
-                        </div>
+                        <LoadingSpinner size="md" />
                         <span className="text-xs text-gray-500 font-medium">Default</span>
                       </div>
 
                       <div className="flex flex-col items-center gap-3">
-                        <div className="text-primary-500 text-3xl">
-                          <svg
-                            className="animate-spin"
-                            xmlns="http://www.w3.org/2000/svg"
-                            fill="none"
-                            viewBox="0 0 24 24"
-                            width="1em"
-                            height="1em"
-                          >
-                            <circle
-                              className="opacity-25"
-                              cx="12"
-                              cy="12"
-                              r="10"
-                              stroke="currentColor"
-                              strokeWidth="4"
-                            ></circle>
-                            <path
-                              className="opacity-75"
-                              fill="currentColor"
-                              d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
-                            ></path>
-                          </svg>
-                        </div>
+                        <LoadingSpinner size="lg" color="#EC131E" />
                         <span className="text-xs text-gray-500 font-medium">Primary</span>
                       </div>
 
                       <div className="flex flex-col items-center gap-3">
-                        <div className="text-white text-2xl bg-primary-500 p-4 rounded-xl">
-                          <svg
-                            className="animate-spin"
-                            xmlns="http://www.w3.org/2000/svg"
-                            fill="none"
-                            viewBox="0 0 24 24"
-                            width="1em"
-                            height="1em"
-                          >
-                            <circle
-                              className="opacity-25"
-                              cx="12"
-                              cy="12"
-                              r="10"
-                              stroke="currentColor"
-                              strokeWidth="4"
-                            ></circle>
-                            <path
-                              className="opacity-75"
-                              fill="currentColor"
-                              d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
-                            ></path>
-                          </svg>
+                        <div className="bg-primary-500 p-4 rounded-xl">
+                          <LoadingSpinner size="md" color="white" />
                         </div>
                         <span className="text-xs text-gray-500 font-medium">On Background</span>
                       </div>
                     </div>
-                  </div>
+                  </motion.div>
 
                   {/* Size Variants */}
-                  <div className="bg-white p-8 rounded-3xl shadow-soft border border-gray-100">
+                  <motion.div 
+                    className="bg-white p-8 rounded-3xl shadow-soft border border-gray-100"
+                    variants={scaleIn}
+                    whileInView="visible"
+                    initial="hidden"
+                    viewport={{ once: true }}
+                  >
                     <h3 className="text-sm font-black text-gray-400 uppercase tracking-widest mb-6">Size Variants</h3>
                     <div className="flex items-center justify-center gap-8 py-8">
                       <div className="flex flex-col items-center gap-3">
-                        <div className="text-primary-500 text-base">
-                          <svg
-                            className="animate-spin"
-                            xmlns="http://www.w3.org/2000/svg"
-                            fill="none"
-                            viewBox="0 0 24 24"
-                            width="1em"
-                            height="1em"
-                          >
-                            <circle
-                              className="opacity-25"
-                              cx="12"
-                              cy="12"
-                              r="10"
-                              stroke="currentColor"
-                              strokeWidth="4"
-                            ></circle>
-                            <path
-                              className="opacity-75"
-                              fill="currentColor"
-                              d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
-                            ></path>
-                          </svg>
-                        </div>
+                        <LoadingSpinner size="xs" />
+                        <span className="text-xs text-gray-500 font-medium">Extra Small</span>
+                      </div>
+
+                      <div className="flex flex-col items-center gap-3">
+                        <LoadingSpinner size="sm" />
                         <span className="text-xs text-gray-500 font-medium">Small</span>
                       </div>
 
                       <div className="flex flex-col items-center gap-3">
-                        <div className="text-primary-500 text-2xl">
-                          <svg
-                            className="animate-spin"
-                            xmlns="http://www.w3.org/2000/svg"
-                            fill="none"
-                            viewBox="0 0 24 24"
-                            width="1em"
-                            height="1em"
-                          >
-                            <circle
-                              className="opacity-25"
-                              cx="12"
-                              cy="12"
-                              r="10"
-                              stroke="currentColor"
-                              strokeWidth="4"
-                            ></circle>
-                            <path
-                              className="opacity-75"
-                              fill="currentColor"
-                              d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
-                            ></path>
-                          </svg>
-                        </div>
+                        <LoadingSpinner size="md" />
                         <span className="text-xs text-gray-500 font-medium">Medium</span>
                       </div>
 
                       <div className="flex flex-col items-center gap-3">
-                        <div className="text-primary-500 text-4xl">
-                          <svg
-                            className="animate-spin"
-                            xmlns="http://www.w3.org/2000/svg"
-                            fill="none"
-                            viewBox="0 0 24 24"
-                            width="1em"
-                            height="1em"
-                          >
-                            <circle
-                              className="opacity-25"
-                              cx="12"
-                              cy="12"
-                              r="10"
-                              stroke="currentColor"
-                              strokeWidth="4"
-                            ></circle>
-                            <path
-                              className="opacity-75"
-                              fill="currentColor"
-                              d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
-                            ></path>
-                          </svg>
-                        </div>
+                        <LoadingSpinner size="lg" />
                         <span className="text-xs text-gray-500 font-medium">Large</span>
                       </div>
+
+                      <div className="flex flex-col items-center gap-3">
+                        <LoadingSpinner size="xl" />
+                        <span className="text-xs text-gray-500 font-medium">Extra Large</span>
+                      </div>
                     </div>
-                  </div>
+                  </motion.div>
+
+                  {/* Speed Variants */}
+                  <motion.div 
+                    className="bg-white p-8 rounded-3xl shadow-soft border border-gray-100"
+                    variants={scaleIn}
+                    whileInView="visible"
+                    initial="hidden"
+                    viewport={{ once: true }}
+                  >
+                    <h3 className="text-sm font-black text-gray-400 uppercase tracking-widest mb-6">Speed Variants</h3>
+                    <div className="flex items-center justify-center gap-8 py-8">
+                      <div className="flex flex-col items-center gap-3">
+                        <LoadingSpinner size="lg" speed={1.5} />
+                        <span className="text-xs text-gray-500 font-medium">Slow (1.5s)</span>
+                      </div>
+
+                      <div className="flex flex-col items-center gap-3">
+                        <LoadingSpinner size="lg" speed={0.8} />
+                        <span className="text-xs text-gray-500 font-medium">Normal (0.8s)</span>
+                      </div>
+
+                      <div className="flex flex-col items-center gap-3">
+                        <LoadingSpinner size="lg" speed={0.4} />
+                        <span className="text-xs text-gray-500 font-medium">Fast (0.4s)</span>
+                      </div>
+                    </div>
+                  </motion.div>
 
                   {/* In Button Context */}
-                  <div className="bg-white p-8 rounded-3xl shadow-soft border border-gray-100">
+                  <motion.div 
+                    className="bg-white p-8 rounded-3xl shadow-soft border border-gray-100"
+                    variants={scaleIn}
+                    whileInView="visible"
+                    initial="hidden"
+                    viewport={{ once: true }}
+                  >
                     <h3 className="text-sm font-black text-gray-400 uppercase tracking-widest mb-6">In Button Context</h3>
-                    <div className="flex flex-wrap items-center gap-4 justify-center py-8">
-                      <Button loading>Loading...</Button>
+                    <div className="flex flex-wrap gap-4">
+                      <Button variant="primary" loading>Loading...</Button>
                       <Button variant="secondary" loading>Processing</Button>
-                      <Button variant="outline" loading>Đang tải</Button>
-                      <Button variant="gradient" loading size="lg">Submitting</Button>
+                      <Button variant="outline" loading size="lg">Submit</Button>
                     </div>
-                  </div>
-                </section>
+                  </motion.div>
+                </motion.section>
               ) : (
-                <section className="space-y-10">
-                  <div className="section-header-gradient">
+                <motion.section 
+                  className="space-y-10"
+                  initial="hidden"
+                  whileInView="visible"
+                  viewport={{ once: true, margin: "-100px" }}
+                  variants={fadeInUp}
+                >
+                  <motion.div 
+                    className="section-header-gradient"
+                    variants={slideInLeft}
+                  >
                     <h2 className="text-3xl font-black tracking-tight">
                       {navigationItems.components.find(item => item.id === activeSection)?.label}
                     </h2>
                     <p className="text-gray-500 mt-1">Coming soon...</p>
-                  </div>
+                  </motion.div>
 
                   <div className="bg-yellow-50 border-2 border-yellow-200 rounded-2xl p-12 text-center">
                     <div className="text-6xl mb-4">🚧</div>
@@ -1567,7 +1710,7 @@ export default function SystemDesignPage() {
                       Component documentation will be added here
                     </p>
                   </div>
-                </section>
+                </motion.section>
               )}
             </>
           )}

@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { submitContact } from "./actions";
 import { ContactInfo, ContactForm, ContactFAQ } from "../components/contact";
 import { Breadcrumb } from "../components/shared";
+import { AnimatedSection } from "../components/shared/AnimatedSection";
 
 export const metadata: Metadata = {
   title: "Liên hệ - HSK Master | Tư vấn khóa học tiếng Trung",
@@ -50,17 +51,17 @@ export default function ContactPage() {
       {/* Main Content */}
       <div className="mx-auto max-w-7xl px-4 py-12 sm:px-6 lg:px-8">
 
-        <div className="mb-12 text-center max-w-3xl mx-auto">
+        <AnimatedSection variant="fadeInUp" className="mb-12 text-center max-w-3xl mx-auto">
           <h1 className="text-3xl font-bold tracking-tight text-gray-900 dark:text-white sm:text-4xl mb-3">
             Liên hệ với chúng tôi <span className="block text-xl sm:text-2xl font-medium text-text-secondary-light dark:text-text-secondary-dark mt-1">联系我们</span>
           </h1>
           <p className="text-lg text-text-secondary-light dark:text-text-secondary-dark">
             Chúng tôi luôn sẵn sàng lắng nghe và giải đáp mọi thắc mắc của bạn về lộ trình học HSK và các khóa học tiếng Trung.
           </p>
-        </div>
+        </AnimatedSection>
 
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-16">
-          <div className="flex flex-col gap-8">
+          <AnimatedSection variant="slideInLeft" className="flex flex-col gap-8">
             <ContactInfo />
             <div className="aspect-video w-full overflow-hidden rounded-2xl border border-border-light dark:border-border-dark shadow-sm relative bg-gray-100 dark:bg-gray-800">
               <iframe
@@ -74,13 +75,16 @@ export default function ContactPage() {
                 className="absolute inset-0 grayscale hover:grayscale-0 transition-all duration-500"
               />
             </div>
-          </div>
+          </AnimatedSection>
 
-          <ContactForm submitAction={submitContact} />
+          <AnimatedSection variant="slideInRight">
+            <ContactForm submitAction={submitContact} />
+          </AnimatedSection>
         </div>
 
-
-        <ContactFAQ />
+        <AnimatedSection variant="fadeInUp">
+          <ContactFAQ />
+        </AnimatedSection>
       </div>
     </main>
   );

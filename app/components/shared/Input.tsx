@@ -3,7 +3,7 @@
 import { InputHTMLAttributes, forwardRef, ReactNode } from "react";
 import { Search, X } from "lucide-react";
 
-interface InputProps extends InputHTMLAttributes<HTMLInputElement> {
+interface InputProps extends Omit<InputHTMLAttributes<HTMLInputElement>, 'size'> {
   label?: string;
   icon?: ReactNode | string; // Support both Lucide icons and Material Icons (string)
   error?: string;
@@ -92,6 +92,7 @@ const Input = forwardRef<HTMLInputElement, InputProps>(
               ${className}
             `}
             {...props}
+            size={undefined}
           />
         </div>
         {error && (

@@ -2,7 +2,9 @@ import { prisma } from "@/lib/prisma";
 import { notFound } from "next/navigation";
 import Button from "@/app/components/shared/Button";
 import { Breadcrumb } from "@/app/components/shared";
+import { AnimatedSection } from "@/app/components/shared/AnimatedSection";
 import LessonList from "./LessonList";
+import { CourseStatsGrid, CourseResourceCards } from "./CourseClient";
 
 export const revalidate = 600; // ISR - revalidate every 10 minutes
 
@@ -16,7 +18,7 @@ export async function generateStaticParams() {
     const courses = await prisma.course.findMany({
       select: { slug: true },
     });
-    return courses.map((course) => ({
+    return courses.map((course: { slug: string }) => ({
       slug: course.slug,
     }));
   } catch (error) {
@@ -74,24 +76,31 @@ export default async function CourseDetail({ params }: Props) {
       {/* Main Content */}
       <div className="mx-auto max-w-7xl px-4 py-12 sm:px-6 lg:px-8">
         {/* Page Heading & Hero */}
-        <div className="flex flex-col gap-6 items-center text-center mb-16 max-w-4xl mx-auto">
-          {course.badgeText && (
-            <div className="inline-flex items-center gap-2">
-              <span className={`px-4 py-2 rounded-full ${course.badgeColor || "bg-gradient-to-r from-orange-500/20 to-red-500/20 text-orange-600 dark:text-orange-400"} text-sm font-bold uppercase tracking-wider shadow-sm`}>
-                {course.badgeText}
-              </span>
-            </div>
-          )}
-          <h1 className="text-[#181111] dark:text-white text-4xl md:text-6xl font-black leading-tight tracking-tight">
-            {course.title}
-          </h1>
-          <p className="text-[#896161] dark:text-gray-300 text-lg md:text-xl font-normal leading-relaxed max-w-2xl">
-            {course.description}
-          </p>
-        </div>
+        <AnimatedSection variant="fadeInUp">
+          <div className="flex flex-col gap-6 items-center text-center mb-16 max-w-4xl mx-auto">
+            {course.badgeText && (
+              <div className="inline-flex items-center gap-2">
+                <span className={`px-4 py-2 rounded-full ${course.badgeColor || "bg-gradient-to-r from-orange-500/20 to-red-500/20 text-orange-600 dark:text-orange-400"} text-sm font-bold uppercase tracking-wider shadow-sm`}>
+                  {course.badgeText}
+                </span>
+              </div>
+            )}
+            <h1 className="text-[#181111] dark:text-white text-4xl md:text-6xl font-black leading-tight tracking-tight">
+              {course.title}
+            </h1>
+            <p className="text-[#896161] dark:text-gray-300 text-lg md:text-xl font-normal leading-relaxed max-w-2xl">
+              {course.description}
+            </p>
+          </div>
+        </AnimatedSection>
+        
         {/* Statistics */}
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-6 md:gap-8 px-0 md:px-4 mb-12">
-          <div className="group relative bg-white/70 dark:bg-gray-800/70 backdrop-blur-sm rounded-2xl p-6 shadow-sm border border-gray-200/50 dark:border-gray-700/50 hover:shadow-2xl hover:border-transparent transition-all duration-500 transform-gpu hover:-translate-y-1 cursor-pointer">
+        <CourseStatsGrid stats={{
+          vocabularyCount: course.vocabularyCount,
+          grammarCount: course.grammarCount,
+          lessonCount: course.lessonCount,
+          durationHours: course.durationHours
+        }} />
             <div className="relative mb-4 flex items-center justify-center">
               <div className="absolute inset-0 bg-gradient-to-r from-blue-500/20 to-cyan-500/20 rounded-2xl blur-xl opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
               <div className="relative z-10 inline-flex items-center justify-center size-14 bg-blue-50 dark:bg-blue-900/30 rounded-2xl text-blue-600 dark:text-blue-400 transition-all duration-300 group-hover:scale-110">
@@ -105,9 +114,9 @@ export default async function CourseDetail({ params }: Props) {
               {course.vocabularyCount} từ
             </p>
             <div className="absolute top-0 right-0 w-20 h-20 bg-gradient-to-br from-blue-200 to-cyan-200 dark:from-blue-900/20 dark:to-cyan-900/20 rounded-bl-[60px] -mr-6 -mt-6 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
-          </div>
+          </motion.div>
 
-          <div className="group relative bg-white/70 dark:bg-gray-800/70 backdrop-blur-sm rounded-2xl p-6 shadow-sm border border-gray-200/50 dark:border-gray-700/50 hover:shadow-2xl hover:border-transparent transition-all duration-500 transform-gpu hover:-translate-y-1 cursor-pointer">
+          <motion.div variants={staggerItem} className="group relative bg-white/70 dark:bg-gray-800/70 backdrop-blur-sm rounded-2xl p-6 shadow-sm border border-gray-200/50 dark:border-gray-700/50 hover:shadow-2xl hover:border-transparent transition-all duration-500 transform-gpu hover:-translate-y-1 cursor-pointer">
             <div className="relative mb-4 flex items-center justify-center">
               <div className="absolute inset-0 bg-gradient-to-r from-purple-500/20 to-pink-500/20 rounded-2xl blur-xl opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
               <div className="relative z-10 inline-flex items-center justify-center size-14 bg-purple-50 dark:bg-purple-900/30 rounded-2xl text-purple-600 dark:text-purple-400 transition-all duration-300 group-hover:scale-110">
@@ -121,9 +130,9 @@ export default async function CourseDetail({ params }: Props) {
               {course.grammarCount} điểm
             </p>
             <div className="absolute top-0 right-0 w-20 h-20 bg-gradient-to-br from-purple-200 to-pink-200 dark:from-purple-900/20 dark:to-pink-900/20 rounded-bl-[60px] -mr-6 -mt-6 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
-          </div>
+          </motion.div>
 
-          <div className="group relative bg-white/70 dark:bg-gray-800/70 backdrop-blur-sm rounded-2xl p-6 shadow-sm border border-gray-200/50 dark:border-gray-700/50 hover:shadow-2xl hover:border-transparent transition-all duration-500 transform-gpu hover:-translate-y-1 cursor-pointer">
+          <motion.div variants={staggerItem} className="group relative bg-white/70 dark:bg-gray-800/70 backdrop-blur-sm rounded-2xl p-6 shadow-sm border border-gray-200/50 dark:border-gray-700/50 hover:shadow-2xl hover:border-transparent transition-all duration-500 transform-gpu hover:-translate-y-1 cursor-pointer">
             <div className="relative mb-4 flex items-center justify-center">
               <div className="absolute inset-0 bg-gradient-to-r from-green-500/20 to-emerald-500/20 rounded-2xl blur-xl opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
               <div className="relative z-10 inline-flex items-center justify-center size-14 bg-green-50 dark:bg-green-900/30 rounded-2xl text-green-600 dark:text-green-400 transition-all duration-300 group-hover:scale-110">
@@ -137,9 +146,9 @@ export default async function CourseDetail({ params }: Props) {
               {course.lessonCount} bài
             </p>
             <div className="absolute top-0 right-0 w-20 h-20 bg-gradient-to-br from-green-200 to-emerald-200 dark:from-green-900/20 dark:to-emerald-900/20 rounded-bl-[60px] -mr-6 -mt-6 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
-          </div>
+          </motion.div>
 
-          <div className="group relative bg-white/70 dark:bg-gray-800/70 backdrop-blur-sm rounded-2xl p-6 shadow-sm border border-gray-200/50 dark:border-gray-700/50 hover:shadow-2xl hover:border-transparent transition-all duration-500 transform-gpu hover:-translate-y-1 cursor-pointer">
+          <motion.div variants={staggerItem} className="group relative bg-white/70 dark:bg-gray-800/70 backdrop-blur-sm rounded-2xl p-6 shadow-sm border border-gray-200/50 dark:border-gray-700/50 hover:shadow-2xl hover:border-transparent transition-all duration-500 transform-gpu hover:-translate-y-1 cursor-pointer">
             <div className="relative mb-4 flex items-center justify-center">
               <div className="absolute inset-0 bg-gradient-to-r from-orange-500/20 to-red-500/20 rounded-2xl blur-xl opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
               <div className="relative z-10 inline-flex items-center justify-center size-14 bg-orange-50 dark:bg-orange-900/30 rounded-2xl text-orange-600 dark:text-orange-400 transition-all duration-300 group-hover:scale-110">
@@ -153,16 +162,29 @@ export default async function CourseDetail({ params }: Props) {
               {course.durationHours} giờ
             </p>
             <div className="absolute top-0 right-0 w-20 h-20 bg-gradient-to-br from-orange-200 to-red-200 dark:from-orange-900/20 dark:to-red-900/20 rounded-bl-[60px] -mr-6 -mt-6 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
-          </div>
-        </div>
+          </motion.div>
+        </motion.div>
 
         {/* Main Learning Path Section */}
-        <LessonList lessons={course.lessons} initialDisplayCount={3} />
+        <motion.div
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true, margin: "-100px" }}
+          variants={fadeInUp}
+        >
+          <LessonList lessons={course.lessons} initialDisplayCount={3} />
+        </motion.div>
 
         {/* Resources Split Section */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 px-0 md:px-4 mt-4">
+        <motion.div
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true, margin: "-100px" }}
+          variants={staggerContainer}
+          className="grid grid-cols-1 md:grid-cols-2 gap-6 px-0 md:px-4 mt-4"
+        >
           {/* Vocabulary Card */}
-          <div className="relative overflow-hidden rounded-2xl bg-surface-light dark:bg-surface-dark border border-[#e6dbdb] dark:border-white/10 p-6 flex flex-col justify-between h-full min-h-[240px] group hover:border-yellow-500/30 transition-colors">
+          <motion.div variants={staggerItem} className="relative overflow-hidden rounded-2xl bg-surface-light dark:bg-surface-dark border border-[#e6dbdb] dark:border-white/10 p-6 flex flex-col justify-between h-full min-h-[240px] group hover:border-yellow-500/30 transition-colors">
             <div className="absolute top-0 right-0 w-32 h-32 bg-yellow-100 dark:bg-yellow-900/20 rounded-bl-full -mr-8 -mt-8 opacity-50 group-hover:scale-110 transition-transform duration-500"></div>
             <div className="relative z-10">
               <div className="flex items-center gap-2 mb-4">
@@ -201,10 +223,10 @@ export default async function CourseDetail({ params }: Props) {
             >
               Xem danh sách đầy đủ
             </Button>
-          </div>
+          </motion.div>
 
           {/* Grammar Card */}
-          <div className="relative overflow-hidden rounded-2xl bg-surface-light dark:bg-surface-dark border border-[#e6dbdb] dark:border-white/10 p-6 flex flex-col justify-between h-full min-h-[240px] group hover:border-primary/30 transition-colors">
+          <motion.div variants={staggerItem} className="relative overflow-hidden rounded-2xl bg-surface-light dark:bg-surface-dark border border-[#e6dbdb] dark:border-white/10 p-6 flex flex-col justify-between h-full min-h-[240px] group hover:border-primary/30 transition-colors">
             <div className="absolute top-0 right-0 w-32 h-32 bg-red-100 dark:bg-red-900/20 rounded-bl-full -mr-8 -mt-8 opacity-50 group-hover:scale-110 transition-transform duration-500"></div>
             <div className="relative z-10">
               <div className="flex items-center gap-2 mb-4">
@@ -220,7 +242,7 @@ export default async function CourseDetail({ params }: Props) {
                 {course.grammarCount} điểm ngữ pháp với ngữ cảnh thực tế.
               </p>
               <ul className="space-y-2 mb-6">
-                {course.grammarPoints.slice(0, 3).map((gp) => (
+                {course.grammarPoints.slice(0, 3).map((gp: { id: string; title: string }) => (
                   <li
                     key={gp.id}
                     className="flex items-center gap-2 text-sm text-[#555] dark:text-gray-400 hover:text-primary transition-colors"
@@ -239,11 +261,17 @@ export default async function CourseDetail({ params }: Props) {
             >
               Xem hướng dẫn ngữ pháp
             </Button>
-          </div>
-        </div>
+          </motion.div>
+        </motion.div>
 
         {/* Bottom CTA */}
-        <div className="mx-0 md:mx-4 mt-8 mb-8 rounded-3xl p-8 md:p-12 relative overflow-hidden text-center bg-gradient-to-br from-orange-50 via-red-50 to-pink-50 dark:from-gray-800 dark:via-gray-900 dark:to-gray-800 border-2 border-orange-200/50 dark:border-orange-900/30">
+        <motion.div
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true, margin: "-100px" }}
+          variants={scaleIn}
+          className="mx-0 md:mx-4 mt-8 mb-8 rounded-3xl p-8 md:p-12 relative overflow-hidden text-center bg-gradient-to-br from-orange-50 via-red-50 to-pink-50 dark:from-gray-800 dark:via-gray-900 dark:to-gray-800 border-2 border-orange-200/50 dark:border-orange-900/30"
+        >
           {/* Decorative background elements */}
           <div className="absolute -left-16 -bottom-16 w-48 h-48 bg-gradient-to-br from-orange-300/30 to-red-300/30 dark:from-orange-900/20 dark:to-red-900/20 rounded-full blur-3xl"></div>
           <div className="absolute -right-16 -top-16 w-48 h-48 bg-gradient-to-br from-yellow-300/30 to-orange-300/30 dark:from-yellow-900/20 dark:to-orange-900/20 rounded-full blur-3xl"></div>
@@ -275,7 +303,7 @@ export default async function CourseDetail({ params }: Props) {
               </Button>
             </div>
           </div>
-        </div>
+        </motion.div>
       </div>
     </main>
   );

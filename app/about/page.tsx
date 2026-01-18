@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Breadcrumb } from "../components/shared";
 import { AboutHero, WhyChooseUs, Teachers, Environment } from "../components/about";
+import { AnimatedSection } from "../components/shared/AnimatedSection";
 
 export const metadata: Metadata = {
   title: "Giới thiệu - HSK Master | Học tiếng Trung chuẩn quốc tế",
@@ -27,10 +28,18 @@ export default function AboutPage() {
         </div>
       </div>
       <div className="mx-auto max-w-7xl px-4 py-12 sm:px-6 lg:px-8">
-        <AboutHero />
-        <WhyChooseUs />
-        <Teachers />
-        <Environment />
+        <AnimatedSection variant="fadeInUp">
+          <AboutHero />
+        </AnimatedSection>
+        <AnimatedSection variant="fadeInUp">
+          <WhyChooseUs />
+        </AnimatedSection>
+        <AnimatedSection variant="fadeInUp">
+          <Teachers />
+        </AnimatedSection>
+        <AnimatedSection variant="fadeInUp">
+          <Environment />
+        </AnimatedSection>
       </div>
     </main>
   );

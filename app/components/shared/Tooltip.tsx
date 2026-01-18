@@ -1,13 +1,11 @@
 "use client";
 
-import Tippy from '@tippyjs/react';
-import 'tippy.js/dist/tippy.css';
-import '@/app/styles/tippy-custom.css';
 import { ReactElement } from 'react';
+import * as TooltipPrimitive from '@radix-ui/react-tooltip';
 
 interface TooltipProps {
   content: string | ReactElement;
-  title?: string; // Support for yellow title like in code.html
+  title?: string;
   children: ReactElement;
   placement?: 'top' | 'bottom' | 'left' | 'right' | 'auto';
   arrow?: boolean;
@@ -30,39 +28,57 @@ export default function Tooltip({
   animation = 'scale',
   duration = 200,
   delay = 0,
-  theme = 'custom',
-  className,
-  maxWidth = 256, // w-64 = 256px
-  interactive = false,
+  className = '',
+  maxWidth = 256,
   disabled = false,
 }: TooltipProps) {
-  // Wrap children in a span to avoid ref issues with React 19
-  const wrappedChildren = <span className="inline-flex">{children}</span>;
+  const delayMs = Array.isArray(delay) ? delay[0] : delay;
+  const side = placement === 'auto' ? 'top' : placement;
+
+  const animationClass = {
+    fade: 'data-[state=delayed-open]:animate-fadeIn data-[state=instant-open]:animate-fadeIn data-[state=closed]:animate-fadeOut',
+    scale: 'data-[state=delayed-open]:animate-scaleIn data-[state=instant-open]:animate-scaleIn data-[state=closed]:animate-scaleOut',
+    'shift-away': 'data-[state=delayed-open]:animate-slideUp data-[state=instant-open]:animate-slideUp data-[state=closed]:animate-slideDown',
+    'shift-toward': 'data-[state=delayed-open]:animate-slideDown data-[state=instant-open]:animate-slideDown data-[state=closed]:animate-slideUp',
+    perspective: 'data-[state=delayed-open]:animate-perspective data-[state=instant-open]:animate-perspective data-[state=closed]:animate-perspectiveOut',
+  }[animation];
+
+  if (disabled) {
+    return children;
+  }
 
   return (
-    <Tippy
-      content={
-        <div className="leading-relaxed">
-          {title && <div className="tooltip-title">{title}</div>}
-          {typeof content === 'string' ? (
-            <p className="text-xs">{content}</p>
-          ) : (
-            content
+    <TooltipPrimitive.Root delayDuration={delayMs}>
+      <TooltipPrimitive.Trigger asChild>
+        {children}
+      </TooltipPrimitive.Trigger>
+      <TooltipPrimitive.Portal>
+        <TooltipPrimitive.Content
+          side={side}
+          sideOffset={5}
+          className={`
+            z-50
+            bg-gray-900 dark:bg-gray-800 text-white text-xs
+            rounded-lg shadow-xl py-2 px-3 leading-relaxed
+            ${animationClass}
+            ${className}
+          `}
+          style={{
+            maxWidth: typeof maxWidth === 'number' ? `${maxWidth}px` : maxWidth,
+          }}
+        >
+          {title && <div className="font-bold mb-1 text-yellow-400">{title}</div>}
+          {typeof content === 'string' ? <p>{content}</p> : content}
+          
+          {arrow && (
+            <TooltipPrimitive.Arrow 
+              className="fill-gray-900 dark:fill-gray-800" 
+              width={11} 
+              height={5}
+            />
           )}
-        </div>
-      }
-      placement={placement}
-      arrow={arrow}
-      animation={animation}
-      duration={duration}
-      delay={delay}
-      theme={theme}
-      className={className}
-      maxWidth={maxWidth}
-      interactive={interactive}
-      disabled={disabled}
-    >
-      {wrappedChildren}
-    </Tippy>
+        </TooltipPrimitive.Content>
+      </TooltipPrimitive.Portal>
+    </TooltipPrimitive.Root>
   );
 }

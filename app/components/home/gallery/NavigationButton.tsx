@@ -18,19 +18,19 @@ export function NavigationButton({
 }: NavigationButtonProps) {
   const isLeft = direction === "left";
   const title = isLeft ? "Ảnh trước (←)" : "Ảnh kế (→)";
-  const icon = isLeft ? <ChevronLeft className="w-6 h-6" /> : <ChevronRight className="w-6 h-6" />;
+  const icon = isLeft ? <ChevronLeft className="w-8 h-8" /> : <ChevronRight className="w-8 h-8" />;
 
   return (
     <div
-      className={`absolute ${isLeft ? "left-4" : "right-4"} top-1/2 -translate-y-1/2 z-10`}
+      className={`absolute ${isLeft ? "left-6" : "right-6"} top-1/2 -translate-y-1/2 z-10`}
       onMouseEnter={cancelHideTimer}
       onMouseLeave={resetHideTimer}
     >
       <Button
         onClick={onClick}
         variant="glass"
-        size="md"
-        className={`p-3! aspect-square transition-opacity duration-300 ${
+        size="lg"
+        className={`p-4! aspect-square transition-all duration-300 bg-black/70 hover:bg-black/90 border-2 border-white/30 shadow-2xl backdrop-blur-md hover:scale-110 ${
           showControls ? "opacity-100" : "opacity-0"
         }`}
         title={title}

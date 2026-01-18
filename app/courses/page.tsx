@@ -1,6 +1,8 @@
 import { prisma } from "@/lib/prisma";
 import { Breadcrumb, Badge, Pagination, Select } from "../components/shared";
-import { CourseFilter, CourseCard } from "../components/courses";
+import { CourseFilter } from "../components/courses";
+import { AnimatedSection } from "../components/shared/AnimatedSection";
+import { CoursesGrid } from "./CoursesClient";
 
 export const revalidate = 600;
 
@@ -18,7 +20,7 @@ export default async function CoursesPage({
   searchParams: Promise<{ page?: string }>;
 }) {
   const params = await searchParams;
-  const currentPage = Number(params.page) || 1;
+  const currentPage = Math.max(1, Number(params.page) || 1);
   const skip = (currentPage - 1) * ITEMS_PER_PAGE;
 
   const [courses, totalCount, categories] = await Promise.all([
@@ -58,20 +60,22 @@ export default async function CoursesPage({
       {/* Main Content */}
       <div className="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8">
         {/* Page Header */}
-        <div className="mb-8 flex flex-col gap-4 md:flex-row md:items-end md:justify-between">
-          <div className="max-w-2xl">
-            <h1 className="text-3xl font-bold tracking-tight text-gray-900 dark:text-white sm:text-4xl mb-2">
-              Danh sách khóa học Tiếng Trung
-            </h1>
-            <p className="text-lg text-text-secondary-light dark:text-text-secondary-dark">
-              Chinh phục HSK từ 1 đến 6 với lộ trình rõ ràng, tập trung vào giao tiếp và kỹ năng làm bài thi.
-            </p>
+        <AnimatedSection variant="fadeInUp">
+          <div className="mb-8 flex flex-col gap-4 md:flex-row md:items-end md:justify-between">
+            <div className="max-w-2xl">
+              <h1 className="text-3xl font-bold tracking-tight text-gray-900 dark:text-white sm:text-4xl mb-2">
+                Danh sách khóa học Tiếng Trung
+              </h1>
+              <p className="text-lg text-text-secondary-light dark:text-text-secondary-dark">
+                Chinh phục HSK từ 1 đến 6 với lộ trình rõ ràng, tập trung vào giao tiếp và kỹ năng làm bài thi.
+              </p>
+            </div>
+            <button className="flex lg:hidden items-center gap-2 rounded-lg border border-border-light dark:border-border-dark bg-surface-light dark:bg-surface-dark px-4 py-2 text-sm font-medium shadow-sm hover:bg-gray-50 dark:hover:bg-gray-800">
+              <span className="material-symbols-outlined">filter_list</span>
+              Bộ lọc
+            </button>
           </div>
-          <button className="flex lg:hidden items-center gap-2 rounded-lg border border-border-light dark:border-border-dark bg-surface-light dark:bg-surface-dark px-4 py-2 text-sm font-medium shadow-sm hover:bg-gray-50 dark:hover:bg-gray-800">
-            <span className="material-symbols-outlined">filter_list</span>
-            Bộ lọc
-          </button>
-        </div>
+        </AnimatedSection>
 
         {/* Main Layout */}
         <div className="flex flex-col lg:flex-row gap-8 relative">
@@ -112,7 +116,7 @@ export default async function CoursesPage({
                   Sắp xếp:
                 </span>
                 <Select
-                  selectSize="sm"
+                  size="sm"
                   options={[
                     { value: 'popular', label: 'Phổ biến nhất' },
                     { value: 'newest', label: 'Mới nhất' },
@@ -125,35 +129,20 @@ export default async function CoursesPage({
             </div>
 
             {/* Courses Grid */}
-            <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 xl:grid-cols-3">
-              {courses.length > 0 ? (
-                courses.map((course: any) => (
-                  <CourseCard key={course.id} course={course} />
-                ))
-              ) : (
-                <div className="col-span-full flex flex-col items-center justify-center py-16 text-center">
-                  <span className="material-symbols-outlined text-6xl text-gray-300 dark:text-gray-600 mb-4">
-                    search_off
-                  </span>
-                  <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-2">
-                    Không tìm thấy khóa học
-                  </h3>
-                  <p className="text-text-secondary-light dark:text-text-secondary-dark">
-                    Vui lòng thử lại với bộ lọc khác
-                  </p>
-                </div>
-              )}
-            </div>
+            <CoursesGrid courses={courses} />
 
             {/* Pagination */}
-            <Pagination
-              currentPage={currentPage}
-              totalPages={totalPages}
-              totalItems={totalCount}
-              itemsPerPage={ITEMS_PER_PAGE}
-              currentItemsCount={courses.length}
-              basePath="/courses"
-            />
+            <div className="mt-12">
+              <Pagination
+                currentPage={currentPage}
+                totalPages={totalPages}
+                totalItems={totalCount}
+                itemsPerPage={ITEMS_PER_PAGE}
+                currentItemsCount={courses.length}
+                basePath="/courses"
+                showInfo={true}
+              />
+            </div>
           </div>
         </div>
       </div>

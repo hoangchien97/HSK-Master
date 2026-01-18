@@ -397,4 +397,113 @@ body {
     -ms-overflow-style: none;
     scrollbar-width: none;
   }
+
+  /* Custom Tooltip Animations */
+  @keyframes tooltip-fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+  }
+  
+  @keyframes tooltip-fadeOut {
+    from { opacity: 1; }
+    to { opacity: 0; }
+  }
+  
+  @keyframes tooltip-scaleIn {
+    from {
+      opacity: 0;
+      transform: scale(0.9);
+    }
+    to {
+      opacity: 1;
+      transform: scale(1);
+    }
+  }
+  
+  @keyframes tooltip-scaleOut {
+    from {
+      opacity: 1;
+      transform: scale(1);
+    }
+    to {
+      opacity: 0;
+      transform: scale(0.9);
+    }
+  }
+  
+  @keyframes tooltip-slideUp {
+    from {
+      opacity: 0;
+      transform: translateY(8px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+  
+  @keyframes tooltip-slideDown {
+    from {
+      opacity: 1;
+      transform: translateY(0);
+    }
+    to {
+      opacity: 0;
+      transform: translateY(8px);
+    }
+  }
+  
+  @keyframes tooltip-perspective {
+    from {
+      opacity: 0;
+      transform: perspective(600px) rotateX(-10deg);
+    }
+    to {
+      opacity: 1;
+      transform: perspective(600px) rotateX(0);
+    }
+  }
+  
+  @keyframes tooltip-perspectiveOut {
+    from {
+      opacity: 1;
+      transform: perspective(600px) rotateX(0);
+    }
+    to {
+      opacity: 0;
+      transform: perspective(600px) rotateX(-10deg);
+    }
+  }
+  
+  .animate-fadeIn {
+    animation: tooltip-fadeIn 200ms ease-out forwards;
+  }
+  
+  .animate-fadeOut {
+    animation: tooltip-fadeOut 200ms ease-out forwards;
+  }
+  
+  .animate-scaleIn {
+    animation: tooltip-scaleIn 200ms cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+  }
+  
+  .animate-scaleOut {
+    animation: tooltip-scaleOut 200ms ease-out forwards;
+  }
+  
+  .animate-slideUp {
+    animation: tooltip-slideUp 200ms ease-out forwards;
+  }
+  
+  .animate-slideDown {
+    animation: tooltip-slideDown 200ms ease-out forwards;
+  }
+  
+  .animate-perspective {
+    animation: tooltip-perspective 200ms ease-out forwards;
+  }
+  
+  .animate-perspectiveOut {
+    animation: tooltip-perspectiveOut 200ms ease-out forwards;
+  }
 }

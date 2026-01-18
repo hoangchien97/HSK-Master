@@ -49,7 +49,7 @@ export default async function VocabularyPage({
             defaultValue={q}
             placeholder="Tìm kiếm từ vựng tiếng Trung..."
             variant="search"
-            inputSize="lg"
+            size="lg"
           />
         </form>
 
