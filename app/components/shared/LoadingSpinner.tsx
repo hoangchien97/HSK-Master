@@ -8,10 +8,10 @@ interface LoadingSpinnerProps {
   speed?: number; // Duration in seconds for one rotation
 }
 
-const LoadingSpinner = ({ 
-  size = "md", 
+const LoadingSpinner = ({
+  size = "md",
   color = "currentColor",
-  speed = 0.8 
+  speed = 0.8
 }: LoadingSpinnerProps) => {
   const sizeClasses = {
     xs: "w-3 h-3",

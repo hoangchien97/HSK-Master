@@ -380,6 +380,26 @@ body {
     animation: gradient-shift 4s ease infinite;
   }
 
+  .shimmer-effect::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(
+      90deg,
+      transparent,
+      rgba(255, 255, 255, 0.2),
+      transparent
+    );
+    transition: left 0.6s;
+  }
+
+  .shimmer-effect:hover::before {
+    left: 100%;
+  }
+
   /* Design System Page Utilities */
   .section-header-gradient {
     @apply mb-8;
@@ -403,12 +423,12 @@ body {
     from { opacity: 0; }
     to { opacity: 1; }
   }
-  
+
   @keyframes tooltip-fadeOut {
     from { opacity: 1; }
     to { opacity: 0; }
   }
-  
+
   @keyframes tooltip-scaleIn {
     from {
       opacity: 0;
@@ -419,7 +439,7 @@ body {
       transform: scale(1);
     }
   }
-  
+
   @keyframes tooltip-scaleOut {
     from {
       opacity: 1;
@@ -430,7 +450,7 @@ body {
       transform: scale(0.9);
     }
   }
-  
+
   @keyframes tooltip-slideUp {
     from {
       opacity: 0;
@@ -441,7 +461,7 @@ body {
       transform: translateY(0);
     }
   }
-  
+
   @keyframes tooltip-slideDown {
     from {
       opacity: 1;
@@ -452,7 +472,7 @@ body {
       transform: translateY(8px);
     }
   }
-  
+
   @keyframes tooltip-perspective {
     from {
       opacity: 0;
@@ -463,7 +483,7 @@ body {
       transform: perspective(600px) rotateX(0);
     }
   }
-  
+
   @keyframes tooltip-perspectiveOut {
     from {
       opacity: 1;
@@ -474,35 +494,35 @@ body {
       transform: perspective(600px) rotateX(-10deg);
     }
   }
-  
+
   .animate-fadeIn {
     animation: tooltip-fadeIn 200ms ease-out forwards;
   }
-  
+
   .animate-fadeOut {
     animation: tooltip-fadeOut 200ms ease-out forwards;
   }
-  
+
   .animate-scaleIn {
     animation: tooltip-scaleIn 200ms cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
   }
-  
+
   .animate-scaleOut {
     animation: tooltip-scaleOut 200ms ease-out forwards;
   }
-  
+
   .animate-slideUp {
     animation: tooltip-slideUp 200ms ease-out forwards;
   }
-  
+
   .animate-slideDown {
     animation: tooltip-slideDown 200ms ease-out forwards;
   }
-  
+
   .animate-perspective {
     animation: tooltip-perspective 200ms ease-out forwards;
   }
-  
+
   .animate-perspectiveOut {
     animation: tooltip-perspectiveOut 200ms ease-out forwards;
   }

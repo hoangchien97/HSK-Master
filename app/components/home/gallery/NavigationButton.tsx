@@ -28,9 +28,9 @@ export function NavigationButton({
     >
       <Button
         onClick={onClick}
-        variant="glass"
-        size="lg"
-        className={`p-4! aspect-square transition-all duration-300 bg-black/70 hover:bg-black/90 border-2 border-white/30 shadow-2xl backdrop-blur-md hover:scale-110 ${
+        variant="icon-only"
+        size="md"
+        className={`aspect-square transition-all duration-300 bg-black/70 hover:bg-black/90 border-2 border-white/30 shadow-2xl backdrop-blur-md ${
           showControls ? "opacity-100" : "opacity-0"
         }`}
         title={title}

@@ -110,7 +110,7 @@ export function HeaderControls({
           variant="icon-only"
           size="md"
           title="Tải xuống"
-          icon={<Download className="w-5 h-5" />}
+          icon={<Download className="w-5 h-5 !text-white" />}
           aria-label="Tải xuống"
         />
       </div>

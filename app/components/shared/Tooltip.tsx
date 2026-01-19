@@ -69,11 +69,11 @@ export default function Tooltip({
         >
           {title && <div className="font-bold mb-1 text-yellow-400">{title}</div>}
           {typeof content === 'string' ? <p>{content}</p> : content}
-          
+
           {arrow && (
-            <TooltipPrimitive.Arrow 
-              className="fill-gray-900 dark:fill-gray-800" 
-              width={11} 
+            <TooltipPrimitive.Arrow
+              className="fill-gray-900 dark:fill-gray-800"
+              width={11}
               height={5}
             />
           )}

@@ -36,8 +36,8 @@ import {
 // Animation variants
 const fadeInUp = {
   hidden: { opacity: 0, y: 40 },
-  visible: { 
-    opacity: 1, 
+  visible: {
+    opacity: 1,
     y: 0,
     transition: { duration: 0.6 }
   }
@@ -45,7 +45,7 @@ const fadeInUp = {
 
 const fadeIn = {
   hidden: { opacity: 0 },
-  visible: { 
+  visible: {
     opacity: 1,
     transition: { duration: 0.8 }
   }
@@ -53,8 +53,8 @@ const fadeIn = {
 
 const scaleIn = {
   hidden: { opacity: 0, scale: 0.8 },
-  visible: { 
-    opacity: 1, 
+  visible: {
+    opacity: 1,
     scale: 1,
     transition: { duration: 0.5 }
   }
@@ -62,8 +62,8 @@ const scaleIn = {
 
 const slideInLeft = {
   hidden: { opacity: 0, x: -50 },
-  visible: { 
-    opacity: 1, 
+  visible: {
+    opacity: 1,
     x: 0,
     transition: { duration: 0.6 }
   }
@@ -82,8 +82,8 @@ const staggerContainer = {
 
 const staggerItem = {
   hidden: { opacity: 0, y: 20 },
-  visible: { 
-    opacity: 1, 
+  visible: {
+    opacity: 1,
     y: 0,
     transition: { duration: 0.5 }
   }
@@ -224,13 +224,13 @@ export default function SystemDesignPage() {
         {/* Content Sections */}
         <div className="p-8 lg:p-12 max-w-6xl mx-auto space-y-20">
           {/* Hero Section */}
-          <motion.section 
+          <motion.section
             className="pb-12 border-b border-gray-100"
             initial="hidden"
             animate="visible"
             variants={fadeIn}
           >
-            <motion.div 
+            <motion.div
               className="inline-flex items-center gap-2 text-primary-600 font-bold text-[10px] bg-primary-50 px-3 py-1 rounded-full mb-6 uppercase tracking-[0.2em]"
               initial={{ opacity: 0, scale: 0.8 }}
               animate={{ opacity: 1, scale: 1 }}
@@ -238,14 +238,14 @@ export default function SystemDesignPage() {
             >
               Design Language
             </motion.div>
-            <motion.h1 
+            <motion.h1
               className="text-5xl lg:text-7xl font-black tracking-tighter mb-6 leading-[1.1]"
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6, delay: 0.3 }}
             >
               Tài liệu <br />
-              <motion.span 
+              <motion.span
                 className="gradient-text"
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
@@ -254,7 +254,7 @@ export default function SystemDesignPage() {
                 HSK Master Ultimate
               </motion.span>
             </motion.h1>
-            <motion.p 
+            <motion.p
               className="text-xl text-gray-500 max-w-3xl leading-relaxed"
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
@@ -267,15 +267,15 @@ export default function SystemDesignPage() {
 
           {/* 1. Color Palette */}
           {activeSection === 'colors' && (
-            <motion.section 
-              className="space-y-10" 
+            <motion.section
+              className="space-y-10"
               id="colors"
               initial="hidden"
               whileInView="visible"
               viewport={{ once: true, margin: "-100px" }}
               variants={fadeInUp}
             >
-              <motion.div 
+              <motion.div
                 className="section-header-gradient"
                 variants={slideInLeft}
               >
@@ -283,12 +283,12 @@ export default function SystemDesignPage() {
                 <p className="text-gray-500 mt-1">Dải màu 50-950 được tối ưu hóa cho độ tương phản và khả năng tiếp cận.</p>
               </motion.div>
 
-              <motion.div 
+              <motion.div
                 className="grid grid-cols-1 gap-12"
                 variants={staggerContainer}
               >
                 {/* Primary Scale */}
-                <motion.div 
+                <motion.div
                   className="bg-white p-8 rounded-3xl shadow-soft border border-gray-100"
                   variants={staggerItem}
                 >
@@ -324,7 +324,7 @@ export default function SystemDesignPage() {
                 </motion.div>
 
                 {/* Semantic Colors Grid */}
-                <motion.div 
+                <motion.div
                   className="grid grid-cols-1 md:grid-cols-2 gap-8"
                   variants={staggerContainer}
                 >
@@ -402,15 +402,15 @@ export default function SystemDesignPage() {
 
           {/* 2. Typography */}
           {activeSection === 'typography' && (
-            <motion.section 
-              className="space-y-10" 
+            <motion.section
+              className="space-y-10"
               id="typography"
               initial="hidden"
               whileInView="visible"
               viewport={{ once: true, margin: "-100px" }}
               variants={fadeInUp}
             >
-              <motion.div 
+              <motion.div
                 className="section-header-gradient"
                 variants={slideInLeft}
               >
@@ -419,7 +419,7 @@ export default function SystemDesignPage() {
               </motion.div>
 
               {/* Font Families */}
-              <motion.div 
+              <motion.div
                 className="bg-white p-8 rounded-3xl shadow-soft border border-gray-100"
                 variants={scaleIn}
                 whileInView="visible"
@@ -449,7 +449,7 @@ export default function SystemDesignPage() {
               </motion.div>
 
               {/* Type Scale */}
-              <motion.div 
+              <motion.div
                 className="bg-white p-8 rounded-3xl shadow-soft border border-gray-100"
                 variants={scaleIn}
                 whileInView="visible"
@@ -491,15 +491,15 @@ export default function SystemDesignPage() {
 
           {/* 3. Icons */}
           {activeSection === 'icons' && (
-            <motion.section 
-              className="space-y-10" 
+            <motion.section
+              className="space-y-10"
               id="icons"
               initial="hidden"
               whileInView="visible"
               viewport={{ once: true, margin: "-100px" }}
               variants={fadeInUp}
             >
-              <motion.div 
+              <motion.div
                 className="section-header-gradient"
                 variants={slideInLeft}
               >
@@ -543,7 +543,7 @@ export default function SystemDesignPage() {
               </div>
 
               {/* Icon Grid */}
-              <motion.div 
+              <motion.div
                 className="grid grid-cols-4 md:grid-cols-6 lg:grid-cols-8 gap-4"
                 variants={staggerContainer}
                 whileInView="visible"
@@ -584,15 +584,15 @@ export default function SystemDesignPage() {
           {['buttons', 'forms', 'pagination', 'tooltip', 'loading', 'cards', 'nav'].includes(activeSection) && (
             <>
               {activeSection === 'buttons' ? (
-                <motion.section 
-                  className="space-y-10" 
+                <motion.section
+                  className="space-y-10"
                   id="buttons"
                   initial="hidden"
                   whileInView="visible"
                   viewport={{ once: true, margin: "-100px" }}
                   variants={fadeInUp}
                 >
-                  <motion.div 
+                  <motion.div
                     className="section-header-gradient"
                     variants={slideInLeft}
                   >
@@ -601,7 +601,7 @@ export default function SystemDesignPage() {
                   </motion.div>
 
                   {/* Variants Overview */}
-                  <motion.div 
+                  <motion.div
                     className="bg-white p-8 rounded-3xl shadow-soft border border-gray-100"
                     variants={scaleIn}
                     whileInView="visible"
@@ -619,7 +619,7 @@ export default function SystemDesignPage() {
                   </motion.div>
 
                   {/* Sizes */}
-                  <motion.div 
+                  <motion.div
                     className="bg-white p-8 rounded-3xl shadow-soft border border-gray-100"
                     variants={scaleIn}
                     whileInView="visible"
@@ -843,15 +843,15 @@ export default function SystemDesignPage() {
                   </div>
                 </motion.section>
               ) : activeSection === 'forms' ? (
-                <motion.section 
-                  className="space-y-10" 
+                <motion.section
+                  className="space-y-10"
                   id="forms"
                   initial="hidden"
                   whileInView="visible"
                   viewport={{ once: true, margin: "-100px" }}
                   variants={fadeInUp}
                 >
-                  <motion.div 
+                  <motion.div
                     className="section-header-gradient"
                     variants={slideInLeft}
                   >
@@ -860,7 +860,7 @@ export default function SystemDesignPage() {
                   </motion.div>
 
                   {/* Input States */}
-                  <motion.div 
+                  <motion.div
                     className="bg-white p-8 rounded-3xl shadow-soft border border-gray-100"
                     variants={scaleIn}
                     whileInView="visible"
@@ -927,7 +927,7 @@ export default function SystemDesignPage() {
                   </motion.div>
 
                   {/* Input Sizes */}
-                  <motion.div 
+                  <motion.div
                     className="bg-white p-8 rounded-3xl shadow-soft border border-gray-100"
                     variants={scaleIn}
                     whileInView="visible"
@@ -1288,15 +1288,15 @@ export default function SystemDesignPage() {
                   </div>
                 </motion.section>
               )  : activeSection === 'pagination' ? (
-                <motion.section 
-                  className="space-y-10" 
+                <motion.section
+                  className="space-y-10"
                   id="pagination"
                   initial="hidden"
                   whileInView="visible"
                   viewport={{ once: true, margin: "-100px" }}
                   variants={fadeInUp}
                 >
-                  <motion.div 
+                  <motion.div
                     className="section-header-gradient"
                     variants={slideInLeft}
                   >
@@ -1454,15 +1454,15 @@ export default function SystemDesignPage() {
                   </div>
                 </motion.section>
               ) : activeSection === 'tooltip' ? (
-                <motion.section 
-                  className="space-y-10" 
+                <motion.section
+                  className="space-y-10"
                   id="tooltip"
                   initial="hidden"
                   whileInView="visible"
                   viewport={{ once: true, margin: "-100px" }}
                   variants={fadeInUp}
                 >
-                  <motion.div 
+                  <motion.div
                     className="section-header-gradient"
                     variants={slideInLeft}
                   >
@@ -1560,15 +1560,15 @@ export default function SystemDesignPage() {
                   </div>
                 </motion.section>
               ) : activeSection === 'loading' ? (
-                <motion.section 
-                  className="space-y-10" 
+                <motion.section
+                  className="space-y-10"
                   id="loading"
                   initial="hidden"
                   whileInView="visible"
                   viewport={{ once: true, margin: "-100px" }}
                   variants={fadeInUp}
                 >
-                  <motion.div 
+                  <motion.div
                     className="section-header-gradient"
                     variants={slideInLeft}
                   >
@@ -1577,7 +1577,7 @@ export default function SystemDesignPage() {
                   </motion.div>
 
                   {/* Basic Spinner */}
-                  <motion.div 
+                  <motion.div
                     className="bg-white p-8 rounded-3xl shadow-soft border border-gray-100"
                     variants={scaleIn}
                     whileInView="visible"
@@ -1606,7 +1606,7 @@ export default function SystemDesignPage() {
                   </motion.div>
 
                   {/* Size Variants */}
-                  <motion.div 
+                  <motion.div
                     className="bg-white p-8 rounded-3xl shadow-soft border border-gray-100"
                     variants={scaleIn}
                     whileInView="visible"
@@ -1643,7 +1643,7 @@ export default function SystemDesignPage() {
                   </motion.div>
 
                   {/* Speed Variants */}
-                  <motion.div 
+                  <motion.div
                     className="bg-white p-8 rounded-3xl shadow-soft border border-gray-100"
                     variants={scaleIn}
                     whileInView="visible"
@@ -1670,7 +1670,7 @@ export default function SystemDesignPage() {
                   </motion.div>
 
                   {/* In Button Context */}
-                  <motion.div 
+                  <motion.div
                     className="bg-white p-8 rounded-3xl shadow-soft border border-gray-100"
                     variants={scaleIn}
                     whileInView="visible"
@@ -1686,14 +1686,14 @@ export default function SystemDesignPage() {
                   </motion.div>
                 </motion.section>
               ) : (
-                <motion.section 
+                <motion.section
                   className="space-y-10"
                   initial="hidden"
                   whileInView="visible"
                   viewport={{ once: true, margin: "-100px" }}
                   variants={fadeInUp}
                 >
-                  <motion.div 
+                  <motion.div
                     className="section-header-gradient"
                     variants={slideInLeft}
                   >
