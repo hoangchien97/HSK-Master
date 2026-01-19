@@ -1,7 +1,7 @@
 'use client';
 
-import { Input, Select, Textarea } from '../shared';
-import { User, Phone, Mail } from 'lucide-react';
+import { Input, Select, Textarea, Button } from '../shared';
+import { User, Phone, Mail, Send } from 'lucide-react';
 
 interface ContactFormProps {
   submitAction: (formData: FormData) => Promise<void>;
@@ -48,13 +48,17 @@ export default function ContactForm({ submitAction }: ContactFormProps) {
           autoComplete="email"
         />
 
-        <Select name="topic" label="Bạn quan tâm đến">
-          <option>Tư vấn khóa học HSK</option>
-          <option>Tư vấn khóa học Giao tiếp</option>
-          <option>Luyện thi HSKK</option>
-          <option>Hợp tác doanh nghiệp</option>
-          <option>Vấn đề khác</option>
-        </Select>
+        <Select
+          label="Bạn quan tâm đến"
+          placeholder="Chọn chủ đề"
+          options={[
+            { value: "hsk", label: "Tư vấn khóa học HSK" },
+            { value: "conversation", label: "Tư vấn khóa học Giao tiếp" },
+            { value: "hskk", label: "Luyện thi HSKK" },
+            { value: "business", label: "Hợp tác doanh nghiệp" },
+            { value: "other", label: "Vấn đề khác" },
+          ]}
+        />
 
         <Textarea
           name="message"
@@ -64,12 +68,16 @@ export default function ContactForm({ submitAction }: ContactFormProps) {
         />
 
         <div className="pt-2">
-          <button
+          <Button
             type="submit"
-            className="flex w-full justify-center rounded-lg bg-gradient-to-r from-yellow-400 to-red-600 px-3 py-3 text-sm font-bold leading-6 text-white shadow-sm hover:opacity-90 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-red-600 transition-all hover:scale-[1.01] active:scale-[0.99]"
+            variant="gradient"
+            size="lg"
+            fullWidth
+            icon={<Send className="w-5 h-5" />}
+            iconPosition="right"
           >
             Gửi thông tin
-          </button>
+          </Button>
         </div>
       </form>
     </div>

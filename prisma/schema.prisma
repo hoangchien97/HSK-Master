@@ -184,3 +184,15 @@ model GrammarPoint {
   createdAt   DateTime @default(now())
   course      Course   @relation(fields: [courseId], references: [id], onDelete: Cascade)
 }
+
+// Student Reviews
+model Review {
+  id          String   @id @default(uuid())
+  studentName String
+  className   String   // HSK 1, HSK 2, etc.
+  content     String
+  rating      Int      // 1-5 stars
+  isApproved  Boolean  @default(false)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}

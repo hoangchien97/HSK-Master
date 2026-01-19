@@ -18,6 +18,7 @@ async function main() {
   await prisma.hSKLevel.deleteMany()
   await prisma.feature.deleteMany()
   await prisma.ctaStat.deleteMany()
+  await prisma.review.deleteMany()
 
   // ============= Categories =============
   const basic = await prisma.category.create({
@@ -1789,6 +1790,44 @@ async function main() {
         order: 2,
       },
     ]
+  })
+
+  // ============= Reviews =============
+  await prisma.review.createMany({
+    data: [
+      {
+        studentName: "Chien Hoang",
+        className: "HSK1",
+        content: "Qua u la beautiful luon ~~~",
+        rating: 5,
+        isApproved: true,
+        createdAt: new Date("2025-11-25T22:01:08"),
+      },
+      {
+        studentName: "Chiên Hoàng",
+        className: "Trọn đời",
+        content: "Cô giáo siêu tuyệt vời, yêu cô giáo nhất trên đời <3",
+        rating: 5,
+        isApproved: true,
+        createdAt: new Date("2025-09-28T23:41:59"),
+      },
+      {
+        studentName: "Bảo Châu",
+        className: "HSK1",
+        content: "Cô giáo siêu giỏi",
+        rating: 5,
+        isApproved: true,
+        createdAt: new Date("2025-09-27T23:47:18"),
+      },
+      {
+        studentName: "Chien",
+        className: "HSK",
+        content: "Thật tuyệt vời",
+        rating: 5,
+        isApproved: true,
+        createdAt: new Date("2025-09-26T21:22:52"),
+      },
+    ],
   })
 
   console.log("✅ Seed FULL completed with all home page data!")

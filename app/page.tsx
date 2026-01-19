@@ -4,6 +4,7 @@ import {
   WhyChooseUsSection,
   GallerySection,
   CTASection,
+  ReviewsSection,
 } from "./components/home";
 import { AnimatedSection } from "./components/shared/AnimatedSection";
 
@@ -36,6 +37,11 @@ export default async function Home() {
       {/* Gallery Section */}
       <AnimatedSection variant="fadeInUp">
         <GallerySection />
+      </AnimatedSection>
+
+      {/* Reviews Section */}
+      <AnimatedSection variant="fadeInUp">
+        <ReviewsSection />
       </AnimatedSection>
 
       {/* CTA Section (Before Footer) */}

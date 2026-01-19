@@ -7,6 +7,8 @@ export type ButtonVariant =
   | "outline"
   | "ghost"
   | "gradient"
+  | "white"
+  | "outline-white"
   | "icon-only";
 export type ButtonSize = "sm" | "md" | "lg";
 
@@ -79,10 +81,24 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
         "focus-visible:ring-gray-200",
 
       gradient:
-        "bg-gradient-to-r from-yellow-400 to-primary-600 text-white shadow-md " +
-        "hover:from-yellow-300 hover:to-primary-700 hover:shadow-lg hover:scale-[1.02] " +
-        "active:from-yellow-500 active:to-primary-800 " +
-        "focus-visible:ring-yellow-200",
+        "relative overflow-hidden bg-gradient-to-r from-primary-500 to-orange-500 text-white shadow-lg " +
+        "hover:from-primary-600 hover:to-orange-600 hover:shadow-xl hover:scale-[1.02] " +
+        "active:from-primary-700 active:to-orange-700 active:scale-[0.98] " +
+        "focus-visible:ring-primary-200 " +
+        "before:absolute before:inset-0 before:bg-gradient-to-r before:from-transparent before:via-white/20 before:to-transparent " +
+        "before:translate-x-[-200%] hover:before:translate-x-[200%] before:transition-transform before:duration-700 before:ease-in-out",
+
+      white:
+        "bg-white text-primary-600 shadow-md " +
+        "hover:bg-gray-50 hover:shadow-lg " +
+        "active:bg-gray-100 " +
+        "focus-visible:ring-white/50",
+
+      "outline-white":
+        "bg-transparent border-2 border-white text-white " +
+        "hover:bg-white hover:text-primary-600 " +
+        "active:bg-gray-100 active:text-primary-700 " +
+        "focus-visible:ring-white/50",
 
       "icon-only":
         "bg-transparent text-gray-700 rounded-full " +
@@ -134,14 +150,14 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
         ) : (
           <>
             {leftContent}
-            {children && <span className="flex items-center">{children}</span>}
+            {children && <span className="relative z-10 flex items-center">{children}</span>}
             {badge && (
-              <span className="ml-1 px-2 py-0.5 text-xs font-bold bg-white/20 rounded-full">
+              <span className="relative z-10 ml-1 px-2 py-0.5 text-xs font-bold bg-white/20 rounded-full">
                 {badge}
               </span>
             )}
             {icon && iconPosition === "right" && !loading && (
-              <span className="flex items-center shrink-0">{icon}</span>
+              <span className="relative z-10 flex items-center shrink-0">{icon}</span>
             )}
             {loading && iconPosition === "right" && <LoadingSpinner />}
           </>

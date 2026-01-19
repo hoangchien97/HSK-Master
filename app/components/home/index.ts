@@ -8,6 +8,9 @@ export { GallerySection } from './GallerySection';
 export { GallerySectionClient } from './GallerySectionClient';
 export { AlbumCard } from './AlbumCard';
 export { LightboxGallery } from './LightboxGallery';
+export { default as ReviewsSection } from './ReviewsSection';
+export { default as ReviewForm } from './ReviewForm';
+export { default as ReviewList } from './ReviewList';
 
 // Re-export types
 export type { HSKLevel } from './HSKLevelCard';

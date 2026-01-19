@@ -4,6 +4,8 @@ import "./globals.css";
 import { Header, Footer, ScrollToTop } from "./components/shared";
 import * as TooltipPrimitive from '@radix-ui/react-tooltip';
 import NextTopLoader from 'nextjs-toploader';
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -57,6 +59,18 @@ export default function RootLayout({
           <Footer />
           <ScrollToTop />
         </TooltipPrimitive.Provider>
+        <ToastContainer
+          position="top-right"
+          autoClose={3000}
+          hideProgressBar={false}
+          newestOnTop={false}
+          closeOnClick
+          rtl={false}
+          pauseOnFocusLoss
+          draggable
+          pauseOnHover
+          theme="light"
+        />
       </body>
     </html>
   );

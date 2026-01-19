@@ -19,7 +19,7 @@ export default function Badge({
     default:
       "bg-white dark:bg-surface-dark text-text-secondary-light dark:text-text-secondary-dark shadow-sm ring-1 ring-inset ring-border-light dark:ring-border-dark hover:bg-gray-50 dark:hover:bg-gray-800 hover:text-red-600 dark:hover:text-red-400 hover:ring-red-200 dark:hover:ring-red-800",
     active:
-      "bg-brand-gradient text-white font-bold shadow-sm hover:shadow-md",
+      "bg-brand-gradient text-[#fff] font-bold shadow-sm hover:shadow-md",
   };
 
   const Component = onClick ? "button" : "div";
