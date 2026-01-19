@@ -66,13 +66,13 @@ export function AlbumCard({ album }: AlbumCardProps) {
             </span>
           </div>
 
-          {/* Title & Description Overlay */}
-          <div className="absolute bottom-0 left-0 right-0 p-6 transform transition-all duration-300 pointer-events-none">
+          {/* Title & Description Overlay - Hidden by default, visible on hover */}
+          <div className="absolute bottom-0 left-0 right-0 p-6 transform transition-all duration-300 pointer-events-none opacity-0 group-hover:opacity-100 translate-y-4 group-hover:translate-y-0">
             <h3 className="text-xl font-bold text-white mb-2 drop-shadow-lg">
               {album.title}
             </h3>
             {album.description && (
-              <p className="text-white/90 text-sm opacity-0 group-hover:opacity-100 transition-opacity duration-300 drop-shadow line-clamp-2">
+              <p className="text-white/90 text-sm drop-shadow line-clamp-2">
                 {album.description}
               </p>
             )}
