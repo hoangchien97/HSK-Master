@@ -140,7 +140,8 @@ model Feature {
 // CTA Section Stats
 model CtaStat {
   id          String   @id @default(uuid())
-  value       String
+  value       Int
+  suffix      String?
   label       String
   order       Int
   isActive    Boolean  @default(true)

@@ -2,8 +2,10 @@ import React from 'react';
 import Link from 'next/link';
 import Button from '../shared/Button';
 import { getCtaStats } from '@/app/services';
+import CountUp from './CountUp';
 
 export default async function CTASection() {
+
   const stats = await getCtaStats();
   return (
     <section className="py-12 bg-gradient-to-r from-red-600 via-orange-600 to-yellow-500 relative overflow-hidden">
@@ -65,7 +67,7 @@ export default async function CTASection() {
               <React.Fragment key={stat.id}>
                 {index > 0 && <div className="hidden sm:block w-px h-10 bg-white/30" />}
                 <div className="text-center">
-                  <div className="text-2xl md:text-3xl font-bold mb-1">{stat.value}</div>
+                  <CountUp value={stat.value} suffix={stat.suffix} />
                   <div className="text-white/80 text-xs md:text-sm">{stat.label}</div>
                 </div>
               </React.Fragment>

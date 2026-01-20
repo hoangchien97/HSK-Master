@@ -2,7 +2,8 @@ import { prisma } from '@/lib/prisma'
 
 export interface CtaStat {
   id: string
-  value: string
+  value: number
+  suffix?: string
   label: string
 }
 
@@ -16,6 +17,7 @@ export async function getCtaStats(): Promise<CtaStat[]> {
     return stats.map(stat => ({
       id: stat.id,
       value: stat.value,
+      suffix: stat.suffix ?? undefined,
       label: stat.label,
     }))
   } catch (error) {

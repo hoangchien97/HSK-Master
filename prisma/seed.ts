@@ -1687,18 +1687,21 @@ async function main() {
   await prisma.ctaStat.createMany({
     data: [
       {
-        value: "10,000+",
+        value: 10000,
+        suffix: "+",
         label: "Học viên",
         order: 1,
       },
       {
-        value: "5 năm",
+        value: 5,
+        suffix: " năm",
         label: "Kinh nghiệm",
         order: 2,
       },
       {
-        value: "98%",
-        label: "Hài lòng",
+        value: 98,
+        suffix: "%",
+        label: "Đậu HSK/HSKK",
         order: 3,
       },
     ]
