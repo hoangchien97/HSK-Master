@@ -48,7 +48,7 @@ export function HeaderControls({
       <div className="flex items-center gap-3">
         <Button
           onClick={onClose}
-          variant="icon-only"
+          variant="gallery-control"
           size="md"
           icon={<X className="w-5 h-5" />}
           iconPosition="left"
@@ -63,7 +63,7 @@ export function HeaderControls({
       <div className="flex items-center gap-2">
         <Button
           onClick={onTogglePlayback}
-          variant="icon-only"
+          variant="gallery-control"
           size="md"
           title={isPlaying ? "Tạm dừng" : "Phát tự động"}
           icon={isPlaying ? <Pause className="w-5 h-5" /> : <Play className="w-5 h-5" />}
@@ -73,7 +73,7 @@ export function HeaderControls({
         <Button
           onClick={onZoomOut}
           disabled={zoom <= ZOOM_MIN}
-          variant="icon-only"
+          variant="gallery-control"
           size="md"
           title="Thu nhỏ (Phím -)"
           icon={<ZoomOut className="w-5 h-5" />}
@@ -82,7 +82,7 @@ export function HeaderControls({
         <Button
           onClick={onZoomIn}
           disabled={zoom >= ZOOM_MAX}
-          variant="icon-only"
+          variant="gallery-control"
           size="md"
           title="Phóng to (Phím +)"
           icon={<ZoomIn className="w-5 h-5" />}
@@ -90,7 +90,7 @@ export function HeaderControls({
         />
         <Button
           onClick={onRotate}
-          variant="icon-only"
+          variant="gallery-control"
           size="md"
           title="Xoay (Phím R)"
           icon={<RotateCw className="w-5 h-5" />}
@@ -99,7 +99,7 @@ export function HeaderControls({
         <div className="w-px h-6 bg-white/20" />
         <Button
           onClick={onToggleFullscreen}
-          variant="icon-only"
+          variant="gallery-control"
           size="md"
           title="Toàn màn hình (Phím F)"
           icon={isFullscreen ? <Minimize className="w-5 h-5" /> : <Maximize className="w-5 h-5" />}
@@ -107,10 +107,10 @@ export function HeaderControls({
         />
         <Button
           onClick={onDownload}
-          variant="icon-only"
+          variant="gallery-control"
           size="md"
           title="Tải xuống"
-          icon={<Download className="w-5 h-5 !text-white" />}
+          icon={<Download className="w-5 h-5" />}
           aria-label="Tải xuống"
         />
       </div>

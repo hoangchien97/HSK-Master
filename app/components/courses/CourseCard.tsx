@@ -11,10 +11,6 @@ interface CourseCardProps {
     image: string | null;
     instructor: string | null;
     instructorAvatar: string | null;
-    price: string | null;
-    originalPrice: string | null;
-    students: string | null;
-    rating: string | null;
     tag: string | null;
     badgeText: string | null;
     lectures: number;
@@ -66,35 +62,23 @@ export default function CourseCard({ course }: CourseCardProps) {
           </Tooltip>
         </div>
 
-        <div className="mt-auto flex items-center justify-between border-t border-border-light dark:border-border-dark pt-4">
-          <div className="flex items-center gap-2.5">
-            {course.instructorAvatar ? (
-              <Image
-                src={course.instructorAvatar}
-                alt={course.instructor || "Instructor"}
-                width={36}
-                height={36}
-                className="rounded-full ring-2 ring-gray-200 dark:ring-gray-700"
-              />
-            ) : (
-              <div className="size-9 rounded-full bg-linear-to-br from-orange-400 to-red-600 flex items-center justify-center text-white text-sm font-bold shadow-md">
-                {course.instructor?.charAt(0) || "C"}
-              </div>
-            )}
-            <span className="text-sm font-medium text-text-main-light dark:text-text-main-dark">
-              {course.instructor || "Cô Ngọc"}
-            </span>
-          </div>
-          <div className="text-right">
-            {course.originalPrice && (
-              <div className="text-xs text-text-secondary-light dark:text-text-secondary-dark line-through mb-0.5">
-                {course.originalPrice}
-              </div>
-            )}
-            <div className="text-xl font-bold text-red-600 dark:text-red-400">
-              {course.price || "Liên hệ"}
+        <div className="mt-auto flex items-center gap-2.5 border-t border-border-light dark:border-border-dark pt-4">
+          {course.instructorAvatar ? (
+            <Image
+              src={course.instructorAvatar}
+              alt={"Instructor"}
+              width={36}
+              height={36}
+              className="rounded-full ring-2 ring-gray-200 dark:ring-gray-700"
+            />
+          ) : (
+            <div className="size-9 rounded-full bg-gradient-to-br from-orange-400 to-red-600 flex items-center justify-center text-white text-sm font-bold shadow-md">
+              {course.instructor?.charAt(0) || "C"}
             </div>
-          </div>
+          )}
+          <span className="text-sm font-medium text-text-main-light dark:text-text-main-dark">
+            {course.instructor || "Cô Ngọc"}
+          </span>
         </div>
       </div>
     </article>

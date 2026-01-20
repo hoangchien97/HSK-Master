@@ -9,7 +9,8 @@ export type ButtonVariant =
   | "gradient"
   | "white"
   | "outline-white"
-  | "icon-only";
+  | "icon-only"
+  | "gallery-control";
 export type ButtonSize = "sm" | "md" | "lg";
 
 export interface ButtonProps
@@ -105,6 +106,12 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
         "hover:bg-gray-100 hover:text-gray-900 " +
         "active:bg-gray-200 " +
         "focus-visible:ring-gray-200",
+
+      "gallery-control":
+        "bg-black/70 text-white border-2 border-white/30 shadow-2xl backdrop-blur-md rounded-xl " +
+        "hover:bg-black/90 hover:border-white/50 hover:shadow-3xl " +
+        "active:bg-black " +
+        "focus-visible:ring-white/50",
     };
 
     // Size styles
@@ -112,14 +119,20 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
       sm:
         variant === "icon-only"
           ? "p-1.5 text-sm"
+          : variant === "gallery-control"
+          ? "px-3 py-2 text-sm rounded-lg"
           : "px-3 py-1.5 text-sm rounded-lg",
       md:
         variant === "icon-only"
           ? "p-2 text-base"
+          : variant === "gallery-control"
+          ? "px-4 py-2.5 text-base rounded-xl"
           : "px-6 py-2.5 text-base rounded-xl",
       lg:
         variant === "icon-only"
           ? "p-3 text-lg"
+          : variant === "gallery-control"
+          ? "px-5 py-3 text-lg rounded-xl"
           : "px-8 py-3.5 text-lg rounded-xl",
     };
 

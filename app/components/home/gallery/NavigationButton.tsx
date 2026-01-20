@@ -28,9 +28,9 @@ export function NavigationButton({
     >
       <Button
         onClick={onClick}
-        variant="icon-only"
+        variant="gallery-control"
         size="md"
-        className={`aspect-square transition-all duration-300 bg-black/70 hover:bg-black/90 border-2 border-white/30 shadow-2xl backdrop-blur-md ${
+        className={`aspect-square transition-all duration-300 ${
           showControls ? "opacity-100" : "opacity-0"
         }`}
         title={title}
