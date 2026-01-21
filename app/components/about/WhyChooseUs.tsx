@@ -45,6 +45,7 @@ export default function WhyChooseUs() {
               <span className="material-symbols-outlined text-2xl">
                 {reason.icon}
               </span>
+              <div className="icon-send"></div>
             </div>
             <h3 className="text-xl font-bold text-gray-900 dark:text-white mb-2">
               {reason.title}

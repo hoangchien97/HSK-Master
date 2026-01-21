@@ -32,24 +32,24 @@ export const Switch = forwardRef<HTMLInputElement, SwitchProps>(
     // Size configurations for container and thumb
     const sizeConfig = {
       sm: {
-        width: "w-8",
-        height: "h-4",
-        thumbSize: "w-3 h-3",
-        thumbTranslate: "translate-x-4",
+        width: "w-7 md:w-8",
+        height: "h-3.5 md:h-4",
+        thumbSize: "w-2.5 h-2.5 md:w-3 md:h-3",
+        thumbTranslate: "translate-x-3.5 md:translate-x-4",
         thumbOffset: "left-0.5 top-0.5",
       },
       md: {
-        width: "w-10",
-        height: "h-5",
-        thumbSize: "w-4 h-4",
-        thumbTranslate: "translate-x-5",
+        width: "w-9 md:w-10",
+        height: "h-4.5 md:h-5",
+        thumbSize: "w-3.5 h-3.5 md:w-4 md:h-4",
+        thumbTranslate: "translate-x-4.5 md:translate-x-5",
         thumbOffset: "left-0.5 top-0.5",
       },
       lg: {
-        width: "w-12",
-        height: "h-6",
-        thumbSize: "w-5 h-5",
-        thumbTranslate: "translate-x-6",
+        width: "w-11 md:w-12",
+        height: "h-5.5 md:h-6",
+        thumbSize: "w-4.5 h-4.5 md:w-5 md:h-5",
+        thumbTranslate: "translate-x-5.5 md:translate-x-6",
         thumbOffset: "left-0.5 top-0.5",
       },
     };
@@ -61,14 +61,14 @@ export const Switch = forwardRef<HTMLInputElement, SwitchProps>(
         {label && (
           <label
             htmlFor={inputId}
-            className="flex items-center gap-1 text-xs font-bold text-gray-700 mb-2"
+            className="flex items-center gap-1 text-[10px] sm:text-xs font-bold text-gray-700 dark:text-gray-300 mb-1.5 md:mb-2"
           >
             {label}
             {required && <span className="text-error-500">*</span>}
           </label>
         )}
 
-        <div className="flex items-center gap-3">
+        <div className="flex items-center gap-2 md:gap-3">
           <label
             htmlFor={inputId}
             className={`relative inline-block ${config.width} ${config.height} ${

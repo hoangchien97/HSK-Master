@@ -33,16 +33,16 @@ export default function Pagination({
   // Size configurations
   const sizeConfig = {
     sm: {
-      button: "size-8 text-xs",
-      gap: "gap-1",
+      button: "size-7 md:size-8 text-[10px] md:text-xs",
+      gap: "gap-0.5 md:gap-1",
     },
     md: {
-      button: "size-10 text-sm",
-      gap: "gap-2",
+      button: "size-8 md:size-10 text-xs md:text-sm",
+      gap: "gap-1 md:gap-2",
     },
     lg: {
-      button: "size-12 text-base",
-      gap: "gap-3",
+      button: "size-10 md:size-12 text-sm md:text-base",
+      gap: "gap-1.5 md:gap-3",
     },
   };
 
@@ -86,7 +86,7 @@ export default function Pagination({
               }
             `}
           >
-            <ChevronLeft className="w-4 h-4" />
+            <ChevronLeft className="w-3 h-3 md:w-4 md:h-4" />
           </button>
         ) : (
           <Link
@@ -101,7 +101,7 @@ export default function Pagination({
               }
             `}
           >
-            <ChevronLeft className="w-4 h-4" />
+            <ChevronLeft className="w-3 h-3 md:w-4 md:h-4" />
           </Link>
         )}
 
@@ -171,7 +171,7 @@ export default function Pagination({
               }
             `}
           >
-            <ChevronRight className="w-4 h-4" />
+            <ChevronRight className="w-3 h-3 md:w-4 md:h-4" />
           </button>
         ) : (
           <Link
@@ -186,14 +186,14 @@ export default function Pagination({
               }
             `}
           >
-            <ChevronRight className="w-4 h-4" />
+            <ChevronRight className="w-3 h-3 md:w-4 md:h-4" />
           </Link>
         )}
       </div>
 
       {/* Page Info */}
       {showInfo && totalItems && (
-        <p className="text-sm text-gray-500">
+        <p className="text-[10px] md:text-xs lg:text-sm text-gray-500">
           Trang <span className="font-bold text-gray-900">{currentPage}</span> /{" "}
           <span className="font-bold text-gray-900">{totalPages}</span> •{" "}
           {currentItemsCount && `Hiển thị ${currentItemsCount} trong `}tổng số{" "}

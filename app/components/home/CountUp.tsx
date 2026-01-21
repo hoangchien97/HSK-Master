@@ -54,7 +54,7 @@ export default function CountUp({ value, suffix, stiffness = 120, damping = 16 }
       setDisplay(rounded.toLocaleString() + (useSuffix ?? ''));
     });
     return () => unsubscribe && unsubscribe();
-  }, [value, motionVal, spring]);
+  }, [value, suffix, motionVal, spring]);
 
-  return <div className="text-2xl md:text-3xl font-bold mb-1">{display}</div>;
+  return <div className="text-lg md:text-2xl lg:text-3xl font-bold mb-1">{display}</div>;
 }

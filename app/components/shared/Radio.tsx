@@ -24,9 +24,9 @@ export const Radio = forwardRef<HTMLInputElement, RadioProps>(
   ) => {
     // Size classes
     const sizeClasses = {
-      sm: "w-4 h-4",
-      md: "w-5 h-5",
-      lg: "w-6 h-6",
+      sm: "w-3.5 h-3.5 md:w-4 md:h-4",
+      md: "w-4 h-4 md:w-5 md:h-5",
+      lg: "w-5 h-5 md:w-6 md:h-6",
     };
 
     return (
@@ -64,7 +64,7 @@ export const Radio = forwardRef<HTMLInputElement, RadioProps>(
             <div className="flex flex-col">
               {label && (
                 <span
-                  className={`text-sm font-medium ${
+                  className={`text-xs md:text-sm font-medium ${
                     disabled
                       ? "text-gray-400"
                       : error
@@ -76,7 +76,7 @@ export const Radio = forwardRef<HTMLInputElement, RadioProps>(
                 </span>
               )}
               {description && (
-                <span className="text-xs text-gray-500 mt-0.5">
+                <span className="text-[10px] md:text-xs text-gray-500 mt-0.5">
                   {description}
                 </span>
               )}

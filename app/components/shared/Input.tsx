@@ -34,9 +34,9 @@ const Input = forwardRef<HTMLInputElement, InputProps>(
 
     // Size classes
     const sizeClasses = {
-      sm: "px-3 py-2 text-xs",
-      md: "px-4 py-3 text-sm",
-      lg: "px-5 py-3.5 text-base",
+      sm: "px-2.5 py-1.5 md:px-3 md:py-2 text-[10px] md:text-xs",
+      md: "px-3 py-2 md:px-4 md:py-3 text-xs md:text-sm",
+      lg: "px-4 py-2.5 md:px-5 md:py-3.5 text-sm md:text-base",
     };
 
     // Base classes
@@ -57,7 +57,7 @@ const Input = forwardRef<HTMLInputElement, InputProps>(
         {label && (
           <label
             htmlFor={inputId}
-            className="flex items-center gap-1 text-xs font-bold text-gray-700 mb-2"
+            className="flex items-center gap-1 text-[10px] sm:text-xs font-bold text-gray-700 dark:text-gray-300 mb-1.5 md:mb-2"
           >
             {label}
             {required && <span className="text-error-500">*</span>}
@@ -65,17 +65,17 @@ const Input = forwardRef<HTMLInputElement, InputProps>(
         )}
         <div className="relative">
           {icon && (
-            <div className="absolute inset-y-0 left-0 flex items-center pl-4 pointer-events-none text-gray-400">
+            <div className="absolute inset-y-0 left-0 flex items-center pl-3 md:pl-4 pointer-events-none text-gray-400">
               {typeof icon === 'string' ? (
-                <span className="material-symbols-outlined text-[20px]">{icon}</span>
+                <span className="material-symbols-outlined text-[16px] md:text-[20px]">{icon}</span>
               ) : (
                 icon
               )}
             </div>
           )}
           {variant === "search" && !icon && (
-            <div className="absolute inset-y-0 left-0 flex items-center pl-4 pointer-events-none text-gray-400">
-              <Search className="w-5 h-5" />
+            <div className="absolute inset-y-0 left-0 flex items-center pl-3 md:pl-4 pointer-events-none text-gray-400">
+              <Search className="w-4 h-4 md:w-5 md:h-5" />
             </div>
           )}
           <input
@@ -88,7 +88,7 @@ const Input = forwardRef<HTMLInputElement, InputProps>(
               ${baseClasses}
               ${sizeClasses[size]}
               ${stateClasses}
-              ${icon || variant === "search" ? "pl-12" : ""}
+              ${icon || variant === "search" ? "pl-9 md:pl-12" : ""}
               ${className}
             `}
             {...props}

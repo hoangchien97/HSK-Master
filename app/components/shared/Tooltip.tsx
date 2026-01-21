@@ -58,8 +58,8 @@ export default function Tooltip({
           sideOffset={5}
           className={`
             z-50
-            bg-gray-900 dark:bg-gray-800 text-white text-xs
-            rounded-lg shadow-xl py-2 px-3 leading-relaxed
+            bg-gray-900 dark:bg-gray-800 text-white text-[10px] md:text-xs
+            rounded-lg shadow-xl py-1.5 px-2 md:py-2 md:px-3 leading-relaxed
             ${animationClass}
             ${className}
           `}

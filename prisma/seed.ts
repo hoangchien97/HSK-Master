@@ -55,7 +55,7 @@ async function main() {
     {
       level: 1,
       title: "HSK 1",
-      badge: "Sơ cấp HSK 1",
+      badge: "Sơ cấp",
       badgeColor: "bg-orange-100 text-orange-800 dark:bg-orange-900/30 dark:text-orange-200",
       description: "Làm quen với tiếng Trung từ con số 0, học cách chào hỏi và giao tiếp cơ bản.",
       vocabularyCount: "150 từ",
@@ -69,7 +69,7 @@ async function main() {
     {
       level: 2,
       title: "HSK 2",
-      badge: "Sơ cấp HSK 2",
+      badge: "Sơ cấp",
       badgeColor: "bg-orange-100 text-orange-800 dark:bg-orange-900/30 dark:text-orange-200",
       description: "Giao tiếp cơ bản trong cuộc sống hàng ngày. Nâng cao kỹ năng giao tiếp, mở rộng từ vựng và mẫu câu thông dụng.",
       vocabularyCount: "300 từ",
@@ -83,7 +83,7 @@ async function main() {
     {
       level: 3,
       title: "HSK 3",
-      badge: "Trung cấp HSK 3",
+      badge: "Trung cấp",
       badgeColor: "bg-red-100 text-red-800 dark:bg-red-900/30 dark:text-red-200",
       description: "Bước vào giao tiếp nâng cao. Giao tiếp và viết thành thạo hơn trong các tình huống thường gặp.",
       vocabularyCount: "600 từ",
@@ -97,7 +97,7 @@ async function main() {
     {
       level: 4,
       title: "HSK 4",
-      badge: "Trung cấp HSK 4",
+      badge: "Trung cấp",
       badgeColor: "bg-red-100 text-red-800 dark:bg-red-900/30 dark:text-red-200",
       description: "Sẵn sàng cho môi trường du học và làm việc. Giao tiếp tự tin trong các tình huống phức tạp.",
       vocabularyCount: "1200 từ",
@@ -111,7 +111,7 @@ async function main() {
     {
       level: 5,
       title: "HSK 5",
-      badge: "Cao cấp HSK 5",
+      badge: "Cao cấp",
       badgeColor: "bg-indigo-100 text-indigo-800 dark:bg-indigo-900/30 dark:text-indigo-200",
       description: "Thành thạo giao tiếp chuyên sâu. Đọc báo, xem phim, giao tiếp trong môi trường chuyên nghiệp.",
       vocabularyCount: "2500 từ",
@@ -125,7 +125,7 @@ async function main() {
     {
       level: 6,
       title: "HSK 6",
-      badge: "Chuyên gia HSK 6",
+      badge: "Chuyên gia",
       badgeColor: "bg-blue-100 text-blue-800 dark:bg-blue-900/30 dark:text-blue-200",
       description: "Đạt trình độ gần như người bản ngữ. Hiểu và sử dụng tiếng Trung trong mọi tình huống phức tạp.",
       vocabularyCount: "5000+ từ",
@@ -584,7 +584,6 @@ async function main() {
     data: [
       { value: 500, suffix: "+", label: "Học viên", order: 1, isActive: true },
       { value: 95, suffix: "%", label: "Tỷ lệ đỗ HSK", order: 2, isActive: true },
-      { value: 20, suffix: "+", label: "Giáo viên", order: 3, isActive: true },
       { value: 5, suffix: " năm", label: "Kinh nghiệm", order: 4, isActive: true },
     ],
   })

@@ -49,16 +49,16 @@ const Select = ({
 
   // Size classes
   const sizeClasses = {
-    sm: "px-3 py-2 text-xs",
-    md: "px-4 py-3 text-sm",
-    lg: "px-5 py-3.5 text-base",
+    sm: "px-2.5 py-1.5 md:px-3 md:py-2 text-[10px] md:text-xs",
+    md: "px-3 py-2 md:px-4 md:py-3 text-xs md:text-sm",
+    lg: "px-4 py-2.5 md:px-5 md:py-3.5 text-sm md:text-base",
   };
 
   // Option size classes
   const optionSizeClasses = {
-    sm: "px-3 py-2 text-xs",
-    md: "px-4 py-3 text-sm",
-    lg: "px-5 py-3.5 text-base",
+    sm: "px-2.5 py-1.5 md:px-3 md:py-2 text-[10px] md:text-xs",
+    md: "px-3 py-2 md:px-4 md:py-3 text-xs md:text-sm",
+    lg: "px-4 py-2.5 md:px-5 md:py-3.5 text-sm md:text-base",
   };
 
   // Base classes
@@ -103,7 +103,7 @@ const Select = ({
   return (
     <div className="w-full">
       {label && (
-        <label className="flex items-center gap-1 text-xs font-bold text-gray-700 mb-2">
+        <label className="flex items-center gap-1 text-[10px] sm:text-xs font-bold text-gray-700 dark:text-gray-300 mb-1.5 md:mb-2">
           {label}
           {required && <span className="text-error-500">*</span>}
         </label>
@@ -117,29 +117,29 @@ const Select = ({
             ${baseClasses}
             ${sizeClasses[size]}
             ${stateClasses}
-            ${icon ? "pl-12" : ""}
-            pr-12
+            ${icon ? "pl-9 md:pl-12" : ""}
+            pr-9 md:pr-12
             ${className}
           `}
         >
           {icon && (
-            <div className="absolute inset-y-0 left-0 flex items-center pl-4 pointer-events-none text-gray-400">
+            <div className="absolute inset-y-0 left-0 flex items-center pl-3 md:pl-4 pointer-events-none text-gray-400">
               {icon}
             </div>
           )}
           <span className={selectedOption ? "" : "text-gray-400"}>
             {selectedOption?.label || placeholder}
           </span>
-          <div className="absolute inset-y-0 right-0 flex items-center pr-4 pointer-events-none">
+          <div className="absolute inset-y-0 right-0 flex items-center pr-3 md:pr-4 pointer-events-none">
             {isOpen ? (
               <ChevronUp
-                className={`w-5 h-5 transition-colors ${
+                className={`w-4 h-4 md:w-5 md:h-5 transition-colors ${
                   error ? "text-error-500" : disabled ? "text-gray-300" : "text-primary-500"
                 }`}
               />
             ) : (
               <ChevronDown
-                className={`w-5 h-5 transition-colors ${
+                className={`w-4 h-4 md:w-5 md:h-5 transition-colors ${
                   error ? "text-error-500" : disabled ? "text-gray-300" : "text-gray-400"
                 }`}
               />
@@ -149,8 +149,8 @@ const Select = ({
 
         {/* Dropdown Menu */}
         {isOpen && !disabled && (
-          <div className="absolute z-50 w-full mt-2 bg-white border-2 border-primary-500 rounded-xl shadow-2xl overflow-hidden">
-            <div className="max-h-60 overflow-y-auto">
+          <div className="absolute z-50 w-full mt-1.5 md:mt-2 bg-white dark:bg-gray-800 border-2 border-primary-500 rounded-lg md:rounded-xl shadow-2xl overflow-hidden">
+            <div className="max-h-48 md:max-h-60 overflow-y-auto">
               {options.map((option) => {
                 const isSelected = option.value === currentValue;
                 return (
@@ -163,15 +163,15 @@ const Select = ({
                       w-full ${optionSizeClasses[size]} text-left font-medium transition-all flex items-center justify-between
                       ${
                         option.disabled
-                          ? "text-gray-300 cursor-not-allowed bg-gray-50"
+                          ? "text-gray-300 dark:text-gray-600 cursor-not-allowed bg-gray-50 dark:bg-gray-900"
                           : isSelected
-                          ? "bg-primary-50 text-primary-600 font-bold cursor-pointer"
-                          : "text-gray-700 hover:bg-primary-50 hover:text-primary-600 cursor-pointer"
+                          ? "bg-primary-50 dark:bg-primary-900/30 text-primary-600 dark:text-primary-400 font-bold cursor-pointer"
+                          : "text-gray-700 dark:text-gray-300 hover:bg-primary-50 dark:hover:bg-primary-900/20 hover:text-primary-600 dark:hover:text-primary-400 cursor-pointer"
                       }
                     `}
                   >
                     <span>{option.label}</span>
-                    {isSelected && <Check className="w-5 h-5 text-primary-500" />}
+                    {isSelected && <Check className="w-4 h-4 md:w-5 md:h-5 text-primary-500" />}
                   </button>
                 );
               })}

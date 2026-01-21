@@ -120,19 +120,19 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
         variant === "icon-only"
           ? "p-1.5 text-sm"
           : variant === "gallery-control"
-          ? "px-3 py-2 text-sm rounded-lg"
+          ? "px-2 py-1.5 md:px-3 md:py-2 text-xs md:text-sm rounded-lg"
           : "px-3 py-1.5 text-sm rounded-lg",
       md:
         variant === "icon-only"
           ? "p-2 text-base"
           : variant === "gallery-control"
-          ? "px-4 py-2.5 text-base rounded-xl"
+          ? "px-3 py-2 md:px-4 md:py-2.5 text-sm md:text-base rounded-lg md:rounded-xl"
           : "px-6 py-2.5 text-base rounded-xl",
       lg:
         variant === "icon-only"
           ? "p-3 text-lg"
           : variant === "gallery-control"
-          ? "px-5 py-3 text-lg rounded-xl"
+          ? "px-4 py-2.5 md:px-5 md:py-3 text-base md:text-lg rounded-xl"
           : "px-8 py-3.5 text-lg rounded-xl",
     };
 
