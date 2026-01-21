@@ -1,6 +1,7 @@
 "use client";
 
 import { InputHTMLAttributes, forwardRef } from "react";
+import { useResponsive } from "@/app/hooks/useResponsive";
 
 interface CheckboxProps extends Omit<InputHTMLAttributes<HTMLInputElement>, 'size'> {
   label?: string;
@@ -15,13 +16,15 @@ export const Checkbox = forwardRef<HTMLInputElement, CheckboxProps>(
       label,
       description,
       error,
-      size = "md",
+      size,
       className = "",
       disabled,
       ...props
     },
     ref
   ) => {
+    const { isMobile } = useResponsive();
+    const effectiveSize = isMobile ? "sm" : (size || "md");
     // Size classes
     const sizeClasses = {
       sm: "w-3.5 h-3.5 md:w-4 md:h-4",
@@ -41,7 +44,7 @@ export const Checkbox = forwardRef<HTMLInputElement, CheckboxProps>(
             type="checkbox"
             disabled={disabled}
             className={`
-              ${sizeClasses[size]}
+              ${sizeClasses[effectiveSize]}
               mt-0.5
               rounded-md border-2
               transition-all

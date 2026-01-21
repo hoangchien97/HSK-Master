@@ -1,6 +1,7 @@
 import { X, Pause, Play, ZoomOut, ZoomIn, RotateCw, Minimize, Maximize, Download } from "lucide-react";
 import Button from "../../shared/Button";
 import { ZOOM_MIN, ZOOM_MAX } from "./types";
+import { useResponsive } from "@/app/hooks/useResponsive";
 
 interface HeaderControlsProps {
   showControls: boolean;
@@ -37,6 +38,8 @@ export function HeaderControls({
   cancelHideTimer,
   resetHideTimer,
 }: HeaderControlsProps) {
+  const { isMobile } = useResponsive();
+
   return (
     <div
       className={`absolute top-2 left-2 right-2 md:top-4 md:left-4 md:right-4 flex justify-between items-center z-10 transition-opacity duration-300 ${
@@ -49,7 +52,6 @@ export function HeaderControls({
         <Button
           onClick={onClose}
           variant="gallery-control"
-          size="sm"
           className="md:text-base"
           icon={<X className="w-4 h-4 md:w-5 md:h-5" />}
           iconPosition="left"
@@ -61,65 +63,60 @@ export function HeaderControls({
         </span>
       </div>
 
-      <div className="flex items-center gap-1 md:gap-2">
-        <Button
-          onClick={onTogglePlayback}
-          variant="gallery-control"
-          size="sm"
-          title={isPlaying ? "Tạm dừng" : "Phát tự động"}
-          icon={isPlaying ? <Pause className="w-4 h-4 md:w-5 md:h-5" /> : <Play className="w-4 h-4 md:w-5 md:h-5" />}
-          aria-label={isPlaying ? "Tạm dừng" : "Phát tự động"}
-        />
+      {!isMobile && (
+        <div className="flex items-center gap-1 md:gap-2">
+          <Button
+            onClick={onTogglePlayback}
+            variant="gallery-control"
+            title={isPlaying ? "Tạm dừng" : "Phát tự động"}
+            icon={isPlaying ? <Pause className="w-4 h-4 md:w-5 md:h-5" /> : <Play className="w-4 h-4 md:w-5 md:h-5" />}
+            aria-label={isPlaying ? "Tạm dừng" : "Phát tự động"}
+          />
 
-        {/* Zoom controls - Hidden on mobile */}
-        <div className="hidden md:block w-px h-6 bg-white/20" />
-        <Button
-          onClick={onZoomOut}
-          disabled={zoom <= ZOOM_MIN}
-          variant="gallery-control"
-          size="sm"
-          className="hidden md:inline-flex"
-          title="Thu nhỏ (Phím -)"
-          icon={<ZoomOut className="w-4 h-4 md:w-5 md:h-5" />}
-          aria-label="Thu nhỏ"
-        />
-        <Button
-          onClick={onZoomIn}
-          disabled={zoom >= ZOOM_MAX}
-          variant="gallery-control"
-          size="sm"
-          className="hidden md:inline-flex"
-          title="Phóng to (Phím +)"
-          icon={<ZoomIn className="w-4 h-4 md:w-5 md:h-5" />}
-          aria-label="Phóng to"
-        />
+          {/* Zoom controls */}
+          <div className="w-px h-6 bg-white/20" />
+          <Button
+            onClick={onZoomOut}
+            disabled={zoom <= ZOOM_MIN}
+            variant="gallery-control"
+            title="Thu nhỏ (Phím -)"
+            icon={<ZoomOut className="w-4 h-4 md:w-5 md:h-5" />}
+            aria-label="Thu nhỏ"
+          />
+          <Button
+            onClick={onZoomIn}
+            disabled={zoom >= ZOOM_MAX}
+            variant="gallery-control"
+            title="Phóng to (Phím +)"
+            icon={<ZoomIn className="w-4 h-4 md:w-5 md:h-5" />}
+            aria-label="Phóng to"
+          />
 
-        <Button
-          onClick={onRotate}
-          variant="gallery-control"
-          size="sm"
-          title="Xoay ảnh (Phím R)"
-          icon={<RotateCw className="w-4 h-4 md:w-5 md:h-5" />}
-          aria-label="Xoay ảnh"
-        />
-        <div className="w-px h-4 md:h-6 bg-white/20" />
-        <Button
-          onClick={onToggleFullscreen}
-          variant="gallery-control"
-          size="sm"
-          title={isFullscreen ? "Thoát toàn màn hình (Esc)" : "Toàn màn hình (F)"}
-          icon={isFullscreen ? <Minimize className="w-4 h-4 md:w-5 md:h-5" /> : <Maximize className="w-4 h-4 md:w-5 md:h-5" />}
-          aria-label={isFullscreen ? "Thu nhỏ" : "Toàn màn hình"}
-        />
-        <Button
-          onClick={onDownload}
-          variant="gallery-control"
-          size="sm"
-          title="Tải xuống (Phím D)"
-          icon={<Download className="w-4 h-4 md:w-5 md:h-5" />}
-          aria-label="Tải xuống"
-        />
-      </div>
+          <Button
+            onClick={onRotate}
+            variant="gallery-control"
+            title="Xoay ảnh (Phím R)"
+            icon={<RotateCw className="w-4 h-4 md:w-5 md:h-5" />}
+            aria-label="Xoay ảnh"
+          />
+
+          <div className="w-px h-6 bg-white/20" />
+          <Button
+            onClick={onToggleFullscreen}
+            variant="gallery-control"
+            title={isFullscreen ? "Thoát toàn màn hình (Esc)" : "Toàn màn hình (F)"}
+            icon={isFullscreen ? <Minimize className="w-4 h-4 md:w-5 md:h-5" /> : <Maximize className="w-4 h-4 md:w-5 md:h-5" />}
+            aria-label={isFullscreen ? "Thu nhỏ" : "Toàn màn hình"}
+          />
+          <Button
+            onClick={onDownload}
+            variant="gallery-control"
+            title="Tải xuống (Phím D)"
+            icon={<Download className="w-4 h-4 md:w-5 md:h-5" />}
+            aria-label="Tải xuống"
+          />
+        </div>
+      )}
     </div>
   );
 }

@@ -2,6 +2,7 @@
 
 import { useState, useRef, useEffect, ReactNode } from "react";
 import { ChevronDown, ChevronUp, Check } from "lucide-react";
+import { useResponsive } from "@/app/hooks/useResponsive";
 
 interface SelectOption {
   value: string;
@@ -34,24 +35,26 @@ const Select = ({
   className = "",
   options = [],
   icon,
-  size = "md",
+  size,
   value: controlledValue,
   defaultValue = "",
   onChange,
   placeholder = "Chọn...",
 }: SelectProps) => {
+  const { isMobile } = useResponsive();
   const [isOpen, setIsOpen] = useState(false);
   const [selectedValue, setSelectedValue] = useState(controlledValue || defaultValue);
   const dropdownRef = useRef<HTMLDivElement>(null);
 
   const currentValue = controlledValue !== undefined ? controlledValue : selectedValue;
   const selectedOption = options.find((opt) => opt.value === currentValue);
+  const effectiveSize = isMobile ? "sm" : (size || "md");
 
   // Size classes
   const sizeClasses = {
-    sm: "px-2.5 py-1.5 md:px-3 md:py-2 text-[10px] md:text-xs",
-    md: "px-3 py-2 md:px-4 md:py-3 text-xs md:text-sm",
-    lg: "px-4 py-2.5 md:px-5 md:py-3.5 text-sm md:text-base",
+    sm: "px-2.5 py-1.5 md:px-3 md:py-2 text-[10px] md:text-xs min-h-[28px] md:min-h-[32px]",
+    md: "px-3 py-2 md:px-4 md:py-3 text-xs md:text-sm min-h-[36px] md:min-h-[44px]",
+    lg: "px-4 py-2.5 md:px-5 md:py-3.5 text-sm md:text-base min-h-[44px] md:min-h-[52px]",
   };
 
   // Option size classes
@@ -115,7 +118,7 @@ const Select = ({
           disabled={disabled}
           className={`
             ${baseClasses}
-            ${sizeClasses[size]}
+            ${sizeClasses[effectiveSize]}
             ${stateClasses}
             ${icon ? "pl-9 md:pl-12" : ""}
             pr-9 md:pr-12
@@ -160,7 +163,7 @@ const Select = ({
                     onClick={() => !option.disabled && handleSelect(option.value)}
                     disabled={option.disabled}
                     className={`
-                      w-full ${optionSizeClasses[size]} text-left font-medium transition-all flex items-center justify-between
+                      w-full ${optionSizeClasses[effectiveSize]} text-left font-medium transition-all flex items-center justify-between
                       ${
                         option.disabled
                           ? "text-gray-300 dark:text-gray-600 cursor-not-allowed bg-gray-50 dark:bg-gray-900"

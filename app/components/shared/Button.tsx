@@ -1,5 +1,8 @@
+"use client";
+
 import React from "react";
 import LoadingSpinner from "./LoadingSpinner";
+import { useResponsive } from "@/app/hooks/useResponsive";
 
 export type ButtonVariant =
   | "primary"
@@ -44,6 +47,8 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
     },
     ref
   ) => {
+    const { isMobile } = useResponsive();
+    const effectiveSize = isMobile ? "md" : (size || "md");
     // Validate icon-only variant
     if (variant === "icon-only" && !ariaLabel) {
       console.warn(
@@ -118,22 +123,22 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
     const sizeStyles = {
       sm:
         variant === "icon-only"
-          ? "p-1.5 text-sm"
+          ? "p-1.5 text-sm min-h-[28px] min-w-[28px]"
           : variant === "gallery-control"
-          ? "px-2 py-1.5 md:px-3 md:py-2 text-xs md:text-sm rounded-lg"
-          : "px-3 py-1.5 text-sm rounded-lg",
+          ? "px-2 py-1.5 md:px-3 md:py-2 text-xs md:text-sm rounded-lg min-h-[28px] md:min-h-[32px]"
+          : "px-3 py-1.5 text-sm rounded-lg min-h-[32px]",
       md:
         variant === "icon-only"
-          ? "p-2 text-base"
+          ? "p-2 text-base min-h-[36px] min-w-[36px]"
           : variant === "gallery-control"
-          ? "px-3 py-2 md:px-4 md:py-2.5 text-sm md:text-base rounded-lg md:rounded-xl"
-          : "px-6 py-2.5 text-base rounded-xl",
+          ? "px-3 py-2 md:px-4 md:py-2.5 text-sm md:text-base rounded-lg md:rounded-xl min-h-[36px] md:min-h-[40px]"
+          : "px-6 py-2.5 text-base rounded-xl min-h-[44px]",
       lg:
         variant === "icon-only"
-          ? "p-3 text-lg"
+          ? "p-3 text-lg min-h-[48px] min-w-[48px]"
           : variant === "gallery-control"
-          ? "px-4 py-2.5 md:px-5 md:py-3 text-base md:text-lg rounded-xl"
-          : "px-8 py-3.5 text-lg rounded-xl",
+          ? "px-4 py-2.5 md:px-5 md:py-3 text-base md:text-lg rounded-xl min-h-[44px] md:min-h-[48px]"
+          : "px-8 py-3.5 text-lg rounded-xl min-h-[52px]",
     };
 
     // Width styles
@@ -155,7 +160,7 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
         ref={ref}
         disabled={disabled || loading}
         aria-label={ariaLabel}
-        className={`${baseStyles} ${variantStyles[variant]} ${sizeStyles[size]} ${widthStyles} ${className}`}
+        className={`${baseStyles} ${variantStyles[variant]} ${sizeStyles[effectiveSize]} ${widthStyles} ${className}`}
         {...props}
       >
         {variant === "icon-only" ? (

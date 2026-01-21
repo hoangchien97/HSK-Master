@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { ChevronLeft, ChevronRight } from "lucide-react";
+import { useResponsive } from "@/app/hooks/useResponsive";
 
 interface PaginationProps {
   currentPage: number;
@@ -22,11 +23,13 @@ export default function Pagination({
   totalItems,
   currentItemsCount,
   basePath = "",
-  size = "md",
+  size,
   shape = "rounded",
   showInfo = false,
   onPageChange,
 }: PaginationProps) {
+  const { isMobile } = useResponsive();
+  const effectiveSize = isMobile ? "sm" : (size || "md");
   const hasNextPage = currentPage < totalPages;
   const hasPrevPage = currentPage > 1;
 
@@ -53,7 +56,7 @@ export default function Pagination({
     square: "rounded-md",
   };
 
-  const config = sizeConfig[size];
+  const config = sizeConfig[effectiveSize];
   const shapeClass = shapeConfig[shape];
 
   const handlePageClick = (page: number) => {

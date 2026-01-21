@@ -1,6 +1,7 @@
 "use client";
 
 import { InputHTMLAttributes, forwardRef } from "react";
+import { useResponsive } from "@/app/hooks/useResponsive";
 
 interface SwitchProps
   extends Omit<InputHTMLAttributes<HTMLInputElement>, "size"> {
@@ -18,7 +19,7 @@ export const Switch = forwardRef<HTMLInputElement, SwitchProps>(
       label,
       helperText,
       error,
-      size = "md",
+      size,
       required = false,
       disabled = false,
       className = "",
@@ -27,7 +28,9 @@ export const Switch = forwardRef<HTMLInputElement, SwitchProps>(
     },
     ref
   ) => {
+    const { isMobile } = useResponsive();
     const inputId = id || props.name;
+    const effectiveSize = isMobile ? "sm" : (size || "md");
 
     // Size configurations for container and thumb
     const sizeConfig = {
@@ -54,7 +57,7 @@ export const Switch = forwardRef<HTMLInputElement, SwitchProps>(
       },
     };
 
-    const config = sizeConfig[size];
+    const config = sizeConfig[effectiveSize];
 
     return (
       <div className="w-full">

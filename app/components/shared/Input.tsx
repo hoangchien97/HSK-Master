@@ -2,6 +2,7 @@
 
 import { InputHTMLAttributes, forwardRef, ReactNode } from "react";
 import { Search, X } from "lucide-react";
+import { useResponsive } from "@/app/hooks/useResponsive";
 
 interface InputProps extends Omit<InputHTMLAttributes<HTMLInputElement>, 'size'> {
   label?: string;
@@ -22,7 +23,7 @@ const Input = forwardRef<HTMLInputElement, InputProps>(
       required,
       disabled,
       readOnly,
-      size = "md",
+      size,
       variant = "default",
       className = "",
       id,
@@ -30,13 +31,15 @@ const Input = forwardRef<HTMLInputElement, InputProps>(
     },
     ref
   ) => {
+    const { isMobile } = useResponsive();
     const inputId = id || props.name;
+    const effectiveSize = isMobile ? "sm" : (size || "md");
 
     // Size classes
     const sizeClasses = {
-      sm: "px-2.5 py-1.5 md:px-3 md:py-2 text-[10px] md:text-xs",
-      md: "px-3 py-2 md:px-4 md:py-3 text-xs md:text-sm",
-      lg: "px-4 py-2.5 md:px-5 md:py-3.5 text-sm md:text-base",
+      sm: "px-2.5 py-1.5 md:px-3 md:py-2 text-[10px] md:text-xs min-h-[28px] md:min-h-[32px]",
+      md: "px-3 py-2 md:px-4 md:py-3 text-xs md:text-sm min-h-[36px] md:min-h-[44px]",
+      lg: "px-4 py-2.5 md:px-5 md:py-3.5 text-sm md:text-base min-h-[44px] md:min-h-[52px]",
     };
 
     // Base classes
@@ -86,7 +89,7 @@ const Input = forwardRef<HTMLInputElement, InputProps>(
             readOnly={readOnly}
             className={`
               ${baseClasses}
-              ${sizeClasses[size]}
+              ${sizeClasses[effectiveSize]}
               ${stateClasses}
               ${icon || variant === "search" ? "pl-9 md:pl-12" : ""}
               ${className}
