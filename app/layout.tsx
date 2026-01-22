@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
-import { Header, Footer, ScrollToTop } from "./components/shared";
+import { Header, Footer, ScrollToTop, ContactBubbles } from "./components/shared";
 import * as TooltipPrimitive from '@radix-ui/react-tooltip';
 import NextTopLoader from 'nextjs-toploader';
 import { ToastContainer } from 'react-toastify';
@@ -58,6 +58,7 @@ export default function RootLayout({
           <main className="flex-1">{children}</main>
           <Footer />
           <ScrollToTop />
+          <ContactBubbles />
         </TooltipPrimitive.Provider>
         <ToastContainer
           position="top-right"

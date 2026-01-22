@@ -23,7 +23,7 @@ export default function CourseCard({ course }: CourseCardProps) {
   const defaultImage = `https://images.unsplash.com/photo-1524178232363-1fb2b075b655?w=800&h=450&fit=crop&q=80`;
 
   return (
-    <article className="group flex flex-col overflow-hidden rounded-xl border border-border-light dark:border-border-dark bg-surface-light dark:bg-surface-dark shadow-sm transition-all hover:shadow-lg hover:border-red-200 dark:hover:border-red-900">
+    <article className="group h-full flex flex-col overflow-hidden rounded-xl border border-border-light dark:border-border-dark bg-surface-light dark:bg-surface-dark shadow-sm transition-all hover:shadow-lg hover:border-red-200 dark:hover:border-red-900">
       <Link href={`/courses/${course.slug}`} className="relative aspect-video w-full overflow-hidden bg-gray-200 dark:bg-gray-800">
         <Image
           src={course.image || defaultImage}

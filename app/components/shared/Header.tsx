@@ -32,7 +32,7 @@ export default function Header() {
     <header className="sticky top-0 z-50 w-full border-b border-border-light dark:border-border-dark bg-surface-light/95 supports-[backdrop-filter]:bg-surface-light/80 dark:bg-surface-dark/95 shadow-sm">
       <div className="mx-auto flex h-16 max-w-7xl items-center justify-between px-4 sm:px-6 lg:px-8">
         {/* Left Section - Mobile Menu + Logo */}
-        <div className="flex justify-between w-full md:w-initial md:justify-start items-center gap-4">
+        <div className="flex justify-between w-full md:w-auto items-center gap-4">
           <button
             onClick={() => setIsMobileMenuOpen(true)}
             className="lg:hidden p-2 flex text-text-main-light dark:text-text-main-dark hover:bg-gray-100 dark:hover:bg-gray-800 rounded-md transition-all duration-300 cursor-pointer"
@@ -51,7 +51,7 @@ export default function Header() {
         </div>
 
         {/* Center Section - Search Bar */}
-        <div className="hidden md:flex max-w-md flex-1 mx-8">
+        {/* <div className="hidden md:flex max-w-md flex-1 mx-8">
           <div className="relative w-full">
             <div className="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
               <Search className="w-5 h-5 text-text-secondary-light" />
@@ -62,7 +62,7 @@ export default function Header() {
               type="text"
             />
           </div>
-        </div>
+        </div> */}
 
         {/* Right Section - Navigation + Language + CTA */}
         <div className="flex items-center gap-4">
@@ -83,9 +83,9 @@ export default function Header() {
           </nav>
 
           {/* Language Switcher - Desktop Only */}
-          <div className="hidden sm:block">
+          {/* <div className="hidden sm:block">
             <LanguageSwitcher />
-          </div>
+          </div> */}
 
           {/* CTA Button */}
           <div className="flex items-center gap-3">
