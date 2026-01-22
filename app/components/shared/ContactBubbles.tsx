@@ -59,7 +59,7 @@ const ContactBubbles = () => {
     }));
   };
 
-  const visibleContactsList = contacts.filter(contact => 
+  const visibleContactsList = contacts.filter(contact =>
     visibleContacts[contact.id as keyof typeof visibleContacts]
   );
 
