@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useTransition } from "react";
+import { useState, useTransition, useEffect } from "react";
 import { motion } from "framer-motion";
 import { CourseCard, CourseFilter } from "../components/courses";
 import { Select, Input, Pagination } from "../components/shared";
@@ -94,6 +94,30 @@ export function CoursesContainer({
   const [page, setPage] = useState(currentPage);
 
   const totalPages = Math.ceil(totalCount / itemsPerPage);
+
+  // Sync state with URL params when navigation happens
+  useEffect(() => {
+    const hskLevel = searchParams.get('hskLevel');
+    const category = searchParams.get('category');
+    const searchQuery = searchParams.get('search') || '';
+    const sort = searchParams.get('sort') || 'featured';
+    const pageNum = parseInt(searchParams.get('page') || '1', 10);
+
+    setSelectedHskLevel(hskLevel);
+    setSelectedCategory(category);
+    setSearch(searchQuery);
+    setSortBy(sort);
+    setPage(pageNum);
+
+    // Fetch courses with new params
+    fetchFilteredCourses({
+      hskLevel,
+      category,
+      search: searchQuery || undefined,
+      sort,
+      page: pageNum,
+    });
+  }, [searchParams]);
 
   const updateFilters = (params: Record<string, string | null | number>, resetPage = true) => {
     const newParams = new URLSearchParams();

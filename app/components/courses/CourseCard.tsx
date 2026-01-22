@@ -1,6 +1,7 @@
 import Link from "next/link";
 import Image from "next/image";
 import { Tooltip } from "../shared";
+import { PlayCircle, Clock } from "lucide-react";
 
 interface CourseCardProps {
   course: {
@@ -50,13 +51,13 @@ export default function CourseCard({ course }: CourseCardProps) {
         <div className="mb-4 flex items-center gap-4 text-xs font-medium text-text-secondary-light dark:text-text-secondary-dark">
           <Tooltip content="Số lượng bài giảng trong khóa học">
             <div className="flex items-center gap-1.5 cursor-help">
-              <span className="material-symbols-outlined text-[18px] text-red-500">play_circle</span>
+              <PlayCircle className="w-[18px] h-[18px] text-red-500" />
               <span>{course.lectures || 0} bài giảng</span>
             </div>
           </Tooltip>
           <Tooltip content="Tổng thời lượng khóa học">
             <div className="flex items-center gap-1.5 cursor-help">
-              <span className="material-symbols-outlined text-[18px] text-orange-500">schedule</span>
+              <Clock className="w-[18px] h-[18px] text-orange-500" />
               <span>{course.durationHours || 0} giờ</span>
             </div>
           </Tooltip>

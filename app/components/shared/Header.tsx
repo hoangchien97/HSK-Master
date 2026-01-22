@@ -6,6 +6,7 @@ import { useState } from "react";
 import LanguageSwitcher from "./LanguageSwitcher";
 import MobileMenu from "./MobileMenu";
 import Button from "./Button";
+import { Menu, Languages, Search } from "lucide-react";
 
 const navigationItems = [
   { name: 'Trang chủ', path: '/' },
@@ -31,17 +32,17 @@ export default function Header() {
     <header className="sticky top-0 z-50 w-full border-b border-border-light dark:border-border-dark bg-surface-light/95 supports-[backdrop-filter]:bg-surface-light/80 dark:bg-surface-dark/95 shadow-sm">
       <div className="mx-auto flex h-16 max-w-7xl items-center justify-between px-4 sm:px-6 lg:px-8">
         {/* Left Section - Mobile Menu + Logo */}
-        <div className="flex items-center gap-4">
+        <div className="flex justify-between w-full md:w-initial md:justify-start items-center gap-4">
           <button
             onClick={() => setIsMobileMenuOpen(true)}
             className="lg:hidden p-2 flex text-text-main-light dark:text-text-main-dark hover:bg-gray-100 dark:hover:bg-gray-800 rounded-md transition-all duration-300 cursor-pointer"
             aria-label="Open menu"
           >
-            <span className="material-symbols-outlined transition-transform duration-300">menu</span>
+            <Menu className="w-6 h-6 transition-transform duration-300" />
           </button>
           <Link href="/" className="flex items-center gap-2 text-primary">
             <div className="size-8 rounded bg-gradient-to-br from-red-600 to-yellow-500 p-1.5 flex items-center justify-center text-white shadow-md">
-              <span className="material-symbols-outlined text-[20px]">translate</span>
+              <Languages className="w-5 h-5" />
             </div>
             <span className="text-xl font-bold tracking-tight bg-clip-text text-transparent bg-gradient-to-r from-yellow-400 to-red-600 hidden sm:block">
               HSK Master
@@ -53,7 +54,7 @@ export default function Header() {
         <div className="hidden md:flex max-w-md flex-1 mx-8">
           <div className="relative w-full">
             <div className="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
-              <span className="material-symbols-outlined text-text-secondary-light">search</span>
+              <Search className="w-5 h-5 text-text-secondary-light" />
             </div>
             <input
               className="block w-full rounded-full border-gray-200 bg-gray-50 dark:bg-background-dark py-2 pl-10 pr-3 text-sm placeholder-text-secondary-light focus:border-red-500 focus:ring-red-500 dark:text-white dark:placeholder-gray-500 transition-all hover:bg-white focus:bg-white dark:hover:bg-surface-dark dark:focus:bg-surface-dark shadow-sm"

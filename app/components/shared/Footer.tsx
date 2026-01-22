@@ -1,5 +1,7 @@
 import Link from "next/link";
 import Button from "./Button";
+import { HSK_LEVEL_GROUPS } from "@/app/types/filters";
+import { Languages, Phone, Mail, MapPin } from "lucide-react";
 
 export default function Footer() {
   return (
@@ -10,7 +12,7 @@ export default function Footer() {
           <div className="md:col-span-1">
             <Link href="/" className="flex items-center gap-2 mb-4">
               <div className="size-8 rounded bg-white p-1.5 flex items-center justify-center text-red-600 shadow-md">
-                <span className="material-symbols-outlined text-[20px]">translate</span>
+                <Languages className="w-5 h-5" />
               </div>
               <span className="text-xl font-bold tracking-tight text-white">HSK Master</span>
             </Link>
@@ -41,23 +43,23 @@ export default function Footer() {
             <h3 className="text-sm font-bold uppercase tracking-wider text-white/90 mb-4">Khóa học</h3>
             <ul className="space-y-3">
               <li>
-                <Link href="/courses?level=beginner" className="text-sm text-white/80 hover:text-white transition-colors">
+                <Link href={`/courses?hskLevel=${HSK_LEVEL_GROUPS.BEGINNER}`} className="text-sm text-white/80 hover:text-white transition-colors">
                   Sơ cấp (HSK 1-2)
                 </Link>
               </li>
               <li>
-                <Link href="/courses?level=intermediate" className="text-sm text-white/80 hover:text-white transition-colors">
+                <Link href={`/courses?hskLevel=${HSK_LEVEL_GROUPS.INTERMEDIATE}`} className="text-sm text-white/80 hover:text-white transition-colors">
                   Trung cấp (HSK 3-4)
                 </Link>
               </li>
               <li>
-                <Link href="/courses?level=advanced" className="text-sm text-white/80 hover:text-white transition-colors">
+                <Link href={`/courses?hskLevel=${HSK_LEVEL_GROUPS.ADVANCED}`} className="text-sm text-white/80 hover:text-white transition-colors">
                   Cao cấp (HSK 5-6)
                 </Link>
               </li>
               <li>
-                <Link href="/courses?type=hskk" className="text-sm text-white/80 hover:text-white transition-colors">
-                  Luyện thi HSKK
+                <Link href="/courses" className="text-sm text-white/80 hover:text-white transition-colors">
+                  Tất cả khóa học
                 </Link>
               </li>
             </ul>
@@ -68,15 +70,15 @@ export default function Footer() {
             <h3 className="text-sm font-bold uppercase tracking-wider text-white/90 mb-4">Liên hệ</h3>
             <ul className="space-y-4">
               <li className="flex items-start gap-3">
-                <span className="material-symbols-outlined text-white/90">call</span>
+                <Phone className="text-white/90 w-5 h-5 flex-shrink-0" />
                 <span className="text-sm font-bold text-white">0965322136</span>
               </li>
               <li className="flex items-start gap-3">
-                <span className="material-symbols-outlined text-white/90">mail</span>
+                <Mail className="text-white/90 w-5 h-5 flex-shrink-0" />
                 <span className="text-sm text-white break-all">tranhongngoc19122001@gmail.com</span>
               </li>
               <li className="flex items-start gap-3">
-                <span className="material-symbols-outlined text-white/90">location_on</span>
+                <MapPin className="text-white/90 w-5 h-5 flex-shrink-0" />
                 <span className="text-sm text-white/80">Hà Nội, Việt Nam</span>
               </li>
             </ul>

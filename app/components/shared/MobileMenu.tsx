@@ -4,6 +4,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import LanguageSwitcher from "./LanguageSwitcher";
 import { useEffect } from "react";
+import { Languages, X, ArrowRight, Home, GraduationCap, Info, Mail, Book } from "lucide-react";
 
 interface MobileMenuProps {
   isOpen: boolean;
@@ -11,11 +12,11 @@ interface MobileMenuProps {
 }
 
 const navigationItems = [
-  { name: 'Trang chủ', icon: 'home', path: '/' },
-  { name: 'Khóa học', icon: 'school', path: '/courses' },
-  { name: 'Giới thiệu', icon: 'info', path: '/about' },
-  { name: 'Liên hệ', icon: 'mail', path: '/contact' },
-  { name: 'Tài liệu', icon: 'book', path: '/vocabulary' },
+  { name: 'Trang chủ', icon: Home, path: '/' },
+  { name: 'Khóa học', icon: GraduationCap, path: '/courses' },
+  { name: 'Giới thiệu', icon: Info, path: '/about' },
+  { name: 'Liên hệ', icon: Mail, path: '/contact' },
+  { name: 'Tài liệu', icon: Book, path: '/vocabulary' },
 ];
 
 export default function MobileMenu({ isOpen, onClose }: MobileMenuProps) {
@@ -76,7 +77,7 @@ export default function MobileMenu({ isOpen, onClose }: MobileMenuProps) {
         <div className="flex items-center justify-between p-4 border-b border-gray-200 dark:border-gray-700 flex-shrink-0">
           <div className="flex items-center gap-2 text-primary">
             <div className="size-8 rounded bg-gradient-to-br from-red-600 to-yellow-500 p-1.5 flex items-center justify-center text-white shadow-md">
-              <span className="material-symbols-outlined text-[20px]">translate</span>
+              <Languages className="w-5 h-5" />
             </div>
             <span className="text-lg font-bold tracking-tight bg-clip-text text-transparent bg-gradient-to-r from-yellow-400 to-red-600">
               HSK Master
@@ -90,28 +91,31 @@ export default function MobileMenu({ isOpen, onClose }: MobileMenuProps) {
               className="flex p-2 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-lg transition-colors cursor-pointer"
               aria-label="Close menu"
             >
-              <span className="material-symbols-outlined text-text-main-light dark:text-text-main-dark">close</span>
+              <X className="w-6 h-6 text-text-main-light dark:text-text-main-dark" />
             </button>
           </div>
         </div>
 
         {/* Navigation Menu - Scrollable */}
         <nav className="flex-1 p-4 space-y-2 overflow-y-auto">
-          {navigationItems.map((item) => (
-            <Link
-              key={item.path}
-              href={item.path}
-              onClick={onClose}
-              className={`flex items-center gap-3 px-4 py-3 rounded-lg font-semibold shadow-sm transition-all cursor-pointer ${
-                isActive(item.path)
-                  ? 'bg-gradient-to-r from-yellow-400 to-red-600 text-white'
-                  : 'text-text-main-light dark:text-text-main-dark hover:bg-gradient-to-r hover:from-yellow-400 hover:to-red-600 hover:text-white'
-              }`}
-            >
-              <span className="material-symbols-outlined">{item.icon}</span>
-              <span>{item.name}</span>
-            </Link>
-          ))}
+          {navigationItems.map((item) => {
+            const IconComponent = item.icon;
+            return (
+              <Link
+                key={item.path}
+                href={item.path}
+                onClick={onClose}
+                className={`flex items-center gap-3 px-4 py-3 rounded-lg font-semibold shadow-sm transition-all cursor-pointer ${
+                  isActive(item.path)
+                    ? 'bg-gradient-to-r from-yellow-400 to-red-600 text-white'
+                    : 'text-text-main-light dark:text-text-main-dark hover:bg-gradient-to-r hover:from-yellow-400 hover:to-red-600 hover:text-white'
+                }`}
+              >
+                <IconComponent className="w-5 h-5" />
+                <span>{item.name}</span>
+              </Link>
+            );
+          })}
         </nav>
 
         {/* CTA Button */}
@@ -121,7 +125,7 @@ export default function MobileMenu({ isOpen, onClose }: MobileMenuProps) {
             onClick={onClose}
             className="flex items-center justify-center gap-2 w-full py-3 rounded-lg bg-gradient-to-r from-yellow-400 to-red-600 text-white font-bold shadow-md hover:opacity-90 transition-opacity"
           >
-            <span className="material-symbols-outlined text-[20px]">arrow_forward</span>
+            <ArrowRight className="w-5 h-5" />
             <span>Bắt đầu học ngay</span>
           </Link>
         </div>

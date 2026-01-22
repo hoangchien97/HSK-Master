@@ -1,6 +1,7 @@
 "use client";
 
 import { Checkbox } from "../shared";
+import { SlidersHorizontal, ChevronDown } from "lucide-react";
 
 interface CourseFilterProps {
   categories: { id: string; name: string; slug: string }[];
@@ -23,16 +24,12 @@ export default function CourseFilter({
       <details className="group rounded-lg border border-border-light dark:border-border-dark bg-surface-light dark:bg-surface-dark shadow-sm" open>
         <summary className="flex cursor-pointer items-center justify-between p-4 font-semibold select-none hover:bg-gray-50 dark:hover:bg-gray-800/50 transition-colors">
           <div className="flex items-center gap-2">
-            <span className="material-symbols-outlined text-primary-500 dark:text-primary-400 text-xl">
-              tune
-            </span>
+            <SlidersHorizontal className="text-primary-500 dark:text-primary-400 w-5 h-5" />
             <span className="text-sm font-bold uppercase tracking-wider text-text-secondary-light dark:text-text-secondary-dark">
               Bộ lọc tìm kiếm
             </span>
           </div>
-          <span className="material-symbols-outlined transition-transform group-open:rotate-180 text-text-secondary-light dark:text-text-secondary-dark">
-            expand_more
-          </span>
+          <ChevronDown className="transition-transform group-open:rotate-180 text-text-secondary-light dark:text-text-secondary-dark w-5 h-5" />
         </summary>
 
         <div className="border-t border-border-light dark:border-border-dark p-4">

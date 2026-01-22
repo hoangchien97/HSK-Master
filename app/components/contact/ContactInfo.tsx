@@ -1,14 +1,16 @@
+import { Info, MapPin, Phone, Mail } from "lucide-react";
+
 export default function ContactInfo() {
   return (
     <div className="rounded-2xl bg-surface-light dark:bg-surface-dark p-8 shadow-sm border border-border-light dark:border-border-dark">
       <h3 className="text-xl font-bold text-gray-900 dark:text-white mb-6 flex items-center gap-2">
-        <span className="material-symbols-outlined text-red-600">info</span>
+        <Info className="w-6 h-6 text-red-600" />
         Thông tin liên hệ
       </h3>
       <ul className="space-y-6">
         <li className="flex items-start gap-4">
           <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-red-50 text-red-600 dark:bg-red-900/20 dark:text-red-400">
-            <span className="material-symbols-outlined">location_on</span>
+            <MapPin className="w-5 h-5" />
           </div>
           <div>
             <p className="font-bold text-gray-900 dark:text-white">
@@ -25,7 +27,7 @@ export default function ContactInfo() {
         </li>
         <li className="flex items-start gap-4">
           <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-red-50 text-red-600 dark:bg-red-900/20 dark:text-red-400">
-            <span className="material-symbols-outlined">call</span>
+            <Phone className="w-5 h-5" />
           </div>
           <div>
             <p className="font-bold text-gray-900 dark:text-white">
@@ -53,7 +55,7 @@ export default function ContactInfo() {
         </li>
         <li className="flex items-start gap-4">
           <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-red-50 text-red-600 dark:bg-red-900/20 dark:text-red-400">
-            <span className="material-symbols-outlined">mail</span>
+            <Mail className="w-5 h-5" />
           </div>
           <div>
             <p className="font-bold text-gray-900 dark:text-white">

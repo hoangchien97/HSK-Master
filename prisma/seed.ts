@@ -612,7 +612,7 @@ async function main() {
       {
         title: "Lễ tốt nghiệp",
         description: "Những khoảnh khắc đáng nhớ trong lễ tốt nghiệp",
-        thumbnail: "https://images.unsplash.com/photo-1523580494863-6f3031224c94?w=400&h=300&fit=crop&q=80",
+        thumbnail: "https://alfbzgjpjvrcfaxxvijl.supabase.co/storage/v1/object/sign/slides/ChatGPT%20Image%20Jan%2022,%202026,%2001_07_42%20PM.png?token=eyJraWQiOiJzdG9yYWdlLXVybC1zaWduaW5nLWtleV9mMmYzNzRkNy05YWRkLTQ3NWMtYTQ0Yi05ZWNlNDRmZDUwMWQiLCJhbGciOiJIUzI1NiJ9.eyJ1cmwiOiJzbGlkZXMvQ2hhdEdQVCBJbWFnZSBKYW4gMjIsIDIwMjYsIDAxXzA3XzQyIFBNLnBuZyIsImlhdCI6MTc2OTA3MjAyMCwiZXhwIjoxODAwNjA4MDIwfQ.RbwyQMQcIxMTCv1nHAjr0IrSNgEjqGsGu_QOICbZpfU",
         photoCount: 5,
         order: 3,
         isActive: true,

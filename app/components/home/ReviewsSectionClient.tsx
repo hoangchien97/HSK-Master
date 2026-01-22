@@ -1,4 +1,5 @@
 "use client";
+import { useState } from "react";
 import ReviewForm from "./ReviewForm";
 import ReviewList from "./ReviewList";
 import { SectionHeader } from "../shared";
@@ -16,7 +17,13 @@ interface Props {
   reviews: Review[];
 }
 
-export default function ReviewsSectionClient({ reviews }: Props) {
+export default function ReviewsSectionClient({ reviews: initialReviews }: Props) {
+  const [reviews, setReviews] = useState(initialReviews);
+
+  const handleReviewAdded = (newReview: Review) => {
+    setReviews((prev) => [newReview, ...prev]);
+  };
+
   return (
     <section className="py-8 md:py-12 lg:py-16 xl:py-20 bg-linear-to-b from-gray-50 to-white dark:from-gray-900 dark:to-gray-800">
       <div className="container mx-auto px-3 sm:px-4 md:px-6">
@@ -31,7 +38,7 @@ export default function ReviewsSectionClient({ reviews }: Props) {
 
         {/* Review Form */}
         <div className="mb-6 md:mb-10 lg:mb-16 flex justify-center items-center">
-          <ReviewForm />
+          <ReviewForm onReviewAdded={handleReviewAdded} />
         </div>
 
         {/* Review List */}

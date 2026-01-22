@@ -16,7 +16,18 @@ const HSK_LEVELS = [
   { value: "HSK 6", label: "HSK 6" },
 ];
 
-export default function ReviewForm() {
+interface ReviewFormProps {
+  onReviewAdded?: (review: {
+    id: string;
+    studentName: string;
+    className: string;
+    content: string;
+    rating: number;
+    createdAt: Date | string;
+  }) => void;
+}
+
+export default function ReviewForm({ onReviewAdded }: ReviewFormProps) {
   const [formData, setFormData] = useState({
     studentName: "",
     className: "",
@@ -26,8 +37,7 @@ export default function ReviewForm() {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [hoveredStar, setHoveredStar] = useState(0);
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
+  const handleSubmit = async () => {
     setIsSubmitting(true);
 
     // Validation
@@ -48,10 +58,11 @@ export default function ReviewForm() {
     if (result.success) {
       toast.success("Cảm ơn bạn đã chia sẻ! Review của bạn đã được đăng thành công 🎉");
       setFormData({ studentName: "", className: "", content: "", rating: 0 });
-      // Reload the page to show new review
-      setTimeout(() => {
-        window.location.reload();
-      }, 1500);
+      
+      // Add review to list without reloading
+      if (result.review && onReviewAdded) {
+        onReviewAdded(result.review);
+      }
     } else {
       toast.error("Có lỗi xảy ra. Vui lòng thử lại.");
     }
@@ -79,7 +90,7 @@ export default function ReviewForm() {
       </div>
 
       {/* Form */}
-      <form onSubmit={handleSubmit} className="space-y-4 md:space-y-6">
+      <div className="space-y-4 md:space-y-6">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6">
           {/* Student Name */}
           <div>
@@ -164,7 +175,8 @@ export default function ReviewForm() {
 
         {/* Submit Button */}
         <Button
-          type="submit"
+          type="button"
+          onClick={handleSubmit}
           variant="gradient"
           size="lg"
           className="w-full"
@@ -173,7 +185,7 @@ export default function ReviewForm() {
           <Send className="h-4 w-4 md:h-5 md:w-5 mr-1.5 md:mr-2" />
           {isSubmitting ? "Đang gửi..." : "Gửi dánh giá ngay"}
         </Button>
-      </form>
+      </div>
     </div>
   );
 }
