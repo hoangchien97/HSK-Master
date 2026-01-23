@@ -76,20 +76,20 @@ export default function HeroSlideShowClient({ slides }: HeroSlideShowClientProps
                 </div>
               </div>
 
-              {/* Enhanced Navigation Dots - Clean Outline Style */}
-              <div className="absolute bottom-3 sm:bottom-5 md:bottom-8 left-1/2 -translate-x-1/2 flex gap-2 sm:gap-3 z-20 bg-white/10 backdrop-blur-md px-4 py-2.5 rounded-full border-2 border-white/30 shadow-xl">
+              {/* Enhanced Navigation Dots - Clean Minimal Style */}
+              <div className="absolute bottom-3 sm:bottom-4 md:bottom-6 lg:bottom-8 left-1/2 -translate-x-1/2 flex items-center gap-1.5 sm:gap-2 md:gap-2.5 z-20">
                 {slides.map((_, index) => (
                   <motion.button
                     key={index}
                     className={`rounded-full transition-all duration-300 ${
                       index === selectedIndex
-                        ? 'bg-white border-2 border-white shadow-lg shadow-red-500/50 w-8 sm:w-10 md:w-12 h-2 sm:h-2.5'
-                        : 'bg-white/50 border-2 border-white/70 hover:bg-white/80 hover:border-white w-2 sm:w-2.5 h-2 sm:h-2.5 cursor-pointer'
+                        ? 'bg-gradient-to-r from-yellow-400 via-orange-500 to-red-500 shadow-lg shadow-orange-500/40 w-7 sm:w-9 md:w-11 lg:w-14 h-2 sm:h-2.5 md:h-3'
+                        : 'bg-white/50 hover:bg-white/80 w-2 sm:w-2.5 md:w-3 h-2 sm:h-2.5 md:h-3 cursor-pointer'
                     }`}
                     onClick={() => scrollTo(index)}
                     aria-label={`Go to slide ${index + 1}`}
-                    whileHover={{ scale: 1.2 }}
-                    whileTap={{ scale: 0.9 }}
+                    whileHover={{ scale: 1.15 }}
+                    whileTap={{ scale: 0.85 }}
                   />
                 ))}
               </div>

@@ -1,9 +1,9 @@
-'use client';
+"use client";
 
-import { useState } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
-import { X } from 'lucide-react';
-import Tooltip from './Tooltip';
+import { useState } from "react";
+import { motion, AnimatePresence } from "framer-motion";
+import { X } from "lucide-react";
+import Tooltip from "./Tooltip";
 
 const ContactBubbles = () => {
   const [visibleContacts, setVisibleContacts] = useState({
@@ -13,60 +13,74 @@ const ContactBubbles = () => {
 
   const contacts = [
     {
-      id: 'zalo',
-      name: 'Zalo',
+      id: "zalo",
+      name: "Zalo",
       icon: (
-        <svg className="w-5 h-5" viewBox="0 0 48 48" fill="none">
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          viewBox="0 0 48 48"
+          width="32px"
+          height="32px"
+        >
           <path
-            d="M24 4C12.96 4 4 12.96 4 24c0 5.52 2.28 10.56 6 14.16V44l5.88-3.24C18.48 42.24 21.12 43 24 43c11.04 0 20-8.96 20-20S35.04 4 24 4z"
-            fill="currentColor"
+            fill="#2962ff"
+            d="M15,36V6.827l-1.211-0.811C8.64,8.083,5,13.112,5,19v10c0,7.732,6.268,14,14,14h10	c4.722,0,8.883-2.348,11.417-5.931V36H15z"
           />
           <path
-            d="M17.28 28.68l-2.4-3.6 9.36-7.2 2.88 4.32c.48.72 1.44.96 2.16.48l6.24-3.84c.48-.24.96-.12 1.2.36.24.48.12.96-.36 1.2l-7.2 4.44c-1.44.84-3.24.48-4.32-.72l-1.56-2.4-6 4.56c-.48.36-1.2.24-1.56-.24-.36-.48-.24-1.2.24-1.56l6.96-5.28"
-            fill="white"
+            fill="#eee"
+            d="M29,5H19c-1.845,0-3.601,0.366-5.214,1.014C10.453,9.25,8,14.528,8,19	c0,6.771,0.936,10.735,3.712,14.607c0.216,0.301,0.357,0.653,0.376,1.022c0.043,0.835-0.129,2.365-1.634,3.742	c-0.162,0.148-0.059,0.419,0.16,0.428c0.942,0.041,2.843-0.014,4.797-0.877c0.557-0.246,1.191-0.203,1.729,0.083	C20.453,39.764,24.333,40,28,40c4.676,0,9.339-1.04,12.417-2.916C42.038,34.799,43,32.014,43,29V19C43,11.268,36.732,5,29,5z"
+          />
+          <path
+            fill="#2962ff"
+            d="M36.75,27C34.683,27,33,25.317,33,23.25s1.683-3.75,3.75-3.75s3.75,1.683,3.75,3.75	S38.817,27,36.75,27z M36.75,21c-1.24,0-2.25,1.01-2.25,2.25s1.01,2.25,2.25,2.25S39,24.49,39,23.25S37.99,21,36.75,21z"
+          />
+          <path
+            fill="#2962ff"
+            d="M31.5,27h-1c-0.276,0-0.5-0.224-0.5-0.5V18h1.5V27z"
+          />
+          <path
+            fill="#2962ff"
+            d="M27,19.75v0.519c-0.629-0.476-1.403-0.769-2.25-0.769c-2.067,0-3.75,1.683-3.75,3.75	S22.683,27,24.75,27c0.847,0,1.621-0.293,2.25-0.769V26.5c0,0.276,0.224,0.5,0.5,0.5h1v-7.25H27z M24.75,25.5	c-1.24,0-2.25-1.01-2.25-2.25S23.51,21,24.75,21S27,22.01,27,23.25S25.99,25.5,24.75,25.5z"
+          />
+          <path
+            fill="#2962ff"
+            d="M21.25,18h-8v1.5h5.321L13,26h0.026c-0.163,0.211-0.276,0.463-0.276,0.75V27h7.5	c0.276,0,0.5-0.224,0.5-0.5v-1h-5.321L21,19h-0.026c0.163-0.211,0.276-0.463,0.276-0.75V18z"
           />
         </svg>
       ),
-      link: 'https://zalo.me/your-zalo-id',
-      bgColor: 'bg-blue-500',
-      tooltip: 'Chat qua Zalo',
+      link: "https://zalo.me/your-zalo-id",
+      bgColor: "bg-blue-500",
+      tooltip: "Chat qua Zalo",
     },
     {
-      id: 'messenger',
-      name: 'Messenger',
+      id: "messenger",
+      name: "Messenger",
       icon: (
-        <svg className="w-5 h-5" viewBox="0 0 48 48" fill="none">
-          <path
-            d="M24 4C12.96 4 4 12.48 4 23.28c0 6.12 3.12 11.52 8 15.12V44l5.52-3.12c1.44.36 3 .6 4.48.6 11.04 0 20-8.4 20-19.2S35.04 4 24 4z"
-            fill="currentColor"
-          />
-          <path
-            d="M25.2 26.4l-5.04-5.52-10.08 5.52 11.04-11.76 5.28 5.52 9.84-5.52L25.2 26.4z"
-            fill="white"
-          />
+        <svg className="w-8 h-8 fill-white" viewBox="0 0 24 24">
+          <path d="M12 2C6.36 2 2 6.13 2 11.7c0 2.9 1.15 5.51 3.03 7.42V22l2.76-1.52c1.3.36 2.69.56 4.14.56 5.64 0 10-4.13 10-9.7C22 6.13 17.64 2 12 2zm1.09 12.91l-2.61-2.77-5.11 2.77 5.62-5.96 2.68 2.77 5.03-2.77-5.61 5.96z"></path>
         </svg>
       ),
-      link: 'https://m.me/your-facebook-page',
-      bgColor: 'bg-gradient-to-br from-pink-500 to-purple-600',
-      tooltip: 'Chat qua Messenger',
+      link: "https://m.me/your-facebook-page",
+      bgColor: "bg-blue-500",
+      tooltip: "Chat qua Messenger",
     },
   ];
 
   const handleClose = (contactId: string) => {
-    setVisibleContacts(prev => ({
+    setVisibleContacts((prev) => ({
       ...prev,
       [contactId]: false,
     }));
   };
 
-  const visibleContactsList = contacts.filter(contact =>
-    visibleContacts[contact.id as keyof typeof visibleContacts]
+  const visibleContactsList = contacts.filter(
+    (contact) => visibleContacts[contact.id as keyof typeof visibleContacts]
   );
 
   if (visibleContactsList.length === 0) return null;
 
   return (
-    <div className="fixed bottom-20 right-6 z-40 flex flex-col gap-3">
+    <div className="fixed bottom-16 sm:bottom-20 right-4 sm:right-6 z-40 flex flex-col gap-2 sm:gap-3">
       <AnimatePresence>
         {visibleContactsList.map((contact, index) => (
           <Tooltip
@@ -76,12 +90,12 @@ const ContactBubbles = () => {
             animation="scale"
           >
             <motion.div
-              className="relative"
+              className="relative group/bubble"
               initial={{ scale: 0, opacity: 0 }}
               animate={{ scale: 1, opacity: 1 }}
               exit={{ scale: 0, opacity: 0 }}
               transition={{
-                type: 'spring',
+                type: "spring",
                 stiffness: 260,
                 damping: 20,
                 delay: index * 0.1,
@@ -91,7 +105,7 @@ const ContactBubbles = () => {
                 href={contact.link}
                 target="_blank"
                 rel="noopener noreferrer"
-                className={`flex h-12 w-12 items-center justify-center rounded-full ${contact.bgColor} text-white shadow-xl hover:shadow-2xl transition-all duration-300 focus:outline-none focus:ring-4 focus:ring-offset-2 focus:ring-blue-400 cursor-pointer group relative`}
+                className={`flex h-10 w-10 sm:h-12 sm:w-12 items-center justify-center rounded-full ${contact.bgColor} text-white shadow-lg sm:shadow-xl hover:shadow-2xl transition-all duration-300 cursor-pointer relative`}
                 whileHover={{
                   scale: 1.1,
                   rotate: [0, -5, 5, -5, 0],
@@ -109,41 +123,42 @@ const ContactBubbles = () => {
                   transition={{
                     duration: 2,
                     repeat: Infinity,
-                    ease: 'easeInOut',
+                    ease: "easeInOut",
                   }}
                 />
 
                 {/* Icon */}
-                <span className="relative z-10 group-hover:scale-110 transition-transform duration-300">
+                <span className="relative z-10 scale-75 sm:scale-100 group-hover/bubble:scale-110 transition-transform duration-300">
                   {contact.icon}
                 </span>
 
                 {/* Notification Badge */}
                 <motion.span
-                  className="absolute -top-1 -right-1 h-3.5 w-3.5 bg-red-500 rounded-full border-2 border-white"
+                  className="absolute -top-0.5 -right-0.5 sm:-top-1 sm:-right-1 h-3 w-3 sm:h-3.5 sm:w-3.5 bg-red-500 rounded-full border-2 border-white"
                   animate={{
                     scale: [1, 1.2, 1],
                   }}
                   transition={{
                     duration: 1.5,
                     repeat: Infinity,
-                    ease: 'easeInOut',
+                    ease: "easeInOut",
                   }}
                 />
               </motion.a>
 
-              {/* Close Button */}
+              {/* Close Button - Only show on hover */}
               <motion.button
                 onClick={(e) => {
                   e.preventDefault();
                   handleClose(contact.id);
                 }}
-                className="absolute -top-1.5 -right-1.5 h-5 w-5 bg-gray-800 hover:bg-gray-900 text-white rounded-full flex items-center justify-center shadow-md z-20 cursor-pointer transition-colors"
+                className="absolute -top-1 -right-1 sm:-top-1.5 sm:-right-1.5 h-4 w-4 sm:h-5 sm:w-5 bg-gray-800 hover:bg-gray-900 text-white rounded-full flex items-center justify-center shadow-md z-20 cursor-pointer transition-all opacity-0 group-hover/bubble:opacity-100"
+                initial={{ opacity: 0, scale: 0.8 }}
                 whileHover={{ scale: 1.1 }}
                 whileTap={{ scale: 0.9 }}
                 aria-label={`Đóng ${contact.name}`}
               >
-                <X className="w-3 h-3" strokeWidth={3} />
+                <X className="w-2.5 h-2.5 sm:w-3 sm:h-3" strokeWidth={3} />
               </motion.button>
             </motion.div>
           </Tooltip>

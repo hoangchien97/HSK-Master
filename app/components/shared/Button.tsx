@@ -75,9 +75,9 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
         "focus-visible:ring-primary-200",
 
       outline:
-        "bg-transparent border-2 border-primary-500 text-primary-600 " +
-        "hover:bg-primary-50 " +
-        "active:bg-primary-100 " +
+        "bg-transparent border-2 border-primary-500 text-primary-500 " +
+        "hover:bg-primary-500 hover:text-white hover:border-primary-500 " +
+        "active:bg-primary-600 active:text-white active:border-primary-600 " +
         "focus-visible:ring-primary-200",
 
       ghost:
@@ -102,8 +102,8 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
 
       "outline-white":
         "bg-transparent border-2 border-white text-white " +
-        "hover:bg-white hover:text-primary-600 " +
-        "active:bg-gray-100 active:text-primary-700 " +
+        "hover:bg-white hover:text-primary-600 hover:border-white " +
+        "active:bg-white/90 active:text-primary-700 active:border-white " +
         "focus-visible:ring-white/50",
 
       "icon-only":

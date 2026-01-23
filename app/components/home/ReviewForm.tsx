@@ -58,7 +58,7 @@ export default function ReviewForm({ onReviewAdded }: ReviewFormProps) {
     if (result.success) {
       toast.success("Cảm ơn bạn đã chia sẻ! Review của bạn đã được đăng thành công 🎉");
       setFormData({ studentName: "", className: "", content: "", rating: 0 });
-      
+
       // Add review to list without reloading
       if (result.review && onReviewAdded) {
         onReviewAdded(result.review);

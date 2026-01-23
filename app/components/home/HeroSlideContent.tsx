@@ -29,9 +29,8 @@ export default function HeroSlideContent({
         style={{ opacity: 0.85 }}
       />
 
-      {/* Enhanced Overlay Gradient */}
-      <div className={`absolute inset-0 bg-gradient-to-r ${slide.overlayGradient}`} style={{ opacity: 0.9 }} />
-      <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent" />
+      {/* Enhanced Overlay Gradient - Only on Background */}
+      <div className={`absolute inset-0 bg-gradient-to-r ${slide.overlayGradient}`} style={{ opacity: 0.7 }} />
 
       {/* Content with Animations */}
       <div className="relative z-10 px-4 py-6 sm:px-8 sm:py-10 md:px-16 lg:px-24 xl:px-32 max-w-5xl w-full">
@@ -46,20 +45,20 @@ export default function HeroSlideContent({
           </Badge>
         </motion.div>
 
-        {/* Title with Typing Effect - Gradient Text */}
+        {/* Title with Typing Effect - Gradient Text with Strong Shadow for Contrast */}
         {animated && isActive ? (
           <TypingText
             text={slide.title}
-            className="text-xl sm:text-2xl md:text-3xl lg:text-4xl font-black bg-gradient-to-r from-white via-yellow-100 to-white bg-clip-text text-transparent mb-2 sm:mb-3 md:mb-4 leading-tight [text-shadow:_0_4px_12px_rgb(0_0_0_/_60%)] animate-gradient"
+            className="text-xl sm:text-2xl md:text-3xl lg:text-5xl font-black text-white mb-2 sm:mb-3 md:mb-4 leading-tight drop-shadow-[0_4px_20px_rgba(0,0,0,0.9)]"
             delay={0.3}
           />
         ) : (
-          <h2 className="text-xl sm:text-2xl md:text-3xl lg:text-4xl font-black bg-gradient-to-r from-white via-yellow-100 to-white bg-clip-text text-transparent mb-2 sm:mb-3 md:mb-4 leading-tight [text-shadow:_0_4px_12px_rgb(0_0_0_/_60%)]">
+          <h2 className="text-xl sm:text-2xl md:text-3xl lg:text-5xl font-black text-white mb-2 sm:mb-3 md:mb-4 leading-tight drop-shadow-[0_4px_20px_rgba(0,0,0,0.9)]">
             {slide.title}
           </h2>
         )}
 
-        {/* Description with Typing Effect */}
+        {/* Description with Typing Effect - Clean White Text */}
         <motion.div
           initial={animated ? { opacity: 0, y: 20 } : false}
           animate={animated ? { opacity: 1, y: 0 } : { opacity: 1, y: 0 }}
@@ -68,19 +67,19 @@ export default function HeroSlideContent({
           {animated && isActive ? (
             <TypingText
               text={slide.description}
-              className="md:block text-gray-100 text-sm md:text-base lg:text-lg mb-4 md:mb-5 max-w-2xl font-medium drop-shadow-lg leading-relaxed [text-shadow:_0_2px_10px_rgb(0_0_0_/_40%)]"
+              className="md:block text-white text-sm md:text-base lg:text-lg mb-4 md:mb-6 max-w-2xl font-medium leading-relaxed drop-shadow-[0_2px_15px_rgba(0,0,0,0.8)]"
               delay={0.8}
             />
           ) : (
-            <p className="md:block text-gray-100 text-sm md:text-base lg:text-lg mb-4 md:mb-5 max-w-2xl font-medium drop-shadow-lg leading-relaxed [text-shadow:_0_2px_10px_rgb(0_0_0_/_40%)]">
+            <p className="md:block text-white text-sm md:text-base lg:text-lg mb-4 md:mb-6 max-w-2xl font-medium leading-relaxed drop-shadow-[0_2px_15px_rgba(0,0,0,0.8)]">
               {slide.description}
             </p>
           )}
         </motion.div>
 
-        {/* CTA Buttons with Staggered Animation - Hidden on Mobile */}
+        {/* CTA Buttons with Staggered Animation - Responsive */}
         <motion.div
-          className="hidden md:flex flex-wrap gap-3 md:gap-4"
+          className="flex flex-wrap gap-2 sm:gap-3 md:gap-4"
           initial={animated ? { opacity: 0, y: 20 } : false}
           animate={animated ? { opacity: 1, y: 0 } : { opacity: 1, y: 0 }}
           transition={{ delay: 0.8, duration: 0.5 }}
@@ -89,7 +88,9 @@ export default function HeroSlideContent({
             <Button
               variant="gradient"
               size="md"
-              className="shadow-2xl hover:shadow-3xl transform hover:-translate-y-1 transition-all duration-300"
+              className="rounded-full shadow-2xl hover:shadow-3xl"
+              icon={<span className="text-base md:text-lg">→</span>}
+              iconPosition="right"
             >
               {slide.primaryCTA.text}
             </Button>
@@ -99,7 +100,7 @@ export default function HeroSlideContent({
               <Button
                 variant="outline-white"
                 size="md"
-                className="backdrop-blur-md shadow-xl hover:shadow-2xl transform hover:-translate-y-1 transition-all duration-300"
+                className="rounded-full bg-white/10 hover:bg-white/20 border-white/60"
               >
                 {slide.secondaryCTA.text}
               </Button>
