@@ -84,7 +84,7 @@ export default function TeacherProfile() {
             <div className="absolute inset-0 rounded-full bg-gradient-to-r from-yellow-400 via-orange-500 to-red-600 opacity-20 blur-xl"></div>
           </div>
           <div className="absolute -inset-3 rounded-full bg-gradient-to-r from-yellow-400 via-orange-500 to-red-600 opacity-30 animate-spin-slow blur-md"></div>
-          
+
           {/* Image */}
           <div className="relative w-32 h-32 md:w-40 md:h-40 rounded-full p-1.5 bg-gradient-to-br from-yellow-400 via-orange-500 to-red-600 shadow-2xl">
             <Image
@@ -123,7 +123,7 @@ export default function TeacherProfile() {
           </h3>
           <div className="w-24 h-1 bg-gradient-to-r from-yellow-400 via-orange-500 to-red-600 mx-auto rounded-full"></div>
         </div>
-        
+
         <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6">
           {achievements.map((item, index) => {
             const IconComponent = item.icon;
@@ -134,12 +134,12 @@ export default function TeacherProfile() {
               >
                 {/* Background gradient on hover */}
                 <div className={`absolute inset-0 bg-gradient-to-br ${item.color} opacity-0 group-hover:opacity-5 transition-opacity`}></div>
-                
+
                 {/* Icon */}
                 <div className={`relative inline-flex h-14 w-14 mx-auto mb-4 items-center justify-center rounded-xl bg-gradient-to-br ${item.color} shadow-lg group-hover:scale-110 transition-transform`}>
                   <IconComponent className="w-7 h-7 text-white" />
                 </div>
-                
+
                 <h4 className="relative font-bold text-sm md:text-base text-gray-900 dark:text-white mb-2">
                   {item.title}
                 </h4>
@@ -163,18 +163,18 @@ export default function TeacherProfile() {
             >
               {/* Animated background */}
               <div className={`absolute inset-0 bg-gradient-to-br ${stat.color} opacity-0 group-hover:opacity-10 transition-opacity`}></div>
-              
+
               {/* Background icon */}
               <div className="absolute top-2 right-2 opacity-5 group-hover:opacity-10 transition-opacity">
                 <IconComponent className="w-20 h-20" />
               </div>
-              
+
               {/* Content */}
               <div className="relative">
                 <div className={`inline-flex h-12 w-12 mb-3 items-center justify-center rounded-xl bg-gradient-to-br ${stat.color} shadow-lg group-hover:scale-110 transition-transform`}>
                   <IconComponent className="w-6 h-6 text-white" />
                 </div>
-                
+
                 <div className="mb-2">
                   <span className={`text-3xl md:text-4xl font-bold bg-gradient-to-r ${stat.color} bg-clip-text text-transparent`}>
                     {stat.number}
@@ -188,7 +188,7 @@ export default function TeacherProfile() {
                     </span>
                   )}
                 </div>
-                
+
                 <p className="text-xs md:text-sm text-text-secondary-light dark:text-text-secondary-dark font-medium">
                   {stat.label}
                 </p>

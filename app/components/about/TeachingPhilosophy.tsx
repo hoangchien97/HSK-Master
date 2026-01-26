@@ -44,12 +44,12 @@ export default function TeachingPhilosophy() {
       <div className="relative group mb-10 md:mb-12">
         {/* Glow effect */}
         <div className="absolute -inset-1 bg-gradient-to-r from-red-600 via-pink-600 to-orange-600 rounded-2xl opacity-0 group-hover:opacity-20 blur-xl transition-opacity"></div>
-        
+
         <div className="relative bg-gradient-to-br from-red-50 via-pink-50 to-orange-50 dark:from-red-900/30 dark:via-pink-900/30 dark:to-orange-900/30 border-2 border-red-200 dark:border-red-800 rounded-2xl p-8 md:p-10 shadow-xl overflow-hidden">
           {/* Decorative elements */}
           <div className="absolute top-0 right-0 w-64 h-64 bg-gradient-to-br from-red-300/20 to-transparent rounded-full blur-3xl"></div>
           <Quote className="absolute top-6 right-6 w-16 h-16 md:w-20 md:h-20 text-red-200/30 dark:text-red-900/20 group-hover:scale-110 transition-transform" />
-          
+
           <blockquote className="relative">
             <div className="flex items-start gap-3 mb-4">
               <div className="flex-shrink-0 w-1 h-full bg-gradient-to-b from-red-600 to-pink-600 rounded-full"></div>
@@ -57,7 +57,7 @@ export default function TeachingPhilosophy() {
                 "Học tiếng Trung không chỉ là học ngôn ngữ, mà còn là{" "}
                 <span className="font-bold text-transparent bg-clip-text bg-gradient-to-r from-red-600 to-pink-600">
                   khám phá một nền văn hóa phong phú
-                </span>. 
+                </span>.
                 Tôi tin rằng mỗi học viên đều có thể{" "}
                 <span className="font-bold text-transparent bg-clip-text bg-gradient-to-r from-orange-600 to-red-600">
                   thành công
@@ -79,7 +79,7 @@ export default function TeachingPhilosophy() {
       {/* Kinh nghiệm và phương pháp */}
       <div className="relative group mb-10">
         <div className="absolute -inset-1 bg-gradient-to-r from-orange-400 to-red-600 rounded-2xl opacity-0 group-hover:opacity-10 blur-xl transition-opacity"></div>
-        
+
         <div className="relative bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 rounded-2xl p-8 md:p-10 shadow-lg overflow-hidden">
           {/* Background pattern */}
           <div className="absolute top-0 left-0 w-full h-full opacity-5">
@@ -95,13 +95,13 @@ export default function TeachingPhilosophy() {
               Kinh nghiệm và phương pháp giảng dạy
             </h3>
           </div>
-          
+
           <div className="relative space-y-5 text-sm md:text-base text-text-secondary-light dark:text-text-secondary-dark leading-relaxed">
             <div className="flex gap-3">
               <div className="flex-shrink-0 w-1.5 h-1.5 rounded-full bg-gradient-to-r from-red-600 to-orange-600 mt-2"></div>
               <p>
-                Với <span className="font-bold text-transparent bg-clip-text bg-gradient-to-r from-red-600 to-orange-600">5 năm kinh nghiệm</span> giảng dạy tiếng Trung, 
-                cô Ngọc đã giúp hàng trăm học viên từ mọi lứa tuổi đạt được mục tiêu học tập của mình, 
+                Với <span className="font-bold text-transparent bg-clip-text bg-gradient-to-r from-red-600 to-orange-600">5 năm kinh nghiệm</span> giảng dạy tiếng Trung,
+                cô Ngọc đã giúp hàng trăm học viên từ mọi lứa tuổi đạt được mục tiêu học tập của mình,
                 từ HSK1 cơ bản đến HSK6 nâng cao.
               </p>
             </div>
@@ -109,14 +109,14 @@ export default function TeachingPhilosophy() {
               <div className="flex-shrink-0 w-1.5 h-1.5 rounded-full bg-gradient-to-r from-red-600 to-pink-600 mt-2"></div>
               <p>
                 Phương pháp giảng dạy của cô Ngọc tập trung vào việc <span className="font-semibold text-gray-900 dark:text-white">
-                kết hợp lý thuyết với thực hành</span>, giúp học viên không chỉ hiểu được kiến thức 
+                kết hợp lý thuyết với thực hành</span>, giúp học viên không chỉ hiểu được kiến thức
                 mà còn có thể ứng dụng thành thạo trong giao tiếp hàng ngày và công việc.
               </p>
             </div>
             <div className="flex gap-3">
               <div className="flex-shrink-0 w-1.5 h-1.5 rounded-full bg-gradient-to-r from-orange-600 to-red-600 mt-2"></div>
               <p>
-                Cô luôn <span className="font-semibold text-gray-900 dark:text-white">tùy chỉnh chương trình học</span> phù hợp 
+                Cô luôn <span className="font-semibold text-gray-900 dark:text-white">tùy chỉnh chương trình học</span> phù hợp
                 với từng học viên, đảm bảo tiến độ học hiệu quả nhất và tạo động lực học tập tích cực.
               </p>
             </div>
@@ -135,7 +135,7 @@ export default function TeachingPhilosophy() {
             >
               {/* Floating glow */}
               <div className={`absolute -inset-1 bg-gradient-to-r ${principle.color} opacity-0 group-hover:opacity-30 blur-xl transition-opacity rounded-2xl`}></div>
-              
+
               <div className={`relative bg-gradient-to-br ${principle.bgColor} border-2 border-gray-200 dark:border-gray-700 group-hover:border-transparent rounded-2xl p-6 md:p-8 shadow-lg hover:shadow-2xl transition-all duration-300 hover:-translate-y-2 overflow-hidden`}>
                 {/* Background decoration */}
                 <div className="absolute top-0 right-0 w-24 h-24 opacity-10">
@@ -147,7 +147,7 @@ export default function TeachingPhilosophy() {
                   <IconComponent className="w-7 h-7 text-white" />
                   <div className={`absolute inset-0 rounded-xl bg-gradient-to-r ${principle.color} blur-md opacity-50`}></div>
                 </div>
-                
+
                 <h4 className="relative font-bold text-base md:text-lg text-gray-900 dark:text-white mb-3">
                   {principle.title}
                 </h4>

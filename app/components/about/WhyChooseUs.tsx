@@ -41,7 +41,7 @@ export default function WhyChooseUs() {
     <div className="relative mb-24">
       {/* Background decoration */}
       <div className="absolute inset-0 bg-gradient-to-r from-red-100/50 via-yellow-100/50 to-orange-100/50 dark:from-red-900/10 dark:via-yellow-900/10 dark:to-orange-900/10 rounded-3xl blur-3xl -z-10" />
-      
+
       <div className="rounded-3xl bg-white/80 dark:bg-gray-900/80 backdrop-blur-sm border border-border-light dark:border-border-dark shadow-2xl overflow-hidden">
         {/* Header Section */}
         <div className="relative bg-gradient-to-r from-red-600 via-orange-500 to-yellow-500 px-8 py-12 md:px-12 md:py-20 text-center text-white overflow-hidden">
@@ -59,7 +59,7 @@ export default function WhyChooseUs() {
                 Điểm khác biệt của chúng tôi
               </span>
             </div>
-            
+
             <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold mb-4 drop-shadow-lg">
               Tại sao chọn HSK Master?
             </h2>
@@ -85,7 +85,7 @@ export default function WhyChooseUs() {
               >
                 {/* Floating gradient background */}
                 <div className={`absolute -inset-1 bg-gradient-to-r ${reason.color} opacity-0 group-hover:opacity-20 blur-xl transition-opacity rounded-2xl`}></div>
-                
+
                 <div className={`relative bg-gradient-to-br ${reason.bgColor} border-2 border-gray-200 dark:border-gray-700 group-hover:border-transparent p-8 rounded-2xl shadow-xl transition-all duration-300 hover:-translate-y-3 hover:shadow-2xl overflow-hidden`}>
                   {/* Background decoration */}
                   <div className="absolute top-0 right-0 w-32 h-32 opacity-5 group-hover:opacity-10 transition-opacity">
@@ -103,7 +103,7 @@ export default function WhyChooseUs() {
                   {/* Icon */}
                   <div className={`relative inline-flex w-16 h-16 rounded-2xl ${reason.iconBg} shadow-lg mb-6 items-center justify-center group-hover:scale-110 group-hover:rotate-3 transition-transform`}>
                     <IconComponent className="w-8 h-8 text-white" />
-                    
+
                     {/* Glow effect */}
                     <div className={`absolute inset-0 rounded-2xl bg-gradient-to-r ${reason.color} blur-md opacity-50 group-hover:opacity-75 transition-opacity`}></div>
                   </div>

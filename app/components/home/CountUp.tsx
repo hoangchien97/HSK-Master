@@ -45,21 +45,21 @@ export default function CountUp({ value, suffix, stiffness = 120, damping = 16 }
     const parsed = parseNumeric(value);
     const target = parsed.num;
     const useSuffix = suffix ?? parsed.suffix;
-    
+
     // start from 0
     motionVal.set(0);
-    
+
     const unsubscribe = spring.onChange((v) => {
       const rounded = Math.round(v);
       // format with grouping
       setDisplay(rounded.toLocaleString() + (useSuffix ?? ''));
     });
-    
+
     // animate to target after a small delay to allow the spring to animate
     const timer = setTimeout(() => {
       motionVal.set(target);
     }, 50);
-    
+
     return () => {
       unsubscribe && unsubscribe();
       clearTimeout(timer);

@@ -1,11 +1,11 @@
 import type { Metadata } from "next";
 import { Breadcrumb } from "../components/shared";
-import { 
-  AboutHero, 
-  TeacherProfile, 
-  WhyChooseUs, 
-  TeachingPhilosophy, 
-  Environment 
+import {
+  AboutHero,
+  TeacherProfile,
+  WhyChooseUs,
+  TeachingPhilosophy,
+  Environment
 } from "../components/about";
 import { AnimatedSection } from "../components/shared/AnimatedSection";
 

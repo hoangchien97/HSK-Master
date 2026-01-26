@@ -62,7 +62,7 @@ export default function Environment() {
           >
             {/* Glow effect */}
             <div className={`absolute -inset-1 bg-gradient-to-r ${image.color} opacity-0 group-hover:opacity-30 blur-xl transition-opacity rounded-2xl`}></div>
-            
+
             <div className="relative aspect-square overflow-hidden rounded-2xl bg-gray-100 dark:bg-gray-800 border-2 border-gray-200 dark:border-gray-700 group-hover:border-transparent shadow-lg hover:shadow-2xl transition-all duration-500">
               {/* Image */}
               <Image
@@ -72,10 +72,10 @@ export default function Environment() {
                 height={400}
                 className="h-full w-full object-cover group-hover:scale-110 transition-transform duration-700"
               />
-              
+
               {/* Gradient overlay */}
               <div className={`absolute inset-0 bg-gradient-to-t ${image.color} opacity-0 group-hover:opacity-80 transition-opacity duration-300`}></div>
-              
+
               {/* Label */}
               <div className="absolute inset-0 flex flex-col items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300">
                 <div className="transform translate-y-4 group-hover:translate-y-0 transition-transform duration-300">

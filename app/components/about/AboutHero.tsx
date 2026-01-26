@@ -38,7 +38,7 @@ export default function AboutHero() {
           {/* Description */}
           <p className="text-base md:text-lg lg:text-xl text-text-secondary-light dark:text-text-secondary-dark leading-relaxed">
             HSK Master không chỉ là nơi dạy tiếng Trung, chúng tôi xây dựng{" "}
-            <span className="font-semibold text-gray-900 dark:text-white">cộng đồng học tập đam mê</span>, 
+            <span className="font-semibold text-gray-900 dark:text-white">cộng đồng học tập đam mê</span>,
             nơi văn hóa và ngôn ngữ giao thoa. Sứ mệnh của chúng tôi là giúp người Việt chinh phục tiếng Trung một cách{" "}
             <span className="font-semibold text-transparent bg-clip-text bg-gradient-to-r from-red-600 to-orange-600">
               tự nhiên và hiệu quả nhất
@@ -56,12 +56,12 @@ export default function AboutHero() {
                 >
                   {/* Animated background */}
                   <div className={`absolute inset-0 bg-gradient-to-r ${stat.color} opacity-0 group-hover:opacity-10 rounded-lg transition-opacity blur-xl`}></div>
-                  
+
                   {/* Icon */}
                   <div className={`relative flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-gradient-to-br ${stat.color} shadow-lg group-hover:scale-110 transition-transform`}>
                     <IconComponent className="w-6 h-6 text-white" />
                   </div>
-                  
+
                   {/* Text */}
                   <div className="relative flex flex-col">
                     <span className="text-2xl md:text-3xl font-bold bg-gradient-to-r from-gray-900 to-gray-700 dark:from-white dark:to-gray-300 bg-clip-text text-transparent">
@@ -86,7 +86,7 @@ export default function AboutHero() {
         <div className="order-1 lg:order-2 relative group">
           {/* Animated glow */}
           <div className="absolute -inset-4 bg-gradient-to-r from-yellow-400 via-orange-500 to-red-600 rounded-3xl opacity-20 blur-2xl group-hover:opacity-30 transition-all duration-1000 animate-pulse"></div>
-          
+
           {/* Image container */}
           <div className="relative overflow-hidden rounded-2xl shadow-2xl aspect-[4/3] ring-1 ring-gray-200 dark:ring-gray-800">
             <Image
@@ -96,7 +96,7 @@ export default function AboutHero() {
               height={600}
               className="object-cover w-full h-full transform transition-all duration-700 group-hover:scale-110 group-hover:rotate-1"
             />
-            
+
             {/* Overlay gradient */}
             <div className="absolute inset-0 bg-gradient-to-t from-black/20 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
           </div>

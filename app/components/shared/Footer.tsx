@@ -11,7 +11,7 @@ export default function Footer() {
   const toggleSection = (section: string) => {
     setExpandedSection(expandedSection === section ? null : section);
   };
-  
+
   return (
     <footer className="bg-gradient-to-r from-yellow-500 to-red-600 text-white mt-auto">
       <div className="mx-auto max-w-7xl px-4 py-10 md:py-12 sm:px-6 lg:px-8">
