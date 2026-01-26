@@ -1,6 +1,12 @@
 import type { Metadata } from "next";
 import { Breadcrumb } from "../components/shared";
-import { AboutHero, WhyChooseUs, Teachers, Environment } from "../components/about";
+import { 
+  AboutHero, 
+  TeacherProfile, 
+  WhyChooseUs, 
+  TeachingPhilosophy, 
+  Environment 
+} from "../components/about";
 import { AnimatedSection } from "../components/shared/AnimatedSection";
 
 export const metadata: Metadata = {
@@ -32,10 +38,13 @@ export default function AboutPage() {
           <AboutHero />
         </AnimatedSection>
         <AnimatedSection variant="fadeInUp">
+          <TeacherProfile />
+        </AnimatedSection>
+        <AnimatedSection variant="fadeInUp">
           <WhyChooseUs />
         </AnimatedSection>
         <AnimatedSection variant="fadeInUp">
-          <Teachers />
+          <TeachingPhilosophy />
         </AnimatedSection>
         <AnimatedSection variant="fadeInUp">
           <Environment />
