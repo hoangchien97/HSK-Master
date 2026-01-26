@@ -6,10 +6,10 @@ import { useState } from "react";
 import { FAQ_DATA } from "../contact/ContactFAQ";
 
 export default function Footer() {
-  const [expandedSection, setExpandedSection] = useState<string | null>(null);
+  const [expandedFAQ, setExpandedFAQ] = useState<string | null>(null);
 
-  const toggleSection = (section: string) => {
-    setExpandedSection(expandedSection === section ? null : section);
+  const toggleFAQ = (faqId: string) => {
+    setExpandedFAQ(expandedFAQ === faqId ? null : faqId);
   };
 
   return (
@@ -24,7 +24,7 @@ export default function Footer() {
               </div>
               <span className="text-xl md:text-2xl font-bold tracking-tight text-white drop-shadow-sm">HSK Master</span>
             </Link>
-            <p className="text-sm text-white/90 mb-4 leading-relaxed max-w-xs">
+            <p className="text-sm text-white mb-4 leading-relaxed max-w-xs">
               Nền tảng học tiếng Trung trực tuyến hàng đầu, giúp bạn chinh phục HSK từ con số 0 đến thành thạo.
             </p>
             <div className="flex gap-2.5">
@@ -59,7 +59,7 @@ export default function Footer() {
               <li>
                 <Link
                   href={`/courses?hskLevel=${HSK_LEVEL_GROUPS.BEGINNER}`}
-                  className="text-sm text-white/80 hover:text-white hover:translate-x-1 transition-all inline-block"
+                  className="text-sm text-white hover:text-white hover:translate-x-1 transition-all inline-block"
                 >
                   Sơ cấp (HSK 1-2)
                 </Link>
@@ -67,7 +67,7 @@ export default function Footer() {
               <li>
                 <Link
                   href={`/courses?hskLevel=${HSK_LEVEL_GROUPS.INTERMEDIATE}`}
-                  className="text-sm text-white/80 hover:text-white hover:translate-x-1 transition-all inline-block"
+                  className="text-sm text-white hover:text-white hover:translate-x-1 transition-all inline-block"
                 >
                   Trung cấp (HSK 3-4)
                 </Link>
@@ -75,7 +75,7 @@ export default function Footer() {
               <li>
                 <Link
                   href={`/courses?hskLevel=${HSK_LEVEL_GROUPS.ADVANCED}`}
-                  className="text-sm text-white/80 hover:text-white hover:translate-x-1 transition-all inline-block"
+                  className="text-sm text-white hover:text-white hover:translate-x-1 transition-all inline-block"
                 >
                   Cao cấp (HSK 5-6)
                 </Link>
@@ -115,87 +115,34 @@ export default function Footer() {
             </ul>
           </div>
 
-          {/* Expandable Sections - Hidden on mobile, visible on lg */}
-          <div className="hidden lg:block space-y-2.5">
-            {/* FAQ Toggle */}
-            <div className="border border-white/20 rounded-lg overflow-hidden bg-white/5 backdrop-blur-sm">
-              <button
-                onClick={() => toggleSection('faq')}
-                className="w-full px-3 py-2.5 flex items-center justify-between text-left hover:bg-white/10 transition-colors cursor-pointer"
-              >
-                <span className="text-xs font-semibold text-white">FAQ</span>
-                <ChevronDown
-                  className={`w-4 h-4 text-white transition-transform ${
-                    expandedSection === 'faq' ? 'rotate-180' : ''
-                  }`}
-                />
-              </button>
-              <div
-                className={`overflow-hidden transition-all duration-300 ${
-                  expandedSection === 'faq' ? 'max-h-96' : 'max-h-0'
-                }`}
-              >
-                <div className="px-3 pb-3 space-y-2 text-xs text-white/90">
-                  {FAQ_DATA.slice(0, 3).map((faq) => (
-                    <div key={faq.id}>
-                      <p className="font-medium mb-0.5">{faq.question}</p>
-                      <p className="text-white/75 text-[10px] leading-relaxed">{faq.answer}</p>
+          {/* FAQ Section */}
+          <div>
+            <h3 className="text-sm font-bold uppercase tracking-wider text-white mb-3">Câu hỏi thường gặp</h3>
+            <div className="space-y-2">
+              {FAQ_DATA.map((faq) => (
+                <div key={faq.id} className="border border-white/20 rounded-lg overflow-hidden bg-white/5 backdrop-blur-sm">
+                  <button
+                    onClick={() => toggleFAQ(faq.id)}
+                    className="w-full px-3 py-2.5 flex items-center justify-between text-left hover:bg-white/10 transition-colors cursor-pointer"
+                  >
+                    <span className="text-sm font-semibold text-white pr-2">{faq.question}</span>
+                    <ChevronDown
+                      className={`w-4 h-4 text-white transition-transform shrink-0 ${
+                        expandedFAQ === faq.id ? 'rotate-180' : ''
+                      }`}
+                    />
+                  </button>
+                  <div
+                    className={`overflow-hidden transition-all duration-300 ${
+                      expandedFAQ === faq.id ? 'max-h-96' : 'max-h-0'
+                    }`}
+                  >
+                    <div className="px-3 pb-3">
+                      <p className="text-[12px] text-white/75 leading-relaxed">{faq.answer}</p>
                     </div>
-                  ))}
+                  </div>
                 </div>
-              </div>
-            </div>
-
-            {/* Privacy Policy Toggle */}
-            <div className="border border-white/20 rounded-lg overflow-hidden bg-white/5 backdrop-blur-sm">
-              <button
-                onClick={() => toggleSection('privacy')}
-                className="w-full px-3 py-2.5 flex items-center justify-between text-left hover:bg-white/10 transition-colors cursor-pointer"
-              >
-                <span className="text-xs font-semibold text-white">Bảo mật</span>
-                <ChevronDown
-                  className={`w-4 h-4 text-white transition-transform ${
-                    expandedSection === 'privacy' ? 'rotate-180' : ''
-                  }`}
-                />
-              </button>
-              <div
-                className={`overflow-hidden transition-all duration-300 ${
-                  expandedSection === 'privacy' ? 'max-h-96' : 'max-h-0'
-                }`}
-              >
-                <div className="px-3 pb-3">
-                  <p className="text-[10px] text-white/75 leading-relaxed">
-                    HSK Master cam kết bảo vệ thông tin cá nhân của học viên. Mọi dữ liệu được mã hóa.
-                  </p>
-                </div>
-              </div>
-            </div>
-
-            {/* Terms of Service Toggle */}
-            <div className="border border-white/20 rounded-lg overflow-hidden bg-white/5 backdrop-blur-sm">
-              <button
-                onClick={() => toggleSection('terms')}
-                className="w-full px-3 py-2.5 flex items-center justify-between text-left hover:bg-white/10 transition-colors cursor-pointer"
-              >
-                <span className="text-xs font-semibold text-white">Điều khoản</span>
-                <ChevronDown
-                  className={`w-4 h-4 text-white transition-transform ${
-                    expandedSection === 'terms' ? 'rotate-180' : ''
-                  }`}
-                />
-              </button>
-              <div
-                className={`overflow-hidden transition-all duration-300 ${
-                  expandedSection === 'terms' ? 'max-h-96' : 'max-h-0'
-                }`}
-              >
-                <div className="px-3 pb-3">
-                  <p className="text-[10px] text-white/75 leading-relaxed">
-                    Khi sử dụng dịch vụ HSK Master, bạn đồng ý tuân thủ các quy định về học tập.
-                  </p>
-                </div>
-              </div>
+              ))}
             </div>
           </div>
         </div>

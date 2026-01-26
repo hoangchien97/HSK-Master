@@ -18,3 +18,5 @@ export { Radio } from './Radio';
 export { Switch } from './Switch';
 export { default as Badge } from './Badge';
 export { default as Pagination } from './Pagination';
+export { OptimizedImage } from './OptimizedImage';
+export { WebVitals } from './WebVitals';

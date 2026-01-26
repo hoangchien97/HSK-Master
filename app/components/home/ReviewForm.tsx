@@ -6,6 +6,7 @@ import { Button, Input, Textarea, Select } from "../shared";
 import { MessageCircle, Send, Star } from "lucide-react";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import { useResponsive } from "@/app/hooks/useResponsive";
 
 const HSK_LEVELS = [
   { value: "HSK 1", label: "HSK 1" },
@@ -36,7 +37,7 @@ export default function ReviewForm({ onReviewAdded }: ReviewFormProps) {
   });
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [hoveredStar, setHoveredStar] = useState(0);
-
+  const { isMobile } = useResponsive();
   const handleSubmit = async () => {
     setIsSubmitting(true);
 
@@ -56,7 +57,9 @@ export default function ReviewForm({ onReviewAdded }: ReviewFormProps) {
     const result = await createReview(formData);
 
     if (result.success) {
-      toast.success("Cảm ơn bạn đã chia sẻ! Review của bạn đã được đăng thành công 🎉");
+      toast.success(
+        "Cảm ơn bạn đã chia sẻ! Review của bạn đã được đăng thành công 🎉"
+      );
       setFormData({ studentName: "", className: "", content: "", rating: 0 });
 
       // Add review to list without reloading

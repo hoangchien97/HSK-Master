@@ -1,7 +1,7 @@
-'use client';
+"use client";
 
-import { Input, Select, Textarea, Button } from '../shared';
-import { User, Phone, Mail, Send } from 'lucide-react';
+import { Input, Select, Textarea, Button } from "../shared";
+import { User, Phone, Mail, Send } from "lucide-react";
 
 interface ContactFormProps {
   submitAction: (formData: FormData) => Promise<void>;
@@ -67,18 +67,16 @@ export default function ContactForm({ submitAction }: ContactFormProps) {
           rows={4}
         />
 
-        <div className="pt-2">
-          <Button
-            type="submit"
-            variant="gradient"
-            size="lg"
-            fullWidth
-            icon={<Send className="w-5 h-5" />}
-            iconPosition="right"
-          >
-            Gửi thông tin
-          </Button>
-        </div>
+        <Button
+          type="submit"
+          variant="gradient"
+          size="lg"
+          fullWidth
+          icon={<Send className="w-5 h-5" />}
+          iconPosition="right"
+        >
+          Gửi thông tin
+        </Button>
       </form>
     </div>
   );

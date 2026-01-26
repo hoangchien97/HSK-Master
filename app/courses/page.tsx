@@ -2,16 +2,21 @@ import { Breadcrumb } from "../components/shared";
 import { AnimatedSection } from "../components/shared/AnimatedSection";
 import { CoursesContainer } from "./CoursesClient";
 import { getFilteredCourses, getCategories } from "../services/course.service";
+import { getPageMetadata } from "../services/metadata.service";
+import type { Metadata } from "next";
 
 export const revalidate = 600;
 
 const ITEMS_PER_PAGE = 6;
 
-export const metadata = {
-  title: "Danh sách khóa học tiếng Trung | HSK 1–6",
-  description:
-    "Chinh phục HSK từ 1 đến 6 với lộ trình hợp lý, tập trung vào giao tiếp và kỹ năng làm bài thi.",
-};
+export async function generateMetadata(): Promise<Metadata> {
+  const metadata = await getPageMetadata("/courses");
+  return metadata || {
+    title: "Danh sách khóa học tiếng Trung | HSK 1–6",
+    description:
+      "Chinh phục HSK từ 1 đến 6 với lộ trình hợp lý, tập trung vào giao tiếp và kỹ năng làm bài thi.",
+  };
+}
 
 export default async function CoursesPage({
   searchParams,

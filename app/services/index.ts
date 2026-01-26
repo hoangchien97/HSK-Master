@@ -6,3 +6,5 @@ export * from './feature.service'
 export * from './cta.service'
 export * from './album.service'
 export * from './review.service'
+export * from './metadata.service'
+

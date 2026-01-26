@@ -63,7 +63,7 @@ async function main() {
       targetIcon: "school",
       accentColor: "orange",
       bgGradient: "from-orange-50 to-orange-100/50",
-      href: "/courses?level=hsk-1",
+      href: "/courses/hsk-1",
       order: 1,
     },
     {
@@ -77,7 +77,7 @@ async function main() {
       targetIcon: "chat",
       accentColor: "orange",
       bgGradient: "from-orange-50 to-orange-100/50",
-      href: "/courses?level=hsk-2",
+      href: "/courses/hsk-2",
       order: 2,
     },
     {
@@ -91,7 +91,7 @@ async function main() {
       targetIcon: "trending_up",
       accentColor: "red",
       bgGradient: "from-red-50 to-red-100/50",
-      href: "/courses?level=hsk-3",
+      href: "/courses/hsk-3",
       order: 3,
     },
     {
@@ -105,7 +105,7 @@ async function main() {
       targetIcon: "work",
       accentColor: "red",
       bgGradient: "from-red-50 to-red-100/50",
-      href: "/courses?level=hsk-4",
+      href: "/courses/hsk-4",
       order: 4,
     },
     {
@@ -119,7 +119,7 @@ async function main() {
       targetIcon: "business_center",
       accentColor: "indigo",
       bgGradient: "from-indigo-50 to-indigo-100/50",
-      href: "/courses?level=hsk-5",
+      href: "/courses/hsk-5",
       order: 5,
     },
     {
@@ -133,7 +133,7 @@ async function main() {
       targetIcon: "emoji_events",
       accentColor: "blue",
       bgGradient: "from-blue-50 to-blue-100/50",
-      href: "/courses?level=hsk-6",
+      href: "/courses/hsk-6",
       order: 6,
     },
   ]
@@ -165,6 +165,13 @@ async function main() {
       hskLevelId: hskLevelMap[1],
       isPublished: true,
       isFeatured: true,
+      publishedAt: new Date("2024-01-01"),
+      viewCount: 1250,
+      enrollmentCount: 340,
+      metaTitle: "Khóa học HSK 1 - Tiếng Trung cho người mới bắt đầu",
+      metaDescription: "Học HSK 1 từ con số 0. 150 từ vựng, 45 điểm ngữ pháp, 18 bài học. Cam kết đầu ra. Giáo viên 8 năm kinh nghiệm.",
+      keywords: "HSK 1, học tiếng Trung cơ bản, khóa học HSK 1, tiếng Trung sơ cấp, học tiếng Trung online",
+      ogImage: "https://images.unsplash.com/photo-1516979187457-637abb4f9353?w=1200&h=630&fit=crop&q=80",
     },
     {
       title: "HSK 2 – Giao tiếp tiếng Trung cơ bản",
@@ -185,6 +192,13 @@ async function main() {
       hskLevelId: hskLevelMap[2],
       isPublished: true,
       isFeatured: true,
+      publishedAt: new Date("2024-01-15"),
+      viewCount: 980,
+      enrollmentCount: 265,
+      metaTitle: "Khóa học HSK 2 - Giao tiếp tiếng Trung cơ bản",
+      metaDescription: "Học HSK 2 giao tiếp thực tế. 300 từ vựng, 60 điểm ngữ pháp, 16 bài học. Luyện nói, nghe, đọc, viết.",
+      keywords: "HSK 2, giao tiếp tiếng Trung, học HSK 2 online, tiếng Trung cơ bản, khóa học HSK 2",
+      ogImage: "https://images.unsplash.com/photo-1434030216411-0b793f4b4173?w=1200&h=630&fit=crop&q=80",
     },
     {
       title: "HSK 3 – Tiếng Trung trung cấp",
@@ -205,6 +219,13 @@ async function main() {
       hskLevelId: hskLevelMap[3],
       isPublished: true,
       isFeatured: true,
+      publishedAt: new Date("2024-02-01"),
+      viewCount: 850,
+      enrollmentCount: 198,
+      metaTitle: "Khóa học HSK 3 - Tiếng Trung trung cấp Hà Nội",
+      metaDescription: "HSK 3 trung cấp với 600 từ vựng, 80 điểm ngữ pháp. Giao tiếp tự tin trong tình huống thực tế.",
+      keywords: "HSK 3, tiếng Trung trung cấp, học HSK 3, khóa học HSK 3 Hà Nội, luyện thi HSK 3",
+      ogImage: "https://images.unsplash.com/photo-1522202176988-66273c2fd55f?w=1200&h=630&fit=crop&q=80",
     },
     {
       title: "HSK 4 – Sẵn sàng du học và làm việc",
@@ -225,6 +246,13 @@ async function main() {
       hskLevelId: hskLevelMap[4],
       isPublished: true,
       isFeatured: true,
+      publishedAt: new Date("2024-02-15"),
+      viewCount: 720,
+      enrollmentCount: 156,
+      metaTitle: "Khóa học HSK 4 - Du học Trung Quốc & Làm việc",
+      metaDescription: "HSK 4 cho du học sinh. 1200 từ vựng, 120 điểm ngữ pháp. Giao tiếp tự tin trong môi trường học tập, làm việc.",
+      keywords: "HSK 4, du học Trung Quốc, học HSK 4, luyện thi HSK 4, tiếng Trung du học",
+      ogImage: "https://images.unsplash.com/photo-1485846234645-a62644f84728?w=1200&h=630&fit=crop&q=80",
     },
     {
       title: "HSK 5 – Tiếng Trung cao cấp",
@@ -245,6 +273,13 @@ async function main() {
       hskLevelId: hskLevelMap[5],
       isPublished: true,
       isFeatured: true,
+      publishedAt: new Date("2024-03-01"),
+      viewCount: 620,
+      enrollmentCount: 112,
+      metaTitle: "Khóa học HSK 5 - Tiếng Trung cao cấp chuyên nghiệp",
+      metaDescription: "HSK 5 cao cấp với 2500 từ vựng. Đọc báo, xem phim, giao tiếp chuyên nghiệp. Cam kết đầu ra.",
+      keywords: "HSK 5, tiếng Trung cao cấp, học HSK 5, luyện thi HSK 5, tiếng Trung chuyên nghiệp",
+      ogImage: "https://images.unsplash.com/photo-1456513080510-7bf3a84b82f8?w=1200&h=630&fit=crop&q=80",
     },
     {
       title: "HSK 6 – Trình độ chuyên gia",
@@ -265,6 +300,13 @@ async function main() {
       hskLevelId: hskLevelMap[6],
       isPublished: true,
       isFeatured: true,
+      publishedAt: new Date("2024-03-15"),
+      viewCount: 480,
+      enrollmentCount: 78,
+      metaTitle: "Khóa học HSK 6 - Trình độ chuyên gia gần như người bản ngữ",
+      metaDescription: "HSK 6 đỉnh cao với 5000+ từ vựng. Đạt trình độ gần người bản ngữ. Giảng viên chuyên gia 8+ năm kinh nghiệm.",
+      keywords: "HSK 6, tiếng Trung chuyên gia, học HSK 6, luyện thi HSK 6, trình độ cao nhất HSK",
+      ogImage: "https://images.unsplash.com/photo-1517842645767-c639042777db?w=1200&h=630&fit=crop&q=80",
     },
     // Communication Course
     {
@@ -285,6 +327,13 @@ async function main() {
       categoryId: communicationCategory.id,
       isPublished: true,
       isFeatured: false,
+      publishedAt: new Date("2024-04-01"),
+      viewCount: 420,
+      enrollmentCount: 89,
+      metaTitle: "Tiếng Trung Giao tiếp Thực tế - Du lịch & Cuộc sống",
+      metaDescription: "Học giao tiếp tiếng Trung thực tế cho du lịch, mua sắm. 800 từ vựng, 60 tình huống thường gặp.",
+      keywords: "tiếng Trung giao tiếp, học giao tiếp tiếng Trung, tiếng Trung du lịch, tiếng Trung thực tế",
+      ogImage: "https://images.unsplash.com/photo-1573167243872-43c6433b9d40?w=1200&h=630&fit=crop&q=80",
     },
     // Business Chinese Course
     {
@@ -305,6 +354,13 @@ async function main() {
       categoryId: businessCategory.id,
       isPublished: true,
       isFeatured: false,
+      publishedAt: new Date("2024-04-15"),
+      viewCount: 350,
+      enrollmentCount: 62,
+      metaTitle: "Tiếng Trung Thương mại - Kinh doanh & Đàm phán",
+      metaDescription: "Khóa học tiếng Trung thương mại chuyên nghiệp. 1500 từ vựng kinh doanh, email, đàm phán.",
+      keywords: "tiếng Trung thương mại, tiếng Trung kinh doanh, học tiếng Trung văn phòng, tiếng Trung chuyên ngành",
+      ogImage: "https://images.unsplash.com/photo-1552664730-d307ca884978?w=1200&h=630&fit=crop&q=80",
     },
   ]
 
@@ -693,6 +749,67 @@ async function main() {
     ],
   })
   console.log("✅ Created 5 reviews")
+
+  // ============= Page Metadata =============
+  console.log("📄 Creating page metadata...")
+  await prisma.pageMetadata.createMany({
+    data: [
+      {
+        pagePath: "/",
+        pageName: "Trang chủ",
+        title: "HSK Master - Trung tâm tiếng Trung uy tín tại Hà Nội | Luyện thi HSK 1-6",
+        description: "Trung tâm tiếng Trung HSK Master - Đào tạo HSK 1-6, giao tiếp, thương mại. Giáo viên 8+ năm kinh nghiệm. Cam kết đầu ra. Học thử miễn phí.",
+        keywords: "học tiếng Trung, HSK, trung tâm tiếng Trung Hà Nội, luyện thi HSK, học tiếng Trung online",
+        ogTitle: "HSK Master - Trung tâm tiếng Trung uy tín #1 Hà Nội",
+        ogDescription: "Học tiếng Trung chất lượng cao với HSK Master. Lộ trình cá nhân hóa, giáo viên giàu kinh nghiệm, cam kết đầu ra.",
+        ogImage: "https://images.unsplash.com/photo-1523580494863-6f3031224c94?w=1200&h=630&fit=crop&q=80",
+        twitterTitle: "HSK Master - Học tiếng Trung chuyên nghiệp",
+        twitterDescription: "Trung tâm tiếng Trung hàng đầu Hà Nội. Đào tạo HSK 1-6, cam kết đầu ra.",
+        twitterImage: "https://images.unsplash.com/photo-1523580494863-6f3031224c94?w=1200&h=630&fit=crop&q=80",
+      },
+      {
+        pagePath: "/about",
+        pageName: "Giới thiệu",
+        title: "Giới thiệu HSK Master - Trung tâm tiếng Trung chuẩn quốc tế Hà Nội",
+        description: "Tìm hiểu về HSK Master - Trung tâm tiếng Trung chuyên nghiệp với đội ngũ giáo viên 8+ năm kinh nghiệm. Phương pháp giảng dạy hiện đại, cam kết chất lượng.",
+        keywords: "giới thiệu HSK Master, trung tâm tiếng Trung uy tín, giáo viên tiếng Trung giỏi, học tiếng Trung Hà Nội",
+        ogTitle: "Về HSK Master - Đào tạo tiếng Trung chuyên nghiệp",
+        ogDescription: "Giáo viên giàu kinh nghiệm, phương pháp giảng dạy hiện đại, môi trường học tập chuyên nghiệp.",
+        ogImage: "https://images.unsplash.com/photo-1522202176988-66273c2fd55f?w=1200&h=630&fit=crop&q=80",
+      },
+      {
+        pagePath: "/contact",
+        pageName: "Liên hệ",
+        title: "Liên hệ HSK Master - Tư vấn khóa học tiếng Trung miễn phí | Hotline 0965322136",
+        description: "Liên hệ HSK Master để được tư vấn lộ trình học tiếng Trung phù hợp. Hotline: 0965322136. Địa chỉ: Hà Nội. Tư vấn miễn phí, học thử 2 buổi.",
+        keywords: "liên hệ HSK Master, tư vấn học tiếng Trung, đăng ký học HSK, hotline tiếng Trung Hà Nội",
+        ogTitle: "Liên hệ tư vấn khóa học tiếng Trung",
+        ogDescription: "Đăng ký tư vấn miễn phí và học thử. Hotline: 0965322136",
+        ogImage: "https://images.unsplash.com/photo-1516321318423-f06f85e504b3?w=1200&h=630&fit=crop&q=80",
+      },
+      {
+        pagePath: "/courses",
+        pageName: "Danh sách khóa học",
+        title: "Khóa học tiếng Trung - HSK 1-6, Giao tiếp, Thương mại | HSK Master",
+        description: "Khám phá các khóa học tiếng Trung chất lượng cao tại HSK Master: HSK 1-6, Giao tiếp thực tế, Thương mại. Lộ trình cá nhân hóa, cam kết đầu ra.",
+        keywords: "khóa học tiếng Trung, học HSK online, tiếng Trung giao tiếp, tiếng Trung thương mại, khóa học HSK",
+        ogTitle: "Danh sách khóa học tiếng Trung chất lượng cao",
+        ogDescription: "HSK 1-6, Giao tiếp, Thương mại. Giáo viên giàu kinh nghiệm, lộ trình rõ ràng.",
+        ogImage: "https://images.unsplash.com/photo-1434030216411-0b793f4b4173?w=1200&h=630&fit=crop&q=80",
+      },
+      {
+        pagePath: "/vocabulary",
+        pageName: "Từ vựng",
+        title: "Từ vựng tiếng Trung HSK - Học từ vựng theo cấp độ | HSK Master",
+        description: "Kho từ vựng tiếng Trung HSK đầy đủ từ HSK 1-6. Có phiên âm, nghĩa, ví dụ. Học từ vựng hiệu quả, nhớ lâu.",
+        keywords: "từ vựng HSK, học từ vựng tiếng Trung, từ vựng HSK 1-6, từ điển tiếng Trung",
+        ogTitle: "Kho từ vựng tiếng Trung HSK đầy đủ",
+        ogDescription: "Từ vựng HSK 1-6 với phiên âm, nghĩa, ví dụ. Miễn phí.",
+        ogImage: "https://images.unsplash.com/photo-1456513080510-7bf3a84b82f8?w=1200&h=630&fit=crop&q=80",
+      },
+    ],
+  })
+  console.log("✅ Created page metadata")
 
   console.log("\n🎉 Seeding completed successfully!")
   console.log("=".repeat(50))

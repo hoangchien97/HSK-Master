@@ -7,14 +7,19 @@ import {
   ReviewsSection,
 } from "./components/home";
 import { AnimatedSection } from "./components/shared/AnimatedSection";
+import { getPageMetadata } from "./services/metadata.service";
+import type { Metadata } from "next";
 
 export const revalidate = 3600;
 
-export const metadata = {
-  title: "Trung tâm tiếng Trung uy tín | Lộ trình HSK bài bản",
-  description:
-    "Trung tâm tiếng Trung chuyên đào tạo HSK từ cơ bản đến nâng cao. Đăng ký học thử miễn phí.",
-};
+export async function generateMetadata(): Promise<Metadata> {
+  const metadata = await getPageMetadata("/");
+  return metadata || {
+    title: "Trung tâm tiếng Trung uy tín | Lộ trình HSK bài bản",
+    description:
+      "Trung tâm tiếng Trung chuyên đào tạo HSK từ cơ bản đến nâng cao. Đăng ký học thử miễn phí.",
+  };
+}
 
 export default async function Home() {
   return (

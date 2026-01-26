@@ -11,7 +11,7 @@ import { Menu, Languages, Search } from "lucide-react";
 const navigationItems = [
   { name: 'Trang chủ', path: '/' },
   { name: 'Khóa học', path: '/courses' },
-  { name: 'Tài liệu', path: '/vocabulary' },
+  // { name: 'Tài liệu', path: '/vocabulary' },
   { name: 'Giới thiệu', path: '/about' },
   { name: 'Liên hệ', path: '/contact' },
 ];

@@ -5,6 +5,7 @@ import { Breadcrumb } from "@/app/components/shared";
 import { AnimatedSection } from "@/app/components/shared/AnimatedSection";
 import LessonList from "./LessonList";
 import { CourseStatsGrid, CourseResourceCards } from "./CourseClient";
+import { generateCourseSchema, generateBreadcrumbSchema } from "@/app/lib/structured-data";
 
 // Animation variants
 const fadeInUp = {
@@ -69,11 +70,46 @@ export async function generateMetadata({ params }: Props) {
   const { slug } = await params;
   const course = await prisma.course.findUnique({
     where: { slug },
+    select: {
+      title: true,
+      description: true,
+      metaTitle: true,
+      metaDescription: true,
+      keywords: true,
+      ogImage: true,
+      image: true,
+      instructor: true,
+      level: true,
+      enrollmentCount: true,
+    },
   });
 
+  if (!course) {
+    return {
+      title: "Khóa học không tồn tại",
+      description: "Khóa học bạn tìm kiếm không tồn tại hoặc đã bị xóa.",
+    };
+  }
+
+  const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://hskmaster.edu.vn";
+
   return {
-    title: course?.title || "Khóa học",
-    description: course?.description || "Chi tiết khóa học tiếng Trung",
+    title: course.metaTitle || course.title || "Khóa học",
+    description: course.metaDescription || course.description || "Chi tiết khóa học tiếng Trung",
+    keywords: course.keywords || undefined,
+    openGraph: {
+      title: course.metaTitle || course.title,
+      description: course.metaDescription || course.description || "",
+      images: course.ogImage || course.image ? [course.ogImage || course.image!] : undefined,
+      type: "website",
+      url: `${siteUrl}/courses/${slug}`,
+    },
+    twitter: {
+      card: "summary_large_image",
+      title: course.metaTitle || course.title,
+      description: course.metaDescription || course.description || "",
+      images: course.ogImage || course.image ? [course.ogImage || course.image!] : undefined,
+    },
   };
 }
 
@@ -96,8 +132,40 @@ export default async function CourseDetail({ params }: Props) {
     notFound();
   }
 
+  // Generate structured data
+  const courseSchema = generateCourseSchema({
+    title: course.title,
+    description: course.description,
+    image: course.image,
+    instructor: course.instructor,
+    durationHours: course.durationHours,
+    level: course.level,
+    enrollmentCount: course.enrollmentCount,
+    viewCount: course.viewCount,
+    slug: course.slug,
+  });
+
+  const breadcrumbSchema = generateBreadcrumbSchema([
+    { name: 'Trang chủ', url: '/' },
+    { name: 'Khóa học', url: '/courses' },
+    { name: course.title, url: `/courses/${course.slug}` },
+  ]);
+
   return (
     <main className="flex-1">
+      {/* Structured Data */}
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify(courseSchema),
+        }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify(breadcrumbSchema),
+        }}
+      />
       {/* Breadcrumb Section */}
       <div className="bg-gray-50 dark:bg-surface-dark border-b border-border-light dark:border-border-dark">
         <div className="mx-auto max-w-7xl px-4 py-3 sm:px-6 lg:px-8">

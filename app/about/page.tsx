@@ -8,17 +8,21 @@ import {
   Environment
 } from "../components/about";
 import { AnimatedSection } from "../components/shared/AnimatedSection";
+import { getPageMetadata, DEFAULT_METADATA } from "../services/metadata.service";
 
-export const metadata: Metadata = {
-  title: "Giới thiệu - HSK Master | Học tiếng Trung chuẩn quốc tế",
-  description:
-    "HSK Master - Trung tâm tiếng Trung chuyên đào tạo HSK từ cơ bản đến nâng cao, giảng viên giàu kinh nghiệm, lộ trình học rõ ràng.",
-  openGraph: {
-    title: "Giới thiệu HSK Master",
-    description: "Học tiếng Trung bài bản – luyện thi HSK – giao tiếp thực tế.",
-    type: "website",
-  },
-};
+export async function generateMetadata(): Promise<Metadata> {
+  const metadata = await getPageMetadata("/about");
+  return metadata || {
+    title: "Giới thiệu - HSK Master | Học tiếng Trung chuẩn quốc tế",
+    description:
+      "HSK Master - Trung tâm tiếng Trung chuyên đào tạo HSK từ cơ bản đến nâng cao, giảng viên giàu kinh nghiệm, lộ trình học rõ ràng.",
+    openGraph: {
+      title: "Giới thiệu HSK Master",
+      description: "Học tiếng Trung bài bản – luyện thi HSK – giao tiếp thực tế.",
+      type: "website",
+    },
+  };
+}
 
 export default function AboutPage() {
   return (

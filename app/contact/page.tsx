@@ -1,18 +1,31 @@
 import type { Metadata } from "next";
 import { submitContact } from "./actions";
-import { ContactInfo, ContactForm, ContactFAQ } from "../components/contact";
+import { ContactInfo, ContactForm, FAQ_DATA } from "../components/contact";
 import { Breadcrumb } from "../components/shared";
 import { AnimatedSection } from "../components/shared/AnimatedSection";
+import { getPageMetadata } from "../services/metadata.service";
+import { generateFAQSchema } from "../lib/structured-data";
 
-export const metadata: Metadata = {
-  title: "Liên hệ - HSK Master | Tư vấn khóa học tiếng Trung",
-  description:
-    "Liên hệ HSK Master để được tư vấn lộ trình học tiếng Trung và đăng ký khóa học phù hợp. Hotline: 0965 322 136",
-};
+export async function generateMetadata(): Promise<Metadata> {
+  const metadata = await getPageMetadata("/contact");
+  return metadata || {
+    title: "Liên hệ - HSK Master | Tư vấn khóa học tiếng Trung",
+    description:
+      "Liên hệ HSK Master để được tư vấn lộ trình học tiếng Trung và đăng ký khóa học phù hợp. Hotline: 0965 322 136",
+  };
+}
 
 export default function ContactPage() {
+  const faqSchema = generateFAQSchema(
+    FAQ_DATA.map((faq) => ({
+      question: faq.question,
+      answer: faq.answer,
+    }))
+  );
+
   return (
     <main className="flex-1">
+      {/* Organization Schema - Already exists, keep it */}
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{
@@ -33,6 +46,13 @@ export default function ContactPage() {
             telephone: "0965322136",
             openingHours: "Mo-Su 08:00-21:00",
           }),
+        }}
+      />
+      {/* FAQ Schema - New */}
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify(faqSchema),
         }}
       />
 
@@ -81,10 +101,6 @@ export default function ContactPage() {
             <ContactForm submitAction={submitContact} />
           </AnimatedSection>
         </div>
-
-        <AnimatedSection variant="fadeInUp">
-          <ContactFAQ />
-        </AnimatedSection>
       </div>
     </main>
   );

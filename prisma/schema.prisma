@@ -15,6 +15,11 @@ model Category {
   description String?
   createdAt   DateTime @default(now())
   updatedAt   DateTime @default(now()) @updatedAt
+
+  // SEO Fields
+  metaTitle        String?
+  metaDescription  String?
+
   courses     Course[]
 }
 
@@ -36,10 +41,28 @@ model Course {
   durationHours    Int            @default(0)
   lectures         Int            @default(0)
   createdAt        DateTime       @default(now())
+  updatedAt        DateTime       @default(now()) @updatedAt
+  publishedAt      DateTime?
   categoryId       String
   hskLevelId       String?
   isPublished      Boolean        @default(true)
   isFeatured       Boolean        @default(false)
+
+  // SEO Fields
+  metaTitle        String?        // Custom SEO title (max 60 chars)
+  metaDescription  String?        // Custom SEO description (max 160 chars)
+  keywords         String?        // Comma-separated keywords
+  ogImage          String?        // Open Graph image URL
+  canonicalUrl     String?        // Canonical URL for duplicate content
+
+  // Analytics & Social Proof
+  viewCount        Int            @default(0)
+  enrollmentCount  Int            @default(0)
+
+  // Video & Rich Media
+  videoUrl         String?        // Course intro video URL
+  videoThumbnail   String?        // Video thumbnail
+
   category         Category       @relation(fields: [categoryId], references: [id])
   hskLevel         HSKLevel?      @relation(fields: [hskLevelId], references: [id])
   lessons          Lesson[]
@@ -120,6 +143,12 @@ model HSKLevel {
   isActive        Boolean  @default(true)
   createdAt       DateTime @default(now())
   updatedAt       DateTime @updatedAt
+
+  // SEO Fields
+  metaTitle        String?
+  metaDescription  String?
+  keywords         String?
+
   courses         Course[]
 }
 
@@ -196,4 +225,37 @@ model Review {
   isApproved  Boolean  @default(false)
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
+}
+
+// Page Metadata for SEO Management
+model PageMetadata {
+  id               String   @id @default(uuid())
+  pagePath         String   @unique // e.g., "/", "/about", "/contact", "/courses"
+  pageName         String   // Friendly name for admin
+  title            String   // SEO title (max 60 chars)
+  description      String   // Meta description (max 160 chars)
+  keywords         String?  // Comma-separated keywords
+
+  // Open Graph
+  ogTitle          String?
+  ogDescription    String?
+  ogImage          String?
+  ogType           String?  @default("website")
+
+  // Twitter Card
+  twitterCard      String?  @default("summary_large_image")
+  twitterTitle     String?
+  twitterDescription String?
+  twitterImage     String?
+
+  // Additional SEO
+  canonicalUrl     String?
+  robots           String?  @default("index, follow")
+
+  // Status
+  isActive         Boolean  @default(true)
+  createdAt        DateTime @default(now())
+  updatedAt        DateTime @updatedAt
+
+  @@index([pagePath])
 }
