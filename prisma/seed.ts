@@ -1,5 +1,6 @@
 import 'dotenv/config'
 import { PrismaClient } from '@prisma/client'
+import { seedPortal } from './seed-portal'
 
 const prisma = new PrismaClient()
 
@@ -20,6 +21,7 @@ async function main() {
   await prisma.feature.deleteMany()
   await prisma.ctaStat.deleteMany()
   await prisma.review.deleteMany()
+  await prisma.pageMetadata.deleteMany()
   console.log("✅ Cleared existing data")
 
   // ============= Categories =============
@@ -825,6 +827,9 @@ async function main() {
   console.log(`   - Photos: 19`)
   console.log(`   - Reviews: 5`)
   console.log("=".repeat(50))
+
+  // Seed portal data
+  await seedPortal()
 }
 
 main()
