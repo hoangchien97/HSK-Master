@@ -34,3 +34,23 @@ You can check out [the Next.js GitHub repository](https://github.com/vercel/next
 The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
 
 Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+
+Page	URL	Strategy	Lý do SEO
+Trang chủ	/	SSG + ISR	Crawl nhanh, ổn định
+Giới thiệu	/about	SSG	Nội dung tĩnh
+Liên hệ	/contact	SSG	Không đổi
+Danh sách khóa học	/courses	ISR	Có thể thêm khóa
+Chi tiết khóa học	/courses/[slug]	ISR	SEO từng khóa
+Danh sách bài học	/courses/[slug]/lessons	ISR	Long-tail
+Chi tiết bài học	/lessons/[id]	SSR	Dynamic
+Từ vựng	/vocabulary	SSR	Search
+Đăng ký	/register	SSR	Form submit
+
+
+Step1: Thay đổi Schema + Seed ( migration v2)
+Thay đổi
+Step2:Tạo migration v2
+npx prisma migrate dev --name v2_add_role_to_user
+Step3:Update seed cho schema mớ
+Bước 4: Chạy lại seed
+npx prisma db seed

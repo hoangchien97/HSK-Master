@@ -1,0 +1,313 @@
+<!DOCTYPE html>
+<html class="light" lang="vi"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Liên hệ - HSK Master</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Lexend:wght@300;400;500;600;700;800&amp;family=Noto+Sans:wght@400;500;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script>
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#e32a22","primary-dark": "#b91c1c",
+                        "highlight": "#f59e0b","background-light": "#ffffff",
+                        "background-dark": "#111621",
+                        "surface-light": "#ffffff",
+                        "surface-dark": "#1e2330",
+                        "text-main-light": "#1f2937",
+                        "text-main-dark": "#f0f2f4",
+                        "text-secondary-light": "#6b7280",
+                        "text-secondary-dark": "#9ca3af",
+                        "border-light": "#e5e7eb",
+                        "border-dark": "#374151",
+                    },
+                    fontFamily: {
+                        "display": ["Lexend", "sans-serif"],
+                        "body": ["Noto Sans", "sans-serif"],
+                    },
+                    backgroundImage: {
+                        'brand-gradient': 'linear-gradient(to right, #e32a22, #f59e0b)',
+                        'brand-gradient-hover': 'linear-gradient(to right, #c5221b, #d97706)',
+                    }
+                },
+            },
+        }
+    </script>
+</head>
+<body class="bg-background-light dark:bg-background-dark font-display text-text-main-light dark:text-text-main-dark antialiased transition-colors duration-200 relative">
+<div class="flex min-h-screen flex-col">
+<header class="sticky top-0 z-50 w-full border-b border-border-light dark:border-border-dark bg-surface-light dark:bg-surface-dark shadow-sm">
+<div class="mx-auto flex h-16 max-w-7xl items-center justify-between px-4 sm:px-6 lg:px-8">
+<div class="flex items-center gap-4">
+<button class="lg:hidden p-2 text-text-main-light dark:text-text-main-dark">
+<span class="material-symbols-outlined">menu</span>
+</button>
+<a class="flex items-center gap-2 text-primary" href="#">
+<div class="size-8 rounded bg-gradient-to-br from-red-600 to-yellow-500 p-1.5 flex items-center justify-center text-white shadow-md">
+<span class="material-symbols-outlined text-[20px]">translate</span>
+</div>
+<span class="text-xl font-bold tracking-tight bg-clip-text text-transparent bg-brand-gradient hidden sm:block">HSK Master</span>
+</a>
+</div>
+<div class="hidden md:flex max-w-md flex-1 mx-8">
+<div class="relative w-full opacity-0 pointer-events-none lg:opacity-100 lg:pointer-events-auto transition-opacity">
+</div>
+</div>
+<div class="flex items-center gap-6">
+<nav class="hidden lg:flex items-center gap-6">
+<a class="text-sm font-medium hover:text-primary transition-colors" href="#">Trang chủ</a>
+<a class="text-sm font-medium hover:text-primary transition-colors" href="#">Giới thiệu</a>
+<a class="text-sm font-bold text-primary transition-colors" href="#">Liên hệ</a>
+</nav>
+<div class="flex items-center gap-3">
+<div class="flex items-center rounded-lg bg-gray-100 dark:bg-gray-800 p-1">
+<button class="rounded-md bg-white dark:bg-surface-dark shadow-sm px-3 py-1 text-xs font-bold text-red-600 transition-all">VI</button>
+<button class="rounded-md px-3 py-1 text-xs font-medium text-text-secondary-light dark:text-text-secondary-dark hover:text-text-main-light dark:hover:text-white transition-all">中文</button>
+</div>
+</div>
+</div>
+</div>
+</header>
+<main class="flex-1">
+<div class="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8">
+<nav class="mb-6 flex items-center gap-2 text-sm text-text-secondary-light dark:text-text-secondary-dark">
+<a class="hover:text-primary" href="#">Trang chủ</a>
+<span class="material-symbols-outlined text-[16px]">chevron_right</span>
+<span class="font-medium text-primary">Liên hệ</span>
+</nav>
+<div class="mb-12 text-center max-w-3xl mx-auto">
+<h1 class="text-3xl font-bold tracking-tight text-gray-900 dark:text-white sm:text-4xl mb-3">
+                        Liên hệ với chúng tôi <span class="block text-xl sm:text-2xl font-medium text-text-secondary-light dark:text-text-secondary-dark mt-1">联系我们</span>
+</h1>
+<p class="text-lg text-text-secondary-light dark:text-text-secondary-dark">
+                        Chúng tôi luôn sẵn sàng lắng nghe và giải đáp mọi thắc mắc của bạn về lộ trình học HSK và các khóa học tiếng Trung.
+                    </p>
+</div>
+<div class="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-16">
+<div class="flex flex-col gap-8">
+<div class="rounded-2xl bg-surface-light dark:bg-surface-dark p-8 shadow-sm border border-border-light dark:border-border-dark">
+<h3 class="text-xl font-bold text-gray-900 dark:text-white mb-6 flex items-center gap-2">
+<span class="material-symbols-outlined text-red-600">info</span>
+                                Thông tin liên hệ
+                            </h3>
+<ul class="space-y-6">
+<li class="flex items-start gap-4">
+<div class="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-red-50 text-red-600 dark:bg-red-900/20 dark:text-red-400">
+<span class="material-symbols-outlined">location_on</span>
+</div>
+<div>
+<p class="font-bold text-gray-900 dark:text-white">Địa chỉ văn phòng</p>
+<p class="mt-1 text-sm text-text-secondary-light dark:text-text-secondary-dark">
+                                            Tầng 5, Tòa nhà HSK Master<br/>
+                                            Số 123 Đường Nguyễn Văn Cừ, Quận 5<br/>
+                                            TP. Hồ Chí Minh, Việt Nam
+                                        </p>
+</div>
+</li>
+<li class="flex items-start gap-4">
+<div class="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-red-50 text-red-600 dark:bg-red-900/20 dark:text-red-400">
+<span class="material-symbols-outlined">call</span>
+</div>
+<div>
+<p class="font-bold text-gray-900 dark:text-white">Hotline tư vấn</p>
+<p class="mt-1 text-sm text-text-secondary-light dark:text-text-secondary-dark">
+<a class="hover:text-primary transition-colors" href="tel:0965322136">0965 322 136</a> (8:00 - 21:00)
+                                        </p>
+<p class="text-sm text-text-secondary-light dark:text-text-secondary-dark">
+<a class="hover:text-primary transition-colors" href="tel:0965322136">0965 322 136</a> (Zalo/WeChat)
+                                        </p>
+</div>
+</li>
+<li class="flex items-start gap-4">
+<div class="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-red-50 text-red-600 dark:bg-red-900/20 dark:text-red-400">
+<span class="material-symbols-outlined">mail</span>
+</div>
+<div>
+<p class="font-bold text-gray-900 dark:text-white">Email hỗ trợ</p>
+<p class="mt-1 text-sm text-text-secondary-light dark:text-text-secondary-dark break-all">
+<a class="hover:text-primary transition-colors" href="mailto:tranhongngoc19122001@gmail.com">tranhongngoc19122001@gmail.com</a>
+</p>
+</div>
+</li>
+</ul>
+</div>
+<div class="aspect-video w-full overflow-hidden rounded-2xl border border-border-light dark:border-border-dark shadow-sm relative bg-gray-100 dark:bg-gray-800">
+<iframe allowfullscreen="" class="absolute inset-0 grayscale hover:grayscale-0 transition-all duration-500" height="100%" loading="lazy" referrerpolicy="no-referrer-when-downgrade" src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3919.669726937899!2d106.68225857486968!3d10.759917089387848!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x31752f1b7c3ed289%3A0xa0665189479a052e!2zVHLGsOG7nW5nIMSQ4bqhaSBo4buNYyBTxrAgcGjhuqFtIFRQLiBIQ00!5e0!3m2!1svi!2s!4v1715480000000!5m2!1svi!2s" style="border:0;" width="100%"></iframe>
+</div>
+</div>
+<div class="rounded-2xl bg-surface-light dark:bg-surface-dark p-8 shadow-lg border-t-4 border-t-red-500 border border-border-light dark:border-border-dark">
+<h3 class="text-2xl font-bold text-gray-900 dark:text-white mb-2">Gửi tin nhắn</h3>
+<p class="text-sm text-text-secondary-light dark:text-text-secondary-dark mb-8">
+                            Vui lòng điền thông tin bên dưới, chuyên viên tư vấn sẽ liên hệ lại với bạn trong vòng 24h.
+                        </p>
+<form action="#" class="space-y-5" method="POST">
+<div class="grid grid-cols-1 gap-5 sm:grid-cols-2">
+<div>
+<label class="block text-sm font-semibold leading-6 text-gray-900 dark:text-white" for="name">Họ và tên <span class="text-red-500">*</span></label>
+<div class="mt-2 relative">
+<div class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
+<span class="material-symbols-outlined text-gray-400 text-[20px]">person</span>
+</div>
+<input autocomplete="name" class="block w-full rounded-lg border-0 py-2.5 pl-10 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-red-500 dark:bg-background-dark dark:ring-border-dark dark:text-white sm:text-sm sm:leading-6" id="name" name="name" placeholder="Nguyễn Văn A" type="text"/>
+</div>
+</div>
+<div>
+<label class="block text-sm font-semibold leading-6 text-gray-900 dark:text-white" for="phone">Số điện thoại <span class="text-red-500">*</span></label>
+<div class="mt-2 relative">
+<div class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
+<span class="material-symbols-outlined text-gray-400 text-[20px]">phone_iphone</span>
+</div>
+<input autocomplete="tel" class="block w-full rounded-lg border-0 py-2.5 pl-10 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-red-500 dark:bg-background-dark dark:ring-border-dark dark:text-white sm:text-sm sm:leading-6" id="phone" name="phone" placeholder="0909xxxxxx" type="tel"/>
+</div>
+</div>
+</div>
+<div>
+<label class="block text-sm font-semibold leading-6 text-gray-900 dark:text-white" for="email">Email</label>
+<div class="mt-2 relative">
+<div class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
+<span class="material-symbols-outlined text-gray-400 text-[20px]">email</span>
+</div>
+<input autocomplete="email" class="block w-full rounded-lg border-0 py-2.5 pl-10 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-red-500 dark:bg-background-dark dark:ring-border-dark dark:text-white sm:text-sm sm:leading-6" id="email" name="email" placeholder="example@email.com" type="email"/>
+</div>
+</div>
+<div>
+<label class="block text-sm font-semibold leading-6 text-gray-900 dark:text-white" for="topic">Bạn quan tâm đến</label>
+<div class="mt-2">
+<select class="block w-full rounded-lg border-0 py-2.5 pl-3 pr-10 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-red-500 dark:bg-background-dark dark:ring-border-dark dark:text-white sm:text-sm sm:leading-6 cursor-pointer" id="topic" name="topic">
+<option>Tư vấn khóa học HSK</option>
+<option>Tư vấn khóa học Giao tiếp</option>
+<option>Luyện thi HSKK</option>
+<option>Hợp tác doanh nghiệp</option>
+<option>Vấn đề khác</option>
+</select>
+</div>
+</div>
+<div>
+<label class="block text-sm font-semibold leading-6 text-gray-900 dark:text-white" for="message">Nội dung tin nhắn</label>
+<div class="mt-2">
+<textarea class="block w-full rounded-lg border-0 py-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-red-500 dark:bg-background-dark dark:ring-border-dark dark:text-white sm:text-sm sm:leading-6" id="message" name="message" placeholder="Nhập câu hỏi hoặc nội dung bạn cần hỗ trợ..." rows="4"></textarea>
+</div>
+</div>
+<div class="pt-2">
+<button class="flex w-full justify-center rounded-lg bg-brand-gradient px-3 py-3 text-sm font-bold leading-6 text-white shadow-sm hover:bg-brand-gradient-hover focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-red-600 transition-all hover:scale-[1.01] active:scale-[0.99]" type="submit">
+                                    Gửi thông tin
+                                </button>
+</div>
+</form>
+</div>
+</div>
+<div class="mt-20 border-t border-border-light dark:border-border-dark pt-12">
+<h2 class="text-center text-2xl font-bold text-gray-900 dark:text-white mb-10">Câu hỏi thường gặp</h2>
+<div class="grid md:grid-cols-3 gap-8">
+<div class="bg-gray-50 dark:bg-surface-dark p-6 rounded-xl border border-gray-100 dark:border-gray-800">
+<h4 class="font-bold text-gray-900 dark:text-white mb-2">Trung tâm có lớp học thử không?</h4>
+<p class="text-sm text-text-secondary-light dark:text-text-secondary-dark">Có, HSK Master cung cấp 2 buổi học thử miễn phí cho tất cả các trình độ để học viên trải nghiệm phương pháp giảng dạy.</p>
+</div>
+<div class="bg-gray-50 dark:bg-surface-dark p-6 rounded-xl border border-gray-100 dark:border-gray-800">
+<h4 class="font-bold text-gray-900 dark:text-white mb-2">Hình thức học như thế nào?</h4>
+<p class="text-sm text-text-secondary-light dark:text-text-secondary-dark">Chúng tôi có cả lớp học Offline tại trung tâm và Online qua Zoom/Google Meet với chất lượng tương đương.</p>
+</div>
+<div class="bg-gray-50 dark:bg-surface-dark p-6 rounded-xl border border-gray-100 dark:border-gray-800">
+<h4 class="font-bold text-gray-900 dark:text-white mb-2">Cam kết đầu ra không?</h4>
+<p class="text-sm text-text-secondary-light dark:text-text-secondary-dark">Có, học viên được ký cam kết đầu ra bằng văn bản. Nếu không đạt, trung tâm sẽ hoàn lại 100% học phí.</p>
+</div>
+</div>
+</div>
+</div>
+</main>
+<footer class="bg-brand-gradient text-white border-t border-red-400/30">
+<div class="mx-auto max-w-7xl px-4 py-12 sm:px-6 lg:px-8">
+<div class="grid grid-cols-1 gap-10 lg:grid-cols-4 md:grid-cols-2">
+<div class="space-y-4">
+<a class="flex items-center gap-2 text-white" href="#">
+<div class="size-9 rounded bg-white p-1.5 flex items-center justify-center text-red-600 shadow-sm">
+<span class="material-symbols-outlined text-[24px]">translate</span>
+</div>
+<span class="text-2xl font-bold tracking-tight">HSK Master</span>
+</a>
+<p class="text-sm text-white/90 leading-relaxed">
+                            Nền tảng học tiếng Trung hàng đầu Việt Nam. Chúng tôi cam kết mang đến chất lượng đào tạo tốt nhất với lộ trình chuẩn HSK.
+                        </p>
+<div class="flex gap-4 pt-2">
+<a aria-label="Facebook" class="bg-white/10 hover:bg-white/20 p-2 rounded-full transition-colors text-white" href="#">
+<svg class="w-5 h-5 fill-current" viewBox="0 0 24 24"><path d="M9.101 23.691v-7.98H6.627v-3.667h2.474v-1.58c0-4.085 1.848-5.978 5.858-5.978.401 0 .955.042 1.468.103a8.68 8.68 0 0 1 1.141.195v3.325a8.623 8.623 0 0 0-.653-.036c-2.148 0-2.971.956-2.971 3.594v.957h5.598l-1.07 7.293h-4.528v7.98H9.101z"></path></svg>
+</a>
+<a aria-label="Instagram" class="bg-white/10 hover:bg-white/20 p-2 rounded-full transition-colors text-white" href="#">
+<svg class="w-5 h-5 fill-current" viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.069-4.85.069-3.204 0-3.584-.012-4.849-.069-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.052.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98C8.333 23.986 8.741 24 12 24c3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 1 0 0 12.324 6.162 6.162 0 0 0 0-12.324zM12 16a4 4 0 1 1 0-8 4 4 0 0 1 0 8zm7.846-10.405a1.44 1.44 0 1 1 0 2.88 1.44 1.44 0 0 1 0-2.88z"></path></svg>
+</a>
+<a aria-label="LinkedIn" class="bg-white/10 hover:bg-white/20 p-2 rounded-full transition-colors text-white" href="#">
+<svg class="w-5 h-5 fill-current" viewBox="0 0 24 24"><path d="M4.98 3.5c0 1.381-1.11 2.5-2.48 2.5s-2.48-1.119-2.48-2.5c0-1.38 1.11-2.5 2.48-2.5s2.48 1.12 2.48 2.5zm.02 4.5h-5v16h5v-16zm7.982 0h-4.968v16h4.969v-8.399c0-4.67 6.029-5.052 6.029 0v8.399h4.988v-10.131c0-7.88-8.922-7.593-11.018-3.714v-2.155z"></path></svg>
+</a>
+</div>
+</div>
+<div>
+<h3 class="text-sm font-bold uppercase tracking-wider text-white mb-6 border-b border-white/20 pb-2 inline-block">Khóa học</h3>
+<ul class="space-y-3">
+<li><a class="text-white/90 hover:text-white hover:underline decoration-white/50 underline-offset-4 transition-all" href="#">Tiếng Trung Sơ cấp (HSK 1-2)</a></li>
+<li><a class="text-white/90 hover:text-white hover:underline decoration-white/50 underline-offset-4 transition-all" href="#">Tiếng Trung Trung cấp (HSK 3-4)</a></li>
+<li><a class="text-white/90 hover:text-white hover:underline decoration-white/50 underline-offset-4 transition-all" href="#">Tiếng Trung Cao cấp (HSK 5-6)</a></li>
+<li><a class="text-white/90 hover:text-white hover:underline decoration-white/50 underline-offset-4 transition-all" href="#">Luyện thi HSKK</a></li>
+</ul>
+</div>
+<div>
+<h3 class="text-sm font-bold uppercase tracking-wider text-white mb-6 border-b border-white/20 pb-2 inline-block">Hỗ trợ</h3>
+<ul class="space-y-3">
+<li><a class="text-white/90 hover:text-white hover:underline decoration-white/50 underline-offset-4 transition-all" href="#">Câu hỏi thường gặp</a></li>
+<li><a class="text-white/90 hover:text-white hover:underline decoration-white/50 underline-offset-4 transition-all" href="#">Chính sách bảo mật</a></li>
+<li><a class="text-white/90 hover:text-white hover:underline decoration-white/50 underline-offset-4 transition-all" href="#">Điều khoản dịch vụ</a></li>
+<li><a class="text-white/90 hover:text-white hover:underline decoration-white/50 underline-offset-4 transition-all" href="#">Hướng dẫn thanh toán</a></li>
+</ul>
+</div>
+<div>
+<h3 class="text-sm font-bold uppercase tracking-wider text-white mb-6 border-b border-white/20 pb-2 inline-block">Liên hệ</h3>
+<ul class="space-y-4">
+<li class="flex items-start gap-3">
+<span class="material-symbols-outlined mt-0.5 text-white/80 text-[20px]">call</span>
+<div>
+<span class="block text-xs text-white/70 uppercase font-semibold">Hotline</span>
+<a class="text-white font-bold hover:text-yellow-100 transition-colors" href="tel:0965322136">0965 322 136</a>
+</div>
+</li>
+<li class="flex items-start gap-3">
+<span class="material-symbols-outlined mt-0.5 text-white/80 text-[20px]">mail</span>
+<div>
+<span class="block text-xs text-white/70 uppercase font-semibold">Email</span>
+<a class="text-white font-medium hover:text-yellow-100 transition-colors break-all text-sm" href="mailto:tranhongngoc19122001@gmail.com">tranhongngoc19122001@gmail.com</a>
+</div>
+</li>
+<li class="flex items-start gap-3">
+<span class="material-symbols-outlined mt-0.5 text-white/80 text-[20px]">location_on</span>
+<div>
+<span class="block text-xs text-white/70 uppercase font-semibold">Địa chỉ</span>
+<span class="text-white/90 text-sm">123 Nguyễn Văn Cừ, Q.5, TP.HCM</span>
+</div>
+</li>
+</ul>
+</div>
+</div>
+<div class="mt-12 border-t border-white/20 pt-8 text-center">
+<p class="text-sm text-white/80">© 2024 HSK Master. All rights reserved.</p>
+</div>
+</div>
+</footer>
+<div class="fixed bottom-6 right-6 z-40 flex flex-col gap-3 items-center group">
+<button class="flex h-10 w-10 items-center justify-center rounded-full bg-white text-red-600 shadow-md hover:bg-gray-50 hover:shadow-lg transition-all border border-red-100" onclick="window.scrollTo({top: 0, behavior: 'smooth'})" title="Lên đầu trang">
+<span class="material-symbols-outlined text-[24px]">arrow_upward</span>
+</button>
+<div class="relative flex flex-col items-center gap-2">
+<a class="flex h-12 w-12 items-center justify-center rounded-full bg-blue-600 text-white shadow-lg hover:scale-110 transition-transform duration-200 border-2 border-white ring-2 ring-blue-200" href="https://zalo.me/0965322136" target="_blank" title="Chat Zalo">
+<span class="font-bold text-[10px] uppercase tracking-tighter">Zalo</span>
+</a>
+<a class="flex h-14 w-14 items-center justify-center rounded-full bg-gradient-to-r from-red-600 to-yellow-500 text-white shadow-xl hover:scale-110 animate-bounce hover:animate-none transition-transform duration-200 border-2 border-white ring-2 ring-red-200" href="tel:0965322136" title="Gọi ngay">
+<span class="material-symbols-outlined text-[30px]">call</span>
+</a>
+</div>
+</div>
+</div>
+
+</body></html>

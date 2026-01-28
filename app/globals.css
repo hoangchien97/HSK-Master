@@ -1,26 +1,529 @@
 @import "tailwindcss";
-
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
+@import "./embla.css";
 
 @theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  /* Brand Colors - Primary (Imperial Red) - Based on ver2 design system */
+  --color-primary: #ec131e;
+  --color-primary-hover: #c91019;
+  --color-primary-50: #fff1f2;
+  --color-primary-100: #ffe4e6;
+  --color-primary-200: #fecdd3;
+  --color-primary-300: #fda4af;
+  --color-primary-400: #fb7185;
+  --color-primary-500: #ec131e;
+  --color-primary-600: #e11d48;
+  --color-primary-700: #be123c;
+  --color-primary-800: #9f1239;
+  --color-primary-900: #881337;
+  --color-primary-950: #4c0519;
+
+  /* HSL Primary for Card Effects */
+  --primary: 0 84% 45%;              /* Red-orange primary */
+  --primary-card: 24 95% 53%;        /* Orange for card hover glow */
+
+  /* Custom Colors - Secondary (Blue) */
+  --color-secondary-50: #f0f9ff;
+  --color-secondary-100: #e0f2fe;
+  --color-secondary-200: #bae6fd;
+  --color-secondary-300: #7dd3fc;
+  --color-secondary-400: #38bdf8;
+  --color-secondary-500: #0ea5e9;
+  --color-secondary-600: #0284c7;
+  --color-secondary-700: #0369a1;
+  --color-secondary-800: #075985;
+  --color-secondary-900: #0c4a6e;
+
+  /* Custom Colors - Accent (Yellow) */
+  --color-accent-50: #fefce8;
+  --color-accent-100: #fef9c3;
+  --color-accent-200: #fef08a;
+  --color-accent-300: #fde047;
+  --color-accent-400: #facc15;
+  --color-accent-500: #eab308;
+  --color-accent-600: #ca8a04;
+  --color-accent-700: #a16207;
+  --color-accent-800: #854d0e;
+  --color-accent-900: #713f12;
+
+  /* Success Colors - Green */
+  --color-success-50: #f0fdf4;
+  --color-success-100: #dcfce7;
+  --color-success-200: #bbf7d0;
+  --color-success-300: #86efac;
+  --color-success-400: #4ade80;
+  --color-success-500: #22c55e;
+  --color-success-600: #16a34a;
+  --color-success-700: #15803d;
+  --color-success-800: #166534;
+  --color-success-900: #14532d;
+  --color-success-950: #052e16;
+
+  /* Warning Colors - Amber */
+  --color-warning-50: #fffbeb;
+  --color-warning-100: #fef3c7;
+  --color-warning-200: #fde68a;
+  --color-warning-300: #fcd34d;
+  --color-warning-400: #fbbf24;
+  --color-warning-500: #f59e0b;
+  --color-warning-600: #d97706;
+  --color-warning-700: #b45309;
+  --color-warning-800: #92400e;
+  --color-warning-900: #78350f;
+  --color-warning-950: #451a03;
+
+  /* Error Colors - Red */
+  --color-error-50: #fef2f2;
+  --color-error-100: #fee2e2;
+  --color-error-200: #fecaca;
+  --color-error-300: #fca5a5;
+  --color-error-400: #f87171;
+  --color-error-500: #ef4444;
+  --color-error-600: #dc2626;
+  --color-error-700: #b91c1c;
+  --color-error-800: #991b1b;
+  --color-error-900: #7f1d1d;
+  --color-error-950: #450a0a;
+
+  /* Info Colors - Blue */
+  --color-info-50: #eff6ff;
+  --color-info-100: #dbeafe;
+  --color-info-200: #bfdbfe;
+  --color-info-300: #93c5fd;
+  --color-info-400: #60a5fa;
+  --color-info-500: #3b82f6;
+  --color-info-600: #2563eb;
+  --color-info-700: #1d4ed8;
+  --color-info-800: #1e40af;
+  --color-info-900: #1e3a8a;
+  --color-info-950: #172554;
+
+  /* Background Colors */
+  --color-background-light: #f8f6f6;
+  --color-background-dark: #221011;
+
+  /* Surface Colors */
+  --color-surface-light: #ffffff;
+  --color-surface-dark: #2d1a1b;
+
+  /* Text Colors */
+  --color-text-main: #181111;
+  --color-text-main-light: #181111;
+  --color-text-main-dark: #f8f6f6;
+  --color-text-muted: #896163;
+  --color-text-secondary-light: #6b7280;
+
+  /* Border Colors */
+  --color-border-light: #e5e7eb;
+  --color-border-dark: #374151;
+
+  /* Sidebar Colors */
+  --color-sidebar-bg: #fafafa;
+  --color-sidebar-text: #374151;
+
+  /* Chinese Theme Colors */
+  --color-chinese-red: #dc143c;
+  --color-chinese-gold: #ffd700;
+  --color-chinese-jade: #00a86b;
+
+  /* Font Families */
+  --font-sans: var(--font-geist-sans), Inter, system-ui, sans-serif;
+  --font-mono: var(--font-geist-mono), Menlo, Monaco, monospace;
+  --font-vietnamese: Inter, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  --font-chinese: 'Noto Sans SC', 'Microsoft YaHei', 'PingFang SC', SimHei, sans-serif;
+  --font-display: Inter, 'Noto Sans SC', sans-serif;
+  --font-body: Inter, 'Noto Sans SC', sans-serif;
+
+  /* Custom Font Sizes */
+  --font-size-2xs: 0.625rem;
+  --font-size-xs: 0.75rem;
+  --font-size-sm: 0.875rem;
+  --font-size-base: 1rem;
+  --font-size-lg: 1.125rem;
+  --font-size-xl: 1.25rem;
+  --font-size-2xl: 1.5rem;
+  --font-size-3xl: 1.875rem;
+  --font-size-4xl: 2.25rem;
+  --font-size-5xl: 3rem;
+  --font-size-6xl: 3.75rem;
+  --font-size-7xl: 4.5rem;
+  --font-size-8xl: 6rem;
+  --font-size-9xl: 8rem;
+
+  /* Border Radius */
+  --radius-4xl: 2rem;
+
+  /* Brand Gradient */
+  --gradient-brand: linear-gradient(to right, #facc15, #dc2626);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+html {
+  scroll-behavior: smooth;
+}
+
+/* Custom Scrollbar with Gradient (Yellow to Red) */
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: linear-gradient(to bottom, #facc15, #dc2626); /* Yellow-400 to Red-600 */
+  border-radius: 6px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: linear-gradient(to bottom, #eab308, #b91c1c); /* Yellow-500 to Red-700 */
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: var(--font-vietnamese);
+}
+
+@layer utilities {
+  /* Animation for SectionHeader */
+  @keyframes fade-in {
+    from {
+      opacity: 0;
+      transform: translateY(-10px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  @keyframes slide-up {
+    from {
+      opacity: 0;
+      transform: translateY(20px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  @keyframes bounce-slow {
+    0%, 100% {
+      transform: translateY(0);
+    }
+    50% {
+      transform: translateY(-5px);
+    }
+  }
+
+  @keyframes gradient-shift {
+    0%, 100% {
+      background-position: 0% 50%;
+    }
+    50% {
+      background-position: 100% 50%;
+    }
+  }
+
+  @keyframes float {
+    0%, 100% {
+      transform: translateY(0px);
+    }
+    50% {
+      transform: translateY(-8px);
+    }
+  }
+
+  @keyframes shimmer {
+    0% {
+      background-position: -100% 0;
+    }
+    100% {
+      background-position: 200% 0;
+    }
+  }
+
+  @keyframes pulse-soft {
+    0%, 100% {
+      opacity: 1;
+      transform: scale(1);
+    }
+    50% {
+      opacity: 0.85;
+      transform: scale(1.02);
+    }
+  }
+
+  @keyframes fade-in-up {
+    from {
+      opacity: 0;
+      transform: translateY(30px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  @keyframes wiggle {
+    0%, 100% {
+      transform: rotate(0deg) scale(1.1);
+    }
+    25% {
+      transform: rotate(-5deg) scale(1.15);
+    }
+    75% {
+      transform: rotate(5deg) scale(1.15);
+    }
+  }
+
+  @keyframes scale-in {
+    from {
+      opacity: 0;
+      transform: scale(0.9);
+    }
+    to {
+      opacity: 1;
+      transform: scale(1);
+    }
+  }
+
+  .animate-fade-in {
+    animation: fade-in 0.6s ease-out forwards;
+  }
+
+  .animate-fade-in-delayed {
+    animation: fade-in 0.8s ease-out 0.2s forwards;
+    opacity: 0;
+  }
+
+  .animate-slide-up {
+    animation: slide-up 0.7s ease-out forwards;
+  }
+
+  .animate-bounce-slow {
+    animation: bounce-slow 2s ease-in-out infinite;
+  }
+
+  .animate-gradient {
+    background-size: 200% auto;
+    animation: gradient-shift 3s ease infinite;
+  }
+
+  .animate-float {
+    animation: float 3s ease-in-out infinite;
+  }
+
+  .animate-shimmer {
+    background-size: 200% 100%;
+    animation: shimmer 2s linear infinite;
+  }
+
+  .animate-pulse-soft {
+    animation: pulse-soft 3s ease-in-out infinite;
+  }
+
+  .animate-fade-in-up {
+    animation: fade-in-up 0.8s ease-out forwards;
+  }
+
+  .animate-wiggle {
+    animation: wiggle 0.5s ease-in-out;
+  }
+
+  .animate-scale-in {
+    animation: scale-in 0.6s ease-out forwards;
+  }
+
+  /* Stagger animation delays - All same timing */
+  .stagger-children > *:nth-child(1),
+  .stagger-children > *:nth-child(2),
+  .stagger-children > *:nth-child(3),
+  .stagger-children > *:nth-child(4) {
+    animation-delay: 0.2s;
+  }
+
+  .stagger-1,
+  .stagger-2,
+  .stagger-3,
+  .stagger-4 {
+    animation-delay: 0.2s;
+  }
+
+  /* Hover lift effect */
+  .hover-lift {
+    transition: all 0.3s ease;
+  }
+
+  .hover-lift:hover {
+    transform: translateY(-8px);
+  }
+
+  /* Hover glow effect - Using HSL variable */
+  .hover-glow:hover {
+    box-shadow: 0 0 30px hsl(var(--primary-card) / 0.3),
+                0 20px 40px -15px hsl(var(--primary-card) / 0.2);
+  }
+
+  /* GPU acceleration */
+  .transform-gpu {
+    transform: translateZ(0);
+    will-change: transform;
+  }
+
+  /* Gradient text effect */
+  .gradient-text {
+    background: linear-gradient(90deg, #dc2626, #ea580c, #eab308, #ea580c, #dc2626);
+    background-clip: text;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-size: 200% auto;
+    animation: gradient-shift 4s ease infinite;
+  }
+
+  .shimmer-effect::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(
+      90deg,
+      transparent,
+      rgba(255, 255, 255, 0.2),
+      transparent
+    );
+    transition: left 0.6s;
+  }
+
+  .shimmer-effect:hover::before {
+    left: 100%;
+  }
+
+  /* Design System Page Utilities */
+  .section-header-gradient {
+    @apply mb-8;
+  }
+
+  .shadow-soft {
+    box-shadow: 0 1px 3px 0 rgb(0 0 0 / 0.03), 0 1px 2px -1px rgb(0 0 0 / 0.03);
+  }
+
+  .no-scrollbar::-webkit-scrollbar {
+    display: none;
+  }
+
+  .no-scrollbar {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+
+  /* Custom Tooltip Animations */
+  @keyframes tooltip-fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+  }
+
+  @keyframes tooltip-fadeOut {
+    from { opacity: 1; }
+    to { opacity: 0; }
+  }
+
+  @keyframes tooltip-scaleIn {
+    from {
+      opacity: 0;
+      transform: scale(0.9);
+    }
+    to {
+      opacity: 1;
+      transform: scale(1);
+    }
+  }
+
+  @keyframes tooltip-scaleOut {
+    from {
+      opacity: 1;
+      transform: scale(1);
+    }
+    to {
+      opacity: 0;
+      transform: scale(0.9);
+    }
+  }
+
+  @keyframes tooltip-slideUp {
+    from {
+      opacity: 0;
+      transform: translateY(8px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  @keyframes tooltip-slideDown {
+    from {
+      opacity: 1;
+      transform: translateY(0);
+    }
+    to {
+      opacity: 0;
+      transform: translateY(8px);
+    }
+  }
+
+  @keyframes tooltip-perspective {
+    from {
+      opacity: 0;
+      transform: perspective(600px) rotateX(-10deg);
+    }
+    to {
+      opacity: 1;
+      transform: perspective(600px) rotateX(0);
+    }
+  }
+
+  @keyframes tooltip-perspectiveOut {
+    from {
+      opacity: 1;
+      transform: perspective(600px) rotateX(0);
+    }
+    to {
+      opacity: 0;
+      transform: perspective(600px) rotateX(-10deg);
+    }
+  }
+
+  .animate-fadeIn {
+    animation: tooltip-fadeIn 200ms ease-out forwards;
+  }
+
+  .animate-fadeOut {
+    animation: tooltip-fadeOut 200ms ease-out forwards;
+  }
+
+  .animate-scaleIn {
+    animation: tooltip-scaleIn 200ms cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+  }
+
+  .animate-scaleOut {
+    animation: tooltip-scaleOut 200ms ease-out forwards;
+  }
+
+  .animate-slideUp {
+    animation: tooltip-slideUp 200ms ease-out forwards;
+  }
+
+  .animate-slideDown {
+    animation: tooltip-slideDown 200ms ease-out forwards;
+  }
+
+  .animate-perspective {
+    animation: tooltip-perspective 200ms ease-out forwards;
+  }
+
+  .animate-perspectiveOut {
+    animation: tooltip-perspectiveOut 200ms ease-out forwards;
+  }
 }

@@ -1,0 +1,844 @@
+<!DOCTYPE html>
+<html class="light scroll-smooth" lang="vi"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Trang chủ - HSK Master</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Lexend:wght@300;400;500;600;700;800&amp;family=Noto+Sans:wght@400;500;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script>
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#e32a22","primary-dark": "#b91c1c",
+                        "highlight": "#f59e0b","background-light": "#ffffff",
+                        "background-dark": "#111621",
+                        "surface-light": "#ffffff",
+                        "surface-dark": "#1e2330",
+                        "text-main-light": "#1f2937",
+                        "text-main-dark": "#f0f2f4",
+                        "text-secondary-light": "#6b7280",
+                        "text-secondary-dark": "#9ca3af",
+                        "border-light": "#e5e7eb",
+                        "border-dark": "#374151",
+                    },
+                    fontFamily: {
+                        "display": ["Lexend", "sans-serif"],
+                        "body": ["Noto Sans", "sans-serif"],
+                    },
+                    backgroundImage: {
+                        'brand-gradient': 'linear-gradient(to right, #e32a22, #f59e0b)',
+                        'brand-gradient-hover': 'linear-gradient(to right, #c5221b, #d97706)',
+                    },
+                    animation: {
+                        blob: "blob 7s infinite",
+                    },
+                    keyframes: {
+                        blob: {
+                            "0%": {
+                                transform: "translate(0px, 0px) scale(1)",
+                            },
+                            "33%": {
+                                transform: "translate(30px, -50px) scale(1.1)",
+                            },
+                            "66%": {
+                                transform: "translate(-20px, 20px) scale(0.9)",
+                            },
+                            "100%": {
+                                transform: "translate(0px, 0px) scale(1)",
+                            },
+                        },
+                    },
+                },
+            },
+        }
+    </script>
+<style type="text/tailwindcss">
+        @layer utilities {
+            .no-scrollbar::-webkit-scrollbar {
+                display: none;
+            }
+            .no-scrollbar {
+                -ms-overflow-style: none;
+                scrollbar-width: none;
+            }
+        }
+    </style>
+</head>
+<body class="bg-background-light dark:bg-background-dark font-display text-text-main-light dark:text-text-main-dark antialiased transition-colors duration-200">
+<div class="flex min-h-screen flex-col">
+<header class="sticky top-0 z-50 w-full border-b border-border-light dark:border-border-dark bg-surface-light/95 backdrop-blur supports-[backdrop-filter]:bg-surface-light/80 dark:bg-surface-dark/95 shadow-sm">
+<div class="mx-auto flex h-16 max-w-7xl items-center justify-between px-4 sm:px-6 lg:px-8">
+<div class="flex items-center gap-4">
+<button class="lg:hidden p-2 text-text-main-light dark:text-text-main-dark hover:bg-gray-100 dark:hover:bg-gray-800 rounded-md">
+<span class="material-symbols-outlined">menu</span>
+</button>
+<a class="flex items-center gap-2 text-primary" href="#">
+<div class="size-8 rounded bg-gradient-to-br from-red-600 to-yellow-500 p-1.5 flex items-center justify-center text-white shadow-md">
+<span class="material-symbols-outlined text-[20px]">translate</span>
+</div>
+<span class="text-xl font-bold tracking-tight bg-clip-text text-transparent bg-brand-gradient hidden sm:block">HSK Master</span>
+</a>
+</div>
+<div class="hidden md:flex max-w-md flex-1 mx-8">
+<div class="relative w-full">
+<div class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
+<span class="material-symbols-outlined text-text-secondary-light">search</span>
+</div>
+<input class="block w-full rounded-full border-gray-200 bg-gray-50 dark:bg-background-dark py-2 pl-10 pr-3 text-sm placeholder-text-secondary-light focus:border-red-500 focus:ring-red-500 dark:text-white dark:placeholder-gray-500 transition-all hover:bg-white focus:bg-white dark:hover:bg-surface-dark dark:focus:bg-surface-dark shadow-sm" placeholder="Tìm khóa học (VD: HSK 4)..." type="text"/>
+</div>
+</div>
+<div class="flex items-center gap-4">
+<nav class="hidden lg:flex items-center gap-6 mr-2">
+<a class="text-sm font-semibold text-red-600" href="#">Trang chủ</a>
+<a class="text-sm font-medium hover:text-primary transition-colors" href="#courses">Khóa học</a>
+<a class="text-sm font-medium hover:text-primary transition-colors" href="#">Tài liệu</a>
+</nav>
+<div class="hidden sm:flex items-center bg-gray-100 rounded-lg p-1 dark:bg-surface-dark border border-border-light dark:border-border-dark">
+<button class="px-3 py-1 rounded-md bg-white text-xs font-bold text-red-600 shadow-sm dark:bg-gray-700 dark:text-red-400 border border-gray-100 dark:border-gray-600">VN</button>
+<button class="px-3 py-1 rounded-md text-xs font-medium text-gray-500 hover:text-red-600 dark:text-gray-400 transition-colors">CN</button>
+</div>
+<div class="flex items-center gap-3">
+<a class="hidden sm:flex h-9 items-center justify-center rounded-lg bg-brand-gradient px-5 text-sm font-bold text-white shadow-md hover:opacity-90 hover:shadow-lg transition-all" href="#">
+                        Bắt đầu học
+                    </a>
+</div>
+</div>
+</div>
+</header>
+<main class="flex-1">
+<section class="relative bg-white dark:bg-background-dark pt-4 pb-8 lg:pt-8">
+<div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+<div class="relative rounded-2xl overflow-hidden shadow-2xl aspect-[16/9] md:aspect-[21/9] group border border-gray-100 dark:border-gray-800">
+<div class="flex w-full h-full overflow-x-auto snap-x snap-mandatory no-scrollbar scroll-smooth">
+<div class="min-w-full h-full snap-center relative flex items-center bg-gray-900">
+<img alt="Students studying chinese" class="absolute inset-0 w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDmwyQMah-FM-3ydl4vQ8stLMZajHRKFFlmY2GceHvY6RpDg-P2sW8WDVwnP7mMQOPYtTASqfIap2JCQJlQ3qrgGKyG6m-cxUYEHyFonuMaw32q84CjbOcEDKTdBfo1z70XvRhqYcv0nVXyitVvD_4UPYPd9hpo1po5wjpVLoj8I4HrNih522V479ZAeHaGQO2xJEL8J1cAKGphj1eUJRSUhObkeAPau6raNjgX8ZptD1-NqhsJFmgvlug_RjqfllrgEFco_KER2Xg2"/>
+<div class="absolute inset-0 bg-gradient-to-r from-black/80 via-black/40 to-transparent"></div>
+<div class="relative z-10 px-8 md:px-16 lg:px-24 max-w-3xl">
+<span class="inline-block py-1 px-3 rounded bg-yellow-500 text-black text-xs font-bold uppercase tracking-wider mb-4 shadow-sm">
+                                    Lộ trình toàn diện
+                                </span>
+<h2 class="text-3xl md:text-4xl lg:text-5xl font-extrabold text-white mb-4 leading-tight drop-shadow-sm">
+                                    Chinh phục <span class="text-transparent bg-clip-text bg-gradient-to-r from-yellow-300 to-red-400">HSK 1 - HSK 6</span><br/>Dễ dàng &amp; Hiệu quả
+                                </h2>
+<p class="text-gray-100 text-base md:text-lg mb-8 max-w-xl font-medium drop-shadow-md">
+                                    Hệ thống bài giảng video chất lượng cao, tích hợp AI luyện phát âm và kho đề thi thử phong phú nhất Việt Nam.
+                                </p>
+<div class="flex flex-wrap gap-4">
+<a class="px-6 py-3 rounded-lg bg-brand-gradient text-white font-bold hover:shadow-lg hover:scale-105 transition-all duration-200" href="#courses">
+                                        Xem lộ trình
+                                    </a>
+<a class="px-6 py-3 rounded-lg bg-white/20 backdrop-blur-md text-white font-semibold border border-white/30 hover:bg-white/30 transition-all" href="#">
+                                        Thi thử miễn phí
+                                    </a>
+</div>
+</div>
+</div>
+<div class="min-w-full h-full snap-center relative flex items-center bg-gray-900">
+<img alt="Chinese books" class="absolute inset-0 w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuB0u7uwznI-Om7uAJap6TEaGJjTbmkpt4j7LjT1TsjvqJJ6fXpPDu5DyI-0HdNRKWEcxaKKra8MbEejTxWtJSmXXG-JAi3beJZsacbcwJT8oE4CweZfyJI8MCMg1GnDvkZtkBJ4fSKrfNeJUobY64GQ8V-NvtprbVxefGe-WsxVhL_9PRbxr7bydQCxjCzVGTF5KNNHKoB08d5ruZ-_xPM7SMmca7dIAwaksTxb4f6LW_nTynK3masxJDOnKpq0qIiQox0Hwk-4t8lm"/>
+<div class="absolute inset-0 bg-gradient-to-r from-red-900/90 via-red-800/50 to-transparent"></div>
+<div class="relative z-10 px-8 md:px-16 lg:px-24 max-w-3xl">
+<span class="inline-block py-1 px-3 rounded bg-white text-red-600 text-xs font-bold uppercase tracking-wider mb-4 shadow-sm">
+                                    Khóa học mới
+                                </span>
+<h2 class="text-3xl md:text-4xl lg:text-5xl font-extrabold text-white mb-4 leading-tight drop-shadow-sm">
+                                    Luyện thi <span class="text-yellow-300">HSKK Trung - Cao cấp</span>
+</h2>
+<p class="text-gray-50 text-base md:text-lg mb-8 max-w-xl font-medium drop-shadow-md">
+                                    Tự tin giao tiếp, phản xạ nhanh và đạt điểm cao trong kỳ thi nói với phương pháp Shadowing độc quyền.
+                                </p>
+<div class="flex flex-wrap gap-4">
+<a class="px-6 py-3 rounded-lg bg-white text-red-700 font-bold hover:shadow-lg hover:scale-105 transition-all duration-200" href="#">
+                                        Đăng ký ngay
+                                    </a>
+</div>
+</div>
+</div>
+<div class="min-w-full h-full snap-center relative flex items-center bg-gray-900">
+<img alt="Business setting" class="absolute inset-0 w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBYWaqHHvmiohiQvRRA3I7qLGMsnmUklsX0LbMfoPYnbfk52P2yjhBvxA1JufvY8RPtDPd3nWdrdkvUoMuFkfyeSbsh4-tdNrlhGj4L6nyIpZRNzlqzBr_d_zHz8ScRHEIr--TKcTGpipr7raHfcQSO8XBwVu6Q7bdifxi9yzbxSlbt3fq0-dL-YCDwkxMc4rIQQ3OFXgjKwbVH3vnBn2uXB8iPAWoGU9SlhuKu7UffzGPpq8JLkfdPzU48pmUTPp1qp3Anyme9oKkT"/>
+<div class="absolute inset-0 bg-gradient-to-r from-blue-900/90 via-blue-800/50 to-transparent"></div>
+<div class="relative z-10 px-8 md:px-16 lg:px-24 max-w-3xl">
+<span class="inline-block py-1 px-3 rounded bg-blue-500 text-white text-xs font-bold uppercase tracking-wider mb-4 shadow-sm">
+                                    Tiếng Trung Thương Mại
+                                </span>
+<h2 class="text-3xl md:text-4xl lg:text-5xl font-extrabold text-white mb-4 leading-tight drop-shadow-sm">
+                                    Đàm phán &amp; Kinh doanh<br/>với đối tác Trung Quốc
+                                </h2>
+<p class="text-gray-100 text-base md:text-lg mb-8 max-w-xl font-medium drop-shadow-md">
+                                    Trang bị từ vựng chuyên ngành, văn hóa doanh nghiệp và kỹ năng biên phiên dịch thực tế.
+                                </p>
+<div class="flex flex-wrap gap-4">
+<a class="px-6 py-3 rounded-lg bg-blue-500 text-white font-bold hover:bg-blue-400 transition-all duration-200 border border-blue-400" href="#">
+                                        Tìm hiểu thêm
+                                    </a>
+</div>
+</div>
+</div>
+</div>
+<div class="absolute bottom-6 left-1/2 -translate-x-1/2 flex gap-2 z-20">
+<div class="w-8 h-1.5 rounded-full bg-white shadow-sm ring-1 ring-black/10"></div>
+<div class="w-8 h-1.5 rounded-full bg-white/40 hover:bg-white/70 transition-colors cursor-pointer backdrop-blur-sm"></div>
+<div class="w-8 h-1.5 rounded-full bg-white/40 hover:bg-white/70 transition-colors cursor-pointer backdrop-blur-sm"></div>
+</div>
+</div>
+</div>
+</section>
+<section class="py-10 bg-gray-50 dark:bg-surface-dark/50">
+<div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+<div class="mb-10 text-center">
+<h2 class="text-3xl font-bold tracking-tight text-gray-900 dark:text-white sm:text-4xl mb-4">
+                        Lộ trình học <span class="text-transparent bg-clip-text bg-brand-gradient">HSK Chuẩn</span>
+</h2>
+<p class="text-lg text-text-secondary-light dark:text-text-secondary-dark max-w-2xl mx-auto">
+                        Chọn trình độ phù hợp và bắt đầu hành trình chinh phục tiếng Trung từ cơ bản đến nâng cao.
+                    </p>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-3 gap-6">
+<a class="group relative flex flex-col justify-between overflow-hidden rounded-2xl bg-white dark:bg-surface-dark p-6 shadow-sm border border-border-light dark:border-border-dark hover:shadow-xl hover:-translate-y-1 transition-all duration-300" href="#hsk1">
+<div class="absolute top-0 right-0 w-24 h-24 bg-gradient-to-br from-orange-400 to-yellow-300 rounded-bl-[100px] -mr-8 -mt-8 opacity-20 group-hover:opacity-100 transition-opacity"></div>
+<div class="relative z-10">
+<div class="flex justify-between items-start mb-6">
+<h3 class="text-3xl font-extrabold text-gray-900 dark:text-white group-hover:text-primary transition-colors">HSK 1</h3>
+<span class="inline-flex items-center rounded-full bg-orange-100 px-3 py-1 text-xs font-medium text-orange-800 dark:bg-orange-900/30 dark:text-orange-200">
+                                    2-3 tháng
+                                </span>
+</div>
+<div class="mb-6">
+<span class="inline-block rounded-full border border-orange-200 bg-orange-50 px-3 py-1 text-sm font-semibold text-orange-600 mb-4 dark:bg-surface-dark dark:border-orange-900 dark:text-orange-400">
+                                    Cấp độ 1/6
+                                </span>
+<p class="text-text-secondary-light dark:text-text-secondary-dark text-sm mb-4">
+                                    Nền tảng cơ bản cho người mới bắt đầu. Làm quen với phát âm, pinyin và các nét chữ Hán đơn giản.
+                                </p>
+<div class="flex gap-3 text-sm text-gray-600 dark:text-gray-300">
+<div class="flex items-center gap-1 rounded-full bg-orange-50 dark:bg-surface-dark border border-orange-100 px-2 py-1">
+<span class="material-symbols-outlined text-[16px] text-orange-500">menu_book</span>
+<span>150 từ</span>
+</div>
+<div class="flex items-center gap-1 rounded-full bg-orange-50 dark:bg-surface-dark border border-orange-100 px-2 py-1">
+<span class="material-symbols-outlined text-[16px] text-orange-500">group</span>
+<span>Mới</span>
+</div>
+</div>
+</div>
+</div>
+<div class="mt-4 w-full rounded-lg bg-brand-gradient p-3 text-center text-sm font-bold text-white opacity-0 group-hover:opacity-100 transition-all duration-300 shadow-md flex items-center justify-center gap-2">
+                            Xem chi tiết <span class="material-symbols-outlined text-[18px]">arrow_forward</span>
+</div>
+<div aria-hidden="true" class="mt-4 h-[44px] w-full"></div>
+</a>
+<a class="group relative flex flex-col justify-between overflow-hidden rounded-2xl bg-white dark:bg-surface-dark p-6 shadow-sm border border-border-light dark:border-border-dark hover:shadow-xl hover:-translate-y-1 transition-all duration-300" href="#hsk2">
+<div class="absolute top-0 right-0 w-24 h-24 bg-gradient-to-br from-orange-400 to-yellow-300 rounded-bl-[100px] -mr-8 -mt-8 opacity-20 group-hover:opacity-100 transition-opacity"></div>
+<div class="relative z-10">
+<div class="flex justify-between items-start mb-6">
+<h3 class="text-3xl font-extrabold text-gray-900 dark:text-white group-hover:text-primary transition-colors">HSK 2</h3>
+<span class="inline-flex items-center rounded-full bg-orange-100 px-3 py-1 text-xs font-medium text-orange-800 dark:bg-orange-900/30 dark:text-orange-200">
+                                    3-4 tháng
+                                </span>
+</div>
+<div class="mb-6">
+<span class="inline-block rounded-full border border-orange-200 bg-orange-50 px-3 py-1 text-sm font-semibold text-orange-600 mb-4 dark:bg-surface-dark dark:border-orange-900 dark:text-orange-400">
+                                    Cấp độ 2/6
+                                </span>
+<p class="text-text-secondary-light dark:text-text-secondary-dark text-sm mb-4">
+                                    Giao tiếp cơ bản hàng ngày. Mở rộng vốn từ và nắm vững các cấu trúc ngữ pháp sơ cấp.
+                                </p>
+<div class="flex gap-3 text-sm text-gray-600 dark:text-gray-300">
+<div class="flex items-center gap-1 rounded-full bg-orange-50 dark:bg-surface-dark border border-orange-100 px-2 py-1">
+<span class="material-symbols-outlined text-[16px] text-orange-500">menu_book</span>
+<span>300 từ</span>
+</div>
+<div class="flex items-center gap-1 rounded-full bg-orange-50 dark:bg-surface-dark border border-orange-100 px-2 py-1">
+<span class="material-symbols-outlined text-[16px] text-orange-500">trending_up</span>
+<span>Sơ cấp</span>
+</div>
+</div>
+</div>
+</div>
+<div class="mt-4 w-full rounded-lg bg-brand-gradient p-3 text-center text-sm font-bold text-white opacity-0 group-hover:opacity-100 transition-all duration-300 shadow-md flex items-center justify-center gap-2">
+                            Xem chi tiết <span class="material-symbols-outlined text-[18px]">arrow_forward</span>
+</div>
+<div aria-hidden="true" class="mt-4 h-[44px] w-full"></div>
+</a>
+<a class="group relative flex flex-col justify-between overflow-hidden rounded-2xl bg-white dark:bg-surface-dark p-6 shadow-sm border border-border-light dark:border-border-dark hover:shadow-xl hover:-translate-y-1 transition-all duration-300" href="#hsk3">
+<div class="absolute top-0 right-0 w-24 h-24 bg-gradient-to-br from-red-400 to-orange-400 rounded-bl-[100px] -mr-8 -mt-8 opacity-20 group-hover:opacity-100 transition-opacity"></div>
+<div class="relative z-10">
+<div class="flex justify-between items-start mb-6">
+<h3 class="text-3xl font-extrabold text-gray-900 dark:text-white group-hover:text-primary transition-colors">HSK 3</h3>
+<span class="inline-flex items-center rounded-full bg-red-100 px-3 py-1 text-xs font-medium text-red-800 dark:bg-red-900/30 dark:text-red-200">
+                                    4-5 tháng
+                                </span>
+</div>
+<div class="mb-6">
+<span class="inline-block rounded-full border border-red-200 bg-red-50 px-3 py-1 text-sm font-semibold text-red-600 mb-4 dark:bg-surface-dark dark:border-red-900 dark:text-red-400">
+                                    Cấp độ 3/6
+                                </span>
+<p class="text-text-secondary-light dark:text-text-secondary-dark text-sm mb-4">
+                                    Bước vào giai đoạn trung cấp. Giao tiếp trôi chảy trong đời sống, học tập và làm việc cơ bản.
+                                </p>
+<div class="flex gap-3 text-sm text-gray-600 dark:text-gray-300">
+<div class="flex items-center gap-1 rounded-full bg-red-50 dark:bg-surface-dark border border-red-100 px-2 py-1">
+<span class="material-symbols-outlined text-[16px] text-red-500">menu_book</span>
+<span>600 từ</span>
+</div>
+<div class="flex items-center gap-1 rounded-full bg-red-50 dark:bg-surface-dark border border-red-100 px-2 py-1">
+<span class="material-symbols-outlined text-[16px] text-red-500">school</span>
+<span>Trung cấp</span>
+</div>
+</div>
+</div>
+</div>
+<div class="mt-4 w-full rounded-lg bg-brand-gradient p-3 text-center text-sm font-bold text-white opacity-0 group-hover:opacity-100 transition-all duration-300 shadow-md flex items-center justify-center gap-2">
+                            Xem chi tiết <span class="material-symbols-outlined text-[18px]">arrow_forward</span>
+</div>
+<div aria-hidden="true" class="mt-4 h-[44px] w-full"></div>
+</a>
+<a class="group relative flex flex-col justify-between overflow-hidden rounded-2xl bg-white dark:bg-surface-dark p-6 shadow-sm border border-border-light dark:border-border-dark hover:shadow-xl hover:-translate-y-1 transition-all duration-300" href="#hsk4">
+<div class="absolute top-0 right-0 w-24 h-24 bg-gradient-to-br from-red-500 to-red-400 rounded-bl-[100px] -mr-8 -mt-8 opacity-20 group-hover:opacity-100 transition-opacity"></div>
+<div class="relative z-10">
+<div class="flex justify-between items-start mb-6">
+<h3 class="text-3xl font-extrabold text-gray-900 dark:text-white group-hover:text-primary transition-colors">HSK 4</h3>
+<span class="inline-flex items-center rounded-full bg-red-100 px-3 py-1 text-xs font-medium text-red-800 dark:bg-red-900/30 dark:text-red-200">
+                                    5-6 tháng
+                                </span>
+</div>
+<div class="mb-6">
+<span class="inline-block rounded-full border border-red-200 bg-red-50 px-3 py-1 text-sm font-semibold text-red-600 mb-4 dark:bg-surface-dark dark:border-red-900 dark:text-red-400">
+                                    Cấp độ 4/6
+                                </span>
+<p class="text-text-secondary-light dark:text-text-secondary-dark text-sm mb-4">
+                                    Thảo luận về nhiều chủ đề. Đủ trình độ để du học và làm việc tại các công ty Trung Quốc.
+                                </p>
+<div class="flex gap-3 text-sm text-gray-600 dark:text-gray-300">
+<div class="flex items-center gap-1 rounded-full bg-red-50 dark:bg-surface-dark border border-red-100 px-2 py-1">
+<span class="material-symbols-outlined text-[16px] text-red-500">menu_book</span>
+<span>1200 từ</span>
+</div>
+<div class="flex items-center gap-1 rounded-full bg-red-50 dark:bg-surface-dark border border-red-100 px-2 py-1">
+<span class="material-symbols-outlined text-[16px] text-red-500">work</span>
+<span>Du học/Làm việc</span>
+</div>
+</div>
+</div>
+</div>
+<div class="mt-4 w-full rounded-lg bg-brand-gradient p-3 text-center text-sm font-bold text-white opacity-0 group-hover:opacity-100 transition-all duration-300 shadow-md flex items-center justify-center gap-2">
+                            Xem chi tiết <span class="material-symbols-outlined text-[18px]">arrow_forward</span>
+</div>
+<div aria-hidden="true" class="mt-4 h-[44px] w-full"></div>
+</a>
+<a class="group relative flex flex-col justify-between overflow-hidden rounded-2xl bg-white dark:bg-surface-dark p-6 shadow-sm border border-border-light dark:border-border-dark hover:shadow-xl hover:-translate-y-1 transition-all duration-300" href="#hsk5">
+<div class="absolute top-0 right-0 w-24 h-24 bg-gradient-to-br from-purple-500 to-indigo-500 rounded-bl-[100px] -mr-8 -mt-8 opacity-20 group-hover:opacity-100 transition-opacity"></div>
+<div class="relative z-10">
+<div class="flex justify-between items-start mb-6">
+<h3 class="text-3xl font-extrabold text-gray-900 dark:text-white group-hover:text-primary transition-colors">HSK 5</h3>
+<span class="inline-flex items-center rounded-full bg-indigo-100 px-3 py-1 text-xs font-medium text-indigo-800 dark:bg-indigo-900/30 dark:text-indigo-200">
+                                    6-8 tháng
+                                </span>
+</div>
+<div class="mb-6">
+<span class="inline-block rounded-full border border-indigo-200 bg-indigo-50 px-3 py-1 text-sm font-semibold text-indigo-600 mb-4 dark:bg-surface-dark dark:border-indigo-900 dark:text-indigo-400">
+                                    Cấp độ 5/6
+                                </span>
+<p class="text-text-secondary-light dark:text-text-secondary-dark text-sm mb-4">
+                                    Trình độ cao cấp. Đọc báo, tạp chí, xem phim ảnh và viết văn bản dài một cách thành thạo.
+                                </p>
+<div class="flex gap-3 text-sm text-gray-600 dark:text-gray-300">
+<div class="flex items-center gap-1 rounded-full bg-indigo-50 dark:bg-surface-dark border border-indigo-100 px-2 py-1">
+<span class="material-symbols-outlined text-[16px] text-indigo-500">menu_book</span>
+<span>2500 từ</span>
+</div>
+<div class="flex items-center gap-1 rounded-full bg-indigo-50 dark:bg-surface-dark border border-indigo-100 px-2 py-1">
+<span class="material-symbols-outlined text-[16px] text-indigo-500">stars</span>
+<span>Cao cấp</span>
+</div>
+</div>
+</div>
+</div>
+<div class="mt-4 w-full rounded-lg bg-brand-gradient p-3 text-center text-sm font-bold text-white opacity-0 group-hover:opacity-100 transition-all duration-300 shadow-md flex items-center justify-center gap-2">
+                            Xem chi tiết <span class="material-symbols-outlined text-[18px]">arrow_forward</span>
+</div>
+<div aria-hidden="true" class="mt-4 h-[44px] w-full"></div>
+</a>
+<a class="group relative flex flex-col justify-between overflow-hidden rounded-2xl bg-white dark:bg-surface-dark p-6 shadow-sm border border-border-light dark:border-border-dark hover:shadow-xl hover:-translate-y-1 transition-all duration-300" href="#hsk6">
+<div class="absolute top-0 right-0 w-24 h-24 bg-gradient-to-br from-indigo-600 to-blue-600 rounded-bl-[100px] -mr-8 -mt-8 opacity-20 group-hover:opacity-100 transition-opacity"></div>
+<div class="relative z-10">
+<div class="flex justify-between items-start mb-6">
+<h3 class="text-3xl font-extrabold text-gray-900 dark:text-white group-hover:text-primary transition-colors">HSK 6</h3>
+<span class="inline-flex items-center rounded-full bg-blue-100 px-3 py-1 text-xs font-medium text-blue-800 dark:bg-blue-900/30 dark:text-blue-200">
+                                    8-12 tháng
+                                </span>
+</div>
+<div class="mb-6">
+<span class="inline-block rounded-full border border-blue-200 bg-blue-50 px-3 py-1 text-sm font-semibold text-blue-600 mb-4 dark:bg-surface-dark dark:border-blue-900 dark:text-blue-400">
+                                    Cấp độ 6/6
+                                </span>
+<p class="text-text-secondary-light dark:text-text-secondary-dark text-sm mb-4">
+                                    Đỉnh cao ngôn ngữ. Hiểu sâu văn hóa, diễn đạt ý tưởng phức tạp như người bản xứ.
+                                </p>
+<div class="flex gap-3 text-sm text-gray-600 dark:text-gray-300">
+<div class="flex items-center gap-1 rounded-full bg-blue-50 dark:bg-surface-dark border border-blue-100 px-2 py-1">
+<span class="material-symbols-outlined text-[16px] text-blue-500">menu_book</span>
+<span>5000+ từ</span>
+</div>
+<div class="flex items-center gap-1 rounded-full bg-blue-50 dark:bg-surface-dark border border-blue-100 px-2 py-1">
+<span class="material-symbols-outlined text-[16px] text-blue-500">psychology</span>
+<span>Chuyên gia</span>
+</div>
+</div>
+</div>
+</div>
+<div class="mt-4 w-full rounded-lg bg-brand-gradient p-3 text-center text-sm font-bold text-white opacity-0 group-hover:opacity-100 transition-all duration-300 shadow-md flex items-center justify-center gap-2">
+                            Xem chi tiết <span class="material-symbols-outlined text-[18px]">arrow_forward</span>
+</div>
+<div aria-hidden="true" class="mt-4 h-[44px] w-full"></div>
+</a>
+</div>
+</div>
+</section>
+<div class="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8" id="courses">
+<div class="mb-10 flex flex-col gap-4 md:flex-row md:items-end md:justify-between border-b border-border-light dark:border-border-dark pb-6">
+<div class="max-w-3xl">
+<h2 class="text-3xl font-bold tracking-tight text-gray-900 dark:text-white sm:text-4xl mb-3">
+                        Khám phá khóa học <span class="text-transparent bg-clip-text bg-brand-gradient">Tiếng Trung</span>
+</h2>
+<p class="text-lg text-text-secondary-light dark:text-text-secondary-dark">
+                        Lựa chọn trình độ phù hợp với bạn để bắt đầu hành trình.
+                    </p>
+</div>
+<button class="flex lg:hidden items-center gap-2 rounded-lg border border-border-light dark:border-border-dark bg-surface-light dark:bg-surface-dark px-4 py-2 text-sm font-medium shadow-sm hover:bg-gray-50 dark:hover:bg-gray-800">
+<span class="material-symbols-outlined">filter_list</span>
+                    Bộ lọc
+                </button>
+</div>
+<div class="flex flex-col lg:flex-row gap-8">
+<aside class="hidden lg:block w-64 flex-shrink-0 space-y-6">
+<div class="flex flex-col gap-4 sticky top-24">
+<div class="p-4 rounded-xl bg-gray-50 dark:bg-surface-dark border border-border-light dark:border-border-dark">
+<h3 class="text-sm font-bold uppercase tracking-wider text-text-secondary-light dark:text-text-secondary-dark mb-4 flex items-center gap-2">
+<span class="material-symbols-outlined text-lg">tune</span>
+                                Bộ lọc tìm kiếm
+                            </h3>
+<div class="space-y-4">
+<div>
+<h4 class="text-sm font-semibold text-gray-900 dark:text-white mb-2">Trình độ HSK</h4>
+<div class="space-y-2 pl-1">
+<label class="flex items-center gap-3 cursor-pointer group">
+<div class="relative flex items-center">
+<input checked="" class="peer h-4 w-4 rounded border-gray-300 text-red-600 focus:ring-red-500" type="checkbox"/>
+</div>
+<span class="text-sm text-gray-900 dark:text-gray-100 group-hover:text-red-600 transition-colors">Tất cả</span>
+</label>
+<label class="flex items-center gap-3 cursor-pointer group">
+<input class="h-4 w-4 rounded border-gray-300 text-red-600 focus:ring-red-500" type="checkbox"/>
+<span class="text-sm text-text-secondary-light dark:text-text-secondary-dark group-hover:text-red-600 transition-colors">Sơ cấp (HSK 1-2)</span>
+</label>
+<label class="flex items-center gap-3 cursor-pointer group">
+<input class="h-4 w-4 rounded border-gray-300 text-red-600 focus:ring-red-500" type="checkbox"/>
+<span class="text-sm text-text-secondary-light dark:text-text-secondary-dark group-hover:text-red-600 transition-colors">Trung cấp (HSK 3-4)</span>
+</label>
+<label class="flex items-center gap-3 cursor-pointer group">
+<input class="h-4 w-4 rounded border-gray-300 text-red-600 focus:ring-red-500" type="checkbox"/>
+<span class="text-sm text-text-secondary-light dark:text-text-secondary-dark group-hover:text-red-600 transition-colors">Cao cấp (HSK 5-6)</span>
+</label>
+</div>
+</div>
+<div class="h-px bg-gray-200 dark:bg-gray-700"></div>
+<div>
+<h4 class="text-sm font-semibold text-gray-900 dark:text-white mb-2">Mục tiêu học</h4>
+<div class="space-y-2 pl-1">
+<label class="flex items-center gap-3 cursor-pointer group">
+<input class="h-4 w-4 rounded border-gray-300 text-red-600 focus:ring-red-500" type="checkbox"/>
+<span class="text-sm text-text-secondary-light dark:text-text-secondary-dark group-hover:text-red-600 transition-colors">Giao tiếp phản xạ</span>
+</label>
+<label class="flex items-center gap-3 cursor-pointer group">
+<input class="h-4 w-4 rounded border-gray-300 text-red-600 focus:ring-red-500" type="checkbox"/>
+<span class="text-sm text-text-secondary-light dark:text-text-secondary-dark group-hover:text-red-600 transition-colors">Luyện thi chứng chỉ</span>
+</label>
+<label class="flex items-center gap-3 cursor-pointer group">
+<input class="h-4 w-4 rounded border-gray-300 text-red-600 focus:ring-red-500" type="checkbox"/>
+<span class="text-sm text-text-secondary-light dark:text-text-secondary-dark group-hover:text-red-600 transition-colors">Tiếng Trung du học</span>
+</label>
+</div>
+</div>
+</div>
+</div>
+</div>
+</aside>
+<div class="flex-1">
+<div class="mb-6 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between bg-white dark:bg-surface-dark p-2 rounded-lg sm:bg-transparent sm:dark:bg-transparent sm:p-0">
+<div class="flex gap-2 overflow-x-auto pb-2 sm:pb-0 no-scrollbar items-center">
+<button class="whitespace-nowrap rounded-full bg-brand-gradient px-4 py-1.5 text-sm font-bold text-white shadow-sm ring-0">Nổi bật</button>
+<button class="whitespace-nowrap rounded-full bg-white dark:bg-surface-dark px-4 py-1.5 text-sm font-medium text-text-secondary-light dark:text-text-secondary-dark shadow-sm ring-1 ring-inset ring-border-light dark:ring-border-dark hover:bg-gray-50 dark:hover:bg-gray-800 hover:text-red-600 transition-colors">Mới nhất</button>
+<button class="whitespace-nowrap rounded-full bg-white dark:bg-surface-dark px-4 py-1.5 text-sm font-medium text-text-secondary-light dark:text-text-secondary-dark shadow-sm ring-1 ring-inset ring-border-light dark:ring-border-dark hover:bg-gray-50 dark:hover:bg-gray-800 hover:text-red-600 transition-colors">Khuyến mãi</button>
+</div>
+<div class="flex items-center gap-2 sm:ml-auto">
+<span class="text-sm text-text-secondary-light dark:text-text-secondary-dark whitespace-nowrap">Hiển thị:</span>
+<select class="block w-full rounded-md border-0 bg-transparent py-1.5 pl-3 pr-8 text-sm text-text-main-light dark:text-white ring-1 ring-inset ring-border-light dark:ring-border-dark focus:ring-2 focus:ring-red-500 sm:text-sm sm:leading-6 cursor-pointer">
+<option>6 khóa học</option>
+<option>12 khóa học</option>
+</select>
+</div>
+</div>
+<div class="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3">
+<article class="group flex flex-col overflow-hidden rounded-2xl border border-border-light dark:border-border-dark bg-surface-light dark:bg-surface-dark shadow-sm transition-all duration-300 hover:shadow-xl hover:-translate-y-1 hover:border-red-200 dark:hover:border-red-900">
+<div class="relative aspect-[4/3] w-full overflow-hidden bg-gray-200">
+<img alt="Chinese characters notebook" class="h-full w-full object-cover transition-transform duration-700 group-hover:scale-110" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCuzfI--U5wpAxuwxiQ17r4qt7M2fyjuhkqsbPEAV3GUgvXKUr84UEtJGh9UlWB0r9dIiiZMX1GMVYi0b4xe-LXbrYeA2cD33t1tTvntieAuoxUOK-0RvuX647hURjoYoWnmZ6Kpf59WuiHFOFpopKMJSvYfrk_bdyDXJKg7zrTA_tKBICkCskI9sKRLtXhM2xeezqRS_qfpvJ1dZf84NOmsQ1wjAyayVAI-2W4PuDRwzJ1K5MqAnCPwqOfonRG_9bDAnYeERK-Ata3"/>
+<div class="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+<div class="absolute left-3 top-3 rounded-full bg-white/95 px-3 py-1 text-xs font-bold text-red-600 backdrop-blur-sm shadow-sm dark:bg-black/80 dark:text-white border border-red-100">
+                                    Sơ cấp HSK 1
+                                </div>
+<button class="absolute right-3 top-3 rounded-full bg-white/20 p-2 text-white opacity-0 backdrop-blur-sm transition-opacity duration-300 group-hover:opacity-100 hover:bg-white/40">
+<span class="material-symbols-outlined text-[20px]">favorite</span>
+</button>
+</div>
+<div class="flex flex-1 flex-col p-5">
+<h3 class="mb-2 text-lg font-bold leading-snug text-gray-900 dark:text-white group-hover:text-red-600 transition-colors">
+<a class="line-clamp-2" href="#">Nhập Môn Tiếng Trung Cấp Tốc</a>
+</h3>
+<p class="mb-4 line-clamp-2 text-sm text-text-secondary-light dark:text-text-secondary-dark">
+                                    Làm quen với Pinyin, nét chữ Hán và các mẫu câu chào hỏi cơ bản nhất chỉ trong 2 tuần.
+                                </p>
+<div class="mb-4 flex items-center gap-4 text-xs font-medium text-text-secondary-light dark:text-text-secondary-dark bg-gray-50 dark:bg-gray-800/50 p-2 rounded-lg">
+<div class="flex items-center gap-1.5">
+<span class="material-symbols-outlined text-[16px] text-red-500">play_circle</span>
+<span>25 bài giảng</span>
+</div>
+<div class="flex items-center gap-1.5">
+<span class="material-symbols-outlined text-[16px] text-red-500">schedule</span>
+<span>15 giờ</span>
+</div>
+</div>
+<div class="mt-auto flex items-center justify-between pt-2">
+<div class="flex items-center gap-2">
+<img alt="Instructor avatar" class="size-8 rounded-full object-cover border border-gray-200" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBqcfsS21W2P5Q_2wNBQv_gZbFCLfHmAmCJlxDA2FfcPjCXI_F8ohRABYiQGaNtccS-TKFKgmAsW7NC7_5c5dkZcNeJx4eUOGHjbh3IhWa3vNgesLgawaJxemonhzMMktCBJV7igyNaVODdbuzaB7jVINQpdrpypBmyFub7nyK25MrGpRTCPLORQk6ZXWhlCTAHrrH5LU1aOWwa935a9hoMSXdx5sRt6ptf3OAzBX7j7dKvN6l4E-vCVtS29q1EcMs0cq75_ONsU5DD"/>
+<span class="text-xs font-bold text-text-main-light dark:text-white">Cô Lan Anh</span>
+</div>
+<div class="flex flex-col items-end">
+<span class="text-lg font-bold text-red-600">499.000đ</span>
+<span class="text-xs text-gray-400 line-through">800.000đ</span>
+</div>
+</div>
+</div>
+</article>
+<article class="group flex flex-col overflow-hidden rounded-2xl border border-border-light dark:border-border-dark bg-surface-light dark:bg-surface-dark shadow-sm transition-all duration-300 hover:shadow-xl hover:-translate-y-1 hover:border-red-200 dark:hover:border-red-900">
+<div class="relative aspect-[4/3] w-full overflow-hidden bg-gray-200">
+<img alt="HSK exam books" class="h-full w-full object-cover transition-transform duration-700 group-hover:scale-110" src="https://lh3.googleusercontent.com/aida-public/AB6AXuB0u7uwznI-Om7uAJap6TEaGJjTbmkpt4j7LjT1TsjvqJJ6fXpPDu5DyI-0HdNRKWEcxaKKra8MbEejTxWtJSmXXG-JAi3beJZsacbcwJT8oE4CweZfyJI8MCMg1GnDvkZtkBJ4fSKrfNeJUobY64GQ8V-NvtprbVxefGe-WsxVhL_9PRbxr7bydQCxjCzVGTF5KNNHKoB08d5ruZ-_xPM7SMmca7dIAwaksTxb4f6LW_nTynK3masxJDOnKpq0qIiQox0Hwk-4t8lm"/>
+<div class="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+<div class="absolute left-3 top-3 rounded-full bg-orange-100 px-3 py-1 text-xs font-bold text-orange-700 backdrop-blur-sm shadow-sm dark:bg-orange-900/80 dark:text-orange-100 border border-orange-200">
+                                    Luyện thi HSK 4
+                                </div>
+</div>
+<div class="flex flex-1 flex-col p-5">
+<h3 class="mb-2 text-lg font-bold leading-snug text-gray-900 dark:text-white group-hover:text-red-600 transition-colors">
+<a class="line-clamp-2" href="#">Luyện giải đề HSK 4 &amp; HSKK</a>
+</h3>
+<p class="mb-4 line-clamp-2 text-sm text-text-secondary-light dark:text-text-secondary-dark">
+                                    Chiến thuật làm bài đọc hiểu, viết câu và luyện nói HSKK trung cấp để đạt điểm cao.
+                                </p>
+<div class="mb-4 flex items-center gap-4 text-xs font-medium text-text-secondary-light dark:text-text-secondary-dark bg-gray-50 dark:bg-gray-800/50 p-2 rounded-lg">
+<div class="flex items-center gap-1.5">
+<span class="material-symbols-outlined text-[16px] text-red-500">play_circle</span>
+<span>40 bài giảng</span>
+</div>
+<div class="flex items-center gap-1.5">
+<span class="material-symbols-outlined text-[16px] text-red-500">schedule</span>
+<span>30 giờ</span>
+</div>
+</div>
+<div class="mt-auto flex items-center justify-between pt-2">
+<div class="flex items-center gap-2">
+<img alt="Instructor avatar" class="size-8 rounded-full object-cover border border-gray-200" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDm1rVdd86T5Wc5yxEP0wj6S0VmkXaV2jWEup_sdUh2dzUtNLnW_LAH442DAnN-FmhQqpEX2Zhm8CAGFlkHxyTwHKwqgirzQVCBbuxpelwn61tW8AHhf4vRjpfofgF5e7tA0zu0Fb7QUn-JkjenIQCQESM4JQihFvv_uCzo-9-f2-xtqk50ZihZzHdeKzRnI14vU-zBlSdvGYC_vu97HAsi67oO9GeEgxL8omBC2it2-aENiRucBakwpZ1NPBe9THh6T9wpLQrqfEWV"/>
+<span class="text-xs font-bold text-text-main-light dark:text-white">Thầy Vương</span>
+</div>
+<div class="flex flex-col items-end">
+<span class="text-lg font-bold text-red-600">1.299.000đ</span>
+</div>
+</div>
+</div>
+</article>
+<article class="group flex flex-col overflow-hidden rounded-2xl border border-border-light dark:border-border-dark bg-surface-light dark:bg-surface-dark shadow-sm transition-all duration-300 hover:shadow-xl hover:-translate-y-1 hover:border-red-200 dark:hover:border-red-900">
+<div class="relative aspect-[4/3] w-full overflow-hidden bg-gray-200">
+<img alt="Business meeting in Shanghai" class="h-full w-full object-cover transition-transform duration-700 group-hover:scale-110" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBYWaqHHvmiohiQvRRA3I7qLGMsnmUklsX0LbMfoPYnbfk52P2yjhBvxA1JufvY8RPtDPd3nWdrdkvUoMuFkfyeSbsh4-tdNrlhGj4L6nyIpZRNzlqzBr_d_zHz8ScRHEIr--TKcTGpipr7raHfcQSO8XBwVu6Q7bdifxi9yzbxSlbt3fq0-dL-YCDwkxMc4rIQQ3OFXgjKwbVH3vnBn2uXB8iPAWoGU9SlhuKu7UffzGPpq8JLkfdPzU48pmUTPp1qp3Anyme9oKkT"/>
+<div class="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+<div class="absolute left-3 top-3 rounded-full bg-blue-100 px-3 py-1 text-xs font-bold text-blue-700 backdrop-blur-sm shadow-sm dark:bg-blue-900/80 dark:text-blue-100 border border-blue-200">
+                                    Thương mại
+                                </div>
+</div>
+<div class="flex flex-1 flex-col p-5">
+<h3 class="mb-2 text-lg font-bold leading-snug text-gray-900 dark:text-white group-hover:text-red-600 transition-colors">
+<a class="line-clamp-2" href="#">Tiếng Trung Kinh Doanh</a>
+</h3>
+<p class="mb-4 line-clamp-2 text-sm text-text-secondary-light dark:text-text-secondary-dark">
+                                    Từ vựng và mẫu câu đàm phán, xuất nhập khẩu và giao tiếp công sở Trung Quốc.
+                                </p>
+<div class="mb-4 flex items-center gap-4 text-xs font-medium text-text-secondary-light dark:text-text-secondary-dark bg-gray-50 dark:bg-gray-800/50 p-2 rounded-lg">
+<div class="flex items-center gap-1.5">
+<span class="material-symbols-outlined text-[16px] text-red-500">play_circle</span>
+<span>20 bài giảng</span>
+</div>
+<div class="flex items-center gap-1.5">
+<span class="material-symbols-outlined text-[16px] text-red-500">schedule</span>
+<span>18 giờ</span>
+</div>
+</div>
+<div class="mt-auto flex items-center justify-between pt-2">
+<div class="flex items-center gap-2">
+<img alt="Instructor avatar" class="size-8 rounded-full object-cover border border-gray-200" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDbu8WMGglk88KU2Y8u2sF-ti-7iMS1NuaFx5hik4JYMyXFpu9hN09489yHDXdDpes2NvOykI0cX8k0hqagsT0tAqTl8aH-xjHIxW_DvdlPT5bGWvFChdxv7HhfqoMCinvxuLl5sVZS3_q8h08XqKzw3ibvE1OuRScgDIKz0FTylFRC4dDTRzROIcWnDWT6WqKXvhXmpxvSwwyC1AgzmQqYKlUG4yVNA4jyFLPX0_tOl9l9UFEAQeD8DivRRLuWvnXJSzdteZlfE0w6"/>
+<span class="text-xs font-bold text-text-main-light dark:text-white">Cô Ngọc</span>
+</div>
+<div class="flex flex-col items-end">
+<span class="text-lg font-bold text-red-600">899.000đ</span>
+</div>
+</div>
+</div>
+</article>
+<article class="group flex flex-col overflow-hidden rounded-2xl border border-border-light dark:border-border-dark bg-surface-light dark:bg-surface-dark shadow-sm transition-all duration-300 hover:shadow-xl hover:-translate-y-1 hover:border-red-200 dark:hover:border-red-900">
+<div class="relative aspect-[4/3] w-full overflow-hidden bg-gray-200">
+<img alt="Chinese tea ceremony" class="h-full w-full object-cover transition-transform duration-700 group-hover:scale-110" src="https://lh3.googleusercontent.com/aida-public/AB6AXuB99N6zoQhg0dHRK5an-xORUsFiDR3oEeu2S-oQiR_E6w83e7fTzVaX7lJU9wHYD1vJuBTqXaT8vJLv8ExuYqhJ1cQS9yhSUg1yPR_VdQQ6GPzQ9Hxp-8Q6gdwCJnr06eq4oW6wGdhw0HjZbTLs-ntZw3eBbX-WfGgneLMwO4JhHKu9ii-jx4w2XYj_td1H-ptghkL1FZrlHkYtbjoAhWgNBUDLyfEgXOejbZX40fyol_TOsCeVm6Wzm6XkavfEzYdw_2L_AcGSacCT"/>
+<div class="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+<div class="absolute left-3 top-3 rounded-full bg-green-100 px-3 py-1 text-xs font-bold text-green-700 backdrop-blur-sm shadow-sm dark:bg-green-900/80 dark:text-green-100 border border-green-200">
+                                    Văn hóa
+                                </div>
+</div>
+<div class="flex flex-1 flex-col p-5">
+<h3 class="mb-2 text-lg font-bold leading-snug text-gray-900 dark:text-white group-hover:text-red-600 transition-colors">
+<a class="line-clamp-2" href="#">Tiếng Trung qua Phim Ảnh</a>
+</h3>
+<p class="mb-4 line-clamp-2 text-sm text-text-secondary-light dark:text-text-secondary-dark">
+                                    Học tiếng Trung khẩu ngữ tự nhiên qua các bộ phim C-Drama nổi tiếng.
+                                </p>
+<div class="mb-4 flex items-center gap-4 text-xs font-medium text-text-secondary-light dark:text-text-secondary-dark bg-gray-50 dark:bg-gray-800/50 p-2 rounded-lg">
+<div class="flex items-center gap-1.5">
+<span class="material-symbols-outlined text-[16px] text-red-500">play_circle</span>
+<span>15 bài giảng</span>
+</div>
+<div class="flex items-center gap-1.5">
+<span class="material-symbols-outlined text-[16px] text-red-500">schedule</span>
+<span>10 giờ</span>
+</div>
+</div>
+<div class="mt-auto flex items-center justify-between pt-2">
+<div class="flex items-center gap-2">
+<img alt="Instructor avatar" class="size-8 rounded-full object-cover border border-gray-200" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBvIDz5fNeXeW0FM1NyAGORdic9dmlsIMXSJTiiomC54tDU5_nL6ty_VgB06W6uWRCHkhq4e5pIn8Q0oFSuQJyunR9p-3AMsSc_QWFRVgkBr2at0dyQQ1Xh2CWA041Ul9liFZlQwsy3J1s7FR1KBqoNcwGQa0-u1l7wxHxsq-iA_PNVNHpFbvLy5djvOEvl1ICXMrkK-yMETyQjVPO6Dl1Ej9h_w75_CleJc7biIXJFmgKQtJMcWr6DukbKvA4WSym7xD02Oq-8ORAN"/>
+<span class="text-xs font-bold text-text-main-light dark:text-white">Mei Ling</span>
+</div>
+<div class="flex flex-col items-end">
+<span class="text-lg font-bold text-red-600">399.000đ</span>
+</div>
+</div>
+</div>
+</article>
+<article class="group flex flex-col overflow-hidden rounded-2xl border border-border-light dark:border-border-dark bg-surface-light dark:bg-surface-dark shadow-sm transition-all duration-300 hover:shadow-xl hover:-translate-y-1 hover:border-red-200 dark:hover:border-red-900">
+<div class="relative aspect-[4/3] w-full overflow-hidden bg-gray-200">
+<img alt="Advanced translation study" class="h-full w-full object-cover transition-transform duration-700 group-hover:scale-110" src="https://lh3.googleusercontent.com/aida-public/AB6AXuC-IXJ0Q5cdkDWC_CTFKRKPv97ycFLzaIDCiuAn2O-OseJ9oHz9wfyOTO8Y6rJJEa9VS9sqFEvfzCyBma7Oaasl8d4PcoTKxBLtsbfFkYOH8Ui8WCrvzzDPD4IvZDdfD-ukp99EdZyWfvmxKQ0_CtX2EEp_1dnRgyLUmzi1o7QDM5vf8XDN6uaI4BychjQEQAvLpLa3f6MDz2DtLT5FrDMAP2whBnpB9hPNIxD2RXnUnStEQjsAMTWFNCqrwCSTzPAf7KE8ue-e8BV5"/>
+<div class="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+<div class="absolute left-3 top-3 rounded-full bg-purple-100 px-3 py-1 text-xs font-bold text-purple-700 backdrop-blur-sm shadow-sm dark:bg-purple-900/80 dark:text-purple-100 border border-purple-200">
+                                    Cao cấp HSK 6
+                                </div>
+</div>
+<div class="flex flex-1 flex-col p-5">
+<h3 class="mb-2 text-lg font-bold leading-snug text-gray-900 dark:text-white group-hover:text-red-600 transition-colors">
+<a class="line-clamp-2" href="#">Biên Phiên Dịch Trung - Việt</a>
+</h3>
+<p class="mb-4 line-clamp-2 text-sm text-text-secondary-light dark:text-text-secondary-dark">
+                                    Kỹ năng dịch thuật chuyên sâu dành cho người học trình độ cao cấp muốn theo nghề.
+                                </p>
+<div class="mb-4 flex items-center gap-4 text-xs font-medium text-text-secondary-light dark:text-text-secondary-dark bg-gray-50 dark:bg-gray-800/50 p-2 rounded-lg">
+<div class="flex items-center gap-1.5">
+<span class="material-symbols-outlined text-[16px] text-red-500">play_circle</span>
+<span>50 bài giảng</span>
+</div>
+<div class="flex items-center gap-1.5">
+<span class="material-symbols-outlined text-[16px] text-red-500">schedule</span>
+<span>40 giờ</span>
+</div>
+</div>
+<div class="mt-auto flex items-center justify-between pt-2">
+<div class="flex items-center gap-2">
+<img alt="Instructor avatar" class="size-8 rounded-full object-cover border border-gray-200" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCz9bBKbLaCG-xhgic0sbhIxQXBY8Hijsdu6ECiQYF8QCn8h0b5nQae98r9ddTnWVqVfTb2jDbKjtYNr-bjCQKfRArwFGu_gPGyTuUiT-6bV8LCuBaFN7m1mLvh3uZz8WX165gmgxnqS151R7MMU8Hz2oymZDfFMYcdBFJa87hdwgbxYGQUNeFs2RBT0wbo9LSUSkrVc__V9lo-JrIpg-un4O7OPnsPl87FaF1Mj-AhXh6E5EXipQlhI-_zWRDmbVHIxz_-8flDLLZ4"/>
+<span class="text-xs font-bold text-text-main-light dark:text-white">Thầy Minh</span>
+</div>
+<div class="flex flex-col items-end">
+<span class="text-lg font-bold text-red-600">2.499.000đ</span>
+</div>
+</div>
+</div>
+</article>
+<article class="group flex flex-col overflow-hidden rounded-2xl border border-border-light dark:border-border-dark bg-surface-light dark:bg-surface-dark shadow-sm transition-all duration-300 hover:shadow-xl hover:-translate-y-1 hover:border-red-200 dark:hover:border-red-900">
+<div class="relative aspect-[4/3] w-full overflow-hidden bg-gray-200">
+<img alt="Group study" class="h-full w-full object-cover transition-transform duration-700 group-hover:scale-110" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDmwyQMah-FM-3ydl4vQ8stLMZajHRKFFlmY2GceHvY6RpDg-P2sW8WDVwnP7mMQOPYtTASqfIap2JCQJlQ3qrgGKyG6m-cxUYEHyFonuMaw32q84CjbOcEDKTdBfo1z70XvRhqYcv0nVXyitVvD_4UPYPd9hpo1po5wjpVLoj8I4HrNih522V479ZAeHaGQO2xJEL8J1cAKGphj1eUJRSUhObkeAPau6raNjgX8ZptD1-NqhsJFmgvlug_RjqfllrgEFco_KER2Xg2"/>
+<div class="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+<div class="absolute left-3 top-3 rounded-full bg-white/95 px-3 py-1 text-xs font-bold text-red-600 backdrop-blur-sm shadow-sm dark:bg-black/80 dark:text-white border border-red-100">
+                                    Sơ cấp HSK 2
+                                </div>
+</div>
+<div class="flex flex-1 flex-col p-5">
+<h3 class="mb-2 text-lg font-bold leading-snug text-gray-900 dark:text-white group-hover:text-red-600 transition-colors">
+<a class="line-clamp-2" href="#">Ngữ pháp HSK 2 Tổng hợp</a>
+</h3>
+<p class="mb-4 line-clamp-2 text-sm text-text-secondary-light dark:text-text-secondary-dark">
+                                    Hệ thống lại toàn bộ ngữ pháp sơ cấp HSK 2, bước đệm quan trọng để lên trung cấp.
+                                </p>
+<div class="mb-4 flex items-center gap-4 text-xs font-medium text-text-secondary-light dark:text-text-secondary-dark bg-gray-50 dark:bg-gray-800/50 p-2 rounded-lg">
+<div class="flex items-center gap-1.5">
+<span class="material-symbols-outlined text-[16px] text-red-500">play_circle</span>
+<span>30 bài giảng</span>
+</div>
+<div class="flex items-center gap-1.5">
+<span class="material-symbols-outlined text-[16px] text-red-500">schedule</span>
+<span>25 giờ</span>
+</div>
+</div>
+<div class="mt-auto flex items-center justify-between pt-2">
+<div class="flex items-center gap-2">
+<img alt="Instructor avatar" class="size-8 rounded-full object-cover border border-gray-200" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBzgdMMEqns3MS2vTatUc528YFZccBg1YParl-YrTZyLgd8T6K7-I8Y8PKQLbpirjMmjIfvpH5-tTXBvxOG4duhKOhPTvWekXEeU9Rz6nqCsj0ePqN2O1KOySKS_bXXZKiPJ8g30756tQcZTMYtn96_4h7FpCZkyairyHrdnuurCquN4Uoz9SzhrUpbGTzDmcglRjeQH6wrX0VA3CBHVLArEH76FZwi47RNAGjv8h1l7q_kLU8jmZyuiJ4Xf87tJedbSjW2icHpBrH-"/>
+<span class="text-xs font-bold text-text-main-light dark:text-white">Cô Hà</span>
+</div>
+<div class="flex flex-col items-end">
+<span class="text-lg font-bold text-red-600">699.000đ</span>
+</div>
+</div>
+</div>
+</article>
+</div>
+<div class="mt-12 flex items-center justify-center pt-4">
+<button class="flex items-center gap-2 rounded-full border border-gray-300 bg-white px-6 py-2.5 text-sm font-semibold text-gray-700 shadow-sm hover:bg-gray-50 hover:text-red-600 transition-all dark:bg-surface-dark dark:border-gray-600 dark:text-white dark:hover:bg-gray-700">
+                            Xem tất cả khóa học
+                            <span class="material-symbols-outlined text-[18px]">arrow_forward</span>
+</button>
+</div>
+</div>
+</div>
+<div class="mt-16 rounded-3xl bg-gradient-to-br from-red-50 to-orange-50 dark:from-red-900/10 dark:to-orange-900/10 p-8 md:p-12 border border-red-100 dark:border-red-900/30 overflow-hidden relative">
+<div class="absolute top-0 right-0 -mt-10 -mr-10 w-64 h-64 bg-yellow-200 rounded-full mix-blend-multiply filter blur-3xl opacity-30 animate-blob"></div>
+<div class="absolute bottom-0 left-0 -mb-10 -ml-10 w-64 h-64 bg-red-200 rounded-full mix-blend-multiply filter blur-3xl opacity-30 animate-blob animation-delay-2000"></div>
+<div class="relative z-10">
+<h2 class="text-2xl md:text-3xl font-bold text-center text-gray-900 dark:text-white mb-10">Tại sao 10,000+ học viên chọn HSK Master?</h2>
+<div class="grid md:grid-cols-3 gap-8">
+<div class="bg-white/80 backdrop-blur dark:bg-surface-dark/80 p-6 rounded-2xl shadow-sm border border-white/50 dark:border-white/10 hover:shadow-md transition-shadow">
+<div class="flex items-center gap-4 mb-4">
+<div class="size-12 rounded-xl bg-gradient-to-br from-red-500 to-red-600 flex items-center justify-center text-white shadow-lg shadow-red-500/30">
+<span class="material-symbols-outlined text-2xl">verified</span>
+</div>
+<h3 class="font-bold text-lg text-gray-900 dark:text-white">Lộ trình HSK Chuẩn</h3>
+</div>
+<p class="text-sm text-text-secondary-light dark:text-text-secondary-dark leading-relaxed">
+                                Chương trình học bám sát giáo trình HSK Chuẩn (HSK Standard Course), cam kết đầu ra bằng văn bản.
+                            </p>
+</div>
+<div class="bg-white/80 backdrop-blur dark:bg-surface-dark/80 p-6 rounded-2xl shadow-sm border border-white/50 dark:border-white/10 hover:shadow-md transition-shadow">
+<div class="flex items-center gap-4 mb-4">
+<div class="size-12 rounded-xl bg-gradient-to-br from-yellow-400 to-orange-500 flex items-center justify-center text-white shadow-lg shadow-yellow-500/30">
+<span class="material-symbols-outlined text-2xl">school</span>
+</div>
+<h3 class="font-bold text-lg text-gray-900 dark:text-white">Giảng viên bản xứ</h3>
+</div>
+<p class="text-sm text-text-secondary-light dark:text-text-secondary-dark leading-relaxed">
+                                100% giáo viên có bằng Thạc sĩ Giáo dục Hán ngữ Quốc tế, phát âm chuẩn Bắc Kinh.
+                            </p>
+</div>
+<div class="bg-white/80 backdrop-blur dark:bg-surface-dark/80 p-6 rounded-2xl shadow-sm border border-white/50 dark:border-white/10 hover:shadow-md transition-shadow">
+<div class="flex items-center gap-4 mb-4">
+<div class="size-12 rounded-xl bg-gradient-to-br from-blue-500 to-indigo-600 flex items-center justify-center text-white shadow-lg shadow-blue-500/30">
+<span class="material-symbols-outlined text-2xl">devices</span>
+</div>
+<h3 class="font-bold text-lg text-gray-900 dark:text-white">Học tập thông minh</h3>
+</div>
+<p class="text-sm text-text-secondary-light dark:text-text-secondary-dark leading-relaxed">
+                                Công nghệ AI check lỗi phát âm và tập viết chữ Hán, học mọi lúc mọi nơi trên mọi thiết bị.
+                            </p>
+</div>
+</div>
+</div>
+</div>
+</div>
+</main>
+<footer class="bg-gradient-to-r from-yellow-500 to-red-600 text-white mt-auto">
+<div class="mx-auto max-w-7xl px-4 py-12 sm:px-6 lg:px-8">
+<div class="grid grid-cols-1 md:grid-cols-4 gap-8">
+<div class="md:col-span-1">
+<a class="flex items-center gap-2 mb-4" href="#">
+<div class="size-8 rounded bg-white p-1.5 flex items-center justify-center text-red-600 shadow-md">
+<span class="material-symbols-outlined text-[20px]">translate</span>
+</div>
+<span class="text-xl font-bold tracking-tight text-white">HSK Master</span>
+</a>
+<p class="text-sm text-white/90 mb-6 leading-relaxed">
+                        Nền tảng học tiếng Trung trực tuyến hàng đầu, giúp bạn chinh phục HSK từ con số 0 đến thành thạo.
+                    </p>
+<div class="flex gap-3">
+<a class="p-2 bg-white/10 rounded-full hover:bg-white/20 transition-colors" href="#">
+<svg class="w-5 h-5 fill-current" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"></path></svg>
+</a>
+<a class="p-2 bg-white/10 rounded-full hover:bg-white/20 transition-colors" href="#">
+<svg class="w-5 h-5 fill-current" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"></path></svg>
+</a>
+<a class="p-2 bg-white/10 rounded-full hover:bg-white/20 transition-colors" href="#">
+<svg class="w-5 h-5 fill-current" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"></path></svg>
+</a>
+</div>
+</div>
+<div>
+<h3 class="text-sm font-bold uppercase tracking-wider text-white/90 mb-4">Khóa học</h3>
+<ul class="space-y-3">
+<li><a class="text-sm text-white/80 hover:text-white transition-colors" href="#">Sơ cấp (HSK 1-2)</a></li>
+<li><a class="text-sm text-white/80 hover:text-white transition-colors" href="#">Trung cấp (HSK 3-4)</a></li>
+<li><a class="text-sm text-white/80 hover:text-white transition-colors" href="#">Cao cấp (HSK 5-6)</a></li>
+<li><a class="text-sm text-white/80 hover:text-white transition-colors" href="#">Luyện thi HSKK</a></li>
+</ul>
+</div>
+<div>
+<h3 class="text-sm font-bold uppercase tracking-wider text-white/90 mb-4">Liên hệ</h3>
+<ul class="space-y-4">
+<li class="flex items-start gap-3">
+<span class="material-symbols-outlined text-white/90">call</span>
+<span class="text-sm font-bold text-white">0965322136</span>
+</li>
+<li class="flex items-start gap-3">
+<span class="material-symbols-outlined text-white/90">mail</span>
+<span class="text-sm text-white break-all">tranhongngoc19122001@gmail.com</span>
+</li>
+<li class="flex items-start gap-3">
+<span class="material-symbols-outlined text-white/90">location_on</span>
+<span class="text-sm text-white/80">Hà Nội, Việt Nam</span>
+</li>
+</ul>
+</div>
+<div>
+<h3 class="text-sm font-bold uppercase tracking-wider text-white/90 mb-4">Đăng ký nhận tin</h3>
+<p class="text-sm text-white/80 mb-4">Nhận tài liệu và ưu đãi mới nhất.</p>
+<form class="flex flex-col gap-2">
+<input class="w-full min-w-0 rounded-lg border-0 bg-white/20 px-3 py-2 text-sm text-white placeholder-white/60 focus:ring-2 focus:ring-white/50 focus:outline-none" placeholder="Email của bạn" type="email"/>
+<button class="w-full rounded-lg bg-white px-3 py-2 text-sm font-bold text-red-600 shadow-sm hover:bg-gray-100 transition-colors" type="submit">Gửi ngay</button>
+</form>
+</div>
+</div>
+<div class="mt-12 border-t border-white/20 pt-8 flex flex-col md:flex-row justify-between items-center gap-4">
+<p class="text-sm text-white/80">© 2024 HSK Master. All rights reserved.</p>
+<div class="flex gap-4">
+<img alt="Payment methods" class="h-6 brightness-0 invert opacity-80" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCTArrXoDsEZ_y_3pdXyca4WOeMn4A4IcntdG5YqXwbK02lgLJCdg9yGH5EWdiKZlV1LdkrZzh5ubuXtxY9Ix8u8-8_4ngt-AY0hSLu1Fl_0AVEvynEC80rVMD92Nr6sJ2rXwB_Liha_-gJWxynVCZwpHHSkxfQ_rizNwmEzF3j_dFhcRPmftRBpRJY5YVUZ8-xp31cVUKUb3vtxvk-5T93ise8PRbLF6UmP3hnoSS-YNxRWRKzUMfJEgGhixLEWr85F68H4QSBAxaA"/>
+<img alt="Payment methods" class="h-6 brightness-0 invert opacity-80" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCEI23Xiq_ps08aCkezPdj0mK1xjXFyMR-ru6oDxrQOfNXkJVboiPWa7tKcfuYZVhddHUMMh-qwjn6o-BZ9jyv_OLpT7ondKLzIqL38gf99tQexc5niJaRLSbgXvpIQfKXYX6GAQlmuPfgagJ7YIO0ytMWXrdLddgIMSz329kSHqclgtMTRrBTTPyqvKp2nWKKMygvnX1VWtFxpcwozfGV_m0rWzFuAc3zA_PSyKaHg7er-l77GCpmbf3nqYuQbuVgJhRlyAilI2i7I"/>
+</div>
+</div>
+</div>
+</footer>
+<div class="fixed bottom-8 right-8 z-50 flex flex-col gap-4">
+<a class="flex items-center justify-center w-12 h-12 bg-blue-600 rounded-full shadow-lg hover:scale-110 transition-transform relative group" href="https://zalo.me/0965322136" target="_blank" title="Chat Zalo">
+<span class="font-bold text-white text-[10px]">Zalo</span>
+<span class="absolute right-full mr-3 bg-gray-900 text-white text-xs px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap pointer-events-none">Chat Zalo</span>
+</a>
+<a class="flex items-center justify-center w-12 h-12 bg-gradient-to-tr from-yellow-400 via-red-500 to-purple-500 rounded-full shadow-lg hover:scale-110 transition-transform relative group" href="#" target="_blank" title="Instagram">
+<svg class="w-6 h-6 fill-white" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"></path></svg>
+<span class="absolute right-full mr-3 bg-gray-900 text-white text-xs px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap pointer-events-none">Instagram</span>
+</a>
+<button class="flex items-center justify-center w-12 h-12 bg-white text-red-600 rounded-full shadow-lg hover:bg-gray-50 transition-colors border border-gray-100" onclick="window.scrollTo({top: 0, behavior: 'smooth'})" title="Lên đầu trang">
+<span class="material-symbols-outlined">arrow_upward</span>
+</button>
+</div>
+</div>
+
+</body></html>
