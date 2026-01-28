@@ -32,7 +32,7 @@ GOOGLE_CLIENT_SECRET="your-google-client-secret"
 3. Enable "Google+ API"
 4. Go to **Credentials** → **Create Credentials** → **OAuth client ID**
 5. Application type: **Web application**
-6. Authorized redirect URIs: 
+6. Authorized redirect URIs:
    - `http://localhost:3000/api/auth/callback/google`
    - `https://yourdomain.com/api/auth/callback/google` (production)
 7. Copy **Client ID** and **Client Secret** to `.env`

@@ -31,9 +31,9 @@ export async function POST(request: NextRequest) {
     })
 
     return NextResponse.json(
-      { 
+      {
         message: "Đăng ký thành công",
-        userId: user.id 
+        userId: user.id
       },
       { status: 201 }
     )

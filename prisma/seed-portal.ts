@@ -34,7 +34,7 @@ export async function seedPortal() {
 
   // ============= Portal Users =============
   console.log("👥 Creating portal users...")
-  
+
   // Hash password for all users
   const hashedPassword = await bcrypt.hash("password123", 10)
 
@@ -234,15 +234,15 @@ export async function seedPortal() {
       { classId: classes[0].id, studentId: studentProfiles[1].id, status: "ENROLLED" },
       { classId: classes[0].id, studentId: studentProfiles[2].id, status: "ENROLLED" },
       { classId: classes[0].id, studentId: studentProfiles[3].id, status: "ENROLLED" },
-      
+
       // HSK2 class - 3 students
       { classId: classes[1].id, studentId: studentProfiles[1].id, status: "ENROLLED" },
       { classId: classes[1].id, studentId: studentProfiles[4].id, status: "ENROLLED" },
-      
+
       // HSK3 class - 2 students
       { classId: classes[2].id, studentId: studentProfiles[2].id, status: "ENROLLED" },
       { classId: classes[2].id, studentId: studentProfiles[3].id, status: "ENROLLED" },
-      
+
       // Giao tiếp - 3 students
       { classId: classes[3].id, studentId: studentProfiles[0].id, status: "ENROLLED" },
       { classId: classes[3].id, studentId: studentProfiles[3].id, status: "ENROLLED" },
@@ -256,8 +256,8 @@ export async function seedPortal() {
   const schedules = await prisma.portalSchedule.createManyAndReturn({
     data: [
       // HSK1 - Thứ 2, 4, 6
-      { 
-        classId: classes[0].id, 
+      {
+        classId: classes[0].id,
         teacherId: teacherProfiles[0].id,
         title: "Bài 1: Chào hỏi cơ bản",
         startTime: new Date("2026-02-02T08:00:00"),
@@ -265,8 +265,8 @@ export async function seedPortal() {
         location: "Phòng 301",
         status: "SCHEDULED"
       },
-      { 
-        classId: classes[0].id, 
+      {
+        classId: classes[0].id,
         teacherId: teacherProfiles[0].id,
         title: "Bài 2: Giới thiệu bản thân",
         startTime: new Date("2026-02-04T08:00:00"),
@@ -274,8 +274,8 @@ export async function seedPortal() {
         location: "Phòng 301",
         status: "SCHEDULED"
       },
-      { 
-        classId: classes[0].id, 
+      {
+        classId: classes[0].id,
         teacherId: teacherProfiles[0].id,
         title: "Bài 3: Số đếm 1-10",
         startTime: new Date("2026-02-06T08:00:00"),
@@ -283,10 +283,10 @@ export async function seedPortal() {
         location: "Phòng 301",
         status: "SCHEDULED"
       },
-      
+
       // HSK2 - Thứ 3, 5, 7
-      { 
-        classId: classes[1].id, 
+      {
+        classId: classes[1].id,
         teacherId: teacherProfiles[0].id,
         title: "Bài 1: Hỏi đường",
         startTime: new Date("2026-02-03T18:30:00"),
@@ -294,8 +294,8 @@ export async function seedPortal() {
         location: "Phòng 302",
         status: "SCHEDULED"
       },
-      { 
-        classId: classes[1].id, 
+      {
+        classId: classes[1].id,
         teacherId: teacherProfiles[0].id,
         title: "Bài 2: Mua sắm",
         startTime: new Date("2026-02-05T18:30:00"),
@@ -303,10 +303,10 @@ export async function seedPortal() {
         location: "Phòng 302",
         status: "SCHEDULED"
       },
-      
+
       // HSK3 - Thứ 2, 4
-      { 
-        classId: classes[2].id, 
+      {
+        classId: classes[2].id,
         teacherId: teacherProfiles[1].id,
         title: "Bài 1: Văn hóa Trung Quốc",
         startTime: new Date("2026-02-02T14:00:00"),
@@ -314,8 +314,8 @@ export async function seedPortal() {
         location: "Phòng 303",
         status: "SCHEDULED"
       },
-      { 
-        classId: classes[2].id, 
+      {
+        classId: classes[2].id,
         teacherId: teacherProfiles[1].id,
         title: "Bài 2: Du lịch",
         startTime: new Date("2026-02-04T14:00:00"),
@@ -323,10 +323,10 @@ export async function seedPortal() {
         location: "Phòng 303",
         status: "SCHEDULED"
       },
-      
+
       // Giao tiếp - Chủ nhật
-      { 
-        classId: classes[3].id, 
+      {
+        classId: classes[3].id,
         teacherId: teacherProfiles[1].id,
         title: "Chủ đề 1: Giao tiếp hàng ngày",
         startTime: new Date("2026-02-07T09:00:00"),
@@ -467,7 +467,7 @@ export async function seedPortal() {
         timeSpent: 180,
         notes: "Viết được 20 chữ Hán cơ bản",
       },
-      
+
       // Student 2 - HSK2 level
       {
         studentId: studentProfiles[1].id,

@@ -184,28 +184,28 @@ model PortalUser {
   phone         String?
   image         String?
   role          PortalRole @default(STUDENT)
-  
+
   // Google OAuth
   googleId      String?   @unique
   emailVerified DateTime?
-  
+
   // Password (for email/password auth)
   hashedPassword String?
-  
+
   // Status
   isActive      Boolean   @default(true)
   lastLogin     DateTime?
-  
+
   // Timestamps
   createdAt     DateTime  @default(now())
   updatedAt     DateTime  @updatedAt
-  
+
   // Relations
   accounts      PortalAccount[]
   sessions      PortalSession[]
   studentProfile PortalStudent?
   teacherProfile PortalTeacher?
-  
+
   @@index([email])
   @@index([googleId])
   @@map("portal_users")
@@ -231,9 +231,9 @@ model PortalAccount {
   scope             String?
   id_token          String?
   session_state     String?
-  
+
   user PortalUser @relation(fields: [userId], references: [id], onDelete: Cascade)
-  
+
   @@unique([provider, providerAccountId])
   @@map("portal_accounts")
 }
@@ -245,7 +245,7 @@ model PortalSession {
   userId       String
   expires      DateTime
   user         PortalUser @relation(fields: [userId], references: [id], onDelete: Cascade)
-  
+
   @@map("portal_sessions")
 }
 
@@ -253,7 +253,7 @@ model PortalVerificationToken {
   identifier String
   token      String   @unique
   expires    DateTime
-  
+
   @@unique([identifier, token])
   @@map("portal_verification_tokens")
 }
@@ -266,22 +266,22 @@ model PortalStudent {
   id              String   @id @default(uuid())
   userId          String   @unique
   studentCode     String   @unique // Auto-generated: STU-XXXXXX
-  
+
   // Profile
   bio             String?
   avatar          String?
   dateOfBirth     DateTime?
   address         String?
-  
+
   // Learning Progress
   totalXP         Int      @default(0)
   currentStreak   Int      @default(0)
   longestStreak   Int      @default(0)
-  
+
   // Timestamps
   createdAt       DateTime @default(now())
   updatedAt       DateTime @updatedAt
-  
+
   // Relations
   user            PortalUser @relation(fields: [userId], references: [id], onDelete: Cascade)
   classEnrollments PortalClassEnrollment[]
@@ -290,7 +290,7 @@ model PortalStudent {
   learningProgress PortalLearningProgress[]
   bookmarks       PortalBookmark[]
   quizAttempts    PortalQuizAttempt[]
-  
+
   @@index([studentCode])
   @@map("portal_students")
 }
@@ -299,22 +299,22 @@ model PortalTeacher {
   id           String   @id @default(uuid())
   userId       String   @unique
   teacherCode  String   @unique // Auto-generated: TEA-XXXXXX
-  
+
   // Profile
   bio          String?
   avatar       String?
   specialization String?
   experience   Int?     // Years of experience
-  
+
   // Timestamps
   createdAt    DateTime @default(now())
   updatedAt    DateTime @updatedAt
-  
+
   // Relations
   user         PortalUser @relation(fields: [userId], references: [id], onDelete: Cascade)
   classes      PortalClass[]
   assignments  PortalAssignment[]
-  
+
   @@index([teacherCode])
   @@map("portal_teachers")
 }
@@ -328,37 +328,37 @@ model PortalClass {
   name            String
   code            String   @unique // HSK1-MON-001
   description     String?
-  
+
   // Class Info
   hskLevel        Int      // 1-6
   capacity        Int      @default(20)
   startDate       DateTime
   endDate         DateTime?
-  
+
   // Schedule
   schedule        String?  // JSON: [{day: 'Monday', time: '08:00-09:30'}]
-  
+
   // Google Calendar Integration
   googleCalendarId String?
   syncToGoogle    Boolean  @default(false)
-  
+
   // Status
   isActive        Boolean  @default(true)
-  
+
   // Teacher
   teacherId       String
-  
+
   // Timestamps
   createdAt       DateTime @default(now())
   updatedAt       DateTime @updatedAt
-  
+
   // Relations
   teacher         PortalTeacher @relation(fields: [teacherId], references: [id])
   enrollments     PortalClassEnrollment[]
   schedules       PortalSchedule[]
   assignments     PortalAssignment[]
   attendances     PortalAttendance[]
-  
+
   @@index([code])
   @@index([teacherId])
   @@map("portal_classes")
@@ -368,16 +368,16 @@ model PortalClassEnrollment {
   id          String   @id @default(uuid())
   classId     String
   studentId   String
-  
+
   // Status
   status      EnrollmentStatus @default(ACTIVE)
   enrolledAt  DateTime @default(now())
   completedAt DateTime?
-  
+
   // Relations
   class       PortalClass @relation(fields: [classId], references: [id], onDelete: Cascade)
   student     PortalStudent @relation(fields: [studentId], references: [id], onDelete: Cascade)
-  
+
   @@unique([classId, studentId])
   @@map("portal_class_enrollments")
 }
@@ -396,33 +396,33 @@ enum EnrollmentStatus {
 model PortalSchedule {
   id              String   @id @default(uuid())
   classId         String
-  
+
   // Schedule Info
   title           String
   description     String?
   date            DateTime
   startTime       String   // HH:mm format
   endTime         String   // HH:mm format
-  
+
   // Lesson Content
   lessonTopic     String?
   materials       String?  // JSON array of URLs
-  
+
   // Google Calendar
   googleEventId   String?
-  
+
   // Status
   isCancelled     Boolean  @default(false)
   cancelReason    String?
-  
+
   // Timestamps
   createdAt       DateTime @default(now())
   updatedAt       DateTime @updatedAt
-  
+
   // Relations
   class           PortalClass @relation(fields: [classId], references: [id], onDelete: Cascade)
   attendances     PortalAttendance[]
-  
+
   @@index([classId])
   @@index([date])
   @@map("portal_schedules")
@@ -433,24 +433,24 @@ model PortalAttendance {
   scheduleId  String
   studentId   String
   classId     String
-  
+
   // Attendance
   status      AttendanceStatus @default(ABSENT)
   note        String?          // Reason if absent
-  
+
   // Check-in
   checkInTime DateTime?
   checkInBy   String?          // Teacher/Student ID
-  
+
   // Timestamps
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
-  
+
   // Relations
   schedule    PortalSchedule @relation(fields: [scheduleId], references: [id], onDelete: Cascade)
   student     PortalStudent @relation(fields: [studentId], references: [id], onDelete: Cascade)
   class       PortalClass @relation(fields: [classId], references: [id], onDelete: Cascade)
-  
+
   @@unique([scheduleId, studentId])
   @@index([classId])
   @@index([studentId])
@@ -472,39 +472,39 @@ model PortalAssignment {
   id              String   @id @default(uuid())
   classId         String
   teacherId       String
-  
+
   // Assignment Info
   title           String
   description     String?
   type            AssignmentType
-  
+
   // Skills (for HSK learning)
   skillTypes      String   // JSON: ['LISTENING', 'READING', 'WRITING', 'SPEAKING']
-  
+
   // Content
   content         String?  // JSON: questions, exercises, etc.
   attachments     String?  // JSON: file URLs
-  
+
   // Grading
   totalPoints     Int      @default(100)
   passingScore    Int      @default(60)
-  
+
   // Dates
   dueDate         DateTime
   availableFrom   DateTime @default(now())
-  
+
   // Status
   isPublished     Boolean  @default(false)
-  
+
   // Timestamps
   createdAt       DateTime @default(now())
   updatedAt       DateTime @updatedAt
-  
+
   // Relations
   class           PortalClass @relation(fields: [classId], references: [id], onDelete: Cascade)
   teacher         PortalTeacher @relation(fields: [teacherId], references: [id])
   submissions     PortalAssignmentSubmission[]
-  
+
   @@index([classId])
   @@index([teacherId])
   @@map("portal_assignments")
@@ -522,29 +522,29 @@ model PortalAssignmentSubmission {
   id              String   @id @default(uuid())
   assignmentId    String
   studentId       String
-  
+
   // Submission
   content         String?  // JSON: answers
   attachments     String?  // JSON: file URLs
   submittedAt     DateTime @default(now())
-  
+
   // Grading
   score           Int?
   feedback        String?
   gradedAt        DateTime?
   gradedBy        String?  // Teacher ID
-  
+
   // Status
   status          SubmissionStatus @default(SUBMITTED)
-  
+
   // Timestamps
   createdAt       DateTime @default(now())
   updatedAt       DateTime @updatedAt
-  
+
   // Relations
   assignment      PortalAssignment @relation(fields: [assignmentId], references: [id], onDelete: Cascade)
   student         PortalStudent @relation(fields: [studentId], references: [id], onDelete: Cascade)
-  
+
   @@unique([assignmentId, studentId])
   @@index([studentId])
   @@map("portal_assignment_submissions")
@@ -564,25 +564,25 @@ enum SubmissionStatus {
 model PortalLearningProgress {
   id          String   @id @default(uuid())
   studentId   String
-  
+
   // Skill Progress
   skillType   SkillType
   level       Int      @default(1) // Current level
   xp          Int      @default(0) // Experience points
   targetXP    Int      @default(500) // XP needed for next level
-  
+
   // Stats
   totalPracticeTime Int @default(0) // Minutes
   completedExercises Int @default(0)
   accuracy    Float   @default(0.0) // Percentage
-  
+
   // Timestamps
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
-  
+
   // Relations
   student     PortalStudent @relation(fields: [studentId], references: [id], onDelete: Cascade)
-  
+
   @@unique([studentId, skillType])
   @@map("portal_learning_progress")
 }
@@ -596,7 +596,7 @@ enum SkillType {
 
 model PortalVocabulary {
   id          String   @id @default(uuid())
-  
+
   // Vocabulary
   word        String
   pinyin      String
@@ -604,23 +604,23 @@ model PortalVocabulary {
   example     String?
   audioUrl    String?
   imageUrl    String?
-  
+
   // HSK Level
   hskLevel    Int      // 1-6
-  
+
   // Category
   category    String?  // e.g., "Numbers", "Colors", "Food"
-  
+
   // Difficulty
   difficulty  Int      @default(1) // 1-5
-  
+
   // Timestamps
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
-  
+
   // Relations
   bookmarks   PortalBookmark[]
-  
+
   @@index([hskLevel])
   @@map("portal_vocabularies")
 }
@@ -629,54 +629,54 @@ model PortalBookmark {
   id          String   @id @default(uuid())
   studentId   String
   vocabularyId String
-  
+
   // Notes
   note        String?
   tags        String?  // JSON array
-  
+
   // Learning
   masteryLevel Int     @default(0) // 0-5
   reviewCount Int     @default(0)
   lastReviewedAt DateTime?
-  
+
   // Timestamps
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
-  
+
   // Relations
   student     PortalStudent @relation(fields: [studentId], references: [id], onDelete: Cascade)
   vocabulary  PortalVocabulary @relation(fields: [vocabularyId], references: [id], onDelete: Cascade)
-  
+
   @@unique([studentId, vocabularyId])
   @@map("portal_bookmarks")
 }
 
 model PortalQuiz {
   id          String   @id @default(uuid())
-  
+
   // Quiz Info
   title       String
   description String?
   hskLevel    Int      // 1-6
   skillType   SkillType
-  
+
   // Content
   questions   String   // JSON: array of questions
-  
+
   // Settings
   timeLimit   Int?     // Minutes
   passingScore Int     @default(70)
-  
+
   // Status
   isPublished Boolean  @default(false)
-  
+
   // Timestamps
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
-  
+
   // Relations
   attempts    PortalQuizAttempt[]
-  
+
   @@index([hskLevel])
   @@map("portal_quizzes")
 }
@@ -685,24 +685,24 @@ model PortalQuizAttempt {
   id          String   @id @default(uuid())
   quizId      String
   studentId   String
-  
+
   // Attempt
   answers     String   // JSON: array of answers
   score       Int
   timeSpent   Int      // Seconds
-  
+
   // Results
   correctCount Int
   totalQuestions Int
-  
+
   // Timestamps
   startedAt   DateTime @default(now())
   completedAt DateTime?
-  
+
   // Relations
   quiz        PortalQuiz @relation(fields: [quizId], references: [id], onDelete: Cascade)
   student     PortalStudent @relation(fields: [studentId], references: [id], onDelete: Cascade)
-  
+
   @@index([studentId])
   @@index([quizId])
   @@map("portal_quiz_attempts")
@@ -725,7 +725,7 @@ model PortalQuizAttempt {
   - Google OAuth provider
   - Credentials provider (email/password)
   - Session management
-  
+
 - **UI Components** (Optional):
   - **shadcn/ui** for complex components:
     - Table (react-table)
@@ -734,25 +734,25 @@ model PortalQuizAttempt {
     - Dialog/Sheet
     - Tabs
     - Data Table
-  
+
 - **Google Calendar API**:
   - `googleapis` package
   - OAuth2 for calendar access
-  
+
 - **Form Validation**:
   - `zod` (already might be using)
   - `react-hook-form`
-  
+
 - **Charts** (for dashboards):
   - `recharts` (lightweight)
   - or `chart.js`
-  
+
 - **Date/Time**:
   - `date-fns` (lighter than moment.js)
-  
+
 - **File Upload**:
   - `uploadthing` or `react-dropzone`
-  
+
 - **Rich Text** (for assignments):
   - `tiptap` or `quill`
 
@@ -765,18 +765,18 @@ model PortalQuizAttempt {
    - Create `(landing)` and `(portal)` route groups
    - Move existing pages to `(landing)`
    - Create portal layouts
-   
+
 2. **Database Migration**
    - Add portal schema
    - Run migrations
    - Update seed file
-   
+
 3. **NextAuth Setup**
    - Configure Google OAuth
    - Setup credentials provider
    - Create auth pages (login, register)
    - Setup middleware for route protection
-   
+
 4. **User Registration Flow**
    - Registration form (name, email, phone)
    - Email verification (optional)
@@ -787,12 +787,12 @@ model PortalQuizAttempt {
    - Sidebar navigation
    - Header with user menu
    - Responsive design
-   
+
 2. **Role-based Routing**
    - Teacher dashboard
    - Student dashboard
    - Permission guards
-   
+
 3. **User Profile**
    - View profile
    - Edit profile
@@ -803,23 +803,23 @@ model PortalQuizAttempt {
    - Create/edit/delete classes
    - View class list
    - Class details
-   
+
 2. **Student Management**
    - View students in class
    - Add/remove students
    - View student progress
-   
+
 3. **Assignment Management**
    - Create assignments
    - View submissions
    - Grade assignments
    - Feedback
-   
+
 4. **Schedule Management**
    - Create schedules
    - Calendar view
    - Google Calendar sync (optional)
-   
+
 5. **Attendance**
    - Mark attendance
    - View attendance reports
@@ -830,22 +830,22 @@ model PortalQuizAttempt {
    - Upcoming classes
    - Pending assignments
    - Progress overview
-   
+
 2. **Assignments**
    - View assignments
    - Submit assignments
    - View grades & feedback
-   
+
 3. **Attendance**
    - View own attendance
    - View classmates attendance (optional)
-   
+
 4. **Learning Module**
    - Vocabulary practice
    - Flashcards
    - Quiz
    - Listening/Speaking/Reading/Writing exercises
-   
+
 5. **Bookmarks**
    - Save vocabulary
    - Review bookmarks
@@ -855,12 +855,12 @@ model PortalQuizAttempt {
    - Optimize queries
    - Add caching
    - Image optimization
-   
+
 2. **UX/UI**
    - Loading states
    - Error handling
    - Animations
-   
+
 3. **Testing**
    - Unit tests
    - Integration tests

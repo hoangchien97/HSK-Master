@@ -10,7 +10,7 @@ export const authConfig = {
     authorized({ auth, request: { nextUrl } }) {
       const isLoggedIn = !!auth?.user
       const isOnPortal = nextUrl.pathname.startsWith("/portal")
-      const isOnPortalAuth = nextUrl.pathname.startsWith("/portal/login") || 
+      const isOnPortalAuth = nextUrl.pathname.startsWith("/portal/login") ||
                              nextUrl.pathname.startsWith("/portal/register") ||
                              nextUrl.pathname.startsWith("/portal/error")
 

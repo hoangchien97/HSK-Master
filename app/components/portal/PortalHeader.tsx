@@ -11,12 +11,12 @@ interface PortalHeaderProps {
   onMenuClick: () => void
 }
 
-export default function PortalHeader({ 
-  userName, 
-  userEmail, 
-  userRole, 
+export default function PortalHeader({
+  userName,
+  userEmail,
+  userRole,
   userImage,
-  onMenuClick 
+  onMenuClick
 }: PortalHeaderProps) {
   const [showUserMenu, setShowUserMenu] = useState(false)
 
@@ -85,8 +85,8 @@ export default function PortalHeader({
             {/* Dropdown menu */}
             {showUserMenu && (
               <>
-                <div 
-                  className="fixed inset-0 z-10" 
+                <div
+                  className="fixed inset-0 z-10"
                   onClick={() => setShowUserMenu(false)}
                 />
                 <div className="absolute right-0 mt-2 w-56 bg-white rounded-lg shadow-lg border border-gray-200 py-2 z-20">

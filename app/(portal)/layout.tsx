@@ -17,7 +17,7 @@ export default function PortalLayout({
   const [sidebarOpen, setSidebarOpen] = useState(false)
 
   // Auth pages don't need redirect logic or portal layout
-  const isAuthPage = pathname?.startsWith("/portal/login") || 
+  const isAuthPage = pathname?.startsWith("/portal/login") ||
                      pathname?.startsWith("/portal/register") ||
                      pathname?.startsWith("/portal/error")
 
