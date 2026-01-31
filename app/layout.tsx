@@ -8,6 +8,7 @@ import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { generateOrganizationSchema, generateWebsiteSchema } from './lib/structured-data';
 import { SessionProvider } from "next-auth/react";
+import { Suspense } from "react";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -177,7 +178,9 @@ export default function RootLayout({
             showAtBottom={false}
           />
           <TooltipPrimitive.Provider delayDuration={200} skipDelayDuration={100}>
-            <WebVitals />
+            <Suspense fallback={null}>
+              <WebVitals />
+            </Suspense>
             {children}
           </TooltipPrimitive.Provider>
           <ToastContainer

@@ -1,5 +1,18 @@
 import { Suspense } from "react"
-import AuthErrorContent from "./AuthErrorContent"
+import PortalAuthErrorContent from "./PortalAuthErrorContent"
+
+// Force dynamic rendering to handle searchParams
+export const dynamic = "force-dynamic"
+
+export default function PortalAuthErrorPage() {
+  return (
+    <div className="w-full max-w-md space-y-6">
+      <Suspense fallback={<ErrorSkeleton />}>
+        <PortalAuthErrorContent />
+      </Suspense>
+    </div>
+  )
+}
 
 function ErrorSkeleton() {
   return (
@@ -14,18 +27,6 @@ function ErrorSkeleton() {
       <div className="space-y-3">
         <div className="h-12 bg-gray-200 rounded-xl"></div>
         <div className="h-12 bg-gray-200 rounded-xl"></div>
-      </div>
-    </div>
-  )
-}
-
-export default function AuthErrorPage() {
-  return (
-    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-50 to-indigo-100 px-4">
-      <div className="max-w-md w-full bg-white rounded-2xl shadow-xl p-8 space-y-6 text-center">
-        <Suspense fallback={<ErrorSkeleton />}>
-          <AuthErrorContent />
-        </Suspense>
       </div>
     </div>
   )

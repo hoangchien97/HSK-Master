@@ -19,8 +19,8 @@ export { default as ReviewList } from './ReviewList';
 export { default as ReviewListClient } from './ReviewListClient';
 export { default as ReviewItem } from './ReviewItem';
 export { default as CountUp } from './CountUp';
-export { CoursesSection } from './CoursesSection';
-export { CoursesSectionClient } from './CoursesSectionClient';
+export { default as CoursesSection } from './CoursesSection';
+export { default as CoursesSectionClient } from './CoursesSectionClient';
 
 // Re-export types
 export type { HSKLevel } from './HSKLevelCard';

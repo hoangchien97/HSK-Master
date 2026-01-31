@@ -159,38 +159,32 @@ export default function CoursesSectionClient({ courses }: CoursesSectionClientPr
                     )}
 
                     {/* Stats */}
-                    {(course.students || course.rating) && (
+                    {course.enrollmentCount > 0 && (
                       <div className="flex items-center gap-4 text-sm text-gray-600 dark:text-gray-400 mb-4">
-                        {course.students && (
-                          <div className="flex items-center gap-1">
-                            <span className="material-symbols-outlined text-[16px] text-red-500">
-                              group
-                            </span>
-                            <span>{course.students}</span>
-                          </div>
-                        )}
-                        {course.rating && (
-                          <div className="flex items-center gap-1">
-                            <span className="material-symbols-outlined text-[16px] text-yellow-500">
-                              star
-                            </span>
-                            <span>{course.rating}</span>
-                          </div>
-                        )}
+                        <div className="flex items-center gap-1">
+                          <span className="material-symbols-outlined text-[16px] text-red-500">
+                            group
+                          </span>
+                          <span>{course.enrollmentCount} học viên</span>
+                        </div>
                       </div>
                     )}
 
-                    {/* Price */}
-                    {course.price && (
-                      <div className="mt-auto flex items-center gap-2">
-                        <span className="text-xl font-bold text-red-600">{course.price}</span>
-                        {course.originalPrice && (
-                          <span className="text-sm text-gray-400 line-through">
-                            {course.originalPrice}
-                          </span>
-                        )}
+                    {/* Course Info - Vocabulary & Grammar count */}
+                    <div className="mt-auto flex items-center gap-4 text-sm text-gray-600 dark:text-gray-400">
+                      <div className="flex items-center gap-1">
+                        <span className="material-symbols-outlined text-[16px] text-indigo-500">
+                          book
+                        </span>
+                        <span>{course.vocabularyCount} từ</span>
                       </div>
-                    )}
+                      <div className="flex items-center gap-1">
+                        <span className="material-symbols-outlined text-[16px] text-purple-500">
+                          school
+                        </span>
+                        <span>{course.lessonCount} bài</span>
+                      </div>
+                    </div>
                   </div>
                 </Link>
               ))}
