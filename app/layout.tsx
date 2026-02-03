@@ -1,13 +1,14 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
-import { WebVitals } from "./components/shared";
+import { WebVitals, ScrollToTop, ContactBubbles } from "./components/shared";
 import * as TooltipPrimitive from '@radix-ui/react-tooltip';
 import NextTopLoader from 'nextjs-toploader';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { generateOrganizationSchema, generateWebsiteSchema } from './lib/structured-data';
 import { SessionProvider } from "next-auth/react";
+import { Suspense } from "react";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -177,21 +178,25 @@ export default function RootLayout({
             showAtBottom={false}
           />
           <TooltipPrimitive.Provider delayDuration={200} skipDelayDuration={100}>
-            <WebVitals />
+            <Suspense fallback={null}>
+              <WebVitals />
+            </Suspense>
             {children}
+            <ToastContainer
+              position="top-right"
+              autoClose={3000}
+              hideProgressBar={false}
+              newestOnTop={false}
+              closeOnClick
+              rtl={false}
+              pauseOnFocusLoss
+              draggable
+              pauseOnHover
+              theme="colored"
+            />
+            <ScrollToTop />
+            <ContactBubbles />
           </TooltipPrimitive.Provider>
-          <ToastContainer
-            position="top-right"
-            autoClose={3000}
-            hideProgressBar={false}
-            newestOnTop={false}
-            closeOnClick
-            rtl={false}
-            pauseOnFocusLoss
-            draggable
-            pauseOnHover
-            theme="colored"
-          />
         </SessionProvider>
       </body>
     </html>

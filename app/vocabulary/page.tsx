@@ -75,11 +75,6 @@ export default async function VocabularyPage({
                           {v.word}
                         </p>
                       </Tooltip>
-                      {v.hskLevel && (
-                        <Badge variant="outline" size="sm">
-                          HSK {v.hskLevel}
-                        </Badge>
-                      )}
                     </div>
                     <p className="text-sm text-primary-600 dark:text-primary-400 font-medium mb-3">
                       {v.pinyin}

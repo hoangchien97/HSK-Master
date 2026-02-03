@@ -52,7 +52,7 @@ export default function ScrollToTop() {
             damping: 20
           }}
           onClick={scrollToTop}
-          className="fixed hover:cursor-pointer bottom-6 right-6 z-50 flex h-12 w-12 items-center justify-center rounded-full bg-gradient-to-br from-yellow-400 via-orange-500 to-red-600 text-white shadow-lg hover:shadow-2xl hover:shadow-orange-500/50 transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-orange-400 focus:ring-offset-2"
+          className="fixed hover:cursor-pointer bottom-4 sm:bottom-6 right-4 sm:right-6 z-50 flex h-12 w-12 items-center justify-center rounded-full bg-gradient-to-br from-yellow-400 via-orange-500 to-red-600 text-white shadow-lg hover:shadow-2xl hover:shadow-orange-500/50 transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-orange-400 focus:ring-offset-2"
           aria-label="Scroll to top"
           title="Lên đầu trang"
         >
