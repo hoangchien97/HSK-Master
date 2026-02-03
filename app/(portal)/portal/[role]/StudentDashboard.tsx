@@ -103,9 +103,7 @@ async function getStudentDashboardData(email: string) {
   }
 }
 
-export default async function StudentDashboard() {
-  const session = await auth()
-
+export default async function StudentDashboard({ session }: { session: { user: { name?: string | null; email?: string | null } } }) {
   if (!session?.user?.email) {
     redirect("/portal/login")
   }

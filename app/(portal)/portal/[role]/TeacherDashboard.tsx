@@ -1,9 +1,6 @@
-import { auth } from "@/auth"
 import Link from "next/link"
 
-export default async function TeacherDashboard() {
-  const session = await auth()
-
+export default async function TeacherDashboard({ session }: { session: { user: { name?: string | null } } }) {
   return (
     <div className="space-y-6">
       <div>
