@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
-import { WebVitals } from "./components/shared";
+import { WebVitals, ScrollToTop, ContactBubbles } from "./components/shared";
 import * as TooltipPrimitive from '@radix-ui/react-tooltip';
 import NextTopLoader from 'nextjs-toploader';
 import { ToastContainer } from 'react-toastify';
@@ -182,19 +182,21 @@ export default function RootLayout({
               <WebVitals />
             </Suspense>
             {children}
+            <ToastContainer
+              position="top-right"
+              autoClose={3000}
+              hideProgressBar={false}
+              newestOnTop={false}
+              closeOnClick
+              rtl={false}
+              pauseOnFocusLoss
+              draggable
+              pauseOnHover
+              theme="colored"
+            />
+            <ScrollToTop />
+            <ContactBubbles />
           </TooltipPrimitive.Provider>
-          <ToastContainer
-            position="top-right"
-            autoClose={3000}
-            hideProgressBar={false}
-            newestOnTop={false}
-            closeOnClick
-            rtl={false}
-            pauseOnFocusLoss
-            draggable
-            pauseOnHover
-            theme="colored"
-          />
         </SessionProvider>
       </body>
     </html>

@@ -10,8 +10,6 @@ export default function LandingLayout({
       <Header />
       <main className="flex-1">{children}</main>
       <Footer />
-      <ScrollToTop />
-      <ContactBubbles />
     </>
   )
 }
