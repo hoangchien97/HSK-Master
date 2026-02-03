@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
-import { WebVitals, ScrollToTop, ContactBubbles } from "./components/shared";
+import { WebVitals } from "./components/shared";
 import * as TooltipPrimitive from '@radix-ui/react-tooltip';
 import NextTopLoader from 'nextjs-toploader';
 import { ToastContainer } from 'react-toastify';
@@ -194,8 +194,6 @@ export default function RootLayout({
               pauseOnHover
               theme="colored"
             />
-            <ScrollToTop />
-            <ContactBubbles />
           </TooltipPrimitive.Provider>
         </SessionProvider>
       </body>
