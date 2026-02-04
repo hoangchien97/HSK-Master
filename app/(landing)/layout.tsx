@@ -1,4 +1,4 @@
-import { Header, Footer, ScrollToTop, ContactBubbles } from "../components/shared";
+import { Header, Footer, ScrollToTop, ContactBubbles } from "../components/landing/shared";
 
 export default function LandingLayout({
   children,
@@ -10,6 +10,8 @@ export default function LandingLayout({
       <Header />
       <main className="flex-1">{children}</main>
       <Footer />
+      <ScrollToTop />
+      <ContactBubbles />
     </>
   )
 }

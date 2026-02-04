@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import Button from "@/app/components/shared/Button";
+import Button from "@/app/components/landing/shared/Button";
 
 type Lesson = {
   id: string;

@@ -1,5 +1,5 @@
 import HSKLevelCard, { type HSKLevel } from './HSKLevelCard';
-import SectionHeader from '../shared/SectionHeader';
+import SectionHeader from '@/app/components/landing/shared/SectionHeader';
 import { getHSKLevels } from '@/app/services';
 
 export default async function HSKLevelsSection() {

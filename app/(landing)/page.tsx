@@ -5,8 +5,8 @@ import {
   GallerySection,
   CTASection,
   ReviewsSection,
-} from "../components/home";
-import { AnimatedSection } from "../components/shared/AnimatedSection";
+} from "@/app/components/landing";
+import { AnimatedSection } from "../components/landing/shared/AnimatedSection";
 import { getPageMetadata } from "../services/metadata.service";
 import type { Metadata } from "next";
 

@@ -1,5 +1,5 @@
 import { X, Pause, Play, ZoomOut, ZoomIn, RotateCw, Minimize, Maximize, Download } from "lucide-react";
-import Button from "../../shared/Button";
+import Button from "@/app/components/landing/shared/Button";
 import { ZOOM_MIN, ZOOM_MAX } from "./types";
 import { useResponsive } from "@/app/hooks/useResponsive";
 

@@ -6,8 +6,8 @@ import {
   TeachingPhilosophy,
   WhyChooseUs,
   Environment,
-} from "../../components/about";
-import { AnimatedSection } from "../../components/shared/AnimatedSection";
+} from "@/app/components/landing/about";
+import { AnimatedSection } from "@/app/components/landing/shared/AnimatedSection";
 
 export const revalidate = 3600;
 

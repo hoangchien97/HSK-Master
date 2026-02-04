@@ -2,8 +2,8 @@
 
 import { useState, useTransition, useEffect } from "react";
 import { motion } from "framer-motion";
-import { CourseCard, CourseFilter } from "../../components/courses";
-import { Select, Input, Pagination } from "../../components/shared";
+import { CourseCard, CourseFilter } from "@/app/components/landing/courses";
+import { Select, Input, Pagination } from "@/app/components/landing/shared";
 import { useRouter, useSearchParams } from "next/navigation";
 import { getCoursesAction } from "./actions";
 

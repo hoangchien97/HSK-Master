@@ -2,8 +2,8 @@
 
 import { useState } from 'react';
 import { motion } from 'framer-motion';
-import { Button, Input, Select, Checkbox, Radio, Switch, Pagination, Tooltip } from "../components/shared";
-import LoadingSpinner from '../components/shared/LoadingSpinner';
+import { Button, Input, Select, Checkbox, Radio, Switch, Pagination, Tooltip } from "../components/landing/shared";
+import LoadingSpinner from '../components/landing/shared/LoadingSpinner';
 import {
   Palette,
   Type,

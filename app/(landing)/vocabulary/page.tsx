@@ -1,5 +1,5 @@
 import { prisma } from "@/lib/prisma";
-import { Breadcrumb, Input, Tooltip, Badge } from "../../components/shared";
+import { Breadcrumb, Input, Tooltip, Badge } from "@/app/components/landing/shared";
 
 export const metadata = {
   title: "Từ vựng tiếng Trung | HSK Master",

@@ -1,6 +1,6 @@
 "use client";
 
-import { Input, Select, Textarea, Button } from "../shared";
+import { Input, Select, Textarea, Button } from "@/app/components/landing/shared";
 import { User, Phone, Mail, Send } from "lucide-react";
 
 interface ContactFormProps {

@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { Tooltip } from "@/app/components/shared";
+import { Tooltip } from "@/app/components/landing/shared";
 import {
   Sparkles,
   TrendingUp,

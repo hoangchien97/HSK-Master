@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 import Link from 'next/link';
-import Button from '../shared/Button';
+import Button from '@/app/components/landing/shared/Button';
 import type { Course } from '@/app/services';
 
 interface CoursesSectionClientProps {
@@ -192,8 +192,8 @@ export default function CoursesSectionClient({ courses }: CoursesSectionClientPr
 
             {/* Load More Button */}
             <div className="mt-10 text-center">
-              <Button 
-                variant="secondary" 
+              <Button
+                variant="secondary"
                 size="md"
                 icon={<span className="material-symbols-outlined text-[20px]">arrow_forward</span>}
               >

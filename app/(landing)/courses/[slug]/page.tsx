@@ -1,8 +1,8 @@
 import { prisma } from "@/lib/prisma";
 import { notFound } from "next/navigation";
-import Button from "@/app/components/shared/Button";
-import { Breadcrumb } from "@/app/components/shared";
-import { AnimatedSection } from "@/app/components/shared/AnimatedSection";
+import Button from "@/app/components/landing/shared/Button";
+import { Breadcrumb } from "@/app/components/landing/shared";
+import { AnimatedSection } from "@/app/components/landing/shared/AnimatedSection";
 import LessonList from "./LessonList";
 import { CourseStatsGrid, CourseResourceCards } from "./CourseClient";
 import { generateCourseSchema, generateBreadcrumbSchema } from "@/app/lib/structured-data";

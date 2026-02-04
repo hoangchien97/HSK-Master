@@ -2,7 +2,7 @@
 import { useState } from "react";
 import ReviewForm from "./ReviewForm";
 import ReviewList from "./ReviewList";
-import { SectionHeader } from "../shared";
+import { SectionHeader } from "@/app/components/landing/shared";
 
 interface Review {
   id: string;
