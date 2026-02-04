@@ -7,7 +7,11 @@ import { useForm } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { z } from "zod"
 import bcrypt from "bcryptjs"
-import { Eye, EyeOff, User, Mail, Lock, AlertCircle } from "lucide-react"
+import { Eye, EyeOff, User, Mail, Lock } from "lucide-react"
+import { Button } from "@/app/components/portal/ui/button"
+import { Input } from "@/app/components/portal/ui/input"
+import { Label } from "@/app/components/portal/ui/label"
+import { Alert } from "@/app/components/portal/ui/alert"
 
 // Validation schema
 const registerSchema = z.object({
@@ -65,7 +69,7 @@ export default function RegisterFormClient() {
 
       // Redirect to portal login
       router.push("/portal/login?registered=true")
-    } catch (err) {
+    } catch {
       setError("Có lỗi xảy ra. Vui lòng thử lại.")
       setLoading(false)
     }
@@ -75,78 +79,68 @@ export default function RegisterFormClient() {
     <>
       {/* Error Message */}
       {error && (
-        <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-xl text-sm flex items-center gap-2">
-          <AlertCircle className="w-5 h-5 flex-shrink-0" />
-          <span>{error}</span>
-        </div>
+        <Alert variant="error" title="Lỗi đăng ký">
+          {error}
+        </Alert>
       )}
 
       {/* Register Form */}
       <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
-        <div>
-          <label htmlFor="name" className="block text-sm font-medium text-gray-700 mb-1">
-            Họ và tên
-          </label>
+        <div className="space-y-2">
+          <Label htmlFor="name">Họ và tên</Label>
           <div className="relative">
             <div className="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none text-gray-400">
               <User className="w-5 h-5" />
             </div>
-            <input
+            <Input
               {...register("name")}
               id="name"
               type="text"
               autoComplete="name"
-              className={`w-full pl-10 pr-4 py-3 border rounded-xl focus:ring-2 focus:ring-red-500 focus:border-transparent transition ${
-                errors.name ? "border-red-300 bg-red-50" : "border-gray-300"
-              }`}
+              hasError={!!errors.name}
+              className={`pl-10 ${errors.name ? "border-red-300 bg-red-50" : ""}`}
               placeholder="Nguyễn Văn A"
             />
           </div>
           {errors.name && (
-            <p className="mt-1 text-sm text-red-600">{errors.name.message}</p>
+            <p className="text-sm text-red-600">{errors.name.message}</p>
           )}
         </div>
 
-        <div>
-          <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-1">
-            Email
-          </label>
+        <div className="space-y-2">
+          <Label htmlFor="email">Email</Label>
           <div className="relative">
             <div className="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none text-gray-400">
               <Mail className="w-5 h-5" />
             </div>
-            <input
+            <Input
               {...register("email")}
               id="email"
               type="email"
               autoComplete="email"
-              className={`w-full pl-10 pr-4 py-3 border rounded-xl focus:ring-2 focus:ring-red-500 focus:border-transparent transition ${
-                errors.email ? "border-red-300 bg-red-50" : "border-gray-300"
-              }`}
+              hasError={!!errors.email}
+              className={`pl-10 ${errors.email ? "border-red-300 bg-red-50" : ""}`}
               placeholder="email@example.com"
             />
           </div>
           {errors.email && (
-            <p className="mt-1 text-sm text-red-600">{errors.email.message}</p>
+            <p className="text-sm text-red-600">{errors.email.message}</p>
           )}
         </div>
 
-        <div>
-          <label htmlFor="password" className="block text-sm font-medium text-gray-700 mb-1">
-            Mật khẩu
-          </label>
+        <div className="space-y-2">
+          <Label htmlFor="password">Mật khẩu</Label>
           <div className="relative">
             <div className="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none text-gray-400">
               <Lock className="w-5 h-5" />
             </div>
-            <input
+            <Input
               {...register("password")}
               id="password"
               type={showPassword ? "text" : "password"}
               autoComplete="new-password"
-              className={`w-full pl-10 pr-12 py-3 border rounded-xl focus:ring-2 focus:ring-red-500 focus:border-transparent transition ${
-                errors.password ? "border-red-300 bg-red-50" : "border-gray-300"
-              }`}
+              hasError={!!errors.password}
+              className={`pl-10 pr-12 ${errors.password ? "border-red-300 bg-red-50" : ""}`}
               placeholder="••••••••"
             />
             <button
@@ -158,26 +152,23 @@ export default function RegisterFormClient() {
             </button>
           </div>
           {errors.password && (
-            <p className="mt-1 text-sm text-red-600">{errors.password.message}</p>
+            <p className="text-sm text-red-600">{errors.password.message}</p>
           )}
         </div>
 
-        <div>
-          <label htmlFor="confirmPassword" className="block text-sm font-medium text-gray-700 mb-1">
-            Xác nhận mật khẩu
-          </label>
+        <div className="space-y-2">
+          <Label htmlFor="confirmPassword">Xác nhận mật khẩu</Label>
           <div className="relative">
             <div className="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none text-gray-400">
               <Lock className="w-5 h-5" />
             </div>
-            <input
+            <Input
               {...register("confirmPassword")}
               id="confirmPassword"
               type={showConfirmPassword ? "text" : "password"}
               autoComplete="new-password"
-              className={`w-full pl-10 pr-12 py-3 border rounded-xl focus:ring-2 focus:ring-red-500 focus:border-transparent transition ${
-                errors.confirmPassword ? "border-red-300 bg-red-50" : "border-gray-300"
-              }`}
+              hasError={!!errors.confirmPassword}
+              className={`pl-10 pr-12 ${errors.confirmPassword ? "border-red-300 bg-red-50" : ""}`}
               placeholder="••••••••"
             />
             <button
@@ -189,14 +180,14 @@ export default function RegisterFormClient() {
             </button>
           </div>
           {errors.confirmPassword && (
-            <p className="mt-1 text-sm text-red-600">{errors.confirmPassword.message}</p>
+            <p className="text-sm text-red-600">{errors.confirmPassword.message}</p>
           )}
         </div>
 
-        <button
+        <Button
           type="submit"
           disabled={loading}
-          className="w-full bg-red-600 text-white py-3 px-4 rounded-xl hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500 font-medium transition shadow-lg shadow-red-200 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
+          className="w-full h-12 bg-red-600 hover:bg-red-700 shadow-lg shadow-red-200"
         >
           {loading ? (
             <>
@@ -213,7 +204,7 @@ export default function RegisterFormClient() {
           ) : (
             "Đăng ký"
           )}
-        </button>
+        </Button>
       </form>
 
       {/* Login Link */}

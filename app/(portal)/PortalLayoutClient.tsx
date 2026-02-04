@@ -1,8 +1,8 @@
 "use client"
 
 import { useState } from "react"
-import PortalSidebar from "@/app/components/portal/PortalSidebar"
-import PortalHeader from "@/app/components/portal/PortalHeader"
+import PortalSidebar from "@/app/components/portal/PortalSidebarNew"
+import PortalHeader from "@/app/components/portal/PortalHeaderNew"
 
 interface User {
   name: string

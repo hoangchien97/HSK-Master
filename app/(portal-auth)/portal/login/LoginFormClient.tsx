@@ -7,7 +7,11 @@ import Link from "next/link"
 import { useForm } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { z } from "zod"
-import { Eye, EyeOff, Mail, Lock, AlertCircle, CheckCircle } from "lucide-react"
+import { Eye, EyeOff, Mail, Lock } from "lucide-react"
+import { Button } from "@/app/components/portal/ui/button"
+import { Input } from "@/app/components/portal/ui/input"
+import { Label } from "@/app/components/portal/ui/label"
+import { Alert } from "@/app/components/portal/ui/alert"
 
 // Validation schema
 const loginSchema = z.object({
@@ -21,7 +25,7 @@ export default function LoginFormClient() {
   const router = useRouter()
   const searchParams = useSearchParams()
   const registered = searchParams.get("registered")
-  
+
   const [showPassword, setShowPassword] = useState(false)
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState("")
@@ -54,7 +58,7 @@ export default function LoginFormClient() {
       // Success - redirect to portal
       router.push("/portal")
       router.refresh()
-    } catch (err) {
+    } catch {
       setError("Có lỗi xảy ra. Vui lòng thử lại.")
       setLoading(false)
     }
@@ -69,26 +73,25 @@ export default function LoginFormClient() {
     <>
       {/* Success Message */}
       {registered && (
-        <div className="bg-green-50 border border-green-200 text-green-700 px-4 py-3 rounded-xl text-sm flex items-center gap-2">
-          <CheckCircle className="w-5 h-5 flex-shrink-0" />
-          <span>Đăng ký thành công! Vui lòng đăng nhập.</span>
-        </div>
+        <Alert variant="success" title="Đăng ký thành công!">
+          Vui lòng đăng nhập để tiếp tục.
+        </Alert>
       )}
 
       {/* Error Message */}
       {error && (
-        <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-xl text-sm flex items-center gap-2">
-          <AlertCircle className="w-5 h-5 flex-shrink-0" />
-          <span>{error}</span>
-        </div>
+        <Alert variant="error" title="Lỗi đăng nhập">
+          {error}
+        </Alert>
       )}
 
       {/* Google Sign In */}
-      <button
+      <Button
         type="button"
+        variant="outline"
         onClick={handleGoogleSignIn}
         disabled={loading}
-        className="w-full flex items-center justify-center gap-3 px-4 py-3 border border-gray-300 rounded-xl shadow-sm bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500 transition disabled:opacity-50 disabled:cursor-not-allowed"
+        className="w-full h-12"
       >
         <svg className="w-5 h-5" viewBox="0 0 24 24">
           <path
@@ -108,8 +111,8 @@ export default function LoginFormClient() {
             d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"
           />
         </svg>
-        <span className="text-gray-700 font-medium">Đăng nhập với Google</span>
-      </button>
+        <span className="font-medium">Đăng nhập với Google</span>
+      </Button>
 
       {/* Divider */}
       <div className="relative">
@@ -123,46 +126,40 @@ export default function LoginFormClient() {
 
       {/* Email/Password Form */}
       <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
-        <div>
-          <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-1">
-            Email
-          </label>
+        <div className="space-y-2">
+          <Label htmlFor="email">Email</Label>
           <div className="relative">
             <div className="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none text-gray-400">
               <Mail className="w-5 h-5" />
             </div>
-            <input
+            <Input
               {...register("email")}
               id="email"
               type="email"
               autoComplete="email"
-              className={`w-full pl-10 pr-4 py-3 border rounded-xl focus:ring-2 focus:ring-red-500 focus:border-transparent transition ${
-                errors.email ? "border-red-300 bg-red-50" : "border-gray-300"
-              }`}
+              hasError={!!errors.email}
+              className={`pl-10 ${errors.email ? "border-red-300 bg-red-50" : ""}`}
               placeholder="email@example.com"
             />
           </div>
           {errors.email && (
-            <p className="mt-1 text-sm text-red-600">{errors.email.message}</p>
+            <p className="text-sm text-red-600">{errors.email.message}</p>
           )}
         </div>
 
-        <div>
-          <label htmlFor="password" className="block text-sm font-medium text-gray-700 mb-1">
-            Mật khẩu
-          </label>
+        <div className="space-y-2">
+          <Label htmlFor="password">Mật khẩu</Label>
           <div className="relative">
             <div className="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none text-gray-400">
               <Lock className="w-5 h-5" />
             </div>
-            <input
+            <Input
               {...register("password")}
               id="password"
               type={showPassword ? "text" : "password"}
               autoComplete="current-password"
-              className={`w-full pl-10 pr-12 py-3 border rounded-xl focus:ring-2 focus:ring-red-500 focus:border-transparent transition ${
-                errors.password ? "border-red-300 bg-red-50" : "border-gray-300"
-              }`}
+              hasError={!!errors.password}
+              className={`pl-10 pr-12 ${errors.password ? "border-red-300 bg-red-50" : ""}`}
               placeholder="••••••••"
             />
             <button
@@ -174,14 +171,14 @@ export default function LoginFormClient() {
             </button>
           </div>
           {errors.password && (
-            <p className="mt-1 text-sm text-red-600">{errors.password.message}</p>
+            <p className="text-sm text-red-600">{errors.password.message}</p>
           )}
         </div>
 
-        <button
+        <Button
           type="submit"
           disabled={loading}
-          className="w-full bg-red-600 text-white py-3 px-4 rounded-xl hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500 font-medium transition shadow-lg shadow-red-200 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
+          className="w-full h-12 bg-red-600 hover:bg-red-700 shadow-lg shadow-red-200"
         >
           {loading ? (
             <>
@@ -198,7 +195,7 @@ export default function LoginFormClient() {
           ) : (
             "Đăng nhập"
           )}
-        </button>
+        </Button>
       </form>
 
       {/* Register Link */}

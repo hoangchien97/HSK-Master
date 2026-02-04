@@ -4,11 +4,18 @@ import bcrypt from 'bcryptjs'
 
 const prisma = new PrismaClient()
 
-// Role constants (since role is a String field in schema)
+// Role constants matching UserRole enum in Prisma schema
 const ROLE = {
-  STUDENT: 'STUDENT',
+  SYSTEM_ADMIN: 'SYSTEM_ADMIN',
   TEACHER: 'TEACHER',
-  ADMIN: 'ADMIN'
+  STUDENT: 'STUDENT',
+} as const
+
+// Status constants matching UserStatus enum
+const STATUS = {
+  ACTIVE: 'ACTIVE',
+  INACTIVE: 'INACTIVE',
+  LOCKED: 'LOCKED',
 } as const
 
 export async function seedPortal() {
@@ -39,13 +46,23 @@ export async function seedPortal() {
   const hashedPassword = await bcrypt.hash("password123", 10)
 
   // Create Admin/Teacher Users
-  const teachers = await prisma.portalUser.createManyAndReturn({
+  const adminsAndTeachers = await prisma.portalUser.createManyAndReturn({
     data: [
+      {
+        email: "admin@hskmaster.com",
+        name: "Admin HSK Master",
+        password: hashedPassword,
+        role: ROLE.SYSTEM_ADMIN,
+        status: STATUS.ACTIVE,
+        emailVerified: new Date(),
+        image: "https://api.dicebear.com/7.x/avataaars/svg?seed=admin",
+      },
       {
         email: "teacher1@hskmaster.com",
         name: "Thầy Nguyễn Văn An",
         password: hashedPassword,
         role: ROLE.TEACHER,
+        status: STATUS.ACTIVE,
         emailVerified: new Date(),
         image: "https://api.dicebear.com/7.x/avataaars/svg?seed=teacher1",
       },
@@ -54,16 +71,9 @@ export async function seedPortal() {
         name: "Cô Trần Thị Bình",
         password: hashedPassword,
         role: ROLE.TEACHER,
+        status: STATUS.ACTIVE,
         emailVerified: new Date(),
         image: "https://api.dicebear.com/7.x/avataaars/svg?seed=teacher2",
-      },
-      {
-        email: "admin@hskmaster.com",
-        name: "Admin HSK Master",
-        password: hashedPassword,
-        role: ROLE.TEACHER, // Teachers are also admins
-        emailVerified: new Date(),
-        image: "https://api.dicebear.com/7.x/avataaars/svg?seed=admin",
       },
     ],
   })
@@ -76,6 +86,7 @@ export async function seedPortal() {
         name: "Lê Văn Cường",
         password: hashedPassword,
         role: ROLE.STUDENT,
+        status: STATUS.ACTIVE,
         emailVerified: new Date(),
         image: "https://api.dicebear.com/7.x/avataaars/svg?seed=student1",
       },
@@ -84,6 +95,7 @@ export async function seedPortal() {
         name: "Phạm Thị Dung",
         password: hashedPassword,
         role: ROLE.STUDENT,
+        status: STATUS.ACTIVE,
         emailVerified: new Date(),
         image: "https://api.dicebear.com/7.x/avataaars/svg?seed=student2",
       },
@@ -92,6 +104,7 @@ export async function seedPortal() {
         name: "Hoàng Văn Em",
         password: hashedPassword,
         role: ROLE.STUDENT,
+        status: STATUS.ACTIVE,
         emailVerified: new Date(),
         image: "https://api.dicebear.com/7.x/avataaars/svg?seed=student3",
       },
@@ -100,6 +113,7 @@ export async function seedPortal() {
         name: "Ngô Thị Hoa",
         password: hashedPassword,
         role: ROLE.STUDENT,
+        status: STATUS.ACTIVE,
         emailVerified: new Date(),
         image: "https://api.dicebear.com/7.x/avataaars/svg?seed=student4",
       },
@@ -108,13 +122,17 @@ export async function seedPortal() {
         name: "Đỗ Văn Khoa",
         password: hashedPassword,
         role: ROLE.STUDENT,
+        status: STATUS.ACTIVE,
         emailVerified: new Date(),
         image: "https://api.dicebear.com/7.x/avataaars/svg?seed=student5",
       },
     ],
   })
 
-  console.log(`✅ Created ${teachers.length} teachers and ${students.length} students`)
+  // Filter teachers (exclude admin)
+  const teachers = adminsAndTeachers.filter(u => u.role === ROLE.TEACHER)
+
+  console.log(`✅ Created 1 admin, ${teachers.length} teachers and ${students.length} students`)
 
   // ============= Portal Teachers =============
   console.log("👨‍🏫 Creating teacher profiles...")
@@ -137,15 +155,6 @@ export async function seedPortal() {
         phoneNumber: "0907654321",
         biography: "Tốt nghiệp Đại học Bắc Kinh, 8 năm kinh nghiệm. Chuyên môn: HSK 4-6, Tiếng Trung thương mại.",
         specialization: "HSK 4-6, Thương mại",
-      },
-      {
-        userId: teachers[2].id,
-        teacherCode: "GV000",
-        firstName: "HSK Master",
-        lastName: "Admin",
-        phoneNumber: "0909999999",
-        biography: "Quản trị viên hệ thống HSK Master. Quản lý và điều phối các khóa học.",
-        specialization: "Quản trị hệ thống",
       },
     ],
   })

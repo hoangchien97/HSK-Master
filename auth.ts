@@ -1,11 +1,21 @@
 import NextAuth from "next-auth"
 import Google from "next-auth/providers/google"
 import Credentials from "next-auth/providers/credentials"
-import { PrismaClient } from "@prisma/client"
+import { prisma } from "@/lib/prisma"
 import bcrypt from "bcryptjs"
 import { z } from "zod"
+import { ROLES } from "@/lib/constants/roles"
 
-const prisma = new PrismaClient()
+// Type for PortalUser with status field (for TypeScript compatibility)
+type PortalUserWithStatus = {
+  id: string
+  email: string
+  name: string | null
+  image: string | null
+  role: string
+  status: string
+  password: string | null
+}
 
 export const { handlers, signIn, signOut, auth } = NextAuth({
   providers: [
@@ -35,7 +45,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
         // Find user by email
         const user = await prisma.portalUser.findUnique({
           where: { email },
-        })
+        }) as PortalUserWithStatus | null
 
         if (!user || !user.password) {
           return null
@@ -54,18 +64,19 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
           name: user.name,
           image: user.image,
           role: user.role,
+          status: user.status,
         }
       },
     }),
   ],
   callbacks: {
-    async signIn({ user, account, profile }) {
+    async signIn({ user, account }) {
       // If signing in with Google OAuth
       if (account?.provider === "google") {
         try {
           const existingUser = await prisma.portalUser.findUnique({
             where: { email: user.email! },
-          })
+          }) as PortalUserWithStatus | null
 
           // Create PortalUser if doesn't exist
           if (!existingUser) {
@@ -75,16 +86,23 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
                 name: user.name,
                 image: user.image,
                 emailVerified: new Date(),
-                role: "STUDENT", // Default role
+                role: ROLES.STUDENT as "STUDENT" | "TEACHER" | "SYSTEM_ADMIN", // Default role for new OAuth users
+                status: "ACTIVE" as "ACTIVE" | "INACTIVE" | "LOCKED",
               },
-            })
+            }) as unknown as PortalUserWithStatus
             // Attach user data to the user object
             user.id = newUser.id
             user.role = newUser.role
+            user.status = newUser.status
           } else {
+            // Check if user is locked
+            if (existingUser.status === "LOCKED") {
+              return false // Prevent login for locked users
+            }
             // Attach existing user data
             user.id = existingUser.id
             user.role = existingUser.role
+            user.status = existingUser.status
           }
         } catch (error) {
           console.error("Error in signIn callback:", error)
@@ -94,21 +112,25 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
 
       return true
     },
-    async jwt({ token, user, account }) {
+    async jwt({ token, user }) {
       // Initial sign in
       if (user) {
         token.id = user.id
         token.role = user.role
+        token.status = user.status
       }
-      // Subsequent requests - get user from DB to keep data fresh
-      if (token.email && !user) {
+      // Always fetch fresh data from DB to keep name and image updated
+      if (token.email) {
         try {
           const dbUser = await prisma.portalUser.findUnique({
             where: { email: token.email },
-          })
+          }) as PortalUserWithStatus | null
           if (dbUser) {
             token.id = dbUser.id
             token.role = dbUser.role
+            token.status = dbUser.status
+            token.name = dbUser.name
+            token.picture = dbUser.image
           }
         } catch (error) {
           console.error("Error fetching user in JWT callback:", error)
@@ -120,6 +142,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
       if (token && session.user) {
         session.user.id = token.id as string
         session.user.role = token.role as string
+        session.user.status = token.status as string
       }
       return session
     },
