@@ -6,7 +6,7 @@ import type { UpdateProfileDTO } from "@/app/interfaces/portal"
 export async function PUT(request: NextRequest) {
   try {
     const session = await auth()
-    
+
     if (!session?.user?.id) {
       return NextResponse.json(
         { error: "Unauthorized" },
@@ -14,24 +14,10 @@ export async function PUT(request: NextRequest) {
       )
     }
 
-    const body = await request.json() as UpdateProfileDTO & { userId: string }
-    const { userId, name, image, studentProfile, teacherProfile } = body
-
-    // Verify the user is updating their own profile
-    if (userId !== session.user.id) {
-      return NextResponse.json(
-        { error: "Unauthorized" },
-        { status: 401 }
-      )
-    }
+    const body = await request.json() as UpdateProfileDTO
 
     // Update profile using service
-    const result = await ProfileService.updateProfile(userId, {
-      name,
-      image,
-      studentProfile,
-      teacherProfile,
-    })
+    const result = await ProfileService.updateProfile(session.user.id, body)
 
     if (!result.success) {
       return NextResponse.json(

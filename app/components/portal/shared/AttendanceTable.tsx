@@ -7,7 +7,6 @@ import { Check, X, ChevronDown, ChevronUp } from "lucide-react"
 interface Student {
   id: string
   name: string
-  studentCode: string
   image?: string | null
 }
 
@@ -49,7 +48,6 @@ export function AttendanceTable({
         <thead>
           <tr className="border-b border-gray-200">
             <th className="text-left py-3 px-4 font-semibold text-gray-900">Học viên</th>
-            <th className="text-left py-3 px-4 font-semibold text-gray-900">Mã HV</th>
             <th className="text-center py-3 px-4 font-semibold text-gray-900">Trạng thái</th>
           </tr>
         </thead>
@@ -78,7 +76,6 @@ export function AttendanceTable({
                     <span className="font-medium text-gray-900">{student.name}</span>
                   </div>
                 </td>
-                <td className="py-3 px-4 text-gray-500">{student.studentCode}</td>
                 <td className="py-3 px-4">
                   {readonly ? (
                     <div className="flex justify-center">

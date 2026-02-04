@@ -1,8 +1,8 @@
 import type { Metadata } from "next";
 import { submitContact } from "./actions";
 import { ContactInfo, ContactForm, FAQ_DATA } from "@/app/components/landing/contact";
-import { Breadcrumb } from "@/app/components/landing/shared";
-import { AnimatedSection } from "@/app/components/landing/shared/AnimatedSection";
+import { Breadcrumb } from "@/app/components/common";
+import { AnimatedSection } from "@/app/components/landing/shared";
 import { getPageMetadata } from "@/app/services/metadata.service";
 import { generateFAQSchema } from "@/app/lib/structured-data";
 

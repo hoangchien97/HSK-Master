@@ -2,7 +2,7 @@
 
 import { Camera } from "lucide-react"
 import { AlbumCard } from "./AlbumCard"
-import { SectionHeader } from "@/app/components/landing/shared"
+import SectionHeader from '@/app/components/landing/shared/SectionHeader';
 
 interface Photo {
   id: string

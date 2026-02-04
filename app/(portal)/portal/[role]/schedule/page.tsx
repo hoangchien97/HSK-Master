@@ -3,6 +3,7 @@ import { redirect, notFound } from "next/navigation"
 import { PrismaClient } from "@prisma/client"
 import StudentScheduleClient from "./StudentScheduleClient"
 import TeacherScheduleClient from "./TeacherScheduleClient"
+import { USER_ROLE, STATUS } from "@/lib/constants/roles"
 
 const prisma = new PrismaClient()
 
@@ -14,25 +15,19 @@ async function getStudentSchedules(email: string) {
   const user = await prisma.portalUser.findUnique({
     where: { email },
     include: {
-      student: {
+      enrollments: {
         include: {
-          enrollments: {
+          class: {
             include: {
-              class: {
-                include: {
-                  schedules: {
-                    where: {
-                      startTime: {
-                        gte: new Date(new Date().setDate(new Date().getDate() - 30)),
-                      },
-                    },
-                    orderBy: { startTime: "asc" },
-                  },
-                  teacher: {
-                    include: { user: true },
+              schedules: {
+                where: {
+                  startTime: {
+                    gte: new Date(new Date().setDate(new Date().getDate() - 30)),
                   },
                 },
+                orderBy: { startTime: "asc" },
               },
+              teacher: true,
             },
           },
         },
@@ -41,7 +36,7 @@ async function getStudentSchedules(email: string) {
   })
 
   const schedules =
-    user?.student?.enrollments.flatMap((e) =>
+    user?.enrollments.flatMap((e) =>
       e.class.schedules.map((s) => ({
         ...s,
         class: {
@@ -61,26 +56,22 @@ async function getTeacherSchedule(email: string) {
   const user = await prisma.portalUser.findUnique({
     where: { email },
     include: {
-      teacher: {
+      schedules: {
         include: {
-          schedules: {
-            include: {
-              class: true,
-            },
-            orderBy: { startTime: "asc" },
-          },
-          classes: {
-            where: { status: "ACTIVE" },
-            select: { id: true, className: true, classCode: true },
-          },
+          class: true,
         },
+        orderBy: { startTime: "asc" },
+      },
+      classes: {
+        where: { status: STATUS.ACTIVE },
+        select: { id: true, className: true, classCode: true },
       },
     },
   })
 
   return {
-    schedules: user?.teacher?.schedules || [],
-    classes: user?.teacher?.classes || [],
+    schedules: user?.schedules || [],
+    classes: user?.classes || [],
   }
 }
 

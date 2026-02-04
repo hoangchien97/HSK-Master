@@ -39,9 +39,8 @@ interface ScheduleData {
     classCode: string
   }
   teacher: {
-    user: {
-      name?: string | null
-    }
+    name: string
+    fullName?: string | null
   }
 }
 
@@ -185,7 +184,7 @@ export default function StudentScheduleClient({ schedules }: StudentScheduleClie
                     <div className="mt-2 flex flex-wrap gap-3 text-sm text-gray-500">
                       <div className="flex items-center gap-1">
                         <User className="w-4 h-4" />
-                        <span>{schedule.teacher.user.name || "Giáo viên"}</span>
+                        <span>{schedule.teacher.fullName || schedule.teacher.name || "Giáo viên"}</span>
                       </div>
                       {schedule.location && (
                         <div className="flex items-center gap-1">

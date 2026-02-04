@@ -3,7 +3,7 @@
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { X } from "lucide-react";
-import Tooltip from "./Tooltip";
+import Tooltip from "@/app/components/common/Tooltip";
 
 const ContactBubbles = () => {
   const [visibleContacts, setVisibleContacts] = useState({

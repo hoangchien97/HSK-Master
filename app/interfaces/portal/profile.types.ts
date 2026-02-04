@@ -1,11 +1,20 @@
 // Portal User Types
 export interface PortalUser {
   id: string
+  name: string // Unique username/slug for URL
   email: string
-  name: string
+  emailVerified?: Date | string | null
   image?: string | null
   role: UserRole
   status: UserStatus
+
+  // Profile fields
+  fullName?: string | null
+  phoneNumber?: string | null
+  address?: string | null
+  dateOfBirth?: Date | string | null
+  biography?: string | null
+
   createdAt: Date | string
   updatedAt?: Date | string
 }
@@ -22,62 +31,14 @@ export enum UserStatus {
   LOCKED = "LOCKED",
 }
 
-// Student Profile Types
-export interface StudentProfile {
-  id: string
-  userId: string
-  studentCode: string
-  firstName: string
-  lastName: string
-  phoneNumber?: string | null
-  address?: string | null
-  dateOfBirth?: Date | string | null
-  level?: string | null
-  status: string
-  createdAt?: Date | string
-  updatedAt?: Date | string
-}
-
-// Teacher Profile Types
-export interface TeacherProfile {
-  id: string
-  userId: string
-  teacherCode: string
-  firstName: string
-  lastName: string
-  phoneNumber?: string | null
-  address?: string | null
-  specialization?: string | null
-  biography?: string | null
-  status: string
-  createdAt?: Date | string
-  updatedAt?: Date | string
-}
-
 // Profile Update DTOs
-export interface UpdateStudentProfileDTO {
-  firstName: string
-  lastName: string
+export interface UpdateProfileDTO {
+  fullName?: string
   phoneNumber?: string
   address?: string
   dateOfBirth?: string
-  level?: string
-}
-
-export interface UpdateTeacherProfileDTO {
-  firstName: string
-  lastName: string
-  phoneNumber?: string
-  address?: string
-  specialization?: string
   biography?: string
-}
-
-export interface UpdateProfileDTO {
-  name: string
   image?: string
-  studentProfile?: UpdateStudentProfileDTO
-  teacherProfile?: UpdateTeacherProfileDTO
 }
 
 // Avatar Upload
@@ -92,6 +53,4 @@ export interface ProfileUpdateResponse {
   success: boolean
   message: string
   user?: PortalUser
-  studentProfile?: StudentProfile
-  teacherProfile?: TeacherProfile
 }

@@ -2,8 +2,8 @@
 
 import { useState } from 'react';
 import { motion } from 'framer-motion';
-import { Button, Input, Select, Checkbox, Radio, Switch, Pagination, Tooltip } from "../components/landing/shared";
-import LoadingSpinner from '../components/landing/shared/LoadingSpinner';
+import { Button, Input, Select, Checkbox, Radio, Switch, Pagination, Tooltip } from "@/app/components/common";
+import LoadingSpinner from '@/app/components/common/LoadingSpinner';
 import {
   Palette,
   Type,
@@ -1592,7 +1592,7 @@ export default function SystemDesignPage() {
                       </div>
 
                       <div className="flex flex-col items-center gap-3">
-                        <LoadingSpinner size="lg" color="#EC131E" />
+                        <LoadingSpinner size="lg" color="primary" />
                         <span className="text-xs text-gray-500 font-medium">Primary</span>
                       </div>
 
@@ -1653,17 +1653,17 @@ export default function SystemDesignPage() {
                     <h3 className="text-sm font-black text-gray-400 uppercase tracking-widest mb-6">Speed Variants</h3>
                     <div className="flex items-center justify-center gap-8 py-8">
                       <div className="flex flex-col items-center gap-3">
-                        <LoadingSpinner size="lg" speed={1.5} />
+                        <LoadingSpinner size="lg" />
                         <span className="text-xs text-gray-500 font-medium">Slow (1.5s)</span>
                       </div>
 
                       <div className="flex flex-col items-center gap-3">
-                        <LoadingSpinner size="lg" speed={0.8} />
+                        <LoadingSpinner size="lg" />
                         <span className="text-xs text-gray-500 font-medium">Normal (0.8s)</span>
                       </div>
 
                       <div className="flex flex-col items-center gap-3">
-                        <LoadingSpinner size="lg" speed={0.4} />
+                        <LoadingSpinner size="lg" />
                         <span className="text-xs text-gray-500 font-medium">Fast (0.4s)</span>
                       </div>
                     </div>

@@ -9,19 +9,15 @@ async function getStudentBookmarks(email: string) {
   const user = await prisma.portalUser.findUnique({
     where: { email },
     include: {
-      student: {
-        include: {
-          bookmarks: true,
-          vocabularies: {
-            where: { mastery: "MASTERED" },
-          },
-        },
+      bookmarks: true,
+      vocabularies: {
+        where: { mastery: "MASTERED" },
       },
     },
   })
 
   // Convert vocabularies to bookmark format for UI
-  const bookmarks = user?.student?.vocabularies.map((v) => ({
+  const bookmarks = user?.vocabularies.map((v) => ({
     id: v.id,
     vocabulary: {
       id: v.id,
@@ -37,7 +33,7 @@ async function getStudentBookmarks(email: string) {
 
   return {
     bookmarks,
-    studentId: user?.student?.id,
+    studentId: user?.id,
   }
 }
 

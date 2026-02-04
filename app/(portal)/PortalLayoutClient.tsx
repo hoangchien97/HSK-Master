@@ -1,8 +1,10 @@
 "use client"
 
 import { useState } from "react"
-import PortalSidebar from "@/app/components/portal/PortalSidebarNew"
-import PortalHeader from "@/app/components/portal/PortalHeaderNew"
+import { ToastContainer } from "react-toastify"
+import PortalSidebar from "@/app/components/portal/PortalSidebar"
+import PortalHeader from "@/app/components/portal/PortalHeader"
+import "react-toastify/dist/ReactToastify.css"
 
 interface User {
   name: string
@@ -21,6 +23,20 @@ export default function PortalLayoutClient({ user, children }: PortalLayoutClien
 
   return (
     <div className="min-h-screen bg-gray-50">
+      {/* Toast Notifications */}
+      <ToastContainer
+        position="top-right"
+        autoClose={3000}
+        hideProgressBar={false}
+        newestOnTop
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+        theme="light"
+      />
+
       {/* Sidebar - Fixed */}
       <PortalSidebar
         userRole={user.role}

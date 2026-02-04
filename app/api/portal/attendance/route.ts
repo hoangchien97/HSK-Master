@@ -15,11 +15,10 @@ export async function POST(request: NextRequest) {
 
     const user = await prisma.portalUser.findUnique({
       where: { email: session.user.email },
-      include: { teacher: true },
     })
 
-    if (!user?.teacher) {
-      return NextResponse.json({ error: "Teacher not found" }, { status: 404 })
+    if (!user) {
+      return NextResponse.json({ error: "User not found" }, { status: 404 })
     }
 
     const body = await request.json()
@@ -29,7 +28,7 @@ export async function POST(request: NextRequest) {
     const classItem = await prisma.portalClass.findFirst({
       where: {
         id: classId,
-        teacherId: user.teacher.id,
+        teacherId: user.id,
       },
     })
 
@@ -58,7 +57,7 @@ export async function POST(request: NextRequest) {
             data: {
               studentId: record.studentId,
               classId,
-              teacherId: user.teacher!.id,
+              teacherId: user.id,
               date: new Date(date),
               status: record.status.toUpperCase(),
             },

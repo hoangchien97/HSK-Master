@@ -1,5 +1,9 @@
+"use client"
+
 import Image from "next/image"
 import Link from "next/link"
+import { ToastContainer } from "react-toastify"
+import "react-toastify/dist/ReactToastify.css"
 
 export default function PortalAuthLayout({
   children,
@@ -8,6 +12,20 @@ export default function PortalAuthLayout({
 }) {
   return (
     <div className="min-h-screen flex">
+      {/* Toast Notifications */}
+      <ToastContainer
+        position="top-right"
+        autoClose={3000}
+        hideProgressBar={false}
+        newestOnTop
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+        theme="light"
+      />
+
       {/* Left side - Image/Branding */}
       <div className="hidden lg:flex lg:w-1/2 bg-gradient-to-br from-red-600 via-red-700 to-red-800 relative overflow-hidden">
         {/* Background pattern */}
@@ -37,7 +55,7 @@ export default function PortalAuthLayout({
               HSK Learn Portal
             </h1>
             <p className="text-red-100 text-lg max-w-md">
-              Nền tảng học tiếng Trung trực tuyến hàng đầu. 
+              Nền tảng học tiếng Trung trực tuyến hàng đầu.
               Theo dõi tiến độ, làm bài tập và nâng cao kỹ năng của bạn.
             </p>
 
@@ -91,7 +109,7 @@ export default function PortalAuthLayout({
           </div>
 
           {/* Form content */}
-          <div className="bg-white rounded-2xl shadow-xl p-8">
+          <div>
             {children}
           </div>
         </div>

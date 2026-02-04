@@ -3,11 +3,11 @@
 import { useState } from "react"
 import Link from "next/link"
 import { useRouter } from "next/navigation"
-import { 
-  Plus, 
-  Search, 
-  Users, 
-  Calendar, 
+import {
+  Plus,
+  Search,
+  Users,
+  Calendar,
   MoreVertical,
   Edit2,
   Trash2,
@@ -21,8 +21,8 @@ interface ClassEnrollment {
   id: string
   student: {
     id: string
-    firstName: string
-    lastName: string
+    fullName: string | null
+    name: string
   }
 }
 

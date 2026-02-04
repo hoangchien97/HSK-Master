@@ -1,6 +1,6 @@
 "use client";
 
-import { Checkbox } from "../shared";
+import { Checkbox } from "@/app/components/common/Checkbox";
 import { SlidersHorizontal, ChevronDown } from "lucide-react";
 
 interface CourseFilterProps {

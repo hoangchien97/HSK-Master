@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server"
 import { PrismaClient } from "@prisma/client"
 import { auth } from "@/auth"
+import { ASSIGNMENT_STATUS } from "@/lib/constants/roles"
 
 const prisma = new PrismaClient()
 
@@ -16,29 +17,25 @@ export async function GET(request: NextRequest) {
     const user = await prisma.portalUser.findUnique({
       where: { email: session.user.email },
       include: {
-        teacher: {
+        assignments: {
           include: {
-            assignments: {
+            class: true,
+            submissions: {
               include: {
-                class: true,
-                submissions: {
-                  include: {
-                    student: true,
-                  },
-                },
+                student: true,
               },
-              orderBy: { createdAt: "desc" },
             },
           },
+          orderBy: { createdAt: "desc" },
         },
       },
     })
 
-    if (!user?.teacher) {
-      return NextResponse.json({ error: "Teacher not found" }, { status: 404 })
+    if (!user) {
+      return NextResponse.json({ error: "User not found" }, { status: 404 })
     }
 
-    return NextResponse.json(user.teacher.assignments)
+    return NextResponse.json(user.assignments)
   } catch (error) {
     console.error("Error fetching assignments:", error)
     return NextResponse.json({ error: "Internal server error" }, { status: 500 })
@@ -56,11 +53,10 @@ export async function POST(request: NextRequest) {
 
     const user = await prisma.portalUser.findUnique({
       where: { email: session.user.email },
-      include: { teacher: true },
     })
 
-    if (!user?.teacher) {
-      return NextResponse.json({ error: "Teacher not found" }, { status: 404 })
+    if (!user) {
+      return NextResponse.json({ error: "User not found" }, { status: 404 })
     }
 
     const body = await request.json()
@@ -70,7 +66,7 @@ export async function POST(request: NextRequest) {
     const classItem = await prisma.portalClass.findFirst({
       where: {
         id: classId,
-        teacherId: user.teacher.id,
+        teacherId: user.id,
       },
     })
 
@@ -83,11 +79,11 @@ export async function POST(request: NextRequest) {
         title,
         description: description || null,
         classId,
-        teacherId: user.teacher.id,
+        teacherId: user.id,
         assignmentType: assignmentType || "HOMEWORK",
         dueDate: dueDate ? new Date(dueDate) : null,
         maxScore: maxScore || 100,
-        status: "ACTIVE",
+        status: ASSIGNMENT_STATUS.ACTIVE,
       },
     })
 

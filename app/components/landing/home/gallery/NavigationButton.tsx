@@ -1,5 +1,5 @@
 import { ChevronLeft, ChevronRight } from "lucide-react";
-import Button from "@/app/components/landing/shared/Button";
+import Button from "@/app/components/common/Button";
 
 interface NavigationButtonProps {
   direction: "left" | "right";
@@ -30,8 +30,10 @@ export function NavigationButton({
         onClick={onClick}
         variant="gallery-control"
         size="sm"
-        className={`aspect-square transition-all duration-300 md:size-auto ${
-          showControls ? "opacity-100" : "opacity-0"
+        className={`aspect-square transition-all duration-300 md:size-auto hover:scale-110 ${
+          showControls
+            ? `opacity-100 ${isLeft ? "translate-x-0" : "-translate-x-0"}`
+            : `opacity-0 ${isLeft ? "-translate-x-4" : "translate-x-4"}`
         }`}
         title={title}
         icon={icon}

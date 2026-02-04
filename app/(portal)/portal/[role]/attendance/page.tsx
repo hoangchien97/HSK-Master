@@ -2,6 +2,7 @@ import { auth } from "@/auth"
 import { redirect } from "next/navigation"
 import { PrismaClient } from "@prisma/client"
 import AttendanceClient from "./AttendanceClient"
+import { USER_ROLE, STATUS } from "@/lib/constants/roles"
 
 const prisma = new PrismaClient()
 
@@ -9,38 +10,30 @@ async function getTeacherAttendanceData(email: string) {
   const user = await prisma.portalUser.findUnique({
     where: { email },
     include: {
-      teacher: {
+      classes: {
+        where: { status: STATUS.ACTIVE },
         include: {
-          classes: {
-            where: { status: "ACTIVE" },
-            include: {
-              enrollments: {
-                include: {
-                  student: {
-                    include: {
-                      user: true,
-                    },
-                  },
-                },
-              },
-            },
-          },
-          attendances: {
-            orderBy: { date: "desc" },
-            take: 100,
+          enrollments: {
             include: {
               student: true,
-              class: true,
             },
           },
+        },
+      },
+      teacherAttendances: {
+        orderBy: { date: "desc" },
+        take: 100,
+        include: {
+          student: true,
+          class: true,
         },
       },
     },
   })
 
   return {
-    classes: user?.teacher?.classes || [],
-    recentAttendances: user?.teacher?.attendances || [],
+    classes: user?.classes || [],
+    recentAttendances: user?.teacherAttendances || [],
   }
 }
 
@@ -51,7 +44,7 @@ export default async function TeacherAttendancePage() {
     redirect("/portal/login")
   }
 
-  if (session.user.role !== "TEACHER" && session.user.role !== "ADMIN") {
+  if (session.user.role !== USER_ROLE.TEACHER && session.user.role !== USER_ROLE.SYSTEM_ADMIN) {
     redirect("/portal/student")
   }
 

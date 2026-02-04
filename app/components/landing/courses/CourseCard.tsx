@@ -1,7 +1,7 @@
 import Link from "next/link";
 import Image from "next/image";
-import { Tooltip } from "../shared";
 import { PlayCircle, Clock } from "lucide-react";
+import { Tooltip } from "@/app/components/common";
 
 interface CourseCardProps {
   course: {

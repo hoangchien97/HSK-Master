@@ -5,8 +5,9 @@ import { usePathname } from "next/navigation"
 import { signOut } from "next-auth/react"
 import { LogOut, X } from "lucide-react"
 import { cn } from "@/lib/utils"
-import { getNavItemsByRole } from "@/lib/constants/navigation"
-import { ROLE_LABELS, type UserRole } from "@/lib/constants/roles"
+import { getNavItemsByRole } from "@/app/constants/navigation"
+import { ROLE_LABELS } from "@/app/constants/portal"
+import { type UserRole } from "@/lib/constants/roles"
 
 interface PortalSidebarProps {
   userRole: string

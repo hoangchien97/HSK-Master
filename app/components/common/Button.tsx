@@ -1,6 +1,7 @@
 "use client";
 
 import React from "react";
+import { cn } from "@/lib/utils";
 import LoadingSpinner from "./LoadingSpinner";
 import { useResponsive } from "@/app/hooks/useResponsive";
 
@@ -10,6 +11,7 @@ export type ButtonVariant =
   | "outline"
   | "ghost"
   | "gradient"
+  | "danger"
   | "white"
   | "outline-white"
   | "icon-only"
@@ -49,6 +51,7 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
   ) => {
     const { isMobile } = useResponsive();
     const effectiveSize = isMobile ? "md" : (size || "md");
+
     // Validate icon-only variant
     if (variant === "icon-only" && !ariaLabel) {
       console.warn(
@@ -56,11 +59,33 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
       );
     }
 
-    // Base styles with focus ring support
+    // Base styles
     const baseStyles =
       "inline-flex items-center justify-center gap-2 font-semibold transition-all duration-200 focus:outline-none focus-visible:ring-4 active:scale-[0.98] disabled:pointer-events-none disabled:opacity-50 cursor-pointer disabled:cursor-not-allowed";
 
-    // Variant styles with all states
+    // Size styles
+    const sizeStyles = {
+      sm:
+        variant === "icon-only"
+          ? "p-1.5 text-sm min-h-[28px] min-w-[28px]"
+          : variant === "gallery-control"
+          ? "px-2 py-1.5 md:px-3 md:py-2 text-xs md:text-sm rounded-lg min-h-[28px] md:min-h-[32px]"
+          : "px-3 py-1.5 text-sm rounded-lg min-h-[32px]",
+      md:
+        variant === "icon-only"
+          ? "p-2 text-base min-h-[36px] min-w-[36px]"
+          : variant === "gallery-control"
+          ? "px-3 py-2 md:px-4 md:py-2.5 text-sm md:text-base rounded-lg md:rounded-xl min-h-[36px] md:min-h-[40px]"
+          : "px-6 py-2.5 text-base rounded-xl min-h-[44px]",
+      lg:
+        variant === "icon-only"
+          ? "p-3 text-lg min-h-[48px] min-w-[48px]"
+          : variant === "gallery-control"
+          ? "px-4 py-2.5 md:px-5 md:py-3 text-base md:text-lg rounded-xl min-h-[44px] md:min-h-[48px]"
+          : "px-8 py-3.5 text-lg rounded-xl min-h-[52px]",
+    };
+
+    // Variant styles
     const variantStyles = {
       primary:
         "bg-primary-500 text-white shadow-sm " +
@@ -94,6 +119,12 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
         "before:absolute before:inset-0 before:bg-gradient-to-r before:from-transparent before:via-white/20 before:to-transparent " +
         "before:translate-x-[-200%] hover:before:translate-x-[200%] before:transition-transform before:duration-700 before:ease-in-out",
 
+      danger:
+        "bg-error-500 text-white shadow-md " +
+        "hover:bg-error-600 hover:shadow-lg " +
+        "active:bg-error-700 " +
+        "focus-visible:ring-error-200",
+
       white:
         "bg-white text-primary-600 shadow-md " +
         "hover:bg-gray-50 hover:shadow-lg " +
@@ -119,48 +150,29 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
         "focus-visible:ring-white/50",
     };
 
-    // Size styles
-    const sizeStyles = {
-      sm:
-        variant === "icon-only"
-          ? "p-1.5 text-sm min-h-[28px] min-w-[28px]"
-          : variant === "gallery-control"
-          ? "px-2 py-1.5 md:px-3 md:py-2 text-xs md:text-sm rounded-lg min-h-[28px] md:min-h-[32px]"
-          : "px-3 py-1.5 text-sm rounded-lg min-h-[32px]",
-      md:
-        variant === "icon-only"
-          ? "p-2 text-base min-h-[36px] min-w-[36px]"
-          : variant === "gallery-control"
-          ? "px-3 py-2 md:px-4 md:py-2.5 text-sm md:text-base rounded-lg md:rounded-xl min-h-[36px] md:min-h-[40px]"
-          : "px-6 py-2.5 text-base rounded-xl min-h-[44px]",
-      lg:
-        variant === "icon-only"
-          ? "p-3 text-lg min-h-[48px] min-w-[48px]"
-          : variant === "gallery-control"
-          ? "px-4 py-2.5 md:px-5 md:py-3 text-base md:text-lg rounded-xl min-h-[44px] md:min-h-[48px]"
-          : "px-8 py-3.5 text-lg rounded-xl min-h-[52px]",
-    };
-
-    // Width styles
-    const widthStyles = fullWidth ? "w-full" : "w-auto";
-
     // Show loading spinner on left if loading, otherwise show icon if provided
     const leftContent =
       loading && iconPosition === "left" ? (
-        <LoadingSpinner />
+        <LoadingSpinner size="sm" />
       ) : icon && iconPosition === "left" ? (
         <span className="flex items-center shrink-0">{icon}</span>
       ) : null;
 
     // For icon-only variant
-    const iconOnlyContent = loading ? <LoadingSpinner /> : icon;
+    const iconOnlyContent = loading ? <LoadingSpinner size="sm" /> : icon;
 
     return (
       <button
         ref={ref}
         disabled={disabled || loading}
         aria-label={ariaLabel}
-        className={`${baseStyles} ${variantStyles[variant]} ${sizeStyles[effectiveSize]} ${widthStyles} ${className}`}
+        className={cn(
+          baseStyles,
+          sizeStyles[effectiveSize],
+          variantStyles[variant],
+          fullWidth && "w-full",
+          className
+        )}
         {...props}
       >
         {variant === "icon-only" ? (
@@ -177,7 +189,7 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
             {icon && iconPosition === "right" && !loading && (
               <span className="relative z-10 flex items-center shrink-0">{icon}</span>
             )}
-            {loading && iconPosition === "right" && <LoadingSpinner />}
+            {loading && iconPosition === "right" && <LoadingSpinner size="sm" />}
           </>
         )}
       </button>

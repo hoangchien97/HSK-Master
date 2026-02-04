@@ -1,12 +1,11 @@
 "use client";
 
 import { InputHTMLAttributes, forwardRef, ReactNode } from "react";
-import { Search, X } from "lucide-react";
-import { useResponsive } from "@/app/hooks/useResponsive";
+import { cn } from "@/lib/utils";
 
 interface InputProps extends Omit<InputHTMLAttributes<HTMLInputElement>, 'size'> {
   label?: string;
-  icon?: ReactNode | string; // Support both Lucide icons and Material Icons (string)
+  icon?: ReactNode;
   error?: string;
   helperText?: string;
   size?: "sm" | "md" | "lg";
@@ -23,23 +22,20 @@ const Input = forwardRef<HTMLInputElement, InputProps>(
       required,
       disabled,
       readOnly,
-      size,
-      variant = "default",
+      size = "md",
       className = "",
       id,
       ...props
     },
     ref
   ) => {
-    const { isMobile } = useResponsive();
     const inputId = id || props.name;
-    const effectiveSize = isMobile ? "sm" : (size || "md");
 
     // Size classes
     const sizeClasses = {
-      sm: "px-2.5 py-1.5 md:px-3 md:py-2 text-[10px] md:text-xs min-h-[28px] md:min-h-[32px]",
-      md: "px-3 py-2 md:px-4 md:py-3 text-xs md:text-sm min-h-[36px] md:min-h-[44px]",
-      lg: "px-4 py-2.5 md:px-5 md:py-3.5 text-sm md:text-base min-h-[44px] md:min-h-[52px]",
+      sm: "px-3 py-2 text-xs h-[36px]",
+      md: "px-4 py-3 text-sm h-[44px]",
+      lg: "px-5 py-3.5 text-base h-[48px]",
     };
 
     // Base classes
@@ -60,7 +56,7 @@ const Input = forwardRef<HTMLInputElement, InputProps>(
         {label && (
           <label
             htmlFor={inputId}
-            className="flex items-center gap-1 text-[10px] sm:text-xs font-bold text-gray-700 dark:text-gray-300 mb-1.5 md:mb-2"
+            className="flex items-center gap-1 text-sm font-bold text-gray-700 dark:text-gray-300 mb-2"
           >
             {label}
             {required && <span className="text-error-500">*</span>}
@@ -68,42 +64,33 @@ const Input = forwardRef<HTMLInputElement, InputProps>(
         )}
         <div className="relative">
           {icon && (
-            <div className="absolute inset-y-0 left-0 flex items-center pl-3 md:pl-4 pointer-events-none text-gray-400">
-              {typeof icon === 'string' ? (
-                <span className="material-symbols-outlined text-[16px] md:text-[20px]">{icon}</span>
-              ) : (
-                icon
-              )}
-            </div>
-          )}
-          {variant === "search" && !icon && (
-            <div className="absolute inset-y-0 left-0 flex items-center pl-3 md:pl-4 pointer-events-none text-gray-400">
-              <Search className="w-4 h-4 md:w-5 md:h-5" />
+            <div className="absolute inset-y-0 left-0 flex items-center pl-4 pointer-events-none text-gray-400">
+              {icon}
             </div>
           )}
           <input
             ref={ref}
             id={inputId}
-            required={required}
             disabled={disabled}
             readOnly={readOnly}
-            className={`
-              ${baseClasses}
-              ${sizeClasses[effectiveSize]}
-              ${stateClasses}
-              ${icon || variant === "search" ? "pl-9 md:pl-12" : ""}
-              ${className}
-            `}
+            className={cn(
+              baseClasses,
+              sizeClasses[size],
+              stateClasses,
+              icon && "pl-12",
+              className
+            )}
             {...props}
-            size={undefined}
           />
         </div>
+        {/* Error message */}
         {error && (
           <p className="mt-1.5 text-xs font-medium text-error-600 flex items-center gap-1">
             <span className="w-1 h-1 bg-error-600 rounded-full"></span>
             {error}
           </p>
         )}
+        {/* Helper text */}
         {helperText && !error && (
           <p className="mt-1.5 text-xs text-gray-500">{helperText}</p>
         )}

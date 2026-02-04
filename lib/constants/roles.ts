@@ -1,11 +1,11 @@
 // Role constants matching Prisma UserRole enum
-export const ROLES = {
+export const USER_ROLE = {
   SYSTEM_ADMIN: 'SYSTEM_ADMIN',
   TEACHER: 'TEACHER',
   STUDENT: 'STUDENT',
 } as const
 
-export type UserRole = typeof ROLES[keyof typeof ROLES]
+export type UserRole = typeof USER_ROLE[keyof typeof USER_ROLE]
 
 // Status constants matching Prisma UserStatus enum
 export const STATUS = {
@@ -16,33 +16,45 @@ export const STATUS = {
 
 export type UserStatus = typeof STATUS[keyof typeof STATUS]
 
-// Role display names in Vietnamese
-export const ROLE_LABELS: Record<UserRole, string> = {
-  [ROLES.SYSTEM_ADMIN]: 'Quản trị viên',
-  [ROLES.TEACHER]: 'Giáo viên',
-  [ROLES.STUDENT]: 'Học viên',
-}
+// Class Status
+export const CLASS_STATUS = {
+  ACTIVE: 'ACTIVE',
+  COMPLETED: 'COMPLETED',
+  CANCELLED: 'CANCELLED',
+} as const
 
-// Role-based route prefixes
-export const ROLE_ROUTES: Record<UserRole, string> = {
-  [ROLES.SYSTEM_ADMIN]: '/portal/admin',
-  [ROLES.TEACHER]: '/portal/teacher',
-  [ROLES.STUDENT]: '/portal/student',
-}
+// Assignment Status
+export const ASSIGNMENT_STATUS = {
+  ACTIVE: 'ACTIVE',
+  DRAFT: 'DRAFT',
+  ARCHIVED: 'ARCHIVED',
+} as const
 
-// Role badge colors
-export const ROLE_COLORS: Record<UserRole, { bg: string; text: string }> = {
-  [ROLES.SYSTEM_ADMIN]: { bg: 'bg-purple-100', text: 'text-purple-700' },
-  [ROLES.TEACHER]: { bg: 'bg-blue-100', text: 'text-blue-700' },
-  [ROLES.STUDENT]: { bg: 'bg-green-100', text: 'text-green-700' },
-}
+// Schedule Status
+export const SCHEDULE_STATUS = {
+  SCHEDULED: 'SCHEDULED',
+  COMPLETED: 'COMPLETED',
+  CANCELLED: 'CANCELLED',
+} as const
 
-// Check if user has required role
-export function hasRole(userRole: string, requiredRoles: UserRole[]): boolean {
-  return requiredRoles.includes(userRole as UserRole)
-}
+// Enrollment Status
+export const ENROLLMENT_STATUS = {
+  ENROLLED: 'ENROLLED',
+  COMPLETED: 'COMPLETED',
+  DROPPED: 'DROPPED',
+} as const
 
-// Get redirect URL based on role
-export function getRoleRedirectUrl(role: string): string {
-  return ROLE_ROUTES[role as UserRole] || '/portal/student'
-}
+// Attendance Status
+export const ATTENDANCE_STATUS = {
+  PRESENT: 'PRESENT',
+  ABSENT: 'ABSENT',
+  LATE: 'LATE',
+  EXCUSED: 'EXCUSED',
+} as const
+
+// Submission Status
+export const SUBMISSION_STATUS = {
+  SUBMITTED: 'SUBMITTED',
+  GRADED: 'GRADED',
+  LATE: 'LATE',
+} as const

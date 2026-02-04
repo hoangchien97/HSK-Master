@@ -2,6 +2,7 @@ import { auth } from "@/auth"
 import { redirect } from "next/navigation"
 import { PrismaClient } from "@prisma/client"
 import StudentsClient from "./StudentsClient"
+import { USER_ROLE } from "@/lib/constants/roles"
 
 const prisma = new PrismaClient()
 
@@ -9,19 +10,11 @@ async function getTeacherStudents(email: string) {
   const user = await prisma.portalUser.findUnique({
     where: { email },
     include: {
-      teacher: {
+      classes: {
         include: {
-          classes: {
+          enrollments: {
             include: {
-              enrollments: {
-                include: {
-                  student: {
-                    include: {
-                      user: true,
-                    },
-                  },
-                },
-              },
+              student: true,
             },
           },
         },
@@ -31,15 +24,15 @@ async function getTeacherStudents(email: string) {
 
   // Flatten students from all classes
   const studentsMap = new Map()
-  user?.teacher?.classes.forEach((classItem) => {
+  user?.classes.forEach((classItem) => {
     classItem.enrollments.forEach((enrollment) => {
-      if (!studentsMap.has(enrollment.student.id)) {
-        studentsMap.set(enrollment.student.id, {
+      if (!studentsMap.has(enrollment.studentId)) {
+        studentsMap.set(enrollment.studentId, {
           ...enrollment.student,
           classes: [classItem],
         })
       } else {
-        const existing = studentsMap.get(enrollment.student.id)
+        const existing = studentsMap.get(enrollment.studentId)
         existing.classes.push(classItem)
       }
     })
@@ -55,7 +48,7 @@ export default async function TeacherStudentsPage() {
     redirect("/portal/login")
   }
 
-  if (session.user.role !== "TEACHER" && session.user.role !== "ADMIN") {
+  if (session.user.role !== USER_ROLE.TEACHER && session.user.role !== USER_ROLE.SYSTEM_ADMIN) {
     redirect("/portal/student")
   }
 

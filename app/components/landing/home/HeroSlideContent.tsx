@@ -1,7 +1,7 @@
 'use client';
 
 import { motion } from 'framer-motion';
-import { Button, Badge } from '@/app/components/landing/shared';
+import { Button, Badge } from '@/app/components/common';
 import TypingText from './TypingText';
 import type { HeroSlide } from '@/app/services';
 

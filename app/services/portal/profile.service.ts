@@ -1,21 +1,16 @@
-import { prisma } from "@/lib/prisma"
-import type {
-  UpdateProfileDTO,
-  ProfileUpdateResponse,
-  StudentProfile,
-  TeacherProfile
-} from "@/app/interfaces/portal"
+import { prisma } from '@/lib/prisma'
+import type { PortalUser, UpdateProfileDTO, ProfileUpdateResponse } from '@/app/interfaces/portal/profile.types'
 
 export class ProfileService {
   /**
-   * Get complete user profile with student/teacher data
+   * Get complete user profile
    */
-  static async getUserProfile(userId: string) {
+  static async getUserProfile(userId: string): Promise<PortalUser | null> {
     const user = await prisma.portalUser.findUnique({
       where: { id: userId },
     })
 
-    return user
+    return user as unknown as PortalUser
   }
 
   /**
@@ -26,68 +21,22 @@ export class ProfileService {
     data: UpdateProfileDTO
   ): Promise<ProfileUpdateResponse> {
     try {
-      // Update base user data
       const user = await prisma.portalUser.update({
         where: { id: userId },
         data: {
-          name: data.name,
+          fullName: data.fullName,
+          phoneNumber: data.phoneNumber,
+          address: data.address,
+          dateOfBirth: data.dateOfBirth ? new Date(data.dateOfBirth) : undefined,
+          biography: data.biography,
           image: data.image,
         },
       })
 
-      let studentProfile: StudentProfile | undefined
-      let teacherProfile: TeacherProfile | undefined
-
-      // Update student profile if exists
-      if (data.studentProfile) {
-        const existingStudent = await prisma.portalStudent.findUnique({
-          where: { userId },
-        })
-
-        if (existingStudent) {
-          studentProfile = await prisma.portalStudent.update({
-            where: { userId },
-            data: {
-              firstName: data.studentProfile.firstName,
-              lastName: data.studentProfile.lastName,
-              phoneNumber: data.studentProfile.phoneNumber || null,
-              address: data.studentProfile.address || null,
-              dateOfBirth: data.studentProfile.dateOfBirth
-                ? new Date(data.studentProfile.dateOfBirth)
-                : null,
-              level: data.studentProfile.level || null,
-            },
-          })
-        }
-      }
-
-      // Update teacher profile if exists
-      if (data.teacherProfile) {
-        const existingTeacher = await prisma.portalTeacher.findUnique({
-          where: { userId },
-        })
-
-        if (existingTeacher) {
-          teacherProfile = await prisma.portalTeacher.update({
-            where: { userId },
-            data: {
-              firstName: data.teacherProfile.firstName,
-              lastName: data.teacherProfile.lastName,
-              phoneNumber: data.teacherProfile.phoneNumber || null,
-              address: data.teacherProfile.address || null,
-              specialization: data.teacherProfile.specialization || null,
-              biography: data.teacherProfile.biography || null,
-            },
-          })
-        }
-      }
-
       return {
         success: true,
         message: "Cập nhật hồ sơ thành công",
-        user,
-        studentProfile,
-        teacherProfile,
+        user: user as unknown as PortalUser,
       }
     } catch (error) {
       console.error("Error updating profile:", error)
@@ -101,10 +50,11 @@ export class ProfileService {
   /**
    * Update avatar
    */
-  static async updateAvatar(userId: string, imageUrl: string) {
-    return await prisma.portalUser.update({
+  static async updateAvatar(userId: string, imageUrl: string): Promise<PortalUser | null> {
+    const user = await prisma.portalUser.update({
       where: { id: userId },
       data: { image: imageUrl },
     })
+    return user as unknown as PortalUser
   }
 }

@@ -3,10 +3,9 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useState } from "react";
-import LanguageSwitcher from "./LanguageSwitcher";
 import MobileMenu from "./MobileMenu";
-import Button from "./Button";
-import { Menu, Languages, Search } from "lucide-react";
+import { Menu, Languages } from "lucide-react";
+import { Button } from "@/app/components/common";
 
 const navigationItems = [
   { name: 'Trang chủ', path: '/' },

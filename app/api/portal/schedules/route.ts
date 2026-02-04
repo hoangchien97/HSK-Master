@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server"
 import { PrismaClient } from "@prisma/client"
 import { auth } from "@/auth"
+import { SCHEDULE_STATUS } from "@/lib/constants/roles"
 
 const prisma = new PrismaClient()
 
@@ -15,11 +16,10 @@ export async function POST(request: NextRequest) {
 
     const user = await prisma.portalUser.findUnique({
       where: { email: session.user.email },
-      include: { teacher: true },
     })
 
-    if (!user?.teacher) {
-      return NextResponse.json({ error: "Teacher not found" }, { status: 404 })
+    if (!user) {
+      return NextResponse.json({ error: "User not found" }, { status: 404 })
     }
 
     const body = await request.json()
@@ -29,7 +29,7 @@ export async function POST(request: NextRequest) {
     const classItem = await prisma.portalClass.findFirst({
       where: {
         id: classId,
-        teacherId: user.teacher.id,
+        teacherId: user.id,
       },
     })
 
@@ -42,12 +42,12 @@ export async function POST(request: NextRequest) {
         title,
         description: description || null,
         classId,
-        teacherId: user.teacher.id,
+        teacherId: user.id,
         startTime: new Date(startTime),
         endTime: new Date(endTime),
         location: location || null,
         meetingLink: meetingLink || null,
-        status: "SCHEDULED",
+        status: SCHEDULE_STATUS.SCHEDULED,
       },
     })
 

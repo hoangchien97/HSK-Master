@@ -24,6 +24,8 @@ interface SelectProps {
   defaultValue?: string;
   onChange?: (value: string) => void;
   placeholder?: string;
+  name?: string;
+  id?: string;
 }
 
 const Select = ({
@@ -40,6 +42,8 @@ const Select = ({
   defaultValue = "",
   onChange,
   placeholder = "Chọn...",
+  name,
+  id,
 }: SelectProps) => {
   const { isMobile } = useResponsive();
   const [isOpen, setIsOpen] = useState(false);
@@ -49,6 +53,7 @@ const Select = ({
   const currentValue = controlledValue !== undefined ? controlledValue : selectedValue;
   const selectedOption = options.find((opt) => opt.value === currentValue);
   const effectiveSize = isMobile ? "sm" : (size || "md");
+  const selectId = id || name;
 
   // Size classes
   const sizeClasses = {
@@ -106,7 +111,10 @@ const Select = ({
   return (
     <div className="w-full">
       {label && (
-        <label className="flex items-center gap-1 text-[10px] sm:text-xs font-bold text-gray-700 dark:text-gray-300 mb-1.5 md:mb-2">
+        <label
+          htmlFor={selectId}
+          className="flex items-center gap-1 text-[10px] sm:text-xs font-bold text-gray-700 dark:text-gray-300 mb-1.5 md:mb-2"
+        >
           {label}
           {required && <span className="text-error-500">*</span>}
         </label>
@@ -114,6 +122,7 @@ const Select = ({
       <div className="relative" ref={dropdownRef}>
         <button
           type="button"
+          id={selectId}
           onClick={handleToggle}
           disabled={disabled}
           className={`

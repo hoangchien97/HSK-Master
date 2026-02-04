@@ -1,49 +1,16 @@
 import { prisma } from "@/lib/prisma";
 import { notFound } from "next/navigation";
-import Button from "@/app/components/landing/shared/Button";
-import { Breadcrumb } from "@/app/components/landing/shared";
+import Button from "@/app/components/common/Button";
+import { Breadcrumb } from "@/app/components/common";
 import { AnimatedSection } from "@/app/components/landing/shared/AnimatedSection";
 import LessonList from "./LessonList";
 import { CourseStatsGrid, CourseResourceCards } from "./CourseClient";
 import { generateCourseSchema, generateBreadcrumbSchema } from "@/app/lib/structured-data";
 
 // Animation variants
-const fadeInUp = {
-  hidden: { opacity: 0, y: 20 },
-  visible: {
-    opacity: 1,
-    y: 0,
-    transition: { duration: 0.6 }
-  }
-};
 
-const staggerContainer = {
-  hidden: { opacity: 0 },
-  visible: {
-    opacity: 1,
-    transition: {
-      staggerChildren: 0.15
-    }
-  }
-};
 
-const staggerItem = {
-  hidden: { opacity: 0, y: 20 },
-  visible: {
-    opacity: 1,
-    y: 0,
-    transition: { duration: 0.4 }
-  }
-};
 
-const scaleIn = {
-  hidden: { opacity: 0, scale: 0.9 },
-  visible: {
-    opacity: 1,
-    scale: 1,
-    transition: { duration: 0.5 }
-  }
-};
 
 export const revalidate = 600; // ISR - revalidate every 10 minutes
 

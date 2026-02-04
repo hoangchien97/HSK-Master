@@ -8,10 +8,8 @@ import { useForm } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { z } from "zod"
 import { Eye, EyeOff, Mail, Lock } from "lucide-react"
-import { Button } from "@/app/components/portal/ui/button"
-import { Input } from "@/app/components/portal/ui/input"
-import { Label } from "@/app/components/portal/ui/label"
-import { Alert } from "@/app/components/portal/ui/alert"
+import { Button, Input, Label } from "@/app/components/common"
+import { Alert } from "@/app/components/portal/shared"
 
 // Validation schema
 const loginSchema = z.object({
@@ -137,7 +135,6 @@ export default function LoginFormClient() {
               id="email"
               type="email"
               autoComplete="email"
-              hasError={!!errors.email}
               className={`pl-10 ${errors.email ? "border-red-300 bg-red-50" : ""}`}
               placeholder="email@example.com"
             />
@@ -158,7 +155,6 @@ export default function LoginFormClient() {
               id="password"
               type={showPassword ? "text" : "password"}
               autoComplete="current-password"
-              hasError={!!errors.password}
               className={`pl-10 pr-12 ${errors.password ? "border-red-300 bg-red-50" : ""}`}
               placeholder="••••••••"
             />

@@ -1,13 +1,7 @@
 import { auth } from "@/auth"
 import { redirect } from "next/navigation"
-import { ROLES } from "@/lib/constants/roles"
-
-// Map database role to URL role
-const ROLE_REDIRECT: Record<string, string> = {
-  [ROLES.SYSTEM_ADMIN]: "/portal/admin",
-  [ROLES.TEACHER]: "/portal/teacher",
-  [ROLES.STUDENT]: "/portal/student",
-}
+import { STATUS } from "@/lib/constants/roles"
+import { getDashboardPath } from "@/lib/utils/auth"
 
 export default async function PortalPage() {
   const session = await auth()
@@ -16,19 +10,19 @@ export default async function PortalPage() {
     redirect("/portal/login")
   }
 
-  // Check if user status is locked
-  if (session.user.status === "LOCKED") {
-    redirect("/portal/unauthorized?reason=locked")
+  // Check if user status is not active
+  if (session.user.status !== STATUS.ACTIVE) {
+    redirect("/portal/login?error=ACCOUNT_LOCKED")
   }
 
   const userRole = session.user.role
 
   // If role is not populated
   if (!userRole) {
-    redirect("/portal/unauthorized?reason=no-role")
+    redirect("/portal/login?error=no-role")
   }
 
-  const redirectUrl = ROLE_REDIRECT[userRole] || "/portal/student"
-
-  redirect(redirectUrl)
+  // Redirect to role-specific dashboard
+  const dashboardPath = getDashboardPath(userRole)
+  redirect(dashboardPath)
 }

@@ -15,11 +15,10 @@ export async function POST(request: NextRequest) {
 
     const user = await prisma.portalUser.findUnique({
       where: { email: session.user.email },
-      include: { student: true },
     })
 
-    if (!user?.student) {
-      return NextResponse.json({ error: "Student not found" }, { status: 404 })
+    if (!user) {
+      return NextResponse.json({ error: "User not found" }, { status: 404 })
     }
 
     const body = await request.json()
@@ -36,7 +35,7 @@ export async function POST(request: NextRequest) {
         class: {
           include: {
             enrollments: {
-              where: { studentId: user.student.id },
+              where: { studentId: user.id },
             },
           },
         },
@@ -58,7 +57,7 @@ export async function POST(request: NextRequest) {
     const existingSubmission = await prisma.portalAssignmentSubmission.findFirst({
       where: {
         assignmentId,
-        studentId: user.student.id,
+        studentId: user.id,
       },
     })
 
@@ -78,7 +77,7 @@ export async function POST(request: NextRequest) {
     const submission = await prisma.portalAssignmentSubmission.create({
       data: {
         assignmentId,
-        studentId: user.student.id,
+        studentId: user.id,
         content,
         submittedAt: new Date(),
       },

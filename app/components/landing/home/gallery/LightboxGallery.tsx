@@ -21,6 +21,7 @@ export function LightboxGallery({
   const [rotation, setRotation] = useState(0);
   const [isFullscreen, setIsFullscreen] = useState(false);
   const [isPlaying, setIsPlaying] = useState(false);
+  const [prevIndex, setPrevIndex] = useState(index);
 
   const currentSlide = slides[currentIndex] || slides[0];
 
@@ -75,7 +76,7 @@ export function LightboxGallery({
 
   const handleDownload = useCallback(() => {
     if (!currentSlide) return;
-    
+
     const link = document.createElement("a");
     link.href = currentSlide.url;
     link.download = `photo-${currentIndex + 1}.jpg`;
@@ -97,13 +98,12 @@ export function LightboxGallery({
   });
 
   // Update currentIndex when index prop changes
-  useEffect(() => {
-    if (index >= 0 && index < slides.length) {
-      setCurrentIndex(index);
-      setZoom(1);
-      setRotation(0);
-    }
-  }, [index, slides.length]);
+  if (index !== prevIndex && index >= 0 && index < slides.length) {
+    setPrevIndex(index);
+    setCurrentIndex(index);
+    setZoom(1);
+    setRotation(0);
+  }
 
   // Auto slideshow
   useEffect(() => {
@@ -118,7 +118,7 @@ export function LightboxGallery({
 
   return (
     <div
-      className="fixed inset-0 z-50 bg-black/95 backdrop-blur-sm flex items-center justify-center"
+      className="fixed inset-0 z-50 bg-black/97 backdrop-blur-md flex items-center justify-center transition-opacity duration-300"
       onMouseMove={resetHideTimer}
     >
       <HeaderControls

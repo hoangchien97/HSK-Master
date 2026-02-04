@@ -1,7 +1,8 @@
 "use client"
 
 import { cn } from "@/lib/utils"
-import { ROLE_LABELS, ROLE_COLORS, type UserRole } from "@/lib/constants/roles"
+import { type UserRole } from "@/lib/constants/roles"
+import { ROLE_COLORS, ROLE_LABELS } from "@/app/constants"
 
 interface RoleBadgeProps {
   role: string

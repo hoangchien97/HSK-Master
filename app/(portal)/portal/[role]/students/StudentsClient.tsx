@@ -2,25 +2,18 @@
 
 import { useState } from "react"
 import Link from "next/link"
-import { 
-  Search, 
-  Filter, 
-  MoreVertical, 
-  Eye, 
-  Mail, 
+import {
+  Search,
+  Filter,
+  MoreVertical,
+  Eye,
+  Mail,
   Phone,
   GraduationCap,
   Users
 } from "lucide-react"
 import { PageHeader, Card, EmptyState } from "@/app/components/portal/shared"
 import { cn } from "@/lib/utils"
-
-interface StudentUser {
-  id: string
-  name?: string | null
-  email: string
-  image?: string | null
-}
 
 interface ClassInfo {
   id: string
@@ -30,13 +23,13 @@ interface ClassInfo {
 
 interface StudentData {
   id: string
-  studentCode: string
-  firstName: string
-  lastName: string
+  name: string
+  fullName?: string | null
+  email: string
   phoneNumber?: string | null
+  image?: string | null
   level?: string | null
   status: string
-  user: StudentUser
   classes: ClassInfo[]
 }
 
@@ -51,10 +44,8 @@ export default function StudentsClient({ students }: StudentsClientProps) {
 
   const filteredStudents = students.filter((student) => {
     const matchesSearch =
-      student.firstName.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      student.lastName.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      student.studentCode.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      student.user.email.toLowerCase().includes(searchQuery.toLowerCase())
+      (student.fullName || student.name).toLowerCase().includes(searchQuery.toLowerCase()) ||
+      student.email.toLowerCase().includes(searchQuery.toLowerCase())
 
     const matchesLevel = levelFilter === "ALL" || student.level === levelFilter
 
@@ -118,7 +109,6 @@ export default function StudentsClient({ students }: StudentsClientProps) {
               <thead>
                 <tr className="border-b border-gray-200 bg-gray-50">
                   <th className="text-left py-3 px-4 font-semibold text-gray-900">Học viên</th>
-                  <th className="text-left py-3 px-4 font-semibold text-gray-900">Mã HV</th>
                   <th className="text-left py-3 px-4 font-semibold text-gray-900">Trình độ</th>
                   <th className="text-left py-3 px-4 font-semibold text-gray-900">Lớp học</th>
                   <th className="text-left py-3 px-4 font-semibold text-gray-900">Trạng thái</th>
@@ -131,27 +121,26 @@ export default function StudentsClient({ students }: StudentsClientProps) {
                     <td className="py-3 px-4">
                       <div className="flex items-center gap-3">
                         <div className="w-10 h-10 rounded-full bg-gray-200 flex items-center justify-center overflow-hidden">
-                          {student.user.image ? (
+                          {student.image ? (
                             <img
-                              src={student.user.image}
-                              alt={student.user.name || ""}
+                              src={student.image}
+                              alt={student.name || ""}
                               className="w-full h-full object-cover"
                             />
                           ) : (
                             <span className="text-sm font-medium text-gray-600">
-                              {student.firstName.charAt(0)}
+                              {(student.fullName || student.name).charAt(0)}
                             </span>
                           )}
                         </div>
                         <div>
                           <p className="font-medium text-gray-900">
-                            {student.lastName} {student.firstName}
+                            {student.fullName || student.name}
                           </p>
-                          <p className="text-sm text-gray-500">{student.user.email}</p>
+                          <p className="text-sm text-gray-500">{student.email}</p>
                         </div>
                       </div>
                     </td>
-                    <td className="py-3 px-4 text-gray-600">{student.studentCode}</td>
                     <td className="py-3 px-4">
                       {student.level ? (
                         <span className="inline-flex items-center gap-1 px-2.5 py-1 bg-red-100 text-red-700 text-xs font-medium rounded-full">
@@ -194,7 +183,7 @@ export default function StudentsClient({ students }: StudentsClientProps) {
                     <td className="py-3 px-4">
                       <div className="flex items-center justify-end gap-2">
                         <a
-                          href={`mailto:${student.user.email}`}
+                          href={`mailto:${student.email}`}
                           className="p-2 text-gray-400 hover:text-gray-600 hover:bg-gray-100 rounded-lg transition"
                           title="Gửi email"
                         >

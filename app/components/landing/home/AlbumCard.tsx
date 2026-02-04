@@ -1,9 +1,9 @@
 "use client"
 
 import { useState } from "react"
-import Image from "next/image"
 import { Images, Eye } from "lucide-react"
 import { LightboxGallery } from "./LightboxGallery"
+import OptimizedImage from "@/app/components/common/OptimizedImage"
 
 interface Photo {
   id: string
@@ -50,17 +50,20 @@ export function AlbumCard({ album }: AlbumCardProps) {
       >
         {/* Thumbnail */}
         <div className="relative h-48 sm:h-56 md:h-64 overflow-hidden">
-          <Image
+          <OptimizedImage
             src={album.thumbnail}
             alt={album.title}
             fill
-            className="object-cover transition-transform duration-300 group-hover:scale-110"
+            className="transition-transform duration-500 ease-out group-hover:scale-110"
+            objectFit="cover"
+            sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw"
+            priority={false}
           />
           <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent" />
 
           {/* Photo Count Badge */}
-          <div className="absolute top-2 right-2 md:top-4 md:right-4 bg-white/90 dark:bg-gray-900/90 backdrop-blur-sm px-2 py-1 md:px-3 md:py-1.5 rounded-full flex items-center gap-1 md:gap-2 shadow-lg">
-            <Images className="w-3 h-3 md:w-4 md:h-4 text-blue-600" />
+          <div className="absolute top-2 right-2 md:top-4 md:right-4 bg-white/95 dark:bg-gray-900/95 backdrop-blur-sm px-2 py-1 md:px-3 md:py-1.5 rounded-full flex items-center gap-1 md:gap-2 shadow-lg">
+            <Images className="w-3 h-3 md:w-4 md:h-4 text-primary-600" />
             <span className="text-xs md:text-sm font-semibold text-gray-900 dark:text-white">
               {album.photoCount} ảnh
             </span>
@@ -79,9 +82,9 @@ export function AlbumCard({ album }: AlbumCardProps) {
           </div>
 
           {/* View Button - Visible on Hover */}
-          <div className="absolute inset-0 flex items-center justify-center bg-black/0 group-hover:bg-black/20 transition-colors duration-300 opacity-0 group-hover:opacity-100 pointer-events-none">
-            <div className="bg-white dark:bg-gray-900 px-4 py-2 md:px-6 md:py-3 rounded-full shadow-2xl transform scale-90 group-hover:scale-100 transition-transform duration-300">
-              <span className="text-xs md:text-sm font-semibold text-gray-900 dark:text-white flex items-center gap-1.5 md:gap-2">
+          <div className="absolute inset-0 flex items-center justify-center bg-black/0 group-hover:bg-black/30 transition-all duration-300 opacity-0 group-hover:opacity-100 pointer-events-none">
+            <div className="bg-white dark:bg-gray-900 px-4 py-2 md:px-6 md:py-3 rounded-full shadow-2xl transform scale-90 group-hover:scale-100 transition-all duration-300">
+              <span className="text-xs md:text-sm font-semibold text-primary-600 dark:text-primary-400 flex items-center gap-1.5 md:gap-2">
                 <Eye className="w-4 h-4 md:w-5 md:h-5" />
                 Xem album
               </span>

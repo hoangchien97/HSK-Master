@@ -4,7 +4,7 @@ import Credentials from "next-auth/providers/credentials"
 import { prisma } from "@/lib/prisma"
 import bcrypt from "bcryptjs"
 import { z } from "zod"
-import { ROLES } from "@/lib/constants/roles"
+import { USER_ROLE, STATUS } from "@/lib/constants/roles"
 
 // Type for PortalUser with status field (for TypeScript compatibility)
 type PortalUserWithStatus = {
@@ -83,11 +83,11 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
             const newUser = await prisma.portalUser.create({
               data: {
                 email: user.email!,
-                name: user.name,
+                name: user.name || user.email!.split('@')[0],
                 image: user.image,
                 emailVerified: new Date(),
-                role: ROLES.STUDENT as "STUDENT" | "TEACHER" | "SYSTEM_ADMIN", // Default role for new OAuth users
-                status: "ACTIVE" as "ACTIVE" | "INACTIVE" | "LOCKED",
+                role: USER_ROLE.STUDENT as "STUDENT" | "TEACHER" | "SYSTEM_ADMIN", // Default role for new OAuth users
+                status: STATUS.ACTIVE as "ACTIVE" | "INACTIVE" | "LOCKED",
               },
             }) as unknown as PortalUserWithStatus
             // Attach user data to the user object
@@ -95,9 +95,9 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
             user.role = newUser.role
             user.status = newUser.status
           } else {
-            // Check if user is locked
-            if (existingUser.status === "LOCKED") {
-              return false // Prevent login for locked users
+            // Check if user is locked or pending
+            if (existingUser.status === STATUS.LOCKED || existingUser.status === STATUS.INACTIVE) {
+              return false // Prevent login for locked/inactive users
             }
             // Attach existing user data
             user.id = existingUser.id
@@ -106,6 +106,22 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
           }
         } catch (error) {
           console.error("Error in signIn callback:", error)
+          return false
+        }
+      }
+
+      // For credentials login, also check status
+      if (account?.provider === "credentials") {
+        try {
+          const dbUser = await prisma.portalUser.findUnique({
+            where: { email: user.email! },
+          }) as PortalUserWithStatus | null
+
+          if (dbUser && (dbUser.status === STATUS.LOCKED || dbUser.status === STATUS.INACTIVE)) {
+            return false
+          }
+        } catch (error) {
+          console.error("Error checking user status:", error)
           return false
         }
       }
@@ -148,9 +164,9 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
     },
   },
   pages: {
-    signIn: "/auth/login",
-    signOut: "/auth/logout",
-    error: "/auth/error",
+    signIn: "/portal/login",
+    signOut: "/portal/login",
+    error: "/portal/error",
   },
   session: {
     strategy: "jwt",

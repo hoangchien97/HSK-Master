@@ -3,6 +3,7 @@ import { redirect, notFound } from "next/navigation"
 import { PrismaClient } from "@prisma/client"
 import StudentAssignmentsClient from "./StudentAssignmentsClient"
 import TeacherAssignmentsClient from "./TeacherAssignmentsClient"
+import { STATUS } from "@/lib/constants/roles"
 
 const prisma = new PrismaClient()
 
@@ -14,37 +15,33 @@ async function getStudentAssignments(email: string) {
   const user = await prisma.portalUser.findUnique({
     where: { email },
     include: {
-      student: {
+      enrollments: {
         include: {
-          enrollments: {
+          class: {
             include: {
-              class: {
+              assignments: {
+                orderBy: { dueDate: "asc" },
                 include: {
-                  assignments: {
-                    orderBy: { dueDate: "asc" },
-                    include: {
-                      submissions: true,
-                    },
-                  },
+                  submissions: true,
                 },
               },
             },
           },
-          submissions: {
-            include: {
-              assignment: true,
-            },
-          },
+        },
+      },
+      submissions: {
+        include: {
+          assignment: true,
         },
       },
     },
   })
 
-  const studentId = user?.student?.id
-  const submittedIds = new Set(user?.student?.submissions.map((s) => s.assignmentId) || [])
+  const studentId = user?.id
+  const submittedIds = new Set(user?.submissions.map((s) => s.assignmentId) || [])
 
   const assignments =
-    user?.student?.enrollments.flatMap((e) =>
+    user?.enrollments.flatMap((e) =>
       e.class.assignments.map((a) => ({
         id: a.id,
         title: a.title,
@@ -57,7 +54,7 @@ async function getStudentAssignments(email: string) {
           classCode: e.class.classCode,
         },
         submitted: submittedIds.has(a.id),
-        submission: user?.student?.submissions.find((s) => s.assignmentId === a.id),
+        submission: user?.submissions.find((s) => s.assignmentId === a.id),
       }))
     ) || []
 
@@ -68,31 +65,27 @@ async function getTeacherAssignments(email: string) {
   const user = await prisma.portalUser.findUnique({
     where: { email },
     include: {
-      teacher: {
+      assignments: {
         include: {
-          assignments: {
+          class: true,
+          submissions: {
             include: {
-              class: true,
-              submissions: {
-                include: {
-                  student: true,
-                },
-              },
+              student: true,
             },
-            orderBy: { createdAt: "desc" },
-          },
-          classes: {
-            where: { status: "ACTIVE" },
-            select: { id: true, className: true, classCode: true },
           },
         },
+        orderBy: { createdAt: "desc" },
+      },
+      classes: {
+        where: { status: STATUS.ACTIVE },
+        select: { id: true, className: true, classCode: true },
       },
     },
   })
 
   return {
-    assignments: user?.teacher?.assignments || [],
-    classes: user?.teacher?.classes || [],
+    assignments: user?.assignments || [],
+    classes: user?.classes || [],
   }
 }
 

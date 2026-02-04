@@ -1,7 +1,7 @@
 "use client";
 import React from 'react';
 import Link from 'next/link';
-import Button from '@/app/components/landing/shared/Button';
+import Button from '@/app/components/common/Button';
 import CountUp from './CountUp';
 
 interface CtaStat {
@@ -19,7 +19,6 @@ export default function CTASectionClient({ stats }: Props) {
   return (
     <section className="py-8 md:py-12 bg-gradient-to-r from-red-600 via-orange-600 to-yellow-500 relative overflow-hidden">
       {/* Decorative Elements */}
-      <div className="absolute inset-0 bg-[url('/pattern.svg')] opacity-10" />
       <div className="hidden md:block absolute top-0 right-0 w-64 h-64 bg-white/10 rounded-full -mr-32 -mt-32" />
       <div className="hidden md:block absolute bottom-0 left-0 w-96 h-96 bg-white/10 rounded-full -ml-48 -mb-48" />
 
@@ -72,15 +71,47 @@ export default function CTASectionClient({ stats }: Props) {
 
           {/* Social Proof Stats */}
           <div className="flex flex-wrap justify-center items-center gap-4 md:gap-6 lg:gap-10 text-white">
-            {stats.map((stat, index) => (
-              <React.Fragment key={stat.id}>
-                {index > 0 && <div className="hidden sm:block w-px h-10 bg-white/30" />}
-                <div className="text-center">
-                  <CountUp value={stat.value} suffix={stat.suffix} />
-                  <div className="text-white/80 text-[10px] md:text-xs lg:text-sm">{stat.label}</div>
+            {stats.length > 0 ? (
+              stats.map((stat, index) => (
+                <React.Fragment key={stat.id}>
+                  {index > 0 && <div className="hidden sm:block w-px h-10 bg-white/30" />}
+                  <div className="text-center min-w-[80px]">
+                    <CountUp
+                      value={stat.value}
+                      suffix={stat.suffix}
+                      stiffness={100}
+                      damping={20}
+                    />
+                    <div className="text-white/90 text-[10px] md:text-xs lg:text-sm font-medium">
+                      {stat.label}
+                    </div>
+                  </div>
+                </React.Fragment>
+              ))
+            ) : (
+              <div className="flex gap-6 md:gap-10">
+                <div className="text-center min-w-[80px]">
+                  <CountUp value={500} suffix="+" />
+                  <div className="text-white/90 text-[10px] md:text-xs lg:text-sm font-medium">
+                    Học viên
+                  </div>
                 </div>
-              </React.Fragment>
-            ))}
+                <div className="hidden sm:block w-px h-10 bg-white/30" />
+                <div className="text-center min-w-[80px]">
+                  <CountUp value={10} suffix="+" />
+                  <div className="text-white/90 text-[10px] md:text-xs lg:text-sm font-medium">
+                    Năm kinh nghiệm
+                  </div>
+                </div>
+                <div className="hidden sm:block w-px h-10 bg-white/30" />
+                <div className="text-center min-w-[80px]">
+                  <CountUp value={95} suffix="%" />
+                  <div className="text-white/90 text-[10px] md:text-xs lg:text-sm font-medium">
+                    Học viên hài lòng
+                  </div>
+                </div>
+              </div>
+            )}
           </div>
         </div>
       </div>

@@ -22,19 +22,11 @@ import { format } from "date-fns"
 import { vi } from "date-fns/locale"
 import { cn } from "@/lib/utils"
 
-interface StudentUser {
-  id: string
-  name?: string | null
-  email: string
-  image?: string | null
-}
-
 interface StudentData {
   id: string
-  studentCode: string
-  firstName: string
-  lastName: string
-  user: StudentUser
+  name: string
+  fullName?: string | null
+  image?: string | null
 }
 
 interface ClassEnrollment {
@@ -51,9 +43,8 @@ interface ClassData {
 
 interface AttendanceStudentData {
   id: string
-  studentCode: string
-  firstName: string
-  lastName: string
+  name: string
+  fullName?: string | null
 }
 
 interface AttendanceRecord {
@@ -85,9 +76,8 @@ export default function AttendanceClient({
   const selectedClass = classes.find((c) => c.id === selectedClassId)
   const students = selectedClass?.enrollments.map((e) => ({
     id: e.student.id,
-    name: `${e.student.lastName} ${e.student.firstName}`,
-    studentCode: e.student.studentCode,
-    image: e.student.user.image,
+    name: e.student.fullName || e.student.name,
+    image: e.student.image,
   })) || []
 
   const handleAttendanceChange = (
@@ -316,7 +306,7 @@ export default function AttendanceClient({
                         </td>
                         <td className="py-2">{record.class.className}</td>
                         <td className="py-2">
-                          {record.student.lastName} {record.student.firstName}
+                          {record.student.fullName || record.student.name}
                         </td>
                         <td className="py-2">
                           <span

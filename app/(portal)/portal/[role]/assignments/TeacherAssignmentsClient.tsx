@@ -3,12 +3,12 @@
 import { useState } from "react"
 import Link from "next/link"
 import { useRouter } from "next/navigation"
-import { 
-  Plus, 
-  Search, 
-  MoreVertical, 
-  Eye, 
-  Edit2, 
+import {
+  Plus,
+  Search,
+  MoreVertical,
+  Eye,
+  Edit2,
   Trash2,
   FileText,
   Calendar,
@@ -30,8 +30,8 @@ interface StudentSubmission {
   id: string
   student: {
     id: string
-    firstName: string
-    lastName: string
+    fullName: string | null
+    name: string
   }
   status: string
   score?: number | null

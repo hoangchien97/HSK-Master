@@ -1,7 +1,7 @@
 import { auth } from "@/auth"
 import { redirect } from "next/navigation"
 import { Suspense } from "react"
-import RegisterFormClient from "./RegisterFormClient"
+import RegisterForm from "@/app/components/portal/auth/RegisterForm"
 
 export default async function PortalRegisterPage() {
   // Server-side auth check - redirect if already logged in
@@ -11,21 +11,10 @@ export default async function PortalRegisterPage() {
   }
 
   return (
-    <div className="w-full max-w-md space-y-6">
-      {/* Logo & Title */}
-      <div className="text-center">
-        <div className="flex justify-center mb-4">
-          <div className="w-16 h-16 bg-red-600 rounded-2xl flex items-center justify-center shadow-lg">
-            <span className="text-white font-bold text-3xl">漢</span>
-          </div>
-        </div>
-        <h1 className="text-3xl font-bold text-gray-900">HSK Learn</h1>
-        <p className="mt-2 text-gray-600">Tạo tài khoản mới</p>
-      </div>
-
+    <div className="flex items-center justify-center">
       {/* Register Form - Client Component wrapped in Suspense */}
       <Suspense fallback={<RegisterFormSkeleton />}>
-        <RegisterFormClient />
+        <RegisterForm />
       </Suspense>
     </div>
   )
@@ -33,12 +22,23 @@ export default async function PortalRegisterPage() {
 
 function RegisterFormSkeleton() {
   return (
-    <div className="space-y-4 animate-pulse">
-      <div className="h-12 bg-gray-200 rounded-xl"></div>
-      <div className="h-12 bg-gray-200 rounded-xl"></div>
-      <div className="h-12 bg-gray-200 rounded-xl"></div>
-      <div className="h-12 bg-gray-200 rounded-xl"></div>
-      <div className="h-12 bg-gray-200 rounded-xl"></div>
+    <div className="w-full max-w-md">
+      <div className="bg-white rounded-2xl shadow-2xl p-8 border border-gray-100 space-y-4 animate-pulse">
+        <div className="flex flex-col items-center">
+          <div className="w-16 h-16 bg-gray-200 rounded-2xl mb-4"></div>
+          <div className="h-8 w-40 bg-gray-200 rounded mb-2"></div>
+          <div className="h-4 w-56 bg-gray-200 rounded"></div>
+        </div>
+        <div className="h-12 bg-gray-200 rounded-xl"></div>
+        <div className="h-4 bg-gray-200 rounded w-1/2 mx-auto"></div>
+        <div className="space-y-4">
+          <div className="h-16 bg-gray-200 rounded-xl"></div>
+          <div className="h-16 bg-gray-200 rounded-xl"></div>
+          <div className="h-16 bg-gray-200 rounded-xl"></div>
+          <div className="h-16 bg-gray-200 rounded-xl"></div>
+          <div className="h-12 bg-gray-200 rounded-xl"></div>
+        </div>
+      </div>
     </div>
   )
 }

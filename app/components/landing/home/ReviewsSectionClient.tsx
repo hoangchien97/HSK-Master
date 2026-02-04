@@ -2,7 +2,7 @@
 import { useState } from "react";
 import ReviewForm from "./ReviewForm";
 import ReviewList from "./ReviewList";
-import { SectionHeader } from "@/app/components/landing/shared";
+import SectionHeader from "@/app/components/landing/shared/SectionHeader";
 
 interface Review {
   id: string;
@@ -17,7 +17,9 @@ interface Props {
   reviews: Review[];
 }
 
-export default function ReviewsSectionClient({ reviews: initialReviews }: Props) {
+export default function ReviewsSectionClient({
+  reviews: initialReviews,
+}: Props) {
   const [reviews, setReviews] = useState(initialReviews);
 
   const handleReviewAdded = (newReview: Review) => {

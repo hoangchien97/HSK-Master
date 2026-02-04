@@ -1,5 +1,5 @@
 import { X, Pause, Play, ZoomOut, ZoomIn, RotateCw, Minimize, Maximize, Download } from "lucide-react";
-import Button from "@/app/components/landing/shared/Button";
+import Button from "@/app/components/common/Button";
 import { ZOOM_MIN, ZOOM_MAX } from "./types";
 import { useResponsive } from "@/app/hooks/useResponsive";
 
@@ -42,8 +42,8 @@ export function HeaderControls({
 
   return (
     <div
-      className={`absolute top-2 left-2 right-2 md:top-4 md:left-4 md:right-4 flex justify-between items-center z-10 transition-opacity duration-300 ${
-        showControls ? "opacity-100" : "opacity-0"
+      className={`absolute top-2 left-2 right-2 md:top-4 md:left-4 md:right-4 flex justify-between items-center z-10 transition-all duration-300 ${
+        showControls ? "opacity-100 translate-y-0" : "opacity-0 -translate-y-4"
       }`}
       onMouseEnter={cancelHideTimer}
       onMouseLeave={resetHideTimer}
@@ -58,7 +58,7 @@ export function HeaderControls({
         >
           <span className="hidden sm:inline">Đóng</span>
         </Button>
-        <span className="text-white text-[10px] sm:text-xs md:text-sm font-medium px-2 py-1 md:px-3 md:py-2 bg-black/50 rounded-lg">
+        <span className="text-white text-[10px] sm:text-xs md:text-sm font-semibold px-2 py-1 md:px-3 md:py-2 bg-black/60 backdrop-blur-sm rounded-lg border border-white/10">
           {currentIndex + 1} / {totalSlides}
         </span>
       </div>

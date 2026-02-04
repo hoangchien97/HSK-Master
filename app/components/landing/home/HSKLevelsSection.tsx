@@ -1,4 +1,4 @@
-import HSKLevelCard, { type HSKLevel } from './HSKLevelCard';
+import HSKLevelCard from './HSKLevelCard';
 import SectionHeader from '@/app/components/landing/shared/SectionHeader';
 import { getHSKLevels } from '@/app/services';
 

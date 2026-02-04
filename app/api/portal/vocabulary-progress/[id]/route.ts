@@ -20,18 +20,17 @@ export async function DELETE(
 
     const user = await prisma.portalUser.findUnique({
       where: { email: session.user.email },
-      include: { student: true },
     })
 
-    if (!user?.student) {
-      return NextResponse.json({ error: "Student not found" }, { status: 404 })
+    if (!user) {
+      return NextResponse.json({ error: "User not found" }, { status: 404 })
     }
 
     // Verify the vocabulary belongs to this student
     const vocabulary = await prisma.portalVocabulary.findFirst({
       where: {
         id,
-        studentId: user.student.id,
+        studentId: user.id,
       },
     })
 
@@ -68,17 +67,16 @@ export async function PUT(
 
     const user = await prisma.portalUser.findUnique({
       where: { email: session.user.email },
-      include: { student: true },
     })
 
-    if (!user?.student) {
-      return NextResponse.json({ error: "Student not found" }, { status: 404 })
+    if (!user) {
+      return NextResponse.json({ error: "User not found" }, { status: 404 })
     }
 
     const vocabulary = await prisma.portalVocabulary.findFirst({
       where: {
         id,
-        studentId: user.student.id,
+        studentId: user.id,
       },
     })
 

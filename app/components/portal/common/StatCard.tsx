@@ -1,7 +1,7 @@
 "use client"
 
 import { cn } from "@/lib/utils"
-import { Card, CardContent } from "@/app/components/portal/ui/card"
+import { Card, CardContent } from "@/app/components/portal/shared"
 
 interface StatCardProps {
   title: string

@@ -1,5 +1,5 @@
 import { Suspense } from "react";
-import { Breadcrumb } from "@/app/components/landing/shared";
+import { Breadcrumb } from "@/app/components/common";
 import { AnimatedSection } from "@/app/components/landing/shared/AnimatedSection";
 import { CoursesContainer } from "./CoursesClient";
 import { getFilteredCourses, getCategories } from "../../services/course.service";

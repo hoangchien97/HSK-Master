@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server"
 import { auth } from "@/auth"
 import { prisma } from "@/lib/prisma"
+import { CLASS_STATUS } from "@/lib/constants/roles"
 
 // GET - Fetch classes for the authenticated teacher
 export async function GET(request: NextRequest) {
@@ -14,28 +15,24 @@ export async function GET(request: NextRequest) {
     const user = await prisma.portalUser.findUnique({
       where: { email: session.user.email },
       include: {
-        teacher: {
+        classes: {
           include: {
-            classes: {
+            enrollments: {
               include: {
-                enrollments: {
-                  include: {
-                    student: true,
-                  },
-                },
+                student: true,
               },
-              orderBy: { createdAt: "desc" },
             },
           },
+          orderBy: { createdAt: "desc" },
         },
       },
     })
 
-    if (!user?.teacher) {
-      return NextResponse.json({ error: "Teacher not found" }, { status: 404 })
+    if (!user) {
+      return NextResponse.json({ error: "User not found" }, { status: 404 })
     }
 
-    return NextResponse.json(user.teacher.classes)
+    return NextResponse.json(user.classes)
   } catch (error) {
     console.error("Error fetching classes:", error)
     return NextResponse.json({ error: "Internal server error" }, { status: 500 })
@@ -53,11 +50,10 @@ export async function POST(request: NextRequest) {
 
     const user = await prisma.portalUser.findUnique({
       where: { email: session.user.email },
-      include: { teacher: true },
     })
 
-    if (!user?.teacher) {
-      return NextResponse.json({ error: "Teacher not found" }, { status: 404 })
+    if (!user) {
+      return NextResponse.json({ error: "User not found" }, { status: 404 })
     }
 
     const body = await request.json()
@@ -81,8 +77,8 @@ export async function POST(request: NextRequest) {
         maxStudents: maxStudents || 20,
         startDate: new Date(startDate),
         endDate: endDate ? new Date(endDate) : null,
-        teacherId: user.teacher.id,
-        status: "ACTIVE",
+        teacherId: user.id,
+        status: CLASS_STATUS.ACTIVE,
       },
     })
 
