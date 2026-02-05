@@ -70,13 +70,19 @@ export default function Header() {
               <Link
                 key={item.path}
                 href={item.path}
-                className={`text-sm font-semibold transition-colors cursor-pointer ${
+                className={`relative text-sm font-semibold transition-all cursor-pointer group pb-1 ${
                   isActive(item.path)
                     ? 'text-red-600'
                     : 'text-text-main-light dark:text-text-main-dark hover:text-red-600'
                 }`}
               >
                 {item.name}
+                {/* Hover Indicator */}
+                <span className={`absolute bottom-0 left-0 right-0 h-0.5 bg-gradient-to-r from-yellow-400 via-orange-500 to-red-600 transition-transform duration-300 origin-left ${
+                  isActive(item.path)
+                    ? 'scale-x-100'
+                    : 'scale-x-0 group-hover:scale-x-100'
+                }`} />
               </Link>
             ))}
           </nav>

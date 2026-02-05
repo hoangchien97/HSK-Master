@@ -49,14 +49,13 @@ export default function PortalSidebar({ userRole, isOpen = true, onClose }: Port
         )}
       >
         {/* Logo - Fixed at top */}
-        <div className="flex items-center justify-between px-5 py-4 border-b border-gray-100 shrink-0">
+        <div className="flex items-center h-[65px] justify-between px-5 py-4 border-b border-gray-100 shrink-0">
           <Link href="/portal" className="flex items-center gap-3">
             <div className="w-10 h-10 bg-linear-to-br from-red-500 to-red-600 rounded-xl flex items-center justify-center shadow-lg shadow-red-200">
               <span className="text-white font-bold text-xl">漢</span>
             </div>
             <div>
               <span className="font-bold text-lg text-gray-900 block">HSK Master</span>
-              <span className="text-xs text-gray-500">Portal</span>
             </div>
           </Link>
           {/* Mobile close button */}

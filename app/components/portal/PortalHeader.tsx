@@ -133,7 +133,13 @@ export default function PortalHeader({
               {/* User info (hidden on mobile) */}
               <div className="hidden lg:block text-left">
                 <p className="text-sm font-medium text-gray-900 leading-tight">{userName}</p>
-                <p className="text-xs text-gray-500">{roleLabel}</p>
+                <span className={cn(
+                  "inline-block px-2 py-0.5 text-xs font-semibold rounded-full mt-0.5",
+                  roleColors.bg,
+                  roleColors.text
+                )}>
+                  {roleLabel}
+                </span>
               </div>
 
               {/* Dropdown icon */}
@@ -143,19 +149,6 @@ export default function PortalHeader({
             {/* Dropdown menu */}
             {showUserMenu && (
               <div className="absolute right-0 mt-2 w-64 bg-white rounded-xl shadow-lg border border-gray-200 py-2 z-20">
-                {/* User info in dropdown */}
-                <div className="px-4 py-3 border-b border-gray-100">
-                  <p className="text-sm font-semibold text-gray-900">{userName}</p>
-                  <p className="text-xs text-gray-500 truncate">{userEmail}</p>
-                  <span className={cn(
-                    "inline-block mt-2 px-2 py-0.5 text-xs font-medium rounded-full",
-                    roleColors.bg,
-                    roleColors.text
-                  )}>
-                    {roleLabel}
-                  </span>
-                </div>
-
                 {/* Menu items */}
                 <div className="py-1">
                   <Link

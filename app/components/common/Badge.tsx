@@ -2,7 +2,7 @@ import { ReactNode } from "react";
 
 interface BadgeProps {
   children: ReactNode;
-  variant?: "default" | "active" | "gradient";
+  variant?: "default" | "active" | "gradient" | "success";
   size?: "sm" | "md" | "lg";
   onClick?: () => void;
   className?: string;
@@ -31,6 +31,8 @@ export default function Badge({
       "bg-brand-gradient text-[#fff] font-bold shadow-sm hover:shadow-md",
     gradient:
       "bg-gradient-to-r from-yellow-400 via-red-500 to-red-600 text-white font-bold shadow-lg hover:shadow-xl hover:scale-105 uppercase tracking-wider",
+    success:
+      "bg-green-100 text-green-800 ring-1 ring-inset ring-green-200",
   };
 
   const Component = onClick ? "button" : "div";

@@ -20,9 +20,9 @@ export default async function DashboardPage({ params }: Props) {
     case USER_ROLE.SYSTEM_ADMIN:
       return <AdminDashboard />
     case USER_ROLE.TEACHER:
-      return <TeacherDashboard teacherName={session?.user?.name || undefined} />
+      return <TeacherDashboard teacherName={session?.user?.fullName || session?.user?.name || undefined} />
     case USER_ROLE.STUDENT:
-      return <StudentDashboard studentName={session?.user?.name || undefined} />
+      return <StudentDashboard studentName={session?.user?.fullName || session?.user?.name || undefined} />
     default:
       notFound()
   }

@@ -12,3 +12,4 @@ export { default as LoadingSpinner } from "./LoadingSpinner";
 export { default as Badge } from "./Badge";
 export { default as Pagination } from "./Pagination";
 export { default as Label } from "./Label";
+export { default as BaseModal } from "./BaseModal";

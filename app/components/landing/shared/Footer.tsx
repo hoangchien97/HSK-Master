@@ -59,7 +59,7 @@ export default function Footer() {
               <li>
                 <Link
                   href={`/courses?hskLevel=${HSK_LEVEL_GROUPS.BEGINNER}`}
-                  className="text-sm text-white hover:text-white hover:translate-x-1 transition-all inline-block"
+                  className="text-sm text-white/90 hover:text-white hover:brightness-125 hover:translate-x-1 transition-all inline-block"
                 >
                   Sơ cấp (HSK 1-2)
                 </Link>
@@ -67,7 +67,7 @@ export default function Footer() {
               <li>
                 <Link
                   href={`/courses?hskLevel=${HSK_LEVEL_GROUPS.INTERMEDIATE}`}
-                  className="text-sm text-white hover:text-white hover:translate-x-1 transition-all inline-block"
+                  className="text-sm text-white/90 hover:text-white hover:brightness-125 hover:translate-x-1 transition-all inline-block"
                 >
                   Trung cấp (HSK 3-4)
                 </Link>
@@ -75,7 +75,7 @@ export default function Footer() {
               <li>
                 <Link
                   href={`/courses?hskLevel=${HSK_LEVEL_GROUPS.ADVANCED}`}
-                  className="text-sm text-white hover:text-white hover:translate-x-1 transition-all inline-block"
+                  className="text-sm text-white/90 hover:text-white hover:brightness-125 hover:translate-x-1 transition-all inline-block"
                 >
                   Cao cấp (HSK 5-6)
                 </Link>
@@ -98,13 +98,13 @@ export default function Footer() {
             <ul className="space-y-2.5">
               <li className="flex items-start gap-2.5 group">
                 <Phone className="text-white/90 w-4 h-4 shrink-0 mt-0.5 group-hover:scale-110 transition-transform" />
-                <a href="tel:0965322136" className="text-sm font-semibold text-white hover:underline">
+                <a href="tel:0965322136" className="text-sm font-semibold text-white/90 hover:text-white hover:brightness-125 hover:underline transition-all">
                   0965322136
                 </a>
               </li>
               <li className="flex items-start gap-2.5 group">
                 <Mail className="text-white/90 w-4 h-4 shrink-0 mt-0.5 group-hover:scale-110 transition-transform" />
-                <a href="mailto:tranhongngoc19122001@gmail.com" className="text-sm text-white hover:underline break-all">
+                <a href="mailto:tranhongngoc19122001@gmail.com" className="text-sm text-white/90 hover:text-white hover:brightness-125 hover:underline break-all transition-all">
                   tranhongngoc19122001@gmail.com
                 </a>
               </li>

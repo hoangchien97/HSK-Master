@@ -163,30 +163,36 @@ const Select = ({
         {isOpen && !disabled && (
           <div className="absolute z-50 w-full mt-1.5 md:mt-2 bg-white dark:bg-gray-800 border-2 border-primary-500 rounded-lg md:rounded-xl shadow-2xl overflow-hidden">
             <div className="max-h-48 md:max-h-60 overflow-y-auto">
-              {options.map((option) => {
-                const isSelected = option.value === currentValue;
-                return (
-                  <button
-                    key={option.value}
-                    type="button"
-                    onClick={() => !option.disabled && handleSelect(option.value)}
-                    disabled={option.disabled}
-                    className={`
-                      w-full ${optionSizeClasses[effectiveSize]} text-left font-medium transition-all flex items-center justify-between
-                      ${
-                        option.disabled
-                          ? "text-gray-300 dark:text-gray-600 cursor-not-allowed bg-gray-50 dark:bg-gray-900"
-                          : isSelected
-                          ? "bg-primary-50 dark:bg-primary-900/30 text-primary-600 dark:text-primary-400 font-bold cursor-pointer"
-                          : "text-gray-700 dark:text-gray-300 hover:bg-primary-50 dark:hover:bg-primary-900/20 hover:text-primary-600 dark:hover:text-primary-400 cursor-pointer"
-                      }
-                    `}
-                  >
-                    <span>{option.label}</span>
-                    {isSelected && <Check className="w-4 h-4 md:w-5 md:h-5 text-primary-500" />}
-                  </button>
-                );
-              })}
+              {options.length === 0 ? (
+                <div className="px-3 py-6 md:px-4 md:py-8 text-center text-gray-500 dark:text-gray-400 text-xs md:text-sm">
+                  Không có dữ liệu để hiển thị
+                </div>
+              ) : (
+                options.map((option) => {
+                  const isSelected = option.value === currentValue;
+                  return (
+                    <button
+                      key={option.value}
+                      type="button"
+                      onClick={() => !option.disabled && handleSelect(option.value)}
+                      disabled={option.disabled}
+                      className={`
+                        w-full ${optionSizeClasses[effectiveSize]} text-left font-medium transition-all flex items-center justify-between
+                        ${
+                          option.disabled
+                            ? "text-gray-300 dark:text-gray-600 cursor-not-allowed bg-gray-50 dark:bg-gray-900"
+                            : isSelected
+                            ? "bg-primary-50 dark:bg-primary-900/30 text-primary-600 dark:text-primary-400 font-bold cursor-pointer"
+                            : "text-gray-700 dark:text-gray-300 hover:bg-primary-50 dark:hover:bg-primary-900/20 hover:text-primary-600 dark:hover:text-primary-400 cursor-pointer"
+                        }
+                      `}
+                    >
+                      <span>{option.label}</span>
+                      {isSelected && <Check className="w-4 h-4 md:w-5 md:h-5 text-primary-500" />}
+                    </button>
+                  );
+                })
+              )}
             </div>
           </div>
         )}

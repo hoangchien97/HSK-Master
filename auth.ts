@@ -11,6 +11,7 @@ type PortalUserWithStatus = {
   id: string
   email: string
   name: string | null
+  fullName: string | null
   image: string | null
   role: string
   status: string
@@ -62,6 +63,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
           id: user.id,
           email: user.email,
           name: user.name,
+          fullName: user.fullName,
           image: user.image,
           role: user.role,
           status: user.status,
@@ -146,6 +148,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
             token.role = dbUser.role
             token.status = dbUser.status
             token.name = dbUser.name
+            token.fullName = dbUser.fullName
             token.picture = dbUser.image
           }
         } catch (error) {
@@ -159,6 +162,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
         session.user.id = token.id as string
         session.user.role = token.role as string
         session.user.status = token.status as string
+        session.user.fullName = token.fullName as string
       }
       return session
     },

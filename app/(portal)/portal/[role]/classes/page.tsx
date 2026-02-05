@@ -1,42 +1,21 @@
 import { auth } from "@/auth"
 import { redirect } from "next/navigation"
-import { PrismaClient } from "@prisma/client"
-import ClassesClient from "./ClassesClient"
 import { USER_ROLE } from "@/lib/constants/roles"
+import TeacherClassManagement from "@/app/components/portal/classes/TeacherClassManagement"
+import ClassesClient from "./ClassesClient"
 
-const prisma = new PrismaClient()
-
-async function getTeacherClasses(email: string) {
-  const user = await prisma.portalUser.findUnique({
-    where: { email },
-    include: {
-      classes: {
-        include: {
-          enrollments: {
-            include: {
-              student: true,
-            },
-          },
-        },
-        orderBy: { createdAt: "desc" },
-      },
-    },
-  })
-  return user?.classes || []
-}
-
-export default async function TeacherClassesPage() {
+export default async function ClassesPage() {
   const session = await auth()
 
-  if (!session?.user?.email) {
+  if (!session?.user) {
     redirect("/portal/login")
   }
 
-  if (session.user.role !== USER_ROLE.TEACHER && session.user.role !== USER_ROLE.SYSTEM_ADMIN) {
-    redirect("/portal/student")
+  // Teacher gets full management interface
+  if (session.user.role === USER_ROLE.TEACHER || session.user.role === USER_ROLE.SYSTEM_ADMIN) {
+    return <TeacherClassManagement />
   }
 
-  const classes = await getTeacherClasses(session.user.email)
-
-  return <ClassesClient classes={classes} />
+  // Student gets simple list view - pass empty classes for now
+  return <ClassesClient classes={[]} />
 }

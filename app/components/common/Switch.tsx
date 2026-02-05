@@ -11,6 +11,8 @@ interface SwitchProps
   size?: "sm" | "md" | "lg";
   required?: boolean;
   disabled?: boolean;
+  checked?: boolean;
+  onCheckedChange?: (checked: boolean) => void;
 }
 
 export const Switch = forwardRef<HTMLInputElement, SwitchProps>(
@@ -22,8 +24,11 @@ export const Switch = forwardRef<HTMLInputElement, SwitchProps>(
       size,
       required = false,
       disabled = false,
+      checked,
+      onCheckedChange,
       className = "",
       id,
+      onChange,
       ...props
     },
     ref
@@ -31,6 +36,11 @@ export const Switch = forwardRef<HTMLInputElement, SwitchProps>(
     const { isMobile } = useResponsive();
     const inputId = id || props.name;
     const effectiveSize = isMobile ? "sm" : (size || "md");
+
+    const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+      onChange?.(e);
+      onCheckedChange?.(e.target.checked);
+    };
 
     // Size configurations for container and thumb
     const sizeConfig = {
@@ -83,6 +93,8 @@ export const Switch = forwardRef<HTMLInputElement, SwitchProps>(
               id={inputId}
               type="checkbox"
               disabled={disabled}
+              checked={checked}
+              onChange={handleChange}
               className="sr-only peer"
               {...props}
             />

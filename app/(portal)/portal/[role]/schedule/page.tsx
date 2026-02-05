@@ -1,8 +1,8 @@
 import { auth } from "@/auth"
 import { redirect, notFound } from "next/navigation"
 import { PrismaClient } from "@prisma/client"
-import StudentScheduleClient from "./StudentScheduleClient"
-import TeacherScheduleClient from "./TeacherScheduleClient"
+import StudentScheduleView from "@/app/components/portal/schedules/StudentScheduleView"
+import TeacherScheduleCalendar from "@/app/components/portal/schedules/TeacherScheduleCalendar"
 import { USER_ROLE, STATUS } from "@/lib/constants/roles"
 
 const prisma = new PrismaClient()
@@ -93,12 +93,11 @@ export default async function SchedulePage({ params }: Props) {
   // Render based on role
   if (userRole === "student") {
     const schedules = await getStudentSchedules(session.user.email)
-    return <StudentScheduleClient schedules={schedules} />
+    return <StudentScheduleView />
   }
 
   if (userRole === "teacher") {
-    const { schedules, classes } = await getTeacherSchedule(session.user.email)
-    return <TeacherScheduleClient schedules={schedules} classes={classes} />
+    return <TeacherScheduleCalendar />
   }
 
   notFound()
