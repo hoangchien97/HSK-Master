@@ -2,6 +2,8 @@ import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import "./styles/schedule-x-custom.css";
+import "./styles/schedule-calendar-custom.css";
+import "./styles/schedule-x-hide-header.css";
 import { WebVitals } from "./components/landing/shared";
 import * as TooltipPrimitive from '@radix-ui/react-tooltip';
 import NextTopLoader from 'nextjs-toploader';

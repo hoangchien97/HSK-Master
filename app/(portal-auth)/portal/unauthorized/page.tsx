@@ -70,7 +70,7 @@ export default async function UnauthorizedPage({ searchParams }: PageProps) {
           {/* Actions */}
           <div className="space-y-3">
             <Link
-              href="/"
+              href="/portal"
               className="flex items-center justify-center gap-2 w-full px-4 py-3 bg-red-600 text-white rounded-xl hover:bg-red-700 transition-colors font-medium"
             >
               <ArrowLeft className="w-5 h-5" />

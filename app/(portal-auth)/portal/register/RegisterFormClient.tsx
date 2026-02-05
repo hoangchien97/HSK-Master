@@ -212,7 +212,7 @@ export default function RegisterFormClient() {
       {/* Back to Home */}
       <div className="pt-4 border-t border-gray-200">
         <Link
-          href="/"
+          href="/portal"
           className="text-sm text-gray-500 hover:text-gray-700 flex items-center justify-center gap-1 transition"
         >
           <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">

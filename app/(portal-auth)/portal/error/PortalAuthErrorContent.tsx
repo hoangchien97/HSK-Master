@@ -63,7 +63,7 @@ export default function PortalAuthErrorContent() {
         </Link>
 
         <Link
-          href="/"
+          href="/portal"
           className="block w-full bg-gray-100 text-gray-700 py-3 px-4 rounded-xl hover:bg-gray-200 font-medium transition"
         >
           Về trang chủ

@@ -5,6 +5,7 @@ import { prisma } from "@/lib/prisma"
 import bcrypt from "bcryptjs"
 import { z } from "zod"
 import { USER_ROLE, STATUS } from "@/lib/constants/roles"
+import { authConfig } from "@/auth.config"
 
 // Type for PortalUser with status field (for TypeScript compatibility)
 type PortalUserWithStatus = {
@@ -19,6 +20,7 @@ type PortalUserWithStatus = {
 }
 
 export const { handlers, signIn, signOut, auth } = NextAuth({
+  ...authConfig,
   providers: [
     Google({
       clientId: process.env.GOOGLE_CLIENT_ID,
@@ -167,13 +169,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
       return session
     },
   },
-  pages: {
-    signIn: "/portal/login",
-    signOut: "/portal/login",
-    error: "/portal/error",
-  },
   session: {
     strategy: "jwt",
   },
-  secret: process.env.AUTH_SECRET,
 })

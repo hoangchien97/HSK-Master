@@ -6,6 +6,8 @@ export const authConfig = {
     signOut: "/portal/login",
     error: "/portal/error",
   },
+  secret: process.env.AUTH_SECRET,
+  trustHost: true,
   callbacks: {
     authorized({ auth, request: { nextUrl } }) {
       const isLoggedIn = !!auth?.user

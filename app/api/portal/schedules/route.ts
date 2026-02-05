@@ -6,6 +6,56 @@ import { generateRecurringSessions, validateRecurrenceRule, type RecurrenceRule 
 
 const prisma = new PrismaClient()
 
+// GET - Fetch schedules for current teacher
+export async function GET(request: NextRequest) {
+  try {
+    const session = await auth()
+
+    if (!session?.user?.email) {
+      return NextResponse.json({ error: "Unauthorized" }, { status: 401 })
+    }
+
+    const user = await prisma.portalUser.findUnique({
+      where: { email: session.user.email },
+    })
+
+    if (!user) {
+      return NextResponse.json({ error: "User not found" }, { status: 404 })
+    }
+
+    // Teachers only see their own schedules
+    // Admins see all schedules
+    const schedules = await prisma.portalSchedule.findMany({
+      where: user.role === USER_ROLE.TEACHER ? { teacherId: user.id } : {},
+      include: {
+        class: {
+          include: {
+            enrollments: {
+              include: {
+                student: {
+                  select: {
+                    id: true,
+                    fullName: true,
+                    image: true,
+                  },
+                },
+              },
+            },
+          },
+        },
+      },
+      orderBy: {
+        startTime: 'asc',
+      },
+    })
+
+    return NextResponse.json(schedules)
+  } catch (error) {
+    console.error("Error fetching schedules:", error)
+    return NextResponse.json({ error: "Không thể tải lịch dạy" }, { status: 500 })
+  }
+}
+
 // POST - Create schedule(s) with optional recurrence
 export async function POST(request: NextRequest) {
   try {
@@ -88,12 +138,12 @@ export async function POST(request: NextRequest) {
 
       // Note: For recurring schedules, Google Calendar sync is manual
       // User can sync individual sessions later if needed
-      
+
       return NextResponse.json({
         success: true,
         count: createdSessions.length,
         schedules: createdSessions,
-        message: syncToGoogle 
+        message: syncToGoogle
           ? `Đã tạo ${createdSessions.length} buổi học. Lưu ý: Lịch lặp không tự động đồng bộ Google Calendar. Bạn có thể đồng bộ từng buổi học sau.`
           : undefined,
       })
