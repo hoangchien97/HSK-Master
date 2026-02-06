@@ -12,6 +12,7 @@ import { createEventsServicePlugin } from "@schedule-x/events-service"
 import "@schedule-x/theme-default/dist/index.css"
 import "@/app/embla.css"
 import type { ScheduleEvent } from "@/app/interfaces/portal/calendar.types"
+import { EventState } from "@/app/interfaces/portal/calendar.types"
 import { toScheduleXEvent, getEventState } from "@/app/utils/calendar"
 
 interface ScheduleCalendarProps {
@@ -47,8 +48,8 @@ export default function ScheduleCalendar({
       nDays: 7,
     },
     calendars: {
-      past: {
-        colorName: "past",
+      [EventState.PAST]: {
+        colorName: EventState.PAST.toLowerCase(),
         lightColors: {
           main: "#9ca3af",
           container: "#f3f4f6",
@@ -60,8 +61,8 @@ export default function ScheduleCalendar({
           container: "#1f2937",
         },
       },
-      upcoming: {
-        colorName: "upcoming",
+      [EventState.UPCOMING]: {
+        colorName: EventState.UPCOMING.toLowerCase(),
         lightColors: {
           main: "#dc2626",
           container: "#fee2e2",
@@ -73,8 +74,8 @@ export default function ScheduleCalendar({
           container: "#7f1d1d",
         },
       },
-      future: {
-        colorName: "future",
+      [EventState.FUTURE]: {
+        colorName: EventState.FUTURE.toLowerCase(),
         lightColors: {
           main: "#f59e0b",
           container: "#fef3c7",

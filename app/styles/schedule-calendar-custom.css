@@ -313,3 +313,7 @@
     background-color: #374151;
   }
 }
+
+.sx__time-grid-event.sx__event {
+  border-radius: 1rem;
+}

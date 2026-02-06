@@ -11,11 +11,13 @@ export default async function ClassesPage() {
     redirect("/portal/login")
   }
 
+  const isStudent = session.user.role === USER_ROLE.STUDENT
+
   // Teacher gets full management interface
   if (session.user.role === USER_ROLE.TEACHER || session.user.role === USER_ROLE.SYSTEM_ADMIN) {
     return <TeacherClassManagement />
   }
 
-  // Student gets simple list view - pass empty classes for now
-  return <ClassesClient classes={[]} />
+  // Student gets simple list view
+  return <ClassesClient classes={[]} isStudent={isStudent} />
 }

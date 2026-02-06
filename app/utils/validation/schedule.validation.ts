@@ -15,12 +15,12 @@ export const createScheduleSchema = z.object({
   meetingLink: z.string().url("Link meeting không hợp lệ").optional().or(z.literal("")),
 
   // Recurrence
-  isRecurring: z.boolean().default(false),
+  isRecurring: z.boolean(),
   recurrenceDays: z.array(z.number()).optional(),
   recurrenceEndDate: z.date().optional(),
 
   // Google sync
-  syncToGoogle: z.boolean().default(false),
+  syncToGoogle: z.boolean(),
 }).refine(
   (data) => data.endTime > data.startTime,
   {

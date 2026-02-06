@@ -35,7 +35,11 @@ export interface ScheduleEvent {
 
 export type ScheduleStatus = "SCHEDULED" | "COMPLETED" | "CANCELLED"
 
-export type EventState = "PAST" | "UPCOMING" | "FUTURE"
+export enum EventState {
+  PAST = "PAST",
+  UPCOMING = "UPCOMING",
+  FUTURE = "FUTURE"
+}
 
 export interface CreateScheduleInput {
   classId: string

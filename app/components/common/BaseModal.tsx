@@ -3,6 +3,7 @@
 import { useEffect, useRef } from "react";
 import { X } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { useClickOutside } from "@/app/hooks/useClickOutside";
 
 interface BaseModalProps {
   isOpen: boolean;
@@ -19,6 +20,7 @@ interface BaseModalProps {
   
   // Behavior options
   closeOnClickOutside?: boolean;
+  closeOnEscape?: boolean;
   maxWidth?: "sm" | "md" | "lg" | "xl" | "2xl" | "3xl" | "4xl" | "5xl" | "full";
   maxHeight?: string;
   
@@ -46,16 +48,20 @@ export default function BaseModal({
   showCloseButton = true,
   footer,
   closeOnClickOutside = false,
+  closeOnEscape = true,
   maxWidth = "2xl",
   maxHeight = "90vh",
   className,
 }: BaseModalProps) {
   const modalRef = useRef<HTMLDivElement>(null);
 
+  // Handle click outside
+  useClickOutside(modalRef as React.RefObject<HTMLElement>, onClose, isOpen && closeOnClickOutside);
+
   // Handle ESC key
   useEffect(() => {
     const handleEscape = (e: KeyboardEvent) => {
-      if (e.key === "Escape" && isOpen) {
+      if (e.key === "Escape" && isOpen && closeOnEscape) {
         onClose();
       }
     };
@@ -69,21 +75,12 @@ export default function BaseModal({
       document.removeEventListener("keydown", handleEscape);
       document.body.style.overflow = "unset";
     };
-  }, [isOpen, onClose]);
-
-  const handleBackdropClick = (e: React.MouseEvent) => {
-    if (closeOnClickOutside && e.target === e.currentTarget) {
-      onClose();
-    }
-  };
+  }, [isOpen, onClose, closeOnEscape]);
 
   if (!isOpen) return null;
 
   return (
-    <div 
-      className="fixed inset-0 z-50 flex items-center justify-center p-4"
-      onClick={handleBackdropClick}
-    >
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
       {/* Backdrop */}
       <div className="absolute inset-0 bg-black/50 backdrop-blur-sm" />
 
@@ -99,23 +96,23 @@ export default function BaseModal({
       >
         {/* Fixed Header */}
         {(header || title || showCloseButton) && (
-          <div className="flex-shrink-0 px-6 py-4 border-b border-gray-200">
-            {header || (
-              <div className="flex items-center justify-between">
-                {title && (
+          <div className="shrink-0 px-6 py-4 border-b border-gray-200">
+            <div className="flex items-center justify-between gap-4">
+              <div className="flex-1 min-w-0">
+                {header || (title && (
                   <h2 className="text-xl font-bold text-gray-900">{title}</h2>
-                )}
-                {showCloseButton && (
-                  <button
-                    onClick={onClose}
-                    className="ml-auto p-2 text-gray-400 hover:text-gray-600 hover:bg-gray-100 rounded-lg transition-colors"
-                    aria-label="Close modal"
-                  >
-                    <X className="w-5 h-5" />
-                  </button>
-                )}
+                ))}
               </div>
-            )}
+              {showCloseButton && (
+                <button
+                  onClick={onClose}
+                  className="shrink-0 p-2 text-gray-400 hover:text-gray-600 hover:bg-gray-100 rounded-lg transition-colors cursor-pointer"
+                  aria-label="Close modal"
+                >
+                  <X className="w-5 h-5" />
+                </button>
+              )}
+            </div>
           </div>
         )}
 
@@ -126,7 +123,7 @@ export default function BaseModal({
 
         {/* Fixed Footer */}
         {footer && (
-          <div className="flex-shrink-0 px-6 py-4 border-t border-gray-200 bg-gray-50">
+          <div className="shrink-0 px-6 py-4 border-t border-gray-200 bg-gray-50">
             {footer}
           </div>
         )}

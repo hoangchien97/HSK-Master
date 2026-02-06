@@ -12,6 +12,8 @@ import { Button, LoadingSpinner } from '@/app/components/common';
 import { format, addDays, addWeeks, addMonths, subDays, subWeeks, subMonths } from 'date-fns';
 import { vi } from 'date-fns/locale';
 import type { ISchedule } from '@/app/interfaces/portal';
+import { EventState } from '@/app/interfaces/portal/calendar.types';
+import { getEventState as getEventStateUtil } from '@/app/utils/calendar';
 
 interface CalendarEvent {
   id: string;
@@ -24,8 +26,8 @@ interface CalendarEvent {
 
 // Event state colors matching getEventStateColor
 const EVENT_CALENDARS = {
-  past: {
-    colorName: 'past',
+  [EventState.PAST]: {
+    colorName: EventState.PAST.toLowerCase(),
     lightColors: {
       main: '#9ca3af', // gray-400
       container: '#f3f4f6', // gray-100
@@ -37,8 +39,8 @@ const EVENT_CALENDARS = {
       container: '#1f2937',
     },
   },
-  upcoming: {
-    colorName: 'upcoming',
+  [EventState.UPCOMING]: {
+    colorName: EventState.UPCOMING.toLowerCase(),
     lightColors: {
       main: '#dc2626', // red-600
       container: '#fee2e2', // red-100
@@ -50,8 +52,8 @@ const EVENT_CALENDARS = {
       container: '#7f1d1d',
     },
   },
-  future: {
-    colorName: 'future',
+  [EventState.FUTURE]: {
+    colorName: EventState.FUTURE.toLowerCase(),
     lightColors: {
       main: '#f59e0b', // amber-500
       container: '#fef3c7', // amber-100
@@ -92,23 +94,18 @@ export default function ScheduleXCalendarView({
   const [currentDate, setCurrentDate] = useState<Date>(new Date());
   const [isInitializing, setIsInitializing] = useState(true);
 
-  // Helper to get event state based on time
-  const getEventState = useCallback((startTime: Date, endTime: Date): 'past' | 'upcoming' | 'future' => {
-    const now = new Date();
-    const sevenDaysFromNow = addDays(now, 7);
-
-    if (now > endTime) return 'past';
-    if (startTime < sevenDaysFromNow) return 'upcoming';
-    return 'future';
+  // Helper to get event state based on time - now uses utility function
+  const getEventState = useCallback((startTime: Date, endTime: Date): EventState => {
+    return getEventStateUtil(startTime, endTime);
   }, []);
 
-  // Initialize and re-render calendar when view changes
+  // Initialize calendar once on mount
   useEffect(() => {
     if (!calendarRef.current) return;
 
     setIsInitializing(true);
 
-    // Destroy previous calendar instance
+    // Destroy previous calendar instance if exists
     if (calendar) {
       calendar.destroy();
     }
@@ -120,7 +117,7 @@ export default function ScheduleXCalendarView({
     // Determine view name
     const viewName = selectedView === 'month' ? 'month-grid' : selectedView;
 
-    // Initialize calendar with state-based colors
+    // Initialize calendar with selected view
     const calendarInstance = createCalendar({
       locale: 'vi-VN',
       views: [createViewDay(), createViewWeek(), createViewMonthGrid(), createViewMonthAgenda()],
@@ -286,7 +283,7 @@ export default function ScheduleXCalendarView({
             type="button"
             variant="outline"
             onClick={handleToday}
-            className="px-4 py-2"
+            className="px-4 py-2 cursor-pointer hover:bg-gray-50"
           >
             Hôm nay
           </Button>
@@ -294,13 +291,13 @@ export default function ScheduleXCalendarView({
           <div className="flex items-center gap-1">
             <button
               onClick={handlePrevious}
-              className="p-2 text-gray-600 hover:bg-gray-100 rounded-lg transition-colors"
+              className="p-2 text-gray-600 hover:bg-gray-100 rounded-lg transition-colors cursor-pointer"
             >
               <ChevronLeft className="w-5 h-5" />
             </button>
             <button
               onClick={handleNext}
-              className="p-2 text-gray-600 hover:bg-gray-100 rounded-lg transition-colors"
+              className="p-2 text-gray-600 hover:bg-gray-100 rounded-lg transition-colors cursor-pointer"
             >
               <ChevronRight className="w-5 h-5" />
             </button>
@@ -317,24 +314,24 @@ export default function ScheduleXCalendarView({
           <div className="flex bg-gray-100 rounded-lg p-1">
             <button
               onClick={() => setSelectedView('day')}
-              className={`px-3 py-1.5 text-sm font-medium rounded-md transition-colors ${
-                selectedView === 'day' ? 'bg-white text-gray-900 shadow-sm' : 'text-gray-600 hover:text-gray-900'
+              className={`px-3 py-1.5 text-sm font-medium rounded-md transition-colors cursor-pointer ${
+                selectedView === 'day' ? 'bg-white text-gray-900 shadow-sm' : 'text-gray-600 hover:text-gray-900 hover:bg-gray-50'
               }`}
             >
               Ngày
             </button>
             <button
               onClick={() => setSelectedView('week')}
-              className={`px-3 py-1.5 text-sm font-medium rounded-md transition-colors ${
-                selectedView === 'week' ? 'bg-white text-gray-900 shadow-sm' : 'text-gray-600 hover:text-gray-900'
+              className={`px-3 py-1.5 text-sm font-medium rounded-md transition-colors cursor-pointer ${
+                selectedView === 'week' ? 'bg-white text-gray-900 shadow-sm' : 'text-gray-600 hover:text-gray-900 hover:bg-gray-50'
               }`}
             >
               Tuần
             </button>
             <button
               onClick={() => setSelectedView('month')}
-              className={`px-3 py-1.5 text-sm font-medium rounded-md transition-colors ${
-                selectedView === 'month' ? 'bg-white text-gray-900 shadow-sm' : 'text-gray-600 hover:text-gray-900'
+              className={`px-3 py-1.5 text-sm font-medium rounded-md transition-colors cursor-pointer ${
+                selectedView === 'month' ? 'bg-white text-gray-900 shadow-sm' : 'text-gray-600 hover:text-gray-900 hover:bg-gray-50'
               }`}
             >
               Tháng
@@ -344,7 +341,7 @@ export default function ScheduleXCalendarView({
           <Button
             type="button"
             onClick={onCreateSchedule}
-            className="flex items-center gap-2 bg-red-600 hover:bg-red-700"
+            className="flex items-center gap-2 bg-red-600 hover:bg-red-700 cursor-pointer"
           >
             <Plus className="w-4 h-4" />
             Thêm buổi học

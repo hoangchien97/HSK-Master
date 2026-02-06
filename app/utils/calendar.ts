@@ -1,24 +1,29 @@
 import 'temporal-polyfill/global'
-import { type EventState, type ScheduleEvent, type RecurrenceDescription } from "@/app/interfaces/portal/calendar.types"
-import { addDays, format, isAfter, isBefore, differenceInDays } from "date-fns"
+import { EventState, type ScheduleEvent, type RecurrenceDescription } from "@/app/interfaces/portal/calendar.types"
+import { addDays, format, isAfter, isBefore, differenceInDays, isSameDay } from "date-fns"
 import { vi } from "date-fns/locale"
 
 /**
  * Determine event state based on current time
+ * UPCOMING: Event is happening today (same day)
+ * PAST: Event has ended
+ * FUTURE: Event is in the future but not today
  */
 export function getEventState(startTime: Date, endTime: Date): EventState {
   const now = new Date()
-  const sevenDaysFromNow = addDays(now, 7)
 
+  // Check if event has ended
   if (isAfter(now, endTime)) {
-    return "PAST"
+    return EventState.PAST
   }
 
-  if (isBefore(startTime, sevenDaysFromNow)) {
-    return "UPCOMING"
+  // Check if event is happening today (same day as now)
+  if (isSameDay(startTime, now)) {
+    return EventState.UPCOMING
   }
 
-  return "FUTURE"
+  // Event is in the future but not today
+  return EventState.FUTURE
 }
 
 /**
@@ -31,21 +36,21 @@ export function getEventStateColor(state: EventState): {
   badge: string
 } {
   switch (state) {
-    case "PAST":
+    case EventState.PAST:
       return {
         bg: "bg-gray-50",
         text: "text-gray-600",
         border: "border-gray-200",
         badge: "bg-gray-100 text-gray-700"
       }
-    case "UPCOMING":
+    case EventState.UPCOMING:
       return {
         bg: "bg-red-50",
         text: "text-red-900",
         border: "border-red-200",
         badge: "bg-red-100 text-red-700"
       }
-    case "FUTURE":
+    case EventState.FUTURE:
       return {
         bg: "bg-yellow-50",
         text: "text-yellow-900",
@@ -60,11 +65,11 @@ export function getEventStateColor(state: EventState): {
  */
 export function getEventStateLabel(state: EventState): string {
   switch (state) {
-    case "PAST":
+    case EventState.PAST:
       return "Đã qua"
-    case "UPCOMING":
+    case EventState.UPCOMING:
       return "Sắp diễn ra"
-    case "FUTURE":
+    case EventState.FUTURE:
       return "Tương lai"
   }
 }

@@ -1,20 +1,12 @@
 "use client"
 
 import { useForm } from "react-hook-form"
-import { zodResolver } from "@hookform/resolvers/zod"
 import { useEffect, useState } from "react"
 import { toast } from "react-toastify"
-import {
-  Dialog,
-  DialogContent,
-  DialogHeader,
-  DialogTitle,
-  DialogFooter,
-} from "@/app/components/common/Dialog"
-import { Button, Input, Label, Select, Switch, Textarea } from "@/app/components/common"
-import { createScheduleSchema, type CreateScheduleFormData } from "@/app/utils/validation/schedule.validation"
-import { createRecurrenceDescription, getDayName } from "@/app/utils/calendar"
-import { Calendar, Clock, MapPin, Video, Repeat, X } from "lucide-react"
+import { BaseModal } from "@/app/components/common"
+import { Button, Input, Label, Switch, Textarea } from "@/app/components/common"
+import { createRecurrenceDescription } from "@/app/utils/calendar"
+import { Calendar, Clock, MapPin, Video, Repeat } from "lucide-react"
 
 interface CreateScheduleModalProps {
   open: boolean
@@ -47,13 +39,20 @@ export default function CreateScheduleModal({
     watch,
     setValue,
     reset,
-  } = useForm<CreateScheduleFormData>({
-    resolver: zodResolver(createScheduleSchema),
+  } = useForm({
+    mode: "onChange", 
     defaultValues: {
+      classId: "",
+      title: "",
+      description: "",
       isRecurring: false,
       syncToGoogle: false,
       startTime: defaultDate || new Date(),
-      endTime: defaultDate ? new Date(defaultDate.getTime() + 90 * 60000) : new Date(), // +90 min
+      endTime: defaultDate ? new Date(defaultDate.getTime() + 90 * 60000) : new Date(),
+      location: "",
+      meetingLink: "",
+      recurrenceDays: [] as number[],
+      recurrenceEndDate: undefined as Date | undefined,
     },
   })
 
@@ -73,7 +72,7 @@ export default function CreateScheduleModal({
         setValue("endTime", endTime)
       }
     }
-  }, [open, defaultDate])
+  }, [open, defaultDate, setValue])
 
   const fetchClasses = async () => {
     try {
@@ -91,26 +90,72 @@ export default function CreateScheduleModal({
     }
   }
 
-  const onSubmit = async (data: CreateScheduleFormData) => {
+  const onSubmit = async (data: Record<string, unknown>) => {
     try {
       setLoading(true)
 
+      // Basic validation
+      if (!data.classId) {
+        toast.error("Vui lòng chọn lớp học")
+        return
+      }
+      if (!data.title) {
+        toast.error("Vui lòng nhập tiêu đề")
+        return
+      }
+      if (!data.startTime || !data.endTime) {
+        toast.error("Vui lòng chọn thời gian")
+        return
+      }
+
+      const startTime = new Date(data.startTime as string)
+      const endTime = new Date(data.endTime as string)
+      
+      if (endTime <= startTime) {
+        toast.error("Giờ kết thúc phải sau giờ bắt đầu")
+        return
+      }
+
+      if (data.isRecurring && (!data.recurrenceDays || (data.recurrenceDays as number[]).length === 0)) {
+        toast.error("Vui lòng chọn ít nhất một ngày lặp lại")
+        return
+      }
+
+      if (data.isRecurring && !data.recurrenceEndDate) {
+        toast.error("Vui lòng chọn ngày kết thúc lặp lại")
+        return
+      }
+
       // Prepare payload
-      const payload = {
-        classId: data.classId,
-        title: data.title,
-        description: data.description,
-        startTime: data.startTime.toISOString(),
-        endTime: data.endTime.toISOString(),
-        location: data.location,
-        meetingLink: data.meetingLink,
-        syncToGoogle: data.syncToGoogle,
-        ...(data.isRecurring && {
-          recurrence: {
-            days: data.recurrenceDays,
-            endDate: data.recurrenceEndDate?.toISOString(),
-          },
-        }),
+      const payload: {
+        classId: string
+        title: string
+        description: string
+        startTime: string
+        endTime: string
+        location: string
+        meetingLink: string
+        syncToGoogle: boolean
+        recurrence?: {
+          days: number[]
+          endDate?: string
+        }
+      } = {
+        classId: data.classId as string,
+        title: data.title as string,
+        description: data.description as string,
+        startTime: startTime.toISOString(),
+        endTime: endTime.toISOString(),
+        location: data.location as string,
+        meetingLink: data.meetingLink as string,
+        syncToGoogle: data.syncToGoogle as boolean,
+      }
+
+      if (data.isRecurring) {
+        payload.recurrence = {
+          days: data.recurrenceDays as number[],
+          endDate: data.recurrenceEndDate ? new Date(data.recurrenceEndDate as string).toISOString() : undefined,
+        }
       }
 
       const response = await fetch("/api/portal/schedules", {
@@ -135,9 +180,9 @@ export default function CreateScheduleModal({
       reset()
       onSuccess()
       onClose()
-    } catch (error: any) {
+    } catch (error: unknown) {
       console.error("Error creating schedule:", error)
-      toast.error(error.message || "Không thể tạo lịch học")
+      toast.error(error instanceof Error ? error.message : "Không thể tạo lịch học")
     } finally {
       setLoading(false)
     }
@@ -165,16 +210,21 @@ export default function CreateScheduleModal({
       : null
 
   return (
-    <Dialog open={open} onOpenChange={handleClose}>
-      <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto">
-        <DialogHeader>
-          <DialogTitle className="text-xl font-bold text-gray-900 flex items-center gap-2">
-            <div className="w-10 h-10 bg-red-600 rounded-lg flex items-center justify-center">
-              <Calendar className="w-5 h-5 text-white" />
-            </div>
-            Tạo lịch học mới
-          </DialogTitle>
-        </DialogHeader>
+    <BaseModal
+      isOpen={open}
+      onClose={handleClose}
+      title="Tạo lịch học mới"
+      maxWidth="2xl"
+      closeOnEscape={!loading}
+      closeOnClickOutside={false}
+    >
+      <div className="max-h-[90vh] overflow-y-auto">
+        <div className="text-xl font-bold text-gray-900 flex items-center gap-2 mb-6">
+          <div className="w-10 h-10 bg-red-600 rounded-lg flex items-center justify-center">
+            <Calendar className="w-5 h-5 text-white" />
+          </div>
+          Tạo lịch học mới
+        </div>
 
         <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
           {/* Class Selection */}
@@ -182,7 +232,11 @@ export default function CreateScheduleModal({
             <Label htmlFor="classId" required>
               Lớp học
             </Label>
-            <Select {...register("classId")} disabled={loadingClasses}>
+            <select 
+              {...register("classId")} 
+              disabled={loadingClasses}
+              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-red-500 focus:border-transparent disabled:bg-gray-100"
+            >
               <option value="">
                 {loadingClasses ? "Đang tải..." : "Chọn lớp học"}
               </option>
@@ -192,7 +246,7 @@ export default function CreateScheduleModal({
                   {cls.level && ` - ${cls.level}`}
                 </option>
               ))}
-            </Select>
+            </select>
             {errors.classId && (
               <p className="text-sm text-red-600">{errors.classId.message}</p>
             )}
@@ -326,7 +380,7 @@ export default function CreateScheduleModal({
                         key={day}
                         type="button"
                         onClick={() => handleDayToggle(day)}
-                        className={`flex-1 min-w-[60px] px-4 py-2.5 rounded-lg text-sm font-semibold transition-all ${
+                        className={`flex-1 min-w-15 px-4 py-2.5 rounded-lg text-sm font-semibold transition-all ${
                           recurrenceDays.includes(day)
                             ? "bg-red-600 text-white shadow-md scale-105"
                             : "bg-white text-gray-700 border-2 border-gray-300 hover:border-red-400 hover:bg-red-50"
@@ -403,7 +457,7 @@ export default function CreateScheduleModal({
           </div>
 
           {/* Actions */}
-          <DialogFooter>
+          <div className="flex justify-end gap-3 mt-8 pt-6 border-t border-gray-200">
             <Button
               type="button"
               variant="outline"
@@ -426,9 +480,9 @@ export default function CreateScheduleModal({
                 "Tạo lịch học"
               )}
             </Button>
-          </DialogFooter>
+          </div>
         </form>
-      </DialogContent>
-    </Dialog>
+      </div>
+    </BaseModal>
   )
 }

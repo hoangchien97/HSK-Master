@@ -6,7 +6,7 @@ import { generateRecurringSessions, validateRecurrenceRule, type RecurrenceRule 
 
 const prisma = new PrismaClient()
 
-// GET - Fetch schedules for current teacher
+// GET - Fetch schedules for current teacher or student
 export async function GET(request: NextRequest) {
   try {
     const session = await auth()
@@ -23,31 +23,124 @@ export async function GET(request: NextRequest) {
       return NextResponse.json({ error: "User not found" }, { status: 404 })
     }
 
-    // Teachers only see their own schedules
-    // Admins see all schedules
-    const schedules = await prisma.portalSchedule.findMany({
-      where: user.role === USER_ROLE.TEACHER ? { teacherId: user.id } : {},
-      include: {
-        class: {
-          include: {
-            enrollments: {
-              include: {
-                student: {
-                  select: {
-                    id: true,
-                    fullName: true,
-                    image: true,
+    let schedules
+
+    // Students see schedules from their enrolled classes
+    if (user.role === USER_ROLE.STUDENT) {
+      const enrollments = await prisma.portalClassEnrollment.findMany({
+        where: {
+          studentId: user.id,
+          status: "ENROLLED",
+        },
+        select: {
+          classId: true,
+        },
+      })
+
+      const enrolledClassIds = enrollments.map((e) => e.classId)
+
+      schedules = await prisma.portalSchedule.findMany({
+        where: {
+          classId: {
+            in: enrolledClassIds,
+          },
+        },
+        include: {
+          class: {
+            include: {
+              teacher: {
+                select: {
+                  id: true,
+                  fullName: true,
+                  email: true,
+                },
+              },
+              enrollments: {
+                where: {
+                  status: "ENROLLED",
+                },
+                include: {
+                  student: {
+                    select: {
+                      id: true,
+                      fullName: true,
+                      image: true,
+                    },
                   },
                 },
               },
             },
           },
         },
-      },
-      orderBy: {
-        startTime: 'asc',
-      },
-    })
+        orderBy: {
+          startTime: 'asc',
+        },
+      })
+    }
+    // Teachers only see their own schedules
+    else if (user.role === USER_ROLE.TEACHER) {
+      schedules = await prisma.portalSchedule.findMany({
+        where: { teacherId: user.id },
+        include: {
+          class: {
+            include: {
+              enrollments: {
+                where: {
+                  status: "ENROLLED",
+                },
+                include: {
+                  student: {
+                    select: {
+                      id: true,
+                      fullName: true,
+                      image: true,
+                    },
+                  },
+                },
+              },
+            },
+          },
+        },
+        orderBy: {
+          startTime: 'asc',
+        },
+      })
+    }
+    // Admins see all schedules
+    else {
+      schedules = await prisma.portalSchedule.findMany({
+        include: {
+          class: {
+            include: {
+              teacher: {
+                select: {
+                  id: true,
+                  fullName: true,
+                  email: true,
+                },
+              },
+              enrollments: {
+                where: {
+                  status: "ENROLLED",
+                },
+                include: {
+                  student: {
+                    select: {
+                      id: true,
+                      fullName: true,
+                      image: true,
+                    },
+                  },
+                },
+              },
+            },
+          },
+        },
+        orderBy: {
+          startTime: 'asc',
+        },
+      })
+    }
 
     return NextResponse.json(schedules)
   } catch (error) {

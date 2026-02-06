@@ -162,7 +162,7 @@ const Select = ({
         {/* Dropdown Menu */}
         {isOpen && !disabled && (
           <div className="absolute z-50 w-full mt-1.5 md:mt-2 bg-white dark:bg-gray-800 border-2 border-primary-500 rounded-lg md:rounded-xl shadow-2xl overflow-hidden">
-            <div className="max-h-48 md:max-h-60 overflow-y-auto">
+            <div className="max-h-44 md:max-h-48 overflow-y-auto">
               {options.length === 0 ? (
                 <div className="px-3 py-6 md:px-4 md:py-8 text-center text-gray-500 dark:text-gray-400 text-xs md:text-sm">
                   Không có dữ liệu để hiển thị

@@ -20,7 +20,7 @@ export default function StudentSchedulePage() {
   const fetchEvents = async () => {
     try {
       setLoading(true)
-      const response = await fetch("/api/portal/schedules/student")
+      const response = await fetch("/api/portal/schedules")
       if (!response.ok) throw new Error("Failed to fetch schedules")
 
       const data = await response.json()

@@ -1,6 +1,6 @@
 "use client"
 
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import Link from "next/link"
 import { useRouter } from "next/navigation"
 import {
@@ -11,11 +11,13 @@ import {
   MoreVertical,
   Edit2,
   Trash2,
-  Eye
+  Eye,
+  User,
 } from "lucide-react"
 import { PageHeader, Card, EmptyState } from "@/app/components/portal/shared"
 import { format } from "date-fns"
 import { vi } from "date-fns/locale"
+import { toast } from "react-toastify"
 
 interface ClassEnrollment {
   id: string
@@ -26,54 +28,112 @@ interface ClassEnrollment {
   }
 }
 
+interface Teacher {
+  id: string
+  fullName: string | null
+  email: string
+}
+
 interface ClassData {
   id: string
   className: string
   classCode: string
   description?: string | null
   level?: string | null
-  startDate: Date
-  endDate?: Date | null
+  startDate: Date | string
+  endDate?: Date | string | null
   maxStudents: number
   status: string
-  enrollments: ClassEnrollment[]
+  teacher?: Teacher
+  enrollments?: ClassEnrollment[]
+  _count?: {
+    enrollments: number
+    schedules: number
+  }
 }
 
 interface ClassesClientProps {
-  classes: ClassData[]
+  classes?: ClassData[]
+  isStudent?: boolean
 }
 
-export default function ClassesClient({ classes }: ClassesClientProps) {
+export default function ClassesClient({ classes: initialClasses = [], isStudent = false }: ClassesClientProps) {
   const router = useRouter()
   const [searchQuery, setSearchQuery] = useState("")
   const [showCreateModal, setShowCreateModal] = useState(false)
   const [activeMenu, setActiveMenu] = useState<string | null>(null)
+  const [classes, setClasses] = useState<ClassData[]>(initialClasses)
+  const [isLoading, setIsLoading] = useState(false)
 
-  const filteredClasses = classes.filter(
-    (c) =>
-      c.className.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      c.classCode.toLowerCase().includes(searchQuery.toLowerCase())
-  )
+  useEffect(() => {
+    if (!initialClasses || initialClasses.length === 0) {
+      fetchClasses()
+    } else {
+      setClasses(initialClasses)
+    }
+  }, [initialClasses])
+
+  const fetchClasses = async () => {
+    try {
+      setIsLoading(true)
+      const response = await fetch("/api/portal/classes")
+      if (response.ok) {
+        const data = await response.json()
+        setClasses(data)
+      }
+    } catch (error) {
+      console.error("Error fetching classes:", error)
+      toast.error("Không thể tải danh sách lớp")
+    } finally {
+      setIsLoading(false)
+    }
+  }
+
+  // Filter classes based on search query
+  const filteredClasses = classes.filter((classItem) => {
+    const searchLower = searchQuery.toLowerCase()
+    return (
+      classItem.className.toLowerCase().includes(searchLower) ||
+      classItem.classCode.toLowerCase().includes(searchLower) ||
+      classItem.description?.toLowerCase().includes(searchLower) ||
+      classItem.level?.toLowerCase().includes(searchLower)
+    )
+  })
 
   const statusConfig = {
-    ACTIVE: { text: "Đang hoạt động", bg: "bg-green-100 text-green-700" },
-    COMPLETED: { text: "Hoàn thành", bg: "bg-gray-100 text-gray-700" },
+    ACTIVE: { text: "Đang học", bg: "bg-green-100 text-green-700" },
+    UPCOMING: { text: "Sắp bắt đầu", bg: "bg-blue-100 text-blue-700" },
+    COMPLETED: { text: "Đã kết thúc", bg: "bg-gray-100 text-gray-700" },
     CANCELLED: { text: "Đã hủy", bg: "bg-red-100 text-red-700" },
+  }
+
+  if (isLoading) {
+    return (
+      <div className="flex items-center justify-center h-64">
+        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-red-600"></div>
+      </div>
+    )
   }
 
   return (
     <div>
       <PageHeader
-        title="Quản lý lớp học"
-        subtitle="Tạo và quản lý các lớp học của bạn"
+        title={isStudent ? "Lớp học của tôi" : "Quản lý lớp học"}
+        subtitle={
+          isStudent
+            ? "Danh sách các lớp bạn đang theo học"
+            : "Tạo và quản lý các lớp học của bạn"
+        }
         actions={
-          <button
-            onClick={() => setShowCreateModal(true)}
-            className="inline-flex items-center gap-2 px-4 py-2 bg-red-600 text-white rounded-xl hover:bg-red-700 transition font-medium"
-          >
-            <Plus className="w-4 h-4" />
-            Tạo lớp mới
-          </button>
+          !isStudent ? (
+            <button
+              onClick={() => setShowCreateModal(true)}
+              className="inline-flex items-center gap-2 px-4 py-2 bg-red-600 text-white rounded-xl hover:bg-red-700 transition font-medium"
+            >
+              <Plus className="w-4 h-4" />
+              Tạo lớp mới
+            </button>
+          ) : undefined
         }
       />
 
@@ -95,55 +155,71 @@ export default function ClassesClient({ classes }: ClassesClientProps) {
       {filteredClasses.length === 0 ? (
         <EmptyState
           icon={Users}
-          title="Chưa có lớp học nào"
-          description="Tạo lớp học đầu tiên để bắt đầu quản lý học viên"
+          title={isStudent ? "Chưa tham gia lớp nào" : "Chưa có lớp học nào"}
+          description={
+            isStudent
+              ? "Liên hệ với giáo viên để được thêm vào lớp học"
+              : "Tạo lớp học đầu tiên để bắt đầu quản lý học viên"
+          }
           action={
-            <button
-              onClick={() => setShowCreateModal(true)}
-              className="inline-flex items-center gap-2 px-4 py-2 bg-red-600 text-white rounded-xl hover:bg-red-700 transition font-medium"
-            >
-              <Plus className="w-4 h-4" />
-              Tạo lớp mới
-            </button>
+            !isStudent ? (
+              <button
+                onClick={() => setShowCreateModal(true)}
+                className="inline-flex items-center gap-2 px-4 py-2 bg-red-600 text-white rounded-xl hover:bg-red-700 transition font-medium"
+              >
+                <Plus className="w-4 h-4" />
+                Tạo lớp mới
+              </button>
+            ) : undefined
           }
         />
       ) : (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {filteredClasses.map((classItem) => (
             <Card key={classItem.id} hover className="relative">
-              {/* Menu Button */}
-              <div className="absolute top-4 right-4">
-                <button
-                  onClick={() => setActiveMenu(activeMenu === classItem.id ? null : classItem.id)}
-                  className="p-1.5 rounded-lg hover:bg-gray-100 text-gray-400 hover:text-gray-600 transition"
-                >
-                  <MoreVertical className="w-5 h-5" />
-                </button>
-                {activeMenu === classItem.id && (
-                  <div className="absolute right-0 mt-1 w-40 bg-white rounded-xl shadow-lg border border-gray-100 py-1 z-10">
-                    <Link
-                      href={`/portal/teacher/classes/${classItem.id}`}
-                      className="flex items-center gap-2 px-3 py-2 text-sm text-gray-700 hover:bg-gray-50"
-                    >
-                      <Eye className="w-4 h-4" />
-                      Chi tiết
-                    </Link>
-                    <Link
-                      href={`/portal/teacher/classes/${classItem.id}/edit`}
-                      className="flex items-center gap-2 px-3 py-2 text-sm text-gray-700 hover:bg-gray-50"
-                    >
-                      <Edit2 className="w-4 h-4" />
-                      Chỉnh sửa
-                    </Link>
-                    <button className="flex items-center gap-2 px-3 py-2 text-sm text-red-600 hover:bg-red-50 w-full">
-                      <Trash2 className="w-4 h-4" />
-                      Xóa
-                    </button>
-                  </div>
-                )}
-              </div>
+              {/* Menu Button - Only for teachers */}
+              {!isStudent && (
+                <div className="absolute top-4 right-4">
+                  <button
+                    onClick={() =>
+                      setActiveMenu(activeMenu === classItem.id ? null : classItem.id)
+                    }
+                    className="p-1.5 rounded-lg hover:bg-gray-100 text-gray-400 hover:text-gray-600 transition"
+                  >
+                    <MoreVertical className="w-5 h-5" />
+                  </button>
+                  {activeMenu === classItem.id && (
+                    <div className="absolute right-0 mt-1 w-40 bg-white rounded-xl shadow-lg border border-gray-100 py-1 z-10">
+                      <Link
+                        href={`/portal/teacher/classes/${classItem.id}`}
+                        className="flex items-center gap-2 px-3 py-2 text-sm text-gray-700 hover:bg-gray-50"
+                      >
+                        <Eye className="w-4 h-4" />
+                        Chi tiết
+                      </Link>
+                      <Link
+                        href={`/portal/teacher/classes/${classItem.id}/edit`}
+                        className="flex items-center gap-2 px-3 py-2 text-sm text-gray-700 hover:bg-gray-50"
+                      >
+                        <Edit2 className="w-4 h-4" />
+                        Chỉnh sửa
+                      </Link>
+                      <button className="flex items-center gap-2 px-3 py-2 text-sm text-red-600 hover:bg-red-50 w-full">
+                        <Trash2 className="w-4 h-4" />
+                        Xóa
+                      </button>
+                    </div>
+                  )}
+                </div>
+              )}
 
-              <Link href={`/portal/teacher/classes/${classItem.id}`}>
+              <Link
+                href={
+                  isStudent
+                    ? `/portal/student/schedule`
+                    : `/portal/teacher/classes/${classItem.id}`
+                }
+              >
                 {/* Level Badge */}
                 {classItem.level && (
                   <span className="inline-block px-2.5 py-1 bg-red-100 text-red-700 text-xs font-medium rounded-full mb-3">
@@ -156,6 +232,21 @@ export default function ClassesClient({ classes }: ClassesClientProps) {
                   {classItem.className}
                 </h3>
                 <p className="text-sm text-gray-500 mt-1">Mã: {classItem.classCode}</p>
+
+                {/* Teacher Info - For students */}
+                {isStudent && classItem.teacher && (
+                  <div className="flex items-center gap-2 mt-3 pt-3 border-t border-gray-100">
+                    <div className="w-8 h-8 bg-blue-100 rounded-full flex items-center justify-center">
+                      <User className="w-4 h-4 text-blue-600" />
+                    </div>
+                    <div className="flex-1 min-w-0">
+                      <p className="text-xs text-gray-500">Giáo viên</p>
+                      <p className="text-sm font-medium text-gray-900 truncate">
+                        {classItem.teacher.fullName || classItem.teacher.email}
+                      </p>
+                    </div>
+                  </div>
+                )}
 
                 {/* Status */}
                 <div className="mt-3">

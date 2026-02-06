@@ -5,7 +5,7 @@ import { toast } from 'react-toastify';
 import {
   ScheduleXCalendarView,
   ScheduleModal,
-  EventDetailPanel,
+  EventDetailDrawer,
   DeleteScheduleModal,
 } from '@/app/components/portal/calendar';
 import { PageHeader, LoadingSpinner } from '@/app/components/portal/common';
@@ -74,7 +74,13 @@ export default function TeacherScheduleCalendar() {
       const count = result.count || 1;
       toast.success(`Đã tạo ${count} buổi học thành công!`);
 
-      await loadData();
+      // Optimistically add new schedules to state
+      if (result.schedules && Array.isArray(result.schedules)) {
+        setSchedules(prev => [...prev, ...result.schedules!]);
+      } else {
+        // Fallback: reload data
+        await loadData();
+      }
       setShowModal(false);
     } catch (error) {
       console.error('Error creating schedule:', error);
@@ -100,10 +106,20 @@ export default function TeacherScheduleCalendar() {
       }
 
       toast.success('Đã cập nhật buổi học thành công!');
-      await loadData();
+      
+      // Optimistically update schedule in state
+      if (result.schedule) {
+        setSchedules(prev => prev.map(s => s.id === scheduleToEdit.id ? result.schedule! : s));
+        if (selectedSchedule?.id === scheduleToEdit.id) {
+          setSelectedSchedule(result.schedule);
+        }
+      } else {
+        // Fallback: reload data
+        await loadData();
+      }
+      
       setShowModal(false);
       setScheduleToEdit(null);
-      setSelectedSchedule(null);
     } catch (error) {
       console.error('Error updating schedule:', error);
       const errorMessage = error instanceof Error ? error.message : 'Không thể cập nhật buổi học';
@@ -120,7 +136,9 @@ export default function TeacherScheduleCalendar() {
       }
 
       toast.success('Đã xóa buổi học thành công!');
-      await loadData();
+      
+      // Optimistically remove schedule from state
+      setSchedules(prev => prev.filter(s => s.id !== scheduleId));
       setShowDeleteModal(false);
       setSelectedSchedule(null);
     } catch (error) {
@@ -169,31 +187,31 @@ export default function TeacherScheduleCalendar() {
         description="Quản lý và xem tất cả lịch học"
       />
 
-      {/* Calendar with Side Panel Layout */}
-      <div className="flex gap-6">
-        {/* Calendar */}
-        <div className={selectedSchedule ? 'flex-1' : 'flex-1'}>
-          <ScheduleXCalendarView
-            schedules={schedules}
-            onEventClick={handleEventClick}
-            onEventDoubleClick={handleEventDoubleClick}
-            onCreateSchedule={() => {
-              setScheduleToEdit(null);
-              setShowModal(true);
-            }}
-          />
-        </div>
+      {/* Calendar - Full Width */}
+      <ScheduleXCalendarView
+        schedules={schedules}
+        onEventClick={handleEventClick}
+        onEventDoubleClick={handleEventDoubleClick}
+        onCreateSchedule={() => {
+          setScheduleToEdit(null);
+          setShowModal(true);
+        }}
+      />
 
-        {/* Side Panel */}
-        {selectedSchedule && (
-          <EventDetailPanel
-            schedule={selectedSchedule}
-            onClose={() => setSelectedSchedule(null)}
-            onEdit={handleEdit}
-            onDelete={handleDelete}
-          />
-        )}
-      </div>
+      {/* Event Detail Drawer */}
+      <EventDetailDrawer
+        open={!!selectedSchedule}
+        onOpenChange={(open) => !open && setSelectedSchedule(null)}
+        eventId={selectedSchedule?.id || null}
+        onEdit={(eventId) => {
+          const schedule = schedules.find(s => s.id === eventId);
+          if (schedule) handleEdit(schedule);
+        }}
+        onDelete={(eventId) => {
+          const schedule = schedules.find(s => s.id === eventId);
+          if (schedule) handleDelete(schedule);
+        }}
+      />
 
       {/* Schedule Modal */}
       <ScheduleModal

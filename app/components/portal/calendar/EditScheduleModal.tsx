@@ -4,14 +4,7 @@ import { useForm } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useEffect, useState } from "react"
 import { toast } from "react-toastify"
-import {
-  Dialog,
-  DialogContent,
-  DialogHeader,
-  DialogTitle,
-  DialogFooter,
-} from "@/app/components/common/Dialog"
-import { Button, Input, Label, Select, Switch, Textarea } from "@/app/components/common"
+import { BaseModal, Button, Input, Label, Select, Switch, Textarea } from "@/app/components/common"
 import { updateScheduleSchema, type UpdateScheduleFormData } from "@/app/utils/validation/schedule.validation"
 import type { ScheduleEvent } from "@/app/interfaces/portal/calendar.types"
 import { getEventState, getEventStateLabel, getEventStateColor } from "@/app/utils/calendar"
@@ -195,16 +188,18 @@ export default function EditScheduleModal({
 
   if (loadingEvent) {
     return (
-      <Dialog open={open} onOpenChange={handleClose}>
-        <DialogContent className="max-w-2xl">
-          <div className="flex items-center justify-center py-12">
-            <div className="text-center">
-              <div className="w-16 h-16 border-4 border-red-600 border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
-              <p className="text-gray-600">Đang tải thông tin...</p>
-            </div>
+      <BaseModal
+        isOpen={open}
+        onClose={handleClose}
+        title="Đang tải thông tin..."
+      >
+        <div className="flex items-center justify-center py-12">
+          <div className="text-center">
+            <div className="w-16 h-16 border-4 border-red-600 border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
+            <p className="text-gray-600">Đang tải thông tin...</p>
           </div>
-        </DialogContent>
-      </Dialog>
+        </div>
+      </BaseModal>
     )
   }
 
@@ -214,20 +209,68 @@ export default function EditScheduleModal({
   const stateColors = getEventStateColor(eventState)
 
   return (
-    <Dialog open={open} onOpenChange={handleClose}>
-      <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto">
-        <DialogHeader>
-          <DialogTitle className="text-xl font-bold text-gray-900 flex items-center gap-2">
-            <div className="w-10 h-10 bg-red-600 rounded-lg flex items-center justify-center">
-              <Calendar className="w-5 h-5 text-white" />
-            </div>
-            Chỉnh sửa lịch học
-          </DialogTitle>
-        </DialogHeader>
-
-        {/* Event Status Badge */}
-        <div className={`flex items-center gap-2 p-3 rounded-lg ${stateColors.bg} ${stateColors.border} border`}>
-          <AlertCircle className={`w-5 h-5 ${stateColors.text}`} />
+    <BaseModal
+      isOpen={open}
+      onClose={handleClose}
+      header={
+        <div className="flex items-center gap-2">
+          <div className="w-10 h-10 bg-red-600 rounded-lg flex items-center justify-center">
+            <Calendar className="w-5 h-5 text-white" />
+          </div>
+          <h3 className="text-xl font-bold text-gray-900">Chỉnh sửa lịch học</h3>
+        </div>
+      }
+      footer={
+        <>
+          <Button
+            type="button"
+            variant="outline"
+            onClick={handleDelete}
+            disabled={deleting || loading}
+            className="text-red-600 border-red-300 hover:bg-red-50 cursor-pointer mr-auto"
+          >
+            {deleting ? (
+              <>
+                <div className="w-4 h-4 border-2 border-red-600 border-t-transparent rounded-full animate-spin mr-2" />
+                Đang xóa...
+              </>
+            ) : (
+              <>
+                <Trash2 className="w-4 h-4 mr-1" />
+                Xóa lịch học
+              </>
+            )}
+          </Button>
+          <Button
+            type="button"
+            variant="outline"
+            onClick={handleClose}
+            disabled={loading || deleting}
+          >
+            Hủy
+          </Button>
+          <Button
+            type="submit"
+            disabled={loading || deleting}
+            className="bg-red-600 hover:bg-red-700 text-white cursor-pointer"
+            onClick={handleSubmit(onSubmit)}
+          >
+            {loading ? (
+              <>
+                <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin mr-2" />
+                Đang lưu...
+              </>
+            ) : (
+              "Lưu thay đổi"
+            )}
+          </Button>
+        </>
+      }
+      maxWidth="2xl"
+    >
+      {/* Event Status Badge */}
+      <div className={`flex items-center gap-2 p-3 rounded-lg ${stateColors.bg} ${stateColors.border} border`}>
+        <AlertCircle className={`w-5 h-5 ${stateColors.text}`} />
           <div>
             <p className={`text-sm font-medium ${stateColors.text}`}>
               Trạng thái: {getEventStateLabel(eventState)}
@@ -367,56 +410,7 @@ export default function EditScheduleModal({
               onCheckedChange={(checked) => setValue("syncToGoogle", checked)}
             />
           </div>
-
-          {/* Actions */}
-          <DialogFooter className="flex justify-between items-center">
-            <Button
-              type="button"
-              variant="outline"
-              onClick={handleDelete}
-              disabled={loading || deleting}
-              className="text-red-600 hover:text-red-700 hover:bg-red-50 border-red-300"
-            >
-              {deleting ? (
-                <>
-                  <div className="w-4 h-4 border-2 border-red-600 border-t-transparent rounded-full animate-spin mr-2" />
-                  Đang xóa...
-                </>
-              ) : (
-                <>
-                  <Trash2 className="w-4 h-4 mr-1" />
-                  Xóa lịch học
-                </>
-              )}
-            </Button>
-
-            <div className="flex gap-2">
-              <Button
-                type="button"
-                variant="outline"
-                onClick={handleClose}
-                disabled={loading || deleting}
-              >
-                Hủy
-              </Button>
-              <Button
-                type="submit"
-                disabled={loading || deleting}
-                className="bg-red-600 hover:bg-red-700 text-white"
-              >
-                {loading ? (
-                  <>
-                    <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin mr-2" />
-                    Đang lưu...
-                  </>
-                ) : (
-                  "Lưu thay đổi"
-                )}
-              </Button>
-            </div>
-          </DialogFooter>
         </form>
-      </DialogContent>
-    </Dialog>
+      </BaseModal>
   )
 }
