@@ -1,9 +1,0 @@
-/* Hide Schedule-X built-in header controls to avoid duplication */
-.sx__calendar-header {
-  display: none !important;
-}
-
-/* Keep only the calendar grid visible */
-.sx__calendar-wrapper {
-  padding-top: 0 !important;
-}

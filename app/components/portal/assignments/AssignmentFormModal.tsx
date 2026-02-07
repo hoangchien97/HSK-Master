@@ -1,9 +1,7 @@
 "use client"
 
-import { useEffect } from "react"
+import { useEffect, useState } from "react"
 import { useRouter } from "next/navigation"
-import { useForm, Controller } from "react-hook-form"
-import { zodResolver } from "@hookform/resolvers/zod"
 import {
   Modal,
   ModalContent,
@@ -15,12 +13,9 @@ import {
   Textarea,
   Select,
   SelectItem,
+  Form,
 } from "@heroui/react"
 import { toast } from "react-toastify"
-import {
-  assignmentSchema,
-  type AssignmentFormValues,
-} from "@/app/validators/assignment"
 
 /* ──────────────────────── types ──────────────────────── */
 
@@ -69,45 +64,37 @@ export default function AssignmentFormModal({
   const router = useRouter()
   const isEdit = !!editData
 
-  const {
-    control,
-    handleSubmit,
-    reset,
-    formState: { errors, isSubmitting },
-  } = useForm<AssignmentFormValues>({
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    resolver: zodResolver(assignmentSchema) as any,
-    defaultValues: {
-      classId: editData?.classId || classes[0]?.id || "",
-      title: editData?.title || "",
-      description: editData?.description || "",
-      assignmentType: editData?.assignmentType || "HOMEWORK",
-      dueDate: editData?.dueDate
-        ? new Date(editData.dueDate).toISOString().slice(0, 16)
-        : "",
-      maxScore: editData?.maxScore || 100,
-      status: (editData?.status as "ACTIVE" | "DRAFT") || "ACTIVE",
-    },
-  })
+  const [errors, setErrors] = useState<Record<string, string>>({})
+  const [isSubmitting, setIsSubmitting] = useState(false)
+  const [classId, setClassId] = useState(editData?.classId || classes[0]?.id || "")
+  const [assignmentType, setAssignmentType] = useState(editData?.assignmentType || "HOMEWORK")
+  const [status, setStatus] = useState((editData?.status as "ACTIVE" | "DRAFT") || "ACTIVE")
 
   useEffect(() => {
     if (isOpen) {
-      reset({
-        classId: editData?.classId || classes[0]?.id || "",
-        title: editData?.title || "",
-        description: editData?.description || "",
-        assignmentType: editData?.assignmentType || "HOMEWORK",
-        dueDate: editData?.dueDate
-          ? new Date(editData.dueDate).toISOString().slice(0, 16)
-          : "",
-        maxScore: editData?.maxScore || 100,
-        status: (editData?.status as "ACTIVE" | "DRAFT") || "ACTIVE",
-      })
+      setClassId(editData?.classId || classes[0]?.id || "")
+      setAssignmentType(editData?.assignmentType || "HOMEWORK")
+      setStatus((editData?.status as "ACTIVE" | "DRAFT") || "ACTIVE")
+      setErrors({})
     }
-  }, [isOpen, editData, classes, reset])
+  }, [isOpen, editData, classes])
 
-  const onSubmit = async (values: AssignmentFormValues) => {
+  const onSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault()
+    const formData = Object.fromEntries(new FormData(e.currentTarget))
+
+    setErrors({})
+    setIsSubmitting(true)
+
     try {
+      const values = {
+        ...formData,
+        classId,
+        assignmentType,
+        status,
+        maxScore: Number(formData.maxScore),
+      }
+
       const url = isEdit
         ? `/api/portal/assignments/${editData!.id}`
         : "/api/portal/assignments"
@@ -129,150 +116,127 @@ export default function AssignmentFormModal({
       }
     } catch {
       toast.error("Có lỗi xảy ra")
+    } finally {
+      setIsSubmitting(false)
     }
   }
 
   return (
     <Modal isOpen={isOpen} onClose={onClose} size="2xl" scrollBehavior="inside">
       <ModalContent>
-        <form onSubmit={handleSubmit(onSubmit)}>
-          <ModalHeader>
-            {isEdit ? "Chỉnh sửa bài tập" : "Tạo bài tập mới"}
-          </ModalHeader>
+        <ModalHeader>
+          {isEdit ? "Chỉnh sửa bài tập" : "Tạo bài tập mới"}
+        </ModalHeader>
 
-          <ModalBody className="gap-4">
+        <Form validationErrors={errors} onSubmit={onSubmit}>
+          <ModalBody className="gap-4 flex flex-col">
             {/* Title */}
-            <Controller
+            <Input
               name="title"
-              control={control}
-              render={({ field }) => (
-                <Input
-                  {...field}
-                  label="Tiêu đề"
-                  placeholder="Bài tập tuần 1 - Từ vựng"
-                  isRequired
-                  isInvalid={!!errors.title}
-                  errorMessage={errors.title?.message}
-                />
-              )}
+              label="Tiêu đề"
+              placeholder="Bài tập tuần 1 - Từ vựng"
+              labelPlacement="outside"
+              isRequired
+              defaultValue={editData?.title || ""}
+              errorMessage={({ validationDetails }) => {
+                if (validationDetails.valueMissing) {
+                  return "Vui lòng nhập tiêu đề"
+                }
+              }}
             />
 
             {/* Description */}
-            <Controller
+            <Textarea
               name="description"
-              control={control}
-              render={({ field }) => (
-                <Textarea
-                  {...field}
-                  label="Mô tả"
-                  placeholder="Mô tả yêu cầu bài tập..."
-                  minRows={3}
-                />
-              )}
+              label="Mô tả"
+              placeholder="Mô tả yêu cầu bài tập..."
+              labelPlacement="outside"
+              minRows={3}
+              defaultValue={editData?.description || ""}
             />
 
             {/* Class + Type */}
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-              <Controller
+              <Select
+                label="Lớp học"
                 name="classId"
-                control={control}
-                render={({ field }) => (
-                  <Select
-                    label="Lớp học"
-                    isRequired
-                    selectedKeys={field.value ? [field.value] : []}
-                    onSelectionChange={(keys) => {
-                      const val = Array.from(keys)[0] as string
-                      field.onChange(val)
-                    }}
-                    isInvalid={!!errors.classId}
-                    errorMessage={errors.classId?.message}
-                  >
-                    {classes.map((c) => (
-                      <SelectItem key={c.id}>
-                        {c.className}
-                      </SelectItem>
-                    ))}
-                  </Select>
-                )}
-              />
+                labelPlacement="outside"
+                isRequired
+                selectedKeys={classId ? [classId] : []}
+                onSelectionChange={(keys) => {
+                  const val = Array.from(keys)[0] as string
+                  setClassId(val)
+                }}
+                errorMessage={({ validationDetails }) => {
+                  if (validationDetails.valueMissing) {
+                    return "Vui lòng chọn lớp học"
+                  }
+                }}
+              >
+                {classes.map((c) => (
+                  <SelectItem key={c.id}>
+                    {c.className}
+                  </SelectItem>
+                ))}
+              </Select>
 
-              <Controller
+              <Select
+                label="Loại bài tập"
                 name="assignmentType"
-                control={control}
-                render={({ field }) => (
-                  <Select
-                    label="Loại bài tập"
-                    isRequired
-                    selectedKeys={field.value ? [field.value] : []}
-                    onSelectionChange={(keys) => {
-                      const val = Array.from(keys)[0] as string
-                      field.onChange(val)
-                    }}
-                    isInvalid={!!errors.assignmentType}
-                    errorMessage={errors.assignmentType?.message}
-                  >
-                    {ASSIGNMENT_TYPES.map((t) => (
-                      <SelectItem key={t.key}>{t.label}</SelectItem>
-                    ))}
-                  </Select>
-                )}
-              />
+                labelPlacement="outside"
+                isRequired
+                selectedKeys={assignmentType ? [assignmentType] : []}
+                onSelectionChange={(keys) => {
+                  const val = Array.from(keys)[0] as string
+                  setAssignmentType(val)
+                }}
+                errorMessage={({ validationDetails }) => {
+                  if (validationDetails.valueMissing) {
+                    return "Vui lòng chọn loại bài tập"
+                  }
+                }}
+              >
+                {ASSIGNMENT_TYPES.map((t) => (
+                  <SelectItem key={t.key}>{t.label}</SelectItem>
+                ))}
+              </Select>
             </div>
 
             {/* Due Date + Max Score */}
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-              <Controller
+              <Input
                 name="dueDate"
-                control={control}
-                render={({ field }) => (
-                  <Input
-                    {...field}
-                    type="datetime-local"
-                    label="Hạn nộp"
-                    isInvalid={!!errors.dueDate}
-                    errorMessage={errors.dueDate?.message}
-                  />
-                )}
+                type="datetime-local"
+                label="Hạn nộp"
+                labelPlacement="outside"
+                defaultValue={editData?.dueDate ? new Date(editData.dueDate).toISOString().slice(0, 16) : ""}
               />
 
-              <Controller
+              <Input
                 name="maxScore"
-                control={control}
-                render={({ field }) => (
-                  <Input
-                    {...field}
-                    type="number"
-                    label="Điểm tối đa"
-                    value={String(field.value)}
-                    onChange={(e) => field.onChange(Number(e.target.value))}
-                    min={1}
-                    max={1000}
-                    isInvalid={!!errors.maxScore}
-                    errorMessage={errors.maxScore?.message}
-                  />
-                )}
+                type="number"
+                label="Điểm tối đa"
+                labelPlacement="outside"
+                defaultValue={String(editData?.maxScore || 100)}
+                min={1}
+                max={1000}
               />
             </div>
 
             {/* Status */}
-            <Controller
+            <Select
+              label="Trạng thái"
               name="status"
-              control={control}
-              render={({ field }) => (
-                <Select
-                  label="Trạng thái"
-                  selectedKeys={field.value ? [field.value] : ["ACTIVE"]}
-                  onSelectionChange={(keys) => {
-                    const val = Array.from(keys)[0] as string
-                    field.onChange(val)
-                  }}
-                >
-                  <SelectItem key="ACTIVE">Đang mở</SelectItem>
-                  <SelectItem key="DRAFT">Nháp</SelectItem>
-                </Select>
-              )}
-            />
+              labelPlacement="outside"
+              selectedKeys={status ? [status] : ["ACTIVE"]}
+              onSelectionChange={(keys) => {
+                const val = Array.from(keys)[0] as string
+                setStatus(val as "ACTIVE" | "DRAFT")
+              }}
+            >
+              <SelectItem key="ACTIVE">Đang mở</SelectItem>
+              <SelectItem key="DRAFT">Nháp</SelectItem>
+            </Select>
           </ModalBody>
 
           <ModalFooter>
@@ -283,7 +247,7 @@ export default function AssignmentFormModal({
               {isEdit ? "Cập nhật" : "Tạo bài tập"}
             </Button>
           </ModalFooter>
-        </form>
+        </Form>
       </ModalContent>
     </Modal>
   )

@@ -37,24 +37,24 @@ export function getEventStateColor(state: EventState): {
   switch (state) {
     case EventState.PAST:
       return {
-        bg: "bg-gray-50",
-        text: "text-gray-600",
+        bg: "bg-[#F3F4F6]",
+        text: "text-[#9CA3AF]",
         border: "border-gray-200",
-        badge: "bg-gray-100 text-gray-700"
+        badge: "bg-[#F3F4F6] text-[#9CA3AF]"
       }
     case EventState.UPCOMING:
       return {
-        bg: "bg-red-50",
-        text: "text-red-900",
-        border: "border-red-200",
-        badge: "bg-red-100 text-red-700"
+        bg: "bg-[#FEF3C7]",
+        text: "text-[#92400E]",
+        border: "border-amber-200",
+        badge: "bg-[#FEF3C7] text-[#92400E]"
       }
     case EventState.FUTURE:
       return {
-        bg: "bg-yellow-50",
-        text: "text-yellow-900",
-        border: "border-yellow-200",
-        badge: "bg-yellow-100 text-yellow-700"
+        bg: "bg-[#ECFEFF]",
+        text: "text-[#065F46]",
+        border: "border-teal-200",
+        badge: "bg-[#ECFEFF] text-[#065F46]"
       }
   }
 }

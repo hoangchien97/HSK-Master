@@ -104,7 +104,7 @@ export default function PortalSidebar({ userRole, isOpen = true, onClose }: Port
                     "flex items-center gap-3 px-3 py-2.5 rounded-lg transition-all duration-200",
                     isActive
                       ? "bg-red-50 text-red-600 font-medium shadow-sm"
-                      : "text-gray-600 hover:bg-gray-50 hover:text-gray-900"
+                      : "text-gray-600 hover:bg-red-50 hover:text-red-600"
                   )}
                   onClick={onClose}
                 >
@@ -130,7 +130,7 @@ export default function PortalSidebar({ userRole, isOpen = true, onClose }: Port
             color="danger"
             startContent={<LogOut className="w-5 h-5" />}
             onPress={handleSignOut}
-            className="w-full justify-start"
+            className="w-full justify-start hover:bg-red-50"
           >
             Đăng xuất
           </Button>

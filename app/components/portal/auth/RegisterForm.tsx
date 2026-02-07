@@ -4,41 +4,49 @@ import { useState } from "react";
 import { signIn } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
-import { useForm } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { z } from "zod";
 import { toast } from "react-toastify";
-import { Eye, EyeOff, Mail, Lock, User } from "lucide-react";
-import { Input, Button } from "@heroui/react";
-
-// Validation schema
-const registerSchema = z.object({
-  name: z.string().min(2, "Tên phải có ít nhất 2 ký tự"),
-  email: z.string().email("Email không hợp lệ"),
-  password: z.string().min(6, "Mật khẩu phải có ít nhất 6 ký tự"),
-  confirmPassword: z.string(),
-}).refine((data) => data.password === data.confirmPassword, {
-  message: "Mật khẩu xác nhận không khớp",
-  path: ["confirmPassword"],
-});
-
-type RegisterFormData = z.infer<typeof registerSchema>;
+import { Eye, EyeOff } from "lucide-react";
+import { Form, Input, Button } from "@heroui/react";
 
 export default function RegisterForm() {
   const router = useRouter();
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [password, setPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
+  const [errors, setErrors] = useState<Record<string, string>>({});
 
-  const {
-    register,
-    handleSubmit,
-    formState: { errors },
-  } = useForm<RegisterFormData>({
-    resolver: zodResolver(registerSchema),
-  });
+  // Password validation
+  const getPasswordError = (value: string) => {
+    if (value.length < 6) {
+      return "Mật khẩu phải có ít nhất 6 ký tự";
+    }
+    return null;
+  };
 
-  const onSubmit = async (data: RegisterFormData) => {
+  const onSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    const data = Object.fromEntries(new FormData(e.currentTarget));
+
+    // Custom validation
+    const newErrors: Record<string, string> = {};
+    
+    const passwordError = getPasswordError(data.password as string);
+    if (passwordError) {
+      newErrors.password = passwordError;
+    }
+
+    if (data.password !== data.confirmPassword) {
+      newErrors.confirmPassword = "Mật khẩu xác nhận không khớp";
+    }
+
+    if (Object.keys(newErrors).length > 0) {
+      setErrors(newErrors);
+      return;
+    }
+
+    setErrors({});
     setLoading(true);
 
     try {
@@ -47,9 +55,9 @@ export default function RegisterForm() {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          name: data.name,
-          email: data.email,
-          password: data.password,
+          name: data.name as string,
+          email: data.email as string,
+          password: data.password as string,
         }),
       });
 
@@ -65,8 +73,8 @@ export default function RegisterForm() {
       toast.success("Đăng ký thành công!");
 
       const signInResult = await signIn("credentials", {
-        email: data.email,
-        password: data.password,
+        email: data.email as string,
+        password: data.password as string,
         callbackUrl: "/portal",
         redirect: false,
       });
@@ -84,11 +92,6 @@ export default function RegisterForm() {
     }
   };
 
-  const handleGoogleSignUp = async () => {
-    setLoading(true);
-    await signIn("google", { callbackUrl: "/portal" });
-  };
-
   return (
     <div className="w-full max-w-md">
       <div className="bg-white rounded-2xl shadow-2xl p-8 border border-gray-100">
@@ -104,37 +107,54 @@ export default function RegisterForm() {
         </div>
 
         {/* Register Form */}
-        <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
+        <Form
+          validationErrors={errors}
+          onSubmit={onSubmit}
+          className="flex flex-col gap-4"
+        >
           <Input
+            isRequired
             label="Họ và tên"
+            name="name"
             type="text"
             placeholder="Nguyễn Văn A"
-            variant="bordered"
-            startContent={<User className="w-5 h-5 text-gray-400" />}
-            isInvalid={!!errors.name}
-            errorMessage={errors.name?.message}
-            isRequired
-            {...register("name")}
+            labelPlacement="outside"
+            errorMessage={({ validationDetails }) => {
+              if (validationDetails.valueMissing) {
+                return "Vui lòng nhập họ tên";
+              }
+            }}
           />
 
           <Input
+            isRequired
             label="Email"
+            name="email"
             type="email"
             placeholder="email@example.com"
-            variant="bordered"
-            startContent={<Mail className="w-5 h-5 text-gray-400" />}
-            isInvalid={!!errors.email}
-            errorMessage={errors.email?.message}
-            isRequired
-            {...register("email")}
+            labelPlacement="outside"
+            errorMessage={({ validationDetails }) => {
+              if (validationDetails.valueMissing) {
+                return "Vui lòng nhập email";
+              }
+              if (validationDetails.typeMismatch) {
+                return "Email không hợp lệ";
+              }
+            }}
           />
 
           <Input
+            isRequired
             label="Mật khẩu"
+            name="password"
             type={showPassword ? "text" : "password"}
             placeholder="••••••••"
-            variant="bordered"
-            startContent={<Lock className="w-5 h-5 text-gray-400" />}
+            labelPlacement="outside"
+            value={password}
+            onValueChange={setPassword}
+            errorMessage={getPasswordError(password)}
+            isInvalid={getPasswordError(password) !== null}
+            description="Tối thiểu 6 ký tự"
             endContent={
               <button
                 type="button"
@@ -148,19 +168,25 @@ export default function RegisterForm() {
                 )}
               </button>
             }
-            isInvalid={!!errors.password}
-            errorMessage={errors.password?.message}
-            description="Tối thiểu 6 ký tự"
-            isRequired
-            {...register("password")}
           />
 
           <Input
+            isRequired
             label="Xác nhận mật khẩu"
+            name="confirmPassword"
             type={showConfirmPassword ? "text" : "password"}
             placeholder="••••••••"
-            variant="bordered"
-            startContent={<Lock className="w-5 h-5 text-gray-400" />}
+            labelPlacement="outside"
+            value={confirmPassword}
+            onValueChange={(value: string) => {
+              setConfirmPassword(value);
+              if (errors.confirmPassword) {
+                const { confirmPassword, ...rest } = errors;
+                setErrors(rest);
+              }
+            }}
+            errorMessage={errors.confirmPassword}
+            isInvalid={!!errors.confirmPassword}
             endContent={
               <button
                 type="button"
@@ -174,10 +200,6 @@ export default function RegisterForm() {
                 )}
               </button>
             }
-            isInvalid={!!errors.confirmPassword}
-            errorMessage={errors.confirmPassword?.message}
-            isRequired
-            {...register("confirmPassword")}
           />
 
           <Button
@@ -199,7 +221,7 @@ export default function RegisterForm() {
               Chính sách bảo mật
             </Link>
           </p>
-        </form>
+        </Form>
 
         {/* Login Link */}
         <div className="mt-6 text-center">

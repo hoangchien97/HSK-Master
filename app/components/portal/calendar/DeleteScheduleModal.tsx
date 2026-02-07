@@ -40,7 +40,6 @@ export default function DeleteScheduleModal({
       isOpen={isOpen}
       onClose={onClose}
       size="md"
-      closeIcon={AlertTriangle}
       title={
         <div className="flex items-center gap-2">
           <AlertTriangle className="w-5 h-5 text-danger" />

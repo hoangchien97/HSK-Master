@@ -9,6 +9,7 @@ import {
   DeleteScheduleModal,
 } from '@/app/components/portal/calendar';
 import { Spinner } from '@heroui/react';
+import { useHttpClient } from '@/app/hooks';
 import {
   fetchSchedules,
   fetchClasses,
@@ -25,11 +26,12 @@ import type {
 export default function TeacherScheduleCalendar() {
   const [schedules, setSchedules] = useState<ISchedule[]>([]);
   const [classes, setClasses] = useState<IClass[]>([]);
-  const [isLoading, setIsLoading] = useState(true);
+  const [isInitialLoading, setIsInitialLoading] = useState(true);
   const [showModal, setShowModal] = useState(false);
   const [selectedSchedule, setSelectedSchedule] = useState<ISchedule | null>(null);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [scheduleToEdit, setScheduleToEdit] = useState<ISchedule | null>(null);
+  const [slotInitialTime, setSlotInitialTime] = useState<{ start: Date; end: Date } | null>(null);
 
   // Fetch data on mount
   useEffect(() => {
@@ -38,7 +40,7 @@ export default function TeacherScheduleCalendar() {
 
   const loadData = async () => {
     try {
-      setIsLoading(true);
+      setIsInitialLoading(true);
       const [classesResult, schedulesResult] = await Promise.all([
         fetchClasses(),
         fetchSchedules(),
@@ -59,7 +61,7 @@ export default function TeacherScheduleCalendar() {
       const errorMessage = error instanceof Error ? error.message : 'Không thể tải dữ liệu';
       toast.error(errorMessage);
     } finally {
-      setIsLoading(false);
+      setIsInitialLoading(false);
     }
   };
 
@@ -170,9 +172,16 @@ export default function TeacherScheduleCalendar() {
   const handleCloseModal = () => {
     setShowModal(false);
     setScheduleToEdit(null);
+    setSlotInitialTime(null);
   };
 
-  if (isLoading) {
+  const handleSlotSelect = (slotInfo: { start: Date; end: Date }) => {
+    setScheduleToEdit(null);
+    setSlotInitialTime(slotInfo);
+    setShowModal(true);
+  };
+
+  if (isInitialLoading) {
     return (
       <div className="flex items-center justify-center h-64">
         <Spinner size="lg" color="danger" />
@@ -192,10 +201,13 @@ export default function TeacherScheduleCalendar() {
         schedules={schedules}
         onEventClick={handleEventClick}
         onEventDoubleClick={handleEventDoubleClick}
+        onEditEvent={handleEdit}
         onCreateSchedule={() => {
           setScheduleToEdit(null);
+          setSlotInitialTime(null);
           setShowModal(true);
         }}
+        onSlotSelect={handleSlotSelect}
       />
 
       {/* Event Detail Drawer */}
@@ -221,6 +233,7 @@ export default function TeacherScheduleCalendar() {
         classes={classes}
         initialData={scheduleToEdit || undefined}
         editMode={!!scheduleToEdit}
+        slotInitialTime={slotInitialTime || undefined}
       />
 
       {/* Delete Modal */}

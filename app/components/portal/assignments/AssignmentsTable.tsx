@@ -34,6 +34,7 @@ import {
   CheckCircle,
 } from "lucide-react"
 import { toast } from "react-toastify"
+import { PAGINATION } from "@/app/constants/portal"
 import AssignmentFormModal from "./AssignmentFormModal"
 import dayjs from "dayjs"
 import "dayjs/locale/vi"
@@ -115,8 +116,8 @@ export default function AssignmentsTable({
   const [searchQuery, setSearchQuery] = useState("")
   const [classFilter, setClassFilter] = useState<string>("ALL")
   const [statusFilter, setStatusFilter] = useState<string>("ALL")
-  const [page, setPage] = useState(1)
-  const rowsPerPage = 10
+  const [page, setPage] = useState(PAGINATION.INITIAL_PAGE)
+  const [rowsPerPage, setRowsPerPage] = useState(PAGINATION.DEFAULT_PAGE_SIZE)
 
   /* filtering */
   const filteredAssignments = useMemo(() => {
@@ -319,7 +320,7 @@ export default function AssignmentsTable({
               onSelectionChange={(keys) => {
                 const val = Array.from(keys)[0] as string
                 setClassFilter(val || "ALL")
-                setPage(1)
+                setPage(PAGINATION.INITIAL_PAGE)
               }}
               className="w-48"
               size="md"
@@ -337,7 +338,7 @@ export default function AssignmentsTable({
               onSelectionChange={(keys) => {
                 const val = Array.from(keys)[0] as string
                 setStatusFilter(val || "ALL")
-                setPage(1)
+                setPage(PAGINATION.INITIAL_PAGE)
               }}
               className="w-48"
               size="md"
@@ -346,6 +347,22 @@ export default function AssignmentsTable({
               <SelectItem key="ACTIVE">Đang mở</SelectItem>
               <SelectItem key="DRAFT">Nháp</SelectItem>
               <SelectItem key="ARCHIVED">Đã đóng</SelectItem>
+            </Select>
+            <Select
+              label="Hiển thị"
+              selectedKeys={[String(rowsPerPage)]}
+              onChange={(e) => {
+                setRowsPerPage(Number(e.target.value));
+                setPage(PAGINATION.INITIAL_PAGE);
+              }}
+              className="w-32"
+              size="md"
+            >
+              {PAGINATION.PAGE_SIZE_OPTIONS.map((size) => (
+                <SelectItem key={size} value={size}>
+                  {size}
+                </SelectItem>
+              ))}
             </Select>
           </div>
         </div>

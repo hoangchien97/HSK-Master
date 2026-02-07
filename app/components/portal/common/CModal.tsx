@@ -39,10 +39,10 @@ export function CModal({
       hideCloseButton={hideCloseButton}
       scrollBehavior={scrollBehavior}
       classNames={{
-        header: "border-b-[1px] border-[#292f46]",
-        footer: "border-t-[1px] border-[#292f46]",
+        header: "py-4 px-6 md:py-6 md:px-6 border-b-[1px] border-[#292f46]",
+        footer: "py-4 px-6 md:py-6 md:px-6 border-t-[1px] border-[#292f46]",
         closeButton: "top-[14px] right-4",
-        body: "max-h-[70vh] overflow-y-auto scrollbar-thin scrollbar-thumb-gray-300 scrollbar-track-transparent hover:scrollbar-thumb-gray-400",
+        body: "max-h-[90vh] overflow-y-auto px-4 py-4 md:px-6 md:py-6 scrollbar-thin scrollbar-thumb-gray-300 scrollbar-track-transparent hover:scrollbar-thumb-gray-400",
       }}
     >
       <ModalContent>

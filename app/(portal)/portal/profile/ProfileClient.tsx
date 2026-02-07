@@ -2,31 +2,14 @@
 
 import { useState, useRef } from "react"
 import { useRouter } from "next/navigation"
-import { useForm } from "react-hook-form"
-import { zodResolver } from "@hookform/resolvers/zod"
-import { z } from "zod"
-import { Camera, Save, X, User, Phone, MapPin, Calendar, FileText } from "lucide-react"
+import { Camera, Save, X, Mail, Phone, User } from "lucide-react"
 import Image from "next/image"
 import { toast } from "react-toastify"
 import type { PortalUser } from "@/app/interfaces/portal/profile"
-import { Input, Button, Chip, Card, CardBody } from "@heroui/react"
+import { Form, Input, Button, Chip, Card, CardBody, Textarea } from "@heroui/react"
 import { uploadAvatar } from "@/app/utils/upload"
 import { validateFile } from "@/app/utils/validation"
-import { formatDateForInput } from "@/app/utils/date"
-import { ROLE_LABELS } from "@/app/constants/portal"
-import { UserRole } from "@/app/constants/portal/roles"
 import { useHttpClient } from "@/app/hooks"
-
-// Validation schema
-const profileSchema = z.object({
-  fullName: z.string().min(1, "Vui lòng nhập họ tên"),
-  phoneNumber: z.string().optional(),
-  address: z.string().optional(),
-  dateOfBirth: z.string().optional(),
-  biography: z.string().optional(),
-})
-
-type ProfileFormData = z.infer<typeof profileSchema>
 
 interface ProfileClientProps {
   user: PortalUser
@@ -41,24 +24,8 @@ export default function ProfileClient({ user }: ProfileClientProps) {
   const [message, setMessage] = useState<{ type: "success" | "error"; text: string } | null>(null)
   const [avatarPreview, setAvatarPreview] = useState<string | null>(user.image || null)
   const [avatarFile, setAvatarFile] = useState<File | null>(null)
-
-  const {
-    register,
-    handleSubmit,
-    formState: { errors, isDirty },
-    reset,
-  } = useForm<ProfileFormData>({
-    resolver: zodResolver(profileSchema),
-    defaultValues: {
-      fullName: user.fullName ?? "",
-      phoneNumber: user.phoneNumber ?? "",
-      address: user.address ?? "",
-      dateOfBirth: user.dateOfBirth
-        ? formatDateForInput(new Date(user.dateOfBirth))
-        : "",
-      biography: user.biography ?? "",
-    },
-  })
+  const [errors, setErrors] = useState<Record<string, string>>({})
+  const [isDirty, setIsDirty] = useState(false)
 
   const handleAvatarClick = () => {
     fileInputRef.current?.click()
@@ -86,9 +53,14 @@ export default function ProfileClient({ user }: ProfileClientProps) {
 
     // Store file for later upload
     setAvatarFile(file)
+    setIsDirty(true)
   }
 
-  const onSubmit = async (data: ProfileFormData) => {
+  const onSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault()
+    const formData = Object.fromEntries(new FormData(e.currentTarget))
+
+    setErrors({})
     setLoading(true)
     setMessage(null)
 
@@ -105,13 +77,14 @@ export default function ProfileClient({ user }: ProfileClientProps) {
       }
 
       const updateData = {
-        fullName: data.fullName,
-        phoneNumber: data.phoneNumber,
-        address: data.address,
-        dateOfBirth: data.dateOfBirth,
-        biography: data.biography,
+        fullName: formData.fullName as string,
+        phoneNumber: formData.phoneNumber as string,
+        address: formData.address as string,
+        dateOfBirth: formData.dateOfBirth as string,
+        biography: formData.biography as string,
         image: avatarUrl,
       }
+      
       // Use httpClient instead of fetch - auto loading spinner
       const response = await http.put<{ error?: string }>("/api/portal/profile", updateData)
 
@@ -122,6 +95,7 @@ export default function ProfileClient({ user }: ProfileClientProps) {
       toast.success("Cập nhật hồ sơ thành công")
       setMessage({ type: "success", text: "Cập nhật hồ sơ thành công" })
       setAvatarFile(null) // Clear file after successful upload
+      setIsDirty(false)
       router.refresh()
     } catch (error) {
       const errorMessage = error instanceof Error ? error.message : "Có lỗi xảy ra"
@@ -136,10 +110,10 @@ export default function ProfileClient({ user }: ProfileClientProps) {
   }
 
   const handleCancel = () => {
-    reset()
     setAvatarPreview(user.image || null)
     setAvatarFile(null)
     setMessage(null)
+    setIsDirty(false)
   }
 
   const getRoleLabel = () => {
@@ -172,7 +146,7 @@ export default function ProfileClient({ user }: ProfileClientProps) {
         </div>
       )}
 
-      <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
+      <Form validationErrors={errors} onSubmit={onSubmit} className="space-y-6">
         {/* Avatar Section - Center */}
         <Card>
           <CardBody className="p-8">
@@ -246,61 +220,68 @@ export default function ProfileClient({ user }: ProfileClientProps) {
               {/* Full Name */}
               <div className="md:col-span-2">
                 <Input
-                  {...register("fullName")}
-                  label={<>Họ và tên <span className="text-red-500">*</span></>}
+                  name="fullName"
+                  label="Họ và tên"
                   placeholder="Nguyễn Văn A"
-                  isInvalid={!!errors.fullName}
-                  errorMessage={errors.fullName?.message}
-                  variant="bordered"
+                  labelPlacement="outside"
+                  defaultValue={user.fullName || ""}
+                  isRequired
+                  onChange={() => setIsDirty(true)}
+                  errorMessage={({ validationDetails }) => {
+                    if (validationDetails.valueMissing) {
+                      return "Vui lòng nhập họ và tên"
+                    }
+                  }}
                 />
               </div>
 
               {/* Phone */}
               <div>
                 <Input
-                  {...register("phoneNumber")}
+                  name="phoneNumber"
                   label="Số điện thoại"
                   type="tel"
                   placeholder="0901234567"
-                  startContent={<Phone className="w-4 h-4 text-gray-400" />}
-                  variant="bordered"
+                  labelPlacement="outside"
+                  defaultValue={user.phoneNumber || ""}
+                  onChange={() => setIsDirty(true)}
                 />
               </div>
 
               {/* Date of Birth */}
               <div>
                 <Input
-                  {...register("dateOfBirth")}
+                  name="dateOfBirth"
                   label="Ngày sinh"
                   type="date"
-                  startContent={<Calendar className="w-4 h-4 text-gray-400" />}
-                  variant="bordered"
+                  labelPlacement="outside"
+                  defaultValue={user.dateOfBirth || ""}
+                  onChange={() => setIsDirty(true)}
                 />
               </div>
 
               {/* Address */}
               <div className="md:col-span-2">
                 <Input
-                  {...register("address")}
+                  name="address"
                   label="Địa chỉ"
                   placeholder="123 Đường ABC, Quận 1, TP.HCM"
-                  startContent={<MapPin className="w-4 h-4 text-gray-400" />}
-                  variant="bordered"
+                  labelPlacement="outside"
+                  defaultValue={user.address || ""}
+                  onChange={() => setIsDirty(true)}
                 />
               </div>
 
               {/* Biography */}
-              <div className="space-y-2 md:col-span-2">
-                <label htmlFor="biography" className="text-sm font-medium text-gray-700 flex items-center gap-1">
-                  <FileText className="w-4 h-4" />
-                  Giới thiệu bản thân
-                </label>
-                <textarea
-                  {...register("biography")}
-                  id="biography"
-                  rows={4}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500 resize-none"
+              <div className="md:col-span-2">
+                <Textarea
+                  name="biography"
+                  label="Giới thiệu bản thân"
                   placeholder="Viết một vài dòng giới thiệu về bản thân..."
+                  labelPlacement="outside"
+                  defaultValue={user.biography || ""}
+                  minRows={4}
+                  onChange={() => setIsDirty(true)}
                 />
               </div>
             </div>
@@ -328,7 +309,7 @@ export default function ProfileClient({ user }: ProfileClientProps) {
             {loading ? "Đang lưu..." : "Lưu thay đổi"}
           </Button>
         </div>
-      </form>
+      </Form>
     </div>
   )
 }

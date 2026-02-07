@@ -61,7 +61,7 @@ function PortalLayoutInner({ user, children }: PortalLayoutClientProps) {
         />
 
         {/* Page content - Scrollable */}
-        <main className="flex-1 p-4 lg:p-6 overflow-y-auto relative">
+        <main className="flex-1 p-4 lg:p-6 overflow-y-auto relative min-h-[calc(100vh-4rem)]">
           {/* Global loading overlay */}
           {isLoading && (
             <div className="absolute inset-0 z-50 flex items-center justify-center bg-white/60 backdrop-blur-xs">

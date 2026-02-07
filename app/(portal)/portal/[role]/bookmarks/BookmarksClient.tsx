@@ -206,10 +206,11 @@ export default function BookmarksClient({
             <div className="flex-1">
               <Input
                 type="text"
+                label="Tìm kiếm"
+                labelPlacement="outside"
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
                 placeholder="Tìm kiếm từ vựng..."
-                startContent={<Search className="w-5 h-5 text-gray-400" />}
               />
             </div>
             <div className="w-full md:w-48">

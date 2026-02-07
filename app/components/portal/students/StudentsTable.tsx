@@ -29,6 +29,7 @@ import {
   GraduationCap,
   Users,
 } from "lucide-react"
+import { PAGINATION } from "@/app/constants/portal"
 
 /* ──────────────────────── types ──────────────────────── */
 
@@ -85,8 +86,8 @@ const COLUMNS = [
 export default function StudentsTable({ students }: StudentsTableProps) {
   const [searchQuery, setSearchQuery] = useState("")
   const [levelFilter, setLevelFilter] = useState<string>("ALL")
-  const [page, setPage] = useState(1)
-  const rowsPerPage = 10
+  const [page, setPage] = useState(PAGINATION.INITIAL_PAGE)
+  const [rowsPerPage, setRowsPerPage] = useState(PAGINATION.DEFAULT_PAGE_SIZE)
 
   /* filtering */
   const filteredStudents = useMemo(() => {
@@ -258,12 +259,27 @@ export default function StudentsTable({ students }: StudentsTableProps) {
             onSelectionChange={(keys) => {
               const val = Array.from(keys)[0] as string
               setLevelFilter(val || "ALL")
-              setPage(1)
+              setPage(PAGINATION.INITIAL_PAGE)
             }}
             className="w-full sm:w-48"
           >
             {HSK_LEVELS.map((l) => (
               <SelectItem key={l.key}>{l.label}</SelectItem>
+            ))}
+          </Select>
+          <Select
+            label="Hiển thị"
+            selectedKeys={[String(rowsPerPage)]}
+            onChange={(e) => {
+              setRowsPerPage(Number(e.target.value));
+              setPage(PAGINATION.INITIAL_PAGE);
+            }}
+            className="w-32"
+          >
+            {PAGINATION.PAGE_SIZE_OPTIONS.map((size) => (
+              <SelectItem key={size} value={size}>
+                {size}
+              </SelectItem>
             ))}
           </Select>
         </div>

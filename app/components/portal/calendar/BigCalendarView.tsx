@@ -1,12 +1,13 @@
 'use client';
 
 import { useMemo, useCallback, useState } from 'react';
-import { Calendar, dateFnsLocalizer, Views, type View } from 'react-big-calendar';
+import { Calendar, dateFnsLocalizer, Views, type View, type SlotInfo } from 'react-big-calendar';
 import 'react-big-calendar/lib/css/react-big-calendar.css';
+import '@/app/styles/big-calendar-custom.css';
 import { format, parse, startOfWeek, getDay } from 'date-fns';
 import { vi } from 'date-fns/locale';
-import { Plus, ChevronLeft, ChevronRight } from 'lucide-react';
-import { Button, Chip, Spinner, Tabs, Tab } from '@heroui/react';
+import { Plus, ChevronLeft, ChevronRight, Pencil } from 'lucide-react';
+import { Button, Spinner, Tabs, Tab, Tooltip } from '@heroui/react';
 import type { ISchedule } from '@/app/interfaces/portal';
 import { EventState } from '@/app/interfaces/portal/calendar';
 import { getEventState } from '@/app/utils/calendar';
@@ -20,6 +21,15 @@ const localizer = dateFnsLocalizer({
   getDay,
   locales,
 });
+
+// Vietnamese weekday names (short format)
+const WEEKDAY_NAMES = ['CN', 'T2', 'T3', 'T4', 'T5', 'T6', 'T7'];
+
+// Custom format for weekday header
+const formatWeekdayShort = (date: Date) => {
+  const day = getDay(date);
+  return WEEKDAY_NAMES[day];
+};
 
 // Vietnamese messages
 const messages = {
@@ -38,11 +48,11 @@ const messages = {
   showMore: (total: number) => `+${total} sự kiện`,
 };
 
-// Legend items
+// Legend items with exact status colors
 const LEGEND_ITEMS = [
-  { label: 'Sắp diễn ra', color: 'bg-red-500' },
-  { label: 'Tương lai', color: 'bg-amber-500' },
-  { label: 'Đã qua', color: 'bg-gray-400' },
+  { label: 'Sắp diễn ra', bgColor: '#FEF3C7', textColor: '#92400E' },
+  { label: 'Tương lai', bgColor: '#ECFEFF', textColor: '#065F46' },
+  { label: 'Đã qua', bgColor: '#F3F4F6', textColor: '#9CA3AF' },
 ];
 
 interface CalendarEvent {
@@ -60,7 +70,9 @@ interface BigCalendarViewProps {
   schedules: ISchedule[];
   onEventClick: (schedule: ISchedule) => void;
   onEventDoubleClick: (schedule: ISchedule) => void;
+  onEditEvent: (schedule: ISchedule) => void;
   onCreateSchedule: () => void;
+  onSlotSelect?: (slotInfo: { start: Date; end: Date }) => void;
   isLoading?: boolean;
 }
 
@@ -74,7 +86,9 @@ export default function BigCalendarView({
   schedules,
   onEventClick,
   onEventDoubleClick,
+  onEditEvent,
   onCreateSchedule,
+  onSlotSelect,
   isLoading = false,
 }: BigCalendarViewProps) {
   const [currentDate, setCurrentDate] = useState(new Date());
@@ -102,26 +116,26 @@ export default function BigCalendarView({
   // Event style based on state
   const eventPropGetter = useCallback((event: CalendarEvent) => {
     const state = event.resource.state;
-    let style: React.CSSProperties = {
+    const base: React.CSSProperties = {
       borderRadius: '6px',
       border: 'none',
       fontSize: '0.8rem',
-      padding: '2px 6px',
+      padding: '3px 8px',
+      fontWeight: '500',
+      cursor: 'pointer',
+      transition: 'all 0.15s ease',
     };
 
     switch (state) {
       case EventState.UPCOMING:
-        style = { ...style, backgroundColor: '#dc2626', color: '#fff' };
-        break;
+        return { style: { ...base, backgroundColor: '#FEF3C7', color: '#92400E' } };
       case EventState.FUTURE:
-        style = { ...style, backgroundColor: '#f59e0b', color: '#78350f' };
-        break;
+        return { style: { ...base, backgroundColor: '#ECFEFF', color: '#065F46' } };
       case EventState.PAST:
-        style = { ...style, backgroundColor: '#d1d5db', color: '#4b5563' };
-        break;
+        return { style: { ...base, backgroundColor: '#F3F4F6', color: '#9CA3AF' } };
+      default:
+        return { style: base };
     }
-
-    return { style };
   }, []);
 
   // Handlers
@@ -133,6 +147,40 @@ export default function BigCalendarView({
   const handleDoubleClickEvent = useCallback(
     (event: CalendarEvent) => onEventDoubleClick(event.resource.schedule),
     [onEventDoubleClick]
+  );
+
+  // Handle drag/drop slot selection
+  const handleSelectSlot = useCallback(
+    (slotInfo: SlotInfo) => {
+      if (onSlotSelect) {
+        onSlotSelect({ start: slotInfo.start, end: slotInfo.end });
+      }
+    },
+    [onSlotSelect]
+  );
+
+  // Custom event component with hover Edit button
+  const CustomEvent = useCallback(
+    ({ event }: { event: CalendarEvent }) => {
+      return (
+        <div className="group relative w-full h-full flex items-center">
+          <span className="truncate block flex-1">{event.title}</span>
+          <Tooltip content="Chỉnh sửa" placement="top" size="sm">
+            <button
+              type="button"
+              className="absolute top-1/2 -translate-y-1/2 -right-1 w-6 h-6 rounded-full bg-white shadow-md border border-gray-200 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity z-10 hover:bg-gray-50"
+              onClick={(e) => {
+                e.stopPropagation();
+                onEditEvent(event.resource.schedule);
+              }}
+            >
+              <Pencil className="w-3 h-3 text-gray-600" />
+            </button>
+          </Tooltip>
+        </div>
+      );
+    },
+    [onEditEvent]
   );
 
   const handleNavigate = useCallback((date: Date) => setCurrentDate(date), []);
@@ -150,25 +198,30 @@ export default function BigCalendarView({
     }
   }, [currentDate, currentView]);
 
-  // Custom Toolbar (replaces default)
-  const CustomToolbar = useCallback(() => {
-    const goToToday = () => setCurrentDate(new Date());
-    const goBack = () => {
-      const d = new Date(currentDate);
+  // Custom Toolbar navigation handlers
+  const goToToday = useCallback(() => setCurrentDate(new Date()), []);
+  const goBack = useCallback(() => {
+    setCurrentDate((prev) => {
+      const d = new Date(prev);
       if (currentView === Views.DAY) d.setDate(d.getDate() - 1);
       else if (currentView === Views.WEEK) d.setDate(d.getDate() - 7);
       else d.setMonth(d.getMonth() - 1);
-      setCurrentDate(d);
-    };
-    const goNext = () => {
-      const d = new Date(currentDate);
+      return d;
+    });
+  }, [currentView]);
+  const goNext = useCallback(() => {
+    setCurrentDate((prev) => {
+      const d = new Date(prev);
       if (currentView === Views.DAY) d.setDate(d.getDate() + 1);
       else if (currentView === Views.WEEK) d.setDate(d.getDate() + 7);
       else d.setMonth(d.getMonth() + 1);
-      setCurrentDate(d);
-    };
+      return d;
+    });
+  }, [currentView]);
 
-    return (
+  return (
+    <div className="bg-white rounded-xl shadow-sm border border-gray-200">
+      {/* Custom Toolbar */}
       <div className="flex items-center justify-between p-4 border-b border-gray-200">
         <div className="flex items-center gap-3">
           <Button variant="bordered" size="sm" onPress={goToToday}>
@@ -193,7 +246,7 @@ export default function BigCalendarView({
             size="sm"
             variant="bordered"
             selectedKey={currentView}
-            onSelectionChange={(key) => handleViewChange(VIEW_MAP[key as string] || Views.MONTH)}
+            onSelectionChange={(key: React.Key) => handleViewChange(VIEW_MAP[key as string] || Views.MONTH)}
           >
             <Tab key="day" title="Ngày" />
             <Tab key="week" title="Tuần" />
@@ -209,22 +262,22 @@ export default function BigCalendarView({
           </Button>
         </div>
       </div>
-    );
-  }, [currentDate, currentView, dateDisplayText, handleViewChange, onCreateSchedule]);
-
-  return (
-    <div className="bg-white rounded-xl shadow-sm border border-gray-200">
-      {/* Custom Toolbar */}
-      <CustomToolbar />
 
       {/* Legend */}
-      <div className="flex items-center gap-6 px-4 py-2 bg-gray-50 border-b border-gray-200">
+      <div className="flex items-center gap-4 px-4 py-2 bg-gray-50 border-b border-gray-200">
         <span className="text-sm text-gray-500 font-medium">Chú thích:</span>
         {LEGEND_ITEMS.map((item) => (
-          <div key={item.label} className="flex items-center gap-2">
-            <span className={`w-3 h-3 rounded-full ${item.color}`} />
-            <span className="text-sm text-gray-600">{item.label}</span>
-          </div>
+          <span
+            key={item.label}
+            className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md text-xs font-medium"
+            style={{ backgroundColor: item.bgColor, color: item.textColor }}
+          >
+            <span
+              className="w-2 h-2 rounded-full"
+              style={{ backgroundColor: item.textColor }}
+            />
+            {item.label}
+          </span>
         ))}
       </div>
 
@@ -247,7 +300,10 @@ export default function BigCalendarView({
           onView={handleViewChange}
           onSelectEvent={handleSelectEvent}
           onDoubleClickEvent={handleDoubleClickEvent}
+          selectable
+          onSelectSlot={handleSelectSlot}
           eventPropGetter={eventPropGetter}
+          components={{ event: CustomEvent }}
           messages={messages}
           toolbar={false}
           popup
@@ -257,10 +313,11 @@ export default function BigCalendarView({
           max={new Date(1970, 0, 1, 21, 0, 0)}
           style={{ height: 650 }}
           formats={{
+            weekdayFormat: formatWeekdayShort,
             timeGutterFormat: (date: Date) => format(date, 'HH:mm'),
             eventTimeRangeFormat: ({ start, end }: { start: Date; end: Date }) =>
               `${format(start, 'HH:mm')} - ${format(end, 'HH:mm')}`,
-            dayHeaderFormat: (date: Date) => format(date, 'EEEE dd/MM', { locale: vi }),
+            dayHeaderFormat: (date: Date) => format(date, 'dd/MM', { locale: vi }),
             dayRangeHeaderFormat: ({ start, end }: { start: Date; end: Date }) =>
               `${format(start, 'dd/MM', { locale: vi })} — ${format(end, 'dd/MM/yyyy', { locale: vi })}`,
           }}

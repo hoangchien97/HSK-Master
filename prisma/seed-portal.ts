@@ -1,20 +1,21 @@
-import { PrismaClient } from '@prisma/client'
-import * as bcrypt from 'bcryptjs'
+import { PrismaClient } from "@prisma/client"
+import bcrypt from "bcryptjs"
 import {
-  USER_ROLE,
-  STATUS,
-  CLASS_STATUS,
-  SCHEDULE_STATUS,
-  ENROLLMENT_STATUS,
-} from '../app/constants/portal/roles'
+  UserRole,
+  UserStatus,
+  ClassStatus,
+  EnrollmentStatus,
+  ScheduleStatus,
+  AttendanceStatus,
+} from "@/app/enums/portal"
 
 const prisma = new PrismaClient()
 
 export async function seedPortal() {
-  console.log("\n🔐 Seeding portal data...")
+  console.log("\n��� Seeding portal data...")
 
   // ============= Clear existing portal data =============
-  console.log("🗑️  Clearing existing portal data...")
+  console.log("���️  Clearing existing portal data...")
   await prisma.portalQuizAttempt.deleteMany()
   await prisma.portalQuiz.deleteMany()
   await prisma.portalBookmark.deleteMany()
@@ -30,20 +31,18 @@ export async function seedPortal() {
   console.log("✅ Cleared existing portal data")
 
   // ============= Portal Users =============
-  console.log("👥 Creating portal users...")
-
-  // Hash password for all users
+  console.log("��� Creating portal users...")
   const hashedPassword = await bcrypt.hash("password123", 10)
 
-  // Create Admin User
+  // Create Admin
   const admin = await prisma.portalUser.create({
     data: {
       name: "admin",
       fullName: "Admin HSK Master",
       email: "admin@hskmaster.com",
       password: hashedPassword,
-      role: USER_ROLE.SYSTEM_ADMIN,
-      status: STATUS.ACTIVE,
+      role: UserRole.SYSTEM_ADMIN,
+      status: UserStatus.ACTIVE,
       emailVerified: new Date(),
       image: "https://api.dicebear.com/7.x/avataaars/svg?seed=admin",
       phoneNumber: "0900000000",
@@ -51,299 +50,250 @@ export async function seedPortal() {
     },
   })
 
-  // Create Teachers
-  const teacher1 = await prisma.portalUser.create({
-    data: {
-      name: "nguyen-van-an",
-      fullName: "Nguyễn Văn An",
-      email: "teacher1@hskmaster.com",
-      password: hashedPassword,
-      role: USER_ROLE.TEACHER,
-      status: STATUS.ACTIVE,
-      emailVerified: new Date(),
-      image: "https://api.dicebear.com/7.x/avataaars/svg?seed=teacher1",
-      phoneNumber: "0901234567",
-      biography: "Giáo viên tiếng Trung với 5 năm kinh nghiệm giảng dạy HSK. Chuyên môn: HSK 1-3, Giao tiếp cơ bản.",
-    },
+  // Create 5 Teachers
+  const teachers = await Promise.all([
+    prisma.portalUser.create({
+      data: {
+        name: "nguyen-van-an",
+        fullName: "Nguyễn Văn An",
+        email: "teacher1@hskmaster.com",
+        password: hashedPassword,
+        role: UserRole.TEACHER,
+        status: UserStatus.ACTIVE,
+        emailVerified: new Date(),
+        image: "https://api.dicebear.com/7.x/avataaars/svg?seed=teacher1",
+        phoneNumber: "0901234567",
+        biography: "Giáo viên tiếng Trung với 5 năm kinh nghiệm. Chuyên môn: HSK 1-3, Giao tiếp.",
+      },
+    }),
+    prisma.portalUser.create({
+      data: {
+        name: "tran-thi-binh",
+        fullName: "Trần Thị Bình",
+        email: "teacher2@hskmaster.com",
+        password: hashedPassword,
+        role: UserRole.TEACHER,
+        status: UserStatus.ACTIVE,
+        emailVerified: new Date(),
+        image: "https://api.dicebear.com/7.x/avataaars/svg?seed=teacher2",
+        phoneNumber: "0907654321",
+        biography: "Tốt nghiệp Đại học Bắc Kinh, 8 năm kinh nghiệm. Chuyên môn: HSK 4-6.",
+      },
+    }),
+    prisma.portalUser.create({
+      data: {
+        name: "le-minh-chau",
+        fullName: "Lê Minh Châu",
+        email: "teacher3@hskmaster.com",
+        password: hashedPassword,
+        role: UserRole.TEACHER,
+        status: UserStatus.ACTIVE,
+        emailVerified: new Date(),
+        image: "https://api.dicebear.com/7.x/avataaars/svg?seed=teacher3",
+        phoneNumber: "0908765432",
+        biography: "Chuyên gia ngữ pháp tiếng Trung, 6 năm giảng dạy HSK 3-5.",
+      },
+    }),
+    prisma.portalUser.create({
+      data: {
+        name: "pham-thu-dung",
+        fullName: "Phạm Thu Dung",
+        email: "teacher4@hskmaster.com",
+        password: hashedPassword,
+        role: UserRole.TEACHER,
+        status: UserStatus.ACTIVE,
+        emailVerified: new Date(),
+        image: "https://api.dicebear.com/7.x/avataaars/svg?seed=teacher4",
+        phoneNumber: "0909876543",
+        biography: "Giáo viên dạy giao tiếp và văn hóa Trung Quốc, 4 năm kinh nghiệm.",
+      },
+    }),
+    prisma.portalUser.create({
+      data: {
+        name: "vo-quang-em",
+        fullName: "Võ Quang Em",
+        email: "teacher5@hskmaster.com",
+        password: hashedPassword,
+        role: UserRole.TEACHER,
+        status: UserStatus.ACTIVE,
+        emailVerified: new Date(),
+        image: "https://api.dicebear.com/7.x/avataaars/svg?seed=teacher5",
+        phoneNumber: "0910987654",
+        biography: "Chuyên gia HSK 5-6, tiếng Trung thương mại, 10 năm kinh nghiệm.",
+      },
+    }),
+  ])
+
+  // Create 50 Students
+  const studentNames = [
+    "Lê Văn Cường", "Phạm Thị Dung", "Hoàng Văn Em", "Ngô Thị Hoa", "Đỗ Văn Khoa",
+    "Trần Minh Giang", "Vũ Thu Hà", "Bùi Văn Hùng", "Đặng Thị Lan", "Lý Quốc Khánh",
+    "Mai Thị Linh", "Nguyễn Hoàng Long", "Phan Thị Mai", "Đinh Văn Nam", "Hồ Thị Nga",
+    "Cao Minh Phúc", "Dương Thị Quỳnh", "Tôn Văn Sơn", "Lưu Thị Tâm", "Võ Minh Tuấn",
+    "Lê Thị Uyên", "Trương Văn Vũ", "Phùng Thị Xuân", "Huỳnh Văn Yên", "Đào Thị Ánh",
+    "Châu Minh Bảo", "Ông Thị Cẩm", "Thái Văn Đạt", "La Thị Diệu", "Mạc Văn Đức",
+    "Nghiêm Thị Hương", "Hà Văn Kha", "Tạ Thị Kiều", "Lâm Văn Lợi", "Từ Thị Mỹ",
+    "Hoàng Văn Ngọc", "Đoàn Thị Oanh", "Trịnh Văn Phong", "Vương Thị Quế", "Lục Văn Sáng",
+    "Ninh Thị Thảo", "Đàm Văn Thịnh", "Cung Thị Uyên", "Triệu Văn Vinh", "Lã Thị Yến",
+    "Khương Minh An", "Trang Thị Bích", "Ưng Văn Cường", "Kiều Thị Diễm", "Bành Văn Hải",
+  ]
+
+  const students = await Promise.all(
+    studentNames.map((name, index) => {
+      const slug = name.toLowerCase()
+        .normalize("NFD").replace(/[\u0300-\u036f]/g, "")
+        .replace(/đ/g, "d").replace(/\s+/g, "-")
+      
+      return prisma.portalUser.create({
+        data: {
+          name: slug,
+          fullName: name,
+          email: `student${index + 1}@gmail.com`,
+          password: hashedPassword,
+          role: UserRole.STUDENT,
+          status: UserStatus.ACTIVE,
+          emailVerified: new Date(),
+          image: `https://api.dicebear.com/7.x/avataaars/svg?seed=student${index + 1}`,
+          phoneNumber: `090${String(1000000 + index).slice(1)}`,
+          dateOfBirth: new Date(1995 + (index % 10), index % 12, (index % 28) + 1),
+          address: `${index + 1} Đường ABC, Quận ${(index % 12) + 1}, TP.HCM`,
+        },
+      })
+    })
+  )
+
+  console.log(`✅ Created 1 admin, 5 teachers, 50 students`)
+
+  // ============= Portal Classes (15 classes) =============
+  console.log("��� Creating 15 classes...")
+  
+  const classesData = [
+    { name: "HSK 1 - Lớp Sáng T2-T4-T6", code: "HSK1-246-SANG", level: "HSK1", teacher: teachers[0], max: 15, desc: "Lớp HSK 1 buổi sáng: T2, T4, T6 từ 8h-10h. Người mới bắt đầu." },
+    { name: "HSK 1 - Lớp Tối T3-T5-T7", code: "HSK1-357-TOI", level: "HSK1", teacher: teachers[0], max: 17, desc: "Lớp HSK 1 buổi tối: T3, T5, T7 từ 18h30-20h30." },
+    { name: "HSK 2 - Lớp Sáng T2-T4-T6", code: "HSK2-246-SANG", level: "HSK2", teacher: teachers[1], max: 16, desc: "Lớp HSK 2 buổi sáng: T2, T4, T6 từ 8h-10h. Dành cho học viên hoàn thành HSK 1." },
+    { name: "HSK 2 - Lớp Tối T3-T5-T7", code: "HSK2-357-TOI", level: "HSK2", teacher: teachers[1], max: 15, desc: "Lớp HSK 2 buổi tối: T3, T5, T7 từ 18h30-20h30." },
+    { name: "HSK 3 - Lớp Chiều T2-T4", code: "HSK3-24-CHIEU", level: "HSK3", teacher: teachers[2], max: 15, desc: "Lớp HSK 3 buổi chiều: T2, T4 từ 14h-17h. Cần nền tảng HSK 2." },
+    { name: "HSK 3 - Lớp Tối T3-T5", code: "HSK3-35-TOI", level: "HSK3", teacher: teachers[2], max: 16, desc: "Lớp HSK 3 buổi tối: T3, T5 từ 18h30-21h." },
+    { name: "HSK 4 - Lớp Sáng T2-T4-T6", code: "HSK4-246-SANG", level: "HSK4", teacher: teachers[4], max: 12, desc: "Lớp HSK 4 buổi sáng: T2, T4, T6 từ 8h-11h. Cần hoàn thành HSK 3." },
+    { name: "HSK 4 - Lớp Tối T3-T5-T7", code: "HSK4-357-TOI", level: "HSK4", teacher: teachers[4], max: 15, desc: "Lớp HSK 4 buổi tối: T3, T5, T7 từ 18h30-21h30." },
+    { name: "HSK 5 - Lớp Chiều T2-T4", code: "HSK5-24-CHIEU", level: "HSK5", teacher: teachers[4], max: 10, desc: "Lớp HSK 5 buổi chiều: T2, T4 từ 14h-17h. Trình độ HSK 4." },
+    { name: "HSK 6 - Lớp Tối T3-T5", code: "HSK6-35-TOI", level: "HSK6", teacher: teachers[4], max: 8, desc: "Lớp HSK 6 buổi tối: T3, T5 từ 18h30-21h30. Trình độ HSK 5." },
+    { name: "Giao tiếp cơ bản - Cuối tuần", code: "GT-CN-SANG", level: "BASIC", teacher: teachers[3], max: 20, desc: "Lớp giao tiếp cơ bản: CN 9h-12h. Tập trung nói và nghe." },
+    { name: "Giao tiếp nâng cao - Cuối tuần", code: "GT-T7-CHIEU", level: "ADVANCED", teacher: teachers[3], max: 15, desc: "Lớp giao tiếp nâng cao: T7 14h-17h. Thực hành đàm thoại." },
+    { name: "Tiếng Trung thương mại", code: "BUSINESS-35-TOI", level: "BUSINESS", teacher: teachers[4], max: 12, desc: "Lớp tiếng Trung thương mại: T3, T5 từ 19h-21h." },
+    { name: "Luyện thi HSK 3 - Intensive", code: "HSK3-INT-SANG", level: "HSK3", teacher: teachers[2], max: 16, desc: "Khóa luyện thi HSK 3 chuyên sâu: T2-T6 từ 8h-10h." },
+    { name: "Luyện thi HSK 5 - Intensive", code: "HSK5-INT-TOI", level: "HSK5", teacher: teachers[4], max: 12, desc: "Khóa luyện thi HSK 5 chuyên sâu: T2-T6 từ 18h30-20h30." },
+  ]
+
+  const classes = await Promise.all(
+    classesData.map((cls) =>
+      prisma.portalClass.create({
+        data: {
+          className: cls.name,
+          classCode: cls.code,
+          description: cls.desc,
+          teacherId: cls.teacher.id,
+          level: cls.level,
+          startDate: new Date("2026-02-01"),
+          endDate: new Date("2026-06-30"),
+          maxStudents: cls.max,
+          status: ClassStatus.ACTIVE,
+        },
+      })
+    )
+  )
+
+  console.log(`✅ Created 15 classes`)
+
+  // ============= Enroll students (varied distribution) =============
+  console.log("��� Enrolling students into classes...")
+  const enrollments: any[] = []
+  
+  // Distribute students across classes (15-17 per class)
+  let studentIndex = 0
+  classes.forEach((cls, classIndex) => {
+    const studentsPerClass = 15 + (classIndex % 3) // 15, 16, or 17
+    for (let i = 0; i < studentsPerClass && studentIndex < students.length; i++) {
+      enrollments.push({
+        classId: cls.id,
+        studentId: students[studentIndex].id,
+        status: EnrollmentStatus.ENROLLED,
+      })
+      studentIndex++
+      if (studentIndex >= students.length) studentIndex = 0 // wrap around
+    }
   })
 
-  const teacher2 = await prisma.portalUser.create({
-    data: {
-      name: "tran-thi-binh",
-      fullName: "Trần Thị Bình",
-      email: "teacher2@hskmaster.com",
-      password: hashedPassword,
-      role: USER_ROLE.TEACHER,
-      status: STATUS.ACTIVE,
-      emailVerified: new Date(),
-      image: "https://api.dicebear.com/7.x/avataaars/svg?seed=teacher2",
-      phoneNumber: "0907654321",
-      biography: "Tốt nghiệp Đại học Bắc Kinh, 8 năm kinh nghiệm. Chuyên môn: HSK 4-6, Tiếng Trung thương mại.",
-    },
-  })
-
-  // Create Students
-  const student1 = await prisma.portalUser.create({
-    data: {
-      name: "le-van-cuong",
-      fullName: "Lê Văn Cường",
-      email: "student1@gmail.com",
-      password: hashedPassword,
-      role: USER_ROLE.STUDENT,
-      status: STATUS.ACTIVE,
-      emailVerified: new Date(),
-      image: "https://api.dicebear.com/7.x/avataaars/svg?seed=student1",
-      phoneNumber: "0901000001",
-      dateOfBirth: new Date(1995, 0, 15),
-      address: "1 Đường ABC, Quận 1, TP.HCM",
-    },
-  })
-
-  const student2 = await prisma.portalUser.create({
-    data: {
-      name: "pham-thi-dung",
-      fullName: "Phạm Thị Dung",
-      email: "student2@gmail.com",
-      password: hashedPassword,
-      role: USER_ROLE.STUDENT,
-      status: STATUS.ACTIVE,
-      emailVerified: new Date(),
-      image: "https://api.dicebear.com/7.x/avataaars/svg?seed=student2",
-      phoneNumber: "0901000002",
-      dateOfBirth: new Date(1996, 1, 20),
-      address: "2 Đường ABC, Quận 2, TP.HCM",
-    },
-  })
-
-  const student3 = await prisma.portalUser.create({
-    data: {
-      name: "hoang-van-em",
-      fullName: "Hoàng Văn Em",
-      email: "student3@gmail.com",
-      password: hashedPassword,
-      role: USER_ROLE.STUDENT,
-      status: STATUS.ACTIVE,
-      emailVerified: new Date(),
-      image: "https://api.dicebear.com/7.x/avataaars/svg?seed=student3",
-      phoneNumber: "0901000003",
-      dateOfBirth: new Date(1997, 2, 10),
-      address: "3 Đường ABC, Quận 3, TP.HCM",
-    },
-  })
-
-  const student4 = await prisma.portalUser.create({
-    data: {
-      name: "ngo-thi-hoa",
-      fullName: "Ngô Thị Hoa",
-      email: "student4@gmail.com",
-      password: hashedPassword,
-      role: USER_ROLE.STUDENT,
-      status: STATUS.ACTIVE,
-      emailVerified: new Date(),
-      image: "https://api.dicebear.com/7.x/avataaars/svg?seed=student4",
-      phoneNumber: "0901000004",
-      dateOfBirth: new Date(1998, 3, 5),
-      address: "4 Đường ABC, Quận 4, TP.HCM",
-    },
-  })
-
-  const student5 = await prisma.portalUser.create({
-    data: {
-      name: "do-van-khoa",
-      fullName: "Đỗ Văn Khoa",
-      email: "student5@gmail.com",
-      password: hashedPassword,
-      role: USER_ROLE.STUDENT,
-      status: STATUS.ACTIVE,
-      emailVerified: new Date(),
-      image: "https://api.dicebear.com/7.x/avataaars/svg?seed=student5",
-      phoneNumber: "0901000005",
-      dateOfBirth: new Date(1999, 4, 25),
-      address: "5 Đường ABC, Quận 5, TP.HCM",
-    },
-  })
-
-  console.log(`✅ Created 1 admin, 2 teachers and 5 students`)
-
-  // ============= Portal Classes =============
-  console.log("🏫 Creating classes...")
-  const class1 = await prisma.portalClass.create({
-    data: {
-      className: "HSK 1 - Lớp Sáng T2-T4-T6",
-      classCode: "HSK1-246-SANG",
-      description: "Lớp học HSK 1 buổi sáng: Thứ 2, 4, 6 từ 8h-10h. Phù hợp cho người mới bắt đầu.",
-      teacherId: teacher1.id,
-      level: "HSK1",
-      startDate: new Date("2026-02-01"),
-      endDate: new Date("2026-05-01"),
-      maxStudents: 15,
-      status: CLASS_STATUS.ACTIVE,
-    },
-  })
-
-  const class2 = await prisma.portalClass.create({
-    data: {
-      className: "HSK 2 - Lớp Tối T3-T5-T7",
-      classCode: "HSK2-357-TOI",
-      description: "Lớp học HSK 2 buổi tối: Thứ 3, 5, 7 từ 18h30-20h30. Dành cho học viên đã hoàn thành HSK 1.",
-      teacherId: teacher1.id,
-      level: "HSK2",
-      startDate: new Date("2026-02-03"),
-      endDate: new Date("2026-05-15"),
-      maxStudents: 15,
-      status: CLASS_STATUS.ACTIVE,
-    },
-  })
-
-  const class3 = await prisma.portalClass.create({
-    data: {
-      className: "HSK 3 - Lớp Chiều T2-T4",
-      classCode: "HSK3-24-CHIEU",
-      description: "Lớp học HSK 3 buổi chiều: Thứ 2, 4 từ 14h-17h. Học viên cần có nền tảng HSK 2.",
-      teacherId: teacher2.id,
-      level: "HSK3",
-      startDate: new Date("2026-02-02"),
-      endDate: new Date("2026-06-30"),
-      maxStudents: 12,
-      status: CLASS_STATUS.ACTIVE,
-    },
-  })
-
-  const class4 = await prisma.portalClass.create({
-    data: {
-      className: "Giao tiếp cơ bản - Cuối tuần",
-      classCode: "GT-CN-SANG",
-      description: "Lớp giao tiếp tiếng Trung cơ bản: Chủ nhật 9h-12h. Tập trung vào kỹ năng nói và nghe.",
-      teacherId: teacher2.id,
-      level: "BASIC",
-      startDate: new Date("2026-02-07"),
-      endDate: new Date("2026-05-30"),
-      maxStudents: 20,
-      status: CLASS_STATUS.ACTIVE,
-    },
-  })
-
-  console.log(`✅ Created 4 classes`)
-
-  // ============= Portal Class Enrollments =============
-  console.log("📝 Enrolling students into classes...")
-  await prisma.portalClassEnrollment.createMany({
-    data: [
-      // Class 1 (HSK 1)
-      { classId: class1.id, studentId: student1.id, status: ENROLLMENT_STATUS.ENROLLED },
-      { classId: class1.id, studentId: student2.id, status: ENROLLMENT_STATUS.ENROLLED },
-      { classId: class1.id, studentId: student3.id, status: ENROLLMENT_STATUS.ENROLLED },
-      { classId: class1.id, studentId: student4.id, status: ENROLLMENT_STATUS.ENROLLED },
-      // Class 2 (HSK 2)
-      { classId: class2.id, studentId: student2.id, status: ENROLLMENT_STATUS.ENROLLED },
-      { classId: class2.id, studentId: student5.id, status: ENROLLMENT_STATUS.ENROLLED },
-      // Class 3 (HSK 3)
-      { classId: class3.id, studentId: student3.id, status: ENROLLMENT_STATUS.ENROLLED },
-      { classId: class3.id, studentId: student4.id, status: ENROLLMENT_STATUS.ENROLLED },
-      // Class 4 (Giao tiếp)
-      { classId: class4.id, studentId: student1.id, status: ENROLLMENT_STATUS.ENROLLED },
-      { classId: class4.id, studentId: student4.id, status: ENROLLMENT_STATUS.ENROLLED },
-      { classId: class4.id, studentId: student5.id, status: ENROLLMENT_STATUS.ENROLLED },
-    ],
-  })
-  console.log(`✅ Created 11 enrollments`)
+  await prisma.portalClassEnrollment.createMany({ data: enrollments })
+  console.log(`✅ Created ${enrollments.length} enrollments`)
 
   // ============= Portal Schedules =============
-  console.log("📅 Creating class schedules...")
-  await prisma.portalSchedule.createMany({
-    data: [
-      // Class 1 schedules
-      {
-        classId: class1.id,
-        teacherId: teacher1.id,
-        title: "Bài 1: Chào hỏi cơ bản",
-        startTime: new Date("2026-02-02T08:00:00"),
-        endTime: new Date("2026-02-02T10:00:00"),
-        location: "Phòng 301",
-        status: SCHEDULE_STATUS.SCHEDULED
-      },
-      {
-        classId: class1.id,
-        teacherId: teacher1.id,
-        title: "Bài 2: Giới thiệu bản thân",
-        startTime: new Date("2026-02-04T08:00:00"),
-        endTime: new Date("2026-02-04T10:00:00"),
-        location: "Phòng 301",
-        status: SCHEDULE_STATUS.SCHEDULED
-      },
-      {
-        classId: class1.id,
-        teacherId: teacher1.id,
-        title: "Bài 3: Số đếm 1-10",
-        startTime: new Date("2026-02-06T08:00:00"),
-        endTime: new Date("2026-02-06T10:00:00"),
-        location: "Phòng 301",
-        status: SCHEDULE_STATUS.SCHEDULED
-      },
-      // Class 2 schedules
-      {
-        classId: class2.id,
-        teacherId: teacher1.id,
-        title: "Bài 1: Hỏi đường",
-        startTime: new Date("2026-02-03T18:30:00"),
-        endTime: new Date("2026-02-03T20:30:00"),
-        location: "Phòng 302",
-        status: SCHEDULE_STATUS.SCHEDULED
-      },
-      {
-        classId: class2.id,
-        teacherId: teacher1.id,
-        title: "Bài 2: Mua sắm",
-        startTime: new Date("2026-02-05T18:30:00"),
-        endTime: new Date("2026-02-05T20:30:00"),
-        location: "Phòng 302",
-        status: SCHEDULE_STATUS.SCHEDULED
-      },
-      // Class 3 schedules
-      {
-        classId: class3.id,
-        teacherId: teacher2.id,
-        title: "Bài 1: Văn hóa Trung Quốc",
-        startTime: new Date("2026-02-02T14:00:00"),
-        endTime: new Date("2026-02-02T17:00:00"),
-        location: "Phòng 303",
-        status: SCHEDULE_STATUS.SCHEDULED
-      },
-      {
-        classId: class3.id,
-        teacherId: teacher2.id,
-        title: "Bài 2: Du lịch",
-        startTime: new Date("2026-02-04T14:00:00"),
-        endTime: new Date("2026-02-04T17:00:00"),
-        location: "Phòng 303",
-        status: SCHEDULE_STATUS.SCHEDULED
-      },
-      // Class 4 schedule
-      {
-        classId: class4.id,
-        teacherId: teacher2.id,
-        title: "Chủ đề 1: Giao tiếp hàng ngày",
-        startTime: new Date("2026-02-07T09:00:00"),
-        endTime: new Date("2026-02-07T12:00:00"),
-        location: "Phòng 304",
-        status: SCHEDULE_STATUS.SCHEDULED
-      },
-    ],
-  })
-  console.log(`✅ Created 8 schedules`)
+  console.log("��� Creating class schedules...")
+  const schedules: any[] = []
+  
+  // Helper to create schedules for a class
+  const createSchedules = (
+    cls: any,
+    weekdays: number[],
+    startHour: number,
+    endHour: number
+  ) => {
+    const start = new Date("2026-02-01")
+    const end = new Date("2026-03-31")
+    
+    for (let d = new Date(start); d <= end; d.setDate(d.getDate() + 1)) {
+      if (weekdays.includes(d.getDay())) {
+        const startTime = new Date(d)
+        startTime.setHours(startHour, 0, 0, 0)
+        const endTime = new Date(d)
+        endTime.setHours(endHour, 0, 0, 0)
+        
+        schedules.push({
+          classId: cls.id,
+          teacherId: cls.teacherId,
+          title: `${cls.className} - Buổi học`,
+          description: cls.description,
+          startTime,
+          endTime,
+          status: ScheduleStatus.SCHEDULED,
+        })
+      }
+    }
+  }
 
-  console.log("\n🎉 Portal seeding completed successfully!")
-  console.log("==================================================")
-  console.log("📊 Summary:")
-  console.log("   - Users: 8 (1 admin, 2 teachers, 5 students)")
-  console.log("   - Classes: 4")
-  console.log("   - Enrollments: 11")
-  console.log("   - Schedules: 8")
-  console.log("==================================================")
-  console.log("\n📧 Login credentials:")
-  console.log("   Admin: admin@hskmaster.com / password123")
-  console.log("   Teacher 1: teacher1@hskmaster.com / password123")
-  console.log("   Teacher 2: teacher2@hskmaster.com / password123")
-  console.log("   Students: student1@gmail.com - student5@gmail.com / password123")
-  console.log("==================================================\n")
+  // Class 0: HSK1-246-SANG (Mon/Wed/Fri 8-10)
+  createSchedules(classes[0], [1, 3, 5], 8, 10)
+  // Class 1: HSK1-357-TOI (Tue/Thu/Sat 18:30-20:30)
+  createSchedules(classes[1], [2, 4, 6], 18, 20)
+  // Class 2: HSK2-246-SANG (Mon/Wed/Fri 8-10)
+  createSchedules(classes[2], [1, 3, 5], 8, 10)
+  // Class 3: HSK2-357-TOI (Tue/Thu/Sat 18:30-20:30)
+  createSchedules(classes[3], [2, 4, 6], 18, 20)
+  // Class 4: HSK3-24-CHIEU (Mon/Wed 14-17)
+  createSchedules(classes[4], [1, 3], 14, 17)
+  // Class 5: HSK3-35-TOI (Tue/Thu 18:30-21)
+  createSchedules(classes[5], [2, 4], 18, 21)
+  // Class 6: HSK4-246-SANG (Mon/Wed/Fri 8-11)
+  createSchedules(classes[6], [1, 3, 5], 8, 11)
+  // Class 7: HSK4-357-TOI (Tue/Thu/Sat 18:30-21:30)
+  createSchedules(classes[7], [2, 4, 6], 18, 21)
+  // Class 8: HSK5-24-CHIEU (Mon/Wed 14-17)
+  createSchedules(classes[8], [1, 3], 14, 17)
+  // Class 9: HSK6-35-TOI (Tue/Thu 18:30-21:30)
+  createSchedules(classes[9], [2, 4], 18, 21)
+  // Class 10: GT-CN-SANG (Sun 9-12)
+  createSchedules(classes[10], [0], 9, 12)
+  // Class 11: GT-T7-CHIEU (Sat 14-17)
+  createSchedules(classes[11], [6], 14, 17)
+  // Class 12: BUSINESS-35-TOI (Tue/Thu 19-21)
+  createSchedules(classes[12], [2, 4], 19, 21)
+  // Class 13: HSK3-INT-SANG (Mon-Fri 8-10)
+  createSchedules(classes[13], [1, 2, 3, 4, 5], 8, 10)
+  // Class 14: HSK5-INT-TOI (Mon-Fri 18:30-20:30)
+  createSchedules(classes[14], [1, 2, 3, 4, 5], 18, 20)
+
+  await prisma.portalSchedule.createMany({ data: schedules })
+  console.log(`✅ Created ${schedules.length} schedules`)
+
+  console.log("\n✅ Portal seeding completed!")
 }

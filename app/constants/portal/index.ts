@@ -6,3 +6,4 @@
 export * from "./portal"
 export * from "./navigation"
 export * from "./roles"
+export * from "./pagination"

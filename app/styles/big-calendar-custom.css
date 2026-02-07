@@ -1,0 +1,216 @@
+/* ================================================================
+   Custom styling for react-big-calendar
+   ================================================================ */
+
+/* ─── Today highlight (subtle warm tint) ─────────────────────── */
+.rbc-today {
+  background-color: #FFFBEB !important;
+}
+
+.rbc-day-bg.rbc-today {
+  border: 1px solid #F59E0B !important;
+  border-radius: 4px;
+  background-color: #FFFBEB !important;
+}
+
+.rbc-month-view .rbc-today {
+  background-color: #FFFBEB !important;
+}
+
+/* Today's date number badge */
+.rbc-date-cell.rbc-now a,
+.rbc-date-cell.rbc-now button {
+  background: #F59E0B !important;
+  color: white !important;
+  border-radius: 50%;
+  width: 26px;
+  height: 26px;
+  display: inline-flex !important;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700 !important;
+}
+
+/* ─── Off-range dates (prev/next month - clearly faded) ──────── */
+.rbc-off-range-bg {
+  background-color: #F3F4F6 !important;
+}
+
+.rbc-off-range {
+  color: #C9CDD3 !important;
+}
+
+.rbc-off-range a,
+.rbc-off-range button {
+  color: #C9CDD3 !important;
+}
+
+/* ─── Header (weekday row) ───────────────────────────────────── */
+.rbc-header {
+  padding: 10px 4px !important;
+  font-weight: 600 !important;
+  font-size: 0.85rem !important;
+  color: #374151 !important;
+  border-bottom: 1px solid #E5E7EB !important;
+  background: #F9FAFB !important;
+}
+
+/* ─── Calendar grid ──────────────────────────────────────────── */
+.rbc-month-view,
+.rbc-time-view {
+  border: 1px solid #E5E7EB !important;
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.rbc-month-row + .rbc-month-row {
+  border-top: 1px solid #E5E7EB !important;
+}
+
+/* ─── Events ─────────────────────────────────────────────────── */
+.rbc-event {
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.rbc-event:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.12) !important;
+  filter: brightness(0.95);
+}
+
+.rbc-event-content {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* ─── Month view date numbers ────────────────────────────────── */
+.rbc-date-cell {
+  padding: 4px 6px !important;
+  text-align: right;
+}
+
+.rbc-date-cell > a,
+.rbc-date-cell > button {
+  color: #374151 !important;
+  font-weight: 500 !important;
+  font-size: 0.85rem !important;
+  text-decoration: none !important;
+}
+
+/* ─── Show more link ─────────────────────────────────────────── */
+.rbc-show-more {
+  color: #6B7280 !important;
+  font-weight: 500 !important;
+  font-size: 0.75rem !important;
+  padding: 1px 4px;
+  background: transparent;
+}
+
+.rbc-show-more:hover {
+  color: #111827 !important;
+  text-decoration: underline;
+}
+
+/* ─── Popup overlay for "+N more" ────────────────────────────── */
+.rbc-overlay {
+  border-radius: 10px !important;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12) !important;
+  border: 1px solid #E5E7EB !important;
+  padding: 8px !important;
+  max-width: 280px;
+}
+
+.rbc-overlay-header {
+  border-bottom: 1px solid #E5E7EB !important;
+  padding: 8px 12px !important;
+  margin: -8px -8px 8px -8px !important;
+  background: #F9FAFB !important;
+  font-weight: 600 !important;
+  font-size: 0.85rem !important;
+  border-radius: 10px 10px 0 0 !important;
+}
+
+/* ─── Time view ──────────────────────────────────────────────── */
+.rbc-time-header-content {
+  border-left: none !important;
+}
+
+.rbc-time-header-gutter {
+  background: #F9FAFB !important;
+}
+
+.rbc-time-gutter .rbc-timeslot-group {
+  font-size: 0.75rem !important;
+  color: #6B7280 !important;
+}
+
+.rbc-time-slot {
+  border-top: 1px solid #F3F4F6 !important;
+}
+
+/* ─── Current time indicator ─────────────────────────────────── */
+.rbc-current-time-indicator {
+  background-color: #EF4444 !important;
+  height: 2px !important;
+}
+
+.rbc-current-time-indicator::before {
+  content: '';
+  position: absolute;
+  left: -5px;
+  top: -4px;
+  width: 10px;
+  height: 10px;
+  background-color: #EF4444;
+  border-radius: 50%;
+}
+
+/* ─── Selected slot (drag to select time) ────────────────────── */
+.rbc-slot-selection {
+  background-color: rgba(245, 158, 11, 0.15) !important;
+  border: 1px dashed #F59E0B !important;
+  border-radius: 4px;
+}
+
+.rbc-selected-cell {
+  background-color: rgba(245, 158, 11, 0.08) !important;
+}
+
+/* ─── Agenda view ────────────────────────────────────────────── */
+.rbc-agenda-view {
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.rbc-agenda-table {
+  border: none !important;
+}
+
+.rbc-agenda-date-cell,
+.rbc-agenda-time-cell {
+  padding: 10px !important;
+  font-weight: 500 !important;
+  color: #374151 !important;
+}
+
+.rbc-agenda-event-cell {
+  padding: 10px !important;
+}
+
+/* ─── Responsive ─────────────────────────────────────────────── */
+@media (max-width: 768px) {
+  .rbc-header {
+    font-size: 0.75rem !important;
+    padding: 8px 2px !important;
+  }
+  .rbc-date-cell > a,
+  .rbc-date-cell > button {
+    font-size: 0.75rem !important;
+  }
+  .rbc-event {
+    font-size: 0.7rem !important;
+    padding: 1px 3px !important;
+  }
+}

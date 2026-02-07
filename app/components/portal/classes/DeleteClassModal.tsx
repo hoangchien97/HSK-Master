@@ -46,7 +46,6 @@ export default function DeleteClassModal({
       isOpen={isOpen}
       onClose={onClose}
       size="sm"
-      closeIcon={AlertTriangle}
       title={
         <div className="flex items-center gap-2">
           <AlertTriangle className="w-5 h-5 text-danger" />

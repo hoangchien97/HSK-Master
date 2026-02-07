@@ -1,19 +1,25 @@
-'use client';
+"use client";
 
-import { useState, useEffect } from 'react';
-import { useForm, Controller } from 'react-hook-form';
-import { zodResolver } from '@hookform/resolvers/zod';
-import { z } from 'zod';
-import dayjs from 'dayjs';
-import { Calendar, Repeat } from 'lucide-react';
-import { Button, Input, Select, SelectItem, Switch, Textarea } from '@heroui/react';
-import { CModal } from '../common';
-import type { IClass, IScheduleFormData, ISchedule } from '@/app/interfaces/portal';
+import { useState, useEffect } from "react";
+import {
+  Button,
+  Form,
+  Input,
+  Textarea,
+  Select,
+  SelectItem,
+  Switch,
+  Chip,
+} from "@heroui/react";
+import { Calendar, Repeat } from "lucide-react";
+import { CModal } from "../common";
+import dayjs from "dayjs";
+import type { IClass, IScheduleFormData, ISchedule } from "@/app/interfaces/portal";
 import {
   getDefaultRecurrenceEndDate,
   previewRecurrenceCount,
   formatWeekdays,
-} from '@/app/utils';
+} from "@/app/utils";
 
 interface ScheduleModalProps {
   isOpen: boolean;
@@ -22,35 +28,17 @@ interface ScheduleModalProps {
   classes: IClass[];
   initialData?: Partial<ISchedule> | Partial<IScheduleFormData>;
   editMode?: boolean;
+  slotInitialTime?: { start: Date; end: Date };
 }
 
-const scheduleSchema = z.object({
-  classId: z.string().min(1, 'Vui lòng chọn lớp học'),
-  title: z.string().min(1, 'Vui lòng nhập tiêu đề'),
-  description: z.string().optional(),
-  startDate: z.string().min(1, 'Vui lòng chọn ngày'),
-  startTime: z.string().min(1, 'Vui lòng chọn giờ bắt đầu'),
-  endTime: z.string().min(1, 'Vui lòng chọn giờ kết thúc'),
-}).refine((data) => {
-  if (data.startTime && data.endTime) {
-    return data.endTime > data.startTime;
-  }
-  return true;
-}, {
-  message: 'Giờ kết thúc phải sau giờ bắt đầu',
-  path: ['endTime'],
-});
-
-type ScheduleFormFields = z.infer<typeof scheduleSchema>;
-
 const WEEKDAYS = [
-  { value: 1, label: 'T2' },
-  { value: 2, label: 'T3' },
-  { value: 3, label: 'T4' },
-  { value: 4, label: 'T5' },
-  { value: 5, label: 'T6' },
-  { value: 6, label: 'T7' },
-  { value: 0, label: 'CN' },
+  { value: 1, label: "T2" },
+  { value: 2, label: "T3" },
+  { value: 3, label: "T4" },
+  { value: 4, label: "T5" },
+  { value: 5, label: "T6" },
+  { value: 6, label: "T7" },
+  { value: 0, label: "CN" },
 ];
 
 export default function ScheduleModal({
@@ -60,110 +48,128 @@ export default function ScheduleModal({
   classes,
   initialData,
   editMode = false,
+  slotInitialTime,
 }: ScheduleModalProps) {
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [errors, setErrors] = useState<Record<string, string>>({});
   const [enableRecurrence, setEnableRecurrence] = useState(false);
   const [syncToGoogle, setSyncToGoogle] = useState(false);
+  const [selectedWeekdays, setSelectedWeekdays] = useState<number[]>([]);
+  const [endDate, setEndDate] = useState("");
   const [previewCount, setPreviewCount] = useState(0);
 
-  const [selectedWeekdays, setSelectedWeekdays] = useState<number[]>([]);
-  const [endDate, setEndDate] = useState('');
-
-  const today = dayjs().format('YYYY-MM-DD');
-
   const getClassId = (): string => {
-    if (!initialData) return '';
-    if ('classId' in initialData && initialData.classId) return initialData.classId;
-    if ('class' in initialData && initialData.class) return initialData.class.id;
-    return '';
+    if (!initialData) return "";
+    if ("classId" in initialData && initialData.classId) return initialData.classId;
+    if ("class" in initialData && initialData.class) return (initialData.class as { id: string }).id;
+    return "";
   };
 
-  const {
-    register,
-    handleSubmit,
-    control,
-    watch,
-    formState: { errors },
-    reset,
-  } = useForm<ScheduleFormFields>({
-    resolver: zodResolver(scheduleSchema),
-    defaultValues: {
-      classId: getClassId(),
-      title: initialData?.title || '',
-      description: initialData?.description || '',
-      startDate: initialData?.startTime
-        ? dayjs(initialData.startTime).format('YYYY-MM-DD')
-        : dayjs().format('YYYY-MM-DD'),
-      startTime: initialData?.startTime
-        ? dayjs(initialData.startTime).format('HH:mm')
-        : '09:00',
-      endTime: initialData?.endTime
-        ? dayjs(initialData.endTime).format('HH:mm')
-        : '11:00',
-    },
-  });
+  const [classId, setClassId] = useState(getClassId());
+  const [startDate, setStartDate] = useState(
+    initialData?.startTime
+      ? dayjs(initialData.startTime).format("YYYY-MM-DD")
+      : slotInitialTime
+        ? dayjs(slotInitialTime.start).format("YYYY-MM-DD")
+        : dayjs().format("YYYY-MM-DD")
+  );
 
-  const startDate = watch('startDate');
+  // Derive default start/end times from slot selection or initialData
+  const defaultStartTime = slotInitialTime
+    ? dayjs(slotInitialTime.start).format("HH:mm")
+    : initialData?.startTime
+      ? dayjs(initialData.startTime).format("HH:mm")
+      : "09:00";
 
+  const defaultEndTime = slotInitialTime
+    ? dayjs(slotInitialTime.end).format("HH:mm")
+    : initialData?.endTime
+      ? dayjs(initialData.endTime).format("HH:mm")
+      : "11:00";
+
+  const today = dayjs().format("YYYY-MM-DD");
+
+  // Auto-set recurrence end date
   useEffect(() => {
     if (startDate && !endDate && enableRecurrence) {
       setEndDate(getDefaultRecurrenceEndDate(startDate));
     }
   }, [startDate, endDate, enableRecurrence]);
 
+  // Preview recurrence count
   useEffect(() => {
     if (enableRecurrence && startDate && endDate && selectedWeekdays.length > 0) {
-      const count = previewRecurrenceCount(startDate, endDate, selectedWeekdays);
-      setPreviewCount(count);
+      setPreviewCount(previewRecurrenceCount(startDate, endDate, selectedWeekdays));
     } else {
       setPreviewCount(0);
     }
   }, [enableRecurrence, startDate, endDate, selectedWeekdays]);
 
+  // Reset form on close / init on open
   useEffect(() => {
     if (!isOpen) {
-      reset();
+      setErrors({});
       setEnableRecurrence(false);
       setSyncToGoogle(false);
       setSelectedWeekdays([]);
-      setEndDate('');
+      setEndDate("");
       setPreviewCount(0);
+      setStartDate(dayjs().format("YYYY-MM-DD"));
+      setClassId("");
+    } else if (initialData) {
+      setClassId(getClassId());
+      setStartDate(
+        initialData?.startTime
+          ? dayjs(initialData.startTime).format("YYYY-MM-DD")
+          : dayjs().format("YYYY-MM-DD")
+      );
+    } else if (slotInitialTime) {
+      setStartDate(dayjs(slotInitialTime.start).format("YYYY-MM-DD"));
     }
-  }, [isOpen, reset]);
+  }, [isOpen, initialData, slotInitialTime, getClassId]);
 
   const handleWeekdayToggle = (day: number) => {
-    setSelectedWeekdays(prev =>
-      prev.includes(day) ? prev.filter(d => d !== day) : [...prev, day]
+    setSelectedWeekdays((prev) =>
+      prev.includes(day) ? prev.filter((d) => d !== day) : [...prev, day]
     );
   };
 
-  const onFormSubmit = async (data: ScheduleFormFields) => {
-    setIsSubmitting(true);
-    try {
-      const startDateTime = dayjs(`${data.startDate} ${data.startTime}`).toDate();
-      const endDateTime = dayjs(`${data.startDate} ${data.endTime}`).toDate();
+  const handleFormSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    const formData = Object.fromEntries(new FormData(e.currentTarget));
 
-      const formData: IScheduleFormData = {
-        classId: data.classId,
-        title: data.title,
-        description: data.description,
+    setErrors({});
+    setIsSubmitting(true);
+
+    try {
+      const startDateTime = dayjs(`${formData.startDate} ${formData.startTime}`).toDate();
+      const endDateTime = dayjs(`${formData.startDate} ${formData.endTime}`).toDate();
+
+      if (endDateTime <= startDateTime) {
+        setErrors({ endTime: "Giờ kết thúc phải sau giờ bắt đầu" });
+        return;
+      }
+
+      const payload: IScheduleFormData = {
+        classId: formData.classId as string,
+        title: formData.title as string,
+        description: formData.description as string,
         startTime: startDateTime,
         endTime: endDateTime,
         syncToGoogle,
       };
 
-      if (enableRecurrence && selectedWeekdays.length > 0 && endDate) {
-        formData.recurrence = {
+      if (!editMode && enableRecurrence && selectedWeekdays.length > 0 && endDate) {
+        payload.recurrence = {
           interval: 1,
           weekdays: selectedWeekdays,
           endDate,
         };
       }
 
-      await onSubmit(formData);
-      onClose();
+      await onSubmit(payload);
     } catch (error) {
-      console.error('Error submitting schedule:', error);
+      console.error("Error submitting schedule:", error);
     } finally {
       setIsSubmitting(false);
     }
@@ -174,195 +180,248 @@ export default function ScheduleModal({
       isOpen={isOpen}
       onClose={onClose}
       size="2xl"
-      closeIcon={editMode ? Calendar : Calendar}
+      scrollBehavior="inside"
       title={
         <div className="flex items-center gap-3">
           <div className="p-2 rounded-lg bg-red-50">
             <Calendar className="h-5 w-5 text-red-600" />
           </div>
           <div>
-            <h3 className="text-lg font-semibold text-gray-900">
-              {editMode ? 'Cập nhật buổi học' : 'Tạo buổi học mới'}
-            </h3>
-            <p className="text-sm text-gray-500 mt-0.5">
-              {editMode ? 'Cập nhật thông tin buổi học' : 'Điền thông tin để tạo buổi học'}
+            <p className="text-lg font-semibold">
+              {editMode ? "Cập nhật buổi học" : "Tạo buổi học mới"}
+            </p>
+            <p className="text-sm text-default-400 font-normal">
+              {editMode
+                ? "Cập nhật thông tin buổi học"
+                : "Điền thông tin để tạo buổi học"}
             </p>
           </div>
         </div>
       }
       footer={
         <>
-          <Button variant="flat" onPress={onClose}>
+          <Button variant="flat" onPress={onClose} isDisabled={isSubmitting}>
             Hủy
           </Button>
           <Button
+            color="primary"
             type="submit"
             form="schedule-form"
-            isDisabled={isSubmitting}
-            className="bg-red-600 hover:bg-red-700 text-white"
+            isLoading={isSubmitting}
           >
-            {isSubmitting ? 'Đang lưu...' : 'Lưu'}
+            {editMode ? "Cập nhật" : "Tạo buổi học"}
           </Button>
         </>
       }
     >
-      <form id="schedule-form" className="space-y-5" onSubmit={handleSubmit(onFormSubmit)}>
-            {/* Class Selection */}
-            <Controller
-              name="classId"
-              control={control}
-              render={({ field }) => (
-                <Select
-                  label="Lớp học"
-                  isRequired
-                  placeholder="Chọn lớp học"
-                  selectedKeys={field.value ? [field.value] : []}
-                  onSelectionChange={(keys) => {
-                    const selected = Array.from(keys)[0] as string;
-                    field.onChange(selected);
-                  }}
-                  isInvalid={!!errors.classId}
-                  errorMessage={errors.classId?.message}
-                >
-                  {classes.map(c => (
-                    <SelectItem key={c.id} textValue={`${c.className} (${c.classCode})`}>
-                      {c.className} ({c.classCode})
-                    </SelectItem>
-                  ))}
-                </Select>
-              )}
-            />
+      <Form
+        id="schedule-form"
+        validationErrors={errors}
+        onSubmit={handleFormSubmit}
+        className="gap-4 flex flex-col"
+      >
+        {/* Class Selection */}
+        <Select
+          label="Lớp học"
+          name="classId"
+          placeholder="Chọn lớp học"
+          labelPlacement="outside"
+          isRequired
+          selectedKeys={classId ? new Set([classId]) : new Set()}
+          onSelectionChange={(keys: "all" | Set<React.Key>) => {
+            if (keys !== "all") {
+              const val = Array.from(keys)[0] as string;
+              setClassId(val || "");
+            }
+          }}
+          errorMessage={({ validationDetails }) => {
+            if (validationDetails.valueMissing) {
+              return "Vui lòng chọn lớp học";
+            }
+          }}
+        >
+          {classes.map((c) => (
+            <SelectItem key={c.id}>
+              {c.className} ({c.classCode})
+            </SelectItem>
+          ))}
+        </Select>
 
-            {/* Title */}
-            <Input
-              label="Tiêu đề"
-              isRequired
-              {...register('title')}
-              placeholder="VD: Lớp HSK 2 - Bài 1"
-              isInvalid={!!errors.title}
-              errorMessage={errors.title?.message}
-            />
+        {/* Title */}
+        <Input
+          name="title"
+          label="Tiêu đề"
+          placeholder="VD: Bài 1 - Chào hỏi cơ bản"
+          labelPlacement="outside"
+          isRequired
+          defaultValue={initialData?.title || ""}
+          errorMessage={({ validationDetails }) => {
+            if (validationDetails.valueMissing) {
+              return "Vui lòng nhập tiêu đề";
+            }
+          }}
+        />
 
-            {/* Description */}
-            <Textarea
-              label="Mô tả"
-              {...register('description')}
-              placeholder="Nội dung buổi học..."
-              minRows={3}
-            />
+        {/* Description */}
+        <Textarea
+          name="description"
+          label="Mô tả"
+          placeholder="Nội dung buổi học..."
+          labelPlacement="outside"
+          defaultValue={initialData?.description || ""}
+        />
 
-            {/* Date and Time */}
-            <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-              <Input
-                label="Ngày học"
-                isRequired
-                type="date"
-                min={editMode ? undefined : today}
-                {...register('startDate')}
-                isInvalid={!!errors.startDate}
-                errorMessage={errors.startDate?.message}
-              />
-              <Input
-                label="Giờ bắt đầu"
-                isRequired
-                type="time"
-                {...register('startTime')}
-                isInvalid={!!errors.startTime}
-                errorMessage={errors.startTime?.message}
-              />
-              <Input
-                label="Giờ kết thúc"
-                isRequired
-                type="time"
-                {...register('endTime')}
-                isInvalid={!!errors.endTime}
-                errorMessage={errors.endTime?.message}
-              />
-            </div>
+        {/* Date & Time */}
+        <div className="grid grid-cols-3 gap-4">
+          <Input
+            type="date"
+            name="startDate"
+            label="Ngày học"
+            labelPlacement="outside"
+            isRequired
+            value={startDate}
+            onChange={(e: React.ChangeEvent<HTMLInputElement>) => setStartDate(e.target.value)}
+            min={editMode ? undefined : today}
+            errorMessage={({ validationDetails }) => {
+              if (validationDetails.valueMissing) {
+                return "Vui lòng chọn ngày";
+              }
+            }}
+          />
+          <Input
+            type="time"
+            name="startTime"
+            label="Giờ bắt đầu"
+            labelPlacement="outside"
+            isRequired
+            defaultValue={defaultStartTime}
+            key={`start-${defaultStartTime}`}
+            errorMessage={({ validationDetails }) => {
+              if (validationDetails.valueMissing) {
+                return "Vui lòng chọn giờ bắt đầu";
+              }
+            }}
+          />
+          <Input
+            type="time"
+            name="endTime"
+            label="Giờ kết thúc"
+            labelPlacement="outside"
+            isRequired
+            defaultValue={defaultEndTime}
+            key={`end-${defaultEndTime}`}
+            errorMessage={({ validationDetails }) => {
+              if (validationDetails.valueMissing) {
+                return "Vui lòng chọn giờ kết thúc";
+              }
+            }}
+          />
+        </div>
 
-            {/* Recurrence */}
-            <div className="space-y-4 p-5 bg-gradient-to-br from-red-50 to-rose-50 rounded-xl border-2 border-red-200">
-              <div className="grid grid-cols-[1fr_auto] gap-4 items-center">
-                <div className="flex items-center gap-3">
-                  <div className="w-10 h-10 bg-red-100 rounded-lg flex items-center justify-center">
-                    <Repeat className="w-5 h-5 text-red-600" />
-                  </div>
-                  <div>
-                    <h4 className="text-sm font-semibold text-gray-900">Lặp lại buổi học</h4>
-                    <p className="text-xs text-gray-600">Tạo nhiều buổi học theo lịch hàng tuần</p>
-                  </div>
-                </div>
-                <Switch
-                  isSelected={enableRecurrence}
-                  onValueChange={setEnableRecurrence}
-                />
-              </div>
+        {/* Location & Meeting Link */}
+        <div className="grid grid-cols-2 gap-4">
+          <Input
+            name="location"
+            label="Địa điểm"
+            placeholder="Phòng 301 hoặc Online"
+            labelPlacement="outside"
+            defaultValue={(initialData as Record<string, unknown>)?.location as string || ""}
+          />
+          <Input
+            name="meetingLink"
+            label="Link học online"
+            placeholder="https://meet.google.com/..."
+            labelPlacement="outside"
+            defaultValue={(initialData as Record<string, unknown>)?.meetingLink as string || ""}
+          />
+        </div>
 
-              {enableRecurrence && (
-                <div className="space-y-4 pt-4 border-t border-red-200">
-                  <div>
-                    <p className="text-sm font-semibold text-gray-800 mb-3">Chọn các ngày trong tuần</p>
-                    <div className="flex gap-2 flex-wrap">
-                      {WEEKDAYS.map(day => (
-                        <button
-                          key={day.value}
-                          type="button"
-                          onClick={() => handleWeekdayToggle(day.value)}
-                          className={`flex-1 min-w-[60px] px-4 py-2.5 rounded-lg text-sm font-semibold transition-all cursor-pointer ${
-                            selectedWeekdays.includes(day.value)
-                              ? 'bg-red-600 text-white shadow-md scale-105'
-                              : 'bg-white text-gray-700 border-2 border-gray-300 hover:border-red-400 hover:bg-red-50'
-                          }`}
-                        >
-                          {day.label}
-                        </button>
-                      ))}
-                    </div>
-                  </div>
-
-                  <Input
-                    label="Ngày kết thúc lặp lại"
-                    type="date"
-                    value={endDate}
-                    onChange={(e) => setEndDate(e.target.value)}
-                    min={startDate || today}
-                    description="Mặc định: +2 tháng từ ngày bắt đầu"
-                    className="bg-white"
-                  />
-
-                  {previewCount > 0 && (
-                    <div className="p-4 bg-red-50 border-2 border-red-200 rounded-lg">
-                      <p className="text-sm text-red-900">
-                        📅 <strong>{previewCount}</strong> buổi học sẽ được tạo
-                        {selectedWeekdays.length > 0 && (
-                          <> vào các ngày: <strong>{formatWeekdays(selectedWeekdays)}</strong></>
-                        )}
-                      </p>
-                    </div>
-                  )}
-                </div>
-              )}
-            </div>
-
-            {/* Google Calendar Sync */}
-            <div className="grid grid-cols-[1fr_auto] items-center gap-4 p-5 bg-gradient-to-br from-red-50 to-rose-50 rounded-xl border-2 border-red-200">
+        {/* Recurrence (create mode only) */}
+        {!editMode && (
+          <div className="p-4 bg-default-50 rounded-xl border border-default-200 space-y-4">
+            <div className="flex items-center justify-between">
               <div className="flex items-center gap-3">
-                <div className="w-10 h-10 bg-white rounded-lg flex items-center justify-center shadow-sm">
-                  <svg className="w-6 h-6" viewBox="0 0 24 24">
-                    <path fill="#4285F4" d="M19 3h-1V1h-2v2H8V1H6v2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm0 16H5V8h14v11z" />
-                  </svg>
+                <div className="p-2 bg-primary-50 rounded-lg">
+                  <Repeat className="w-4 h-4 text-primary" />
                 </div>
                 <div>
-                  <h4 className="text-sm font-semibold text-gray-900">Đồng bộ Google Calendar</h4>
-                  <p className="text-xs text-gray-600">Tự động thêm vào lịch của bạn</p>
+                  <p className="text-sm font-semibold">Lặp lại buổi học</p>
+                  <p className="text-xs text-default-400">
+                    Tạo nhiều buổi học theo lịch hàng tuần
+                  </p>
                 </div>
               </div>
               <Switch
-                isSelected={syncToGoogle}
-                onValueChange={setSyncToGoogle}
+                isSelected={enableRecurrence}
+                onValueChange={setEnableRecurrence}
+                size="sm"
+                color="primary"
               />
             </div>
-          </form>
+
+            {enableRecurrence && (
+              <div className="space-y-3 pt-3 border-t border-default-200">
+                <p className="text-sm font-medium">Chọn các ngày trong tuần</p>
+                <div className="flex gap-2 flex-wrap">
+                  {WEEKDAYS.map((day) => (
+                    <Chip
+                      key={day.value}
+                      variant={
+                        selectedWeekdays.includes(day.value) ? "solid" : "bordered"
+                      }
+                      color={
+                        selectedWeekdays.includes(day.value) ? "primary" : "default"
+                      }
+                      className="cursor-pointer"
+                      onClick={() => handleWeekdayToggle(day.value)}
+                    >
+                      {day.label}
+                    </Chip>
+                  ))}
+                </div>
+                <Input
+                  type="date"
+                  label="Ngày kết thúc lặp lại"
+                  labelPlacement="outside"
+                  value={endDate}
+                  onChange={(e: React.ChangeEvent<HTMLInputElement>) => setEndDate(e.target.value)}
+                  min={startDate || today}
+                  description="Mặc định: +2 tháng từ ngày bắt đầu"
+                  size="sm"
+                />
+                {previewCount > 0 && (
+                  <Chip color="primary" variant="flat" size="sm">
+                    ��� {previewCount} buổi học sẽ được tạo
+                    {selectedWeekdays.length > 0 &&
+                      ` vào: ${formatWeekdays(selectedWeekdays)}`}
+                  </Chip>
+                )}
+              </div>
+            )}
+          </div>
+        )}
+
+        {/* Google Sync */}
+        <div className="flex items-center justify-between p-4 bg-default-50 rounded-xl border border-default-200">
+          <div className="flex items-center gap-3">
+            <div className="p-2 bg-primary-50 rounded-lg">
+              <Calendar className="w-4 h-4 text-primary" />
+            </div>
+            <div>
+              <p className="text-sm font-semibold">Đồng bộ Google Calendar</p>
+              <p className="text-xs text-default-400">
+                Tự động thêm vào lịch của bạn
+              </p>
+            </div>
+          </div>
+          <Switch
+            isSelected={syncToGoogle}
+            onValueChange={setSyncToGoogle}
+            size="sm"
+            color="primary"
+          />
+        </div>
+      </Form>
     </CModal>
   );
 }
