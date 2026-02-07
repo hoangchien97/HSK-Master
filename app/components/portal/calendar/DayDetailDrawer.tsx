@@ -3,13 +3,13 @@
 import { useMemo } from "react"
 import { format, isSameDay } from "date-fns"
 import { vi } from "date-fns/locale"
-import { BaseDrawer } from "@/app/components/common"
-import Button from "@/app/components/common/Button"
+import { Button } from "@heroui/react"
 import { Calendar, Plus } from "lucide-react"
-import type { ScheduleEvent } from "@/app/interfaces/portal/calendar.types"
-import { EventState } from "@/app/interfaces/portal/calendar.types"
+import type { ScheduleEvent } from "@/app/interfaces/portal/calendar"
+import { EventState } from "@/app/interfaces/portal/calendar"
 import { getEventState } from "@/app/utils/calendar"
 import EventGroup from "./DayDetail/EventGroup"
+import { CDrawer } from "@/app/components/portal/common";
 
 interface DayDetailDrawerProps {
   open: boolean
@@ -78,13 +78,13 @@ export default function DayDetailDrawer({
   if (!date) return null
 
   return (
-    <BaseDrawer
+    <CDrawer
       isOpen={open}
-      onClose={() => onOpenChange(false)}
-      direction="right"
+      onOpenChange={onOpenChange}
+      placement="right"
       size="md"
-      header={
-        <div>
+      title={
+        <div className="flex flex-col gap-1">
           <h3 className="text-xl font-bold">
             {format(date, "EEEE, d MMMM yyyy", { locale: vi })}
           </h3>
@@ -96,13 +96,15 @@ export default function DayDetailDrawer({
         </div>
       }
       footer={
-        <Button
-          onClick={handleCreateClick}
-          className="w-full bg-red-600 hover:bg-red-700 cursor-pointer"
-        >
-          <Plus className="mr-2 h-4 w-4" />
-          Thêm lịch học mới
-        </Button>
+        (onClose) => (
+          <Button
+            onPress={handleCreateClick}
+            className="w-full bg-red-600 hover:bg-red-700 text-white cursor-pointer"
+          >
+            <Plus className="mr-2 h-4 w-4" />
+            Thêm lịch học mới
+          </Button>
+        )
       }
     >
       {totalCount === 0 ? (
@@ -147,6 +149,6 @@ export default function DayDetailDrawer({
           )}
         </div>
       )}
-    </BaseDrawer>
+    </CDrawer>
   )
 }

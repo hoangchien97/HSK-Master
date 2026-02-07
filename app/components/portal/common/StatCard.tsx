@@ -1,7 +1,7 @@
 "use client"
 
 import { cn } from "@/lib/utils"
-import { Card, CardContent } from "@/app/components/portal/shared"
+import { Card, CardBody } from "@heroui/react"
 
 interface StatCardProps {
   title: string
@@ -29,7 +29,7 @@ export function StatCard({
 }: StatCardProps) {
   return (
     <Card className={cn("hover:shadow-md transition-shadow", className)}>
-      <CardContent className="p-6">
+      <CardBody className="p-6">
       <div className="flex items-start justify-between">
         <div className="flex-1">
           <p className="text-sm font-medium text-gray-500">{title}</p>
@@ -61,7 +61,7 @@ export function StatCard({
           <div className={cn("w-6 h-6", iconColor)}>{icon}</div>
         </div>
       </div>
-      </CardContent>
+      </CardBody>
     </Card>
   )
 }

@@ -6,10 +6,10 @@ export const createScheduleSchema = z.object({
   title: z.string().min(1, "Tiêu đề không được để trống"),
   description: z.string().optional(),
   startTime: z.date({
-    required_error: "Vui lòng chọn giờ bắt đầu",
+    error: "Vui lòng chọn giờ bắt đầu",
   }),
   endTime: z.date({
-    required_error: "Vui lòng chọn giờ kết thúc",
+    error: "Vui lòng chọn giờ kết thúc",
   }),
   location: z.string().optional(),
   meetingLink: z.string().url("Link meeting không hợp lệ").optional().or(z.literal("")),

@@ -9,8 +9,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import { toast } from "react-toastify";
 import { Eye, EyeOff, Mail, Lock, User } from "lucide-react";
-import Input from "@/app/components/common/Input";
-import Button from "@/app/components/common/Button";
+import { Input, Button } from "@heroui/react";
 
 // Validation schema
 const registerSchema = z.object({
@@ -110,9 +109,11 @@ export default function RegisterForm() {
             label="Họ và tên"
             type="text"
             placeholder="Nguyễn Văn A"
-            icon={<User className="w-5 h-5" />}
-            error={errors.name?.message}
-            required
+            variant="bordered"
+            startContent={<User className="w-5 h-5 text-gray-400" />}
+            isInvalid={!!errors.name}
+            errorMessage={errors.name?.message}
+            isRequired
             {...register("name")}
           />
 
@@ -120,64 +121,70 @@ export default function RegisterForm() {
             label="Email"
             type="email"
             placeholder="email@example.com"
-            icon={<Mail className="w-5 h-5" />}
-            error={errors.email?.message}
-            required
+            variant="bordered"
+            startContent={<Mail className="w-5 h-5 text-gray-400" />}
+            isInvalid={!!errors.email}
+            errorMessage={errors.email?.message}
+            isRequired
             {...register("email")}
           />
 
-          <div className="relative">
-            <Input
-              label="Mật khẩu"
-              type={showPassword ? "text" : "password"}
-              placeholder="••••••••"
-              icon={<Lock className="w-5 h-5" />}
-              error={errors.password?.message}
-              helperText="Tối thiểu 6 ký tự"
-              required
-              {...register("password")}
-            />
-            <button
-              type="button"
-              onClick={() => setShowPassword(!showPassword)}
-              className="absolute right-4 top-[42px] text-gray-400 hover:text-gray-600 transition-colors"
-            >
-              {showPassword ? (
-                <EyeOff className="w-5 h-5" />
-              ) : (
-                <Eye className="w-5 h-5" />
-              )}
-            </button>
-          </div>
+          <Input
+            label="Mật khẩu"
+            type={showPassword ? "text" : "password"}
+            placeholder="••••••••"
+            variant="bordered"
+            startContent={<Lock className="w-5 h-5 text-gray-400" />}
+            endContent={
+              <button
+                type="button"
+                onClick={() => setShowPassword(!showPassword)}
+                className="text-gray-400 hover:text-gray-600 transition-colors"
+              >
+                {showPassword ? (
+                  <EyeOff className="w-5 h-5" />
+                ) : (
+                  <Eye className="w-5 h-5" />
+                )}
+              </button>
+            }
+            isInvalid={!!errors.password}
+            errorMessage={errors.password?.message}
+            description="Tối thiểu 6 ký tự"
+            isRequired
+            {...register("password")}
+          />
 
-          <div className="relative">
-            <Input
-              label="Xác nhận mật khẩu"
-              type={showConfirmPassword ? "text" : "password"}
-              placeholder="••••••••"
-              icon={<Lock className="w-5 h-5" />}
-              error={errors.confirmPassword?.message}
-              required
-              {...register("confirmPassword")}
-            />
-            <button
-              type="button"
-              onClick={() => setShowConfirmPassword(!showConfirmPassword)}
-              className="absolute right-4 top-[42px] text-gray-400 hover:text-gray-600 transition-colors"
-            >
-              {showConfirmPassword ? (
-                <EyeOff className="w-5 h-5" />
-              ) : (
-                <Eye className="w-5 h-5" />
-              )}
-            </button>
-          </div>
+          <Input
+            label="Xác nhận mật khẩu"
+            type={showConfirmPassword ? "text" : "password"}
+            placeholder="••••••••"
+            variant="bordered"
+            startContent={<Lock className="w-5 h-5 text-gray-400" />}
+            endContent={
+              <button
+                type="button"
+                onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+                className="text-gray-400 hover:text-gray-600 transition-colors"
+              >
+                {showConfirmPassword ? (
+                  <EyeOff className="w-5 h-5" />
+                ) : (
+                  <Eye className="w-5 h-5" />
+                )}
+              </button>
+            }
+            isInvalid={!!errors.confirmPassword}
+            errorMessage={errors.confirmPassword?.message}
+            isRequired
+            {...register("confirmPassword")}
+          />
 
           <Button
             type="submit"
-            variant="gradient"
-            loading={loading}
-            fullWidth
+            color="danger"
+            isLoading={loading}
+            className="w-full"
           >
             Đăng ký
           </Button>

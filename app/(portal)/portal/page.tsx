@@ -1,6 +1,6 @@
 import { auth } from "@/auth"
 import { redirect } from "next/navigation"
-import { STATUS } from "@/lib/constants/roles"
+import { STATUS } from "@/app/constants/portal/roles"
 import { getDashboardPath } from "@/lib/utils/auth"
 
 export default async function PortalPage() {

@@ -9,7 +9,7 @@ export default async function PortalLayout({
 }) {
   // Server-side auth check
   const session = await auth()
-  
+
   if (!session?.user) {
     redirect("/portal/login")
   }

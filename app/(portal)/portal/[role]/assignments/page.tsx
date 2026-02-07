@@ -1,11 +1,9 @@
 import { auth } from "@/auth"
 import { redirect, notFound } from "next/navigation"
-import { PrismaClient } from "@prisma/client"
-import StudentAssignmentsClient from "./StudentAssignmentsClient"
-import TeacherAssignmentsClient from "./TeacherAssignmentsClient"
-import { STATUS } from "@/lib/constants/roles"
-
-const prisma = new PrismaClient()
+import prisma from "@/lib/prisma"
+import StudentAssignmentsView from "@/app/components/portal/assignments/StudentAssignmentsView"
+import AssignmentsTable from "@/app/components/portal/assignments/AssignmentsTable"
+import { STATUS } from "@/app/constants/portal/roles"
 
 type Props = {
   params: Promise<{ role: string }>
@@ -107,12 +105,12 @@ export default async function AssignmentsPage({ params }: Props) {
   // Render based on role
   if (userRole === "student") {
     const { assignments, studentId } = await getStudentAssignments(session.user.email)
-    return <StudentAssignmentsClient assignments={assignments} studentId={studentId || ""} />
+    return <StudentAssignmentsView assignments={assignments} studentId={studentId || ""} />
   }
 
   if (userRole === "teacher") {
     const { assignments, classes } = await getTeacherAssignments(session.user.email)
-    return <TeacherAssignmentsClient assignments={assignments} classes={classes} />
+    return <AssignmentsTable assignments={assignments} classes={classes} role={userRole} />
   }
 
   notFound()

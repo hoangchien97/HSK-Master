@@ -12,7 +12,10 @@ import {
   Images,
   ImageIcon,
 } from "lucide-react"
-import { PageHeader, StatCard, DataCard } from "@/app/components/portal/common"
+import { Card, CardHeader, CardBody, Chip } from "@heroui/react"
+import { PageHeader } from "@/app/components/portal/common/PageHeader"
+import { StatCard } from "@/app/components/portal/common/StatCard"
+import { DataCard } from "@/app/components/portal/common/DataCard"
 
 interface AdminDashboardProps {
   stats?: {

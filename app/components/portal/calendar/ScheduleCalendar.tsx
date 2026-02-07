@@ -1,19 +1,30 @@
 "use client"
 
-import { useEffect, useState, useCallback } from "react"
-import { ScheduleXCalendar, useCalendarApp } from "@schedule-x/react"
-import {
-  createCalendar,
-  viewDay,
-  viewWeek,
-  viewMonthGrid,
-} from "@schedule-x/calendar"
-import { createEventsServicePlugin } from "@schedule-x/events-service"
-import "@schedule-x/theme-default/dist/index.css"
-import "@/app/embla.css"
-import type { ScheduleEvent } from "@/app/interfaces/portal/calendar.types"
-import { EventState } from "@/app/interfaces/portal/calendar.types"
-import { toScheduleXEvent, getEventState } from "@/app/utils/calendar"
+import { useMemo, useCallback } from "react"
+import { Calendar, dateFnsLocalizer, Views } from "react-big-calendar"
+import "react-big-calendar/lib/css/react-big-calendar.css"
+import { format, parse, startOfWeek, getDay } from "date-fns"
+import { vi } from "date-fns/locale"
+import type { ScheduleEvent } from "@/app/interfaces/portal/calendar"
+import { EventState } from "@/app/interfaces/portal/calendar"
+import { getEventState } from "@/app/utils/calendar"
+
+const locales = { vi }
+const localizer = dateFnsLocalizer({
+  format,
+  parse,
+  startOfWeek: () => startOfWeek(new Date(), { weekStartsOn: 1 }),
+  getDay,
+  locales,
+})
+
+interface BigCalEvent {
+  id: string
+  title: string
+  start: Date
+  end: Date
+  resource: { state: EventState; event: ScheduleEvent }
+}
 
 interface ScheduleCalendarProps {
   events: ScheduleEvent[]
@@ -32,105 +43,99 @@ export default function ScheduleCalendar({
   onEventDoubleClick,
   isReadOnly = false,
 }: ScheduleCalendarProps) {
-  const [eventsServicePlugin] = useState(() => createEventsServicePlugin())
+  const calendarEvents: BigCalEvent[] = useMemo(
+    () =>
+      events.map((ev) => {
+        const start = new Date(ev.startTime)
+        const end = new Date(ev.endTime)
+        return {
+          id: ev.id,
+          title: ev.title,
+          start,
+          end,
+          resource: { state: getEventState(start, end), event: ev },
+        }
+      }),
+    [events]
+  )
 
-  const calendar = useCalendarApp({
-    views: [viewDay, viewWeek, viewMonthGrid],
-    defaultView: viewWeek.name,
-    locale: "vi-VN",
-    firstDayOfWeek: 1, // Monday
-    dayBoundaries: {
-      start: "07:00",
-      end: "21:00",
-    },
-    weekOptions: {
-      gridHeight: 800,
-      nDays: 7,
-    },
-    calendars: {
-      [EventState.PAST]: {
-        colorName: EventState.PAST.toLowerCase(),
-        lightColors: {
-          main: "#9ca3af",
-          container: "#f3f4f6",
-          onContainer: "#4b5563",
-        },
-        darkColors: {
-          main: "#6b7280",
-          onContainer: "#f9fafb",
-          container: "#1f2937",
-        },
-      },
-      [EventState.UPCOMING]: {
-        colorName: EventState.UPCOMING.toLowerCase(),
-        lightColors: {
-          main: "#dc2626",
-          container: "#fee2e2",
-          onContainer: "#7f1d1d",
-        },
-        darkColors: {
-          main: "#ef4444",
-          onContainer: "#fef2f2",
-          container: "#7f1d1d",
-        },
-      },
-      [EventState.FUTURE]: {
-        colorName: EventState.FUTURE.toLowerCase(),
-        lightColors: {
-          main: "#f59e0b",
-          container: "#fef3c7",
-          onContainer: "#78350f",
-        },
-        darkColors: {
-          main: "#fbbf24",
-          onContainer: "#fefce8",
-          container: "#78350f",
-        },
-      },
-    },
-    plugins: [eventsServicePlugin],
-    callbacks: {
-      onEventClick(calendarEvent) {
-        if (onEventClick && calendarEvent.id) {
-          onEventClick(calendarEvent.id)
-        }
-      },
-      onEventUpdate(updatedEvent) {
-        if (isReadOnly) return
-        // Handle drag & drop update
-        console.log("Event updated:", updatedEvent)
-      },
-      onDoubleClickEvent(calendarEvent) {
-        if (onEventDoubleClick && calendarEvent.id) {
-          onEventDoubleClick(calendarEvent.id)
-        }
-      },
-      onDoubleClickDateTime(dateTime) {
-        if (onEmptySlotDoubleClick) {
-          onEmptySlotDoubleClick(new Date(dateTime))
-        }
-      },
-      onClickDate(date) {
-        if (onDateClick) {
-          onDateClick(new Date(date))
-        }
-      },
-    },
-  })
+  const eventPropGetter = useCallback((event: BigCalEvent) => {
+    const state = event.resource.state
+    let style: React.CSSProperties = {
+      borderRadius: "6px",
+      border: "none",
+      fontSize: "0.8rem",
+      padding: "2px 6px",
+    }
+    switch (state) {
+      case EventState.UPCOMING:
+        style = { ...style, backgroundColor: "#dc2626", color: "#fff" }
+        break
+      case EventState.FUTURE:
+        style = { ...style, backgroundColor: "#f59e0b", color: "#78350f" }
+        break
+      case EventState.PAST:
+        style = { ...style, backgroundColor: "#d1d5db", color: "#4b5563" }
+        break
+    }
+    return { style }
+  }, [])
 
-  // Update events when prop changes
-  useEffect(() => {
-    if (!eventsServicePlugin) return
+  const handleSelectEvent = useCallback(
+    (event: BigCalEvent) => onEventClick?.(event.id),
+    [onEventClick]
+  )
 
-    console.log("📅 ScheduleCalendar received events:", events)
-    const scheduleXEvents = events.map(toScheduleXEvent)
-    console.log("📅 Converted to Schedule-X format:", scheduleXEvents)
-    eventsServicePlugin.set(scheduleXEvents)
-  }, [events, eventsServicePlugin])
+  const handleDoubleClickEvent = useCallback(
+    (event: BigCalEvent) => onEventDoubleClick?.(event.id),
+    [onEventDoubleClick]
+  )
+
+  const handleSelectSlot = useCallback(
+    (slotInfo: { start: Date }) => {
+      if (!isReadOnly) {
+        onEmptySlotDoubleClick?.(slotInfo.start)
+      }
+    },
+    [isReadOnly, onEmptySlotDoubleClick]
+  )
 
   return (
-    <div className="w-full h-full">
-      <ScheduleXCalendar calendarApp={calendar} />
+    <div className="w-full h-full" style={{ minHeight: 600 }}>
+      <Calendar
+        localizer={localizer}
+        events={calendarEvents}
+        defaultView={Views.WEEK}
+        views={[Views.DAY, Views.WEEK, Views.MONTH]}
+        onSelectEvent={handleSelectEvent}
+        onDoubleClickEvent={handleDoubleClickEvent}
+        onSelectSlot={handleSelectSlot}
+        selectable={!isReadOnly}
+        eventPropGetter={eventPropGetter}
+        popup
+        step={30}
+        timeslots={2}
+        min={new Date(1970, 0, 1, 7, 0, 0)}
+        max={new Date(1970, 0, 1, 21, 0, 0)}
+        style={{ height: 600 }}
+        formats={{
+          timeGutterFormat: (date: Date) => format(date, "HH:mm"),
+          eventTimeRangeFormat: ({ start, end }: { start: Date; end: Date }) =>
+            `${format(start, "HH:mm")} - ${format(end, "HH:mm")}`,
+        }}
+        messages={{
+          allDay: "Cả ngày",
+          previous: "Trước",
+          next: "Tiếp",
+          today: "Hôm nay",
+          month: "Tháng",
+          week: "Tuần",
+          day: "Ngày",
+          agenda: "Lịch trình",
+          noEventsInRange: "Không có sự kiện nào.",
+          showMore: (total: number) => `+${total} thêm`,
+        }}
+      />
     </div>
   )
 }

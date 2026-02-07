@@ -2,8 +2,8 @@
 
 import { Clock, MapPin, Video } from "lucide-react"
 import { cn } from "@/lib/utils"
-import type { ScheduleEvent } from "@/app/interfaces/portal/calendar.types"
-import { EventState } from "@/app/interfaces/portal/calendar.types"
+import type { ScheduleEvent } from "@/app/interfaces/portal/calendar"
+import { EventState } from "@/app/interfaces/portal/calendar"
 import { getEventStateColor, formatEventTime } from "@/app/utils/calendar"
 
 interface EventCardProps {

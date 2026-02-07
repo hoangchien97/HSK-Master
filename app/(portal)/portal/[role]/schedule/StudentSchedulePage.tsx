@@ -3,7 +3,7 @@
 import { useState, useEffect } from "react"
 import CalendarHeader from "@/app/components/portal/calendar/CalendarHeader"
 import ScheduleCalendar from "@/app/components/portal/calendar/ScheduleCalendar"
-import type { ScheduleEvent } from "@/app/interfaces/portal/calendar.types"
+import type { ScheduleEvent } from "@/app/interfaces/portal/calendar"
 import { toast } from "react-toastify"
 
 export default function StudentSchedulePage() {

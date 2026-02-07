@@ -3,7 +3,7 @@
 import { useState, useTransition, useEffect } from "react";
 import { motion } from "framer-motion";
 import { CourseCard, CourseFilter } from "@/app/components/landing/courses";
-import { Select, Input, Pagination } from "@/app/components/common";
+import { Select, Input, Pagination } from "@/app/components/landing/common";
 import { useRouter, useSearchParams } from "next/navigation";
 import { getCoursesAction } from "./actions";
 

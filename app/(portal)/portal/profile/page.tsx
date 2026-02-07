@@ -2,7 +2,7 @@ import { auth } from "@/auth"
 import { redirect } from "next/navigation"
 import { prisma } from "@/lib/prisma"
 import ProfileClient from "./ProfileClient"
-import type { PortalUser } from "@/app/interfaces/portal/profile.types"
+import type { PortalUser } from "@/app/interfaces/portal/profile"
 
 async function getUserProfile(email: string) {
   const user = await prisma.portalUser.findUnique({

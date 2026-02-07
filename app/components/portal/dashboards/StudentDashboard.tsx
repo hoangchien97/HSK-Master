@@ -13,7 +13,11 @@ import {
   CheckCircle,
   Play,
 } from "lucide-react"
-import { PageHeader, StatCard, DataCard, EmptyState } from "@/app/components/portal/common"
+import { Card, CardHeader, CardBody, Chip } from "@heroui/react"
+import { PageHeader } from "@/app/components/portal/common/PageHeader"
+import { StatCard } from "@/app/components/portal/common/StatCard"
+import { DataCard } from "@/app/components/portal/common/DataCard"
+import { EmptyState } from "@/app/components/portal/common/EmptyState"
 
 interface StudentDashboardProps {
   studentName?: string

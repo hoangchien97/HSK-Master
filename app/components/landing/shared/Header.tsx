@@ -5,7 +5,7 @@ import { usePathname } from "next/navigation";
 import { useState } from "react";
 import MobileMenu from "./MobileMenu";
 import { Menu, Languages } from "lucide-react";
-import { Button } from "@/app/components/common";
+import { Button } from "@/app/components/landing/common";
 
 const navigationItems = [
   { name: 'Trang chủ', path: '/' },

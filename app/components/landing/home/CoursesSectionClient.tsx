@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 import Link from 'next/link';
-import Button from '@/app/components/common/Button';
+import Button from '@/app/components/landing/common/Button';
 import type { Course } from '@/app/services';
 
 interface CoursesSectionClientProps {

@@ -3,12 +3,12 @@
 import { useState, useEffect } from 'react';
 import { toast } from 'react-toastify';
 import {
-  ScheduleXCalendarView,
+  BigCalendarView,
   ScheduleModal,
   EventDetailDrawer,
   DeleteScheduleModal,
 } from '@/app/components/portal/calendar';
-import { PageHeader, LoadingSpinner } from '@/app/components/portal/common';
+import { Spinner } from '@heroui/react';
 import {
   fetchSchedules,
   fetchClasses,
@@ -175,20 +175,20 @@ export default function TeacherScheduleCalendar() {
   if (isLoading) {
     return (
       <div className="flex items-center justify-center h-64">
-        <LoadingSpinner size="lg" />
+        <Spinner size="lg" color="danger" />
       </div>
     );
   }
 
   return (
     <div className="space-y-6">
-      <PageHeader
-        title="Lịch giảng dạy"
-        description="Quản lý và xem tất cả lịch học"
-      />
+      <div>
+        <h1 className="text-2xl font-bold text-gray-900">Lịch giảng dạy</h1>
+        <p className="text-sm text-gray-500 mt-1">Quản lý và xem tất cả lịch học</p>
+      </div>
 
       {/* Calendar - Full Width */}
-      <ScheduleXCalendarView
+      <BigCalendarView
         schedules={schedules}
         onEventClick={handleEventClick}
         onEventDoubleClick={handleEventDoubleClick}

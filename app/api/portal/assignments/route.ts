@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from "next/server"
 import { PrismaClient } from "@prisma/client"
 import { auth } from "@/auth"
-import { ASSIGNMENT_STATUS } from "@/lib/constants/roles"
+import { ASSIGNMENT_STATUS } from "@/app/constants/portal/roles"
 
 const prisma = new PrismaClient()
 

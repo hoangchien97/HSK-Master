@@ -1,11 +1,9 @@
 import { auth } from "@/auth"
 import { redirect, notFound } from "next/navigation"
-import { PrismaClient } from "@prisma/client"
+import prisma from "@/lib/prisma"
 import StudentScheduleView from "@/app/components/portal/schedules/StudentScheduleView"
 import TeacherScheduleCalendar from "@/app/components/portal/schedules/TeacherScheduleCalendar"
-import { USER_ROLE, STATUS } from "@/lib/constants/roles"
-
-const prisma = new PrismaClient()
+import { USER_ROLE, STATUS } from "@/app/constants/portal/roles"
 
 type Props = {
   params: Promise<{ role: string }>

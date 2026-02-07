@@ -1,8 +1,8 @@
 "use client"
 
 import { cn } from "@/lib/utils"
-import type { ScheduleEvent } from "@/app/interfaces/portal/calendar.types"
-import { EventState } from "@/app/interfaces/portal/calendar.types"
+import type { ScheduleEvent } from "@/app/interfaces/portal/calendar"
+import { EventState } from "@/app/interfaces/portal/calendar"
 import { getEventStateColor } from "@/app/utils/calendar"
 import EventCard from "./EventCard"
 

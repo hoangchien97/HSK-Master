@@ -2,7 +2,7 @@
 
 import dayjs from 'dayjs';
 import { X, Calendar, Clock, BookOpen, Edit2, Trash2, CheckCircle2 } from 'lucide-react';
-import { Button, Badge } from '@/app/components/common';
+import { Button, Chip } from '@heroui/react';
 import type { ISchedule } from '@/app/interfaces/portal';
 import { formatScheduleTime, getScheduleDuration } from '@/app/utils';
 
@@ -62,12 +62,10 @@ export default function EventDetailPanel({
               <BookOpen className="w-6 h-6 text-red-600" />
             </div>
             <div className="flex-1">
-              <p className="font-semibold text-gray-900">{schedule.class.name}</p>
+              <p className="font-semibold text-gray-900">{schedule.class?.name}</p>
               <div className="flex items-center gap-2 mt-1">
-                <Badge variant="default" className="text-xs">
-                  {schedule.class.code}
-                </Badge>
-                <span className="text-xs text-gray-600">{schedule.class.level}</span>
+                <Chip size="sm" variant="flat">{schedule.class?.code}</Chip>
+                <span className="text-xs text-gray-600">{schedule.class?.level}</span>
               </div>
             </div>
           </div>
@@ -83,9 +81,7 @@ export default function EventDetailPanel({
               <p className="text-sm font-medium text-gray-900">
                 {formatScheduleTime(schedule.startTime)} - {formatScheduleTime(schedule.endTime)}
               </p>
-              <p className="text-xs text-gray-500">
-                Thời lượng: {duration} phút
-              </p>
+              <p className="text-xs text-gray-500">Thời lượng: {duration} phút</p>
             </div>
           </div>
         </div>
@@ -107,9 +103,7 @@ export default function EventDetailPanel({
           <div className="p-3 bg-blue-50 rounded-lg border border-blue-200 flex items-start gap-2">
             <CheckCircle2 className="w-5 h-5 text-blue-600 flex-shrink-0 mt-0.5" />
             <div>
-              <p className="text-sm font-medium text-blue-900">
-                Đã đồng bộ Google Calendar
-              </p>
+              <p className="text-sm font-medium text-blue-900">Đã đồng bộ Google Calendar</p>
               <p className="text-xs text-blue-700 mt-0.5">
                 Buổi học này được tự động cập nhật trên Google Calendar
               </p>
@@ -120,31 +114,27 @@ export default function EventDetailPanel({
         {/* Status */}
         <div>
           <h4 className="text-sm font-semibold text-gray-700 mb-2">Trạng thái</h4>
-          <Badge 
-            variant={schedule.status === 'ACTIVE' ? 'success' : 'default'}
-            className="text-sm"
-          >
+          <Chip color={schedule.status === 'ACTIVE' ? 'success' : 'default'} variant="flat" size="sm">
             {schedule.status === 'ACTIVE' ? 'Hoạt động' : schedule.status}
-          </Badge>
+          </Chip>
         </div>
       </div>
 
       {/* Actions Footer */}
       <div className="p-4 border-t border-gray-200 bg-gray-50 space-y-2">
         <Button
-          variant="outline"
-          fullWidth
-          onClick={() => onEdit(schedule)}
-          icon={<Edit2 className="w-4 h-4" />}
+          variant="bordered"
+          className="w-full"
+          onPress={() => onEdit(schedule)}
+          startContent={<Edit2 className="w-4 h-4" />}
         >
           Chỉnh sửa
         </Button>
         <Button
-          variant="outline"
-          fullWidth
-          onClick={() => onDelete(schedule)}
-          icon={<Trash2 className="w-4 h-4" />}
-          className="text-red-600 hover:text-red-700 hover:bg-red-50 border-red-300"
+          variant="bordered"
+          className="w-full text-red-600 hover:text-red-700 hover:bg-red-50 border-red-300"
+          onPress={() => onDelete(schedule)}
+          startContent={<Trash2 className="w-4 h-4" />}
         >
           Xóa buổi học
         </Button>

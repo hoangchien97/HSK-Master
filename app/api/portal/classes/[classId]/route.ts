@@ -5,7 +5,7 @@ import { prisma } from "@/lib/prisma"
 // GET - Fetch class detail with enrollments
 export async function GET(
   request: NextRequest,
-  { params }: { params: { classId: string } }
+  { params }: { params: Promise<{ classId: string }> }
 ) {
   try {
     const session = await auth()
@@ -23,7 +23,7 @@ export async function GET(
       return NextResponse.json({ error: "User not found" }, { status: 404 })
     }
 
-    const classId = params.classId
+    const { classId } = await params
 
     // Fetch class with enrollments
     const classData = await prisma.portalClass.findUnique({
@@ -98,7 +98,7 @@ export async function GET(
 // PUT - Update class details
 export async function PUT(
   request: NextRequest,
-  { params }: { params: { classId: string } }
+  { params }: { params: Promise<{ classId: string }> }
 ) {
   try {
     const session = await auth()
@@ -116,7 +116,7 @@ export async function PUT(
       return NextResponse.json({ error: "User not found" }, { status: 404 })
     }
 
-    const classId = params.classId
+    const { classId } = await params
     const body = await request.json()
 
     // Check if class exists and user has permission
@@ -189,7 +189,7 @@ export async function PUT(
 // DELETE - Delete class (soft delete by setting status to CANCELLED)
 export async function DELETE(
   request: NextRequest,
-  { params }: { params: { classId: string } }
+  { params }: { params: Promise<{ classId: string }> }
 ) {
   try {
     const session = await auth()
@@ -207,7 +207,7 @@ export async function DELETE(
       return NextResponse.json({ error: "User not found" }, { status: 404 })
     }
 
-    const classId = params.classId
+    const { classId } = await params
 
     // Check if class exists and user has permission
     const existingClass = await prisma.portalClass.findUnique({

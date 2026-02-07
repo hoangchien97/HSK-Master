@@ -10,7 +10,7 @@ import type {
   ICreateScheduleData,
   IUpdateScheduleData,
 } from '@/app/interfaces/portal';
-import { SCHEDULE_STATUS } from '@/lib/constants/roles';
+import { SCHEDULE_STATUS } from '@/app/constants/portal/roles';
 import dayjs from 'dayjs';
 
 /**
@@ -63,10 +63,13 @@ export async function getClasses(userId?: string): Promise<IClass[]> {
 
   return classes.map((cls) => ({
     id: cls.id,
-    name: cls.className,
-    code: cls.classCode,
+    className: cls.className,
+    classCode: cls.classCode,
     level: cls.level || '',
     status: cls.status,
+    startDate: cls.startDate.toISOString(),
+    maxStudents: cls.maxStudents,
+    teacherId: cls.teacherId,
   }));
 }
 

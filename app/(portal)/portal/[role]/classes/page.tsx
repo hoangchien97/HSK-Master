@@ -1,8 +1,7 @@
 import { auth } from "@/auth"
 import { redirect } from "next/navigation"
-import { USER_ROLE } from "@/lib/constants/roles"
-import TeacherClassManagement from "@/app/components/portal/classes/TeacherClassManagement"
-import ClassesClient from "./ClassesClient"
+import { USER_ROLE } from "@/app/constants/portal/roles"
+import ClassesTable from "@/app/components/portal/classes/ClassesTable"
 
 export default async function ClassesPage() {
   const session = await auth()
@@ -11,13 +10,13 @@ export default async function ClassesPage() {
     redirect("/portal/login")
   }
 
+  // Both teacher and admin get full management, student gets read-only
   const isStudent = session.user.role === USER_ROLE.STUDENT
 
-  // Teacher gets full management interface
   if (session.user.role === USER_ROLE.TEACHER || session.user.role === USER_ROLE.SYSTEM_ADMIN) {
-    return <TeacherClassManagement />
+    return <ClassesTable />
   }
 
-  // Student gets simple list view
-  return <ClassesClient classes={[]} isStudent={isStudent} />
+  // Student gets simple list view (read-only)
+  return <ClassesTable />
 }

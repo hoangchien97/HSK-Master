@@ -1,6 +1,5 @@
 "use client"
 
-import Image from "next/image"
 import Link from "next/link"
 import { ToastContainer } from "react-toastify"
 import "react-toastify/dist/ReactToastify.css"
@@ -11,7 +10,7 @@ export default function PortalAuthLayout({
   children: React.ReactNode
 }) {
   return (
-    <div className="min-h-screen flex">
+      <div className="min-h-screen flex">
       {/* Toast Notifications */}
       <ToastContainer
         position="top-right"
@@ -114,6 +113,6 @@ export default function PortalAuthLayout({
           </div>
         </div>
       </div>
-    </div>
+      </div>
   )
 }

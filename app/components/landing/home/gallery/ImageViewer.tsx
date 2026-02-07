@@ -1,5 +1,5 @@
 import { LightboxSlide } from "./types";
-import OptimizedImage from "@/app/components/common/OptimizedImage";
+import OptimizedImage from "@/app/components/landing/common/OptimizedImage";
 
 interface ImageViewerProps {
   slide: LightboxSlide;

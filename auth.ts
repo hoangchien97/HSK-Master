@@ -4,7 +4,7 @@ import Credentials from "next-auth/providers/credentials"
 import { prisma } from "@/lib/prisma"
 import bcrypt from "bcryptjs"
 import { z } from "zod"
-import { USER_ROLE, STATUS } from "@/lib/constants/roles"
+import { USER_ROLE, STATUS } from "@/app/constants/portal/roles"
 import { authConfig } from "@/auth.config"
 
 // Type for PortalUser with status field (for TypeScript compatibility)
@@ -65,7 +65,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
           id: user.id,
           email: user.email,
           name: user.name,
-          fullName: user.fullName,
+          fullName: user.fullName ?? undefined,
           image: user.image,
           role: user.role,
           status: user.status,

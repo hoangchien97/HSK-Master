@@ -6,7 +6,7 @@ import {
   CLASS_STATUS,
   SCHEDULE_STATUS,
   ENROLLMENT_STATUS,
-} from '../lib/constants/roles'
+} from '../app/constants/portal/roles'
 
 const prisma = new PrismaClient()
 

@@ -2,7 +2,7 @@ import { auth } from "@/auth"
 import { notFound } from "next/navigation"
 import { AdminDashboard, TeacherDashboard, StudentDashboard } from "@/app/components/portal/dashboards"
 import { routeToRole } from "@/lib/utils/auth"
-import { USER_ROLE } from "@/lib/constants/roles"
+import { USER_ROLE } from "@/app/constants/portal/roles"
 
 type Props = {
   params: Promise<{ role: string }>

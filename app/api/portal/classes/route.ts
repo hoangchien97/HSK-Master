@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from "next/server"
 import { auth } from "@/auth"
 import { prisma } from "@/lib/prisma"
-import { CLASS_STATUS } from "@/lib/constants/roles"
+import { CLASS_STATUS } from "@/app/constants/portal/roles"
 
 // GET - Fetch classes for the authenticated teacher
 export async function GET(request: NextRequest) {

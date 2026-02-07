@@ -1,7 +1,7 @@
 import { auth } from "@/auth"
 import { redirect, notFound } from "next/navigation"
 import { roleToRoute, isRouteAllowedForRole } from "@/lib/utils/auth"
-import { STATUS } from "@/lib/constants/roles"
+import { STATUS } from "@/app/constants/portal/roles"
 
 type Props = {
   children: React.ReactNode

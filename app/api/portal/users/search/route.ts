@@ -56,7 +56,7 @@ export async function GET(request: NextRequest) {
               },
             ],
           },
-          ...(role ? [{ role: role }] : []),
+          ...(role ? [{ role: role as any }] : []),
         ],
       },
       select: {

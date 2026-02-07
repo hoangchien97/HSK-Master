@@ -3,11 +3,16 @@
 import Link from "next/link"
 import { usePathname } from "next/navigation"
 import { signOut } from "next-auth/react"
+import {
+  Button,
+  Divider,
+  Chip,
+} from "@heroui/react"
 import { LogOut, X } from "lucide-react"
 import { cn } from "@/lib/utils"
-import { getNavItemsByRole } from "@/app/constants/navigation"
+import { getNavItemsByRole } from "@/app/constants/portal/navigation"
 import { ROLE_LABELS } from "@/app/constants/portal"
-import { type UserRole } from "@/lib/constants/roles"
+import { type UserRole } from "@/app/constants/portal/roles"
 
 interface PortalSidebarProps {
   userRole: string
@@ -51,7 +56,7 @@ export default function PortalSidebar({ userRole, isOpen = true, onClose }: Port
         {/* Logo - Fixed at top */}
         <div className="flex items-center h-[65px] justify-between px-5 py-4 border-b border-gray-100 shrink-0">
           <Link href="/portal" className="flex items-center gap-3">
-            <div className="w-10 h-10 bg-linear-to-br from-red-500 to-red-600 rounded-xl flex items-center justify-center shadow-lg shadow-red-200">
+            <div className="w-10 h-10 bg-gradient-to-br from-red-500 to-red-600 rounded-xl flex items-center justify-center shadow-lg shadow-red-200">
               <span className="text-white font-bold text-xl">漢</span>
             </div>
             <div>
@@ -59,20 +64,33 @@ export default function PortalSidebar({ userRole, isOpen = true, onClose }: Port
             </div>
           </Link>
           {/* Mobile close button */}
-          <button onClick={onClose} className="lg:hidden text-gray-400 hover:text-gray-600 p-1 rounded-lg hover:bg-gray-100">
+          <Button
+            isIconOnly
+            variant="light"
+            size="sm"
+            onPress={onClose}
+            className="lg:hidden"
+          >
             <X className="w-5 h-5" />
-          </button>
+          </Button>
         </div>
 
         {/* Role badge */}
         <div className="px-5 py-3 shrink-0">
-          <span className="text-xs font-semibold text-gray-400 uppercase tracking-wider">
+          <Chip
+            color="primary"
+            variant="flat"
+            size="sm"
+            className="uppercase tracking-wider font-semibold"
+          >
             {ROLE_LABELS[userRole as UserRole] || userRole}
-          </span>
+          </Chip>
         </div>
 
+        <Divider />
+
         {/* Navigation - Scrollable */}
-        <nav className="flex-1 overflow-y-auto px-3 pb-4">
+        <nav className="flex-1 overflow-y-auto px-3 py-4">
           <div className="space-y-1">
             {navItems.map((item) => {
               const isActive = isActiveLink(item.href)
@@ -91,11 +109,11 @@ export default function PortalSidebar({ userRole, isOpen = true, onClose }: Port
                   onClick={onClose}
                 >
                   <Icon className={cn("w-5 h-5", isActive ? "text-red-500" : "text-gray-400")} />
-                  <span className="text-sm">{item.label}</span>
+                  <span className="text-sm flex-1">{item.label}</span>
                   {item.badge && (
-                    <span className="ml-auto px-2 py-0.5 text-xs font-medium bg-red-100 text-red-600 rounded-full">
+                    <Chip color="danger" size="sm" variant="flat">
                       {item.badge}
-                    </span>
+                    </Chip>
                   )}
                 </Link>
               )
@@ -103,15 +121,19 @@ export default function PortalSidebar({ userRole, isOpen = true, onClose }: Port
           </div>
         </nav>
 
+        <Divider />
+
         {/* Bottom actions - Fixed at bottom */}
-        <div className="border-t border-gray-100 p-3 shrink-0">
-          <button
-            onClick={handleSignOut}
-            className="flex items-center gap-3 px-3 py-2.5 rounded-lg text-gray-600 hover:bg-red-50 hover:text-red-600 transition-colors w-full"
+        <div className="p-3 shrink-0">
+          <Button
+            variant="light"
+            color="danger"
+            startContent={<LogOut className="w-5 h-5" />}
+            onPress={handleSignOut}
+            className="w-full justify-start"
           >
-            <LogOut className="w-5 h-5 text-gray-400" />
-            <span className="text-sm">Đăng xuất</span>
-          </button>
+            Đăng xuất
+          </Button>
         </div>
       </aside>
     </>

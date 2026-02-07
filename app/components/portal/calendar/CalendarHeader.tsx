@@ -1,7 +1,7 @@
 "use client"
 
 import { Calendar, Plus, Search } from "lucide-react"
-import { Button, Input } from "@/app/components/common"
+import { Button, Input } from "@heroui/react"
 import { useState } from "react"
 
 interface CalendarHeaderProps {

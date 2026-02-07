@@ -4,11 +4,12 @@ import { useForm } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useEffect, useState } from "react"
 import { toast } from "react-toastify"
-import { BaseModal, Button, Input, Label, Select, Switch, Textarea } from "@/app/components/common"
+import { Button, Input, Select, SelectItem, Switch, Textarea, Spinner } from "@heroui/react"
 import { updateScheduleSchema, type UpdateScheduleFormData } from "@/app/utils/validation/schedule.validation"
-import type { ScheduleEvent } from "@/app/interfaces/portal/calendar.types"
+import type { ScheduleEvent } from "@/app/interfaces/portal/calendar"
 import { getEventState, getEventStateLabel, getEventStateColor } from "@/app/utils/calendar"
-import { Calendar, Clock, MapPin, Video, Trash2, AlertCircle } from "lucide-react"
+import { Calendar, Clock, MapPin, Video, Trash2, AlertCircle, FileEdit } from "lucide-react"
+import { CModal } from "@/app/components/portal/common";
 
 interface EditScheduleModalProps {
   open: boolean
@@ -47,7 +48,6 @@ export default function EditScheduleModal({
     resolver: zodResolver(updateScheduleSchema),
   })
 
-  // Fetch event data and classes
   useEffect(() => {
     if (open && eventId) {
       fetchEvent()
@@ -72,7 +72,6 @@ export default function EditScheduleModal({
 
       setEvent(scheduleEvent)
 
-      // Pre-fill form
       setValue("classId", scheduleEvent.classId)
       setValue("title", scheduleEvent.title)
       setValue("description", scheduleEvent.description || "")
@@ -94,7 +93,6 @@ export default function EditScheduleModal({
     try {
       const response = await fetch("/api/portal/classes")
       if (!response.ok) throw new Error("Failed to fetch classes")
-
       const data = await response.json()
       setClasses(data)
     } catch (error) {
@@ -108,7 +106,6 @@ export default function EditScheduleModal({
     try {
       setLoading(true)
 
-      // Prepare payload
       const payload = {
         ...(data.classId && { classId: data.classId }),
         ...(data.title && { title: data.title }),
@@ -122,9 +119,7 @@ export default function EditScheduleModal({
 
       const response = await fetch(`/api/portal/schedules/${eventId}`, {
         method: "PUT",
-        headers: {
-          "Content-Type": "application/json",
-        },
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify(payload),
       })
 
@@ -134,13 +129,12 @@ export default function EditScheduleModal({
       }
 
       toast.success("Cập nhật lịch học thành công!")
-
       reset()
       onSuccess()
       onClose()
-    } catch (error: any) {
+    } catch (error: unknown) {
       console.error("Error updating schedule:", error)
-      toast.error(error.message || "Không thể cập nhật lịch học")
+      toast.error(error instanceof Error ? error.message : "Không thể cập nhật lịch học")
     } finally {
       setLoading(false)
     }
@@ -148,31 +142,23 @@ export default function EditScheduleModal({
 
   const handleDelete = async () => {
     if (!eventId) return
-
-    if (!confirm("Bạn có chắc chắn muốn xóa lịch học này?")) {
-      return
-    }
+    if (!confirm("Bạn có chắc chắn muốn xóa lịch học này?")) return
 
     try {
       setDeleting(true)
-
-      const response = await fetch(`/api/portal/schedules/${eventId}`, {
-        method: "DELETE",
-      })
-
+      const response = await fetch(`/api/portal/schedules/${eventId}`, { method: "DELETE" })
       if (!response.ok) {
         const error = await response.json()
         throw new Error(error.error || "Failed to delete schedule")
       }
 
       toast.success("Xóa lịch học thành công!")
-
       reset()
       onSuccess()
       onClose()
-    } catch (error: any) {
+    } catch (error: unknown) {
       console.error("Error deleting schedule:", error)
-      toast.error(error.message || "Không thể xóa lịch học")
+      toast.error(error instanceof Error ? error.message : "Không thể xóa lịch học")
     } finally {
       setDeleting(false)
     }
@@ -188,18 +174,11 @@ export default function EditScheduleModal({
 
   if (loadingEvent) {
     return (
-      <BaseModal
-        isOpen={open}
-        onClose={handleClose}
-        title="Đang tải thông tin..."
-      >
+      <CModal isOpen={open} onClose={handleClose} title="Đang tải...">
         <div className="flex items-center justify-center py-12">
-          <div className="text-center">
-            <div className="w-16 h-16 border-4 border-red-600 border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
-            <p className="text-gray-600">Đang tải thông tin...</p>
-          </div>
+          <Spinner size="lg" color="danger" label="Đang tải thông tin..." />
         </div>
-      </BaseModal>
+      </CModal>
     )
   }
 
@@ -209,208 +188,148 @@ export default function EditScheduleModal({
   const stateColors = getEventStateColor(eventState)
 
   return (
-    <BaseModal
+    <CModal
       isOpen={open}
       onClose={handleClose}
-      header={
+      size="2xl"
+      closeIcon={FileEdit}
+      title={
         <div className="flex items-center gap-2">
           <div className="w-10 h-10 bg-red-600 rounded-lg flex items-center justify-center">
             <Calendar className="w-5 h-5 text-white" />
           </div>
-          <h3 className="text-xl font-bold text-gray-900">Chỉnh sửa lịch học</h3>
+          Chỉnh sửa lịch học
         </div>
       }
       footer={
         <>
           <Button
-            type="button"
-            variant="outline"
-            onClick={handleDelete}
-            disabled={deleting || loading}
-            className="text-red-600 border-red-300 hover:bg-red-50 cursor-pointer mr-auto"
+            variant="bordered"
+            onPress={handleDelete}
+            isDisabled={deleting || loading}
+            className="text-red-600 border-red-300 hover:bg-red-50 mr-auto"
+            startContent={!deleting && <Trash2 className="w-4 h-4" />}
           >
-            {deleting ? (
-              <>
-                <div className="w-4 h-4 border-2 border-red-600 border-t-transparent rounded-full animate-spin mr-2" />
-                Đang xóa...
-              </>
-            ) : (
-              <>
-                <Trash2 className="w-4 h-4 mr-1" />
-                Xóa lịch học
-              </>
-            )}
+            {deleting ? "Đang xóa..." : "Xóa lịch học"}
           </Button>
-          <Button
-            type="button"
-            variant="outline"
-            onClick={handleClose}
-            disabled={loading || deleting}
-          >
-            Hủy
-          </Button>
+          <Button variant="bordered" onPress={handleClose} isDisabled={loading || deleting}>Hủy</Button>
           <Button
             type="submit"
-            disabled={loading || deleting}
-            className="bg-red-600 hover:bg-red-700 text-white cursor-pointer"
-            onClick={handleSubmit(onSubmit)}
+            form="edit-schedule-form"
+            isDisabled={loading || deleting}
+            className="bg-red-600 hover:bg-red-700 text-white"
           >
-            {loading ? (
-              <>
-                <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin mr-2" />
-                Đang lưu...
-              </>
-            ) : (
-              "Lưu thay đổi"
-            )}
+            {loading ? "Đang lưu..." : "Lưu thay đổi"}
           </Button>
         </>
       }
-      maxWidth="2xl"
     >
       {/* Event Status Badge */}
       <div className={`flex items-center gap-2 p-3 rounded-lg ${stateColors.bg} ${stateColors.border} border`}>
         <AlertCircle className={`w-5 h-5 ${stateColors.text}`} />
-          <div>
-            <p className={`text-sm font-medium ${stateColors.text}`}>
-              Trạng thái: {getEventStateLabel(eventState)}
-            </p>
-            {event.syncedToGoogle && (
-              <p className="text-xs text-gray-600 flex items-center gap-1 mt-1">
-                <svg className="w-4 h-4" viewBox="0 0 24 24">
-                  <path fill="#4285F4" d="M19 3h-1V1h-2v2H8V1H6v2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm0 16H5V8h14v11z"/>
-                </svg>
-                Đã đồng bộ Google Calendar
+        <div>
+          <p className={`text-sm font-medium ${stateColors.text}`}>
+                Trạng thái: {getEventStateLabel(eventState)}
               </p>
-            )}
+              {event.syncedToGoogle && (
+                <p className="text-xs text-gray-600 flex items-center gap-1 mt-1">
+                  <svg className="w-4 h-4" viewBox="0 0 24 24">
+                    <path fill="#4285F4" d="M19 3h-1V1h-2v2H8V1H6v2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm0 16H5V8h14v11z"/>
+                  </svg>
+                  Đã đồng bộ Google Calendar
+                </p>
+              )}
+            </div>
           </div>
-        </div>
 
-        <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
-          {/* Class Selection */}
-          <div className="space-y-2">
-            <Label htmlFor="classId">Lớp học</Label>
-            <Select {...register("classId")}>
-              <option value="">Chọn lớp học</option>
+          <form id="edit-schedule-form" onSubmit={handleSubmit(onSubmit)} className="space-y-6">
+            {/* Class Selection */}
+            <Select
+              label="Lớp học"
+              {...register("classId")}
+              isInvalid={!!errors.classId}
+              errorMessage={errors.classId?.message}
+            >
               {classes.map((cls) => (
-                <option key={cls.id} value={cls.id}>
-                  {cls.className} ({cls.classCode})
-                  {cls.level && ` - ${cls.level}`}
-                </option>
+                <SelectItem key={cls.id} textValue={`${cls.className} (${cls.classCode})${cls.level ? ` - ${cls.level}` : ''}`}>
+                  {cls.className} ({cls.classCode}){cls.level && ` - ${cls.level}`}
+                </SelectItem>
               ))}
             </Select>
-            {errors.classId && (
-              <p className="text-sm text-red-600">{errors.classId.message}</p>
-            )}
-          </div>
 
-          {/* Title */}
-          <div className="space-y-2">
-            <Label htmlFor="title">Tiêu đề buổi học</Label>
+            {/* Title */}
             <Input
+              label="Tiêu đề buổi học"
               {...register("title")}
               placeholder="VD: Bài 5: Ngữ pháp cơ bản"
+              isInvalid={!!errors.title}
+              errorMessage={errors.title?.message}
             />
-            {errors.title && (
-              <p className="text-sm text-red-600">{errors.title.message}</p>
-            )}
-          </div>
 
-          {/* Description */}
-          <div className="space-y-2">
-            <Label htmlFor="description">Ghi chú</Label>
+            {/* Description */}
             <Textarea
+              label="Ghi chú"
               {...register("description")}
               placeholder="Nội dung chi tiết buổi học..."
-              rows={3}
+              minRows={3}
             />
-          </div>
 
-          {/* Date & Time */}
-          <div className="grid grid-cols-2 gap-4">
-            <div className="space-y-2">
-              <Label htmlFor="startTime">
-                <Clock className="w-4 h-4 inline mr-1" />
-                Giờ bắt đầu
-              </Label>
+            {/* Date & Time */}
+            <div className="grid grid-cols-2 gap-4">
               <Input
+                label="Giờ bắt đầu"
                 type="datetime-local"
-                {...register("startTime", {
-                  setValueAs: (v) => (v ? new Date(v) : undefined),
-                })}
+                startContent={<Clock className="w-4 h-4 text-gray-400" />}
+                {...register("startTime", { setValueAs: (v) => (v ? new Date(v) : undefined) })}
+                isInvalid={!!errors.startTime}
+                errorMessage={errors.startTime?.message}
               />
-              {errors.startTime && (
-                <p className="text-sm text-red-600">{errors.startTime.message}</p>
-              )}
+              <Input
+                label="Giờ kết thúc"
+                type="datetime-local"
+                startContent={<Clock className="w-4 h-4 text-gray-400" />}
+                {...register("endTime", { setValueAs: (v) => (v ? new Date(v) : undefined) })}
+                isInvalid={!!errors.endTime}
+                errorMessage={errors.endTime?.message}
+              />
             </div>
 
-            <div className="space-y-2">
-              <Label htmlFor="endTime">
-                <Clock className="w-4 h-4 inline mr-1" />
-                Giờ kết thúc
-              </Label>
-              <Input
-                type="datetime-local"
-                {...register("endTime", {
-                  setValueAs: (v) => (v ? new Date(v) : undefined),
-                })}
-              />
-              {errors.endTime && (
-                <p className="text-sm text-red-600">{errors.endTime.message}</p>
-              )}
-            </div>
-          </div>
-
-          {/* Location */}
-          <div className="space-y-2">
-            <Label htmlFor="location">
-              <MapPin className="w-4 h-4 inline mr-1" />
-              Địa điểm
-            </Label>
+            {/* Location */}
             <Input
+              label="Địa điểm"
+              startContent={<MapPin className="w-4 h-4 text-gray-400" />}
               {...register("location")}
               placeholder="VD: Phòng 301, Tòa A"
             />
-          </div>
 
-          {/* Meeting Link */}
-          <div className="space-y-2">
-            <Label htmlFor="meetingLink">
-              <Video className="w-4 h-4 inline mr-1" />
-              Link meeting
-            </Label>
+            {/* Meeting Link */}
             <Input
+              label="Link meeting"
+              startContent={<Video className="w-4 h-4 text-gray-400" />}
               {...register("meetingLink")}
               type="url"
               placeholder="https://meet.google.com/..."
+              isInvalid={!!errors.meetingLink}
+              errorMessage={errors.meetingLink?.message}
             />
-            {errors.meetingLink && (
-              <p className="text-sm text-red-600">{errors.meetingLink.message}</p>
-            )}
-          </div>
 
-          {/* Google Calendar Sync */}
-          <div className="flex items-center justify-between p-4 bg-gray-50 rounded-lg">
-            <div className="flex items-center gap-2">
-              <svg className="w-5 h-5" viewBox="0 0 24 24">
-                <path
-                  fill="#4285F4"
-                  d="M19 3h-1V1h-2v2H8V1H6v2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm0 16H5V8h14v11z"
-                />
-              </svg>
-              <div>
-                <Label>Đồng bộ Google Calendar</Label>
-                <p className="text-xs text-gray-500">
-                  Cập nhật thay đổi lên Google Calendar
-                </p>
+            {/* Google Calendar Sync */}
+            <div className="flex items-center justify-between p-4 bg-gray-50 rounded-lg">
+              <div className="flex items-center gap-2">
+                <svg className="w-5 h-5" viewBox="0 0 24 24">
+                  <path fill="#4285F4" d="M19 3h-1V1h-2v2H8V1H6v2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm0 16H5V8h14v11z" />
+                </svg>
+                <div>
+                  <p className="text-sm font-medium text-gray-900">Đồng bộ Google Calendar</p>
+                  <p className="text-xs text-gray-500">Cập nhật thay đổi lên Google Calendar</p>
+                </div>
               </div>
+              <Switch
+                isSelected={watch("syncToGoogle")}
+                onValueChange={(val) => setValue("syncToGoogle", val)}
+              />
             </div>
-            <Switch
-              checked={watch("syncToGoogle")}
-              onCheckedChange={(checked) => setValue("syncToGoogle", checked)}
-            />
-          </div>
-        </form>
-      </BaseModal>
+          </form>
+    </CModal>
   )
 }

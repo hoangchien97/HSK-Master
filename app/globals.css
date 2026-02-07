@@ -1,5 +1,7 @@
 @import "tailwindcss";
-@import "./embla.css";
+@plugin "../hero.ts";
+@source '../node_modules/@heroui/theme/dist/**/*.{js,ts,jsx,tsx}';
+@custom-variant dark (&:is(.dark *));
 
 @theme inline {
   /* Brand Colors - Primary (Imperial Red) - Based on ver2 design system */
@@ -20,27 +22,6 @@
   /* HSL Primary for Card Effects */
   --primary: 0 84% 45%;              /* Red-orange primary */
   --primary-card: 24 95% 53%;        /* Orange for card hover glow */
-
-  /* Shadcn UI Variables */
-  --background: 0 0% 100%;
-  --foreground: 0 0% 3.9%;
-  --card: 0 0% 100%;
-  --card-foreground: 0 0% 3.9%;
-  --popover: 0 0% 100%;
-  --popover-foreground: 0 0% 3.9%;
-  --primary-foreground: 0 0% 98%;
-  --secondary: 0 0% 96.1%;
-  --secondary-foreground: 0 0% 9%;
-  --muted: 0 0% 96.1%;
-  --muted-foreground: 0 0% 45.1%;
-  --accent: 0 0% 96.1%;
-  --accent-foreground: 0 0% 9%;
-  --destructive: 0 84.2% 60.2%;
-  --destructive-foreground: 0 0% 98%;
-  --border: 0 0% 89.8%;
-  --input: 0 0% 89.8%;
-  --ring: 0 84% 45%;
-  --radius: 0.5rem;
 
   /* Custom Colors - Secondary (Blue) */
   --color-secondary-50: #f0f9ff;
@@ -105,7 +86,7 @@
   --color-error-900: #7f1d1d;
   --color-error-950: #450a0a;
 
-  /* Info Colors - Blue */
+  /* Info Colors — NOT in HeroUI palette */
   --color-info-50: #eff6ff;
   --color-info-100: #dbeafe;
   --color-info-200: #bfdbfe;
@@ -379,10 +360,10 @@ body {
     transform: translateY(-8px);
   }
 
-  /* Hover glow effect - Using HSL variable */
+  /* Hover glow effect */
   .hover-glow:hover {
-    box-shadow: 0 0 30px hsl(var(--primary-card) / 0.3),
-                0 20px 40px -15px hsl(var(--primary-card) / 0.2);
+    box-shadow: 0 0 30px rgba(148, 163, 184, 0.3),
+                0 20px 40px -15px rgba(148, 163, 184, 0.2);
   }
 
   /* GPU acceleration */

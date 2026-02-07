@@ -8,9 +8,8 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import { toast } from "react-toastify";
-import { Eye, EyeOff, Mail, Lock } from "lucide-react";
-import Input from "@/app/components/common/Input";
-import Button from "@/app/components/common/Button";
+import { Eye, EyeOff, Mail, Lock, MailIcon } from "lucide-react";
+import { Input, Button } from "@heroui/react";
 
 // Validation schema
 const loginSchema = z.object({
@@ -103,11 +102,10 @@ export default function LoginForm() {
         {/* Google Sign In */}
         <Button
           type="button"
-          variant="white"
-          onClick={handleGoogleSignIn}
-          disabled={loading}
-          fullWidth
-          className="mb-6 border-2 gap-2 flex border-gray-200 hover:border-red-300"
+          variant="bordered"
+          onPress={handleGoogleSignIn}
+          isDisabled={loading}
+          className="mb-6 w-full border-2 gap-2 border-gray-200 hover:border-red-300"
         >
           <svg className="w-5 h-5" viewBox="0 0 24 24">
             <path
@@ -150,10 +148,22 @@ export default function LoginForm() {
             label="Email"
             type="email"
             placeholder="email@example.com"
-            icon={<Mail className="w-5 h-5" />}
-            error={errors.email?.message}
-            required
+            variant="bordered"
+            startContent={<Mail className="w-5 h-5 text-gray-400" />}
+            isInvalid={!!errors.email}
+            errorMessage={errors.email?.message}
+            isRequired
             {...register("email")}
+          />
+
+          <Input
+            label="Email"
+            labelPlacement="outside"
+            placeholder="you@example.com"
+            startContent={
+              <MailIcon className="text-2xl text-default-400 pointer-events-none shrink-0" />
+            }
+            type="email"
           />
 
           <div className="relative">
@@ -161,22 +171,26 @@ export default function LoginForm() {
               label="Mật khẩu"
               type={showPassword ? "text" : "password"}
               placeholder="••••••••"
-              icon={<Lock className="w-5 h-5" />}
-              error={errors.password?.message}
-              required
+              variant="bordered"
+              startContent={<Lock className="w-5 h-5 text-gray-400" />}
+              endContent={
+                <button
+                  type="button"
+                  onClick={() => setShowPassword(!showPassword)}
+                  className="text-gray-400 hover:text-gray-600 transition-colors"
+                >
+                  {showPassword ? (
+                    <EyeOff className="w-5 h-5" />
+                  ) : (
+                    <Eye className="w-5 h-5" />
+                  )}
+                </button>
+              }
+              isInvalid={!!errors.password}
+              errorMessage={errors.password?.message}
+              isRequired
               {...register("password")}
             />
-            <button
-              type="button"
-              onClick={() => setShowPassword(!showPassword)}
-              className="absolute right-4 top-[42px] text-gray-400 hover:text-gray-600 transition-colors"
-            >
-              {showPassword ? (
-                <EyeOff className="w-5 h-5" />
-              ) : (
-                <Eye className="w-5 h-5" />
-              )}
-            </button>
           </div>
 
           <div className="flex items-center justify-between">
@@ -190,13 +204,15 @@ export default function LoginForm() {
 
           <Button
             type="submit"
-            variant="gradient"
-            loading={loading}
-            fullWidth
+            color="danger"
+            isLoading={loading}
+            className="w-full"
           >
             Đăng nhập
           </Button>
         </form>
+
+        <Button color="primary">Button 123</Button>
 
         {/* Register Link */}
         <div className="mt-6 text-center">

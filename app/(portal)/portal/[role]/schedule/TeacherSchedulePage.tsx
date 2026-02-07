@@ -7,7 +7,7 @@ import CreateScheduleModal from "@/app/components/portal/calendar/CreateSchedule
 import EditScheduleModal from "@/app/components/portal/calendar/EditScheduleModal"
 import DayDetailDrawer from "@/app/components/portal/calendar/DayDetailDrawer"
 import EventDetailDrawer from "@/app/components/portal/calendar/EventDetailDrawer"
-import type { ScheduleEvent } from "@/app/interfaces/portal/calendar.types"
+import type { ScheduleEvent } from "@/app/interfaces/portal/calendar"
 import { toast } from "react-toastify"
 
 export default function TeacherSchedulePage() {

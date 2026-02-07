@@ -1,3 +1,4 @@
+import { Button } from "@heroui/react";
 import { Header, Footer, ScrollToTop, ContactBubbles } from "../components/landing/shared";
 
 export default function LandingLayout({

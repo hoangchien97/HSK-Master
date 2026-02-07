@@ -1,5 +1,4 @@
-import 'temporal-polyfill/global'
-import { EventState, type ScheduleEvent, type RecurrenceDescription } from "@/app/interfaces/portal/calendar.types"
+import { EventState, type ScheduleEvent, type RecurrenceDescription } from "@/app/interfaces/portal/calendar"
 import { addDays, format, isAfter, isBefore, differenceInDays, isSameDay } from "date-fns"
 import { vi } from "date-fns/locale"
 
@@ -183,44 +182,43 @@ export function groupEventsByState(events: ScheduleEvent[]): {
 }
 
 /**
- * Convert Date to Temporal.ZonedDateTime
- * Schedule-X v4 requires Temporal API objects
+ * Convert ScheduleEvent to react-big-calendar Event format
  */
-function dateToZonedDateTime(date: Date): Temporal.ZonedDateTime {
-  const instant = Temporal.Instant.fromEpochMilliseconds(date.getTime())
-  return instant.toZonedDateTimeISO('Asia/Ho_Chi_Minh')
-}
-
-/**
- * Convert ScheduleEvent to Schedule-X format
- */
-export function toScheduleXEvent(event: ScheduleEvent): {
+export function toBigCalendarEvent(event: ScheduleEvent): {
   id: string
   title: string
-  start: Temporal.ZonedDateTime
-  end: Temporal.ZonedDateTime
-  description?: string
-  location?: string
-  calendarId: string
-  _customData: Record<string, unknown>
+  start: Date
+  end: Date
+  resource: {
+    scheduleId: string
+    status: string
+    state: EventState
+    classId: string
+    className?: string
+    level?: string
+    description?: string
+    location?: string
+    meetingLink?: string
+    syncedToGoogle: boolean
+  }
 } {
   const state = getEventState(event.startTime, event.endTime)
 
   return {
     id: event.id,
     title: event.title,
-    start: dateToZonedDateTime(event.startTime),
-    end: dateToZonedDateTime(event.endTime),
-    description: event.description,
-    location: event.location,
-    calendarId: state.toLowerCase(),
-    _customData: {
+    start: new Date(event.startTime),
+    end: new Date(event.endTime),
+    resource: {
       scheduleId: event.id,
       status: event.status,
       state,
       classId: event.classId,
       className: event.class?.className,
       level: event.class?.level,
+      description: event.description,
+      location: event.location,
+      meetingLink: event.meetingLink,
       syncedToGoogle: event.syncedToGoogle
     }
   }

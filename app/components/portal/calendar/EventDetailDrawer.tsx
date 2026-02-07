@@ -3,8 +3,7 @@
 import { useState, useEffect, useCallback } from "react"
 import { format } from "date-fns"
 import { vi } from "date-fns/locale"
-import { BaseDrawer } from "@/app/components/common"
-import Button from "@/app/components/common/Button"
+import { Button } from "@heroui/react"
 import {
   Calendar,
   MapPin,
@@ -17,11 +16,12 @@ import {
   XCircle,
   Circle,
 } from "lucide-react"
-import type { ScheduleEvent } from "@/app/interfaces/portal/calendar.types"
-import { EventState } from "@/app/interfaces/portal/calendar.types"
+import type { ScheduleEvent } from "@/app/interfaces/portal/calendar"
+import { EventState } from "@/app/interfaces/portal/calendar"
 import { getEventState, getEventStateColor, formatEventTime } from "@/app/utils/calendar"
 import { cn } from "@/lib/utils"
 import { toast } from "react-toastify"
+import { CDrawer } from "@/app/components/portal/common";
 
 interface EventDetailDrawerProps {
   open: boolean
@@ -130,14 +130,13 @@ export default function EventDetailDrawer({
   const colors = getEventStateColor(eventState)
 
   return (
-    <BaseDrawer
+    <CDrawer
       isOpen={open}
-      onClose={() => onOpenChange(false)}
-      direction="right"
+      onOpenChange={onOpenChange}
+      placement="right"
       size="lg"
-      closeOnClickOutside={true}
-      header={
-        event && (
+      title={
+        event ? (
           <div className="flex items-center gap-3">
             <div className="w-10 h-10 bg-red-600 rounded-xl flex items-center justify-center shrink-0">
               <Calendar className="w-5 h-5 text-white" />
@@ -146,35 +145,39 @@ export default function EventDetailDrawer({
               {event.title}
             </h3>
           </div>
+        ) : (
+          "Chi tiết lịch học"
         )
       }
       footer={
-        event && (
-          <div className="flex gap-3">
-            <Button
-              variant="outline"
-              onClick={handleDelete}
-              disabled={isDeleting}
-              className="flex-1 text-red-600 border-red-300 hover:bg-red-50 cursor-pointer"
-            >
-              {isDeleting ? (
-                <>
-                  <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-red-600 mr-2"></div>
-                  Đang xóa...
-                </>
-              ) : (
-                <>
-                  <Trash2 className="mr-2 h-4 w-4" />
-                  Xóa
-                </>
-              )}
-            </Button>
-            <Button onClick={handleEdit} className="flex-1 bg-red-600 hover:bg-red-700 cursor-pointer">
-              <Edit className="mr-2 h-4 w-4" />
-              Chỉnh sửa
-            </Button>
-          </div>
-        )
+        event
+          ? (onClose) => (
+              <div className="flex gap-3 w-full">
+                <Button
+                  variant="bordered"
+                  onPress={handleDelete}
+                  isDisabled={isDeleting}
+                  className="flex-1 text-red-600 border-red-300 hover:bg-red-50 cursor-pointer"
+                >
+                  {isDeleting ? (
+                    <>
+                      <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-red-600 mr-2"></div>
+                      Đang xóa...
+                    </>
+                  ) : (
+                    <>
+                      <Trash2 className="mr-2 h-4 w-4" />
+                      Xóa
+                    </>
+                  )}
+                </Button>
+                <Button onPress={handleEdit} className="flex-1 bg-red-600 hover:bg-red-700 text-white cursor-pointer">
+                  <Edit className="mr-2 h-4 w-4" />
+                  Chỉnh sửa
+                </Button>
+              </div>
+            )
+          : undefined
       }
     >
       {isLoading ? (
@@ -306,7 +309,7 @@ export default function EventDetailDrawer({
                 Link họp trực tuyến
               </h3>
               <Button
-                variant="outline"
+                variant="bordered"
                 onClick={openMeetingLink}
                 className="w-full justify-start text-blue-600 hover:text-blue-700 hover:bg-blue-50"
               >
@@ -339,6 +342,6 @@ export default function EventDetailDrawer({
           </div>
         </div>
       ) : null}
-    </BaseDrawer>
+    </CDrawer>
   )
 }

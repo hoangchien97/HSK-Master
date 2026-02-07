@@ -3,7 +3,7 @@
 import { useState } from "react"
 import { Images, Eye } from "lucide-react"
 import { LightboxGallery } from "./LightboxGallery"
-import OptimizedImage from "@/app/components/common/OptimizedImage"
+import OptimizedImage from "@/app/components/landing/common/OptimizedImage"
 
 interface Photo {
   id: string

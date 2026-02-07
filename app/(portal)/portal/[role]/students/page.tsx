@@ -1,10 +1,8 @@
 import { auth } from "@/auth"
 import { redirect } from "next/navigation"
-import { PrismaClient } from "@prisma/client"
-import StudentsClient from "./StudentsClient"
-import { USER_ROLE } from "@/lib/constants/roles"
-
-const prisma = new PrismaClient()
+import prisma from "@/lib/prisma"
+import StudentsTable from "@/app/components/portal/students/StudentsTable"
+import { USER_ROLE } from "@/app/constants/portal/roles"
 
 async function getTeacherStudents(email: string) {
   const user = await prisma.portalUser.findUnique({
@@ -54,5 +52,5 @@ export default async function TeacherStudentsPage() {
 
   const students = await getTeacherStudents(session.user.email)
 
-  return <StudentsClient students={students} />
+  return <StudentsTable students={students} />
 }

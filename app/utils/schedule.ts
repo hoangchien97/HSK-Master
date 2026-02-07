@@ -4,7 +4,7 @@
  */
 
 import dayjs from 'dayjs';
-import type { Schedule } from '@/app/services/portal';
+import type { ISchedule } from '@/app/interfaces/portal';
 
 /**
  * Calculate recurrence end date (default +2 months from start date)
@@ -55,9 +55,9 @@ export function formatWeekdays(weekdays: number[]): string {
  * Get schedules for a specific date
  */
 export function getSchedulesForDate(
-  schedules: Schedule[],
+  schedules: ISchedule[],
   date: Date | string
-): Schedule[] {
+): ISchedule[] {
   const targetDate = dayjs(date).format('YYYY-MM-DD');
   
   return schedules.filter(schedule => {
@@ -111,7 +111,7 @@ export function isSchedulePast(date: Date | string): boolean {
 /**
  * Group schedules by date
  */
-export function groupSchedulesByDate(schedules: Schedule[]): Record<string, Schedule[]> {
+export function groupSchedulesByDate(schedules: ISchedule[]): Record<string, ISchedule[]> {
   return schedules.reduce((groups, schedule) => {
     const date = dayjs(schedule.startTime).format('YYYY-MM-DD');
     if (!groups[date]) {
@@ -119,13 +119,13 @@ export function groupSchedulesByDate(schedules: Schedule[]): Record<string, Sche
     }
     groups[date].push(schedule);
     return groups;
-  }, {} as Record<string, Schedule[]>);
+  }, {} as Record<string, ISchedule[]>);
 }
 
 /**
  * Sort schedules by start time
  */
-export function sortSchedulesByTime(schedules: Schedule[]): Schedule[] {
+export function sortSchedulesByTime(schedules: ISchedule[]): ISchedule[] {
   return [...schedules].sort((a, b) => 
     dayjs(a.startTime).diff(dayjs(b.startTime))
   );

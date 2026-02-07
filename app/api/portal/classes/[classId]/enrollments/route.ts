@@ -5,7 +5,7 @@ import { prisma } from "@/lib/prisma"
 // POST - Enroll a student to a class (by email search)
 export async function POST(
   request: NextRequest,
-  { params }: { params: { classId: string } }
+  { params }: { params: Promise<{ classId: string }> }
 ) {
   try {
     const session = await auth()
@@ -23,7 +23,7 @@ export async function POST(
       return NextResponse.json({ error: "User not found" }, { status: 404 })
     }
 
-    const classId = params.classId
+    const { classId } = await params
     const body = await request.json()
     const { studentEmail } = body
 
@@ -155,7 +155,7 @@ export async function POST(
 // DELETE - Remove student from class (soft delete)
 export async function DELETE(
   request: NextRequest,
-  { params }: { params: { classId: string } }
+  { params }: { params: Promise<{ classId: string }> }
 ) {
   try {
     const session = await auth()
@@ -173,7 +173,7 @@ export async function DELETE(
       return NextResponse.json({ error: "User not found" }, { status: 404 })
     }
 
-    const classId = params.classId
+    const { classId } = await params
     const { searchParams } = new URL(request.url)
     const studentId = searchParams.get("studentId")
 

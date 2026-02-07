@@ -11,11 +11,9 @@ import {
   RotateCcw,
   ArrowRight,
 } from "lucide-react"
-import {
-  PageHeader,
-  Card,
-  EmptyState,
-} from "@/app/components/portal/shared"
+import { Card, CardBody, Button, Chip, Input } from "@heroui/react"
+import { PageHeader } from "@/app/components/portal/common/PageHeader"
+import { EmptyState } from "@/app/components/portal/common/EmptyState"
 import { cn } from "@/lib/utils"
 
 interface Vocabulary {
@@ -50,7 +48,6 @@ export default function BookmarksClient({
   const [levelFilter, setLevelFilter] = useState<number | "all">("all")
   const [mode, setMode] = useState<"browse" | "flashcard">("browse")
 
-  // Flashcard state
   const [currentIndex, setCurrentIndex] = useState(0)
   const [showAnswer, setShowAnswer] = useState(false)
 
@@ -100,52 +97,51 @@ export default function BookmarksClient({
 
     return (
       <div>
-        <PageHeader
-          title="Ôn tập Flashcard"
-          subtitle={`${currentIndex + 1} / ${filteredBookmarks.length}`}
-          actions={
-            <button
-              onClick={() => setMode("browse")}
-              className="inline-flex items-center gap-2 px-4 py-2 border border-gray-200 text-gray-700 rounded-xl hover:bg-gray-50 transition font-medium"
-            >
-              <ArrowLeft className="w-4 h-4" />
-              Quay lại
-            </button>
-          }
-        />
+        <PageHeader title="Ôn tập Flashcard" description={`${currentIndex + 1} / ${filteredBookmarks.length}`}>
+          <button
+            onClick={() => setMode("browse")}
+            className="inline-flex items-center gap-2 px-4 py-2 border border-gray-200 text-gray-700 rounded-xl hover:bg-gray-50 transition font-medium"
+          >
+            <ArrowLeft className="w-4 h-4" />
+            Quay lại
+          </button>
+        </PageHeader>
 
         <div className="max-w-xl mx-auto">
           <Card
-            className="min-h-[300px] flex flex-col items-center justify-center cursor-pointer relative"
-            onClick={() => setShowAnswer(!showAnswer)}
+            isPressable
+            onPress={() => setShowAnswer(!showAnswer)}
+            className="min-h-[300px] flex flex-col items-center justify-center relative"
           >
-            <button
-              onClick={(e) => {
-                e.stopPropagation()
-                playPronunciation(currentVocab.hanzi)
-              }}
-              className="absolute top-4 right-4 p-2 hover:bg-gray-100 rounded-lg transition"
-            >
-              <Volume2 className="w-5 h-5 text-gray-400" />
-            </button>
+            <CardBody className="flex flex-col items-center justify-center">
+              <button
+                onClick={(e) => {
+                  e.stopPropagation()
+                  playPronunciation(currentVocab.hanzi)
+                }}
+                className="absolute top-4 right-4 p-2 hover:bg-gray-100 rounded-lg transition"
+              >
+                <Volume2 className="w-5 h-5 text-gray-400" />
+              </button>
 
-            <span className="text-6xl font-bold text-gray-900 mb-4">
-              {currentVocab.hanzi}
-            </span>
+              <span className="text-6xl font-bold text-gray-900 mb-4">
+                {currentVocab.hanzi}
+              </span>
 
-            {showAnswer ? (
-              <div className="text-center">
-                <p className="text-xl text-red-600 mb-2">{currentVocab.pinyin}</p>
-                <p className="text-lg text-gray-600">{currentVocab.meaning}</p>
-                {currentVocab.hskLevel && (
-                  <span className="inline-block mt-3 px-3 py-1 bg-red-100 text-red-700 rounded-full text-sm">
-                    HSK {currentVocab.hskLevel.level}
-                  </span>
-                )}
-              </div>
-            ) : (
-              <p className="text-gray-400">Nhấp để xem đáp án</p>
-            )}
+              {showAnswer ? (
+                <div className="text-center">
+                  <p className="text-xl text-red-600 mb-2">{currentVocab.pinyin}</p>
+                  <p className="text-lg text-gray-600">{currentVocab.meaning}</p>
+                  {currentVocab.hskLevel && (
+                    <Chip size="sm" color="danger" variant="flat" className="mt-3">
+                      HSK {currentVocab.hskLevel.level}
+                    </Chip>
+                  )}
+                </div>
+              ) : (
+                <p className="text-gray-400">Nhấp để xem đáp án</p>
+              )}
+            </CardBody>
           </Card>
 
           <div className="flex items-center justify-between mt-6">
@@ -160,10 +156,7 @@ export default function BookmarksClient({
             </button>
 
             <button
-              onClick={() => {
-                setCurrentIndex(0)
-                setShowAnswer(false)
-              }}
+              onClick={() => { setCurrentIndex(0); setShowAnswer(false) }}
               className="p-3 hover:bg-gray-100 rounded-xl transition"
               title="Bắt đầu lại"
             >
@@ -181,16 +174,9 @@ export default function BookmarksClient({
             </button>
           </div>
 
-          {/* Progress dots */}
           <div className="flex justify-center gap-1 mt-6 flex-wrap">
             {filteredBookmarks.map((_, idx) => (
-              <div
-                key={idx}
-                className={cn(
-                  "w-2 h-2 rounded-full transition",
-                  idx === currentIndex ? "bg-red-600" : "bg-gray-200"
-                )}
-              />
+              <div key={idx} className={cn("w-2 h-2 rounded-full transition", idx === currentIndex ? "bg-red-600" : "bg-gray-200")} />
             ))}
           </div>
         </div>
@@ -201,109 +187,92 @@ export default function BookmarksClient({
   // Browse mode
   return (
     <div>
-      <PageHeader
-        title="Từ vựng đã lưu"
-        subtitle={`${bookmarks.length} từ đã bookmark`}
-        actions={
-          filteredBookmarks.length > 0 && (
-            <button
-              onClick={() => {
-                setCurrentIndex(0)
-                setShowAnswer(false)
-                setMode("flashcard")
-              }}
-              className="inline-flex items-center gap-2 px-4 py-2 bg-red-600 text-white rounded-xl hover:bg-red-700 transition font-medium"
-            >
-              <RotateCcw className="w-4 h-4" />
-              Ôn tập Flashcard
-            </button>
-          )
-        }
-      />
+      <PageHeader title="Từ vựng đã lưu" description={`${bookmarks.length} từ đã bookmark`}>
+        {filteredBookmarks.length > 0 && (
+          <button
+            onClick={() => { setCurrentIndex(0); setShowAnswer(false); setMode("flashcard") }}
+            className="inline-flex items-center gap-2 px-4 py-2 bg-red-600 text-white rounded-xl hover:bg-red-700 transition font-medium"
+          >
+            <RotateCcw className="w-4 h-4" />
+            Ôn tập Flashcard
+          </button>
+        )}
+      </PageHeader>
 
       {/* Filters */}
       <Card className="mb-6">
-        <div className="flex flex-col md:flex-row gap-4">
-          <div className="flex-1 relative">
-            <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
-            <input
-              type="text"
-              value={searchTerm}
-              onChange={(e) => setSearchTerm(e.target.value)}
-              placeholder="Tìm kiếm từ vựng..."
-              className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-xl focus:ring-2 focus:ring-red-500 focus:border-transparent"
-            />
+        <CardBody>
+          <div className="flex flex-col md:flex-row gap-4">
+            <div className="flex-1">
+              <Input
+                type="text"
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+                placeholder="Tìm kiếm từ vựng..."
+                startContent={<Search className="w-5 h-5 text-gray-400" />}
+              />
+            </div>
+            <div className="w-full md:w-48">
+              <select
+                value={levelFilter}
+                onChange={(e) => setLevelFilter(e.target.value === "all" ? "all" : Number(e.target.value))}
+                className="w-full px-4 py-2 border border-gray-300 rounded-xl focus:ring-2 focus:ring-red-500 focus:border-transparent"
+              >
+                <option value="all">Tất cả cấp độ</option>
+                {levels.map((level) => (
+                  <option key={level} value={level}>HSK {level}</option>
+                ))}
+              </select>
+            </div>
           </div>
-          <div className="w-full md:w-48">
-            <select
-              value={levelFilter}
-              onChange={(e) =>
-                setLevelFilter(e.target.value === "all" ? "all" : Number(e.target.value))
-              }
-              className="w-full px-4 py-2 border border-gray-300 rounded-xl focus:ring-2 focus:ring-red-500 focus:border-transparent"
-            >
-              <option value="all">Tất cả cấp độ</option>
-              {levels.map((level) => (
-                <option key={level} value={level}>
-                  HSK {level}
-                </option>
-              ))}
-            </select>
-          </div>
-        </div>
+        </CardBody>
       </Card>
 
       {/* Bookmarked Vocabulary List */}
       {filteredBookmarks.length === 0 ? (
         <EmptyState
-          icon={Bookmark}
+          icon={<Bookmark className="w-8 h-8" />}
           title={bookmarks.length === 0 ? "Chưa có từ vựng đã lưu" : "Không tìm thấy từ vựng"}
-          description={
-            bookmarks.length === 0
-              ? "Đánh dấu từ vựng khi học để ôn tập sau"
-              : "Thử tìm kiếm với từ khóa khác"
-          }
+          description={bookmarks.length === 0 ? "Đánh dấu từ vựng khi học để ôn tập sau" : "Thử tìm kiếm với từ khóa khác"}
         />
       ) : (
         <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4">
           {filteredBookmarks.map((bookmark) => (
-            <Card key={bookmark.id} hover className="group">
-              <div className="flex items-start justify-between">
-                <div className="flex-1">
-                  <div className="flex items-center gap-2 mb-2">
-                    <span className="text-2xl font-bold text-gray-900">
-                      {bookmark.vocabulary.hanzi}
-                    </span>
+            <Card key={bookmark.id} className="group hover:shadow-md transition-shadow">
+              <CardBody>
+                <div className="flex items-start justify-between">
+                  <div className="flex-1">
+                    <div className="flex items-center gap-2 mb-2">
+                      <span className="text-2xl font-bold text-gray-900">{bookmark.vocabulary.hanzi}</span>
+                      <button
+                        onClick={() => playPronunciation(bookmark.vocabulary.hanzi)}
+                        className="p-1 hover:bg-gray-100 rounded-lg opacity-0 group-hover:opacity-100 transition"
+                      >
+                        <Volume2 className="w-4 h-4 text-gray-400" />
+                      </button>
+                    </div>
+                    <p className="text-red-600 text-sm mb-1">{bookmark.vocabulary.pinyin}</p>
+                    <p className="text-gray-600">{bookmark.vocabulary.meaning}</p>
+                  </div>
+
+                  <div className="flex flex-col gap-1">
+                    {bookmark.vocabulary.hskLevel && (
+                      <Chip size="sm" color="danger" variant="flat">HSK {bookmark.vocabulary.hskLevel.level}</Chip>
+                    )}
                     <button
-                      onClick={() => playPronunciation(bookmark.vocabulary.hanzi)}
-                      className="p-1 hover:bg-gray-100 rounded-lg opacity-0 group-hover:opacity-100 transition"
+                      onClick={() => handleRemoveBookmark(bookmark.id)}
+                      className="p-1.5 text-gray-300 hover:text-red-500 hover:bg-red-50 rounded-lg opacity-0 group-hover:opacity-100 transition"
+                      title="Xóa bookmark"
                     >
-                      <Volume2 className="w-4 h-4 text-gray-400" />
+                      <Trash2 className="w-4 h-4" />
                     </button>
                   </div>
-                  <p className="text-red-600 text-sm mb-1">{bookmark.vocabulary.pinyin}</p>
-                  <p className="text-gray-600">{bookmark.vocabulary.meaning}</p>
                 </div>
 
-                <div className="flex flex-col gap-1">
-                  {bookmark.vocabulary.hskLevel && (
-                    <span className="px-2 py-0.5 bg-red-100 text-red-700 rounded text-xs font-medium">
-                      HSK {bookmark.vocabulary.hskLevel.level}
-                    </span>
-                  )}
-                  <button
-                    onClick={() => handleRemoveBookmark(bookmark.id)}
-                    className="p-1.5 text-gray-300 hover:text-red-500 hover:bg-red-50 rounded-lg opacity-0 group-hover:opacity-100 transition"
-                    title="Xóa bookmark"
-                  >
-                    <Trash2 className="w-4 h-4" />
-                  </button>
+                <div className="mt-3 pt-3 border-t border-gray-100 text-xs text-gray-400">
+                  Đã ôn: {bookmark.reviewCount} lần
                 </div>
-              </div>
-
-              <div className="mt-3 pt-3 border-t border-gray-100 text-xs text-gray-400">
-                Đã ôn: {bookmark.reviewCount} lần
-              </div>
+              </CardBody>
             </Card>
           ))}
         </div>

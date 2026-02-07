@@ -1,10 +1,8 @@
 import { auth } from "@/auth"
 import { redirect } from "next/navigation"
-import { PrismaClient } from "@prisma/client"
-import AttendanceClient from "./AttendanceClient"
-import { USER_ROLE, STATUS } from "@/lib/constants/roles"
-
-const prisma = new PrismaClient()
+import prisma from "@/lib/prisma"
+import AttendanceView from "@/app/components/portal/attendance/AttendanceView"
+import { USER_ROLE, STATUS } from "@/app/constants/portal/roles"
 
 async function getTeacherAttendanceData(email: string) {
   const user = await prisma.portalUser.findUnique({
@@ -50,5 +48,5 @@ export default async function TeacherAttendancePage() {
 
   const { classes, recentAttendances } = await getTeacherAttendanceData(session.user.email)
 
-  return <AttendanceClient classes={classes} recentAttendances={recentAttendances} />
+  return <AttendanceView classes={classes} recentAttendances={recentAttendances} />
 }

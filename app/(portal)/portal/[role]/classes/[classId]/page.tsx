@@ -1,11 +1,11 @@
 import { auth } from "@/auth"
 import { redirect } from "next/navigation"
-import ClassDetailClient from "./ClassDetailClient"
+import ClassDetailView from "@/app/components/portal/classes/ClassDetailView"
 
 export default async function ClassDetailPage({
   params,
 }: {
-  params: { classId: string }
+  params: Promise<{ classId: string; role: string }>
 }) {
   const session = await auth()
 
@@ -13,5 +13,7 @@ export default async function ClassDetailPage({
     redirect("/portal")
   }
 
-  return <ClassDetailClient classId={params.classId} />
+  const { classId, role } = await params
+
+  return <ClassDetailView classId={classId} role={role} />
 }

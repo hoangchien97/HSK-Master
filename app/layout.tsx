@@ -1,9 +1,6 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
-import "./styles/schedule-x-custom.css";
-import "./styles/schedule-calendar-custom.css";
-import "./styles/schedule-x-hide-header.css";
 import { WebVitals } from "./components/landing/shared";
 import * as TooltipPrimitive from '@radix-ui/react-tooltip';
 import NextTopLoader from 'nextjs-toploader';
@@ -12,6 +9,7 @@ import 'react-toastify/dist/ReactToastify.css';
 import { generateOrganizationSchema, generateWebsiteSchema } from './lib/structured-data';
 import { SessionProvider } from "next-auth/react";
 import { Suspense } from "react";
+import { HeroUIProvider } from "./providers";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -142,7 +140,7 @@ export default function RootLayout({
   const websiteSchema = generateWebsiteSchema();
 
   return (
-    <html lang="vi" suppressHydrationWarning>
+    <html lang="vi" suppressHydrationWarning className="light">
       <head>
         <link
           href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap"
@@ -181,22 +179,24 @@ export default function RootLayout({
             showAtBottom={false}
           />
           <TooltipPrimitive.Provider delayDuration={200} skipDelayDuration={100}>
-            <Suspense fallback={null}>
-              <WebVitals />
-            </Suspense>
-            {children}
-            <ToastContainer
-              position="top-right"
-              autoClose={3000}
-              hideProgressBar={false}
-              newestOnTop={false}
-              closeOnClick
-              rtl={false}
-              pauseOnFocusLoss
-              draggable
-              pauseOnHover
-              theme="colored"
-            />
+              <HeroUIProvider>
+                <Suspense fallback={null}>
+                  <WebVitals />
+                </Suspense>
+                {children}
+                <ToastContainer
+                  position="top-right"
+                  autoClose={3000}
+                  hideProgressBar={false}
+                  newestOnTop={false}
+                  closeOnClick
+                  rtl={false}
+                  pauseOnFocusLoss
+                  draggable
+                  pauseOnHover
+                  theme="colored"
+                />
+              </HeroUIProvider>
           </TooltipPrimitive.Provider>
         </SessionProvider>
       </body>

@@ -1,8 +1,14 @@
 "use client"
 
-import { cn } from "@/lib/utils"
-import { type UserRole } from "@/lib/constants/roles"
-import { ROLE_COLORS, ROLE_LABELS } from "@/app/constants"
+import { Chip } from "@heroui/react"
+import { type UserRole } from "@/app/constants/portal/roles"
+import { ROLE_LABELS } from "@/app/constants/portal"
+
+const ROLE_CHIP_COLOR: Record<string, "secondary" | "primary" | "success" | "default"> = {
+  SYSTEM_ADMIN: "secondary",
+  TEACHER: "primary",
+  STUDENT: "success",
+}
 
 interface RoleBadgeProps {
   role: string
@@ -11,26 +17,18 @@ interface RoleBadgeProps {
 }
 
 export function RoleBadge({ role, size = "md", className }: RoleBadgeProps) {
-  const colors = ROLE_COLORS[role as UserRole] || { bg: "bg-gray-100", text: "text-gray-700" }
   const label = ROLE_LABELS[role as UserRole] || role
-
-  const sizeClasses = {
-    sm: "px-2 py-0.5 text-xs",
-    md: "px-2.5 py-1 text-xs",
-    lg: "px-3 py-1.5 text-sm",
-  }
+  const chipColor = ROLE_CHIP_COLOR[role] || "default"
+  const chipSize = size === "lg" ? "md" : "sm"
 
   return (
-    <span
-      className={cn(
-        "inline-flex items-center font-medium rounded-full",
-        colors.bg,
-        colors.text,
-        sizeClasses[size],
-        className
-      )}
+    <Chip
+      color={chipColor}
+      variant="flat"
+      size={chipSize}
+      className={className}
     >
       {label}
-    </span>
+    </Chip>
   )
 }

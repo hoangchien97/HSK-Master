@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { createReview } from "@/app/services";
-import { Button, Input, Textarea, Select } from "@/app/components/common";
+import { Button, Input, Textarea, Select } from "@/app/components/landing/common";
 import { MessageCircle, Send, Star } from "lucide-react";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";

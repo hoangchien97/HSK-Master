@@ -2,8 +2,10 @@
 
 import { useState } from "react"
 import { ToastContainer } from "react-toastify"
+import { Spinner } from "@heroui/react"
 import PortalSidebar from "@/app/components/portal/PortalSidebar"
 import PortalHeader from "@/app/components/portal/PortalHeader"
+import { useLoading, LoadingProvider } from "@/app/providers"
 import "react-toastify/dist/ReactToastify.css"
 
 interface User {
@@ -19,8 +21,10 @@ interface PortalLayoutClientProps {
   children: React.ReactNode
 }
 
-export default function PortalLayoutClient({ user, children }: PortalLayoutClientProps) {
+/** Inner layout that can access LoadingContext */
+function PortalLayoutInner({ user, children }: PortalLayoutClientProps) {
   const [sidebarOpen, setSidebarOpen] = useState(false)
+  const { isLoading } = useLoading()
 
   return (
     <div className="min-h-screen bg-gray-50">
@@ -57,10 +61,26 @@ export default function PortalLayoutClient({ user, children }: PortalLayoutClien
         />
 
         {/* Page content - Scrollable */}
-        <main className="flex-1 p-4 lg:p-6 overflow-y-auto">
+        <main className="flex-1 p-4 lg:p-6 overflow-y-auto relative">
+          {/* Global loading overlay */}
+          {isLoading && (
+            <div className="absolute inset-0 z-50 flex items-center justify-center bg-white/60 backdrop-blur-xs">
+              <Spinner size="lg" color="danger" label="Đang tải..." />
+            </div>
+          )}
           {children}
         </main>
       </div>
     </div>
+  )
+}
+
+export default function PortalLayoutClient({ user, children }: PortalLayoutClientProps) {
+  return (
+    <LoadingProvider>
+      <PortalLayoutInner user={user}>
+        {children}
+      </PortalLayoutInner>
+    </LoadingProvider>
   )
 }
