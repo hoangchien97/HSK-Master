@@ -36,6 +36,7 @@ export async function getSchedules(userId?: string): Promise<ISchedule[]> {
 
   return schedules.map((schedule) => ({
     id: schedule.id,
+    classId: schedule.classId,
     title: schedule.title,
     description: schedule.description || undefined,
     startTime: schedule.startTime.toISOString(),
@@ -43,8 +44,8 @@ export async function getSchedules(userId?: string): Promise<ISchedule[]> {
     status: schedule.status,
     class: {
       id: schedule.class.id,
-      name: schedule.class.className,
-      code: schedule.class.classCode,
+      className: schedule.class.className,
+      classCode: schedule.class.classCode,
       level: schedule.class.level || '',
     },
   }));
@@ -95,15 +96,20 @@ export async function getScheduleById(id: string): Promise<ISchedule | null> {
 
   return {
     id: schedule.id,
+    classId: schedule.classId,
     title: schedule.title,
     description: schedule.description || undefined,
     startTime: schedule.startTime.toISOString(),
     endTime: schedule.endTime.toISOString(),
     status: schedule.status,
+    location: schedule.location || undefined,
+    meetingLink: schedule.meetingLink || undefined,
+    googleEventId: schedule.googleEventId || undefined,
+    syncedToGoogle: schedule.syncedToGoogle,
     class: {
       id: schedule.class.id,
-      name: schedule.class.className,
-      code: schedule.class.classCode,
+      className: schedule.class.className,
+      classCode: schedule.class.classCode,
       level: schedule.class.level || '',
     },
   };
@@ -175,6 +181,7 @@ export async function createSchedules(
       count: created.length,
       schedules: created.map((s) => ({
         id: s.id,
+        classId: s.classId,
         title: s.title,
         description: s.description || undefined,
         startTime: s.startTime.toISOString(),
@@ -182,8 +189,8 @@ export async function createSchedules(
         status: s.status,
         class: {
           id: s.class.id,
-          name: s.class.className,
-          code: s.class.classCode,
+          className: s.class.className,
+          classCode: s.class.classCode,
           level: s.class.level || '',
         },
       })),
@@ -218,6 +225,7 @@ export async function createSchedules(
     schedules: [
       {
         id: created.id,
+        classId: created.classId,
         title: created.title,
         description: created.description || undefined,
         startTime: created.startTime.toISOString(),
@@ -225,8 +233,8 @@ export async function createSchedules(
         status: created.status,
         class: {
           id: created.class.id,
-          name: created.class.className,
-          code: created.class.classCode,
+          className: created.class.className,
+          classCode: created.class.classCode,
           level: created.class.level || '',
         },
       },
@@ -249,6 +257,8 @@ export async function updateSchedule(
       ...(data.classId && { classId: data.classId }),
       ...(data.startTime && { startTime: data.startTime }),
       ...(data.endTime && { endTime: data.endTime }),
+      ...(data.location !== undefined && { location: data.location || null }),
+      ...(data.meetingLink !== undefined && { meetingLink: data.meetingLink || null }),
     },
     include: {
       class: {
@@ -264,15 +274,18 @@ export async function updateSchedule(
 
   return {
     id: updated.id,
+    classId: updated.classId,
     title: updated.title,
     description: updated.description || undefined,
     startTime: updated.startTime.toISOString(),
     endTime: updated.endTime.toISOString(),
     status: updated.status,
+    location: updated.location || undefined,
+    meetingLink: updated.meetingLink || undefined,
     class: {
       id: updated.class.id,
-      name: updated.class.className,
-      code: updated.class.classCode,
+      className: updated.class.className,
+      classCode: updated.class.classCode,
       level: updated.class.level || '',
     },
   };

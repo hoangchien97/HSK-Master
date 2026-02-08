@@ -9,7 +9,6 @@ import {
   DeleteScheduleModal,
 } from '@/app/components/portal/calendar';
 import { Spinner } from '@heroui/react';
-import { useHttpClient } from '@/app/hooks';
 import {
   fetchSchedules,
   fetchClasses,
@@ -101,6 +100,8 @@ export default function TeacherScheduleCalendar() {
         classId: data.classId,
         startTime: data.startTime,
         endTime: data.endTime,
+        location: data.location,
+        meetingLink: data.meetingLink,
       });
 
       if (!result.success) {
@@ -108,7 +109,7 @@ export default function TeacherScheduleCalendar() {
       }
 
       toast.success('Đã cập nhật buổi học thành công!');
-      
+
       // Optimistically update schedule in state
       if (result.schedule) {
         setSchedules(prev => prev.map(s => s.id === scheduleToEdit.id ? result.schedule! : s));
@@ -119,7 +120,7 @@ export default function TeacherScheduleCalendar() {
         // Fallback: reload data
         await loadData();
       }
-      
+
       setShowModal(false);
       setScheduleToEdit(null);
     } catch (error) {
@@ -138,7 +139,7 @@ export default function TeacherScheduleCalendar() {
       }
 
       toast.success('Đã xóa buổi học thành công!');
-      
+
       // Optimistically remove schedule from state
       setSchedules(prev => prev.filter(s => s.id !== scheduleId));
       setShowDeleteModal(false);

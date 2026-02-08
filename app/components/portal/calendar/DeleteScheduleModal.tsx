@@ -78,7 +78,7 @@ export default function DeleteScheduleModal({
             <div>
               <p className="text-sm font-medium text-gray-900">{schedule.title}</p>
               <p className="text-xs text-gray-600 mt-0.5">
-                {schedule.class?.name} ({schedule.class?.code})
+                {schedule.class?.className} ({schedule.class?.classCode})
               </p>
             </div>
             <div className="pt-2 border-t border-gray-200">

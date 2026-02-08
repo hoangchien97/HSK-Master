@@ -107,6 +107,7 @@ export default function PortalHeader({
                   <p className="text-sm font-medium text-gray-900 leading-tight">{userName}</p>
                   <span className="text-xs text-gray-500">{roleLabel}</span>
                 </div>
+
                 <ChevronDown className="hidden lg:block w-4 h-4 text-gray-400" />
               </button>
             </DropdownTrigger>

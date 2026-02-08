@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import {
   Button,
   Form,
@@ -58,12 +58,12 @@ export default function ScheduleModal({
   const [endDate, setEndDate] = useState("");
   const [previewCount, setPreviewCount] = useState(0);
 
-  const getClassId = (): string => {
+  const getClassId = useCallback((): string => {
     if (!initialData) return "";
     if ("classId" in initialData && initialData.classId) return initialData.classId;
     if ("class" in initialData && initialData.class) return (initialData.class as { id: string }).id;
     return "";
-  };
+  }, [initialData]);
 
   const [classId, setClassId] = useState(getClassId());
   const [startDate, setStartDate] = useState(
@@ -108,10 +108,10 @@ export default function ScheduleModal({
   // Reset form on close / init on open
   useEffect(() => {
     if (!isOpen) {
-      setErrors({});
+      setErrors((prev) => Object.keys(prev).length > 0 ? {} : prev);
       setEnableRecurrence(false);
       setSyncToGoogle(false);
-      setSelectedWeekdays([]);
+      setSelectedWeekdays((prev) => prev.length > 0 ? [] : prev);
       setEndDate("");
       setPreviewCount(0);
       setStartDate(dayjs().format("YYYY-MM-DD"));
@@ -139,6 +139,13 @@ export default function ScheduleModal({
     const formData = Object.fromEntries(new FormData(e.currentTarget));
 
     setErrors({});
+
+    // Validate classId from state (Select doesn't serialize well)
+    if (!classId) {
+      setErrors({ classId: "Vui lòng chọn lớp học" });
+      return;
+    }
+
     setIsSubmitting(true);
 
     try {
@@ -151,11 +158,13 @@ export default function ScheduleModal({
       }
 
       const payload: IScheduleFormData = {
-        classId: formData.classId as string,
+        classId,
         title: formData.title as string,
         description: formData.description as string,
         startTime: startDateTime,
         endTime: endDateTime,
+        location: formData.location as string || undefined,
+        meetingLink: formData.meetingLink as string || undefined,
         syncToGoogle,
       };
 
@@ -180,7 +189,7 @@ export default function ScheduleModal({
       isOpen={isOpen}
       onClose={onClose}
       size="2xl"
-      scrollBehavior="inside"
+      scrollBehavior="outside"
       title={
         <div className="flex items-center gap-3">
           <div className="p-2 rounded-lg bg-red-50">
@@ -234,15 +243,12 @@ export default function ScheduleModal({
               setClassId(val || "");
             }
           }}
-          errorMessage={({ validationDetails }) => {
-            if (validationDetails.valueMissing) {
-              return "Vui lòng chọn lớp học";
-            }
-          }}
+          isInvalid={!!errors.classId}
+          errorMessage={errors.classId || undefined}
         >
           {classes.map((c) => (
             <SelectItem key={c.id}>
-              {c.className} ({c.classCode})
+              {c.className}
             </SelectItem>
           ))}
         </Select>
@@ -338,7 +344,7 @@ export default function ScheduleModal({
 
         {/* Recurrence (create mode only) */}
         {!editMode && (
-          <div className="p-4 bg-default-50 rounded-xl border border-default-200 space-y-4">
+          <div className="p-4 bg-default-50 rounded-xl border border-default-200 space-y-4 w-full">
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-3">
                 <div className="p-2 bg-primary-50 rounded-lg">
@@ -386,7 +392,6 @@ export default function ScheduleModal({
                   value={endDate}
                   onChange={(e: React.ChangeEvent<HTMLInputElement>) => setEndDate(e.target.value)}
                   min={startDate || today}
-                  description="Mặc định: +2 tháng từ ngày bắt đầu"
                   size="sm"
                 />
                 {previewCount > 0 && (
@@ -402,7 +407,7 @@ export default function ScheduleModal({
         )}
 
         {/* Google Sync */}
-        <div className="flex items-center justify-between p-4 bg-default-50 rounded-xl border border-default-200">
+        <div className="flex items-center justify-between p-4 bg-default-50 rounded-xl border border-default-200 w-full">
           <div className="flex items-center gap-3">
             <div className="p-2 bg-primary-50 rounded-lg">
               <Calendar className="w-4 h-4 text-primary" />

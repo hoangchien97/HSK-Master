@@ -17,8 +17,8 @@ export interface ISchedule {
   updatedAt?: Date | string;
   class?: {
     id: string;
-    name: string;
-    code: string;
+    className: string;
+    classCode: string;
     level?: string | null;
     maxStudents?: number;
   };
@@ -30,7 +30,7 @@ export interface IRecurrence {
   endDate: string;
 }
 
-export interface ICreateScheduleDTO {
+export interface ICreateScheduleData {
   classId: string;
   title: string;
   description?: string;
@@ -42,7 +42,7 @@ export interface ICreateScheduleDTO {
   syncToGoogle?: boolean;
 }
 
-export interface IUpdateScheduleDTO {
+export interface IUpdateScheduleData {
   classId?: string;
   title?: string;
   description?: string;
@@ -51,6 +51,18 @@ export interface IUpdateScheduleDTO {
   location?: string;
   meetingLink?: string;
   status?: ScheduleStatus;
+  syncToGoogle?: boolean;
+}
+
+export interface IScheduleFormData {
+  classId: string;
+  title: string;
+  description?: string;
+  startTime: Date;
+  endTime: Date;
+  location?: string;
+  meetingLink?: string;
+  recurrence?: IRecurrence;
   syncToGoogle?: boolean;
 }
 

@@ -151,7 +151,7 @@ export default function EventDetailDrawer({
       }
       footer={
         event
-          ? (onClose) => (
+          ? () => (
               <div className="flex gap-3 w-full">
                 <Button
                   variant="bordered"

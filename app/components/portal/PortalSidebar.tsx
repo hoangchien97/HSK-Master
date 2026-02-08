@@ -75,18 +75,6 @@ export default function PortalSidebar({ userRole, isOpen = true, onClose }: Port
           </Button>
         </div>
 
-        {/* Role badge */}
-        <div className="px-5 py-3 shrink-0">
-          <Chip
-            color="primary"
-            variant="flat"
-            size="sm"
-            className="uppercase tracking-wider font-semibold"
-          >
-            {ROLE_LABELS[userRole as UserRole] || userRole}
-          </Chip>
-        </div>
-
         <Divider />
 
         {/* Navigation - Scrollable */}
