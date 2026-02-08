@@ -40,7 +40,7 @@ export default function PortalHeader({
   const roleLabel = ROLE_LABELS[userRole as UserRole] || userRole
 
   return (
-    <header className="sticky top-0 z-10 bg-white border-b border-gray-200">
+    <header className="shrink-0 z-10 bg-white border-b border-gray-200">
       <div className="flex items-center justify-between h-16 px-4 lg:px-6">
         {/* Left: Mobile menu button + Search */}
         <div className="flex items-center gap-4 flex-1">

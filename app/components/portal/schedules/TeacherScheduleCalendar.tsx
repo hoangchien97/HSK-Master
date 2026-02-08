@@ -8,7 +8,6 @@ import {
   EventDetailDrawer,
   DeleteScheduleModal,
 } from '@/app/components/portal/calendar';
-import { Spinner } from '@heroui/react';
 import {
   fetchSchedules,
   fetchClasses,
@@ -16,6 +15,7 @@ import {
   updateSchedule,
   deleteSchedule,
 } from '@/app/actions/schedule.actions';
+import { usePortalUI } from '@/app/providers/portal-ui-provider';
 import type {
   ISchedule,
   IClass,
@@ -25,21 +25,21 @@ import type {
 export default function TeacherScheduleCalendar() {
   const [schedules, setSchedules] = useState<ISchedule[]>([]);
   const [classes, setClasses] = useState<IClass[]>([]);
-  const [isInitialLoading, setIsInitialLoading] = useState(true);
   const [showModal, setShowModal] = useState(false);
   const [selectedSchedule, setSelectedSchedule] = useState<ISchedule | null>(null);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [scheduleToEdit, setScheduleToEdit] = useState<ISchedule | null>(null);
   const [slotInitialTime, setSlotInitialTime] = useState<{ start: Date; end: Date } | null>(null);
+  const { startLoading, stopLoading } = usePortalUI();
 
-  // Fetch data on mount
   useEffect(() => {
     loadData();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const loadData = async () => {
     try {
-      setIsInitialLoading(true);
+      startLoading();
       const [classesResult, schedulesResult] = await Promise.all([
         fetchClasses(),
         fetchSchedules(),
@@ -60,7 +60,7 @@ export default function TeacherScheduleCalendar() {
       const errorMessage = error instanceof Error ? error.message : 'Không thể tải dữ liệu';
       toast.error(errorMessage);
     } finally {
-      setIsInitialLoading(false);
+      stopLoading();
     }
   };
 
@@ -182,21 +182,8 @@ export default function TeacherScheduleCalendar() {
     setShowModal(true);
   };
 
-  if (isInitialLoading) {
-    return (
-      <div className="flex items-center justify-center h-64">
-        <Spinner size="lg" color="danger" />
-      </div>
-    );
-  }
-
   return (
-    <div className="space-y-6">
-      <div>
-        <h1 className="text-2xl font-bold text-gray-900">Lịch giảng dạy</h1>
-        <p className="text-sm text-gray-500 mt-1">Quản lý và xem tất cả lịch học</p>
-      </div>
-
+    <div className="h-full flex flex-col gap-4">
       {/* Calendar - Full Width */}
       <BigCalendarView
         schedules={schedules}

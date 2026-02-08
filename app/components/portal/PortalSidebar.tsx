@@ -9,7 +9,7 @@ import {
   Chip,
 } from "@heroui/react"
 import { LogOut, X } from "lucide-react"
-import { cn } from "@/lib/utils"
+import { cn } from "@/app/lib/utils"
 import { getNavItemsByRole } from "@/app/constants/portal/navigation"
 import { ROLE_LABELS } from "@/app/constants/portal"
 import { type UserRole } from "@/app/constants/portal/roles"

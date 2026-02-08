@@ -1,4 +1,5 @@
 import { ClassStatus, EnrollmentStatus } from "@/app/enums/portal";
+import type { IPaginationParams, IPaginatedResponse } from "./api";
 
 export interface IClass {
   id: string;
@@ -56,3 +57,12 @@ export interface ICreateClassDTO {
 export interface IUpdateClassDTO extends Partial<ICreateClassDTO> {
   status?: ClassStatus;
 }
+
+/* ───────── API params / response ───────── */
+
+export interface IGetClassParams extends IPaginationParams {
+  search?: string
+  status?: string
+}
+
+export type IGetClassResponse = IPaginatedResponse<IClass>

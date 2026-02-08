@@ -1,6 +1,6 @@
 import { auth } from "@/auth"
 import { redirect, notFound } from "next/navigation"
-import { roleToRoute, isRouteAllowedForRole } from "@/lib/utils/auth"
+import { roleToRoute, isRouteAllowedForRole } from "@/app/lib/utils/auth"
 import { STATUS } from "@/app/constants/portal/roles"
 
 type Props = {

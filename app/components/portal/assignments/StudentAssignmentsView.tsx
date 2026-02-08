@@ -2,13 +2,8 @@
 
 import { useState, useMemo } from "react"
 import { useRouter } from "next/navigation"
+import api from "@/app/lib/http/client"
 import {
-  Table,
-  TableHeader,
-  TableColumn,
-  TableBody,
-  TableRow,
-  TableCell,
   Card,
   CardBody,
   Button,
@@ -21,7 +16,6 @@ import {
   ModalBody,
   ModalFooter,
   Textarea,
-  Pagination,
   useDisclosure,
 } from "@heroui/react"
 import {
@@ -36,6 +30,7 @@ import { toast } from "react-toastify"
 import dayjs from "dayjs"
 import { isPast, differenceInDays } from "date-fns"
 import "dayjs/locale/vi"
+import { CTable, type CTableColumn } from "@/app/components/portal/common"
 
 dayjs.locale("vi")
 
@@ -133,28 +128,90 @@ export default function StudentAssignmentsView({
     return <Chip size="sm" variant="flat">Chưa nộp</Chip>
   }
 
+  /* columns for CTable */
+  const columns: CTableColumn<AssignmentData & Record<string, unknown>>[] = useMemo(() => [
+    {
+      key: "title",
+      label: "Bài tập",
+      render: (_v, row) => (
+        <div>
+          <p className="font-medium">{row.title}</p>
+          {row.description && (
+            <p className="text-xs text-default-400 line-clamp-1 mt-0.5">{row.description}</p>
+          )}
+          <Chip size="sm" variant="flat" className="mt-1">{row.type}</Chip>
+        </div>
+      ),
+    },
+    {
+      key: "class",
+      label: "Lớp",
+      render: (_v, row) => (
+        <span className="text-sm text-primary">{row.class.className}</span>
+      ),
+    },
+    {
+      key: "dueDate",
+      label: "Hạn nộp",
+      render: (_v, row) =>
+        row.dueDate ? (
+          <span className="text-sm">{dayjs(row.dueDate).format("DD/MM/YYYY HH:mm")}</span>
+        ) : (
+          <span className="text-default-400">—</span>
+        ),
+    },
+    {
+      key: "status",
+      label: "Trạng thái",
+      render: (_v, row) => getStatusChip(row),
+    },
+    {
+      key: "actions",
+      label: "Thao tác",
+      align: "end" as const,
+      render: (_v, row) => (
+        <div className="flex justify-end gap-2">
+          {!row.submitted && row.dueDate && !isPast(new Date(row.dueDate)) && (
+            <Button
+              size="sm"
+              color="primary"
+              startContent={<Upload className="w-3.5 h-3.5" />}
+              onPress={() => openSubmitModal(row)}
+            >
+              Nộp bài
+            </Button>
+          )}
+          {row.submitted && (
+            <Button
+              size="sm"
+              variant="bordered"
+              startContent={<ExternalLink className="w-3.5 h-3.5" />}
+              onPress={() => openSubmitModal(row)}
+            >
+              Xem bài
+            </Button>
+          )}
+        </div>
+      ),
+    },
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  ], [])
+
   /* submit handler */
   const handleSubmit = async () => {
     if (!selectedAssignment || !submissionContent.trim()) return
     setLoading(true)
     try {
-      const res = await fetch("/api/portal/submissions", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          assignmentId: selectedAssignment.id,
-          content: submissionContent,
-        }),
-      })
-      if (res.ok) {
-        toast.success("Nộp bài thành công!")
-        submitModal.onClose()
-        setSubmissionContent("")
-        setSelectedAssignment(null)
-        router.refresh()
-      } else {
-        toast.error("Nộp bài thất bại")
-      }
+      await api.post("/portal/submissions", {
+        assignmentId: selectedAssignment.id,
+        content: submissionContent,
+      }, { meta: { loading: false } })
+
+      toast.success("Nộp bài thành công!")
+      submitModal.onClose()
+      setSubmissionContent("")
+      setSelectedAssignment(null)
+      router.refresh()
     } catch {
       toast.error("Có lỗi xảy ra")
     } finally {
@@ -246,98 +303,20 @@ export default function StudentAssignmentsView({
       </Card>
 
       {/* Assignments Table */}
-      <Table
-        aria-label="Danh sách bài tập"
-        isStriped
-        bottomContent={
-          pages > 1 ? (
-            <div className="flex justify-center py-2">
-              <Pagination
-                total={pages}
-                page={page}
-                onChange={setPage}
-                showControls
-                color="primary"
-              />
-            </div>
-          ) : null
-        }
-        bottomContentPlacement="outside"
-      >
-        <TableHeader>
-          <TableColumn>Bài tập</TableColumn>
-          <TableColumn>Lớp</TableColumn>
-          <TableColumn>Hạn nộp</TableColumn>
-          <TableColumn>Trạng thái</TableColumn>
-          <TableColumn align="end">Thao tác</TableColumn>
-        </TableHeader>
-        <TableBody
-          items={paginatedItems}
-          emptyContent={
-            <div className="flex flex-col items-center py-10 gap-2">
-              <FileText className="w-12 h-12 text-default-300" />
-              <p className="text-default-500">Không có bài tập nào</p>
-            </div>
-          }
-        >
-          {(item) => (
-            <TableRow key={item.id}>
-              <TableCell>
-                <div>
-                  <p className="font-medium">{item.title}</p>
-                  {item.description && (
-                    <p className="text-xs text-default-400 line-clamp-1 mt-0.5">
-                      {item.description}
-                    </p>
-                  )}
-                  <Chip size="sm" variant="flat" className="mt-1">
-                    {item.type}
-                  </Chip>
-                </div>
-              </TableCell>
-              <TableCell>
-                <span className="text-sm text-primary">
-                  {item.class.className}
-                </span>
-              </TableCell>
-              <TableCell>
-                {item.dueDate ? (
-                  <span className="text-sm">
-                    {dayjs(item.dueDate).format("DD/MM/YYYY HH:mm")}
-                  </span>
-                ) : (
-                  <span className="text-default-400">—</span>
-                )}
-              </TableCell>
-              <TableCell>{getStatusChip(item)}</TableCell>
-              <TableCell>
-                <div className="flex justify-end gap-2">
-                  {!item.submitted && item.dueDate && !isPast(new Date(item.dueDate)) && (
-                    <Button
-                      size="sm"
-                      color="primary"
-                      startContent={<Upload className="w-3.5 h-3.5" />}
-                      onPress={() => openSubmitModal(item)}
-                    >
-                      Nộp bài
-                    </Button>
-                  )}
-                  {item.submitted && (
-                    <Button
-                      size="sm"
-                      variant="bordered"
-                      startContent={<ExternalLink className="w-3.5 h-3.5" />}
-                      onPress={() => openSubmitModal(item)}
-                    >
-                      Xem bài
-                    </Button>
-                  )}
-                </div>
-              </TableCell>
-            </TableRow>
-          )}
-        </TableBody>
-      </Table>
+      <CTable<AssignmentData & Record<string, unknown>>
+        columns={columns}
+        data={paginatedItems as (AssignmentData & Record<string, unknown>)[]}
+        rowKey="id"
+        page={page}
+        pageSize={rowsPerPage}
+        total={filteredAssignments.length}
+        onPageChange={setPage}
+        ariaLabel="Danh sách bài tập"
+        emptyContent={{
+          icon: <FileText className="w-12 h-12" />,
+          title: "Không có bài tập nào",
+        }}
+      />
 
       {/* Submit / View Modal */}
       <Modal

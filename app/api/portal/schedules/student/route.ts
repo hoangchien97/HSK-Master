@@ -1,5 +1,5 @@
 import { auth } from "@/auth"
-import { prisma } from "@/lib/prisma"
+import { prisma } from "@/app/lib/prisma"
 import { NextResponse } from "next/server"
 
 // GET /api/portal/schedules/student - Get schedules for enrolled classes

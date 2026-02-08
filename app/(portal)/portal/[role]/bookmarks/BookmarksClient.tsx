@@ -14,7 +14,8 @@ import {
 import { Card, CardBody, Button, Chip, Input } from "@heroui/react"
 import { PageHeader } from "@/app/components/portal/common/PageHeader"
 import { EmptyState } from "@/app/components/portal/common/EmptyState"
-import { cn } from "@/lib/utils"
+import { cn } from "@/app/lib/utils"
+import api from "@/app/lib/http/client"
 
 interface Vocabulary {
   id: string
@@ -82,9 +83,7 @@ export default function BookmarksClient({
 
   const handleRemoveBookmark = async (progressId: string) => {
     try {
-      await fetch(`/api/portal/vocabulary-progress/${progressId}`, {
-        method: "DELETE",
-      })
+      await api.delete(`/portal/vocabulary-progress/${progressId}`, { meta: { loading: false } })
       router.refresh()
     } catch (error) {
       console.error("Error removing bookmark:", error)

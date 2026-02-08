@@ -1,6 +1,6 @@
 import { auth } from "@/auth"
 import { redirect } from "next/navigation"
-import { prisma } from "@/lib/prisma"
+import { prisma } from "@/app/lib/prisma"
 import ProfileClient from "./ProfileClient"
 import type { PortalUser } from "@/app/interfaces/portal/profile"
 

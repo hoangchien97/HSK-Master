@@ -1,6 +1,6 @@
 "use client"
 
-import { cn } from "@/lib/utils"
+import { cn } from "@/app/lib/utils"
 import { format } from "date-fns"
 import { vi } from "date-fns/locale"
 

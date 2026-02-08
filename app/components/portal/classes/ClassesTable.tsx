@@ -1,322 +1,257 @@
 "use client";
 
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect, useCallback, useMemo } from "react";
 import {
-  Table,
-  TableHeader,
-  TableColumn,
-  TableBody,
-  TableRow,
-  TableCell,
   Button,
-  Input,
   Chip,
-  Tooltip,
-  Pagination,
   useDisclosure,
   Dropdown,
   DropdownTrigger,
   DropdownMenu,
   DropdownItem,
-  Spinner,
-  User as UserAvatar,
-  Select,
-  SelectItem,
 } from "@heroui/react";
-import { Plus, Search, Eye, Edit2, Trash2, MoreVertical, Users, Calendar } from "lucide-react";
+import { Plus, Edit2, Trash2, MoreVertical, Users, Calendar } from "lucide-react";
 import { toast } from "react-toastify";
 import dayjs from "dayjs";
-import { useRouter } from "next/navigation";
-import type { IClass } from "@/app/interfaces/portal";
-import { ClassStatus } from "@/app/enums/portal";
-import { PAGINATION } from "@/app/constants/portal";
+import { useRouter, useSearchParams, usePathname } from "next/navigation";
+import type { IClass, IGetClassResponse } from "@/app/interfaces/portal";
+import { PAGINATION, CLASS_STATUS_COLOR_MAP, CLASS_STATUS_LABEL_MAP } from "@/app/constants/portal";
+import { CTable, type CTableColumn } from "@/app/components/portal/common";
+import ClassesToolbar from "./ClassesToolbar";
 import ClassFormModal from "./ClassFormModal";
 import DeleteClassModal from "./DeleteClassModal";
+import api from "@/app/lib/http/client";
+import { useDebouncedValue } from "@/app/hooks/useTableParams";
 
-const statusColorMap: Record<string, "success" | "primary" | "danger" | "default"> = {
-  ACTIVE: "success",
-  COMPLETED: "primary",
-  CANCELLED: "danger",
-};
-
-const statusLabelMap: Record<string, string> = {
-  ACTIVE: "Đang hoạt động",
-  COMPLETED: "Đã kết thúc",
-  CANCELLED: "Đã hủy",
-};
-
-const COLUMNS = [
-  { key: "className", label: "Tên lớp" },
-  { key: "classCode", label: "Mã lớp" },
-  { key: "level", label: "Trình độ" },
-  { key: "students", label: "Học viên" },
-  { key: "startDate", label: "Ngày bắt đầu" },
-  { key: "status", label: "Trạng thái" },
-  { key: "actions", label: "" },
-];
+/* ──────────────────── component ──────────────────── */
 
 export default function ClassesTable() {
   const router = useRouter();
-  const [classes, setClasses] = useState<IClass[]>([]);
-  const [isLoading, setIsLoading] = useState(true);
-  const [search, setSearch] = useState("");
-  const [page, setPage] = useState(PAGINATION.INITIAL_PAGE);
-  const [rowsPerPage, setRowsPerPage] = useState(PAGINATION.DEFAULT_PAGE_SIZE);
+  const searchParams = useSearchParams();
+  const pathname = usePathname();
 
-  // Modals
+  /* ─── URL params ─── */
+  const urlSearch = searchParams.get("search") || "";
+  const urlStatus = searchParams.get("status") || "ALL";
+  const urlPage = Number(searchParams.get("page") || PAGINATION.INITIAL_PAGE);
+  const urlPageSize = Number(searchParams.get("pageSize") || PAGINATION.DEFAULT_PAGE_SIZE);
+
+  /* ─── Local state ─── */
+  const [search, setSearch] = useState(urlSearch);
+  const debouncedSearch = useDebouncedValue(search, 350);
+  const [data, setData] = useState<IGetClassResponse>({ items: [], total: 0 });
+
+  /* ─── Modals ─── */
   const createModal = useDisclosure();
   const editModal = useDisclosure();
   const deleteModal = useDisclosure();
   const [selectedClass, setSelectedClass] = useState<IClass | null>(null);
 
-  const fetchClasses = useCallback(async () => {
-    try {
-      setIsLoading(true);
-      const res = await fetch("/api/portal/classes");
-      if (res.ok) {
-        setClasses(await res.json());
+  /* ─── Refresh trigger ─── */
+  const [refreshKey, setRefreshKey] = useState(0);
+  const refresh = useCallback(() => setRefreshKey((k) => k + 1), []);
+
+  /* ─── URL updater: keeps existing params, resets page on filter change ─── */
+  const updateUrl = useCallback(
+    (updates: Record<string, string>) => {
+      const newParams = new URLSearchParams(searchParams.toString());
+      let shouldResetPage = false;
+
+      for (const [key, value] of Object.entries(updates)) {
+        if (!value || value === "ALL") {
+          newParams.delete(key);
+        } else {
+          newParams.set(key, value);
+        }
+        if (key !== "page") shouldResetPage = true;
       }
-    } catch {
-      toast.error("Không thể tải danh sách lớp");
-    } finally {
-      setIsLoading(false);
-    }
-  }, []);
 
+      // Reset page to 1 when any filter (non-page) changes
+      if (shouldResetPage && !("page" in updates)) {
+        newParams.delete("page");
+      }
+
+      const qs = newParams.toString();
+      router.replace(`${pathname}${qs ? `?${qs}` : ""}`, { scroll: false });
+    },
+    [searchParams, router, pathname],
+  );
+
+  /* ─── Fetch data (uses global loading) ─── */
   useEffect(() => {
+    let cancelled = false;
+    const fetchClasses = async () => {
+      try {
+        const params = new URLSearchParams();
+        if (debouncedSearch) params.set("search", debouncedSearch);
+        if (urlStatus !== "ALL") params.set("status", urlStatus);
+        params.set("page", String(urlPage));
+        params.set("pageSize", String(urlPageSize));
+
+        const { data: res } = await api.get<IGetClassResponse>(
+          `/portal/classes?${params}`,
+        );
+        if (!cancelled) setData(res);
+      } catch {
+        if (!cancelled) toast.error("Không thể tải danh sách lớp");
+      }
+    };
     fetchClasses();
-  }, [fetchClasses]);
+    return () => { cancelled = true; };
+  }, [debouncedSearch, urlStatus, urlPage, urlPageSize, refreshKey]);
 
-  const filtered = classes.filter((c) => {
-    const q = search.toLowerCase();
-    return (
-      c.className.toLowerCase().includes(q) ||
-      c.classCode.toLowerCase().includes(q) ||
-      (c.level?.toLowerCase().includes(q) ?? false)
-    );
-  });
+  /* ─── Sync search → URL ─── */
+  useEffect(() => {
+    updateUrl({ search: debouncedSearch });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [debouncedSearch]);
 
-  const totalPages = Math.ceil(filtered.length / rowsPerPage);
-  const paginatedItems = filtered.slice((page - 1) * rowsPerPage, page * rowsPerPage);
+  /* ─── Handlers ─── */
+  const handleEdit = (cls: IClass) => { setSelectedClass(cls); editModal.onOpen(); };
+  const handleDelete = (cls: IClass) => { setSelectedClass(cls); deleteModal.onOpen(); };
 
-  const handleEdit = (cls: IClass) => {
-    setSelectedClass(cls);
-    editModal.onOpen();
-  };
-
-  const handleDelete = (cls: IClass) => {
-    setSelectedClass(cls);
-    deleteModal.onOpen();
-  };
-
-  const renderCell = (cls: IClass, columnKey: string) => {
-    switch (columnKey) {
-      case "className":
-        return (
-          <div>
-            <p className="font-semibold text-sm">{cls.className}</p>
-            {cls.teacher && (
-              <p className="text-xs text-default-400">
-                GV: {cls.teacher.fullName || cls.teacher.email}
-              </p>
-            )}
-          </div>
-        );
-      case "classCode":
-        return <Chip size="sm" variant="flat">{cls.classCode}</Chip>;
-      case "level":
-        return cls.level ? (
-          <Chip size="sm" color="primary" variant="flat">{cls.level}</Chip>
-        ) : (
-          <span className="text-default-300">—</span>
-        );
-      case "students":
-        return (
-          <div className="flex items-center gap-1.5">
-            <Users className="w-4 h-4 text-default-400" />
-            <span className="text-sm">
-              {cls._count?.enrollments ?? 0}/{cls.maxStudents}
-            </span>
-          </div>
-        );
-      case "startDate":
-        return (
-          <div className="flex items-center gap-1.5">
-            <Calendar className="w-4 h-4 text-default-400" />
-            <span className="text-sm">{dayjs(cls.startDate).format("DD/MM/YYYY")}</span>
-          </div>
-        );
-      case "status":
-        return (
-          <Chip
-            size="sm"
-            color={statusColorMap[cls.status] || "default"}
-            variant="flat"
-          >
-            {statusLabelMap[cls.status] || cls.status}
-          </Chip>
-        );
-      case "actions":
-        return (
-          <div className="flex justify-end">
-            <Dropdown>
-              <DropdownTrigger>
-                <Button isIconOnly size="sm" variant="light">
-                  <MoreVertical className="w-4 h-4" />
-                </Button>
-              </DropdownTrigger>
-              <DropdownMenu aria-label="Thao tác">
-                <DropdownItem
-                  key="view"
-                  startContent={<Eye className="w-4 h-4" />}
-                  onPress={() => router.push(`/portal/teacher/classes/${cls.id}`)}
-                >
-                  Chi tiết
-                </DropdownItem>
-                <DropdownItem
-                  key="edit"
-                  startContent={<Edit2 className="w-4 h-4" />}
-                  onPress={() => handleEdit(cls)}
-                >
-                  Chỉnh sửa
-                </DropdownItem>
-                <DropdownItem
-                  key="delete"
-                  startContent={<Trash2 className="w-4 h-4" />}
-                  className="text-danger"
-                  color="danger"
-                  onPress={() => handleDelete(cls)}
-                >
-                  Xóa
-                </DropdownItem>
-              </DropdownMenu>
-            </Dropdown>
-          </div>
-        );
-      default:
-        return null;
-    }
-  };
+  /* ─── Columns ─── */
+  const columns: CTableColumn<IClass & Record<string, unknown>>[] = useMemo(() => [
+    {
+      key: "stt",
+      label: "STT",
+      align: "center" as const,
+      headerClassName: "w-12",
+      render: (_v, _row, index) => (
+        <span className="text-sm text-default-500">{(urlPage - 1) * urlPageSize + index + 1}</span>
+      ),
+    },
+    {
+      key: "className",
+      label: "Tên lớp",
+      render: (_v, row) => (
+        <button
+          className="text-left hover:text-primary transition-colors"
+          onClick={() => router.push(`/portal/teacher/classes/${row.id}`)}
+        >
+          <p className="font-semibold text-sm">{row.className}</p>
+          {row.teacher && (
+            <p className="text-xs text-default-400">GV: {row.teacher.fullName || row.teacher.email}</p>
+          )}
+        </button>
+      ),
+    },
+    {
+      key: "classCode",
+      label: "Mã lớp",
+      render: (_v, row) => <Chip size="sm" variant="flat">{row.classCode}</Chip>,
+    },
+    {
+      key: "level",
+      label: "Trình độ",
+      render: (_v, row) => row.level
+        ? <Chip size="sm" color="primary" variant="flat">{row.level}</Chip>
+        : <span className="text-default-300">—</span>,
+    },
+    {
+      key: "students",
+      label: "Học viên",
+      render: (_v, row) => (
+        <div className="flex items-center gap-1.5">
+          <Users className="w-4 h-4 text-default-400" />
+          <span className="text-sm">{row._count?.enrollments ?? 0}/{row.maxStudents}</span>
+        </div>
+      ),
+    },
+    {
+      key: "startDate",
+      label: "Ngày bắt đầu",
+      render: (_v, row) => (
+        <div className="flex items-center gap-1.5">
+          <Calendar className="w-4 h-4 text-default-400" />
+          <span className="text-sm">{dayjs(row.startDate).format("DD/MM/YYYY")}</span>
+        </div>
+      ),
+    },
+    {
+      key: "status",
+      label: "Trạng thái",
+      render: (_v, row) => (
+        <Chip size="sm" color={CLASS_STATUS_COLOR_MAP[row.status] || "default"} variant="flat">
+          {CLASS_STATUS_LABEL_MAP[row.status] || row.status}
+        </Chip>
+      ),
+    },
+    {
+      key: "actions",
+      label: "",
+      align: "end" as const,
+      render: (_v, row) => (
+        <div className="flex justify-end">
+          <Dropdown>
+            <DropdownTrigger>
+              <Button isIconOnly size="sm" variant="light"><MoreVertical className="w-4 h-4" /></Button>
+            </DropdownTrigger>
+            <DropdownMenu aria-label="Thao tác">
+              <DropdownItem key="edit" startContent={<Edit2 className="w-4 h-4" />} onPress={() => handleEdit(row as IClass)}>
+                Chỉnh sửa
+              </DropdownItem>
+              <DropdownItem key="delete" startContent={<Trash2 className="w-4 h-4" />} className="text-danger" color="danger" onPress={() => handleDelete(row as IClass)}>
+                Xóa
+              </DropdownItem>
+            </DropdownMenu>
+          </Dropdown>
+        </div>
+      ),
+    },
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  ], [urlPage, urlPageSize, router]);
 
   return (
-    <div className="space-y-4">
-      {/* Toolbar */}
-      <div className="flex flex-col sm:flex-row justify-between gap-3">
-        <div className="flex gap-3 flex-1">
-          <Input
-            isClearable
-            className="w-full sm:max-w-xs"
-            placeholder="Tìm kiếm lớp học..."
-            startContent={<Search className="w-4 h-4 text-default-400" />}
-            value={search}
-            onValueChange={setSearch}
-            onClear={() => setSearch("")}
-            size="sm"
-          />
-          <Select
-            label="Hiển thị"
-            size="sm"
-            selectedKeys={[String(rowsPerPage)]}
-            onChange={(e) => {
-              setRowsPerPage(Number(e.target.value));
-              setPage(PAGINATION.INITIAL_PAGE);
-            }}
-            className="w-32"
-          >
-            {PAGINATION.PAGE_SIZE_OPTIONS.map((size) => (
-              <SelectItem key={size} value={size}>
-                {size}
-              </SelectItem>
-            ))}
-          </Select>
-        </div>
-        <Button
-          color="primary"
-          startContent={<Plus className="w-4 h-4" />}
-          onPress={createModal.onOpen}
-          size="sm"
-        >
-          Tạo lớp mới
-        </Button>
-      </div>
-
-      {/* Table */}
-      <Table
-        aria-label="Danh sách lớp học"
-        bottomContent={
-          totalPages > 1 ? (
-            <div className="flex w-full justify-center">
-              <Pagination
-                isCompact
-                showControls
-                showShadow
-                color="primary"
-                page={page}
-                total={totalPages}
-                onChange={setPage}
-              />
-            </div>
-          ) : null
+    <>
+      <CTable<IClass & Record<string, unknown>>
+        columns={columns}
+        data={data.items as (IClass & Record<string, unknown>)[]}
+        rowKey="id"
+        page={urlPage}
+        pageSize={urlPageSize}
+        total={data.total}
+        onPageChange={(p) => updateUrl({ page: String(p) })}
+        onPageSizeChange={(s) => updateUrl({ pageSize: String(s) })}
+        ariaLabel="Danh sách lớp học"
+        emptyContent={{
+          icon: <Users className="w-12 h-12" />,
+          title: "Chưa có lớp học nào",
+          description: "Tạo lớp học mới để bắt đầu",
+        }}
+        actions={
+          <Button color="primary" size="sm" startContent={<Plus className="w-4 h-4" />} onPress={createModal.onOpen}>
+            Tạo lớp mới
+          </Button>
         }
-      >
-        <TableHeader columns={COLUMNS}>
-          {(column) => (
-            <TableColumn
-              key={column.key}
-              align={column.key === "actions" ? "end" : "start"}
-            >
-              {column.label}
-            </TableColumn>
-          )}
-        </TableHeader>
-        <TableBody
-          items={paginatedItems}
-          isLoading={isLoading}
-          loadingContent={<Spinner label="Đang tải..." />}
-          emptyContent="Chưa có lớp học nào"
-        >
-          {(item) => (
-            <TableRow key={item.id}>
-              {(columnKey) => (
-                <TableCell>{renderCell(item, columnKey as string)}</TableCell>
-              )}
-            </TableRow>
-          )}
-        </TableBody>
-      </Table>
-
-      {/* Create Modal */}
-      <ClassFormModal
-        isOpen={createModal.isOpen}
-        onClose={createModal.onClose}
-        onSuccess={fetchClasses}
+        toolbar={
+          <ClassesToolbar
+            search={search}
+            onSearchChange={setSearch}
+            statusFilter={urlStatus}
+            onStatusChange={(v) => updateUrl({ status: v })}
+          />
+        }
       />
 
-      {/* Edit Modal */}
+      {/* Modals */}
+      <ClassFormModal isOpen={createModal.isOpen} onClose={createModal.onClose} onSuccess={refresh} />
       {selectedClass && (
         <ClassFormModal
           isOpen={editModal.isOpen}
-          onClose={() => {
-            editModal.onClose();
-            setSelectedClass(null);
-          }}
-          onSuccess={fetchClasses}
+          onClose={() => { editModal.onClose(); setSelectedClass(null); }}
+          onSuccess={refresh}
           initialData={selectedClass}
         />
       )}
-
-      {/* Delete Modal */}
       {selectedClass && (
         <DeleteClassModal
           isOpen={deleteModal.isOpen}
-          onClose={() => {
-            deleteModal.onClose();
-            setSelectedClass(null);
-          }}
-          onSuccess={fetchClasses}
+          onClose={() => { deleteModal.onClose(); setSelectedClass(null); }}
+          onSuccess={refresh}
           classData={selectedClass}
         />
       )}
-    </div>
+    </>
   );
 }

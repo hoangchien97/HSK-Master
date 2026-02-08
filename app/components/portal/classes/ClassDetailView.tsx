@@ -24,6 +24,8 @@ import { toast } from "react-toastify";
 import dayjs from "dayjs";
 import { useRouter } from "next/navigation";
 import type { IClass, IEnrollment } from "@/app/interfaces/portal";
+import { usePortalUI } from "@/app/providers/portal-ui-provider";
+import api from "@/app/lib/http/client";
 
 interface ClassDetailViewProps {
   classId: string;
@@ -32,6 +34,7 @@ interface ClassDetailViewProps {
 
 export default function ClassDetailView({ classId, role }: ClassDetailViewProps) {
   const router = useRouter();
+  const { setDynamicLabel } = usePortalUI();
   const [classData, setClassData] = useState<IClass | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [enrollEmail, setEnrollEmail] = useState("");
@@ -44,19 +47,19 @@ export default function ClassDetailView({ classId, role }: ClassDetailViewProps)
   const fetchClass = useCallback(async () => {
     try {
       setIsLoading(true);
-      const res = await fetch(`/api/portal/classes/${classId}`);
-      if (res.ok) {
-        setClassData(await res.json());
-      } else {
-        toast.error("Không tìm thấy lớp học");
-        router.back();
+      const { data } = await api.get<IClass>(`/portal/classes/${classId}`);
+      setClassData(data);
+      // Set dynamic breadcrumb label for classId segment
+      if (data?.className) {
+        setDynamicLabel(classId, data.className);
       }
     } catch {
-      toast.error("Lỗi tải dữ liệu");
+      toast.error("Không tìm thấy lớp học");
+      router.back();
     } finally {
       setIsLoading(false);
     }
-  }, [classId, router]);
+  }, [classId, router, setDynamicLabel]);
 
   useEffect(() => {
     fetchClass();
@@ -66,20 +69,12 @@ export default function ClassDetailView({ classId, role }: ClassDetailViewProps)
     if (!enrollEmail.trim()) return;
     setIsEnrolling(true);
     try {
-      const res = await fetch(`/api/portal/classes/${classId}/enrollments`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email: enrollEmail }),
-      });
-      if (!res.ok) {
-        const err = await res.json();
-        throw new Error(err.error || "Thêm học viên thất bại");
-      }
+      await api.post(`/portal/classes/${classId}/enrollments`, { email: enrollEmail }, { meta: { loading: false } });
       toast.success("Thêm học viên thành công!");
       setEnrollEmail("");
       fetchClass();
     } catch (error: any) {
-      toast.error(error.message);
+      toast.error(error?.normalized?.message || "Thêm học viên thất bại");
     } finally {
       setIsEnrolling(false);
     }
@@ -87,12 +82,10 @@ export default function ClassDetailView({ classId, role }: ClassDetailViewProps)
 
   const handleRemoveStudent = async (enrollmentId: string) => {
     try {
-      const res = await fetch(`/api/portal/classes/${classId}/enrollments`, {
-        method: "DELETE",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ enrollmentId }),
+      await api.delete(`/portal/classes/${classId}/enrollments`, {
+        data: { enrollmentId },
+        meta: { loading: false },
       });
-      if (!res.ok) throw new Error("Xóa học viên thất bại");
       toast.success("Đã xóa học viên!");
       fetchClass();
     } catch {

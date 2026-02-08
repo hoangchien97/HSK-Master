@@ -1,14 +1,29 @@
 "use client"
 
-import { Button } from "@heroui/react"
+import { Button, Chip } from "@heroui/react"
 import { Save, Check, X } from "lucide-react"
 
 /* ───────────────── Types ───────────────── */
+
+interface AttendanceSummary {
+  present: number
+  absent: number
+  unmarked: number
+  total: number
+}
 
 interface AttendanceFooterProps {
   pendingCount: number
   isSaving: boolean
   onSave: () => void
+  /** Per-column (date) summary – keyed by date string */
+  dateSummaries?: Record<string, AttendanceSummary>
+  /** Overall summary across all dates */
+  overallSummary?: {
+    totalPresent: number
+    totalAbsent: number
+    totalUnmarked: number
+  }
 }
 
 /* ───────────────── Component ───────────────── */
@@ -17,6 +32,7 @@ export default function AttendanceFooter({
   pendingCount,
   isSaving,
   onSave,
+  overallSummary,
 }: AttendanceFooterProps) {
   return (
     <div className="shrink-0 flex items-center justify-between px-4 py-3 bg-gray-50 border-t border-gray-200">
@@ -33,7 +49,25 @@ export default function AttendanceFooter({
           </div>
           <span>VẮNG</span>
         </div>
+
+        {/* Overall summary chips */}
+        {overallSummary && (
+          <div className="flex items-center gap-2 ml-4 border-l border-gray-300 pl-4">
+            <Chip size="sm" variant="flat" color="success">
+              Tổng có mặt: {overallSummary.totalPresent}
+            </Chip>
+            <Chip size="sm" variant="flat" color="danger">
+              Tổng vắng: {overallSummary.totalAbsent}
+            </Chip>
+            {overallSummary.totalUnmarked > 0 && (
+              <Chip size="sm" variant="flat">
+                Chưa điểm danh: {overallSummary.totalUnmarked}
+              </Chip>
+            )}
+          </div>
+        )}
       </div>
+
       <Button
         color="primary"
         startContent={!isSaving && <Save className="w-4 h-4" />}

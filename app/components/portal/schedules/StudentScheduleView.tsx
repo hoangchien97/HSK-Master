@@ -5,6 +5,7 @@ import { Calendar, Clock, MapPin, Video, ExternalLink, Users } from "lucide-reac
 import { Card, CardBody, Chip, Button, Spinner, Tabs, Tab, Link as HeroLink } from "@heroui/react"
 import { toast } from "react-toastify"
 import Link from "next/link"
+import api from "@/app/lib/http/client"
 
 interface ClassInfo {
   id: string
@@ -38,20 +39,14 @@ export default function StudentScheduleView() {
   const fetchData = async () => {
     try {
       setIsLoading(true)
-      
+
       // Fetch enrolled classes
-      const classesRes = await fetch('/api/portal/classes')
-      if (classesRes.ok) {
-        const classesData = await classesRes.json()
-        setEnrolledClasses(classesData)
-      }
+      const { data: classesData } = await api.get<ClassInfo[]>('/portal/classes', { meta: { loading: false } })
+      setEnrolledClasses(classesData)
 
       // Fetch schedules
-      const schedulesRes = await fetch('/api/portal/schedules')
-      if (schedulesRes.ok) {
-        const schedulesData = await schedulesRes.json()
-        setSchedules(schedulesData)
-      }
+      const { data: schedulesData } = await api.get<Schedule[]>('/portal/schedules', { meta: { loading: false } })
+      setSchedules(schedulesData)
     } catch (error) {
       console.error('Error fetching data:', error)
       toast.error('Không thể tải lịch học')
@@ -80,14 +75,14 @@ export default function StudentScheduleView() {
       })
     }
 
-    return filtered.sort((a, b) => 
+    return filtered.sort((a, b) =>
       new Date(a.startTime).getTime() - new Date(b.startTime).getTime()
     )
   }
 
   const groupSchedulesByDate = (schedules: Schedule[]) => {
     const grouped: Record<string, Schedule[]> = {}
-    
+
     schedules.forEach(schedule => {
       const date = new Date(schedule.startTime).toLocaleDateString('vi-VN', {
         weekday: 'long',
@@ -95,13 +90,13 @@ export default function StudentScheduleView() {
         month: 'long',
         day: 'numeric',
       })
-      
+
       if (!grouped[date]) {
         grouped[date] = []
       }
       grouped[date].push(schedule)
     })
-    
+
     return grouped
   }
 

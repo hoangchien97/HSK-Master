@@ -1,15 +1,9 @@
 "use client"
 
-import { useState, useMemo, useCallback } from "react"
-import { useRouter } from "next/navigation"
+import { useState, useEffect, useCallback, useMemo } from "react"
+import { useRouter, useSearchParams, usePathname } from "next/navigation"
 import Link from "next/link"
 import {
-  Table,
-  TableHeader,
-  TableColumn,
-  TableBody,
-  TableRow,
-  TableCell,
   Button,
   Input,
   Select,
@@ -19,14 +13,12 @@ import {
   DropdownTrigger,
   DropdownMenu,
   DropdownItem,
-  Pagination,
   useDisclosure,
 } from "@heroui/react"
 import {
   Plus,
   Search,
   MoreVertical,
-  Eye,
   Edit2,
   Trash2,
   FileText,
@@ -35,9 +27,12 @@ import {
 } from "lucide-react"
 import { toast } from "react-toastify"
 import { PAGINATION } from "@/app/constants/portal"
+import { CTable, type CTableColumn } from "@/app/components/portal/common"
 import AssignmentFormModal from "./AssignmentFormModal"
+import { useDebouncedValue } from "@/app/hooks/useTableParams"
 import dayjs from "dayjs"
 import "dayjs/locale/vi"
+import api from "@/app/lib/http/client"
 
 dayjs.locale("vi")
 
@@ -70,8 +65,6 @@ interface AssignmentData {
 }
 
 interface AssignmentsTableProps {
-  assignments: AssignmentData[]
-  classes: ClassInfo[]
   role?: string
 }
 
@@ -93,359 +86,304 @@ const STATUS_CONFIG: Record<string, { label: string; color: "success" | "default
   ARCHIVED: { label: "Đã đóng", color: "danger" },
 }
 
-const COLUMNS = [
-  { key: "title", label: "Bài tập" },
-  { key: "class", label: "Lớp" },
-  { key: "type", label: "Loại" },
-  { key: "dueDate", label: "Hạn nộp" },
-  { key: "submissions", label: "Nộp bài" },
-  { key: "status", label: "Trạng thái" },
-  { key: "actions", label: "" },
+const STATUS_OPTIONS = [
+  { key: "ALL", label: "Tất cả trạng thái" },
+  { key: "ACTIVE", label: "Đang mở" },
+  { key: "DRAFT", label: "Nháp" },
+  { key: "ARCHIVED", label: "Đã đóng" },
 ]
 
 /* ──────────────────── component ──────────────────────── */
 
 export default function AssignmentsTable({
-  assignments,
-  classes,
   role = "teacher",
 }: AssignmentsTableProps) {
   const router = useRouter()
+  const searchParams = useSearchParams()
+  const pathname = usePathname()
   const createModal = useDisclosure()
 
-  const [searchQuery, setSearchQuery] = useState("")
-  const [classFilter, setClassFilter] = useState<string>("ALL")
-  const [statusFilter, setStatusFilter] = useState<string>("ALL")
-  const [page, setPage] = useState(PAGINATION.INITIAL_PAGE)
-  const [rowsPerPage, setRowsPerPage] = useState(PAGINATION.DEFAULT_PAGE_SIZE)
+  /* ─── URL params ─── */
+  const urlSearch = searchParams.get("search") || ""
+  const urlClassFilter = searchParams.get("classId") || "ALL"
+  const urlStatusFilter = searchParams.get("status") || "ALL"
+  const urlPage = Number(searchParams.get("page") || PAGINATION.INITIAL_PAGE)
+  const urlPageSize = Number(searchParams.get("pageSize") || PAGINATION.DEFAULT_PAGE_SIZE)
 
-  /* filtering */
-  const filteredAssignments = useMemo(() => {
-    return assignments.filter((a) => {
-      const matchSearch = a.title.toLowerCase().includes(searchQuery.toLowerCase())
-      const matchClass = classFilter === "ALL" || a.class.id === classFilter
-      const matchStatus = statusFilter === "ALL" || a.status === statusFilter
-      return matchSearch && matchClass && matchStatus
-    })
-  }, [assignments, searchQuery, classFilter, statusFilter])
+  /* ─── Local state ─── */
+  const [search, setSearch] = useState(urlSearch)
+  const debouncedSearch = useDebouncedValue(search, 350)
+  const [items, setItems] = useState<AssignmentData[]>([])
+  const [total, setTotal] = useState(0)
+  const [classes, setClasses] = useState<ClassInfo[]>([])
 
-  /* pagination */
-  const pages = Math.ceil(filteredAssignments.length / rowsPerPage)
-  const paginatedItems = useMemo(() => {
-    const start = (page - 1) * rowsPerPage
-    return filteredAssignments.slice(start, start + rowsPerPage)
-  }, [filteredAssignments, page])
+  /* ─── Refresh trigger ─── */
+  const [refreshKey, setRefreshKey] = useState(0)
+  const refresh = useCallback(() => setRefreshKey((k) => k + 1), [])
 
-  /* delete */
+  /* ─── URL updater: keeps existing params, resets page on filter change ─── */
+  const updateUrl = useCallback(
+    (updates: Record<string, string>) => {
+      const newParams = new URLSearchParams(searchParams.toString())
+      let shouldResetPage = false
+
+      for (const [key, value] of Object.entries(updates)) {
+        if (!value || value === "ALL") {
+          newParams.delete(key)
+        } else {
+          newParams.set(key, value)
+        }
+        if (key !== "page") shouldResetPage = true
+      }
+
+      if (shouldResetPage && !("page" in updates)) {
+        newParams.delete("page")
+      }
+
+      const qs = newParams.toString()
+      router.replace(`${pathname}${qs ? `?${qs}` : ""}`, { scroll: false })
+    },
+    [searchParams, router, pathname],
+  )
+
+  /* ─── Fetch data (uses global loading) ─── */
+  useEffect(() => {
+    let cancelled = false
+    const fetchAssignments = async () => {
+      try {
+        const params = new URLSearchParams()
+        if (debouncedSearch) params.set("search", debouncedSearch)
+        if (urlClassFilter !== "ALL") params.set("classId", urlClassFilter)
+        if (urlStatusFilter !== "ALL") params.set("status", urlStatusFilter)
+        params.set("page", String(urlPage))
+        params.set("pageSize", String(urlPageSize))
+
+        const { data } = await api.get<{
+          items: AssignmentData[]
+          total: number
+          classes: ClassInfo[]
+        }>(`/portal/assignments?${params}`)
+        if (!cancelled) {
+          setItems(data.items)
+          setTotal(data.total)
+          setClasses(data.classes)
+        }
+      } catch {
+        if (!cancelled) toast.error("Không thể tải danh sách bài tập")
+      }
+    }
+    fetchAssignments()
+    return () => { cancelled = true }
+  }, [debouncedSearch, urlClassFilter, urlStatusFilter, urlPage, urlPageSize, refreshKey])
+
+  /* ─── Sync search → URL ─── */
+  useEffect(() => {
+    updateUrl({ search: debouncedSearch })
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [debouncedSearch])
+
+  /* ─── Delete handler ─── */
   const handleDelete = useCallback(
     async (id: string) => {
       if (!confirm("Bạn có chắc muốn xóa bài tập này?")) return
       try {
-        const res = await fetch(`/api/portal/assignments/${id}`, { method: "DELETE" })
-        if (res.ok) {
-          toast.success("Đã xóa bài tập")
-          router.refresh()
-        } else {
-          toast.error("Xóa thất bại")
-        }
+        await api.delete(`/portal/assignments/${id}`)
+        toast.success("Đã xóa bài tập")
+        refresh()
       } catch {
         toast.error("Có lỗi xảy ra")
       }
     },
-    [router],
+    [refresh],
   )
 
-  /* render cell */
-  const renderCell = useCallback(
-    (assignment: AssignmentData, columnKey: string) => {
-      switch (columnKey) {
-        case "title":
-          return (
-            <div className="max-w-xs">
-              <Link
-                href={`/portal/${role}/assignments/${assignment.id}`}
-                className="font-medium text-foreground hover:text-primary transition"
-              >
-                {assignment.title}
-              </Link>
-              {assignment.description && (
-                <p className="text-xs text-default-400 line-clamp-1 mt-0.5">
-                  {assignment.description}
-                </p>
-              )}
-            </div>
-          )
-
-        case "class":
-          return (
-            <span className="text-sm">
-              {assignment.class.className}
-            </span>
-          )
-
-        case "type":
-          return (
-            <Chip
-              size="sm"
-              color={TYPE_CONFIG[assignment.assignmentType]?.color ?? "default"}
-              variant="flat"
-            >
-              {TYPE_CONFIG[assignment.assignmentType]?.label ?? assignment.assignmentType}
-            </Chip>
-          )
-
-        case "dueDate":
-          return assignment.dueDate ? (
-            <span className="text-sm">
-              {dayjs(assignment.dueDate).format("DD/MM/YYYY HH:mm")}
-            </span>
-          ) : (
-            <span className="text-default-400 text-sm">—</span>
-          )
-
-        case "submissions": {
-          const submitted = assignment.submissions.length
-          const graded = assignment.submissions.filter((s) => s.status === "GRADED").length
-          return (
-            <div className="flex items-center gap-2 text-sm">
-              <span className="flex items-center gap-1">
-                <Users className="w-3.5 h-3.5 text-default-400" />
-                {submitted} nộp
-              </span>
-              <span className="flex items-center gap-1">
-                <CheckCircle className="w-3.5 h-3.5 text-success" />
-                {graded} chấm
-              </span>
-            </div>
-          )
-        }
-
-        case "status":
-          return (
-            <Chip
-              size="sm"
-              color={STATUS_CONFIG[assignment.status]?.color ?? "default"}
-              variant="flat"
-            >
-              {STATUS_CONFIG[assignment.status]?.label ?? assignment.status}
-            </Chip>
-          )
-
-        case "actions":
-          return (
-            <div className="flex justify-end">
-              <Dropdown>
-                <DropdownTrigger>
-                  <Button isIconOnly size="sm" variant="light">
-                    <MoreVertical className="w-4 h-4" />
-                  </Button>
-                </DropdownTrigger>
-                <DropdownMenu aria-label="Thao tác">
-                  <DropdownItem
-                    key="view"
-                    startContent={<Eye className="w-4 h-4" />}
-                    href={`/portal/${role}/assignments/${assignment.id}`}
-                  >
-                    Chi tiết
-                  </DropdownItem>
-                  <DropdownItem
-                    key="submissions"
-                    startContent={<FileText className="w-4 h-4" />}
-                    href={`/portal/${role}/assignments/${assignment.id}/submissions`}
-                  >
-                    Xem bài nộp
-                  </DropdownItem>
-                  <DropdownItem
-                    key="edit"
-                    startContent={<Edit2 className="w-4 h-4" />}
-                    href={`/portal/${role}/assignments/${assignment.id}/edit`}
-                  >
-                    Chỉnh sửa
-                  </DropdownItem>
-                  <DropdownItem
-                    key="delete"
-                    color="danger"
-                    className="text-danger"
-                    startContent={<Trash2 className="w-4 h-4" />}
-                    onPress={() => handleDelete(assignment.id)}
-                  >
-                    Xóa
-                  </DropdownItem>
-                </DropdownMenu>
-              </Dropdown>
-            </div>
-          )
-
-        default:
-          return null
-      }
+  /* ─── Columns ─── */
+  const columns: CTableColumn<AssignmentData & Record<string, unknown>>[] = useMemo(() => [
+    {
+      key: "stt",
+      label: "STT",
+      align: "center" as const,
+      headerClassName: "w-12",
+      render: (_v, _row, index) => (
+        <span className="text-sm text-default-500">{(urlPage - 1) * urlPageSize + index + 1}</span>
+      ),
     },
-    [role, handleDelete],
-  )
-
-  /* top content */
-  const topContent = useMemo(
-    () => (
-      <div className="flex flex-col gap-4">
-        <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
-          <div>
-            <h1 className="text-2xl font-bold">Quản lý bài tập</h1>
-            <p className="text-default-500 text-sm mt-1">
-              Tổng cộng {assignments.length} bài tập
-            </p>
-          </div>
-          <Button
-            color="primary"
-            startContent={<Plus className="w-4 h-4" />}
-            onPress={createModal.onOpen}
+    {
+      key: "title",
+      label: "Bài tập",
+      render: (_v, row) => (
+        <div className="max-w-xs">
+          <Link
+            href={`/portal/${role}/assignments/${row.id}`}
+            className="font-medium text-foreground hover:text-primary transition"
           >
-            Tạo bài tập
-          </Button>
+            {row.title}
+          </Link>
+          {row.description && (
+            <p className="text-xs text-default-400 line-clamp-1 mt-0.5">{row.description}</p>
+          )}
         </div>
-
-        <div className="flex flex-col lg:flex-row gap-3">
-          <Input
-            isClearable
-            placeholder="Tìm kiếm bài tập..."
-            startContent={<Search className="w-4 h-4 text-default-400" />}
-            value={searchQuery}
-            onValueChange={setSearchQuery}
-            onClear={() => setSearchQuery("")}
-            className="w-full lg:max-w-sm"
-          />
-          <div className="flex gap-3">
-            <Select
-              placeholder="Tất cả lớp"
-              selectedKeys={[classFilter]}
-              onSelectionChange={(keys) => {
-                const val = Array.from(keys)[0] as string
-                setClassFilter(val || "ALL")
-                setPage(PAGINATION.INITIAL_PAGE)
-              }}
-              className="w-48"
-              size="md"
-            >
-              {[
-                <SelectItem key="ALL">Tất cả lớp</SelectItem>,
-                ...classes.map((c) => (
-                  <SelectItem key={c.id}>{c.className}</SelectItem>
-                )),
-              ]}
-            </Select>
-            <Select
-              placeholder="Tất cả trạng thái"
-              selectedKeys={[statusFilter]}
-              onSelectionChange={(keys) => {
-                const val = Array.from(keys)[0] as string
-                setStatusFilter(val || "ALL")
-                setPage(PAGINATION.INITIAL_PAGE)
-              }}
-              className="w-48"
-              size="md"
-            >
-              <SelectItem key="ALL">Tất cả trạng thái</SelectItem>
-              <SelectItem key="ACTIVE">Đang mở</SelectItem>
-              <SelectItem key="DRAFT">Nháp</SelectItem>
-              <SelectItem key="ARCHIVED">Đã đóng</SelectItem>
-            </Select>
-            <Select
-              label="Hiển thị"
-              selectedKeys={[String(rowsPerPage)]}
-              onChange={(e) => {
-                setRowsPerPage(Number(e.target.value));
-                setPage(PAGINATION.INITIAL_PAGE);
-              }}
-              className="w-32"
-              size="md"
-            >
-              {PAGINATION.PAGE_SIZE_OPTIONS.map((size) => (
-                <SelectItem key={size} value={size}>
-                  {size}
-                </SelectItem>
-              ))}
-            </Select>
+      ),
+    },
+    {
+      key: "class",
+      label: "Lớp",
+      render: (_v, row) => <span className="text-sm">{row.class.className}</span>,
+    },
+    {
+      key: "type",
+      label: "Loại",
+      render: (_v, row) => (
+        <Chip size="sm" color={TYPE_CONFIG[row.assignmentType]?.color ?? "default"} variant="flat">
+          {TYPE_CONFIG[row.assignmentType]?.label ?? row.assignmentType}
+        </Chip>
+      ),
+    },
+    {
+      key: "dueDate",
+      label: "Hạn nộp",
+      render: (_v, row) => row.dueDate
+        ? <span className="text-sm">{dayjs(row.dueDate).format("DD/MM/YYYY HH:mm")}</span>
+        : <span className="text-default-400 text-sm">—</span>,
+    },
+    {
+      key: "submissions",
+      label: "Nộp bài",
+      render: (_v, row) => {
+        const submitted = row.submissions.length
+        const graded = row.submissions.filter((s) => s.status === "GRADED").length
+        return (
+          <div className="flex items-center gap-2 text-sm">
+            <span className="flex items-center gap-1">
+              <Users className="w-3.5 h-3.5 text-default-400" />{submitted}
+            </span>
+            <span className="flex items-center gap-1">
+              <CheckCircle className="w-3.5 h-3.5 text-success" />{graded}
+            </span>
           </div>
+        )
+      },
+    },
+    {
+      key: "status",
+      label: "Trạng thái",
+      render: (_v, row) => (
+        <Chip size="sm" color={STATUS_CONFIG[row.status]?.color ?? "default"} variant="flat">
+          {STATUS_CONFIG[row.status]?.label ?? row.status}
+        </Chip>
+      ),
+    },
+    {
+      key: "actions",
+      label: "",
+      align: "end" as const,
+      render: (_v, row) => (
+        <div className="flex justify-end">
+          <Dropdown>
+            <DropdownTrigger>
+              <Button isIconOnly size="sm" variant="light"><MoreVertical className="w-4 h-4" /></Button>
+            </DropdownTrigger>
+            <DropdownMenu aria-label="Thao tác">
+              <DropdownItem key="edit" startContent={<Edit2 className="w-4 h-4" />} href={`/portal/${role}/assignments/${row.id}/edit`}>
+                Chỉnh sửa
+              </DropdownItem>
+              <DropdownItem key="delete" color="danger" className="text-danger" startContent={<Trash2 className="w-4 h-4" />} onPress={() => handleDelete(row.id)}>
+                Xóa
+              </DropdownItem>
+            </DropdownMenu>
+          </Dropdown>
         </div>
-      </div>
-    ),
-    [assignments.length, searchQuery, classFilter, statusFilter, classes, createModal],
-  )
+      ),
+    },
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  ], [urlPage, urlPageSize, role, handleDelete])
 
-  /* bottom content */
-  const bottomContent = useMemo(
-    () =>
-      pages > 1 ? (
-        <div className="flex items-center justify-between px-2 py-2">
-          <span className="text-sm text-default-400">
-            {filteredAssignments.length} bài tập
-          </span>
-          <Pagination
-            total={pages}
-            page={page}
-            onChange={setPage}
-            showControls
-            color="primary"
-          />
-        </div>
-      ) : null,
-    [pages, page, filteredAssignments.length],
-  )
+  /* ─── Toolbar ─── */
+  const toolbarContent = useMemo(() => (
+    <div className="flex flex-col gap-2 sm:flex-row sm:items-center">
+      <Input
+        isClearable
+        placeholder="Tìm kiếm bài tập..."
+        startContent={<Search className="w-4 h-4 text-default-400" />}
+        value={search}
+        onValueChange={setSearch}
+        onClear={() => setSearch("")}
+        className="w-full sm:max-w-xs"
+        size="sm"
+      />
+      <div className="flex gap-2">
+        <Select
+          placeholder="Tất cả lớp"
+          size="sm"
+          selectedKeys={[urlClassFilter]}
+          onSelectionChange={(keys) => {
+            const val = Array.from(keys)[0] as string
+            updateUrl({ classId: val || "ALL" })
+          }}
+          className="w-full sm:w-40"
+        >
+          {[
+            <SelectItem key="ALL">Tất cả lớp</SelectItem>,
+            ...classes.map((c) => (
+              <SelectItem key={c.id}>{c.className}</SelectItem>
+            )),
+          ]}
+        </Select>
+        <Select
+          placeholder="Trạng thái"
+          size="sm"
+          selectedKeys={[urlStatusFilter]}
+          onSelectionChange={(keys) => {
+            const val = Array.from(keys)[0] as string
+            updateUrl({ status: val || "ALL" })
+          }}
+          className="w-full sm:w-40"
+        >
+          {STATUS_OPTIONS.map((opt) => (
+            <SelectItem key={opt.key}>{opt.label}</SelectItem>
+          ))}
+        </Select>
+      </div>
+    </div>
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  ), [search, urlClassFilter, urlStatusFilter, classes])
 
   return (
-    <div className="space-y-4">
-      <Table
-        aria-label="Bảng bài tập"
-        topContent={topContent}
-        topContentPlacement="outside"
-        bottomContent={bottomContent}
-        bottomContentPlacement="outside"
-        isStriped
-      >
-        <TableHeader columns={COLUMNS}>
-          {(column) => (
-            <TableColumn
-              key={column.key}
-              align={column.key === "actions" ? "end" : "start"}
-            >
-              {column.label}
-            </TableColumn>
-          )}
-        </TableHeader>
-        <TableBody
-          items={paginatedItems}
-          emptyContent={
-            <div className="flex flex-col items-center py-10 gap-3">
-              <FileText className="w-12 h-12 text-default-300" />
-              <p className="text-default-500">Chưa có bài tập nào</p>
-              <Button
-                color="primary"
-                size="sm"
-                startContent={<Plus className="w-4 h-4" />}
-                onPress={createModal.onOpen}
-              >
-                Tạo bài tập
-              </Button>
-            </div>
-          }
-        >
-          {(item) => (
-            <TableRow key={item.id}>
-              {(columnKey) => (
-                <TableCell>{renderCell(item, columnKey as string)}</TableCell>
-              )}
-            </TableRow>
-          )}
-        </TableBody>
-      </Table>
+    <>
+      <CTable<AssignmentData & Record<string, unknown>>
+        columns={columns}
+        data={items as (AssignmentData & Record<string, unknown>)[]}
+        rowKey="id"
+        page={urlPage}
+        pageSize={urlPageSize}
+        total={total}
+        onPageChange={(p) => updateUrl({ page: String(p) })}
+        onPageSizeChange={(s) => updateUrl({ pageSize: String(s) })}
+        ariaLabel="Bảng bài tập"
+        emptyContent={{
+          icon: <FileText className="w-12 h-12" />,
+          title: "Chưa có bài tập nào",
+          description: "Tạo bài tập mới để bắt đầu",
+        }}
+        actions={
+          <Button color="primary" size="sm" startContent={<Plus className="w-4 h-4" />} onPress={createModal.onOpen}>
+            Tạo bài tập
+          </Button>
+        }
+        toolbar={toolbarContent}
+      />
 
-      {/* Assignment Form Modal */}
+      {/* Modal */}
       {createModal.isOpen && (
         <AssignmentFormModal
           classes={classes}
           isOpen={createModal.isOpen}
-          onClose={createModal.onClose}
+          onClose={() => {
+            createModal.onClose()
+            refresh()
+          }}
         />
       )}
-    </div>
+    </>
   )
 }

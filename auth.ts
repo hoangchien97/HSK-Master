@@ -1,7 +1,7 @@
 import NextAuth from "next-auth"
 import Google from "next-auth/providers/google"
 import Credentials from "next-auth/providers/credentials"
-import { prisma } from "@/lib/prisma"
+import { prisma } from "@/app/lib/prisma"
 import bcrypt from "bcryptjs"
 import { z } from "zod"
 import { USER_ROLE, STATUS } from "@/app/constants/portal/roles"

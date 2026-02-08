@@ -1,43 +1,7 @@
 import { auth } from "@/auth"
 import { redirect } from "next/navigation"
-import prisma from "@/lib/prisma"
 import StudentsTable from "@/app/components/portal/students/StudentsTable"
 import { USER_ROLE } from "@/app/constants/portal/roles"
-
-async function getTeacherStudents(email: string) {
-  const user = await prisma.portalUser.findUnique({
-    where: { email },
-    include: {
-      classes: {
-        include: {
-          enrollments: {
-            include: {
-              student: true,
-            },
-          },
-        },
-      },
-    },
-  })
-
-  // Flatten students from all classes
-  const studentsMap = new Map()
-  user?.classes.forEach((classItem) => {
-    classItem.enrollments.forEach((enrollment) => {
-      if (!studentsMap.has(enrollment.studentId)) {
-        studentsMap.set(enrollment.studentId, {
-          ...enrollment.student,
-          classes: [classItem],
-        })
-      } else {
-        const existing = studentsMap.get(enrollment.studentId)
-        existing.classes.push(classItem)
-      }
-    })
-  })
-
-  return Array.from(studentsMap.values())
-}
 
 export default async function TeacherStudentsPage() {
   const session = await auth()
@@ -50,7 +14,5 @@ export default async function TeacherStudentsPage() {
     redirect("/portal/student")
   }
 
-  const students = await getTeacherStudents(session.user.email)
-
-  return <StudentsTable students={students} />
+  return <StudentsTable />
 }

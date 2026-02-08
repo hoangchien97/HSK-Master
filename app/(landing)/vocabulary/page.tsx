@@ -1,4 +1,4 @@
-import { prisma } from "@/lib/prisma";
+import { prisma } from "@/app/lib/prisma";
 import { Breadcrumb, Input, Tooltip, Badge } from "@/app/components/landing/common";
 
 export const metadata = {

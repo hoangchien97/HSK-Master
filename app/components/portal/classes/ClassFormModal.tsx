@@ -14,6 +14,7 @@ import type { IClass } from "@/app/interfaces/portal";
 import dayjs from "dayjs";
 import { CModal } from "@/app/components/portal/common";
 import { FileEdit, PlusCircle } from "lucide-react";
+import api from "@/app/lib/http/client";
 
 interface ClassFormModalProps {
   isOpen: boolean;
@@ -50,27 +51,23 @@ export default function ClassFormModal({
 
     try {
       const url = isEdit
-        ? `/api/portal/classes/${initialData!.id}`
-        : "/api/portal/classes";
-      const method = isEdit ? "PUT" : "POST";
+        ? `/portal/classes/${initialData!.id}`
+        : "/portal/classes";
 
-      const res = await fetch(url, {
-        method,
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          className: formData.className,
-          classCode: formData.classCode,
-          description: formData.description || "",
-          level: formData.level,
-          startDate: formData.startDate,
-          endDate: formData.endDate || "",
-          maxStudents: Number(formData.maxStudents),
-        }),
-      });
+      const payload = {
+        className: formData.className,
+        classCode: formData.classCode,
+        description: formData.description || "",
+        level: formData.level,
+        startDate: formData.startDate,
+        endDate: formData.endDate || "",
+        maxStudents: Number(formData.maxStudents),
+      };
 
-      if (!res.ok) {
-        const err = await res.json();
-        throw new Error(err.error || "Có lỗi xảy ra");
+      if (isEdit) {
+        await api.put(url, payload, { meta: { loading: false } });
+      } else {
+        await api.post(url, payload, { meta: { loading: false } });
       }
 
       toast.success(
@@ -79,7 +76,7 @@ export default function ClassFormModal({
       onClose();
       onSuccess();
     } catch (error: any) {
-      toast.error(error.message || "Có lỗi xảy ra");
+      toast.error(error?.normalized?.message || "Có lỗi xảy ra");
     } finally {
       setIsSubmitting(false);
     }

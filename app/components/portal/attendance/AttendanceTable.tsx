@@ -99,6 +99,42 @@ export default function AttendanceTable({
     return { present, absent, unmarked, total: matrixData.students.length }
   }, [matrixData, scheduleDates, today, getCellStatus])
 
+  // Per-column summary (present/absent/unmarked counts for each date)
+  const columnSummaries = useMemo(() => {
+    if (!matrixData) return {} as Record<string, { present: number; absent: number; unmarked: number }>
+    const result: Record<string, { present: number; absent: number; unmarked: number }> = {}
+    for (const date of scheduleDates) {
+      let present = 0
+      let absent = 0
+      let unmarked = 0
+      matrixData.students.forEach((s) => {
+        const status = getCellStatus(s.id, date)
+        if (status === "PRESENT") present++
+        else if (status === "ABSENT") absent++
+        else unmarked++
+      })
+      result[date] = { present, absent, unmarked }
+    }
+    return result
+  }, [matrixData, scheduleDates, getCellStatus])
+
+  // Overall summary across all past/today dates
+  const overallSummary = useMemo(() => {
+    let totalPresent = 0
+    let totalAbsent = 0
+    let totalUnmarked = 0
+    for (const date of scheduleDates) {
+      if (date > today) continue // skip future dates
+      const col = columnSummaries[date]
+      if (col) {
+        totalPresent += col.present
+        totalAbsent += col.absent
+        totalUnmarked += col.unmarked
+      }
+    }
+    return { totalPresent, totalAbsent, totalUnmarked }
+  }, [columnSummaries, scheduleDates, today])
+
   if (scheduleDates.length === 0) {
     return (
       <Card shadow="sm" className="flex-1">
@@ -279,6 +315,37 @@ export default function AttendanceTable({
               </tr>
             ))}
           </tbody>
+
+          {/* Footer row: per-column totals */}
+          <tfoot className="sticky bottom-0 z-20">
+            <tr className="bg-gray-100 border-t-2 border-gray-300">
+              <td className="sticky left-0 z-30 bg-gray-100 px-3 py-2 text-xs font-bold text-gray-600 border-r border-gray-200 text-center" colSpan={1}>
+                TỔNG
+              </td>
+              <td className="sticky left-12 z-30 bg-gray-100 px-4 py-2 border-r border-gray-200">
+                <span className="text-xs font-semibold text-gray-500">{filteredStudents.length} HV</span>
+              </td>
+              {scheduleDates.map((date) => {
+                const col = columnSummaries[date]
+                const isFuture = date > today
+                if (!col || isFuture) {
+                  return (
+                    <td key={date} className="px-2 py-2 text-center border-r border-gray-100 bg-gray-100 opacity-40">
+                      <span className="text-gray-300 text-[10px]">—</span>
+                    </td>
+                  )
+                }
+                return (
+                  <td key={date} className="px-1 py-1.5 text-center border-r border-gray-100 bg-gray-100">
+                    <div className="flex flex-col items-center gap-0.5">
+                      <span className="text-[10px] font-bold text-emerald-600">{col.present}</span>
+                      <span className="text-[10px] font-bold text-red-500">{col.absent}</span>
+                    </div>
+                  </td>
+                )
+              })}
+            </tr>
+          </tfoot>
         </table>
       </div>
 
@@ -287,6 +354,7 @@ export default function AttendanceTable({
         pendingCount={pendingChanges.size}
         isSaving={isSaving}
         onSave={onSave}
+        overallSummary={overallSummary}
       />
     </Card>
   )

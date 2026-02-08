@@ -9,7 +9,7 @@ import type { PortalUser } from "@/app/interfaces/portal/profile"
 import { Form, Input, Button, Chip, Card, CardBody, Textarea } from "@heroui/react"
 import { uploadAvatar } from "@/app/utils/upload"
 import { validateFile } from "@/app/utils/validation"
-import { useHttpClient } from "@/app/hooks"
+import api from "@/app/lib/http/client"
 
 interface ProfileClientProps {
   user: PortalUser
@@ -18,7 +18,6 @@ interface ProfileClientProps {
 export default function ProfileClient({ user }: ProfileClientProps) {
   const router = useRouter()
   const fileInputRef = useRef<HTMLInputElement>(null)
-  const http = useHttpClient()
 
   const [loading, setLoading] = useState(false)
   const [message, setMessage] = useState<{ type: "success" | "error"; text: string } | null>(null)
@@ -84,12 +83,12 @@ export default function ProfileClient({ user }: ProfileClientProps) {
         biography: formData.biography as string,
         image: avatarUrl,
       }
-      
-      // Use httpClient instead of fetch - auto loading spinner
-      const response = await http.put<{ error?: string }>("/api/portal/profile", updateData)
 
-      if (!response.ok) {
-        throw new Error(response.data?.error || "Cập nhật thất bại")
+      // Use axios api client - auto loading overlay
+      const { data: responseData } = await api.put<{ error?: string }>("/portal/profile", updateData)
+
+      if (responseData?.error) {
+        throw new Error(responseData.error || "Cập nhật thất bại")
       }
 
       toast.success("Cập nhật hồ sơ thành công")

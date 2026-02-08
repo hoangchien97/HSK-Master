@@ -6,3 +6,4 @@ export * from "./schedule";
 export * from "./attendance";
 export * from "./assignment";
 export * from "./api";
+export * from "./student";

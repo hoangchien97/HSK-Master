@@ -8,6 +8,7 @@ import { useState } from "react";
 import type { IClass } from "@/app/interfaces/portal";
 import { CModal } from "@/app/components/portal/common";
 import { AlertTriangle } from "lucide-react";
+import api from "@/app/lib/http/client";
 
 interface DeleteClassModalProps {
   isOpen: boolean;
@@ -27,10 +28,7 @@ export default function DeleteClassModal({
   const handleDelete = async () => {
     setIsDeleting(true);
     try {
-      const res = await fetch(`/api/portal/classes/${classData.id}`, {
-        method: "DELETE",
-      });
-      if (!res.ok) throw new Error("Xóa lớp thất bại");
+      await api.delete(`/portal/classes/${classData.id}`, { meta: { loading: false } });
       toast.success("Đã xóa lớp thành công!");
       onClose();
       onSuccess();

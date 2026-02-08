@@ -19,9 +19,10 @@ import {
 import type { ScheduleEvent } from "@/app/interfaces/portal/calendar"
 import { EventState } from "@/app/interfaces/portal/calendar"
 import { getEventState, getEventStateColor, formatEventTime } from "@/app/utils/calendar"
-import { cn } from "@/lib/utils"
+import { cn } from "@/app/lib/utils"
 import { toast } from "react-toastify"
 import { CDrawer } from "@/app/components/portal/common";
+import api from "@/app/lib/http/client";
 
 interface EventDetailDrawerProps {
   open: boolean
@@ -48,21 +49,15 @@ export default function EventDetailDrawer({
 
     try {
       setIsLoading(true)
-      const response = await fetch(`/api/portal/schedules/${eventId}`)
-
-      if (!response.ok) {
-        throw new Error("Failed to fetch event")
-      }
-
-      const data = await response.json()
+      const { data } = await api.get<ScheduleEvent>(`/portal/schedules/${eventId}`, { meta: { loading: false } })
 
       // Convert date strings to Date objects
       setEvent({
         ...data,
-        startTime: new Date(data.startTime),
-        endTime: new Date(data.endTime),
-        createdAt: new Date(data.createdAt),
-        updatedAt: new Date(data.updatedAt),
+        startTime: new Date(data.startTime as unknown as string),
+        endTime: new Date(data.endTime as unknown as string),
+        createdAt: new Date(data.createdAt as unknown as string),
+        updatedAt: new Date(data.updatedAt as unknown as string),
       })
     } catch (error) {
       console.error("Error fetching event:", error)
@@ -99,13 +94,7 @@ export default function EventDetailDrawer({
 
     try {
       setIsDeleting(true)
-      const response = await fetch(`/api/portal/schedules/${event.id}`, {
-        method: "DELETE",
-      })
-
-      if (!response.ok) {
-        throw new Error("Failed to delete event")
-      }
+      await api.delete(`/portal/schedules/${event.id}`, { meta: { loading: false } })
 
       toast.success("Đã xóa lịch dạy thành công")
       onDelete(event.id)

@@ -9,11 +9,11 @@ import {
   TableRow,
   TableCell,
   Pagination,
-  Spinner,
-  Input,
+  Select,
+  SelectItem,
 } from "@heroui/react"
-import { Search } from "lucide-react"
 import { EmptyState } from "./EmptyState"
+import { PAGINATION } from "@/app/constants/portal/pagination"
 import type { SortDescriptor, Selection } from "@heroui/react"
 
 // ─── Column definition ───────────────────────────────────────────────
@@ -26,10 +26,16 @@ export interface CTableColumn<T = Record<string, unknown>> {
   sortable?: boolean
   /** Custom render function for the cell */
   render?: (value: unknown, row: T, index: number) => React.ReactNode
-  /** Column width */
-  width?: number
+  /** Column width (CSS value) */
+  width?: number | string
+  /** Min width for scroll support */
+  minWidth?: number
   /** Text alignment */
   align?: "start" | "center" | "end"
+  /** Extra className for header <th> */
+  headerClassName?: string
+  /** Extra className for <td> */
+  cellClassName?: string
 }
 
 // ─── Props ───────────────────────────────────────────────────────────
@@ -40,44 +46,43 @@ export interface CTableProps<T extends Record<string, unknown>> {
   data: T[]
   /** Unique key field in each row (default: "id") */
   rowKey?: string
-  /** Loading state */
-  isLoading?: boolean
-  /** Pagination config – omit to disable pagination */
-  pagination?: {
-    page: number
-    pageSize: number
-    total: number
-    onPageChange: (page: number) => void
-  }
-  /** Sort descriptor (controlled) */
+
+  /* ── Pagination ── */
+  page?: number
+  pageSize?: number
+  total?: number
+  onPageChange?: (page: number) => void
+  onPageSizeChange?: (size: number) => void
+  isShowPagination?: boolean
+  pageSizeOptions?: number[]
+
+  /* ── Sorting ── */
   sortDescriptor?: SortDescriptor
-  /** Sort change handler */
   onSortChange?: (descriptor: SortDescriptor) => void
-  /** Show search bar above table */
-  searchable?: boolean
-  /** Search value (controlled) */
-  searchValue?: string
-  /** Search change handler */
-  onSearchChange?: (value: string) => void
-  /** Search placeholder */
-  searchPlaceholder?: string
-  /** Empty state config */
+
+  /* ── Selection ── */
+  selectionMode?: "none" | "single" | "multiple"
+  selectedKeys?: Selection
+  onSelectionChange?: (keys: Selection) => void
+
+  /* ── Slots ── */
+  /** Toolbar node: search filters etc — shown above total row */
+  toolbar?: React.ReactNode
+  /** Total label on the left */
+  totalLabel?: string
+  /** Actions node on the right (same row as total) */
+  actions?: React.ReactNode
+
+  /* ── Empty state ── */
   emptyContent?: {
     icon?: React.ReactNode
     title?: string
     description?: string
   }
-  /** Selection mode */
-  selectionMode?: "none" | "single" | "multiple"
-  /** Selected keys (controlled) */
-  selectedKeys?: Selection
-  /** Selection change handler */
-  onSelectionChange?: (keys: Selection) => void
-  /** Extra toolbar rendered above the table */
-  toolbar?: React.ReactNode
-  /** Additional className for the wrapper */
+
+  /* ── Styling ── */
   className?: string
-  /** Aria label for accessibility */
+  isStriped?: boolean
   ariaLabel?: string
 }
 
@@ -86,136 +91,177 @@ export function CTable<T extends Record<string, unknown>>({
   columns,
   data,
   rowKey = "id",
-  isLoading = false,
-  pagination,
+  // pagination
+  page = PAGINATION.INITIAL_PAGE,
+  pageSize = PAGINATION.DEFAULT_PAGE_SIZE,
+  total = 0,
+  onPageChange,
+  onPageSizeChange,
+  isShowPagination = true,
+  pageSizeOptions = PAGINATION.PAGE_SIZE_OPTIONS as unknown as number[],
+  // sort
   sortDescriptor,
   onSortChange,
-  searchable = false,
-  searchValue = "",
-  onSearchChange,
-  searchPlaceholder = "Tìm kiếm...",
-  emptyContent,
+  // selection
   selectionMode = "none",
   selectedKeys,
   onSelectionChange,
+  // slots
   toolbar,
+  totalLabel,
+  actions,
+  // empty
+  emptyContent,
+  // styling
   className,
+  isStriped = true,
   ariaLabel = "Data table",
 }: CTableProps<T>) {
-
-  const totalPages = useMemo(() => {
-    if (!pagination) return 1
-    return Math.max(1, Math.ceil(pagination.total / pagination.pageSize))
-  }, [pagination])
-
-  const handlePageChange = useCallback(
-    (page: number) => {
-      pagination?.onPageChange(page)
-    },
-    [pagination],
+  /* ─── Derived ─── */
+  const totalPages = useMemo(
+    () => Math.max(1, Math.ceil(total / pageSize)),
+    [total, pageSize],
   )
 
-  // Bottom content: pagination
-  const bottomContent = useMemo(() => {
-    if (!pagination) return null
-    return (
-      <div className="flex justify-between items-center px-2 py-2">
-        <span className="text-sm text-gray-500">
-          Tổng: {pagination.total} kết quả
-        </span>
-        <Pagination
-          showControls
-          color="danger"
-          page={pagination.page}
-          total={totalPages}
-          onChange={handlePageChange}
-        />
-      </div>
-    )
-  }, [pagination, totalPages, handlePageChange])
+  const handlePageChange = useCallback(
+    (p: number) => onPageChange?.(p),
+    [onPageChange],
+  )
 
-  // Top content: search + toolbar
-  const topContent = useMemo(() => {
-    if (!searchable && !toolbar) return null
+  const handlePageSizeChange = useCallback(
+    (e: React.ChangeEvent<HTMLSelectElement>) => {
+      const newSize = Number(e.target.value)
+      onPageSizeChange?.(newSize)
+    },
+    [onPageSizeChange],
+  )
+
+  /* ─── Table classNames ─── */
+  const tableClassNames = useMemo(
+    () => ({
+      base: "h-full",
+      wrapper: ["h-full", "shadow-none"],
+      // th: ["bg-default-100", "text-default-500", "border-b", "border-divider"],
+      td: [
+        "first:group-data-[first=true]/tr:before:rounded-none",
+        "last:group-data-[first=true]/tr:before:rounded-none",
+        "group-data-[middle=true]/tr:before:rounded-none",
+        "first:group-data-[last=true]/tr:before:rounded-none",
+        "last:group-data-[last=true]/tr:before:rounded-none",
+      ],
+    }),
+    [],
+  )
+
+  /* ─── Bottom: Pagination (center) + Page size (right) ─── */
+  const bottomContent = useMemo(() => {
+    if (!isShowPagination || total === 0) return null
+
     return (
-      <div className="flex flex-col gap-4">
-        <div className="flex justify-between gap-3 items-end">
-          {searchable && (
-            <Input
-              isClearable
-              className="w-full sm:max-w-[44%]"
-              placeholder={searchPlaceholder}
-              startContent={<Search className="w-4 h-4 text-gray-400" />}
-              value={searchValue}
-              onClear={() => onSearchChange?.("")}
-              onValueChange={onSearchChange}
-              variant="bordered"
-              size="sm"
-            />
-          )}
-          {toolbar && <div className="flex gap-3">{toolbar}</div>}
+      <div className="shrink-0 flex items-center justify-center gap-4 px-2 py-2 relative">
+        {totalPages > 1 && (
+          <Pagination
+            isCompact
+            showControls
+            color="primary"
+            page={page}
+            total={totalPages}
+            onChange={handlePageChange}
+          />
+        )}
+        <div className="absolute right-2 flex items-center gap-2">
+          <Select
+            size="sm"
+            selectedKeys={[String(pageSize)]}
+            onChange={handlePageSizeChange}
+            className="w-20"
+            aria-label="Số dòng mỗi trang"
+          >
+            {pageSizeOptions.map((size) => (
+              <SelectItem key={size} textValue={String(size)}>
+                {size}
+              </SelectItem>
+            ))}
+          </Select>
         </div>
       </div>
     )
-  }, [searchable, toolbar, searchPlaceholder, searchValue, onSearchChange])
+  }, [isShowPagination, total, totalPages, page, pageSize, pageSizeOptions, handlePageChange, handlePageSizeChange])
 
   return (
-    <Table
-      aria-label={ariaLabel}
-      topContent={topContent}
-      topContentPlacement="outside"
-      bottomContent={bottomContent}
-      bottomContentPlacement="outside"
-      sortDescriptor={sortDescriptor}
-      onSortChange={onSortChange}
-      selectionMode={selectionMode}
-      selectedKeys={selectedKeys}
-      onSelectionChange={onSelectionChange}
-      className={className}
-      classNames={{
-        wrapper: "shadow-none border border-gray-200 rounded-xl",
-        th: "bg-gray-50 text-gray-700 font-semibold text-xs uppercase",
-      }}
-    >
-      <TableHeader columns={columns}>
-        {(column) => (
-          <TableColumn
-            key={column.key}
-            allowsSorting={column.sortable}
-            width={column.width}
-            align={column.align}
-          >
-            {column.label}
-          </TableColumn>
-        )}
-      </TableHeader>
-      <TableBody
-        items={data}
-        isLoading={isLoading}
-        loadingContent={<Spinner color="danger" label="Đang tải..." />}
-        emptyContent={
-          <EmptyState
-            title={emptyContent?.title || "Không có dữ liệu"}
-            description={emptyContent?.description || "Chưa có dữ liệu để hiển thị"}
-            icon={emptyContent?.icon}
-          />
-        }
-      >
-        {(item) => (
-          <TableRow key={String(item[rowKey])}>
-            {(columnKey) => {
-              const col = columns.find((c) => c.key === String(columnKey))
-              const value = item[String(columnKey)]
-              const index = data.indexOf(item)
-              return (
-                <TableCell>
-                  {col?.render ? col.render(value, item, index) : (value as React.ReactNode) ?? "—"}
-                </TableCell>
-              )
-            }}
-          </TableRow>
-        )}
-      </TableBody>
-    </Table>
+    <div className={`h-full flex flex-col gap-3 ${className ?? ""}`}>
+      {/* ── Toolbar (search / filters) ── */}
+      {toolbar && <div className="shrink-0">{toolbar}</div>}
+
+      {/* ── Total (left) + Actions (right) ── */}
+      {(total > 0 || totalLabel || actions) && (
+        <div className="shrink-0 flex items-center justify-between">
+          <span className="text-sm text-default-400">
+            {totalLabel ?? `Tổng ${total}`}
+          </span>
+          {actions && <div className="flex items-center gap-2">{actions}</div>}
+        </div>
+      )}
+
+      {/* ── Table (flex-1, header sticky, body scrolls) ── */}
+      <div className="flex-1 min-h-0">
+        <Table
+          isHeaderSticky
+          aria-label={ariaLabel}
+          sortDescriptor={sortDescriptor}
+          onSortChange={onSortChange}
+          selectionMode={selectionMode}
+          selectedKeys={selectedKeys}
+          onSelectionChange={onSelectionChange}
+          classNames={tableClassNames}
+          isStriped={isStriped}
+        >
+        <TableHeader columns={columns}>
+          {(column) => (
+            <TableColumn
+              key={column.key}
+              allowsSorting={column.sortable}
+              width={column.width as number | undefined}
+              align={column.align}
+              className={column.headerClassName}
+              minWidth={column.minWidth}
+            >
+              {column.label}
+            </TableColumn>
+          )}
+        </TableHeader>
+        <TableBody
+          items={data}
+          emptyContent={
+            <EmptyState
+              title={emptyContent?.title || "Không có dữ liệu"}
+              description={emptyContent?.description || "Chưa có dữ liệu để hiển thị"}
+              icon={emptyContent?.icon}
+            />
+          }
+        >
+          {(item) => (
+            <TableRow key={String(item[rowKey])}>
+              {(columnKey) => {
+                const col = columns.find((c) => c.key === String(columnKey))
+                const value = item[String(columnKey)]
+                const index = data.indexOf(item)
+                return (
+                  <TableCell className={col?.cellClassName}>
+                    {col?.render
+                      ? col.render(value, item, index)
+                      : (value as React.ReactNode) ?? "—"}
+                  </TableCell>
+                )
+              }}
+            </TableRow>
+          )}
+        </TableBody>
+        </Table>
+      </div>
+
+      {/* ── Pagination (fixed at bottom) ── */}
+      {bottomContent}
+    </div>
   )
 }

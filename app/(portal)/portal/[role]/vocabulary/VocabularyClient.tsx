@@ -17,7 +17,7 @@ import { Card, CardBody, Button, Chip, Progress } from "@heroui/react"
 import { PageHeader } from "@/app/components/portal/common/PageHeader"
 import { StatCard } from "@/app/components/portal/common/StatCard"
 import { EmptyState } from "@/app/components/portal/common/EmptyState"
-import { cn } from "@/lib/utils"
+import { cn } from "@/app/lib/utils"
 
 interface HSKLevel {
   id: string

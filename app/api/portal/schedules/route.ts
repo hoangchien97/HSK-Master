@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from "next/server"
 import { PrismaClient } from "@prisma/client"
 import { auth } from "@/auth"
 import { SCHEDULE_STATUS, USER_ROLE } from "@/app/constants/portal/roles"
-import { generateRecurringSessions, validateRecurrenceRule, type RecurrenceRule } from "@/lib/utils/recurrence"
+import { generateRecurringSessions, validateRecurrenceRule, type RecurrenceRule } from "@/app/lib/utils/recurrence"
 
 const prisma = new PrismaClient()
 

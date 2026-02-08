@@ -1,4 +1,4 @@
-import { prisma } from "@/lib/prisma";
+import { prisma } from "@/app/lib/prisma";
 import { notFound } from "next/navigation";
 import Button from "@/app/components/landing/common/Button";
 import { Breadcrumb } from "@/app/components/landing/common";

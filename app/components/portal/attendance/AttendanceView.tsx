@@ -33,6 +33,7 @@ import {
   AlertCircle,
 } from "lucide-react"
 import { toast } from "react-toastify"
+import api from "@/app/lib/http/client"
 import dayjs from "dayjs"
 import "dayjs/locale/vi"
 
@@ -176,23 +177,14 @@ export default function AttendanceView({
         status: attendance[student.id] || "present",
       }))
 
-      const res = await fetch("/api/portal/attendance", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          classId: selectedClassId,
-          date: selectedDate,
-          attendance: attendanceData,
-        }),
-      })
+      await api.post("/portal/attendance", {
+        classId: selectedClassId,
+        date: selectedDate,
+        attendance: attendanceData,
+      }, { meta: { loading: false } })
 
-      if (res.ok) {
-        toast.success("Điểm danh thành công!")
-        router.refresh()
-      } else {
-        const data = await res.json()
-        toast.error(data.error || "Điểm danh thất bại")
-      }
+      toast.success("Điểm danh thành công!")
+      router.refresh()
     } catch {
       toast.error("Có lỗi xảy ra")
     } finally {

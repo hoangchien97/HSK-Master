@@ -2,10 +2,11 @@ import { NextRequest, NextResponse } from "next/server"
 import { PrismaClient } from "@prisma/client"
 import { auth } from "@/auth"
 import { ASSIGNMENT_STATUS } from "@/app/constants/portal/roles"
+import type { Prisma } from "@prisma/client"
 
 const prisma = new PrismaClient()
 
-// GET - Fetch assignments for the authenticated teacher
+// GET - Fetch assignments with server-side filtering & pagination
 export async function GET(request: NextRequest) {
   try {
     const session = await auth()
@@ -16,26 +17,51 @@ export async function GET(request: NextRequest) {
 
     const user = await prisma.portalUser.findUnique({
       where: { email: session.user.email },
-      include: {
-        assignments: {
-          include: {
-            class: true,
-            submissions: {
-              include: {
-                student: true,
-              },
-            },
-          },
-          orderBy: { createdAt: "desc" },
-        },
-      },
     })
 
     if (!user) {
       return NextResponse.json({ error: "User not found" }, { status: 404 })
     }
 
-    return NextResponse.json(user.assignments)
+    // Parse query params
+    const { searchParams } = new URL(request.url)
+    const search = searchParams.get("search") || ""
+    const classId = searchParams.get("classId") || ""
+    const status = searchParams.get("status") || ""
+    const page = Math.max(1, parseInt(searchParams.get("page") || "1"))
+    const pageSize = Math.min(100, Math.max(1, parseInt(searchParams.get("pageSize") || "10")))
+
+    // Build where clause
+    const where: Prisma.PortalAssignmentWhereInput = {
+      teacherId: user.id,
+      ...(search && {
+        title: { contains: search, mode: "insensitive" as const },
+      }),
+      ...(classId && { classId }),
+      ...(status && { status }),
+    }
+
+    const [items, total, classes] = await Promise.all([
+      prisma.portalAssignment.findMany({
+        where,
+        include: {
+          class: true,
+          submissions: { include: { student: true } },
+        },
+        orderBy: { createdAt: "desc" },
+        skip: (page - 1) * pageSize,
+        take: pageSize,
+      }),
+      prisma.portalAssignment.count({ where }),
+      // Also return teacher's active classes for filter dropdown
+      prisma.portalClass.findMany({
+        where: { teacherId: user.id, status: "ACTIVE" },
+        select: { id: true, className: true, classCode: true },
+        orderBy: { className: "asc" },
+      }),
+    ])
+
+    return NextResponse.json({ items, total, classes })
   } catch (error) {
     console.error("Error fetching assignments:", error)
     return NextResponse.json({ error: "Internal server error" }, { status: 500 })

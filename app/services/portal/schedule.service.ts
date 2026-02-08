@@ -3,7 +3,7 @@
  * Server-side service for schedule operations using Prisma
  */
 
-import { prisma } from '@/lib/prisma';
+import { prisma } from '@/app/lib/prisma';
 import type {
   ISchedule,
   IClass,

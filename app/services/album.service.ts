@@ -1,4 +1,4 @@
-import { prisma } from '@/lib/prisma'
+import { prisma } from '@/app/lib/prisma'
 import { Album } from '@/app/types/components'
 
 export async function getActiveAlbums(): Promise<Album[]> {

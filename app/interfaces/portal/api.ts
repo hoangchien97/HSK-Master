@@ -6,19 +6,20 @@ export interface IApiResponse<T = unknown> {
   error?: string;
 }
 
-/** Paginated response */
+/** Paginated list response from API */
 export interface IPaginatedResponse<T> {
-  data: T[];
+  items: T[];
   total: number;
-  page: number;
-  pageSize: number;
-  totalPages: number;
 }
 
-/** Table query params */
-export interface ITableQuery {
-  page?: number;
-  pageSize?: number;
+/** Base pagination params – every list screen extends this */
+export interface IPaginationParams {
+  page: number;
+  pageSize: number;
+}
+
+/** Table query params (legacy compat + sort support) */
+export interface ITableQuery extends IPaginationParams {
   search?: string;
   sortBy?: string;
   sortOrder?: "asc" | "desc";

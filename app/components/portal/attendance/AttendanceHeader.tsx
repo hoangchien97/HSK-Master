@@ -58,24 +58,21 @@ export default function AttendanceHeader({
 
   return (
     <div className="shrink-0 space-y-3 pb-3">
-      {/* Row 1: Title + Status indicators */}
-      <div className="flex items-center justify-between">
-        <h1 className="text-2xl font-bold text-gray-900">Điểm danh</h1>
-        <div className="flex items-center gap-2">
-          <Chip
-            startContent={isOnline ? <Wifi className="w-3 h-3" /> : <WifiOff className="w-3 h-3" />}
-            color={isOnline ? "success" : "warning"}
-            variant="flat"
-            size="sm"
-          >
-            {isOnline ? "Online" : "Offline"}
+      {/* Row 1: Status indicators */}
+      <div className="flex items-center justify-end gap-2">
+        <Chip
+          startContent={isOnline ? <Wifi className="w-3 h-3" /> : <WifiOff className="w-3 h-3" />}
+          color={isOnline ? "success" : "warning"}
+          variant="flat"
+          size="sm"
+        >
+          {isOnline ? "Online" : "Offline"}
+        </Chip>
+        {pendingCount > 0 && (
+          <Chip color="warning" variant="flat" size="sm">
+            Chưa lưu: {pendingCount}
           </Chip>
-          {pendingCount > 0 && (
-            <Chip color="warning" variant="flat" size="sm">
-              Chưa lưu: {pendingCount}
-            </Chip>
-          )}
-        </div>
+        )}
       </div>
 
       {/* Row 2: Filters */}

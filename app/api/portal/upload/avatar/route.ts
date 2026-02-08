@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server"
 import { auth } from "@/auth"
-import { uploadToSupabaseStorage, generateAvatarPath } from "@/lib/supabase-storage"
+import { uploadToSupabaseStorage, generateAvatarPath } from "@/app/lib/supabase-storage"
 
 export async function POST(req: NextRequest) {
   try {

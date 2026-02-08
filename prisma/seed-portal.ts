@@ -164,8 +164,8 @@ export async function seedPortal() {
 
   console.log(`✅ Created 1 admin, 5 teachers, 50 students`)
 
-  // ============= Portal Classes (15 classes) =============
-  console.log("��� Creating 15 classes...")
+  // ============= Portal Classes (25 classes) =============
+  console.log("��� Creating 25 classes...")
   
   const classesData = [
     { name: "HSK 1 - Lớp Sáng T2-T4-T6", code: "HSK1-246-SANG", level: "HSK1", teacher: teachers[0], max: 15, desc: "Lớp HSK 1 buổi sáng: T2, T4, T6 từ 8h-10h. Người mới bắt đầu." },
@@ -183,6 +183,17 @@ export async function seedPortal() {
     { name: "Tiếng Trung thương mại", code: "BUSINESS-35-TOI", level: "BUSINESS", teacher: teachers[4], max: 12, desc: "Lớp tiếng Trung thương mại: T3, T5 từ 19h-21h." },
     { name: "Luyện thi HSK 3 - Intensive", code: "HSK3-INT-SANG", level: "HSK3", teacher: teachers[2], max: 16, desc: "Khóa luyện thi HSK 3 chuyên sâu: T2-T6 từ 8h-10h." },
     { name: "Luyện thi HSK 5 - Intensive", code: "HSK5-INT-TOI", level: "HSK5", teacher: teachers[4], max: 12, desc: "Khóa luyện thi HSK 5 chuyên sâu: T2-T6 từ 18h30-20h30." },
+    // Additional 10 classes to reach 25 total — for pagination testing
+    { name: "HSK 1 - Lớp Chiều T2-T4", code: "HSK1-24-CHIEU", level: "HSK1", teacher: teachers[0], max: 18, desc: "Lớp HSK 1 buổi chiều: T2, T4 từ 14h-16h. Người mới bắt đầu." },
+    { name: "HSK 2 - Lớp Cuối tuần", code: "HSK2-T7-SANG", level: "HSK2", teacher: teachers[1], max: 20, desc: "Lớp HSK 2 cuối tuần: T7 9h-12h. Tiến độ chậm cho người bận." },
+    { name: "HSK 3 - Lớp Sáng T2-T4-T6", code: "HSK3-246-SANG", level: "HSK3", teacher: teachers[2], max: 14, desc: "Lớp HSK 3 buổi sáng: T2, T4, T6 từ 8h-10h." },
+    { name: "HSK 4 - Lớp Chiều T3-T5", code: "HSK4-35-CHIEU", level: "HSK4", teacher: teachers[4], max: 12, desc: "Lớp HSK 4 buổi chiều: T3, T5 từ 14h-17h." },
+    { name: "HSK 1 - Lớp Online T2-T4-T6", code: "HSK1-246-OL", level: "HSK1", teacher: teachers[0], max: 25, desc: "Lớp HSK 1 online: T2, T4, T6 từ 20h-21h30." },
+    { name: "HSK 2 - Lớp Online T3-T5-T7", code: "HSK2-357-OL", level: "HSK2", teacher: teachers[1], max: 25, desc: "Lớp HSK 2 online: T3, T5, T7 từ 20h-21h30." },
+    { name: "Giao tiếp du lịch - Cuối tuần", code: "GT-DL-T7", level: "BASIC", teacher: teachers[3], max: 20, desc: "Lớp giao tiếp du lịch: T7 9h-11h30. Hội thoại thực tế." },
+    { name: "HSK 5 - Lớp Sáng T3-T5-T7", code: "HSK5-357-SANG", level: "HSK5", teacher: teachers[4], max: 10, desc: "Lớp HSK 5 buổi sáng: T3, T5, T7 từ 8h-11h." },
+    { name: "Tiếng Trung Y khoa", code: "MED-24-TOI", level: "ADVANCED", teacher: teachers[3], max: 10, desc: "Lớp tiếng Trung chuyên ngành Y khoa: T2, T4 từ 19h-21h." },
+    { name: "Luyện viết Hán tự - Cuối tuần", code: "HANTU-CN", level: "BASIC", teacher: teachers[2], max: 18, desc: "Lớp luyện viết Hán tự: CN 14h-16h30. Từ nét cơ bản đến chữ phức tạp." },
   ]
 
   const classes = await Promise.all(
@@ -203,7 +214,7 @@ export async function seedPortal() {
     )
   )
 
-  console.log(`✅ Created 15 classes`)
+  console.log(`✅ Created 25 classes`)
 
   // ============= Enroll students (varied distribution) =============
   console.log("��� Enrolling students into classes...")
@@ -291,6 +302,26 @@ export async function seedPortal() {
   createSchedules(classes[13], [1, 2, 3, 4, 5], 8, 10)
   // Class 14: HSK5-INT-TOI (Mon-Fri 18:30-20:30)
   createSchedules(classes[14], [1, 2, 3, 4, 5], 18, 20)
+  // Class 15: HSK1-24-CHIEU (Mon/Wed 14-16)
+  createSchedules(classes[15], [1, 3], 14, 16)
+  // Class 16: HSK2-T7-SANG (Sat 9-12)
+  createSchedules(classes[16], [6], 9, 12)
+  // Class 17: HSK3-246-SANG (Mon/Wed/Fri 8-10)
+  createSchedules(classes[17], [1, 3, 5], 8, 10)
+  // Class 18: HSK4-35-CHIEU (Tue/Thu 14-17)
+  createSchedules(classes[18], [2, 4], 14, 17)
+  // Class 19: HSK1-246-OL Online (Mon/Wed/Fri 20-21:30)
+  createSchedules(classes[19], [1, 3, 5], 20, 21)
+  // Class 20: HSK2-357-OL Online (Tue/Thu/Sat 20-21:30)
+  createSchedules(classes[20], [2, 4, 6], 20, 21)
+  // Class 21: GT-DL-T7 (Sat 9-11:30)
+  createSchedules(classes[21], [6], 9, 11)
+  // Class 22: HSK5-357-SANG (Tue/Thu/Sat 8-11)
+  createSchedules(classes[22], [2, 4, 6], 8, 11)
+  // Class 23: MED-24-TOI (Mon/Wed 19-21)
+  createSchedules(classes[23], [1, 3], 19, 21)
+  // Class 24: HANTU-CN (Sun 14-16:30)
+  createSchedules(classes[24], [0], 14, 16)
 
   await prisma.portalSchedule.createMany({ data: schedules })
   console.log(`✅ Created ${schedules.length} schedules`)

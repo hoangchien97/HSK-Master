@@ -2,7 +2,7 @@
 
 import { useEffect, useRef } from "react";
 import { X } from "lucide-react";
-import { cn } from "@/lib/utils";
+import { cn } from "@/app/lib/utils";
 import { useClickOutside } from "@/app/hooks/useClickOutside";
 
 interface BaseModalProps {

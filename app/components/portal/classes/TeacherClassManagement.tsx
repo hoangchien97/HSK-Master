@@ -7,6 +7,7 @@ import { toast } from "react-toastify"
 // PageHeader removed - using inline heading
 import { PageHeader } from "@/app/components/portal/common/PageHeader"
 import CreateClassModal from "./CreateClassModal"
+import api from "@/app/lib/http/client"
 
 interface Class {
   id: string
@@ -30,7 +31,6 @@ interface Class {
 
 export default function TeacherClassManagement() {
   const [classes, setClasses] = useState<Class[]>([])
-  const [isLoading, setIsLoading] = useState(true)
   const [showCreateModal, setShowCreateModal] = useState(false)
   const [searchTerm, setSearchTerm] = useState("")
 
@@ -40,39 +40,24 @@ export default function TeacherClassManagement() {
 
   const fetchClasses = async () => {
     try {
-      setIsLoading(true)
-      const response = await fetch('/api/portal/classes')
-      if (response.ok) {
-        const data = await response.json()
-        setClasses(data)
-      }
+      const { data } = await api.get('/portal/classes')
+      setClasses(data as any[])
     } catch (error) {
       console.error('Error fetching classes:', error)
       toast.error('Không thể tải danh sách lớp')
-    } finally {
-      setIsLoading(false)
     }
   }
 
   const handleCreateClass = async (classData: any) => {
     try {
-      const response = await fetch('/api/portal/classes', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(classData),
-      })
-
-      if (!response.ok) {
-        const error = await response.json()
-        throw new Error(error.error || 'Failed to create class')
-      }
+      await api.post('/portal/classes', classData, { meta: { loading: false } })
 
       toast.success('Đã tạo lớp học thành công!')
       fetchClasses()
       setShowCreateModal(false)
     } catch (error: any) {
       console.error('Error creating class:', error)
-      toast.error(error.message || 'Không thể tạo lớp học')
+      toast.error(error?.normalized?.message || 'Không thể tạo lớp học')
     }
   }
 
@@ -80,14 +65,6 @@ export default function TeacherClassManagement() {
     cls.className.toLowerCase().includes(searchTerm.toLowerCase()) ||
     cls.classCode.toLowerCase().includes(searchTerm.toLowerCase())
   )
-
-  if (isLoading) {
-    return (
-      <div className="flex items-center justify-center h-64">
-        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-red-600"></div>
-      </div>
-    )
-  }
 
   return (
     <div className="space-y-6">

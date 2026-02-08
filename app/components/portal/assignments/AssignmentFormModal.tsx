@@ -16,6 +16,7 @@ import {
   Form,
 } from "@heroui/react"
 import { toast } from "react-toastify"
+import api from "@/app/lib/http/client"
 
 /* ──────────────────────── types ──────────────────────── */
 
@@ -96,26 +97,20 @@ export default function AssignmentFormModal({
       }
 
       const url = isEdit
-        ? `/api/portal/assignments/${editData!.id}`
-        : "/api/portal/assignments"
-      const method = isEdit ? "PUT" : "POST"
+        ? `/portal/assignments/${editData!.id}`
+        : "/portal/assignments"
 
-      const res = await fetch(url, {
-        method,
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(values),
-      })
-
-      if (res.ok) {
-        toast.success(isEdit ? "Cập nhật bài tập thành công!" : "Tạo bài tập thành công!")
-        router.refresh()
-        onClose()
+      if (isEdit) {
+        await api.put(url, values, { meta: { loading: false } })
       } else {
-        const data = await res.json()
-        toast.error(data.error || "Thao tác thất bại")
+        await api.post(url, values, { meta: { loading: false } })
       }
-    } catch {
-      toast.error("Có lỗi xảy ra")
+
+      toast.success(isEdit ? "Cập nhật bài tập thành công!" : "Tạo bài tập thành công!")
+      router.refresh()
+      onClose()
+    } catch (error: any) {
+      toast.error(error?.normalized?.message || "Có lỗi xảy ra")
     } finally {
       setIsSubmitting(false)
     }

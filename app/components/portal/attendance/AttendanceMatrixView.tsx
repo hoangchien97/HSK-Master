@@ -1,7 +1,6 @@
 "use client"
 
 import { useState, useEffect, useMemo, useCallback } from "react"
-import { Spinner } from "@heroui/react"
 import { Users } from "lucide-react"
 import { toast } from "react-toastify"
 import dayjs from "dayjs"
@@ -12,6 +11,7 @@ import {
   saveAttendance,
   type AttendanceMatrixData,
 } from "@/app/actions/attendance.actions"
+import { usePortalUI } from "@/app/providers/portal-ui-provider"
 import AttendanceHeader from "./AttendanceHeader"
 import AttendanceTable from "./AttendanceTable"
 
@@ -46,12 +46,11 @@ export default function AttendanceMatrixView() {
   const [matrixData, setMatrixData] = useState<AttendanceMatrixData | null>(null)
   const [pendingChanges, setPendingChanges] = useState<Map<string, PendingChange>>(new Map())
   const [searchQuery, setSearchQuery] = useState("")
-  const [isLoading, setIsLoading] = useState(true)
-  const [isLoadingMatrix, setIsLoadingMatrix] = useState(false)
   const [isSaving, setIsSaving] = useState(false)
   const [isOnline, setIsOnline] = useState(true)
   const [notePopover, setNotePopover] = useState<{ studentId: string; date: string } | null>(null)
   const [noteText, setNoteText] = useState("")
+  const { startLoading, stopLoading } = usePortalUI()
 
   // Online/offline detection
   useEffect(() => {
@@ -65,7 +64,6 @@ export default function AttendanceMatrixView() {
     }
   }, [])
 
-  // Load classes on mount
   useEffect(() => {
     loadClasses()
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -81,7 +79,7 @@ export default function AttendanceMatrixView() {
 
   const loadClasses = async () => {
     try {
-      setIsLoading(true)
+      startLoading()
       const result = await fetchTeacherClasses()
       if (result.success && result.classes) {
         setClasses(result.classes)
@@ -94,14 +92,14 @@ export default function AttendanceMatrixView() {
     } catch {
       toast.error("Có lỗi xảy ra")
     } finally {
-      setIsLoading(false)
+      stopLoading()
     }
   }
 
   const loadMatrix = async () => {
     if (!selectedClassId || !currentMonth) return
     try {
-      setIsLoadingMatrix(true)
+      startLoading()
       const result = await fetchAttendanceMatrix(selectedClassId, currentMonth)
       if (result.success && result.data) {
         setMatrixData(result.data)
@@ -112,7 +110,7 @@ export default function AttendanceMatrixView() {
     } catch {
       toast.error("Có lỗi xảy ra")
     } finally {
-      setIsLoadingMatrix(false)
+      stopLoading()
     }
   }
 
@@ -368,16 +366,8 @@ export default function AttendanceMatrixView() {
     setPendingChanges(new Map())
   }, [])
 
-  /* ───── Loading state ───── */
-  if (isLoading) {
-    return (
-      <div className="flex items-center justify-center h-64">
-        <Spinner size="lg" color="danger" />
-      </div>
-    )
-  }
-
-  if (classes.length === 0) {
+  /* ───── Main render ───── */
+  if (classes.length === 0 && !matrixData) {
     return (
       <div className="flex flex-col items-center justify-center py-20 gap-4">
         <Users className="w-16 h-16 text-default-300" />
@@ -387,9 +377,8 @@ export default function AttendanceMatrixView() {
     )
   }
 
-  /* ───── Main render ───── */
   return (
-    <div className="flex flex-col h-[calc(100vh-140px)]">
+    <div className="flex flex-col h-full">
       {/* Header: Filters */}
       <AttendanceHeader
         classes={classes}
@@ -404,11 +393,7 @@ export default function AttendanceMatrixView() {
       />
 
       {/* Matrix Table */}
-      {isLoadingMatrix ? (
-        <div className="flex items-center justify-center flex-1">
-          <Spinner size="lg" color="danger" />
-        </div>
-      ) : matrixData ? (
+      {matrixData ? (
         <AttendanceTable
           matrixData={matrixData}
           scheduleDates={scheduleDates}

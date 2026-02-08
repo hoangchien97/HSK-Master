@@ -1,4 +1,4 @@
-import { prisma } from '@/lib/prisma'
+import { prisma } from '@/app/lib/prisma'
 
 export interface HSKLevel {
   level: number
@@ -43,9 +43,9 @@ export async function getHSKLevels(): Promise<HSKLevel[]> {
 export async function getHSKLevelByLevel(level: number): Promise<HSKLevel | null> {
   try {
     const hskLevel = await prisma.hSKLevel.findFirst({
-      where: { 
+      where: {
         level,
-        isActive: true 
+        isActive: true
       },
     })
 

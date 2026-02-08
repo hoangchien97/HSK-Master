@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server"
 import { auth } from "@/auth"
-import { prisma } from "@/lib/prisma"
+import { prisma } from "@/app/lib/prisma"
 
 // POST - Enroll a student to a class (by email search)
 export async function POST(

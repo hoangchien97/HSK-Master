@@ -1,4 +1,4 @@
-import { prisma } from '@/lib/prisma'
+import { prisma } from '@/app/lib/prisma'
 import type { PortalUser, UpdateProfileDTO, ProfileUpdateResponse } from '@/app/interfaces/portal/profile'
 
 export class ProfileService {

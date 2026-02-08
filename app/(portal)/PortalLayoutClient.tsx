@@ -2,10 +2,10 @@
 
 import { useState } from "react"
 import { ToastContainer } from "react-toastify"
-import { Spinner } from "@heroui/react"
 import PortalSidebar from "@/app/components/portal/PortalSidebar"
 import PortalHeader from "@/app/components/portal/PortalHeader"
-import { useLoading, LoadingProvider } from "@/app/providers"
+import PortalContent from "@/app/components/portal/PortalContent"
+import { PortalUIProvider } from "@/app/providers/portal-ui-provider"
 import "react-toastify/dist/ReactToastify.css"
 
 interface User {
@@ -21,13 +21,12 @@ interface PortalLayoutClientProps {
   children: React.ReactNode
 }
 
-/** Inner layout that can access LoadingContext */
+/** Inner layout that can access PortalUIProvider context */
 function PortalLayoutInner({ user, children }: PortalLayoutClientProps) {
   const [sidebarOpen, setSidebarOpen] = useState(false)
-  const { isLoading } = useLoading()
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="h-screen flex bg-gray-50 overflow-hidden">
       {/* Toast Notifications */}
       <ToastContainer
         position="top-right"
@@ -42,16 +41,16 @@ function PortalLayoutInner({ user, children }: PortalLayoutClientProps) {
         theme="light"
       />
 
-      {/* Sidebar - Fixed */}
+      {/* Sidebar - Fixed left, full height */}
       <PortalSidebar
         userRole={user.role}
         isOpen={sidebarOpen}
         onClose={() => setSidebarOpen(false)}
       />
 
-      {/* Main content area */}
-      <div className="lg:pl-64 flex flex-col min-h-screen">
-        {/* Header - Fixed */}
+      {/* Right area: Header (sticky) + Content (scrollable) */}
+      <div className="flex-1 flex flex-col min-h-0 lg:pl-64">
+        {/* Header - Sticky top */}
         <PortalHeader
           userName={user.fullName || user.name}
           userEmail={user.email}
@@ -60,16 +59,8 @@ function PortalLayoutInner({ user, children }: PortalLayoutClientProps) {
           onMenuClick={() => setSidebarOpen(true)}
         />
 
-        {/* Page content - Scrollable */}
-        <main className="flex-1 p-4 lg:p-6 overflow-y-auto relative min-h-[calc(100vh-4rem)]">
-          {/* Global loading overlay */}
-          {isLoading && (
-            <div className="absolute inset-0 z-50 flex items-center justify-center bg-white/60 backdrop-blur-xs">
-              <Spinner size="lg" color="danger" label="Đang tải..." />
-            </div>
-          )}
-          {children}
-        </main>
+        {/* Page content - Only this area scrolls */}
+        <PortalContent>{children}</PortalContent>
       </div>
     </div>
   )
@@ -77,10 +68,10 @@ function PortalLayoutInner({ user, children }: PortalLayoutClientProps) {
 
 export default function PortalLayoutClient({ user, children }: PortalLayoutClientProps) {
   return (
-    <LoadingProvider>
+    <PortalUIProvider>
       <PortalLayoutInner user={user}>
         {children}
       </PortalLayoutInner>
-    </LoadingProvider>
+    </PortalUIProvider>
   )
 }

@@ -1,9 +1,8 @@
 import { auth } from "@/auth"
 import { redirect, notFound } from "next/navigation"
-import prisma from "@/lib/prisma"
+import prisma from "@/app/lib/prisma"
 import StudentAssignmentsView from "@/app/components/portal/assignments/StudentAssignmentsView"
 import AssignmentsTable from "@/app/components/portal/assignments/AssignmentsTable"
-import { STATUS } from "@/app/constants/portal/roles"
 
 type Props = {
   params: Promise<{ role: string }>
@@ -59,34 +58,6 @@ async function getStudentAssignments(email: string) {
   return { assignments, studentId }
 }
 
-async function getTeacherAssignments(email: string) {
-  const user = await prisma.portalUser.findUnique({
-    where: { email },
-    include: {
-      assignments: {
-        include: {
-          class: true,
-          submissions: {
-            include: {
-              student: true,
-            },
-          },
-        },
-        orderBy: { createdAt: "desc" },
-      },
-      classes: {
-        where: { status: STATUS.ACTIVE },
-        select: { id: true, className: true, classCode: true },
-      },
-    },
-  })
-
-  return {
-    assignments: user?.assignments || [],
-    classes: user?.classes || [],
-  }
-}
-
 export default async function AssignmentsPage({ params }: Props) {
   const session = await auth()
 
@@ -102,15 +73,15 @@ export default async function AssignmentsPage({ params }: Props) {
     notFound()
   }
 
-  // Render based on role
+  // Student view: server-fetched assignments
   if (userRole === "student") {
     const { assignments, studentId } = await getStudentAssignments(session.user.email)
     return <StudentAssignmentsView assignments={assignments} studentId={studentId || ""} />
   }
 
+  // Teacher view: client-side table with API fetch
   if (userRole === "teacher") {
-    const { assignments, classes } = await getTeacherAssignments(session.user.email)
-    return <AssignmentsTable assignments={assignments} classes={classes} role={userRole} />
+    return <AssignmentsTable role={userRole} />
   }
 
   notFound()

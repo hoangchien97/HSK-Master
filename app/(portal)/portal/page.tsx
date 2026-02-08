@@ -1,7 +1,7 @@
 import { auth } from "@/auth"
 import { redirect } from "next/navigation"
 import { STATUS } from "@/app/constants/portal/roles"
-import { getDashboardPath } from "@/lib/utils/auth"
+import { getDashboardPath } from "@/app/lib/utils/auth"
 
 export default async function PortalPage() {
   const session = await auth()

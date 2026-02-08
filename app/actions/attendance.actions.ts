@@ -6,7 +6,7 @@
  */
 
 import { auth } from '@/auth';
-import { prisma } from '@/lib/prisma';
+import { prisma } from '@/app/lib/prisma';
 import { USER_ROLE } from '@/app/constants/portal/roles';
 import { revalidatePath } from 'next/cache';
 

@@ -1,9 +1,10 @@
 import { NextRequest, NextResponse } from "next/server"
 import { auth } from "@/auth"
-import { prisma } from "@/lib/prisma"
+import { prisma } from "@/app/lib/prisma"
 import { CLASS_STATUS } from "@/app/constants/portal/roles"
+import type { Prisma } from "@prisma/client"
 
-// GET - Fetch classes for the authenticated teacher
+// GET - Fetch classes with server-side filtering & pagination
 export async function GET(request: NextRequest) {
   try {
     const session = await auth()
@@ -14,25 +15,48 @@ export async function GET(request: NextRequest) {
 
     const user = await prisma.portalUser.findUnique({
       where: { email: session.user.email },
-      include: {
-        classes: {
-          include: {
-            enrollments: {
-              include: {
-                student: true,
-              },
-            },
-          },
-          orderBy: { createdAt: "desc" },
-        },
-      },
     })
 
     if (!user) {
       return NextResponse.json({ error: "User not found" }, { status: 404 })
     }
 
-    return NextResponse.json(user.classes)
+    // Parse query params
+    const { searchParams } = new URL(request.url)
+    const search = searchParams.get("search") || ""
+    const status = searchParams.get("status") || ""
+    const page = Math.max(1, parseInt(searchParams.get("page") || "1"))
+    const pageSize = Math.min(100, Math.max(1, parseInt(searchParams.get("pageSize") || "10")))
+
+    // Build where clause
+    const where: Prisma.PortalClassWhereInput = {
+      teacherId: user.id,
+      ...(status && { status }),
+      ...(search && {
+        OR: [
+          { className: { contains: search, mode: "insensitive" as const } },
+          { classCode: { contains: search, mode: "insensitive" as const } },
+          { level: { contains: search, mode: "insensitive" as const } },
+        ],
+      }),
+    }
+
+    const [items, total] = await Promise.all([
+      prisma.portalClass.findMany({
+        where,
+        include: {
+          teacher: { select: { fullName: true, email: true } },
+          enrollments: { include: { student: true } },
+          _count: { select: { enrollments: true } },
+        },
+        orderBy: { createdAt: "desc" },
+        skip: (page - 1) * pageSize,
+        take: pageSize,
+      }),
+      prisma.portalClass.count({ where }),
+    ])
+
+    return NextResponse.json({ items, total })
   } catch (error) {
     console.error("Error fetching classes:", error)
     return NextResponse.json({ error: "Internal server error" }, { status: 500 })
