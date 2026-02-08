@@ -143,7 +143,7 @@ export async function seedPortal() {
       const slug = name.toLowerCase()
         .normalize("NFD").replace(/[\u0300-\u036f]/g, "")
         .replace(/đ/g, "d").replace(/\s+/g, "-")
-      
+
       return prisma.portalUser.create({
         data: {
           name: slug,
@@ -166,7 +166,7 @@ export async function seedPortal() {
 
   // ============= Portal Classes (25 classes) =============
   console.log("��� Creating 25 classes...")
-  
+
   const classesData = [
     { name: "HSK 1 - Lớp Sáng T2-T4-T6", code: "HSK1-246-SANG", level: "HSK1", teacher: teachers[0], max: 15, desc: "Lớp HSK 1 buổi sáng: T2, T4, T6 từ 8h-10h. Người mới bắt đầu." },
     { name: "HSK 1 - Lớp Tối T3-T5-T7", code: "HSK1-357-TOI", level: "HSK1", teacher: teachers[0], max: 17, desc: "Lớp HSK 1 buổi tối: T3, T5, T7 từ 18h30-20h30." },
@@ -219,7 +219,7 @@ export async function seedPortal() {
   // ============= Enroll students (varied distribution) =============
   console.log("��� Enrolling students into classes...")
   const enrollments: any[] = []
-  
+
   // Distribute students across classes (15-17 per class)
   let studentIndex = 0
   classes.forEach((cls, classIndex) => {
@@ -241,7 +241,7 @@ export async function seedPortal() {
   // ============= Portal Schedules =============
   console.log("��� Creating class schedules...")
   const schedules: any[] = []
-  
+
   // Helper to create schedules for a class
   const createSchedules = (
     cls: any,
@@ -251,14 +251,14 @@ export async function seedPortal() {
   ) => {
     const start = new Date("2026-02-01")
     const end = new Date("2026-03-31")
-    
+
     for (let d = new Date(start); d <= end; d.setDate(d.getDate() + 1)) {
       if (weekdays.includes(d.getDay())) {
         const startTime = new Date(d)
         startTime.setHours(startHour, 0, 0, 0)
         const endTime = new Date(d)
         endTime.setHours(endHour, 0, 0, 0)
-        
+
         schedules.push({
           classId: cls.id,
           teacherId: cls.teacherId,
