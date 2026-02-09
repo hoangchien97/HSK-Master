@@ -1,6 +1,6 @@
 'use server'
 
-import { getFilteredCourses } from '../../services/course.service'
+import { getFilteredCourses } from '@/services/course.service'
 
 export async function getCoursesAction(filters: {
   category?: string | null

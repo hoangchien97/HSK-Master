@@ -1,8 +1,8 @@
 import { NextResponse } from "next/server";
-import { prisma } from "@/app/lib/prisma";
+import { prisma } from "@/lib/prisma";
 import bcrypt from "bcryptjs";
 import { z } from "zod";
-import { USER_ROLE, STATUS } from "@/app/constants/portal/roles";
+import { USER_ROLE, STATUS } from "@/constants/portal/roles";
 
 const registerSchema = z.object({
   name: z.string().min(2, "Tên phải có ít nhất 2 ký tự"),

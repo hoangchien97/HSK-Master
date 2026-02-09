@@ -1,7 +1,7 @@
 import { auth } from "@/auth"
 import { redirect } from "next/navigation"
-import StudentsTable from "@/app/components/portal/students/StudentsTable"
-import { USER_ROLE } from "@/app/constants/portal/roles"
+import StudentsTable from "@/components/portal/students/StudentsTable"
+import { USER_ROLE } from "@/constants/portal/roles"
 
 export default async function TeacherStudentsPage() {
   const session = await auth()

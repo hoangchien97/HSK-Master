@@ -1,7 +1,7 @@
 import { auth } from "@/auth"
 import { redirect, notFound } from "next/navigation"
-import StudentScheduleView from "@/app/components/portal/schedules/StudentScheduleView"
-import TeacherScheduleCalendar from "@/app/components/portal/schedules/TeacherScheduleCalendar"
+import StudentScheduleView from "@/components/portal/schedules/StudentScheduleView"
+import TeacherScheduleCalendar from "@/components/portal/schedules/TeacherScheduleCalendar"
 
 type Props = {
   params: Promise<{ role: string }>

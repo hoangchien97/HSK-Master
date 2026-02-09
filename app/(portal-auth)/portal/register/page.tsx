@@ -1,7 +1,7 @@
 import { auth } from "@/auth"
 import { redirect } from "next/navigation"
 import { Suspense } from "react"
-import RegisterForm from "@/app/components/portal/auth/RegisterForm"
+import RegisterForm from "@/components/portal/auth/RegisterForm"
 
 export default async function PortalRegisterPage() {
   // Server-side auth check - redirect if already logged in

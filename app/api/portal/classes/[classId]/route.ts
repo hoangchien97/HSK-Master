@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server"
 import { auth } from "@/auth"
-import { prisma } from "@/app/lib/prisma"
+import { prisma } from "@/lib/prisma"
 
 // GET - Fetch class detail with enrollments
 export async function GET(

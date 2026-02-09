@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from "next/server"
-import { prisma } from "@/app/lib/prisma"
+import { prisma } from "@/lib/prisma"
 import { auth } from "@/auth"
-import { USER_ROLE } from "@/app/constants/portal/roles"
+import { USER_ROLE } from "@/constants/portal/roles"
 
 // GET - Fetch attendance matrix for a class in a month
 export async function GET(request: NextRequest) {

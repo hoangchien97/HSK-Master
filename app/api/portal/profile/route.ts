@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from "next/server"
 import { auth } from "@/auth"
-import { ProfileService } from "@/app/services/portal"
-import type { UpdateProfileDTO } from "@/app/interfaces/portal"
+import { ProfileService } from "@/services/portal"
+import type { UpdateProfileDTO } from "@/interfaces/portal"
 
 export async function PUT(request: NextRequest) {
   try {

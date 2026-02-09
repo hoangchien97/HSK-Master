@@ -1,8 +1,8 @@
 import { auth } from "@/auth"
 import { redirect, notFound } from "next/navigation"
-import prisma from "@/app/lib/prisma"
-import StudentAssignmentsView from "@/app/components/portal/assignments/StudentAssignmentsView"
-import AssignmentsTable from "@/app/components/portal/assignments/AssignmentsTable"
+import prisma from "@/lib/prisma"
+import StudentAssignmentsView from "@/components/portal/assignments/StudentAssignmentsView"
+import AssignmentsTable from "@/components/portal/assignments/AssignmentsTable"
 
 type Props = {
   params: Promise<{ role: string }>

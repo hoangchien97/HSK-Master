@@ -12,10 +12,10 @@ import {
   ArrowRight,
 } from "lucide-react"
 import { Card, CardBody, Button, Chip, Input } from "@heroui/react"
-import { PageHeader } from "@/app/components/portal/common/PageHeader"
-import { EmptyState } from "@/app/components/portal/common/EmptyState"
-import { cn } from "@/app/lib/utils"
-import api from "@/app/lib/http/client"
+import { PageHeader } from "@/components/portal/common/PageHeader"
+import { EmptyState } from "@/components/portal/common/EmptyState"
+import { cn } from "@/lib/utils"
+import api from "@/lib/http/client"
 
 interface Vocabulary {
   id: string

@@ -1,7 +1,7 @@
 import { auth } from "@/auth"
 import { redirect } from "next/navigation"
-import AttendanceMatrixView from "@/app/components/portal/attendance/AttendanceMatrixView"
-import { USER_ROLE } from "@/app/constants/portal/roles"
+import AttendanceMatrixView from "@/components/portal/attendance/AttendanceMatrixView"
+import { USER_ROLE } from "@/constants/portal/roles"
 
 export default async function TeacherAttendancePage() {
   const session = await auth()

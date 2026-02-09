@@ -1,6 +1,6 @@
 import { auth } from "@/auth"
 import { redirect } from "next/navigation"
-import ClassDetailView from "@/app/components/portal/classes/ClassDetailView"
+import ClassDetailView from "@/components/portal/classes/ClassDetailView"
 
 export default async function ClassDetailPage({
   params,

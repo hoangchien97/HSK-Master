@@ -2,9 +2,9 @@ import { MetadataRoute } from 'next';
 
 export default function manifest(): MetadataRoute.Manifest {
   return {
-    name: 'HSK Master - Trung tâm tiếng Trung',
-    short_name: 'HSK Master',
-    description: 'Trung tâm tiếng Trung HSK Master - Đào tạo HSK 1-6, giao tiếp, thương mại',
+    name: 'HSK Ruby - Trung tâm tiếng Trung',
+    short_name: 'HSK Ruby',
+    description: 'Trung tâm tiếng Trung HSK Ruby - Đào tạo HSK 1-6, giao tiếp, thương mại',
     start_url: '/',
     display: 'standalone',
     background_color: '#ffffff',

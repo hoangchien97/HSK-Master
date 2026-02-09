@@ -1,7 +1,7 @@
 import { auth } from "@/auth"
 import { redirect } from "next/navigation"
 import { Suspense } from "react"
-import LoginForm from "@/app/components/portal/auth/LoginForm"
+import LoginForm from "@/components/portal/auth/LoginForm"
 
 export default async function PortalLoginPage() {
   // Server-side auth check - redirect if already logged in

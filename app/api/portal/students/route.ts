@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server"
 import { auth } from "@/auth"
-import { prisma } from "@/app/lib/prisma"
+import { prisma } from "@/lib/prisma"
 import type { Prisma } from "@prisma/client"
 
 // GET - Fetch students for the authenticated teacher with filtering & pagination

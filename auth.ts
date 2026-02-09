@@ -1,10 +1,10 @@
 import NextAuth from "next-auth"
 import Google from "next-auth/providers/google"
 import Credentials from "next-auth/providers/credentials"
-import { prisma } from "@/app/lib/prisma"
+import { prisma } from "@/lib/prisma"
 import bcrypt from "bcryptjs"
 import { z } from "zod"
-import { USER_ROLE, STATUS } from "@/app/constants/portal/roles"
+import { USER_ROLE, STATUS } from "@/constants/portal/roles"
 import { authConfig } from "@/auth.config"
 
 // Type for PortalUser with status field (for TypeScript compatibility)

@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from "next/server"
 import { auth } from "@/auth"
-import { prisma } from "@/app/lib/prisma"
-import { CLASS_STATUS } from "@/app/constants/portal/roles"
+import { prisma } from "@/lib/prisma"
+import { CLASS_STATUS } from "@/constants/portal/roles"
 import type { Prisma } from "@prisma/client"
 
 // GET - Fetch classes with server-side filtering & pagination

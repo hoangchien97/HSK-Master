@@ -1,13 +1,13 @@
 import type { Metadata } from "next";
-import { getPageMetadata } from "../../services/metadata.service";
+import { getPageMetadata } from "@/services/metadata.service";
 import {
   AboutHero,
   TeacherProfile,
   TeachingPhilosophy,
   WhyChooseUs,
   Environment,
-} from "@/app/components/landing/about";
-import { AnimatedSection } from "@/app/components/landing/shared/AnimatedSection";
+} from "@/components/landing/about";
+import { AnimatedSection } from "@/components/landing/shared/AnimatedSection";
 
 export const revalidate = 3600;
 

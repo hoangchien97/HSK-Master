@@ -1,10 +1,10 @@
 import type { Metadata } from "next";
 import { submitContact } from "./actions";
-import { ContactInfo, ContactForm, FAQ_DATA } from "@/app/components/landing/contact";
-import { Breadcrumb } from "@/app/components/landing/common";
-import { AnimatedSection } from "@/app/components/landing/shared";
-import { getPageMetadata } from "@/app/services/metadata.service";
-import { generateFAQSchema } from "@/app/lib/structured-data";
+import { ContactInfo, ContactForm, FAQ_DATA } from "@/components/landing/contact";
+import { Breadcrumb } from "@/components/landing/common";
+import { AnimatedSection } from "@/components/landing/shared";
+import { getPageMetadata } from "@/services/metadata.service";
+import { generateFAQSchema } from "@/lib/structured-data";
 
 export async function generateMetadata(): Promise<Metadata> {
   const metadata = await getPageMetadata("/contact");

@@ -14,10 +14,10 @@ import {
   Plus,
 } from "lucide-react"
 import { Card, CardBody, Button, Chip, Progress } from "@heroui/react"
-import { PageHeader } from "@/app/components/portal/common/PageHeader"
-import { StatCard } from "@/app/components/portal/common/StatCard"
-import { EmptyState } from "@/app/components/portal/common/EmptyState"
-import { cn } from "@/app/lib/utils"
+import { PageHeader } from "@/components/portal/common/PageHeader"
+import { StatCard } from "@/components/portal/common/StatCard"
+import { EmptyState } from "@/components/portal/common/EmptyState"
+import { cn } from "@/lib/utils"
 
 interface HSKLevel {
   id: string

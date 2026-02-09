@@ -1,9 +1,9 @@
 import { Suspense } from "react";
-import { Breadcrumb } from "@/app/components/landing/common";
-import { AnimatedSection } from "@/app/components/landing/shared/AnimatedSection";
+import { Breadcrumb } from "@/components/landing/common";
+import { AnimatedSection } from "@/components/landing/shared/AnimatedSection";
 import { CoursesContainer } from "./CoursesClient";
-import { getFilteredCourses, getCategories } from "../../services/course.service";
-import { getPageMetadata } from "../../services/metadata.service";
+import { getFilteredCourses, getCategories } from "@/services/course.service";
+import { getPageMetadata } from "@/services/metadata.service";
 import type { Metadata } from "next";
 
 export const revalidate = 600;

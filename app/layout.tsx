@@ -1,15 +1,15 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
-import { WebVitals } from "./components/landing/shared";
+import { WebVitals } from "@/components/landing/shared";
 import * as TooltipPrimitive from '@radix-ui/react-tooltip';
 import NextTopLoader from 'nextjs-toploader';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import { generateOrganizationSchema, generateWebsiteSchema } from './lib/structured-data';
+import { generateOrganizationSchema, generateWebsiteSchema } from '@/lib/structured-data';
 import { SessionProvider } from "next-auth/react";
 import { Suspense } from "react";
-import { HeroUIProvider } from "./providers";
+import { HeroUIProvider } from "@/providers";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -26,16 +26,16 @@ const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://hskmaster.edu.vn";
 export const metadata: Metadata = {
   metadataBase: new URL(siteUrl),
   title: {
-    default: "HSK Master - Trung tâm tiếng Trung uy tín tại Hà Nội",
-    template: "%s | HSK Master",
+    default: "HSK Ruby - Trung tâm tiếng Trung uy tín tại Hà Nội",
+    template: "%s | HSK Ruby",
   },
   description:
-    "Trung tâm tiếng Trung HSK Master - Đào tạo HSK 1-6, giao tiếp, thương mại. Giáo viên 8+ năm kinh nghiệm. Cam kết đầu ra.",
+    "Trung tâm tiếng Trung HSK Ruby - Đào tạo HSK 1-6, giao tiếp, thương mại. Giáo viên 8+ năm kinh nghiệm. Cam kết đầu ra.",
   keywords: ["học tiếng Trung", "HSK", "trung tâm tiếng Trung Hà Nội", "luyện thi HSK", "học tiếng Trung online"],
-  authors: [{ name: "HSK Master" }],
-  creator: "HSK Master",
-  publisher: "HSK Master",
-  applicationName: "HSK Master",
+  authors: [{ name: "HSK Ruby" }],
+  creator: "HSK Ruby",
+  publisher: "HSK Ruby",
+  applicationName: "HSK Ruby",
   category: "Education",
   classification: "Education",
   formatDetection: {
@@ -43,11 +43,9 @@ export const metadata: Metadata = {
     address: false,
     telephone: false,
   },
-  // Thẻ Icons & Manifest
   icons: {
     icon: [
       { url: "/favicon.ico", sizes: "any" },
-      { url: "/favicon-16x16.png", sizes: "16x16", type: "image/png" },
       { url: "/favicon-32x32.png", sizes: "32x32", type: "image/png" },
       { url: "/android-chrome-192x192.png", sizes: "192x192", type: "image/png" },
       { url: "/android-chrome-512x512.png", sizes: "512x512", type: "image/png" },
@@ -63,15 +61,15 @@ export const metadata: Metadata = {
     type: "website",
     locale: "vi_VN",
     url: siteUrl,
-    siteName: "HSK Master",
-    title: "HSK Master - Trung tâm tiếng Trung uy tín tại Hà Nội",
-    description: "Trung tâm tiếng Trung HSK Master - Đào tạo HSK 1-6, giao tiếp, thương mại. Cam kết đầu ra.",
+    siteName: "HSK Ruby",
+    title: "HSK Ruby - Trung tâm tiếng Trung uy tín tại Hà Nội",
+    description: "Trung tâm tiếng Trung HSK Ruby - Đào tạo HSK 1-6, giao tiếp, thương mại. Cam kết đầu ra.",
     images: [
       {
         url: `${siteUrl}/og-image.jpg`,
         width: 1200,
         height: 630,
-        alt: "HSK Master - Trung tâm tiếng Trung",
+        alt: "HSK Ruby - Trung tâm tiếng Trung",
         type: "image/jpeg",
       },
     ],
@@ -80,9 +78,9 @@ export const metadata: Metadata = {
   // Twitter Card - Enhanced
   twitter: {
     card: "summary_large_image",
-    site: "@hskmaster",
-    creator: "@hskmaster",
-    title: "HSK Master - Trung tâm tiếng Trung uy tín",
+    site: "@hskruby",
+    creator: "@hskruby",
+    title: "HSK Ruby - Trung tâm tiếng Trung uy tín",
     description: "Đào tạo HSK 1-6, giao tiếp, thương mại. Cam kết đầu ra.",
     images: [`${siteUrl}/og-image.jpg`],
   },
@@ -118,7 +116,7 @@ export const metadata: Metadata = {
   appleWebApp: {
     capable: true,
     statusBarStyle: "default",
-    title: "HSK Master",
+    title: "HSK Ruby",
   },
 
   // Other metadata
@@ -146,6 +144,7 @@ export default function RootLayout({
           href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap"
           rel="stylesheet"
         />
+        <meta name="apple-mobile-web-app-title" content="HSK Ruby" />
         {/* Structured Data - Organization & Website Schema */}
         <script
           type="application/ld+json"

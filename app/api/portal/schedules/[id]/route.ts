@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { auth } from '@/auth';
-import prisma from '@/app/lib/prisma';
-import { USER_ROLE, SCHEDULE_STATUS } from '@/app/constants/portal/roles';
+import prisma from '@/lib/prisma';
+import { USER_ROLE, SCHEDULE_STATUS } from '@/constants/portal/roles';
 
 // GET - Get single schedule
 export async function GET(

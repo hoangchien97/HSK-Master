@@ -5,9 +5,9 @@ import {
   GallerySection,
   CTASection,
   ReviewsSection,
-} from "@/app/components/landing";
-import { AnimatedSection } from "../components/landing/shared/AnimatedSection";
-import { getPageMetadata } from "../services/metadata.service";
+} from "@/components/landing";
+import { AnimatedSection } from "@/components/landing/shared/AnimatedSection";
+import { getPageMetadata } from "@/services/metadata.service";
 import type { Metadata } from "next";
 
 export const revalidate = 3600;

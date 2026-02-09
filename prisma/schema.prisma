@@ -155,9 +155,7 @@ model HSKLevel {
 // Why Choose Us Features
 model Feature {
   id          String   @id @default(uuid())
-  icon        String
-  iconBg      String
-  iconColor   String
+  iconName    String   // Lucide icon name (e.g., "GraduationCap", "BookOpen")
   title       String
   description String
   order       Int

@@ -2,10 +2,10 @@
 
 import { useState } from "react"
 import { ToastContainer } from "react-toastify"
-import PortalSidebar from "@/app/components/portal/PortalSidebar"
-import PortalHeader from "@/app/components/portal/PortalHeader"
-import PortalContent from "@/app/components/portal/PortalContent"
-import { PortalUIProvider } from "@/app/providers/portal-ui-provider"
+import PortalSidebar from "@/components/portal/PortalSidebar"
+import PortalHeader from "@/components/portal/PortalHeader"
+import PortalContent from "@/components/portal/PortalContent"
+import { PortalUIProvider } from "@/providers/portal-ui-provider"
 import "react-toastify/dist/ReactToastify.css"
 
 interface User {

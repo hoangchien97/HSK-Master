@@ -5,11 +5,11 @@ import { useRouter } from "next/navigation"
 import { Camera, Save, X, Mail, Phone, User } from "lucide-react"
 import Image from "next/image"
 import { toast } from "react-toastify"
-import type { PortalUser } from "@/app/interfaces/portal/profile"
+import type { PortalUser } from "@/interfaces/portal/profile"
 import { Form, Input, Button, Chip, Card, CardBody, Textarea } from "@heroui/react"
-import { uploadAvatar } from "@/app/utils/upload"
-import { validateFile } from "@/app/utils/validation"
-import api from "@/app/lib/http/client"
+import { uploadAvatar } from "@/utils/upload"
+import { validateFile } from "@/utils/validation"
+import api from "@/lib/http/client"
 
 interface ProfileClientProps {
   user: PortalUser
@@ -254,7 +254,7 @@ export default function ProfileClient({ user }: ProfileClientProps) {
                   label="Ngày sinh"
                   type="date"
                   labelPlacement="outside"
-                  defaultValue={user.dateOfBirth || ""}
+                  defaultValue={user.dateOfBirth ? new Date(user.dateOfBirth).toISOString().split('T')[0] : ""}
                   onChange={() => setIsDirty(true)}
                 />
               </div>

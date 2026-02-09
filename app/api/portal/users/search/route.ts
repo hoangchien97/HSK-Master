@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server"
 import { auth } from "@/auth"
-import { prisma } from "@/app/lib/prisma"
+import { prisma } from "@/lib/prisma"
 
 // GET /api/portal/users/search - Search users by email or name
 export async function GET(request: NextRequest) {
