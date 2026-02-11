@@ -20,10 +20,9 @@ export default function Footer() {
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 md:gap-8">
           {/* Brand Section */}
           <div className="sm:col-span-2 lg:col-span-1">
-            <Link href="/" className="inline-flex items-center gap-2 mb-3 hover:opacity-90 transition-opacity group">
-              <Image src="/logo.png" alt={BRAND_NAME} width={36} height={36} className="rounded-lg shadow-lg group-hover:shadow-xl" />
-              <span className="text-xl md:text-2xl font-bold text-white drop-shadow-sm">{BRAND_NAME}</span>
-            </Link>
+            <Link href="/" className="flex items-center gap-2 text-primary">
+            <Image src="/logo.svg" alt={BRAND_NAME} width={160} height={64} priority className="bg-transparent" />
+          </Link>
             <p className="text-sm text-white mb-4 leading-relaxed max-w-xs">
               Nền tảng học tiếng Trung trực tuyến hàng đầu, giúp bạn chinh phục HSK từ con số 0 đến thành thạo.
             </p>

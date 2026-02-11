@@ -35,23 +35,9 @@ export default function Header() {
             <Menu className="w-6 h-6 transition-transform duration-300" />
           </button>
           <Link href="/" className="flex items-center gap-2 text-primary">
-            <Image src="/logo.png" alt={BRAND_NAME} width={64} height={64} className="rounded-lg" priority />
+            <Image src="/logo.svg" alt={BRAND_NAME} priority width="160" height="64" />
           </Link>
         </div>
-
-        {/* Center Section - Search Bar */}
-        {/* <div className="hidden md:flex max-w-md flex-1 mx-8">
-          <div className="relative w-full">
-            <div className="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
-              <Search className="w-5 h-5 text-text-secondary-light" />
-            </div>
-            <input
-              className="block w-full rounded-full border-gray-200 bg-gray-50 dark:bg-background-dark py-2 pl-10 pr-3 text-sm placeholder-text-secondary-light focus:border-red-500 focus:ring-red-500 dark:text-white dark:placeholder-gray-500 transition-all hover:bg-white focus:bg-white dark:hover:bg-surface-dark dark:focus:bg-surface-dark shadow-sm"
-              placeholder="Tìm khóa học (VD: HSK 4)..."
-              type="text"
-            />
-          </div>
-        </div> */}
 
         {/* Right Section - Navigation + Language + CTA */}
         <div className="flex items-center gap-4">
