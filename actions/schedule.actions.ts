@@ -13,6 +13,7 @@ import {
   createSchedules as createSchedulesService,
   updateSchedule as updateScheduleService,
   deleteSchedule as deleteScheduleService,
+  deleteScheduleGroup as deleteScheduleGroupService,
 } from '@/services/portal/schedule.service';
 import type {
   ISchedule,
@@ -176,6 +177,32 @@ export async function deleteSchedule(id: string): Promise<{
     return {
       success: false,
       error: error instanceof Error ? error.message : 'Failed to delete schedule',
+    };
+  }
+}
+
+/**
+ * Delete all schedules in a recurrence group (batch delete)
+ */
+export async function deleteScheduleGroup(recurrenceGroupId: string): Promise<{
+  success: boolean;
+  deletedIds?: string[];
+  error?: string;
+}> {
+  try {
+    const session = await auth();
+    if (!session?.user?.id) {
+      return { success: false, error: 'Unauthorized' };
+    }
+
+    const deletedIds = await deleteScheduleGroupService(recurrenceGroupId);
+    revalidatePath('/portal/teacher/schedule');
+    return { success: true, deletedIds };
+  } catch (error) {
+    console.error('Error deleting schedule group:', error);
+    return {
+      success: false,
+      error: error instanceof Error ? error.message : 'Failed to delete schedule group',
     };
   }
 }

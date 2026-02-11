@@ -14,6 +14,7 @@ import {
   createSchedule,
   updateSchedule,
   deleteSchedule,
+  deleteScheduleGroup,
 } from '@/actions/schedule.actions';
 import { usePortalUI } from '@/providers/portal-ui-provider';
 import type {
@@ -151,6 +152,34 @@ export default function TeacherScheduleCalendar() {
     }
   };
 
+  const handleDeleteScheduleGroup = async (recurrenceGroupId: string) => {
+    try {
+      const result = await deleteScheduleGroup(recurrenceGroupId);
+
+      if (!result.success) {
+        throw new Error(result.error || 'Không thể xóa nhóm lịch lặp lại');
+      }
+
+      const count = result.deletedIds?.length || 0;
+      toast.success(`Đã xóa ${count} buổi học trong nhóm lặp lại!`);
+
+      // Optimistically remove all schedules in the group from state
+      if (result.deletedIds) {
+        const deletedSet = new Set(result.deletedIds);
+        setSchedules(prev => prev.filter(s => !deletedSet.has(s.id)));
+      } else {
+        // Fallback: reload all data
+        await loadData();
+      }
+      setShowDeleteModal(false);
+      setSelectedSchedule(null);
+    } catch (error) {
+      console.error('Error deleting schedule group:', error);
+      const errorMessage = error instanceof Error ? error.message : 'Không thể xóa nhóm lịch';
+      toast.error(errorMessage);
+    }
+  };
+
   const handleEventClick = (schedule: ISchedule) => {
     setSelectedSchedule(schedule);
   };
@@ -230,6 +259,7 @@ export default function TeacherScheduleCalendar() {
         schedule={selectedSchedule}
         onClose={() => setShowDeleteModal(false)}
         onConfirm={handleDeleteSchedule}
+        onConfirmGroup={handleDeleteScheduleGroup}
       />
     </div>
   );

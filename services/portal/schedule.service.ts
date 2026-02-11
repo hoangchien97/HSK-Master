@@ -3,6 +3,7 @@
  * Server-side service for schedule operations using Prisma
  */
 
+import { randomUUID } from 'crypto';
 import { prisma } from '@/lib/prisma';
 import type {
   ISchedule,
@@ -42,6 +43,7 @@ export async function getSchedules(userId?: string): Promise<ISchedule[]> {
     startTime: schedule.startTime.toISOString(),
     endTime: schedule.endTime.toISOString(),
     status: schedule.status,
+    recurrenceGroupId: schedule.recurrenceGroupId || undefined,
     class: {
       id: schedule.class.id,
       className: schedule.class.className,
@@ -102,6 +104,7 @@ export async function getScheduleById(id: string): Promise<ISchedule | null> {
     startTime: schedule.startTime.toISOString(),
     endTime: schedule.endTime.toISOString(),
     status: schedule.status,
+    recurrenceGroupId: schedule.recurrenceGroupId || undefined,
     location: schedule.location || undefined,
     meetingLink: schedule.meetingLink || undefined,
     googleEventId: schedule.googleEventId || undefined,
@@ -126,6 +129,7 @@ export async function createSchedules(
 
   // Handle recurring schedules
   if (recurrence && recurrence.weekdays.length > 0) {
+    const groupId = randomUUID();
     const sessions: Array<{
       title: string;
       description: string | null;
@@ -134,6 +138,7 @@ export async function createSchedules(
       startTime: Date;
       endTime: Date;
       status: string;
+      recurrenceGroupId: string;
     }> = [];
 
     let currentDate = dayjs(baseData.startTime);
@@ -153,6 +158,7 @@ export async function createSchedules(
           startTime: sessionStart,
           endTime: sessionEnd,
           status: SCHEDULE_STATUS.SCHEDULED,
+          recurrenceGroupId: groupId,
         });
       }
       currentDate = currentDate.add(1, 'day');
@@ -187,6 +193,7 @@ export async function createSchedules(
         startTime: s.startTime.toISOString(),
         endTime: s.endTime.toISOString(),
         status: s.status,
+        recurrenceGroupId: s.recurrenceGroupId || undefined,
         class: {
           id: s.class.id,
           className: s.class.className,
@@ -231,6 +238,7 @@ export async function createSchedules(
         startTime: created.startTime.toISOString(),
         endTime: created.endTime.toISOString(),
         status: created.status,
+        recurrenceGroupId: created.recurrenceGroupId || undefined,
         class: {
           id: created.class.id,
           className: created.class.className,
@@ -280,6 +288,7 @@ export async function updateSchedule(
     startTime: updated.startTime.toISOString(),
     endTime: updated.endTime.toISOString(),
     status: updated.status,
+    recurrenceGroupId: updated.recurrenceGroupId || undefined,
     location: updated.location || undefined,
     meetingLink: updated.meetingLink || undefined,
     class: {
@@ -298,4 +307,25 @@ export async function deleteSchedule(id: string): Promise<void> {
   await prisma.portalSchedule.delete({
     where: { id },
   });
+}
+
+/**
+ * Delete all schedules in a recurrence group
+ * Returns the IDs of deleted schedules for optimistic UI update
+ */
+export async function deleteScheduleGroup(recurrenceGroupId: string): Promise<string[]> {
+  // First get all IDs in the group
+  const schedulesInGroup = await prisma.portalSchedule.findMany({
+    where: { recurrenceGroupId },
+    select: { id: true },
+  });
+
+  const ids = schedulesInGroup.map((s) => s.id);
+
+  // Delete all in the group
+  await prisma.portalSchedule.deleteMany({
+    where: { recurrenceGroupId },
+  });
+
+  return ids;
 }

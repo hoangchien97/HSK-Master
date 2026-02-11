@@ -1,4 +1,4 @@
 /**
  * Brand constants — single source of truth
  */
-export const BRAND_NAME = 'HSK Ruby';
+export const BRAND_NAME = 'Ruby HSK';

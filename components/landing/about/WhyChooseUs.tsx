@@ -61,7 +61,7 @@ export default function WhyChooseUs() {
             </div>
 
             <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold mb-4 drop-shadow-lg">
-              Tại sao chọn HSK Ruby?
+              Tại sao chọn Ruby HSK?
             </h2>
             <p className="text-red-50 max-w-2xl mx-auto text-base md:text-lg leading-relaxed">
               Hệ thống đào tạo{" "}

@@ -11,6 +11,7 @@ export interface ISchedule {
   location?: string | null;
   meetingLink?: string | null;
   status: ScheduleStatus | string;
+  recurrenceGroupId?: string | null;
   googleEventId?: string | null;
   syncedToGoogle?: boolean;
   createdAt?: Date | string;

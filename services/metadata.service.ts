@@ -51,12 +51,12 @@ export async function getPageMetadata(pagePath: string): Promise<Metadata | null
  * Get default metadata as fallback
  */
 export const DEFAULT_METADATA: Metadata = {
-  title: "HSK Ruby - Trung tâm tiếng Trung uy tín tại Hà Nội",
-  description: "Trung tâm tiếng Trung HSK Ruby - Đào tạo HSK 1-6, giao tiếp, thương mại. Cam kết đầu ra.",
+  title: "Ruby HSK - Trung tâm tiếng Trung uy tín tại Hà Nội",
+  description: "Trung tâm tiếng Trung Ruby HSK - Đào tạo HSK 1-6, giao tiếp, thương mại. Cam kết đầu ra.",
   keywords: "học tiếng Trung, HSK, trung tâm tiếng Trung Hà Nội",
   openGraph: {
-    title: "HSK Ruby - Trung tâm tiếng Trung uy tín",
-    description: "Học tiếng Trung chất lượng cao với HSK Ruby",
+    title: "Ruby HSK - Trung tâm tiếng Trung uy tín",
+    description: "Học tiếng Trung chất lượng cao với Ruby HSK",
     type: "website",
   },
   twitter: {

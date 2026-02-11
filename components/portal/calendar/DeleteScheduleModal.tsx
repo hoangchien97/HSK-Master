@@ -2,16 +2,19 @@
 
 import { useState } from 'react';
 import dayjs from 'dayjs';
-import { Trash2, AlertTriangle } from 'lucide-react';
-import { Button } from '@heroui/react';
+import { Trash2, AlertTriangle, Repeat } from 'lucide-react';
+import { Button, RadioGroup, Radio } from '@heroui/react';
 import type { ISchedule } from '@/interfaces/portal';
 import { CModal } from '@/components/portal/common';
+
+type DeleteMode = 'single' | 'group';
 
 interface DeleteScheduleModalProps {
   isOpen: boolean;
   schedule: ISchedule | null;
   onClose: () => void;
   onConfirm: (scheduleId: string) => Promise<void>;
+  onConfirmGroup?: (recurrenceGroupId: string) => Promise<void>;
 }
 
 export default function DeleteScheduleModal({
@@ -19,26 +22,40 @@ export default function DeleteScheduleModal({
   schedule,
   onClose,
   onConfirm,
+  onConfirmGroup,
 }: DeleteScheduleModalProps) {
   const [isDeleting, setIsDeleting] = useState(false);
+  const [deleteMode, setDeleteMode] = useState<DeleteMode>('single');
 
   if (!schedule) return null;
+
+  const hasRecurrenceGroup = !!schedule.recurrenceGroupId;
 
   const handleDelete = async () => {
     setIsDeleting(true);
     try {
-      await onConfirm(schedule.id);
+      if (deleteMode === 'group' && hasRecurrenceGroup && onConfirmGroup) {
+        await onConfirmGroup(schedule.recurrenceGroupId!);
+      } else {
+        await onConfirm(schedule.id);
+      }
     } catch (error) {
       console.error('Error deleting schedule:', error);
     } finally {
       setIsDeleting(false);
+      setDeleteMode('single');
     }
+  };
+
+  const handleClose = () => {
+    setDeleteMode('single');
+    onClose();
   };
 
   return (
     <CModal
       isOpen={isOpen}
-      onClose={onClose}
+      onClose={handleClose}
       size="md"
       title={
         <div className="flex items-center gap-2">
@@ -48,12 +65,12 @@ export default function DeleteScheduleModal({
       }
       footer={
         <>
-          <Button variant="flat" onPress={onClose} isDisabled={isDeleting}>
+          <Button variant="flat" onPress={handleClose} isDisabled={isDeleting}>
             Hủy
           </Button>
           <Button color="danger" onPress={handleDelete} isLoading={isDeleting}>
             <Trash2 className="w-4 h-4" />
-            Xóa lịch
+            {deleteMode === 'group' ? 'Xóa tất cả' : 'Xóa lịch'}
           </Button>
         </>
       }
@@ -91,6 +108,32 @@ export default function DeleteScheduleModal({
             </div>
           </div>
         </div>
+
+        {/* Batch delete option for recurring schedules */}
+        {hasRecurrenceGroup && onConfirmGroup && (
+          <div className="p-4 bg-purple-50 border border-purple-200 rounded-lg">
+            <div className="flex items-center gap-2 mb-3">
+              <Repeat className="w-4 h-4 text-purple-600" />
+              <p className="text-sm font-medium text-purple-900">
+                Buổi học thuộc nhóm lịch lặp lại
+              </p>
+            </div>
+            <RadioGroup
+              value={deleteMode}
+              onValueChange={(value) => setDeleteMode(value as DeleteMode)}
+              size="sm"
+            >
+              <Radio value="single">
+                <span className="text-sm">Chỉ xóa buổi học này</span>
+              </Radio>
+              <Radio value="group" className="mt-1">
+                <span className="text-sm text-red-600 font-medium">
+                  Xóa tất cả buổi học trong nhóm lặp lại
+                </span>
+              </Radio>
+            </RadioGroup>
+          </div>
+        )}
 
         {/* Google Calendar Warning */}
         {schedule.syncedToGoogle && (

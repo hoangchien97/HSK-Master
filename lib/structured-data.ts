@@ -6,8 +6,8 @@ export function generateOrganizationSchema() {
   return {
     '@context': 'https://schema.org',
     '@type': 'EducationalOrganization',
-    name: 'HSK Ruby',
-    alternateName: 'Trung tâm tiếng Trung HSK Ruby',
+    name: 'Ruby HSK',
+    alternateName: 'Trung tâm tiếng Trung Ruby HSK',
     url: baseUrl,
     logo: `${baseUrl}/logo.png`,
     description: 'Trung tâm tiếng Trung chuyên đào tạo HSK từ cơ bản đến nâng cao tại Hà Nội',
@@ -89,7 +89,7 @@ export function generateCourseSchema(course: {
     },
     instructor: {
       '@type': 'Person',
-      name: course.instructor || 'HSK Ruby',
+      name: course.instructor || 'Ruby HSK',
     },
     educationalLevel: course.level || 'Beginner to Advanced',
     timeRequired: `PT${course.durationHours}H`,

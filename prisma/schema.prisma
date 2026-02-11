@@ -413,11 +413,14 @@ model PortalSchedule {
   location         String?  // e.g., "Phòng 301" or "Google Meet"
   meetingLink      String?  // Online meeting link
   status           String   @default("SCHEDULED") // SCHEDULED, COMPLETED, CANCELLED
-  
+
+  // Recurrence group — all schedules created from the same recurring rule share this ID
+  recurrenceGroupId String?
+
   // Google Calendar Sync
   googleEventId    String?  // Google Calendar event ID for synced events
   syncedToGoogle   Boolean  @default(false) // Whether this event is synced to Google Calendar
-  
+
   createdAt        DateTime @default(now())
   updatedAt        DateTime @updatedAt
 

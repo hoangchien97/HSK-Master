@@ -41,7 +41,6 @@ export default function EventDetailDrawer({
 }: EventDetailDrawerProps) {
   const [event, setEvent] = useState<ScheduleEvent | null>(null)
   const [isLoading, setIsLoading] = useState(false)
-  const [isDeleting, setIsDeleting] = useState(false)
 
   // Fetch event details
   const fetchEvent = useCallback(async () => {
@@ -83,28 +82,10 @@ export default function EventDetailDrawer({
     }
   }
 
-  const handleDelete = async () => {
+  const handleDelete = () => {
     if (!event) return
-
-    const confirmed = window.confirm(
-      "Bạn có chắc chắn muốn xóa lịch dạy này?\n\nThao tác này không thể hoàn tác."
-    )
-
-    if (!confirmed) return
-
-    try {
-      setIsDeleting(true)
-      await api.delete(`/portal/schedules/${event.id}`, { meta: { loading: false } })
-
-      toast.success("Đã xóa lịch dạy thành công")
-      onDelete(event.id)
-      onOpenChange(false)
-    } catch (error) {
-      console.error("Error deleting event:", error)
-      toast.error("Không thể xóa lịch dạy")
-    } finally {
-      setIsDeleting(false)
-    }
+    onOpenChange(false)
+    onDelete(event.id)
   }
 
   const openMeetingLink = () => {
@@ -145,20 +126,10 @@ export default function EventDetailDrawer({
                 <Button
                   variant="bordered"
                   onPress={handleDelete}
-                  isDisabled={isDeleting}
                   className="flex-1 text-red-600 border-red-300 hover:bg-red-50 cursor-pointer"
                 >
-                  {isDeleting ? (
-                    <>
-                      <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-red-600 mr-2"></div>
-                      Đang xóa...
-                    </>
-                  ) : (
-                    <>
-                      <Trash2 className="mr-2 h-4 w-4" />
-                      Xóa
-                    </>
-                  )}
+                  <Trash2 className="mr-2 h-4 w-4" />
+                  Xóa
                 </Button>
                 <Button onPress={handleEdit} className="flex-1 bg-red-600 hover:bg-red-700 text-white cursor-pointer">
                   <Edit className="mr-2 h-4 w-4" />

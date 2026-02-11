@@ -7,7 +7,8 @@ import '@/styles/big-calendar-custom.css';
 import { format, parse, startOfWeek, getDay } from 'date-fns';
 import { vi } from 'date-fns/locale';
 import { Plus, ChevronLeft, ChevronRight, Pencil } from 'lucide-react';
-import { Button, Spinner, Tabs, Tab, Tooltip } from '@heroui/react';
+import { Button, Spinner, Tabs, Tab, Tooltip, DatePicker } from '@heroui/react';
+import { CalendarDate } from '@internationalized/date';
 import type { ISchedule } from '@/interfaces/portal';
 import { EventState } from '@/interfaces/portal/calendar';
 import { getEventState } from '@/utils/calendar';
@@ -219,6 +220,21 @@ export default function BigCalendarView({
     });
   }, [currentView]);
 
+  // Calendar date for DatePicker
+  const calendarDateValue = useMemo(() => {
+    return new CalendarDate(
+      currentDate.getFullYear(),
+      currentDate.getMonth() + 1,
+      currentDate.getDate()
+    );
+  }, [currentDate]);
+
+  const handleDatePickerChange = useCallback((value: CalendarDate | null) => {
+    if (value) {
+      setCurrentDate(new Date(value.year, value.month - 1, value.day));
+    }
+  }, []);
+
   return (
     <div className="bg-white rounded-xl shadow-sm border border-gray-200">
       {/* Custom Toolbar */}
@@ -238,6 +254,15 @@ export default function BigCalendarView({
           <h2 className="text-lg font-semibold text-gray-900 capitalize">
             {dateDisplayText}
           </h2>
+          {/* Date Picker for quick navigation */}
+          <DatePicker
+            aria-label="Chọn ngày"
+            value={calendarDateValue}
+            onChange={handleDatePickerChange}
+            size="sm"
+            className="w-40"
+            showMonthAndYearPickers
+          />
         </div>
 
         <div className="flex items-center gap-3">
@@ -261,24 +286,6 @@ export default function BigCalendarView({
             Thêm buổi học
           </Button>
         </div>
-      </div>
-
-      {/* Legend */}
-      <div className="flex items-center gap-4 px-4 py-2 bg-gray-50 border-b border-gray-200">
-        <span className="text-sm text-gray-500 font-medium">Chú thích:</span>
-        {LEGEND_ITEMS.map((item) => (
-          <span
-            key={item.label}
-            className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md text-xs font-medium"
-            style={{ backgroundColor: item.bgColor, color: item.textColor }}
-          >
-            <span
-              className="w-2 h-2 rounded-full"
-              style={{ backgroundColor: item.textColor }}
-            />
-            {item.label}
-          </span>
-        ))}
       </div>
 
       {/* Calendar */}
@@ -322,6 +329,24 @@ export default function BigCalendarView({
               `${format(start, 'dd/MM', { locale: vi })} — ${format(end, 'dd/MM/yyyy', { locale: vi })}`,
           }}
         />
+      </div>
+
+      {/* Legend — below calendar */}
+      <div className="flex items-center gap-4 px-4 py-2.5 bg-gray-50 border-t border-gray-200 rounded-b-xl">
+        <span className="text-sm text-gray-500 font-medium">Chú thích:</span>
+        {LEGEND_ITEMS.map((item) => (
+          <span
+            key={item.label}
+            className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md text-xs font-medium"
+            style={{ backgroundColor: item.bgColor, color: item.textColor }}
+          >
+            <span
+              className="w-2 h-2 rounded-full"
+              style={{ backgroundColor: item.textColor }}
+            />
+            {item.label}
+          </span>
+        ))}
       </div>
     </div>
   );

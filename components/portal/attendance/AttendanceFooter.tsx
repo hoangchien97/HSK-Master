@@ -35,8 +35,9 @@ export default function AttendanceFooter({
   overallSummary,
 }: AttendanceFooterProps) {
   return (
-    <div className="shrink-0 flex items-center justify-between px-4 py-3 bg-gray-50 border-t border-gray-200">
-      <div className="flex items-center gap-4 text-xs text-gray-500">
+    <div className="shrink-0 flex flex-wrap items-center justify-between gap-3 px-4 py-3 bg-gray-50 border-t border-gray-200">
+      {/* Left: Legend + Overall summary — all horizontal */}
+      <div className="flex flex-wrap items-center gap-3 text-xs text-gray-500">
         <div className="flex items-center gap-1.5">
           <div className="w-4 h-4 rounded-full border-2 border-emerald-500 bg-emerald-50 flex items-center justify-center">
             <Check className="w-2.5 h-2.5 text-emerald-600 stroke-[2.5]" />
@@ -50,9 +51,10 @@ export default function AttendanceFooter({
           <span>VẮNG</span>
         </div>
 
-        {/* Overall summary chips */}
+        {/* Overall summary chips — inline horizontal */}
         {overallSummary && (
-          <div className="flex items-center gap-2 ml-4 border-l border-gray-300 pl-4">
+          <>
+            <span className="w-px h-4 bg-gray-300" />
             <Chip size="sm" variant="flat" color="success">
               Tổng có mặt: {overallSummary.totalPresent}
             </Chip>
@@ -64,10 +66,11 @@ export default function AttendanceFooter({
                 Chưa điểm danh: {overallSummary.totalUnmarked}
               </Chip>
             )}
-          </div>
+          </>
         )}
       </div>
 
+      {/* Right: Save button */}
       <Button
         color="primary"
         startContent={!isSaving && <Save className="w-4 h-4" />}

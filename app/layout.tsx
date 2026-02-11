@@ -26,16 +26,16 @@ const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://hskmaster.edu.vn";
 export const metadata: Metadata = {
   metadataBase: new URL(siteUrl),
   title: {
-    default: "HSK Ruby - Trung tâm tiếng Trung uy tín tại Hà Nội",
-    template: "%s | HSK Ruby",
+    default: "Ruby HSK - Trung tâm tiếng Trung uy tín tại Hà Nội",
+    template: "%s | Ruby HSK",
   },
   description:
-    "Trung tâm tiếng Trung HSK Ruby - Đào tạo HSK 1-6, giao tiếp, thương mại. Giáo viên 8+ năm kinh nghiệm. Cam kết đầu ra.",
+    "Trung tâm tiếng Trung Ruby HSK - Đào tạo HSK 1-6, giao tiếp, thương mại. Giáo viên 8+ năm kinh nghiệm. Cam kết đầu ra.",
   keywords: ["học tiếng Trung", "HSK", "trung tâm tiếng Trung Hà Nội", "luyện thi HSK", "học tiếng Trung online"],
-  authors: [{ name: "HSK Ruby" }],
-  creator: "HSK Ruby",
-  publisher: "HSK Ruby",
-  applicationName: "HSK Ruby",
+  authors: [{ name: "Ruby HSK" }],
+  creator: "Ruby HSK",
+  publisher: "Ruby HSK",
+  applicationName: "Ruby HSK",
   category: "Education",
   classification: "Education",
   formatDetection: {
@@ -61,15 +61,15 @@ export const metadata: Metadata = {
     type: "website",
     locale: "vi_VN",
     url: siteUrl,
-    siteName: "HSK Ruby",
-    title: "HSK Ruby - Trung tâm tiếng Trung uy tín tại Hà Nội",
-    description: "Trung tâm tiếng Trung HSK Ruby - Đào tạo HSK 1-6, giao tiếp, thương mại. Cam kết đầu ra.",
+    siteName: "Ruby HSK",
+    title: "Ruby HSK - Trung tâm tiếng Trung uy tín tại Hà Nội",
+    description: "Trung tâm tiếng Trung Ruby HSK - Đào tạo HSK 1-6, giao tiếp, thương mại. Cam kết đầu ra.",
     images: [
       {
         url: `${siteUrl}/og-image.jpg`,
         width: 1200,
         height: 630,
-        alt: "HSK Ruby - Trung tâm tiếng Trung",
+        alt: "Ruby HSK - Trung tâm tiếng Trung",
         type: "image/jpeg",
       },
     ],
@@ -80,7 +80,7 @@ export const metadata: Metadata = {
     card: "summary_large_image",
     site: "@hskruby",
     creator: "@hskruby",
-    title: "HSK Ruby - Trung tâm tiếng Trung uy tín",
+    title: "Ruby HSK - Trung tâm tiếng Trung uy tín",
     description: "Đào tạo HSK 1-6, giao tiếp, thương mại. Cam kết đầu ra.",
     images: [`${siteUrl}/og-image.jpg`],
   },
@@ -116,7 +116,7 @@ export const metadata: Metadata = {
   appleWebApp: {
     capable: true,
     statusBarStyle: "default",
-    title: "HSK Ruby",
+    title: "Ruby HSK",
   },
 
   // Other metadata
@@ -144,7 +144,7 @@ export default function RootLayout({
           href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap"
           rel="stylesheet"
         />
-        <meta name="apple-mobile-web-app-title" content="HSK Ruby" />
+        <meta name="apple-mobile-web-app-title" content="Ruby HSK" />
         {/* Structured Data - Organization & Website Schema */}
         <script
           type="application/ld+json"

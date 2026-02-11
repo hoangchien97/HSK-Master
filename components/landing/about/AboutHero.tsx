@@ -37,7 +37,7 @@ export default function AboutHero() {
 
           {/* Description */}
           <p className="text-base md:text-lg lg:text-xl text-text-secondary-light dark:text-text-secondary-dark leading-relaxed">
-            HSK Ruby không chỉ là nơi dạy tiếng Trung, chúng tôi xây dựng{" "}
+            Ruby HSK không chỉ là nơi dạy tiếng Trung, chúng tôi xây dựng{" "}
             <span className="font-semibold text-gray-900 dark:text-white">cộng đồng học tập đam mê</span>,
             nơi văn hóa và ngôn ngữ giao thoa. Sứ mệnh của chúng tôi là giúp người Việt chinh phục tiếng Trung một cách{" "}
             <span className="font-semibold text-transparent bg-clip-text bg-gradient-to-r from-red-600 to-orange-600">

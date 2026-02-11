@@ -38,7 +38,7 @@ export async function seedPortal() {
   const admin = await prisma.portalUser.create({
     data: {
       name: "admin",
-      fullName: "Admin HSK Ruby",
+      fullName: "Admin Ruby HSK",
       email: "admin@hskmaster.com",
       password: hashedPassword,
       role: UserRole.SYSTEM_ADMIN,
@@ -46,7 +46,7 @@ export async function seedPortal() {
       emailVerified: new Date(),
       image: "https://api.dicebear.com/7.x/avataaars/svg?seed=admin",
       phoneNumber: "0900000000",
-      biography: "Quản trị viên hệ thống HSK Ruby",
+      biography: "Quản trị viên hệ thống Ruby HSK",
     },
   })
 

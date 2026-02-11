@@ -1,7 +1,7 @@
 {
-  "name": "HSK Ruby",
-  "short_name": "HSK Ruby",
-  "description": "Trung tâm tiếng Trung HSK Ruby - Đào tạo HSK 1-6, giao tiếp, thương mại",
+  "name": "Ruby HSK",
+  "short_name": "Ruby HSK",
+  "description": "Trung tâm tiếng Trung Ruby HSK - Đào tạo HSK 1-6, giao tiếp, thương mại",
   "start_url": "/",
   "display": "standalone",
   "background_color": "#ffffff",

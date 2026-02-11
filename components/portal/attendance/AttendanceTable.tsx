@@ -152,16 +152,16 @@ export default function AttendanceTable({
   }
 
   return (
-    <Card shadow="sm" className="flex-1 overflow-hidden flex flex-col min-h-0">
-      {/* Student count + Today summary bar */}
-      <div className="shrink-0 flex items-center justify-between px-4 py-2 bg-white border-b border-gray-100">
+    <div className="flex-1 flex flex-col min-h-0 gap-2">
+      {/* Student count + Today summary — OUTSIDE the table card */}
+      <div className="shrink-0 flex flex-wrap items-center justify-between px-1 py-1">
         <div className="flex items-center gap-3">
           <span className="text-sm text-default-500">
             Hiển thị <strong>{filteredStudents.length}</strong> / {totalStudents} học viên
           </span>
         </div>
         {todaySummary && (
-          <div className="flex items-center gap-4">
+          <div className="flex items-center gap-3">
             <Chip
               size="sm"
               variant="flat"
@@ -191,8 +191,10 @@ export default function AttendanceTable({
         )}
       </div>
 
-      {/* Scrollable table */}
-      <div className="flex-1 overflow-auto min-h-0">
+      {/* Table card with mobile scroll */}
+      <Card shadow="sm" className="flex-1 overflow-hidden flex flex-col min-h-0">
+        {/* Scrollable table — horizontal scroll for mobile */}
+        <div className="flex-1 overflow-auto min-h-0 -webkit-overflow-scrolling-touch">
         <table className="w-full border-collapse">
           {/* Header */}
           <thead className="sticky top-0 z-30">
@@ -357,5 +359,6 @@ export default function AttendanceTable({
         overallSummary={overallSummary}
       />
     </Card>
+    </div>
   )
 }

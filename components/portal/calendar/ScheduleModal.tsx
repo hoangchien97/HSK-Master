@@ -236,6 +236,7 @@ export default function ScheduleModal({
           placeholder="Chọn lớp học"
           labelPlacement="outside"
           isRequired
+          isDisabled={editMode}
           selectedKeys={classId ? new Set([classId]) : new Set()}
           onSelectionChange={(keys: "all" | Set<React.Key>) => {
             if (keys !== "all") {
@@ -324,35 +325,19 @@ export default function ScheduleModal({
           />
         </div>
 
-        {/* Location & Meeting Link */}
-        <div className="grid grid-cols-2 gap-4">
-          <Input
-            name="location"
-            label="Địa điểm"
-            placeholder="Phòng 301 hoặc Online"
-            labelPlacement="outside"
-            defaultValue={(initialData as Record<string, unknown>)?.location as string || ""}
-          />
-          <Input
-            name="meetingLink"
-            label="Link học online"
-            placeholder="https://meet.google.com/..."
-            labelPlacement="outside"
-            defaultValue={(initialData as Record<string, unknown>)?.meetingLink as string || ""}
-          />
-        </div>
+        {/* Location & Meeting Link — hidden per design */}
 
         {/* Recurrence (create mode only) */}
         {!editMode && (
-          <div className="p-4 bg-default-50 rounded-xl border border-default-200 space-y-4 w-full">
-            <div className="flex items-center justify-between">
+          <div className="p-5 bg-default-50 rounded-xl border border-default-200 space-y-4 w-full">
+            <div className="flex items-center justify-between gap-4">
               <div className="flex items-center gap-3">
-                <div className="p-2 bg-primary-50 rounded-lg">
+                <div className="p-2.5 bg-primary-50 rounded-lg">
                   <Repeat className="w-4 h-4 text-primary" />
                 </div>
                 <div>
                   <p className="text-sm font-semibold">Lặp lại buổi học</p>
-                  <p className="text-xs text-default-400">
+                  <p className="text-xs text-default-400 mt-0.5">
                     Tạo nhiều buổi học theo lịch hàng tuần
                   </p>
                 </div>

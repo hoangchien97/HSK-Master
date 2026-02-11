@@ -58,24 +58,7 @@ export default function AttendanceHeader({
 
   return (
     <div className="shrink-0 space-y-3 pb-3">
-      {/* Row 1: Status indicators */}
-      <div className="flex items-center justify-end gap-2">
-        <Chip
-          startContent={isOnline ? <Wifi className="w-3 h-3" /> : <WifiOff className="w-3 h-3" />}
-          color={isOnline ? "success" : "warning"}
-          variant="flat"
-          size="sm"
-        >
-          {isOnline ? "Online" : "Offline"}
-        </Chip>
-        {pendingCount > 0 && (
-          <Chip color="warning" variant="flat" size="sm">
-            Chưa lưu: {pendingCount}
-          </Chip>
-        )}
-      </div>
-
-      {/* Row 2: Filters */}
+      {/* Row 1: Filters */}
       <div className="flex flex-wrap items-end gap-3">
         {/* Search */}
         <Input
@@ -124,6 +107,23 @@ export default function AttendanceHeader({
           className="w-48"
           showMonthAndYearPickers
         />
+      </div>
+
+      {/* Row 2: Status indicators — below filters */}
+      <div className="flex items-center gap-2">
+        <Chip
+          startContent={isOnline ? <Wifi className="w-3 h-3" /> : <WifiOff className="w-3 h-3" />}
+          color={isOnline ? "success" : "warning"}
+          variant="flat"
+          size="sm"
+        >
+          {isOnline ? "Online" : "Offline"}
+        </Chip>
+        {pendingCount > 0 && (
+          <Chip color="warning" variant="flat" size="sm">
+            Chưa lưu: {pendingCount}
+          </Chip>
+        )}
       </div>
     </div>
   )

@@ -19,7 +19,7 @@ export const FAQ_DATA = [
   {
     id: "faq-4",
     question: "Trung tâm có lớp học thử không?",
-    answer: "Có, HSK Ruby cung cấp 2 buổi học thử miễn phí cho tất cả các trình độ để học viên trải nghiệm phương pháp giảng dạy.",
+    answer: "Có, Ruby HSK cung cấp 2 buổi học thử miễn phí cho tất cả các trình độ để học viên trải nghiệm phương pháp giảng dạy.",
   },
   {
     id: "faq-5",
