@@ -45,7 +45,7 @@ export async function GET(request: NextRequest) {
       prisma.portalClass.findMany({
         where,
         include: {
-          teacher: { select: { fullName: true, email: true } },
+          teacher: { select: { name: true, email: true } },
           enrollments: { include: { student: true } },
           _count: { select: { enrollments: true } },
         },
@@ -81,7 +81,7 @@ export async function POST(request: NextRequest) {
     }
 
     const body = await request.json()
-    const { className, classCode, description, level, maxStudents, startDate, endDate } = body
+    const { className, classCode, description, level, startDate, endDate } = body
 
     // Check if class code already exists
     const existingClass = await prisma.portalClass.findUnique({
@@ -98,7 +98,6 @@ export async function POST(request: NextRequest) {
         classCode,
         description: description || null,
         level: level || null,
-        maxStudents: maxStudents || 20,
         startDate: new Date(startDate),
         endDate: endDate ? new Date(endDate) : null,
         teacherId: user.id,

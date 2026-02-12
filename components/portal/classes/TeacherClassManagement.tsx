@@ -15,7 +15,6 @@ interface Class {
   classCode: string
   description?: string
   level?: string
-  maxStudents: number
   startDate: string
   endDate?: string
   status: string
@@ -23,7 +22,7 @@ interface Class {
     id: string
     student: {
       id: string
-      fullName: string
+      name: string
       email: string
     }
   }>
@@ -148,7 +147,7 @@ export default function TeacherClassManagement() {
                 <div className="flex items-center gap-2">
                   <Users className="w-4 h-4 text-gray-400" />
                   <span className="text-sm text-gray-600">
-                    {cls.enrollments.length}/{cls.maxStudents} học viên
+                    {cls.enrollments.length} học viên
                   </span>
                 </div>
                 <div className="flex items-center gap-2">

@@ -38,9 +38,11 @@ export function CModal({
       isDismissable={isDismissable}
       hideCloseButton={hideCloseButton}
       scrollBehavior={scrollBehavior}
+      placement="center"
       classNames={{
-        header: "py-4 px-6 md:py-6 md:px-6 border-b-[1px] border-[#292f46]",
-        footer: "py-4 px-6 md:py-6 md:px-6 border-t-[1px] border-[#292f46]",
+        wrapper: "items-center justify-center",
+        header: "py-4 px-6 md:py-6 md:px-6 border-b border-default-200",
+        footer: "py-4 px-6 md:py-6 md:px-6 border-t border-default-200",
         closeButton: "top-[14px] right-4",
         body: "max-h-[90vh] overflow-y-auto px-4 py-4 md:px-6 md:py-6 scrollbar-thin scrollbar-thumb-gray-300 scrollbar-track-transparent hover:scrollbar-thumb-gray-400",
       }}

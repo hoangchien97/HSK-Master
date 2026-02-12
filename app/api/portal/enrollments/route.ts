@@ -54,10 +54,6 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: "Lớp học không tồn tại" }, { status: 404 })
     }
 
-    if (classWithEnrollments.enrollments.length >= classWithEnrollments.maxStudents) {
-      return NextResponse.json({ error: "Lớp học đã đầy" }, { status: 400 })
-    }
-
     // Create enrollment
     const enrollment = await prisma.portalClassEnrollment.create({
       data: {
@@ -69,7 +65,6 @@ export async function POST(request: NextRequest) {
         student: {
           select: {
             id: true,
-            fullName: true,
             name: true,
             email: true,
             image: true,
@@ -141,7 +136,6 @@ export async function GET(request: NextRequest) {
       },
       select: {
         id: true,
-        fullName: true,
         name: true,
         email: true,
         image: true,

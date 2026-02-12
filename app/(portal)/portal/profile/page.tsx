@@ -31,7 +31,7 @@ export default async function ProfilePage() {
     image: userProfile.image,
     role: userProfile.role as any,
     status: userProfile.status as any,
-    fullName: userProfile.fullName,
+    username: userProfile.username,
     phoneNumber: userProfile.phoneNumber,
     address: userProfile.address,
     dateOfBirth: userProfile.dateOfBirth?.toISOString(),

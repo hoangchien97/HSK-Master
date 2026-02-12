@@ -18,7 +18,7 @@ export interface IAttendance {
   };
   student?: {
     id: string;
-    fullName: string | null;
+    name: string;
     email: string;
     image?: string | null;
   };

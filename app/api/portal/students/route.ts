@@ -52,7 +52,6 @@ export async function GET(request: NextRequest) {
       enrollments: { some: enrollmentFilter },
       ...(search && {
         OR: [
-          { fullName: { contains: search, mode: "insensitive" as const } },
           { name: { contains: search, mode: "insensitive" as const } },
           { email: { contains: search, mode: "insensitive" as const } },
         ],
@@ -72,7 +71,7 @@ export async function GET(request: NextRequest) {
             },
           },
         },
-        orderBy: { fullName: "asc" },
+        orderBy: { name: "asc" },
         skip: (page - 1) * pageSize,
         take: pageSize,
       }),
@@ -83,7 +82,6 @@ export async function GET(request: NextRequest) {
     const items = students.map((s) => ({
       id: s.id,
       name: s.name,
-      fullName: s.fullName,
       email: s.email,
       phoneNumber: s.phoneNumber,
       image: s.image,

@@ -48,14 +48,13 @@ export async function GET(request: NextRequest) {
               select: {
                 id: true,
                 name: true,
-                fullName: true,
                 image: true,
                 email: true,
               },
             },
           },
           orderBy: {
-            student: { fullName: "asc" },
+            student: { name: "asc" },
           },
         },
       },
@@ -134,7 +133,6 @@ export async function GET(request: NextRequest) {
       students: classData.enrollments.map((e) => ({
         id: e.student.id,
         name: e.student.name,
-        fullName: e.student.fullName,
         image: e.student.image,
         email: e.student.email,
       })),

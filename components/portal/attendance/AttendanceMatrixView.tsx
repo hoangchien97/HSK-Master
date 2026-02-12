@@ -132,7 +132,7 @@ export default function AttendanceMatrixView() {
     const q = searchQuery.toLowerCase()
     return matrixData.students.filter(
       (s) =>
-        (s.fullName || s.name).toLowerCase().includes(q) ||
+        s.name.toLowerCase().includes(q) ||
         s.email.toLowerCase().includes(q)
     )
   }, [matrixData, searchQuery])

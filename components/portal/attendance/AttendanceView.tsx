@@ -44,7 +44,6 @@ dayjs.locale("vi")
 interface StudentData {
   id: string
   name: string
-  fullName?: string | null
   image?: string | null
 }
 
@@ -64,7 +63,7 @@ interface AttendanceRecord {
   id: string
   date: Date
   status: string
-  student: { id: string; name: string; fullName?: string | null }
+  student: { id: string; name: string }
   class: { className: string }
 }
 
@@ -125,7 +124,7 @@ export default function AttendanceView({
     () =>
       selectedClass?.enrollments.map((e) => ({
         id: e.student.id,
-        name: e.student.fullName || e.student.name,
+        name: e.student.name,
         image: e.student.image,
       })) ?? [],
     [selectedClass],
@@ -410,7 +409,7 @@ export default function AttendanceView({
                     </TableCell>
                     <TableCell>{record.class.className}</TableCell>
                     <TableCell>
-                      {record.student.fullName || record.student.name}
+                      {record.student.name}
                     </TableCell>
                     <TableCell>
                       <Chip

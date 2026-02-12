@@ -87,8 +87,12 @@ export default function EventDetailDrawer({
 
   const handleDelete = () => {
     if (!event) return
+    const eventId = event.id
     onOpenChange(false)
-    onDelete(event.id)
+    // Use setTimeout to defer onDelete call so drawer closes without refetching
+    setTimeout(() => {
+      onDelete(eventId)
+    }, 0)
   }
 
   const openMeetingLink = () => {
@@ -99,11 +103,11 @@ export default function EventDetailDrawer({
 
   const handleSyncToGoogle = async () => {
     if (!event) return
-    
+
     try {
       setIsSyncing(true)
       const result = await syncScheduleToGoogleCalendar(event.id)
-      
+
       if (result.success) {
         toast.success(result.message || "Đã đồng bộ với Google Calendar")
         // Update event state to reflect sync
@@ -168,8 +172,8 @@ export default function EventDetailDrawer({
                   <Trash2 className="mr-2 h-4 w-4" />
                   Xóa
                 </Button>
-                <Button 
-                  onPress={handleEdit} 
+                <Button
+                  onPress={handleEdit}
                   className="flex-1 min-w-[100px] bg-red-600 hover:bg-red-700 text-white cursor-pointer"
                 >
                   <Edit className="mr-2 h-4 w-4" />
@@ -261,7 +265,7 @@ export default function EventDetailDrawer({
                 )}
                 {event.class.enrollments && (
                   <p className="text-sm text-gray-600">
-                    Học viên: <span className="font-medium">{event.class.enrollments.length}/{event.class.maxStudents}</span>
+                    Học viên: <span className="font-medium">{event.class.enrollments.length}</span>
                   </p>
                 )}
               </div>

@@ -9,12 +9,11 @@ export interface IClass {
   level?: string | null;
   startDate: Date | string;
   endDate?: Date | string | null;
-  maxStudents: number;
   status: ClassStatus | string;
   teacherId: string;
   teacher?: {
     id: string;
-    fullName: string | null;
+    name: string;
     email: string;
     image?: string | null;
   };
@@ -36,10 +35,10 @@ export interface IEnrollment {
   finalGrade?: number | null;
   student?: {
     id: string;
-    fullName: string | null;
+    name: string;
     email: string;
     image?: string | null;
-    name: string;
+    username: string;
   };
   class?: IClass;
 }
@@ -51,7 +50,7 @@ export interface ICreateClassDTO {
   level?: string;
   startDate: string;
   endDate?: string;
-  maxStudents: number;
+  studentIds?: string[];
 }
 
 export interface IUpdateClassDTO extends Partial<ICreateClassDTO> {

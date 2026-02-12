@@ -29,7 +29,7 @@ export async function getClasses(
     prisma.portalClass.findMany({
       where,
       include: {
-        teacher: { select: { id: true, fullName: true, email: true, image: true } },
+        teacher: { select: { id: true, name: true, email: true, image: true } },
         _count: { select: { enrollments: true, schedules: true } },
       },
       orderBy: { createdAt: 'desc' },
@@ -62,14 +62,21 @@ export async function createClass(
       classCode: data.classCode,
       description: data.description || null,
       level: data.level || null,
-      maxStudents: data.maxStudents || 20,
       startDate: new Date(data.startDate),
       endDate: data.endDate ? new Date(data.endDate) : null,
       teacherId,
       status: CLASS_STATUS.ACTIVE,
+      ...(data.studentIds && data.studentIds.length > 0 && {
+        enrollments: {
+          create: data.studentIds.map((studentId) => ({
+            studentId,
+            status: 'ENROLLED',
+          })),
+        },
+      }),
     },
     include: {
-      teacher: { select: { id: true, fullName: true, email: true, image: true } },
+      teacher: { select: { id: true, name: true, email: true, image: true } },
       _count: { select: { enrollments: true, schedules: true } },
     },
   });
@@ -88,6 +95,40 @@ export async function updateClass(
   if (!existing) throw new Error('Không tìm thấy lớp học');
   if (existing.teacherId !== teacherId) throw new Error('Bạn không có quyền chỉnh sửa lớp này');
 
+  // Handle student enrollments if studentIds provided
+  if (data.studentIds !== undefined) {
+    // Get current enrolled student IDs
+    const currentEnrollments = await prisma.portalClassEnrollment.findMany({
+      where: { classId, status: 'ENROLLED' },
+      select: { studentId: true },
+    });
+    const currentIds = new Set(currentEnrollments.map((e) => e.studentId));
+    const newIds = new Set(data.studentIds);
+
+    // Students to add
+    const toAdd = data.studentIds.filter((id) => !currentIds.has(id));
+    // Students to remove
+    const toRemove = [...currentIds].filter((id) => !newIds.has(id));
+
+    if (toAdd.length > 0) {
+      await prisma.portalClassEnrollment.createMany({
+        data: toAdd.map((studentId) => ({
+          classId,
+          studentId,
+          status: 'ENROLLED',
+        })),
+        skipDuplicates: true,
+      });
+    }
+
+    if (toRemove.length > 0) {
+      await prisma.portalClassEnrollment.updateMany({
+        where: { classId, studentId: { in: toRemove } },
+        data: { status: 'DROPPED' },
+      });
+    }
+  }
+
   const updated = await prisma.portalClass.update({
     where: { id: classId },
     data: {
@@ -95,13 +136,12 @@ export async function updateClass(
       ...(data.classCode && { classCode: data.classCode }),
       ...(data.description !== undefined && { description: data.description || null }),
       ...(data.level !== undefined && { level: data.level || null }),
-      ...(data.maxStudents && { maxStudents: data.maxStudents }),
       ...(data.startDate && { startDate: new Date(data.startDate) }),
       ...(data.endDate !== undefined && { endDate: data.endDate ? new Date(data.endDate) : null }),
       ...(data.status && { status: data.status }),
     },
     include: {
-      teacher: { select: { id: true, fullName: true, email: true, image: true } },
+      teacher: { select: { id: true, name: true, email: true, image: true } },
       _count: { select: { enrollments: true, schedules: true } },
     },
   });

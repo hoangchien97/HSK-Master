@@ -78,12 +78,12 @@ export default function ProfileClient({ user }: ProfileClientProps) {
       }
 
       const updateData = {
-        fullName: formData.fullName as string,
+        name: formData.name as string,
         phoneNumber: formData.phoneNumber as string,
         address: formData.address as string,
         dateOfBirth: formData.dateOfBirth as string,
         biography: formData.biography as string,
-        image: avatarUrl,
+        image: avatarUrl || undefined,
       }
 
       // Use server action instead of API call
@@ -164,14 +164,14 @@ export default function ProfileClient({ user }: ProfileClientProps) {
                   {avatarPreview ? (
                     <Image
                       src={avatarPreview}
-                      alt={currentUser.fullName || currentUser.name}
+                      alt={currentUser.name}
                       width={128}
                       height={128}
                       className="w-full h-full object-cover"
                     />
                   ) : (
                     <div className="w-full h-full bg-gradient-to-br from-red-400 to-red-600 flex items-center justify-center text-white text-4xl font-bold">
-                      {currentUser.fullName?.[0] || currentUser.name[0] || "U"}
+                      {currentUser.name[0] || "U"}
                     </div>
                   )}
                 </div>
@@ -197,7 +197,7 @@ export default function ProfileClient({ user }: ProfileClientProps) {
 
               {/* User Info */}
               <h2 className="mt-6 text-2xl font-bold text-gray-900">
-                {currentUser.fullName || currentUser.name}
+                {currentUser.name}
               </h2>
               <p className="text-gray-500 mt-1">{currentUser.email}</p>
 
@@ -227,11 +227,11 @@ export default function ProfileClient({ user }: ProfileClientProps) {
               {/* Full Name */}
               <div className="md:col-span-2">
                 <Input
-                  name="fullName"
+                  name="name"
                   label="Họ và tên"
                   placeholder="Nguyễn Văn A"
                   labelPlacement="outside"
-                  defaultValue={currentUser.fullName || ""}
+                  defaultValue={currentUser.name || ""}
                   isRequired
                   onChange={() => setIsDirty(true)}
                   errorMessage={({ validationDetails }) => {

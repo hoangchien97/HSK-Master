@@ -138,7 +138,7 @@ export default function ClassDetailView({ classId, role }: ClassDetailViewProps)
             <div>
               <p className="text-sm text-default-500">Học viên</p>
               <p className="text-xl font-bold">
-                {classData._count?.enrollments ?? 0}/{classData.maxStudents}
+                {classData._count?.enrollments ?? 0}
               </p>
             </div>
           </CardBody>
@@ -246,7 +246,7 @@ export default function ClassDetailView({ classId, role }: ClassDetailViewProps)
                 <TableRow key={enrollment.id}>
                   <TableCell>
                     <UserAvatar
-                      name={enrollment.student?.fullName || enrollment.student?.email || ""}
+                      name={enrollment.student?.name || enrollment.student?.email || ""}
                       description={enrollment.student?.email}
                       avatarProps={{
                         src: enrollment.student?.image || undefined,

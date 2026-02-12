@@ -10,7 +10,6 @@ import "react-toastify/dist/ReactToastify.css"
 
 interface User {
   name: string
-  fullName?: string
   email: string
   role: string
   image?: string | null
@@ -53,7 +52,7 @@ function PortalLayoutInner({ user, children }: PortalLayoutClientProps) {
       <div className="flex-1 flex flex-col min-h-0 lg:pl-64">
         {/* Header - Sticky top */}
         <PortalHeader
-          userName={user.fullName || user.name}
+          userName={user.name}
           userEmail={user.email}
           userRole={user.role}
           userImage={user.image}

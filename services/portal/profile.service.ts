@@ -24,7 +24,7 @@ export class ProfileService {
       const user = await prisma.portalUser.update({
         where: { id: userId },
         data: {
-          fullName: data.fullName,
+          name: data.name,
           phoneNumber: data.phoneNumber,
           address: data.address,
           dateOfBirth: data.dateOfBirth ? new Date(data.dateOfBirth) : undefined,

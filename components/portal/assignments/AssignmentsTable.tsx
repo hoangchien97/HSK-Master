@@ -48,7 +48,7 @@ interface ClassInfo {
 
 interface StudentSubmission {
   id: string
-  student: { id: string; fullName: string | null; name: string }
+  student: { id: string; name: string }
   status: string
   score?: number | null
 }

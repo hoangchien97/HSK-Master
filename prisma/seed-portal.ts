@@ -37,8 +37,8 @@ export async function seedPortal() {
   // Create Admin
   const admin = await prisma.portalUser.create({
     data: {
-      name: "admin",
-      fullName: "Admin Ruby HSK",
+      name: "Admin Ruby HSK",
+      username: "admin",
       email: "admin@hskmaster.com",
       password: hashedPassword,
       role: UserRole.SYSTEM_ADMIN,
@@ -54,8 +54,8 @@ export async function seedPortal() {
   const teachers = await Promise.all([
     prisma.portalUser.create({
       data: {
-        name: "nguyen-van-an",
-        fullName: "Nguyễn Văn An",
+        name: "Nguyễn Văn An",
+        username: "nguyenvanan",
         email: "teacher1@hskmaster.com",
         password: hashedPassword,
         role: UserRole.TEACHER,
@@ -68,8 +68,8 @@ export async function seedPortal() {
     }),
     prisma.portalUser.create({
       data: {
-        name: "tran-thi-binh",
-        fullName: "Trần Thị Bình",
+        name: "Trần Thị Bình",
+        username: "tranthibinh",
         email: "teacher2@hskmaster.com",
         password: hashedPassword,
         role: UserRole.TEACHER,
@@ -82,8 +82,8 @@ export async function seedPortal() {
     }),
     prisma.portalUser.create({
       data: {
-        name: "le-minh-chau",
-        fullName: "Lê Minh Châu",
+        name: "Lê Minh Châu",
+        username: "leminhchau",
         email: "teacher3@hskmaster.com",
         password: hashedPassword,
         role: UserRole.TEACHER,
@@ -96,8 +96,8 @@ export async function seedPortal() {
     }),
     prisma.portalUser.create({
       data: {
-        name: "pham-thu-dung",
-        fullName: "Phạm Thu Dung",
+        name: "Phạm Thu Dung",
+        username: "phamthudung",
         email: "teacher4@hskmaster.com",
         password: hashedPassword,
         role: UserRole.TEACHER,
@@ -110,8 +110,8 @@ export async function seedPortal() {
     }),
     prisma.portalUser.create({
       data: {
-        name: "vo-quang-em",
-        fullName: "Võ Quang Em",
+        name: "Võ Quang Em",
+        username: "voquangem",
         email: "teacher5@hskmaster.com",
         password: hashedPassword,
         role: UserRole.TEACHER,
@@ -142,12 +142,12 @@ export async function seedPortal() {
     studentNames.map((name, index) => {
       const slug = name.toLowerCase()
         .normalize("NFD").replace(/[\u0300-\u036f]/g, "")
-        .replace(/đ/g, "d").replace(/\s+/g, "-")
+        .replace(/đ/g, "d").replace(/\s+/g, "")
 
       return prisma.portalUser.create({
         data: {
-          name: slug,
-          fullName: name,
+          name: name,
+          username: slug,
           email: `student${index + 1}@gmail.com`,
           password: hashedPassword,
           role: UserRole.STUDENT,
@@ -168,32 +168,32 @@ export async function seedPortal() {
   console.log("��� Creating 25 classes...")
 
   const classesData = [
-    { name: "HSK 1 - Lớp Sáng T2-T4-T6", code: "HSK1-246-SANG", level: "HSK1", teacher: teachers[0], max: 15, desc: "Lớp HSK 1 buổi sáng: T2, T4, T6 từ 8h-10h. Người mới bắt đầu." },
-    { name: "HSK 1 - Lớp Tối T3-T5-T7", code: "HSK1-357-TOI", level: "HSK1", teacher: teachers[0], max: 17, desc: "Lớp HSK 1 buổi tối: T3, T5, T7 từ 18h30-20h30." },
-    { name: "HSK 2 - Lớp Sáng T2-T4-T6", code: "HSK2-246-SANG", level: "HSK2", teacher: teachers[1], max: 16, desc: "Lớp HSK 2 buổi sáng: T2, T4, T6 từ 8h-10h. Dành cho học viên hoàn thành HSK 1." },
-    { name: "HSK 2 - Lớp Tối T3-T5-T7", code: "HSK2-357-TOI", level: "HSK2", teacher: teachers[1], max: 15, desc: "Lớp HSK 2 buổi tối: T3, T5, T7 từ 18h30-20h30." },
-    { name: "HSK 3 - Lớp Chiều T2-T4", code: "HSK3-24-CHIEU", level: "HSK3", teacher: teachers[2], max: 15, desc: "Lớp HSK 3 buổi chiều: T2, T4 từ 14h-17h. Cần nền tảng HSK 2." },
-    { name: "HSK 3 - Lớp Tối T3-T5", code: "HSK3-35-TOI", level: "HSK3", teacher: teachers[2], max: 16, desc: "Lớp HSK 3 buổi tối: T3, T5 từ 18h30-21h." },
-    { name: "HSK 4 - Lớp Sáng T2-T4-T6", code: "HSK4-246-SANG", level: "HSK4", teacher: teachers[4], max: 12, desc: "Lớp HSK 4 buổi sáng: T2, T4, T6 từ 8h-11h. Cần hoàn thành HSK 3." },
-    { name: "HSK 4 - Lớp Tối T3-T5-T7", code: "HSK4-357-TOI", level: "HSK4", teacher: teachers[4], max: 15, desc: "Lớp HSK 4 buổi tối: T3, T5, T7 từ 18h30-21h30." },
-    { name: "HSK 5 - Lớp Chiều T2-T4", code: "HSK5-24-CHIEU", level: "HSK5", teacher: teachers[4], max: 10, desc: "Lớp HSK 5 buổi chiều: T2, T4 từ 14h-17h. Trình độ HSK 4." },
-    { name: "HSK 6 - Lớp Tối T3-T5", code: "HSK6-35-TOI", level: "HSK6", teacher: teachers[4], max: 8, desc: "Lớp HSK 6 buổi tối: T3, T5 từ 18h30-21h30. Trình độ HSK 5." },
-    { name: "Giao tiếp cơ bản - Cuối tuần", code: "GT-CN-SANG", level: "BASIC", teacher: teachers[3], max: 20, desc: "Lớp giao tiếp cơ bản: CN 9h-12h. Tập trung nói và nghe." },
-    { name: "Giao tiếp nâng cao - Cuối tuần", code: "GT-T7-CHIEU", level: "ADVANCED", teacher: teachers[3], max: 15, desc: "Lớp giao tiếp nâng cao: T7 14h-17h. Thực hành đàm thoại." },
-    { name: "Tiếng Trung thương mại", code: "BUSINESS-35-TOI", level: "BUSINESS", teacher: teachers[4], max: 12, desc: "Lớp tiếng Trung thương mại: T3, T5 từ 19h-21h." },
-    { name: "Luyện thi HSK 3 - Intensive", code: "HSK3-INT-SANG", level: "HSK3", teacher: teachers[2], max: 16, desc: "Khóa luyện thi HSK 3 chuyên sâu: T2-T6 từ 8h-10h." },
-    { name: "Luyện thi HSK 5 - Intensive", code: "HSK5-INT-TOI", level: "HSK5", teacher: teachers[4], max: 12, desc: "Khóa luyện thi HSK 5 chuyên sâu: T2-T6 từ 18h30-20h30." },
+    { name: "HSK 1 - Lớp Sáng T2-T4-T6", code: "HSK1-246-SANG", level: "HSK1", teacher: teachers[0], desc: "Lớp HSK 1 buổi sáng: T2, T4, T6 từ 8h-10h. Người mới bắt đầu." },
+    { name: "HSK 1 - Lớp Tối T3-T5-T7", code: "HSK1-357-TOI", level: "HSK1", teacher: teachers[0], desc: "Lớp HSK 1 buổi tối: T3, T5, T7 từ 18h30-20h30." },
+    { name: "HSK 2 - Lớp Sáng T2-T4-T6", code: "HSK2-246-SANG", level: "HSK2", teacher: teachers[1], desc: "Lớp HSK 2 buổi sáng: T2, T4, T6 từ 8h-10h. Dành cho học viên hoàn thành HSK 1." },
+    { name: "HSK 2 - Lớp Tối T3-T5-T7", code: "HSK2-357-TOI", level: "HSK2", teacher: teachers[1], desc: "Lớp HSK 2 buổi tối: T3, T5, T7 từ 18h30-20h30." },
+    { name: "HSK 3 - Lớp Chiều T2-T4", code: "HSK3-24-CHIEU", level: "HSK3", teacher: teachers[2], desc: "Lớp HSK 3 buổi chiều: T2, T4 từ 14h-17h. Cần nền tảng HSK 2." },
+    { name: "HSK 3 - Lớp Tối T3-T5", code: "HSK3-35-TOI", level: "HSK3", teacher: teachers[2], desc: "Lớp HSK 3 buổi tối: T3, T5 từ 18h30-21h." },
+    { name: "HSK 4 - Lớp Sáng T2-T4-T6", code: "HSK4-246-SANG", level: "HSK4", teacher: teachers[4], desc: "Lớp HSK 4 buổi sáng: T2, T4, T6 từ 8h-11h. Cần hoàn thành HSK 3." },
+    { name: "HSK 4 - Lớp Tối T3-T5-T7", code: "HSK4-357-TOI", level: "HSK4", teacher: teachers[4], desc: "Lớp HSK 4 buổi tối: T3, T5, T7 từ 18h30-21h30." },
+    { name: "HSK 5 - Lớp Chiều T2-T4", code: "HSK5-24-CHIEU", level: "HSK5", teacher: teachers[4], desc: "Lớp HSK 5 buổi chiều: T2, T4 từ 14h-17h. Trình độ HSK 4." },
+    { name: "HSK 6 - Lớp Tối T3-T5", code: "HSK6-35-TOI", level: "HSK6", teacher: teachers[4], desc: "Lớp HSK 6 buổi tối: T3, T5 từ 18h30-21h30. Trình độ HSK 5." },
+    { name: "Giao tiếp cơ bản - Cuối tuần", code: "GT-CN-SANG", level: "BASIC", teacher: teachers[3], desc: "Lớp giao tiếp cơ bản: CN 9h-12h. Tập trung nói và nghe." },
+    { name: "Giao tiếp nâng cao - Cuối tuần", code: "GT-T7-CHIEU", level: "ADVANCED", teacher: teachers[3], desc: "Lớp giao tiếp nâng cao: T7 14h-17h. Thực hành đàm thoại." },
+    { name: "Tiếng Trung thương mại", code: "BUSINESS-35-TOI", level: "BUSINESS", teacher: teachers[4], desc: "Lớp tiếng Trung thương mại: T3, T5 từ 19h-21h." },
+    { name: "Luyện thi HSK 3 - Intensive", code: "HSK3-INT-SANG", level: "HSK3", teacher: teachers[2], desc: "Khóa luyện thi HSK 3 chuyên sâu: T2-T6 từ 8h-10h." },
+    { name: "Luyện thi HSK 5 - Intensive", code: "HSK5-INT-TOI", level: "HSK5", teacher: teachers[4], desc: "Khóa luyện thi HSK 5 chuyên sâu: T2-T6 từ 18h30-20h30." },
     // Additional 10 classes to reach 25 total — for pagination testing
-    { name: "HSK 1 - Lớp Chiều T2-T4", code: "HSK1-24-CHIEU", level: "HSK1", teacher: teachers[0], max: 18, desc: "Lớp HSK 1 buổi chiều: T2, T4 từ 14h-16h. Người mới bắt đầu." },
-    { name: "HSK 2 - Lớp Cuối tuần", code: "HSK2-T7-SANG", level: "HSK2", teacher: teachers[1], max: 20, desc: "Lớp HSK 2 cuối tuần: T7 9h-12h. Tiến độ chậm cho người bận." },
-    { name: "HSK 3 - Lớp Sáng T2-T4-T6", code: "HSK3-246-SANG", level: "HSK3", teacher: teachers[2], max: 14, desc: "Lớp HSK 3 buổi sáng: T2, T4, T6 từ 8h-10h." },
-    { name: "HSK 4 - Lớp Chiều T3-T5", code: "HSK4-35-CHIEU", level: "HSK4", teacher: teachers[4], max: 12, desc: "Lớp HSK 4 buổi chiều: T3, T5 từ 14h-17h." },
-    { name: "HSK 1 - Lớp Online T2-T4-T6", code: "HSK1-246-OL", level: "HSK1", teacher: teachers[0], max: 25, desc: "Lớp HSK 1 online: T2, T4, T6 từ 20h-21h30." },
-    { name: "HSK 2 - Lớp Online T3-T5-T7", code: "HSK2-357-OL", level: "HSK2", teacher: teachers[1], max: 25, desc: "Lớp HSK 2 online: T3, T5, T7 từ 20h-21h30." },
-    { name: "Giao tiếp du lịch - Cuối tuần", code: "GT-DL-T7", level: "BASIC", teacher: teachers[3], max: 20, desc: "Lớp giao tiếp du lịch: T7 9h-11h30. Hội thoại thực tế." },
-    { name: "HSK 5 - Lớp Sáng T3-T5-T7", code: "HSK5-357-SANG", level: "HSK5", teacher: teachers[4], max: 10, desc: "Lớp HSK 5 buổi sáng: T3, T5, T7 từ 8h-11h." },
-    { name: "Tiếng Trung Y khoa", code: "MED-24-TOI", level: "ADVANCED", teacher: teachers[3], max: 10, desc: "Lớp tiếng Trung chuyên ngành Y khoa: T2, T4 từ 19h-21h." },
-    { name: "Luyện viết Hán tự - Cuối tuần", code: "HANTU-CN", level: "BASIC", teacher: teachers[2], max: 18, desc: "Lớp luyện viết Hán tự: CN 14h-16h30. Từ nét cơ bản đến chữ phức tạp." },
+    { name: "HSK 1 - Lớp Chiều T2-T4", code: "HSK1-24-CHIEU", level: "HSK1", teacher: teachers[0], desc: "Lớp HSK 1 buổi chiều: T2, T4 từ 14h-16h. Người mới bắt đầu." },
+    { name: "HSK 2 - Lớp Cuối tuần", code: "HSK2-T7-SANG", level: "HSK2", teacher: teachers[1], desc: "Lớp HSK 2 cuối tuần: T7 9h-12h. Tiến độ chậm cho người bận." },
+    { name: "HSK 3 - Lớp Sáng T2-T4-T6", code: "HSK3-246-SANG", level: "HSK3", teacher: teachers[2], desc: "Lớp HSK 3 buổi sáng: T2, T4, T6 từ 8h-10h." },
+    { name: "HSK 4 - Lớp Chiều T3-T5", code: "HSK4-35-CHIEU", level: "HSK4", teacher: teachers[4], desc: "Lớp HSK 4 buổi chiều: T3, T5 từ 14h-17h." },
+    { name: "HSK 1 - Lớp Online T2-T4-T6", code: "HSK1-246-OL", level: "HSK1", teacher: teachers[0], desc: "Lớp HSK 1 online: T2, T4, T6 từ 20h-21h30." },
+    { name: "HSK 2 - Lớp Online T3-T5-T7", code: "HSK2-357-OL", level: "HSK2", teacher: teachers[1], desc: "Lớp HSK 2 online: T3, T5, T7 từ 20h-21h30." },
+    { name: "Giao tiếp du lịch - Cuối tuần", code: "GT-DL-T7", level: "BASIC", teacher: teachers[3], desc: "Lớp giao tiếp du lịch: T7 9h-11h30. Hội thoại thực tế." },
+    { name: "HSK 5 - Lớp Sáng T3-T5-T7", code: "HSK5-357-SANG", level: "HSK5", teacher: teachers[4], desc: "Lớp HSK 5 buổi sáng: T3, T5, T7 từ 8h-11h." },
+    { name: "Tiếng Trung Y khoa", code: "MED-24-TOI", level: "ADVANCED", teacher: teachers[3], desc: "Lớp tiếng Trung chuyên ngành Y khoa: T2, T4 từ 19h-21h." },
+    { name: "Luyện viết Hán tự - Cuối tuần", code: "HANTU-CN", level: "BASIC", teacher: teachers[2], desc: "Lớp luyện viết Hán tự: CN 14h-16h30. Từ nét cơ bản đến chữ phức tạp." },
   ]
 
   const classes = await Promise.all(
@@ -207,7 +207,6 @@ export async function seedPortal() {
           level: cls.level,
           startDate: new Date("2026-02-01"),
           endDate: new Date("2026-06-30"),
-          maxStudents: cls.max,
           status: ClassStatus.ACTIVE,
         },
       })

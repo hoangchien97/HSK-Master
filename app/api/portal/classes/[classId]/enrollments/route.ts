@@ -61,7 +61,7 @@ export async function POST(
     // Find student by email
     const student = await prisma.portalUser.findUnique({
       where: { email: studentEmail },
-      select: { id: true, role: true, fullName: true, email: true },
+      select: { id: true, role: true, name: true, email: true },
     })
 
     if (!student) {
@@ -72,14 +72,6 @@ export async function POST(
     if (student.role !== "STUDENT") {
       return NextResponse.json(
         { error: "User is not a student" },
-        { status: 400 }
-      )
-    }
-
-    // Check if class is full
-    if (classData._count.enrollments >= classData.maxStudents) {
-      return NextResponse.json(
-        { error: "Class is full" },
         { status: 400 }
       )
     }
@@ -112,7 +104,7 @@ export async function POST(
             student: {
               select: {
                 id: true,
-                fullName: true,
+                name: true,
                 email: true,
               },
             },
@@ -134,7 +126,7 @@ export async function POST(
         student: {
           select: {
             id: true,
-            fullName: true,
+            name: true,
             email: true,
             phoneNumber: true,
           },

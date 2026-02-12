@@ -20,7 +20,6 @@ export interface AttendanceMatrixData {
   students: Array<{
     id: string;
     name: string;
-    fullName: string | null;
     image: string | null;
     email: string;
   }>;
@@ -126,14 +125,13 @@ export async function fetchAttendanceMatrix(
               select: {
                 id: true,
                 name: true,
-                fullName: true,
                 image: true,
                 email: true,
               },
             },
           },
           orderBy: {
-            student: { fullName: 'asc' },
+            student: { name: 'asc' },
           },
         },
       },
@@ -205,7 +203,6 @@ export async function fetchAttendanceMatrix(
         students: classData.enrollments.map((e) => ({
           id: e.student.id,
           name: e.student.name,
-          fullName: e.student.fullName,
           image: e.student.image,
           email: e.student.email,
         })),

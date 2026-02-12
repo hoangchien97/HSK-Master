@@ -51,7 +51,7 @@ export async function GET(request: NextRequest) {
               teacher: {
                 select: {
                   id: true,
-                  fullName: true,
+                  name: true,
                   email: true,
                 },
               },
@@ -63,7 +63,7 @@ export async function GET(request: NextRequest) {
                   student: {
                     select: {
                       id: true,
-                      fullName: true,
+                      name: true,
                       image: true,
                     },
                   },
@@ -92,7 +92,7 @@ export async function GET(request: NextRequest) {
                   student: {
                     select: {
                       id: true,
-                      fullName: true,
+                      name: true,
                       image: true,
                     },
                   },
@@ -115,7 +115,7 @@ export async function GET(request: NextRequest) {
               teacher: {
                 select: {
                   id: true,
-                  fullName: true,
+                  name: true,
                   email: true,
                 },
               },
@@ -127,7 +127,7 @@ export async function GET(request: NextRequest) {
                   student: {
                     select: {
                       id: true,
-                      fullName: true,
+                      name: true,
                       image: true,
                     },
                   },

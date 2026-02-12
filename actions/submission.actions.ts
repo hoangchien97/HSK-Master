@@ -73,7 +73,7 @@ export async function submitAssignmentAction(
           submittedAt: new Date(),
         },
         include: {
-          student: { select: { id: true, fullName: true, email: true, image: true } },
+          student: { select: { id: true, name: true, email: true, image: true } },
         },
       });
     } else {
@@ -87,7 +87,7 @@ export async function submitAssignmentAction(
           submittedAt: new Date(),
         },
         include: {
-          student: { select: { id: true, fullName: true, email: true, image: true } },
+          student: { select: { id: true, name: true, email: true, image: true } },
         },
       });
     }

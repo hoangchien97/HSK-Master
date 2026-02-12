@@ -12,7 +12,7 @@ type PortalUserWithStatus = {
   id: string
   email: string
   name: string | null
-  fullName: string | null
+  username: string
   image: string | null
   role: string
   status: string
@@ -72,7 +72,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
           id: user.id,
           email: user.email,
           name: user.name,
-          fullName: user.fullName ?? undefined,
+          username: user.username,
           image: user.image,
           role: user.role,
           status: user.status,
@@ -91,10 +91,17 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
 
           // Create PortalUser if doesn't exist
           if (!existingUser) {
+            const baseUsername = (user.name || user.email!.split('@')[0])
+              .toLowerCase()
+              .normalize("NFD").replace(/[\u0300-\u036f]/g, "")
+              .replace(/đ/g, "d").replace(/[^a-z0-9]+/g, "")
+            // Ensure uniqueness by appending random chars
+            const username = `${baseUsername}${Date.now().toString(36).slice(-4)}`
             const newUser = await prisma.portalUser.create({
               data: {
                 email: user.email!,
                 name: user.name || user.email!.split('@')[0],
+                username,
                 image: user.image,
                 emailVerified: new Date(),
                 role: USER_ROLE.STUDENT as "STUDENT" | "TEACHER" | "SYSTEM_ADMIN", // Default role for new OAuth users
@@ -157,7 +164,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
             token.role = dbUser.role
             token.status = dbUser.status
             token.name = dbUser.name
-            token.fullName = dbUser.fullName
+            token.username = dbUser.username
             token.picture = dbUser.image
           }
         } catch (error) {
@@ -171,7 +178,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
         session.user.id = token.id as string
         session.user.role = token.role as string
         session.user.status = token.status as string
-        session.user.fullName = token.fullName as string
+        session.user.username = token.username as string
       }
       return session
     },

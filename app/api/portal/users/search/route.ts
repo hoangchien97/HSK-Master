@@ -26,50 +26,50 @@ export async function GET(request: NextRequest) {
     }
 
     const { searchParams } = new URL(request.url)
-    const query = searchParams.get("q")
+    const query = searchParams.get("q") || searchParams.get("search") || ""
     const role = searchParams.get("role") // Filter by role (e.g., STUDENT)
+    const page = Math.max(1, parseInt(searchParams.get("page") || "1"))
+    const pageSize = Math.min(100, Math.max(1, parseInt(searchParams.get("pageSize") || "20")))
 
-    if (!query || query.length < 2) {
-      return NextResponse.json(
-        { error: "Query must be at least 2 characters" },
-        { status: 400 }
-      )
+    // Build where clause
+    const where: any = {
+      AND: [
+        ...(query.length >= 1
+          ? [
+              {
+                OR: [
+                  { email: { contains: query, mode: "insensitive" } },
+                  { name: { contains: query, mode: "insensitive" } },
+                  { username: { contains: query, mode: "insensitive" } },
+                ],
+              },
+            ]
+          : []),
+        ...(role ? [{ role: role as any }] : []),
+      ],
     }
 
-    // Search users by email or full name
-    const users = await prisma.portalUser.findMany({
-      where: {
-        AND: [
-          {
-            OR: [
-              {
-                email: {
-                  contains: query,
-                  mode: "insensitive",
-                },
-              },
-              {
-                fullName: {
-                  contains: query,
-                  mode: "insensitive",
-                },
-              },
-            ],
-          },
-          ...(role ? [{ role: role as any }] : []),
-        ],
-      },
-      select: {
-        id: true,
-        email: true,
-        fullName: true,
-        role: true,
-        phoneNumber: true,
-      },
-      take: 10, // Limit results
-    })
+    // Search users by email or name
+    const [users, total] = await Promise.all([
+      prisma.portalUser.findMany({
+        where,
+        select: {
+          id: true,
+          email: true,
+          name: true,
+          username: true,
+          image: true,
+          role: true,
+          phoneNumber: true,
+        },
+        orderBy: { name: "asc" },
+        skip: (page - 1) * pageSize,
+        take: pageSize,
+      }),
+      prisma.portalUser.count({ where }),
+    ])
 
-    return NextResponse.json(users)
+    return NextResponse.json({ items: users, total })
   } catch (error) {
     console.error("Error searching users:", error)
     return NextResponse.json(

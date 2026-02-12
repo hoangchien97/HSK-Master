@@ -21,7 +21,6 @@ export interface ISchedule {
     className: string;
     classCode: string;
     level?: string | null;
-    maxStudents?: number;
   };
 }
 

@@ -32,7 +32,7 @@ export async function GET(
         teacher: {
           select: {
             id: true,
-            fullName: true,
+            name: true,
             email: true,
           },
         },
@@ -44,7 +44,7 @@ export async function GET(
             student: {
               select: {
                 id: true,
-                fullName: true,
+                name: true,
                 email: true,
                 phoneNumber: true,
               },
@@ -140,7 +140,6 @@ export async function PUT(
       className,
       description,
       level,
-      maxStudents,
       startDate,
       endDate,
       status,
@@ -152,7 +151,6 @@ export async function PUT(
         ...(className && { className }),
         ...(description !== undefined && { description }),
         ...(level !== undefined && { level }),
-        ...(maxStudents && { maxStudents }),
         ...(startDate && { startDate: new Date(startDate) }),
         ...(endDate !== undefined && {
           endDate: endDate ? new Date(endDate) : null,
@@ -163,7 +161,7 @@ export async function PUT(
         teacher: {
           select: {
             id: true,
-            fullName: true,
+            name: true,
             email: true,
           },
         },

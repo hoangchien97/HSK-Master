@@ -71,7 +71,6 @@ export async function getClasses(userId?: string): Promise<IClass[]> {
     level: cls.level || '',
     status: cls.status,
     startDate: cls.startDate.toISOString(),
-    maxStudents: cls.maxStudents,
     teacherId: cls.teacherId,
   }));
 }

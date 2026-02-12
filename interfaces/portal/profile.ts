@@ -1,7 +1,8 @@
 // Portal User Types
 export interface PortalUser {
   id: string
-  name: string // Unique username/slug for URL
+  name: string // Display name (e.g., "Hoang Chien")
+  username: string // Unique slug for URL
   email: string
   emailVerified?: Date | string | null
   image?: string | null
@@ -9,7 +10,6 @@ export interface PortalUser {
   status: UserStatus
 
   // Profile fields
-  fullName?: string | null
   phoneNumber?: string | null
   address?: string | null
   dateOfBirth?: Date | string | null
@@ -33,7 +33,7 @@ export enum UserStatus {
 
 // Profile Update DTOs
 export interface UpdateProfileDTO {
-  fullName?: string
+  name?: string
   phoneNumber?: string
   address?: string
   dateOfBirth?: string

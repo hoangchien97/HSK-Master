@@ -33,7 +33,7 @@ export interface ISubmission {
   status: SubmissionStatus | string;
   student?: {
     id: string;
-    fullName: string | null;
+    name: string;
     email: string;
     image?: string | null;
   };

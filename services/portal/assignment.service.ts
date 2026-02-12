@@ -22,7 +22,7 @@ interface AssignmentItem {
   attachments: string[];
   status: string;
   class: AssignmentClassInfo;
-  submissions: { id: string; student: { id: string; fullName: string | null; name: string }; status: string; score?: number | null }[];
+  submissions: { id: string; student: { id: string; name: string }; status: string; score?: number | null }[];
   createdAt: Date;
 }
 
@@ -66,7 +66,7 @@ export async function getAssignments(
       include: {
         class: { select: { id: true, className: true, classCode: true } },
         submissions: {
-          include: { student: { select: { id: true, fullName: true, name: true } } },
+          include: { student: { select: { id: true, name: true } } },
         },
       },
       orderBy: { createdAt: 'desc' },
@@ -115,7 +115,7 @@ export async function createAssignment(
     include: {
       class: { select: { id: true, className: true, classCode: true } },
       submissions: {
-        include: { student: { select: { id: true, fullName: true, name: true } } },
+        include: { student: { select: { id: true, name: true } } },
       },
     },
   });
@@ -149,7 +149,7 @@ export async function updateAssignment(
     include: {
       class: { select: { id: true, className: true, classCode: true } },
       submissions: {
-        include: { student: { select: { id: true, fullName: true, name: true } } },
+        include: { student: { select: { id: true, name: true } } },
       },
     },
   });

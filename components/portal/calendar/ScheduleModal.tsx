@@ -329,7 +329,7 @@ export default function ScheduleModal({
 
         {/* Recurrence (create mode only) */}
         {!editMode && (
-          <div className="p-5 bg-default-50 rounded-xl border border-default-200 space-y-4 w-full">
+          <div className="p-4 bg-default-50 rounded-xl border border-default-200 space-y-4 w-full">
             <div className="flex items-center justify-between gap-4">
               <div className="flex items-center gap-3">
                 <div className="p-2.5 bg-primary-50 rounded-lg">

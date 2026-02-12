@@ -6,14 +6,14 @@ declare module "next-auth" {
       id: string
       role: string
       status: string
-      fullName?: string
+      username?: string
     } & DefaultSession["user"]
   }
 
   interface User {
     role?: string
     status?: string
-    fullName?: string
+    username?: string
   }
 }
 
@@ -22,6 +22,6 @@ declare module "@auth/core/jwt" {
     id: string
     role: string
     status: string
-    fullName?: string
+    username?: string
   }
 }

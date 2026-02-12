@@ -21,12 +21,11 @@ export interface ScheduleEvent {
     className: string
     classCode: string
     level?: string
-    maxStudents: number
     enrollments?: {
       id: string
       student: {
         id: string
-        fullName: string
+        name: string
         image?: string
       }
     }[]

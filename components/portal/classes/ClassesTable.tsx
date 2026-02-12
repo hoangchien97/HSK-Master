@@ -148,7 +148,7 @@ export default function ClassesTable() {
         >
           <p className="font-semibold text-sm">{row.className}</p>
           {row.teacher && (
-            <p className="text-xs text-default-400">GV: {row.teacher.fullName || row.teacher.email}</p>
+            <p className="text-xs text-default-400">GV: {row.teacher.name || row.teacher.email}</p>
           )}
         </button>
       ),
@@ -171,7 +171,7 @@ export default function ClassesTable() {
       render: (_v, row) => (
         <div className="flex items-center gap-1.5">
           <Users className="w-4 h-4 text-default-400" />
-          <span className="text-sm">{row._count?.enrollments ?? 0}/{row.maxStudents}</span>
+          <span className="text-sm">{row._count?.enrollments ?? 0}</span>
         </div>
       ),
     },

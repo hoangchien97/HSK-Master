@@ -22,6 +22,8 @@ import type {
   IUpdateScheduleData,
 } from '@/interfaces/portal';
 import { auth } from '@/auth';
+import { prisma } from '@/lib/prisma';
+import { createGoogleCalendarEvent, scheduleToGoogleEvent } from '@/lib/utils/google-calendar';
 
 /**
  * Fetch all schedules for current user
@@ -223,30 +225,142 @@ export async function syncScheduleToGoogleCalendar(scheduleId: string): Promise<
       return { success: false, error: 'Unauthorized' };
     }
 
-    // Call the sync API
-    const response = await fetch(`${process.env.NEXTAUTH_URL || 'http://localhost:3000'}/api/portal/google-calendar/sync`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
+    // Fetch the schedule
+    const schedule = await prisma.portalSchedule.findUnique({
+      where: { id: scheduleId },
+      include: {
+        class: {
+          include: {
+            enrollments: {
+              where: { status: 'ENROLLED' },
+              include: {
+                student: {
+                  select: { email: true },
+                },
+              },
+            },
+          },
+        },
       },
-      body: JSON.stringify({ scheduleId }),
     });
 
-    const data = await response.json();
+    if (!schedule) {
+      return { success: false, error: 'Schedule not found' };
+    }
 
-    if (!response.ok) {
+    // Verify user owns this schedule
+    if (schedule.teacherId !== session.user.id) {
+      return { success: false, error: 'Unauthorized' };
+    }
+
+    // Check if already synced
+    if (schedule.syncedToGoogle && schedule.googleEventId) {
       return {
-        success: false,
-        error: data.error || 'Failed to sync with Google Calendar',
+        success: true,
+        message: 'Already synced',
+        googleEventId: schedule.googleEventId,
+        googleEventLink: `https://calendar.google.com/calendar/event?eid=${schedule.googleEventId}`,
       };
     }
+
+    // Get user's Google access token from Account table
+    const account = await prisma.account.findFirst({
+      where: {
+        userId: session.user.id,
+        provider: 'google',
+      },
+    });
+
+    if (!account?.access_token) {
+      return {
+        success: false,
+        error: 'Google Calendar chưa được kết nối. Vui lòng đăng nhập bằng Google để đồng bộ.',
+      };
+    }
+
+    // Check if token is expired and try to refresh
+    let accessToken = account.access_token;
+    if (account.expires_at && account.expires_at * 1000 < Date.now()) {
+      if (!account.refresh_token) {
+        return {
+          success: false,
+          error: 'Phiên Google đã hết hạn. Vui lòng đăng xuất và đăng nhập lại bằng Google.',
+        };
+      }
+
+      // Refresh the token
+      const tokenResponse = await fetch('https://oauth2.googleapis.com/token', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+        body: new URLSearchParams({
+          client_id: process.env.GOOGLE_CLIENT_ID!,
+          client_secret: process.env.GOOGLE_CLIENT_SECRET!,
+          refresh_token: account.refresh_token,
+          grant_type: 'refresh_token',
+        }),
+      });
+
+      if (!tokenResponse.ok) {
+        return {
+          success: false,
+          error: 'Không thể làm mới token Google. Vui lòng đăng nhập lại.',
+        };
+      }
+
+      const tokenData = await tokenResponse.json();
+      accessToken = tokenData.access_token;
+
+      // Update the stored token
+      await prisma.account.update({
+        where: { id: account.id },
+        data: {
+          access_token: tokenData.access_token,
+          expires_at: tokenData.expires_in
+            ? Math.floor(Date.now() / 1000) + tokenData.expires_in
+            : account.expires_at,
+        },
+      });
+    }
+
+    // Prepare attendees (students in the class)
+    const attendees = schedule.class.enrollments.map((e) => e.student.email);
+
+    // Convert schedule to Google Calendar event
+    const googleEvent = scheduleToGoogleEvent({
+      title: schedule.title,
+      description: schedule.description || undefined,
+      startTime: schedule.startTime,
+      endTime: schedule.endTime,
+      location: schedule.location || undefined,
+      meetingLink: schedule.meetingLink || undefined,
+      attendees,
+    });
+
+    // Create event in Google Calendar
+    const result = await createGoogleCalendarEvent(accessToken, googleEvent);
+
+    if (!result.success) {
+      return {
+        success: false,
+        error: result.error || 'Failed to sync with Google Calendar',
+      };
+    }
+
+    // Update schedule with Google event ID
+    await prisma.portalSchedule.update({
+      where: { id: scheduleId },
+      data: {
+        googleEventId: result.eventId,
+        syncedToGoogle: true,
+      },
+    });
 
     revalidatePath('/portal/teacher/schedule');
     return {
       success: true,
-      message: data.message,
-      googleEventId: data.googleEventId,
-      googleEventLink: data.googleEventLink,
+      message: 'Đã đồng bộ với Google Calendar thành công',
+      googleEventId: result.eventId,
+      googleEventLink: `https://calendar.google.com/calendar/event?eid=${result.eventId}`,
     };
   } catch (error) {
     console.error('Error syncing to Google Calendar:', error);

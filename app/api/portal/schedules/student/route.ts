@@ -43,13 +43,12 @@ export async function GET() {
             className: true,
             classCode: true,
             level: true,
-            maxStudents: true,
           },
         },
         teacher: {
           select: {
             id: true,
-            fullName: true,
+            name: true,
             image: true,
           },
         },

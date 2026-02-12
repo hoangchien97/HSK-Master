@@ -3,12 +3,12 @@ import { UserRole, UserStatus } from "@/enums/portal";
 export interface IUser {
   id: string;
   name: string;
+  username: string;
   email: string;
   emailVerified?: Date | string | null;
   image?: string | null;
   role: UserRole;
   status: UserStatus;
-  fullName?: string | null;
   phoneNumber?: string | null;
   address?: string | null;
   dateOfBirth?: Date | string | null;
@@ -18,7 +18,7 @@ export interface IUser {
 }
 
 export interface IUpdateProfileDTO {
-  fullName?: string;
+  name?: string;
   phoneNumber?: string;
   address?: string;
   dateOfBirth?: string;

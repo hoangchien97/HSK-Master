@@ -31,7 +31,6 @@ const WEEKDAY_LABELS: Record<number, string> = {
 interface StudentData {
   id: string
   name: string
-  fullName: string | null
   image: string | null
   email: string
 }
@@ -270,7 +269,7 @@ export default function AttendanceTable({
                   <div className="flex items-center gap-3">
                     <Avatar
                       src={student.image || undefined}
-                      name={(student.fullName || student.name).substring(0, 2).toUpperCase()}
+                      name={student.name.substring(0, 2).toUpperCase()}
                       size="sm"
                       className="shrink-0"
                       classNames={{
@@ -280,7 +279,7 @@ export default function AttendanceTable({
                     />
                     <div className="min-w-0">
                       <p className="text-sm font-medium text-gray-900 truncate">
-                        {student.fullName || student.name}
+                        {student.name}
                       </p>
                       <p className="text-[11px] text-gray-400 truncate">
                         MSHV: {student.name.toUpperCase().slice(0, 8)}

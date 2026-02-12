@@ -11,7 +11,7 @@ export interface IStudentClassInfo {
 export interface IStudent {
   id: string
   name: string
-  fullName?: string | null
+  username: string
   email: string
   phoneNumber?: string | null
   image?: string | null

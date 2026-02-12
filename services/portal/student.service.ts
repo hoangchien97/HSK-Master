@@ -32,7 +32,6 @@ export async function getStudents(
     enrollments: { some: enrollmentFilter },
     ...(search && {
       OR: [
-        { fullName: { contains: search, mode: 'insensitive' as const } },
         { name: { contains: search, mode: 'insensitive' as const } },
         { email: { contains: search, mode: 'insensitive' as const } },
       ],
@@ -50,7 +49,7 @@ export async function getStudents(
           },
         },
       },
-      orderBy: { fullName: 'asc' },
+      orderBy: { name: 'asc' },
       skip: (page - 1) * pageSize,
       take: pageSize,
     }),
@@ -60,7 +59,7 @@ export async function getStudents(
   const items: IStudent[] = students.map((s) => ({
     id: s.id,
     name: s.name,
-    fullName: s.fullName,
+    username: s.username,
     email: s.email,
     phoneNumber: s.phoneNumber,
     image: s.image,

@@ -318,7 +318,8 @@ enum UserStatus {
 // Portal User (Unified user model with all profile fields)
 model PortalUser {
   id            String     @id @default(cuid())
-  name          String     @unique // Username/slug for profile URL (e.g., /portal/profile/john-doe)
+  name          String     // Display name (e.g., "Hoang Chien") - same as Google profile name
+  username      String     @unique // Unique slug for profile URL (e.g., /portal/profile/hoangchien)
   email         String     @unique
   emailVerified DateTime?  @map("email_verified")
   password      String?    // For email/password auth (hashed with bcrypt)
@@ -327,7 +328,6 @@ model PortalUser {
   status        UserStatus @default(ACTIVE)
 
   // Profile fields
-  fullName      String?    // Họ và tên đầy đủ (e.g., "Nguyễn Văn An")
   phoneNumber   String?
   address       String?
   dateOfBirth   DateTime?
@@ -369,7 +369,6 @@ model PortalClass {
   level            String?  // HSK level
   startDate        DateTime
   endDate          DateTime?
-  maxStudents      Int      @default(20)
   status           String   @default("ACTIVE") // ACTIVE, COMPLETED, CANCELLED
   createdAt        DateTime @default(now())
   updatedAt        DateTime @updatedAt

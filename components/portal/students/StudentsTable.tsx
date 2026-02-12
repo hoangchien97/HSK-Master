@@ -108,9 +108,9 @@ export default function StudentsTable() {
       key: "student", label: "Học viên",
       render: (_v, row) => (
         <div className="flex items-center gap-3">
-          <Avatar src={row.image || undefined} name={(row.fullName || row.name)?.charAt(0)} size="sm" />
+          <Avatar src={row.image || undefined} name={(row.name)?.charAt(0)} size="sm" />
           <div>
-            <p className="font-medium">{row.fullName || row.name}</p>
+            <p className="font-medium">{row.name}</p>
             <p className="text-xs text-default-400">{row.email}</p>
           </div>
         </div>
@@ -197,11 +197,7 @@ export default function StudentsTable() {
         title: "Chưa có học viên nào",
         description: "Thêm học viên vào lớp để quản lý",
       }}
-      actions={
-        <Button color="primary" size="sm" startContent={<UserPlus className="w-4 h-4" />}>
-          Thêm học viên
-        </Button>
-      }
+      actions={undefined}
       toolbar={
         <StudentsToolbar
           search={search}
