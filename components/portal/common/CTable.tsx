@@ -83,6 +83,7 @@ export interface CTableProps<T extends Record<string, unknown>> {
   /* ── Styling ── */
   className?: string
   isStriped?: boolean
+  isHoverable?: boolean
   ariaLabel?: string
 }
 
@@ -115,6 +116,7 @@ export function CTable<T extends Record<string, unknown>>({
   // styling
   className,
   isStriped = true,
+  isHoverable = true,
   ariaLabel = "Data table",
 }: CTableProps<T>) {
   /* ─── Derived ─── */
@@ -142,6 +144,9 @@ export function CTable<T extends Record<string, unknown>>({
       base: "h-full",
       wrapper: ["h-full", "shadow-none"],
       // th: ["bg-default-100", "text-default-500", "border-b", "border-divider"],
+      tr: isHoverable
+        ? ["hover:bg-default-100", "transition-colors", "cursor-pointer"]
+        : [],
       td: [
         "first:group-data-[first=true]/tr:before:rounded-none",
         "last:group-data-[first=true]/tr:before:rounded-none",
@@ -150,7 +155,7 @@ export function CTable<T extends Record<string, unknown>>({
         "last:group-data-[last=true]/tr:before:rounded-none",
       ],
     }),
-    [],
+    [isHoverable],
   )
 
   /* ─── Bottom: Pagination (center) + Page size (right) ─── */

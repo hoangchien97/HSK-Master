@@ -221,9 +221,8 @@ export async function POST(request: NextRequest) {
               location: session.location || null,
               meetingLink: meetingLink || null,
               status: SCHEDULE_STATUS.SCHEDULED,
-              // TODO: Re-enable after migration
-              // syncedToGoogle: false,
-              // googleEventId: null,
+              syncedToGoogle: false,
+              googleEventId: null,
             },
           })
         )
@@ -254,48 +253,46 @@ export async function POST(request: NextRequest) {
         location: location || null,
         meetingLink: meetingLink || null,
         status: SCHEDULE_STATUS.SCHEDULED,
-        // TODO: Re-enable after migration
-        // syncedToGoogle: false,
-        // googleEventId: null,
+        syncedToGoogle: false,
+        googleEventId: null,
       },
     })
 
-    // TODO: Re-enable Google sync after migration
     // If Google sync is requested, sync to Google Calendar
-    // if (syncToGoogle) {
-    //   try {
-    //     // Call Google Calendar sync API
-    //     const syncResponse = await fetch(`${process.env.NEXTAUTH_URL}/api/portal/google-calendar/sync`, {
-    //       method: 'POST',
-    //       headers: { 'Content-Type': 'application/json' },
-    //       body: JSON.stringify({ scheduleId: newSchedule.id }),
-    //     })
+    if (syncToGoogle) {
+      try {
+        // Call Google Calendar sync API
+        const syncResponse = await fetch(`${process.env.NEXTAUTH_URL || 'http://localhost:3000'}/api/portal/google-calendar/sync`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ scheduleId: newSchedule.id }),
+        })
 
-    //     if (syncResponse.ok) {
-    //       const syncData = await syncResponse.json()
-    //       return NextResponse.json({
-    //         ...newSchedule,
-    //         googleEventId: syncData.googleEventId,
-    //         googleEventLink: syncData.googleEventLink,
-    //         syncedToGoogle: true,
-    //         message: 'Đã tạo buổi học và đồng bộ với Google Calendar',
-    //       }, { status: 201 })
-    //     } else {
-    //       // Schedule created but sync failed
-    //       return NextResponse.json({
-    //         ...newSchedule,
-    //         warning: 'Đã tạo buổi học nhưng đồng bộ Google Calendar thất bại',
-    //       }, { status: 201 })
-    //     }
-    //   } catch (syncError) {
-    //     console.error('Google Calendar sync error:', syncError)
-    //     // Return schedule anyway, sync can be retried
-    //     return NextResponse.json({
-    //       ...newSchedule,
-    //       warning: 'Đã tạo buổi học nhưng đồng bộ Google Calendar thất bại',
-    //     }, { status: 201 })
-    //   }
-    // }
+        if (syncResponse.ok) {
+          const syncData = await syncResponse.json()
+          return NextResponse.json({
+            ...newSchedule,
+            googleEventId: syncData.googleEventId,
+            googleEventLink: syncData.googleEventLink,
+            syncedToGoogle: true,
+            message: 'Đã tạo buổi học và đồng bộ với Google Calendar',
+          }, { status: 201 })
+        } else {
+          // Schedule created but sync failed
+          return NextResponse.json({
+            ...newSchedule,
+            warning: 'Đã tạo buổi học nhưng đồng bộ Google Calendar thất bại',
+          }, { status: 201 })
+        }
+      } catch (syncError) {
+        console.error('Google Calendar sync error:', syncError)
+        // Return schedule anyway, sync can be retried
+        return NextResponse.json({
+          ...newSchedule,
+          warning: 'Đã tạo buổi học nhưng đồng bộ Google Calendar thất bại',
+        }, { status: 201 })
+      }
+    }
 
     return NextResponse.json(newSchedule, { status: 201 })
   } catch (error) {

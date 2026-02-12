@@ -17,6 +17,7 @@ export default function LoginForm() {
   const [showPassword, setShowPassword] = useState(false);
   const [loading, setLoading] = useState(false);
   const [password, setPassword] = useState("");
+  const [passwordTouched, setPasswordTouched] = useState(false);
   const [errors, setErrors] = useState<Record<string, string>>({});
 
   // Show error toast on mount if error exists
@@ -138,8 +139,9 @@ export default function LoginForm() {
             labelPlacement="outside"
             value={password}
             onValueChange={setPassword}
-            errorMessage={getPasswordError(password)}
-            isInvalid={getPasswordError(password) !== null}
+            onBlur={() => setPasswordTouched(true)}
+            errorMessage={passwordTouched ? getPasswordError(password) : undefined}
+            isInvalid={passwordTouched && getPasswordError(password) !== null}
             endContent={
               <button
                 type="button"

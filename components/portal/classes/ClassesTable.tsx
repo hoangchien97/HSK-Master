@@ -20,38 +20,30 @@ import { CTable, type CTableColumn } from "@/components/portal/common";
 import ClassesToolbar from "./ClassesToolbar";
 import ClassFormModal from "./ClassFormModal";
 import DeleteClassModal from "./DeleteClassModal";
-import api from "@/lib/http/client";
+import { fetchClasses } from "@/actions/class.actions";
 import { useDebouncedValue } from "@/hooks/useTableParams";
-
-/* ──────────────────── component ──────────────────── */
+import { usePortalUI } from "@/providers/portal-ui-provider";
 
 export default function ClassesTable() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const pathname = usePathname();
+  const { startLoading, stopLoading } = usePortalUI();
 
-  /* ─── URL params ─── */
   const urlSearch = searchParams.get("search") || "";
   const urlStatus = searchParams.get("status") || "ALL";
   const urlPage = Number(searchParams.get("page") || PAGINATION.INITIAL_PAGE);
   const urlPageSize = Number(searchParams.get("pageSize") || PAGINATION.DEFAULT_PAGE_SIZE);
 
-  /* ─── Local state ─── */
   const [search, setSearch] = useState(urlSearch);
   const debouncedSearch = useDebouncedValue(search, 350);
   const [data, setData] = useState<IGetClassResponse>({ items: [], total: 0 });
 
-  /* ─── Modals ─── */
   const createModal = useDisclosure();
   const editModal = useDisclosure();
   const deleteModal = useDisclosure();
   const [selectedClass, setSelectedClass] = useState<IClass | null>(null);
 
-  /* ─── Refresh trigger ─── */
-  const [refreshKey, setRefreshKey] = useState(0);
-  const refresh = useCallback(() => setRefreshKey((k) => k + 1), []);
-
-  /* ─── URL updater: keeps existing params, resets page on filter change ─── */
   const updateUrl = useCallback(
     (updates: Record<string, string>) => {
       const newParams = new URLSearchParams(searchParams.toString());
@@ -66,7 +58,6 @@ export default function ClassesTable() {
         if (key !== "page") shouldResetPage = true;
       }
 
-      // Reset page to 1 when any filter (non-page) changes
       if (shouldResetPage && !("page" in updates)) {
         newParams.delete("page");
       }
@@ -77,40 +68,66 @@ export default function ClassesTable() {
     [searchParams, router, pathname],
   );
 
-  /* ─── Fetch data (uses global loading) ─── */
+  /* ─── Load data via server action ─── */
+  const loadData = useCallback(async () => {
+    startLoading();
+    const result = await fetchClasses({
+      search: debouncedSearch || undefined,
+      status: urlStatus !== "ALL" ? urlStatus : undefined,
+      page: urlPage,
+      pageSize: urlPageSize,
+    });
+    if (result.success && result.data) {
+      setData(result.data);
+    } else {
+      toast.error(result.error || "Không thể tải danh sách lớp");
+    }
+    stopLoading();
+  }, [debouncedSearch, urlStatus, urlPage, urlPageSize, startLoading, stopLoading]);
+
   useEffect(() => {
-    let cancelled = false;
-    const fetchClasses = async () => {
-      try {
-        const params = new URLSearchParams();
-        if (debouncedSearch) params.set("search", debouncedSearch);
-        if (urlStatus !== "ALL") params.set("status", urlStatus);
-        params.set("page", String(urlPage));
-        params.set("pageSize", String(urlPageSize));
+    loadData();
+  }, [loadData]);
 
-        const { data: res } = await api.get<IGetClassResponse>(
-          `/portal/classes?${params}`,
-        );
-        if (!cancelled) setData(res);
-      } catch {
-        if (!cancelled) toast.error("Không thể tải danh sách lớp");
-      }
-    };
-    fetchClasses();
-    return () => { cancelled = true; };
-  }, [debouncedSearch, urlStatus, urlPage, urlPageSize, refreshKey]);
-
-  /* ─── Sync search → URL ─── */
   useEffect(() => {
     updateUrl({ search: debouncedSearch });
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [debouncedSearch]);
 
-  /* ─── Handlers ─── */
-  const handleEdit = (cls: IClass) => { setSelectedClass(cls); editModal.onOpen(); };
-  const handleDelete = (cls: IClass) => { setSelectedClass(cls); deleteModal.onOpen(); };
+  /* ─── Optimistic handlers ─── */
+  const handleCreateSuccess = useCallback(
+    (newClass: IClass) => {
+      setData((prev) => ({
+        items: [newClass, ...prev.items],
+        total: prev.total + 1,
+      }));
+    },
+    [],
+  );
 
-  /* ─── Columns ─── */
+  const handleUpdateSuccess = useCallback(
+    (updated: IClass) => {
+      setData((prev) => ({
+        ...prev,
+        items: prev.items.map((c) => (c.id === updated.id ? updated : c)),
+      }));
+    },
+    [],
+  );
+
+  const handleDeleteSuccess = useCallback(
+    (classId: string) => {
+      setData((prev) => ({
+        items: prev.items.filter((c) => c.id !== classId),
+        total: prev.total - 1,
+      }));
+    },
+    [],
+  );
+
+  const handleEdit = useCallback((cls: IClass) => { setSelectedClass(cls); editModal.onOpen(); }, [editModal]);
+  const handleDelete = useCallback((cls: IClass) => { setSelectedClass(cls); deleteModal.onOpen(); }, [deleteModal]);
+
   const columns: CTableColumn<IClass & Record<string, unknown>>[] = useMemo(() => [
     {
       key: "stt",
@@ -199,8 +216,7 @@ export default function ClassesTable() {
         </div>
       ),
     },
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  ], [urlPage, urlPageSize, router]);
+  ], [urlPage, urlPageSize, router, handleEdit, handleDelete]);
 
   return (
     <>
@@ -234,13 +250,16 @@ export default function ClassesTable() {
         }
       />
 
-      {/* Modals */}
-      <ClassFormModal isOpen={createModal.isOpen} onClose={createModal.onClose} onSuccess={refresh} />
+      <ClassFormModal
+        isOpen={createModal.isOpen}
+        onClose={createModal.onClose}
+        onSuccess={handleCreateSuccess}
+      />
       {selectedClass && (
         <ClassFormModal
           isOpen={editModal.isOpen}
           onClose={() => { editModal.onClose(); setSelectedClass(null); }}
-          onSuccess={refresh}
+          onSuccess={handleUpdateSuccess}
           initialData={selectedClass}
         />
       )}
@@ -248,7 +267,7 @@ export default function ClassesTable() {
         <DeleteClassModal
           isOpen={deleteModal.isOpen}
           onClose={() => { deleteModal.onClose(); setSelectedClass(null); }}
-          onSuccess={refresh}
+          onSuccess={handleDeleteSuccess}
           classData={selectedClass}
         />
       )}

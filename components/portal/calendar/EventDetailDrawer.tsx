@@ -15,6 +15,7 @@ import {
   CheckCircle2,
   XCircle,
   Circle,
+  Cloud,
 } from "lucide-react"
 import type { ScheduleEvent } from "@/interfaces/portal/calendar"
 import { EventState } from "@/interfaces/portal/calendar"
@@ -23,6 +24,7 @@ import { cn } from "@/lib/utils"
 import { toast } from "react-toastify"
 import { CDrawer } from "@/components/portal/common";
 import api from "@/lib/http/client";
+import { syncScheduleToGoogleCalendar } from "@/actions/schedule.actions";
 
 interface EventDetailDrawerProps {
   open: boolean
@@ -41,6 +43,7 @@ export default function EventDetailDrawer({
 }: EventDetailDrawerProps) {
   const [event, setEvent] = useState<ScheduleEvent | null>(null)
   const [isLoading, setIsLoading] = useState(false)
+  const [isSyncing, setIsSyncing] = useState(false)
 
   // Fetch event details
   const fetchEvent = useCallback(async () => {
@@ -94,6 +97,28 @@ export default function EventDetailDrawer({
     }
   }
 
+  const handleSyncToGoogle = async () => {
+    if (!event) return
+    
+    try {
+      setIsSyncing(true)
+      const result = await syncScheduleToGoogleCalendar(event.id)
+      
+      if (result.success) {
+        toast.success(result.message || "Đã đồng bộ với Google Calendar")
+        // Update event state to reflect sync
+        setEvent(prev => prev ? { ...prev, syncedToGoogle: true, googleEventId: result.googleEventId || undefined } : null)
+      } else {
+        toast.error(result.error || "Không thể đồng bộ với Google Calendar")
+      }
+    } catch (error) {
+      console.error("Error syncing to Google:", error)
+      toast.error("Có lỗi xảy ra khi đồng bộ")
+    } finally {
+      setIsSyncing(false)
+    }
+  }
+
   if (!event && !isLoading) return null
 
   const eventState = event ? getEventState(event.startTime, event.endTime) : EventState.FUTURE
@@ -122,16 +147,31 @@ export default function EventDetailDrawer({
       footer={
         event
           ? () => (
-              <div className="flex gap-3 w-full">
+              <div className="flex gap-3 w-full flex-wrap">
+                {!event.syncedToGoogle && (
+                  <Button
+                    variant="flat"
+                    color="primary"
+                    onPress={handleSyncToGoogle}
+                    isLoading={isSyncing}
+                    className="flex-1 min-w-[140px]"
+                  >
+                    <Cloud className="mr-2 h-4 w-4" />
+                    Đồng bộ Google
+                  </Button>
+                )}
                 <Button
                   variant="bordered"
                   onPress={handleDelete}
-                  className="flex-1 text-red-600 border-red-300 hover:bg-red-50 cursor-pointer"
+                  className="flex-1 min-w-[100px] text-red-600 border-red-300 hover:bg-red-50 cursor-pointer"
                 >
                   <Trash2 className="mr-2 h-4 w-4" />
                   Xóa
                 </Button>
-                <Button onPress={handleEdit} className="flex-1 bg-red-600 hover:bg-red-700 text-white cursor-pointer">
+                <Button 
+                  onPress={handleEdit} 
+                  className="flex-1 min-w-[100px] bg-red-600 hover:bg-red-700 text-white cursor-pointer"
+                >
                   <Edit className="mr-2 h-4 w-4" />
                   Chỉnh sửa
                 </Button>

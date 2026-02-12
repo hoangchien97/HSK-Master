@@ -14,12 +14,12 @@ import type { IClass } from "@/interfaces/portal";
 import dayjs from "dayjs";
 import { CModal } from "@/components/portal/common";
 import { FileEdit, PlusCircle } from "lucide-react";
-import api from "@/lib/http/client";
+import { createClassAction, updateClassAction } from "@/actions/class.actions";
 
 interface ClassFormModalProps {
   isOpen: boolean;
   onClose: () => void;
-  onSuccess: () => void;
+  onSuccess: (classData: IClass) => void;
   initialData?: IClass;
 }
 
@@ -50,31 +50,29 @@ export default function ClassFormModal({
     setIsSubmitting(true);
 
     try {
-      const url = isEdit
-        ? `/portal/classes/${initialData!.id}`
-        : "/portal/classes";
-
       const payload = {
-        className: formData.className,
-        classCode: formData.classCode,
-        description: formData.description || "",
-        level: formData.level,
-        startDate: formData.startDate,
-        endDate: formData.endDate || "",
+        className: formData.className as string,
+        classCode: formData.classCode as string,
+        description: (formData.description as string) || "",
+        level: formData.level as string,
+        startDate: formData.startDate as string,
+        endDate: (formData.endDate as string) || "",
         maxStudents: Number(formData.maxStudents),
       };
 
       if (isEdit) {
-        await api.put(url, payload, { meta: { loading: false } });
+        const result = await updateClassAction(initialData!.id, payload);
+        if (!result.success) throw new Error(result.error);
+        toast.success("Cập nhật lớp thành công!");
+        onClose();
+        if (result.classData) onSuccess(result.classData);
       } else {
-        await api.post(url, payload, { meta: { loading: false } });
+        const result = await createClassAction(payload);
+        if (!result.success) throw new Error(result.error);
+        toast.success("Tạo lớp thành công!");
+        onClose();
+        if (result.classData) onSuccess(result.classData);
       }
-
-      toast.success(
-        isEdit ? "Cập nhật lớp thành công!" : "Tạo lớp thành công!"
-      );
-      onClose();
-      onSuccess();
     } catch (error: any) {
       toast.error(error?.normalized?.message || "Có lỗi xảy ra");
     } finally {

@@ -1,8 +1,7 @@
 "use client"
 
-import { useState, useMemo } from "react"
+import { useState, useMemo, useCallback } from "react"
 import { useRouter } from "next/navigation"
-import api from "@/lib/http/client"
 import {
   Card,
   CardBody,
@@ -16,6 +15,7 @@ import {
   ModalBody,
   ModalFooter,
   Textarea,
+  Divider,
   useDisclosure,
 } from "@heroui/react"
 import {
@@ -25,12 +25,15 @@ import {
   AlertCircle,
   Upload,
   ExternalLink,
+  Download,
+  Paperclip,
 } from "lucide-react"
 import { toast } from "react-toastify"
 import dayjs from "dayjs"
 import { isPast, differenceInDays } from "date-fns"
 import "dayjs/locale/vi"
-import { CTable, type CTableColumn } from "@/components/portal/common"
+import { CTable, type CTableColumn, FileUploadZone } from "@/components/portal/common"
+import { submitAssignmentAction } from "@/actions/submission.actions"
 
 dayjs.locale("vi")
 
@@ -43,6 +46,7 @@ interface AssignmentData {
   type: string
   dueDate: Date | null
   maxScore?: number | null
+  attachments?: string[]
   class: { className: string; classCode: string }
   submitted: boolean
   submission?: {
@@ -51,12 +55,26 @@ interface AssignmentData {
     feedback?: string | null
     submittedAt: Date
     content?: string | null
+    attachments?: string[]
   } | null
 }
 
 interface StudentAssignmentsViewProps {
   assignments: AssignmentData[]
   studentId: string
+}
+
+/* ──────────────────── helpers ──────────────────────────── */
+
+function getFileName(url: string) {
+  try {
+    const decoded = decodeURIComponent(url)
+    const parts = decoded.split("/")
+    const raw = parts[parts.length - 1]
+    return raw.replace(/^\d+_/, "")
+  } catch {
+    return url
+  }
 }
 
 /* ──────────────────── component ──────────────────────── */
@@ -71,11 +89,12 @@ export default function StudentAssignmentsView({
   const [typeFilter, setTypeFilter] = useState<string>("all")
   const [selectedAssignment, setSelectedAssignment] = useState<AssignmentData | null>(null)
   const [submissionContent, setSubmissionContent] = useState("")
+  const [submissionAttachments, setSubmissionAttachments] = useState<string[]>([])
   const [loading, setLoading] = useState(false)
   const [page, setPage] = useState(1)
   const rowsPerPage = 10
 
-  const now = new Date()
+  const now = useMemo(() => new Date(), [])
 
   /* filtering */
   const filteredAssignments = useMemo(() => {
@@ -97,7 +116,6 @@ export default function StudentAssignmentsView({
   }), [assignments])
 
   /* pagination */
-  const pages = Math.ceil(filteredAssignments.length / rowsPerPage)
   const paginatedItems = useMemo(() => {
     const start = (page - 1) * rowsPerPage
     return filteredAssignments.slice(start, start + rowsPerPage)
@@ -107,7 +125,7 @@ export default function StudentAssignmentsView({
   const types = useMemo(() => [...new Set(assignments.map((a) => a.type))], [assignments])
 
   /* status badge */
-  const getStatusChip = (a: AssignmentData) => {
+  const getStatusChip = useCallback((a: AssignmentData) => {
     if (a.submission?.score != null) {
       return (
         <Chip size="sm" color="success" variant="flat">
@@ -126,7 +144,19 @@ export default function StudentAssignmentsView({
       return <Chip size="sm" color="warning" variant="flat">Còn {daysLeft + 1} ngày</Chip>
     }
     return <Chip size="sm" variant="flat">Chưa nộp</Chip>
-  }
+  }, [now])
+
+  const openSubmitModal = useCallback((assignment: AssignmentData) => {
+    setSelectedAssignment(assignment)
+    if (assignment.submitted && assignment.submission) {
+      setSubmissionContent(assignment.submission.content || "")
+      setSubmissionAttachments(assignment.submission.attachments || [])
+    } else {
+      setSubmissionContent("")
+      setSubmissionAttachments([])
+    }
+    submitModal.onOpen()
+  }, [submitModal])
 
   /* columns for CTable */
   const columns: CTableColumn<AssignmentData & Record<string, unknown>>[] = useMemo(() => [
@@ -139,7 +169,14 @@ export default function StudentAssignmentsView({
           {row.description && (
             <p className="text-xs text-default-400 line-clamp-1 mt-0.5">{row.description}</p>
           )}
-          <Chip size="sm" variant="flat" className="mt-1">{row.type}</Chip>
+          <div className="flex items-center gap-2 mt-1">
+            <Chip size="sm" variant="flat">{row.type}</Chip>
+            {(row.attachments?.length ?? 0) > 0 && (
+              <span className="flex items-center gap-0.5 text-xs text-default-400">
+                <Paperclip className="w-3 h-3" />{row.attachments!.length} file
+              </span>
+            )}
+          </div>
         </div>
       ),
     },
@@ -194,39 +231,37 @@ export default function StudentAssignmentsView({
         </div>
       ),
     },
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  ], [])
+  ], [getStatusChip, openSubmitModal])
 
-  /* submit handler */
+  /* submit handler — using server action */
   const handleSubmit = async () => {
-    if (!selectedAssignment || !submissionContent.trim()) return
+    if (!selectedAssignment) return
+    if (!submissionContent.trim() && submissionAttachments.length === 0) {
+      toast.warning("Vui lòng nhập nội dung hoặc đính kèm file")
+      return
+    }
+
     setLoading(true)
     try {
-      await api.post("/portal/submissions", {
+      const result = await submitAssignmentAction({
         assignmentId: selectedAssignment.id,
-        content: submissionContent,
-      }, { meta: { loading: false } })
+        content: submissionContent || undefined,
+        attachments: submissionAttachments,
+      })
+
+      if (!result.success) throw new Error(result.error)
 
       toast.success("Nộp bài thành công!")
       submitModal.onClose()
       setSubmissionContent("")
+      setSubmissionAttachments([])
       setSelectedAssignment(null)
       router.refresh()
-    } catch {
-      toast.error("Có lỗi xảy ra")
+    } catch (err) {
+      toast.error(err instanceof Error ? err.message : "Có lỗi xảy ra")
     } finally {
       setLoading(false)
     }
-  }
-
-  const openSubmitModal = (assignment: AssignmentData) => {
-    setSelectedAssignment(assignment)
-    if (assignment.submitted && assignment.submission?.content) {
-      setSubmissionContent(assignment.submission.content)
-    } else {
-      setSubmissionContent("")
-    }
-    submitModal.onOpen()
   }
 
   /* ──────────────────── render ──────────────────────── */
@@ -325,8 +360,9 @@ export default function StudentAssignmentsView({
           submitModal.onClose()
           setSelectedAssignment(null)
           setSubmissionContent("")
+          setSubmissionAttachments([])
         }}
-        size="2xl"
+        size="3xl"
         scrollBehavior="inside"
       >
         <ModalContent>
@@ -342,6 +378,7 @@ export default function StudentAssignmentsView({
               </ModalHeader>
 
               <ModalBody className="gap-4">
+                {/* Assignment description */}
                 {selectedAssignment.description && (
                   <div>
                     <p className="text-sm font-medium mb-1">Mô tả bài tập</p>
@@ -351,15 +388,58 @@ export default function StudentAssignmentsView({
                   </div>
                 )}
 
+                {/* Teacher attachments (download) */}
+                {(selectedAssignment.attachments?.length ?? 0) > 0 && (
+                  <div>
+                    <p className="text-sm font-medium mb-2 flex items-center gap-1">
+                      <Paperclip className="w-4 h-4" />
+                      Tài liệu đính kèm ({selectedAssignment.attachments!.length})
+                    </p>
+                    <div className="space-y-2">
+                      {selectedAssignment.attachments!.map((url) => (
+                        <a
+                          key={url}
+                          href={url}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="flex items-center gap-2 p-2 rounded-lg bg-default-50 hover:bg-default-100 transition-colors group"
+                        >
+                          <FileText className="w-4 h-4 text-primary shrink-0" />
+                          <span className="flex-1 text-sm truncate">{getFileName(url)}</span>
+                          <Download className="w-4 h-4 text-default-400 group-hover:text-primary shrink-0" />
+                        </a>
+                      ))}
+                    </div>
+                  </div>
+                )}
+
+                <Divider />
+
+                {/* Student content */}
                 <Textarea
                   label={selectedAssignment.submitted ? "Bài làm của bạn" : "Nội dung bài làm"}
                   value={submissionContent}
                   onValueChange={setSubmissionContent}
-                  minRows={6}
+                  minRows={5}
                   isDisabled={selectedAssignment.submitted}
                   placeholder="Nhập bài làm của bạn..."
                 />
 
+                {/* Student file upload / view */}
+                <div>
+                  <p className="text-sm font-medium mb-2">
+                    {selectedAssignment.submitted ? "File đã nộp" : "Đính kèm file bài làm"}
+                  </p>
+                  <FileUploadZone
+                    value={submissionAttachments}
+                    onChange={setSubmissionAttachments}
+                    folder="submissions"
+                    maxFiles={5}
+                    disabled={selectedAssignment.submitted}
+                  />
+                </div>
+
+                {/* Grading result */}
                 {selectedAssignment.submission?.score != null && (
                   <Card shadow="sm" className="bg-success-50 border border-success-200">
                     <CardBody>
@@ -386,6 +466,7 @@ export default function StudentAssignmentsView({
                     submitModal.onClose()
                     setSelectedAssignment(null)
                     setSubmissionContent("")
+                    setSubmissionAttachments([])
                   }}
                 >
                   {selectedAssignment.submitted ? "Đóng" : "Hủy"}
@@ -394,7 +475,7 @@ export default function StudentAssignmentsView({
                   <Button
                     color="primary"
                     isLoading={loading}
-                    isDisabled={!submissionContent.trim()}
+                    isDisabled={!submissionContent.trim() && submissionAttachments.length === 0}
                     onPress={handleSubmit}
                   >
                     Nộp bài

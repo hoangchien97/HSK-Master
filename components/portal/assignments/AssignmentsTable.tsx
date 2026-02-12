@@ -24,15 +24,17 @@ import {
   FileText,
   Users,
   CheckCircle,
+  Paperclip,
 } from "lucide-react"
 import { toast } from "react-toastify"
 import { PAGINATION } from "@/constants/portal"
 import { CTable, type CTableColumn } from "@/components/portal/common"
 import AssignmentFormModal from "./AssignmentFormModal"
+import { fetchAssignments, deleteAssignmentAction } from "@/actions/assignment.actions"
 import { useDebouncedValue } from "@/hooks/useTableParams"
+import { usePortalUI } from "@/providers/portal-ui-provider"
 import dayjs from "dayjs"
 import "dayjs/locale/vi"
-import api from "@/lib/http/client"
 
 dayjs.locale("vi")
 
@@ -58,6 +60,7 @@ interface AssignmentData {
   assignmentType: string
   dueDate?: Date | null
   maxScore: number
+  attachments?: string[]
   status: string
   class: ClassInfo
   submissions: StudentSubmission[]
@@ -101,7 +104,9 @@ export default function AssignmentsTable({
   const router = useRouter()
   const searchParams = useSearchParams()
   const pathname = usePathname()
+  const { startLoading, stopLoading } = usePortalUI()
   const createModal = useDisclosure()
+  const editModal = useDisclosure()
 
   /* ─── URL params ─── */
   const urlSearch = searchParams.get("search") || ""
@@ -116,12 +121,9 @@ export default function AssignmentsTable({
   const [items, setItems] = useState<AssignmentData[]>([])
   const [total, setTotal] = useState(0)
   const [classes, setClasses] = useState<ClassInfo[]>([])
+  const [editData, setEditData] = useState<AssignmentData | null>(null)
 
-  /* ─── Refresh trigger ─── */
-  const [refreshKey, setRefreshKey] = useState(0)
-  const refresh = useCallback(() => setRefreshKey((k) => k + 1), [])
-
-  /* ─── URL updater: keeps existing params, resets page on filter change ─── */
+  /* ─── URL updater ─── */
   const updateUrl = useCallback(
     (updates: Record<string, string>) => {
       const newParams = new URLSearchParams(searchParams.toString())
@@ -146,35 +148,29 @@ export default function AssignmentsTable({
     [searchParams, router, pathname],
   )
 
-  /* ─── Fetch data (uses global loading) ─── */
-  useEffect(() => {
-    let cancelled = false
-    const fetchAssignments = async () => {
-      try {
-        const params = new URLSearchParams()
-        if (debouncedSearch) params.set("search", debouncedSearch)
-        if (urlClassFilter !== "ALL") params.set("classId", urlClassFilter)
-        if (urlStatusFilter !== "ALL") params.set("status", urlStatusFilter)
-        params.set("page", String(urlPage))
-        params.set("pageSize", String(urlPageSize))
-
-        const { data } = await api.get<{
-          items: AssignmentData[]
-          total: number
-          classes: ClassInfo[]
-        }>(`/portal/assignments?${params}`)
-        if (!cancelled) {
-          setItems(data.items)
-          setTotal(data.total)
-          setClasses(data.classes)
-        }
-      } catch {
-        if (!cancelled) toast.error("Không thể tải danh sách bài tập")
-      }
+  /* ─── Load data via server action ─── */
+  const loadData = useCallback(async () => {
+    startLoading()
+    const result = await fetchAssignments({
+      search: debouncedSearch || undefined,
+      classId: urlClassFilter !== "ALL" ? urlClassFilter : undefined,
+      status: urlStatusFilter !== "ALL" ? urlStatusFilter : undefined,
+      page: urlPage,
+      pageSize: urlPageSize,
+    })
+    if (result.success && result.data) {
+      setItems(result.data.items as AssignmentData[])
+      setTotal(result.data.total)
+      setClasses(result.data.classes as ClassInfo[])
+    } else {
+      toast.error(result.error || "Không thể tải danh sách bài tập")
     }
-    fetchAssignments()
-    return () => { cancelled = true }
-  }, [debouncedSearch, urlClassFilter, urlStatusFilter, urlPage, urlPageSize, refreshKey])
+    stopLoading()
+  }, [debouncedSearch, urlClassFilter, urlStatusFilter, urlPage, urlPageSize, startLoading, stopLoading])
+
+  useEffect(() => {
+    loadData()
+  }, [loadData])
 
   /* ─── Sync search → URL ─── */
   useEffect(() => {
@@ -182,19 +178,38 @@ export default function AssignmentsTable({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [debouncedSearch])
 
+  /* ─── Optimistic create ─── */
+  const handleCreateSuccess = useCallback((newAssignment: AssignmentData) => {
+    setItems((prev) => [newAssignment, ...prev])
+    setTotal((prev) => prev + 1)
+  }, [])
+
+  /* ─── Optimistic update ─── */
+  const handleUpdateSuccess = useCallback((updated: AssignmentData) => {
+    setItems((prev) => prev.map((a) => (a.id === updated.id ? updated : a)))
+  }, [])
+
   /* ─── Delete handler ─── */
   const handleDelete = useCallback(
     async (id: string) => {
       if (!confirm("Bạn có chắc muốn xóa bài tập này?")) return
-      try {
-        await api.delete(`/portal/assignments/${id}`)
+      // Optimistic remove
+      const prevItems = items
+      const prevTotal = total
+      setItems((prev) => prev.filter((a) => a.id !== id))
+      setTotal((prev) => prev - 1)
+
+      const result = await deleteAssignmentAction(id)
+      if (!result.success) {
+        // Rollback
+        setItems(prevItems)
+        setTotal(prevTotal)
+        toast.error(result.error || "Có lỗi xảy ra")
+      } else {
         toast.success("Đã xóa bài tập")
-        refresh()
-      } catch {
-        toast.error("Có lỗi xảy ra")
       }
     },
-    [refresh],
+    [items, total],
   )
 
   /* ─── Columns ─── */
@@ -247,6 +262,20 @@ export default function AssignmentsTable({
         : <span className="text-default-400 text-sm">—</span>,
     },
     {
+      key: "attachments",
+      label: "Đính kèm",
+      align: "center" as const,
+      render: (_v, row) => {
+        const count = row.attachments?.length || 0
+        if (!count) return <span className="text-default-300">—</span>
+        return (
+          <span className="flex items-center justify-center gap-1 text-sm text-default-500">
+            <Paperclip className="w-3.5 h-3.5" />{count}
+          </span>
+        )
+      },
+    },
+    {
       key: "submissions",
       label: "Nộp bài",
       render: (_v, row) => {
@@ -284,7 +313,14 @@ export default function AssignmentsTable({
               <Button isIconOnly size="sm" variant="light"><MoreVertical className="w-4 h-4" /></Button>
             </DropdownTrigger>
             <DropdownMenu aria-label="Thao tác">
-              <DropdownItem key="edit" startContent={<Edit2 className="w-4 h-4" />} href={`/portal/${role}/assignments/${row.id}/edit`}>
+              <DropdownItem
+                key="edit"
+                startContent={<Edit2 className="w-4 h-4" />}
+                onPress={() => {
+                  setEditData(row as AssignmentData)
+                  editModal.onOpen()
+                }}
+              >
                 Chỉnh sửa
               </DropdownItem>
               <DropdownItem key="delete" color="danger" className="text-danger" startContent={<Trash2 className="w-4 h-4" />} onPress={() => handleDelete(row.id)}>
@@ -295,8 +331,7 @@ export default function AssignmentsTable({
         </div>
       ),
     },
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  ], [urlPage, urlPageSize, role, handleDelete])
+  ], [urlPage, urlPageSize, role, handleDelete, editModal])
 
   /* ─── Toolbar ─── */
   const toolbarContent = useMemo(() => (
@@ -345,8 +380,7 @@ export default function AssignmentsTable({
         </Select>
       </div>
     </div>
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  ), [search, urlClassFilter, urlStatusFilter, classes])
+  ), [search, urlClassFilter, urlStatusFilter, classes, updateUrl])
 
   return (
     <>
@@ -373,14 +407,34 @@ export default function AssignmentsTable({
         toolbar={toolbarContent}
       />
 
-      {/* Modal */}
       {createModal.isOpen && (
         <AssignmentFormModal
           classes={classes}
           isOpen={createModal.isOpen}
+          onClose={createModal.onClose}
+          onSuccess={(assignment: unknown) => handleCreateSuccess(assignment as AssignmentData)}
+        />
+      )}
+
+      {editModal.isOpen && editData && (
+        <AssignmentFormModal
+          classes={classes}
+          isOpen={editModal.isOpen}
           onClose={() => {
-            createModal.onClose()
-            refresh()
+            editModal.onClose()
+            setEditData(null)
+          }}
+          onSuccess={(assignment: unknown) => handleUpdateSuccess(assignment as AssignmentData)}
+          editData={{
+            id: editData.id,
+            title: editData.title,
+            description: editData.description,
+            assignmentType: editData.assignmentType,
+            dueDate: editData.dueDate,
+            maxScore: editData.maxScore,
+            classId: editData.class.id,
+            status: editData.status,
+            attachments: editData.attachments || [],
           }}
         />
       )}

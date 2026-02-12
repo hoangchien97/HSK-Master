@@ -1,23 +1,23 @@
 "use client"
 
 import { useState, useRef } from "react"
-import { useRouter } from "next/navigation"
-import { Camera, Save, X, Mail, Phone, User } from "lucide-react"
+import { Camera, Save, X, User } from "lucide-react"
 import Image from "next/image"
 import { toast } from "react-toastify"
 import type { PortalUser } from "@/interfaces/portal/profile"
 import { Form, Input, Button, Chip, Card, CardBody, Textarea } from "@heroui/react"
 import { uploadAvatar } from "@/utils/upload"
 import { validateFile } from "@/utils/validation"
-import api from "@/lib/http/client"
+import { updateProfileAction } from "@/actions/profile.actions"
+import { usePortalUI } from "@/providers/portal-ui-provider"
 
 interface ProfileClientProps {
   user: PortalUser
 }
 
 export default function ProfileClient({ user }: ProfileClientProps) {
-  const router = useRouter()
   const fileInputRef = useRef<HTMLInputElement>(null)
+  const { startLoading, stopLoading } = usePortalUI()
 
   const [loading, setLoading] = useState(false)
   const [message, setMessage] = useState<{ type: "success" | "error"; text: string } | null>(null)
@@ -25,6 +25,7 @@ export default function ProfileClient({ user }: ProfileClientProps) {
   const [avatarFile, setAvatarFile] = useState<File | null>(null)
   const [errors, setErrors] = useState<Record<string, string>>({})
   const [isDirty, setIsDirty] = useState(false)
+  const [currentUser, setCurrentUser] = useState<PortalUser>(user)
 
   const handleAvatarClick = () => {
     fileInputRef.current?.click()
@@ -61,12 +62,13 @@ export default function ProfileClient({ user }: ProfileClientProps) {
 
     setErrors({})
     setLoading(true)
+    startLoading()
     setMessage(null)
 
     try {
-      let avatarUrl = user.image
+      let avatarUrl = currentUser.image
 
-      // Upload avatar to Supabase if new file selected
+      // Upload avatar if new file selected
       if (avatarFile) {
         const uploadResult = await uploadAvatar(avatarFile)
         if (!uploadResult.success) {
@@ -84,18 +86,23 @@ export default function ProfileClient({ user }: ProfileClientProps) {
         image: avatarUrl,
       }
 
-      // Use axios api client - auto loading overlay
-      const { data: responseData } = await api.put<{ error?: string }>("/portal/profile", updateData)
+      // Use server action instead of API call
+      const result = await updateProfileAction(updateData)
 
-      if (responseData?.error) {
-        throw new Error(responseData.error || "Cập nhật thất bại")
+      if (!result.success) {
+        throw new Error(result.error || "Cập nhật thất bại")
+      }
+
+      // Optimistic UI update
+      if (result.user) {
+        setCurrentUser(result.user)
+        setAvatarPreview(result.user.image || null)
       }
 
       toast.success("Cập nhật hồ sơ thành công")
       setMessage({ type: "success", text: "Cập nhật hồ sơ thành công" })
-      setAvatarFile(null) // Clear file after successful upload
+      setAvatarFile(null)
       setIsDirty(false)
-      router.refresh()
     } catch (error) {
       const errorMessage = error instanceof Error ? error.message : "Có lỗi xảy ra"
       toast.error(errorMessage)
@@ -105,11 +112,12 @@ export default function ProfileClient({ user }: ProfileClientProps) {
       })
     } finally {
       setLoading(false)
+      stopLoading()
     }
   }
 
   const handleCancel = () => {
-    setAvatarPreview(user.image || null)
+    setAvatarPreview(currentUser.image || null)
     setAvatarFile(null)
     setMessage(null)
     setIsDirty(false)
@@ -121,7 +129,7 @@ export default function ProfileClient({ user }: ProfileClientProps) {
       TEACHER: "Giáo viên",
       STUDENT: "Học viên",
     }
-    return roleConfig[user.role] ?? user.role
+    return roleConfig[currentUser.role] ?? currentUser.role
   }
 
   return (
@@ -156,14 +164,14 @@ export default function ProfileClient({ user }: ProfileClientProps) {
                   {avatarPreview ? (
                     <Image
                       src={avatarPreview}
-                      alt={user.fullName || user.name}
+                      alt={currentUser.fullName || currentUser.name}
                       width={128}
                       height={128}
                       className="w-full h-full object-cover"
                     />
                   ) : (
                     <div className="w-full h-full bg-gradient-to-br from-red-400 to-red-600 flex items-center justify-center text-white text-4xl font-bold">
-                      {user.fullName?.[0] || user.name[0] || "U"}
+                      {currentUser.fullName?.[0] || currentUser.name[0] || "U"}
                     </div>
                   )}
                 </div>
@@ -189,9 +197,9 @@ export default function ProfileClient({ user }: ProfileClientProps) {
 
               {/* User Info */}
               <h2 className="mt-6 text-2xl font-bold text-gray-900">
-                {user.fullName || user.name}
+                {currentUser.fullName || currentUser.name}
               </h2>
-              <p className="text-gray-500 mt-1">{user.email}</p>
+              <p className="text-gray-500 mt-1">{currentUser.email}</p>
 
               {/* Badges */}
               <div className="flex items-center gap-3 mt-4 flex-wrap justify-center">
@@ -223,7 +231,7 @@ export default function ProfileClient({ user }: ProfileClientProps) {
                   label="Họ và tên"
                   placeholder="Nguyễn Văn A"
                   labelPlacement="outside"
-                  defaultValue={user.fullName || ""}
+                  defaultValue={currentUser.fullName || ""}
                   isRequired
                   onChange={() => setIsDirty(true)}
                   errorMessage={({ validationDetails }) => {
@@ -242,7 +250,7 @@ export default function ProfileClient({ user }: ProfileClientProps) {
                   type="tel"
                   placeholder="0901234567"
                   labelPlacement="outside"
-                  defaultValue={user.phoneNumber || ""}
+                  defaultValue={currentUser.phoneNumber || ""}
                   onChange={() => setIsDirty(true)}
                 />
               </div>
@@ -254,7 +262,7 @@ export default function ProfileClient({ user }: ProfileClientProps) {
                   label="Ngày sinh"
                   type="date"
                   labelPlacement="outside"
-                  defaultValue={user.dateOfBirth ? new Date(user.dateOfBirth).toISOString().split('T')[0] : ""}
+                  defaultValue={currentUser.dateOfBirth ? new Date(currentUser.dateOfBirth).toISOString().split('T')[0] : ""}
                   onChange={() => setIsDirty(true)}
                 />
               </div>
@@ -266,7 +274,7 @@ export default function ProfileClient({ user }: ProfileClientProps) {
                   label="Địa chỉ"
                   placeholder="123 Đường ABC, Quận 1, TP.HCM"
                   labelPlacement="outside"
-                  defaultValue={user.address || ""}
+                  defaultValue={currentUser.address || ""}
                   onChange={() => setIsDirty(true)}
                 />
               </div>
@@ -278,7 +286,7 @@ export default function ProfileClient({ user }: ProfileClientProps) {
                   label="Giới thiệu bản thân"
                   placeholder="Viết một vài dòng giới thiệu về bản thân..."
                   labelPlacement="outside"
-                  defaultValue={user.biography || ""}
+                  defaultValue={currentUser.biography || ""}
                   minRows={4}
                   onChange={() => setIsDirty(true)}
                 />

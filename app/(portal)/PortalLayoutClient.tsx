@@ -39,6 +39,7 @@ function PortalLayoutInner({ user, children }: PortalLayoutClientProps) {
         draggable
         pauseOnHover
         theme="light"
+        stacked
       />
 
       {/* Sidebar - Fixed left, full height */}

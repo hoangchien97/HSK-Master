@@ -1,7 +1,6 @@
 "use client"
 
 import { useEffect, useState } from "react"
-import { useRouter } from "next/navigation"
 import {
   Modal,
   ModalContent,
@@ -16,9 +15,8 @@ import {
   Form,
 } from "@heroui/react"
 import { toast } from "react-toastify"
-import api from "@/lib/http/client"
-
-/* ──────────────────────── types ──────────────────────── */
+import { createAssignmentAction, updateAssignmentAction } from "@/actions/assignment.actions"
+import { FileUploadZone } from "@/components/portal/common"
 
 interface ClassInfo {
   id: string
@@ -29,6 +27,7 @@ interface ClassInfo {
 interface AssignmentFormModalProps {
   isOpen: boolean
   onClose: () => void
+  onSuccess: (assignment: unknown) => void
   classes: ClassInfo[]
   editData?: {
     id: string
@@ -39,10 +38,9 @@ interface AssignmentFormModalProps {
     maxScore: number
     classId?: string
     status?: string
+    attachments?: string[]
   } | null
 }
-
-/* ──────────────────── config ──────────────────────────── */
 
 const ASSIGNMENT_TYPES = [
   { key: "HOMEWORK", label: "Bài tập về nhà" },
@@ -54,15 +52,13 @@ const ASSIGNMENT_TYPES = [
   { key: "LISTENING", label: "Nghe" },
 ]
 
-/* ──────────────────── component ──────────────────────── */
-
 export default function AssignmentFormModal({
   isOpen,
   onClose,
+  onSuccess,
   classes,
   editData,
 }: AssignmentFormModalProps) {
-  const router = useRouter()
   const isEdit = !!editData
 
   const [errors, setErrors] = useState<Record<string, string>>({})
@@ -70,12 +66,14 @@ export default function AssignmentFormModal({
   const [classId, setClassId] = useState(editData?.classId || classes[0]?.id || "")
   const [assignmentType, setAssignmentType] = useState(editData?.assignmentType || "HOMEWORK")
   const [status, setStatus] = useState((editData?.status as "ACTIVE" | "DRAFT") || "ACTIVE")
+  const [attachments, setAttachments] = useState<string[]>(editData?.attachments || [])
 
   useEffect(() => {
     if (isOpen) {
       setClassId(editData?.classId || classes[0]?.id || "")
       setAssignmentType(editData?.assignmentType || "HOMEWORK")
       setStatus((editData?.status as "ACTIVE" | "DRAFT") || "ACTIVE")
+      setAttachments(editData?.attachments || [])
       setErrors({})
     }
   }, [isOpen, editData, classes])
@@ -89,35 +87,38 @@ export default function AssignmentFormModal({
 
     try {
       const values = {
-        ...formData,
         classId,
+        title: formData.title as string,
+        description: formData.description as string,
         assignmentType,
         status,
         maxScore: Number(formData.maxScore),
+        dueDate: (formData.dueDate as string) || undefined,
+        attachments,
       }
-
-      const url = isEdit
-        ? `/portal/assignments/${editData!.id}`
-        : "/portal/assignments"
 
       if (isEdit) {
-        await api.put(url, values, { meta: { loading: false } })
+        const result = await updateAssignmentAction(editData!.id, values)
+        if (!result.success) throw new Error(result.error)
+        toast.success("Cập nhật bài tập thành công!")
+        onClose()
+        if (result.assignment) onSuccess(result.assignment)
       } else {
-        await api.post(url, values, { meta: { loading: false } })
+        const result = await createAssignmentAction(values)
+        if (!result.success) throw new Error(result.error)
+        toast.success("Tạo bài tập thành công!")
+        onClose()
+        if (result.assignment) onSuccess(result.assignment)
       }
-
-      toast.success(isEdit ? "Cập nhật bài tập thành công!" : "Tạo bài tập thành công!")
-      router.refresh()
-      onClose()
-    } catch (error: any) {
-      toast.error(error?.normalized?.message || "Có lỗi xảy ra")
+    } catch (error) {
+      toast.error(error instanceof Error ? error.message : "Có lỗi xảy ra")
     } finally {
       setIsSubmitting(false)
     }
   }
 
   return (
-    <Modal isOpen={isOpen} onClose={onClose} size="2xl" scrollBehavior="inside">
+    <Modal isOpen={isOpen} onClose={onClose} size="3xl" scrollBehavior="inside">
       <ModalContent>
         <ModalHeader>
           {isEdit ? "Chỉnh sửa bài tập" : "Tạo bài tập mới"}
@@ -125,7 +126,6 @@ export default function AssignmentFormModal({
 
         <Form validationErrors={errors} onSubmit={onSubmit}>
           <ModalBody className="gap-4 flex flex-col">
-            {/* Title */}
             <Input
               name="title"
               label="Tiêu đề"
@@ -140,7 +140,6 @@ export default function AssignmentFormModal({
               }}
             />
 
-            {/* Description */}
             <Textarea
               name="description"
               label="Mô tả"
@@ -150,7 +149,6 @@ export default function AssignmentFormModal({
               defaultValue={editData?.description || ""}
             />
 
-            {/* Class + Type */}
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <Select
                 label="Lớp học"
@@ -197,7 +195,6 @@ export default function AssignmentFormModal({
               </Select>
             </div>
 
-            {/* Due Date + Max Score */}
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <Input
                 name="dueDate"
@@ -218,7 +215,6 @@ export default function AssignmentFormModal({
               />
             </div>
 
-            {/* Status */}
             <Select
               label="Trạng thái"
               name="status"
@@ -232,6 +228,17 @@ export default function AssignmentFormModal({
               <SelectItem key="ACTIVE">Đang mở</SelectItem>
               <SelectItem key="DRAFT">Nháp</SelectItem>
             </Select>
+
+            {/* ── File Attachments ── */}
+            <div>
+              <p className="text-sm font-medium mb-2">Tài liệu đính kèm</p>
+              <FileUploadZone
+                value={attachments}
+                onChange={setAttachments}
+                folder="assignments"
+                maxFiles={10}
+              />
+            </div>
           </ModalBody>
 
           <ModalFooter>

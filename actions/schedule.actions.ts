@@ -206,3 +206,53 @@ export async function deleteScheduleGroup(recurrenceGroupId: string): Promise<{
     };
   }
 }
+
+/**
+ * Sync schedule to Google Calendar
+ */
+export async function syncScheduleToGoogleCalendar(scheduleId: string): Promise<{
+  success: boolean;
+  message?: string;
+  googleEventId?: string;
+  googleEventLink?: string;
+  error?: string;
+}> {
+  try {
+    const session = await auth();
+    if (!session?.user?.id) {
+      return { success: false, error: 'Unauthorized' };
+    }
+
+    // Call the sync API
+    const response = await fetch(`${process.env.NEXTAUTH_URL || 'http://localhost:3000'}/api/portal/google-calendar/sync`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ scheduleId }),
+    });
+
+    const data = await response.json();
+
+    if (!response.ok) {
+      return {
+        success: false,
+        error: data.error || 'Failed to sync with Google Calendar',
+      };
+    }
+
+    revalidatePath('/portal/teacher/schedule');
+    return {
+      success: true,
+      message: data.message,
+      googleEventId: data.googleEventId,
+      googleEventLink: data.googleEventLink,
+    };
+  } catch (error) {
+    console.error('Error syncing to Google Calendar:', error);
+    return {
+      success: false,
+      error: error instanceof Error ? error.message : 'Failed to sync with Google Calendar',
+    };
+  }
+}

@@ -100,3 +100,43 @@ export function generateAvatarPath(userId: string, fileName: string): string {
   const ext = fileName.split(".").pop() || "jpg"
   return `${userId}/${timestamp}.${ext}`
 }
+
+/**
+ * Generate unique file path for assignment / submission attachments
+ * @param folder  "assignments" | "submissions"
+ */
+export function generateFilePath(
+  folder: string,
+  userId: string,
+  fileName: string,
+): string {
+  const timestamp = Date.now()
+  const safeName = fileName.replace(/[^a-zA-Z0-9._-]/g, "_")
+  return `${folder}/${userId}/${timestamp}_${safeName}`
+}
+
+/**
+ * Allowed MIME types for assignment / submission file uploads
+ */
+export const ALLOWED_FILE_TYPES = [
+  // Images
+  "image/jpeg",
+  "image/png",
+  "image/gif",
+  "image/webp",
+  "image/svg+xml",
+  // Documents
+  "application/pdf",
+  "application/msword",
+  "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+  "application/vnd.ms-powerpoint",
+  "application/vnd.openxmlformats-officedocument.presentationml.presentation",
+  "application/vnd.ms-excel",
+  "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+  // Text
+  "text/plain",
+  "text/csv",
+]
+
+/** Max file size: 10 MB */
+export const MAX_FILE_SIZE = 10 * 1024 * 1024

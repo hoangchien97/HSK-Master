@@ -1,2 +1,5 @@
 export * from "./profile.service"
 export * from "./schedule.service"
+export * from "./class.service"
+export * from "./assignment.service"
+export * from "./student.service"

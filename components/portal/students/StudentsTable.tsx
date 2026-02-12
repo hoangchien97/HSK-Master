@@ -2,68 +2,39 @@
 
 import { useState, useEffect, useCallback, useMemo } from "react"
 import {
-  Chip,
-  Avatar,
-  Dropdown,
-  DropdownTrigger,
-  DropdownMenu,
-  DropdownItem,
-  Button,
+  Chip, Avatar, Dropdown, DropdownTrigger, DropdownMenu, DropdownItem, Button,
 } from "@heroui/react"
 import {
-  MoreVertical,
-  Eye,
-  Mail,
-  Phone,
-  GraduationCap,
-  Users,
-  UserPlus,
+  MoreVertical, Eye, Mail, Phone, GraduationCap, Users, UserPlus,
 } from "lucide-react"
 import { toast } from "react-toastify"
 import { useSearchParams, useRouter, usePathname } from "next/navigation"
 import { PAGINATION, STUDENT_STATUS_CONFIG } from "@/constants/portal"
 import { CTable, type CTableColumn } from "@/components/portal/common"
 import StudentsToolbar from "./StudentsToolbar"
-import api from "@/lib/http/client"
-import type {
-  IStudent,
-  IGetStudentParams,
-  IGetStudentResponse,
-} from "@/interfaces/portal"
+import { fetchStudents, fetchClassesForFilter } from "@/actions/student.actions"
+import type { IStudent, IGetStudentResponse } from "@/interfaces/portal"
 import { useDebouncedValue } from "@/hooks/useTableParams"
-
-/* ──────────────────── component ──────────────────────── */
+import { usePortalUI } from "@/providers/portal-ui-provider"
 
 export default function StudentsTable() {
   const searchParams = useSearchParams()
   const router = useRouter()
   const pathname = usePathname()
+  const { startLoading, stopLoading } = usePortalUI()
 
-  /* ─── URL-synced params ─── */
   const urlSearch = searchParams.get("search") || ""
   const urlLevel = searchParams.get("level") || "ALL"
   const urlClassId = searchParams.get("classId") || "ALL"
   const urlPage = Number(searchParams.get("page") || PAGINATION.INITIAL_PAGE)
   const urlPageSize = Number(searchParams.get("pageSize") || PAGINATION.DEFAULT_PAGE_SIZE)
 
-  /* ─── Local state for instant UI ─── */
   const [search, setSearch] = useState(urlSearch)
   const debouncedSearch = useDebouncedValue(search, 350)
 
-  /* ─── Data state ─── */
   const [data, setData] = useState<IGetStudentResponse>({ items: [], total: 0 })
   const [classes, setClasses] = useState<{ id: string; className: string; classCode: string }[]>([])
 
-  /* ─── Effective params (from URL) ─── */
-  const params: IGetStudentParams = useMemo(() => ({
-    page: urlPage,
-    pageSize: urlPageSize,
-    search: debouncedSearch || undefined,
-    level: urlLevel !== "ALL" ? urlLevel : undefined,
-    classId: urlClassId !== "ALL" ? urlClassId : undefined,
-  }), [urlPage, urlPageSize, debouncedSearch, urlLevel, urlClassId])
-
-  /* ─── URL updater: keeps existing params, resets page on filter change ─── */
   const updateUrl = useCallback(
     (updates: Record<string, string>) => {
       const newParams = new URLSearchParams(searchParams.toString())
@@ -78,7 +49,6 @@ export default function StudentsTable() {
         if (key !== "page") shouldResetPage = true
       }
 
-      // Reset page to 1 when any filter (non-page) changes
       if (shouldResetPage && !("page" in updates)) {
         newParams.delete("page")
       }
@@ -89,75 +59,56 @@ export default function StudentsTable() {
     [searchParams, router, pathname],
   )
 
-  /* ─── Fetch classes for filter dropdown (uses global loading) ─── */
+  /* ─── Load classes for filter dropdown ─── */
   useEffect(() => {
-    const fetchClasses = async () => {
-      try {
-        const { data } = await api.get<{ items: { id: string; className: string; classCode: string }[]; total: number }>(
-          "/portal/classes?pageSize=100",
-          { meta: { loading: false } },
-        )
-        setClasses(data.items ?? [])
-      } catch {
-        // silently fail — class filter just won't show
+    const loadClasses = async () => {
+      const result = await fetchClassesForFilter()
+      if (result.success && result.classes) {
+        setClasses(result.classes)
       }
     }
-    fetchClasses()
+    loadClasses()
   }, [])
 
-  /* ─── Fetch students when params change (uses global loading) ─── */
-  useEffect(() => {
-    let cancelled = false
-    const fetchStudents = async () => {
-      try {
-        const qp = new URLSearchParams()
-        if (params.search) qp.set("search", params.search)
-        if (params.level) qp.set("level", params.level)
-        if (params.classId) qp.set("classId", params.classId)
-        qp.set("page", String(params.page))
-        qp.set("pageSize", String(params.pageSize))
-
-        const { data: res } = await api.get<IGetStudentResponse>(
-          `/portal/students?${qp}`,
-        )
-        if (!cancelled) setData(res)
-      } catch {
-        if (!cancelled) toast.error("Không thể tải danh sách học viên")
-      }
+  /* ─── Load students via server action ─── */
+  const loadData = useCallback(async () => {
+    startLoading()
+    const result = await fetchStudents({
+      search: debouncedSearch || undefined,
+      level: urlLevel !== "ALL" ? urlLevel : undefined,
+      classId: urlClassId !== "ALL" ? urlClassId : undefined,
+      page: urlPage,
+      pageSize: urlPageSize,
+    })
+    if (result.success && result.data) {
+      setData(result.data)
+    } else {
+      toast.error(result.error || "Không thể tải danh sách học viên")
     }
-    fetchStudents()
-    return () => { cancelled = true }
-  }, [params])
+    stopLoading()
+  }, [debouncedSearch, urlLevel, urlClassId, urlPage, urlPageSize, startLoading, stopLoading])
 
-  /* ─── Sync search input → URL on debounce ─── */
+  useEffect(() => {
+    loadData()
+  }, [loadData])
+
   useEffect(() => {
     updateUrl({ search: debouncedSearch })
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [debouncedSearch])
 
-  /* ─── Columns ─── */
   const columns: CTableColumn<IStudent & Record<string, unknown>>[] = useMemo(() => [
     {
-      key: "stt",
-      label: "STT",
-      align: "center" as const,
-      headerClassName: "w-12",
+      key: "stt", label: "STT", align: "center" as const, headerClassName: "w-12",
       render: (_v, _row, index) => (
-        <span className="text-sm text-default-500">
-          {(urlPage - 1) * urlPageSize + index + 1}
-        </span>
+        <span className="text-sm text-default-500">{(urlPage - 1) * urlPageSize + index + 1}</span>
       ),
     },
     {
-      key: "student",
-      label: "Học viên",
+      key: "student", label: "Học viên",
       render: (_v, row) => (
         <div className="flex items-center gap-3">
-          <Avatar
-            src={row.image || undefined}
-            name={(row.fullName || row.name)?.charAt(0)}
-            size="sm"
-          />
+          <Avatar src={row.image || undefined} name={(row.fullName || row.name)?.charAt(0)} size="sm" />
           <div>
             <p className="font-medium">{row.fullName || row.name}</p>
             <p className="text-xs text-default-400">{row.email}</p>
@@ -166,20 +117,16 @@ export default function StudentsTable() {
       ),
     },
     {
-      key: "level",
-      label: "Trình độ",
+      key: "level", label: "Trình độ",
       render: (_v, row) =>
         row.level ? (
           <Chip size="sm" color="primary" variant="flat" startContent={<GraduationCap className="w-3 h-3" />}>
             {row.level}
           </Chip>
-        ) : (
-          <span className="text-default-400">—</span>
-        ),
+        ) : (<span className="text-default-400">—</span>),
     },
     {
-      key: "classes",
-      label: "Lớp học",
+      key: "classes", label: "Lớp học",
       render: (_v, row) => (
         <div className="flex flex-wrap gap-1">
           {row.classes?.slice(0, 2).map((c) => (
@@ -195,22 +142,15 @@ export default function StudentsTable() {
       ),
     },
     {
-      key: "status",
-      label: "Trạng thái",
+      key: "status", label: "Trạng thái",
       render: (_v, row) => (
-        <Chip
-          size="sm"
-          color={STUDENT_STATUS_CONFIG[row.status]?.color ?? "default"}
-          variant="flat"
-        >
+        <Chip size="sm" color={STUDENT_STATUS_CONFIG[row.status]?.color ?? "default"} variant="flat">
           {STUDENT_STATUS_CONFIG[row.status]?.label ?? row.status}
         </Chip>
       ),
     },
     {
-      key: "actions",
-      label: "",
-      align: "end" as const,
+      key: "actions", label: "", align: "end" as const,
       render: (_v, row) => (
         <div className="flex justify-end items-center gap-1">
           {row.email && (
