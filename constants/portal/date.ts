@@ -1,7 +1,7 @@
 /* ───── Date format constants ───── */
 
-/** Standard date format: dd/MM/yyyy */
-export const FORMAT_DATE = "DD/MM/YYYY"
+/** Standard date format: dd/MM/YYYY */
+export const FORMAT_DATE = "dd/MM/YYYY"
 
 /** Date with time format: dd/MM/yyyy HH:mm */
 export const FORMAT_DATE_TIME = "DD/MM/YYYY HH:mm"

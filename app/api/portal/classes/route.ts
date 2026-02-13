@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from "next/server"
 import { auth } from "@/auth"
 import { prisma } from "@/lib/prisma"
-import { CLASS_STATUS } from "@/constants/portal/roles"
+import { CLASS_STATUS, USER_ROLE } from "@/constants/portal/roles"
 import type { Prisma } from "@prisma/client"
 
 // GET - Fetch classes with server-side filtering & pagination
@@ -28,17 +28,41 @@ export async function GET(request: NextRequest) {
     const page = Math.max(1, parseInt(searchParams.get("page") || "1"))
     const pageSize = Math.min(100, Math.max(1, parseInt(searchParams.get("pageSize") || "10")))
 
-    // Build where clause
-    const where: Prisma.PortalClassWhereInput = {
-      teacherId: user.id,
-      ...(status && { status }),
-      ...(search && {
-        OR: [
-          { className: { contains: search, mode: "insensitive" as const } },
-          { classCode: { contains: search, mode: "insensitive" as const } },
-          { level: { contains: search, mode: "insensitive" as const } },
-        ],
-      }),
+    // Build where clause - role-aware
+    let where: Prisma.PortalClassWhereInput
+
+    if (user.role === USER_ROLE.STUDENT) {
+      // Students see their enrolled classes
+      const enrollments = await prisma.portalClassEnrollment.findMany({
+        where: { studentId: user.id, status: "ENROLLED" },
+        select: { classId: true },
+      })
+      const classIds = enrollments.map((e) => e.classId)
+
+      where = {
+        id: { in: classIds },
+        status: CLASS_STATUS.ACTIVE,
+        ...(search && {
+          OR: [
+            { className: { contains: search, mode: "insensitive" as const } },
+            { classCode: { contains: search, mode: "insensitive" as const } },
+            { level: { contains: search, mode: "insensitive" as const } },
+          ],
+        }),
+      }
+    } else {
+      // Teachers/admins see their own classes
+      where = {
+        teacherId: user.id,
+        ...(status && { status }),
+        ...(search && {
+          OR: [
+            { className: { contains: search, mode: "insensitive" as const } },
+            { classCode: { contains: search, mode: "insensitive" as const } },
+            { level: { contains: search, mode: "insensitive" as const } },
+          ],
+        }),
+      }
     }
 
     const [items, total] = await Promise.all([

@@ -30,6 +30,13 @@ export async function getClasses(
       where,
       include: {
         teacher: { select: { id: true, name: true, email: true, image: true } },
+        enrollments: {
+          where: { status: 'ENROLLED' },
+          select: {
+            studentId: true,
+            student: { select: { id: true, name: true, username: true, email: true, image: true } },
+          },
+        },
         _count: { select: { enrollments: true, schedules: true } },
       },
       orderBy: { createdAt: 'desc' },
@@ -77,6 +84,13 @@ export async function createClass(
     },
     include: {
       teacher: { select: { id: true, name: true, email: true, image: true } },
+      enrollments: {
+        where: { status: 'ENROLLED' },
+        select: {
+          studentId: true,
+          student: { select: { id: true, name: true, username: true, email: true, image: true } },
+        },
+      },
       _count: { select: { enrollments: true, schedules: true } },
     },
   });
@@ -142,6 +156,13 @@ export async function updateClass(
     },
     include: {
       teacher: { select: { id: true, name: true, email: true, image: true } },
+      enrollments: {
+        where: { status: 'ENROLLED' },
+        select: {
+          studentId: true,
+          student: { select: { id: true, name: true, username: true, email: true, image: true } },
+        },
+      },
       _count: { select: { enrollments: true, schedules: true } },
     },
   });
@@ -160,4 +181,59 @@ export async function deleteClass(classId: string, teacherId: string): Promise<v
     where: { id: classId },
     data: { status: 'CANCELLED' },
   });
+}
+
+/* ───────── Fetch enrolled classes for a STUDENT ───────── */
+
+export async function getStudentClasses(
+  studentId: string,
+  params: { search?: string; page?: number; pageSize?: number } = {}
+): Promise<IGetClassResponse> {
+  const { search = '', page = 1, pageSize = 20 } = params;
+
+  // Find enrolled class IDs
+  const enrollments = await prisma.portalClassEnrollment.findMany({
+    where: { studentId, status: 'ENROLLED' },
+    select: { classId: true },
+  });
+  const classIds = enrollments.map((e) => e.classId);
+
+  if (classIds.length === 0) {
+    return { items: [], total: 0 };
+  }
+
+  const where: Prisma.PortalClassWhereInput = {
+    id: { in: classIds },
+    status: CLASS_STATUS.ACTIVE,
+    ...(search && {
+      OR: [
+        { className: { contains: search, mode: 'insensitive' as const } },
+        { classCode: { contains: search, mode: 'insensitive' as const } },
+        { level: { contains: search, mode: 'insensitive' as const } },
+      ],
+    }),
+  };
+
+  const [items, total] = await Promise.all([
+    prisma.portalClass.findMany({
+      where,
+      include: {
+        teacher: { select: { id: true, name: true, email: true, image: true } },
+        enrollments: {
+          where: { status: 'ENROLLED' },
+          select: {
+            studentId: true,
+            student: { select: { id: true, name: true, username: true, email: true, image: true } },
+          },
+        },
+        _count: { select: { enrollments: true, schedules: true } },
+      },
+      orderBy: { createdAt: 'desc' },
+      skip: (page - 1) * pageSize,
+      take: pageSize,
+    }),
+    prisma.portalClass.count({ where }),
+  ]);
+
+  return { items: items as unknown as IClass[], total };
 }

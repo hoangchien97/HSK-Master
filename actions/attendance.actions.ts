@@ -80,6 +80,59 @@ export async function fetchTeacherClasses(): Promise<{
 }
 
 /**
+ * Fetch classes the current student is enrolled in (for attendance)
+ */
+export async function fetchStudentAttendanceClasses(): Promise<{
+  success: boolean;
+  classes?: Array<{
+    id: string;
+    className: string;
+    classCode: string;
+    level: string | null;
+    _count: { enrollments: number };
+  }>;
+  error?: string;
+}> {
+  try {
+    const session = await auth();
+    if (!session?.user?.id) {
+      return { success: false, error: 'Unauthorized' };
+    }
+
+    const enrollments = await prisma.portalClassEnrollment.findMany({
+      where: { studentId: session.user.id, status: 'ENROLLED' },
+      include: {
+        class: {
+          select: {
+            id: true,
+            className: true,
+            classCode: true,
+            level: true,
+            status: true,
+            _count: { select: { enrollments: true } },
+          },
+        },
+      },
+    });
+
+    const classes = enrollments
+      .filter((e) => e.class.status === 'ACTIVE')
+      .map((e) => ({
+        id: e.class.id,
+        className: e.class.className,
+        classCode: e.class.classCode,
+        level: e.class.level,
+        _count: e.class._count,
+      }));
+
+    return { success: true, classes };
+  } catch (error) {
+    console.error('Error fetching student attendance classes:', error);
+    return { success: false, error: 'Không thể tải danh sách lớp' };
+  }
+}
+
+/**
  * Fetch attendance matrix data for a class and month
  */
 export async function fetchAttendanceMatrix(
@@ -111,6 +164,13 @@ export async function fetchAttendanceMatrix(
       });
       if (!cls) {
         return { success: false, error: 'Lớp học không hợp lệ' };
+      }
+    } else if (user.role === USER_ROLE.STUDENT) {
+      const enrollment = await prisma.portalClassEnrollment.findFirst({
+        where: { classId, studentId: user.id, status: 'ENROLLED' },
+      });
+      if (!enrollment) {
+        return { success: false, error: 'Bạn không thuộc lớp học này' };
       }
     }
 
@@ -294,5 +354,65 @@ export async function saveAttendance(
   } catch (error) {
     console.error('Error saving attendance:', error);
     return { success: false, error: 'Lưu điểm danh thất bại' };
+  }
+}
+
+/**
+ * Fetch attendance records for the current student in a specific class and month
+ */
+export async function fetchStudentAttendance(
+  classId: string,
+  month: string // YYYY-MM
+): Promise<{
+  success: boolean;
+  data?: Array<{ date: string; status: string; notes: string | null }>;
+  error?: string;
+}> {
+  try {
+    const session = await auth();
+    if (!session?.user?.id) {
+      return { success: false, error: 'Unauthorized' };
+    }
+
+    // Verify student is enrolled in this class
+    const enrollment = await prisma.portalClassEnrollment.findFirst({
+      where: { classId, studentId: session.user.id, status: 'ENROLLED' },
+    });
+
+    if (!enrollment) {
+      return { success: false, error: 'Bạn không thuộc lớp học này' };
+    }
+
+    // Parse month
+    const [year, mon] = month.split('-').map(Number);
+    const startDate = new Date(year, mon - 1, 1);
+    const endDate = new Date(year, mon, 0, 23, 59, 59, 999);
+
+    // Get attendance records for this student
+    const records = await prisma.portalAttendance.findMany({
+      where: {
+        classId,
+        studentId: session.user.id,
+        date: { gte: startDate, lte: endDate },
+      },
+      select: {
+        date: true,
+        status: true,
+        notes: true,
+      },
+      orderBy: { date: 'asc' },
+    });
+
+    return {
+      success: true,
+      data: records.map((r) => ({
+        date: r.date.toISOString().split('T')[0],
+        status: r.status,
+        notes: r.notes,
+      })),
+    };
+  } catch (error) {
+    console.error('Error fetching student attendance:', error);
+    return { success: false, error: 'Không thể tải dữ liệu điểm danh' };
   }
 }

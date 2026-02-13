@@ -32,6 +32,8 @@ interface EventDetailDrawerProps {
   eventId: string | null
   onEdit: (eventId: string) => void
   onDelete: (eventId: string) => void
+  /** When true, hides edit/delete/sync buttons in footer */
+  readOnly?: boolean
 }
 
 export default function EventDetailDrawer({
@@ -40,6 +42,7 @@ export default function EventDetailDrawer({
   eventId,
   onEdit,
   onDelete,
+  readOnly = false,
 }: EventDetailDrawerProps) {
   const [event, setEvent] = useState<ScheduleEvent | null>(null)
   const [isLoading, setIsLoading] = useState(false)
@@ -149,7 +152,7 @@ export default function EventDetailDrawer({
         )
       }
       footer={
-        event
+        event && !readOnly
           ? () => (
               <div className="flex gap-3 w-full flex-wrap">
                 {!event.syncedToGoogle && (

@@ -75,6 +75,8 @@ interface BigCalendarViewProps {
   onCreateSchedule: () => void;
   onSlotSelect?: (slotInfo: { start: Date; end: Date }) => void;
   isLoading?: boolean;
+  /** When true, hides create/edit buttons and disables slot selection */
+  readOnly?: boolean;
 }
 
 const VIEW_MAP: Record<string, View> = {
@@ -91,6 +93,7 @@ export default function BigCalendarView({
   onCreateSchedule,
   onSlotSelect,
   isLoading = false,
+  readOnly = false,
 }: BigCalendarViewProps) {
   const [currentDate, setCurrentDate] = useState(new Date());
   const [currentView, setCurrentView] = useState<View>(Views.MONTH);
@@ -166,22 +169,24 @@ export default function BigCalendarView({
       return (
         <div className="group relative w-full h-full flex items-center">
           <span className="truncate block flex-1">{event.title}</span>
-          <Tooltip content="Chỉnh sửa" placement="top" size="sm">
-            <button
-              type="button"
-              className="absolute top-1/2 -translate-y-1/2 -right-1 w-6 h-6 rounded-full bg-white shadow-md border border-gray-200 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity z-10 hover:bg-gray-50"
-              onClick={(e) => {
-                e.stopPropagation();
-                onEditEvent(event.resource.schedule);
-              }}
-            >
-              <Pencil className="w-3 h-3 text-gray-600" />
-            </button>
-          </Tooltip>
+          {!readOnly && (
+            <Tooltip content="Chỉnh sửa" placement="top" size="sm">
+              <button
+                type="button"
+                className="absolute top-1/2 -translate-y-1/2 -right-1 w-6 h-6 rounded-full bg-white shadow-md border border-gray-200 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity z-10 hover:bg-gray-50"
+                onClick={(e) => {
+                  e.stopPropagation();
+                  onEditEvent(event.resource.schedule);
+                }}
+              >
+                <Pencil className="w-3 h-3 text-gray-600" />
+              </button>
+            </Tooltip>
+          )}
         </div>
       );
     },
-    [onEditEvent]
+    [onEditEvent, readOnly]
   );
 
   const handleNavigate = useCallback((date: Date) => setCurrentDate(date), []);
@@ -282,6 +287,7 @@ export default function BigCalendarView({
             color="danger"
             startContent={<Plus className="w-4 h-4" />}
             onPress={onCreateSchedule}
+            className={readOnly ? "hidden" : ""}
           >
             Thêm buổi học
           </Button>
@@ -307,8 +313,8 @@ export default function BigCalendarView({
           onView={handleViewChange}
           onSelectEvent={handleSelectEvent}
           onDoubleClickEvent={handleDoubleClickEvent}
-          selectable
-          onSelectSlot={handleSelectSlot}
+          selectable={!readOnly}
+          onSelectSlot={readOnly ? undefined : handleSelectSlot}
           eventPropGetter={eventPropGetter}
           components={{ event: CustomEvent }}
           messages={messages}

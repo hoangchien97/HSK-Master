@@ -19,6 +19,8 @@ import {
   Star,
   Upload,
   ExternalLink,
+  BookOpen,
+  Calendar,
 } from "lucide-react"
 import dayjs from "dayjs"
 import relativeTime from "dayjs/plugin/relativeTime"
@@ -48,6 +50,9 @@ const TYPE_ICON: Record<string, React.ReactNode> = {
   ASSIGNMENT_CREATED: <FileText className="w-4 h-4 text-primary" />,
   SUBMISSION_RECEIVED: <Upload className="w-4 h-4 text-warning" />,
   SUBMISSION_GRADED: <Star className="w-4 h-4 text-success" />,
+  CLASS_ENROLLED: <BookOpen className="w-4 h-4 text-secondary" />,
+  SCHEDULE_CREATED: <Calendar className="w-4 h-4 text-primary" />,
+  SCHEDULE_UPDATED: <Calendar className="w-4 h-4 text-warning" />,
 }
 
 /* ─── Component ─── */

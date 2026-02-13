@@ -54,6 +54,52 @@ export async function getSchedules(userId?: string): Promise<ISchedule[]> {
 }
 
 /**
+ * Fetch schedules for classes a student is enrolled in
+ */
+export async function getStudentSchedules(studentId: string): Promise<ISchedule[]> {
+  // Find class IDs student is enrolled in
+  const enrollments = await prisma.portalClassEnrollment.findMany({
+    where: { studentId, status: 'ENROLLED' },
+    select: { classId: true },
+  });
+
+  const classIds = enrollments.map((e) => e.classId);
+  if (classIds.length === 0) return [];
+
+  const schedules = await prisma.portalSchedule.findMany({
+    where: { classId: { in: classIds } },
+    include: {
+      class: {
+        select: {
+          id: true,
+          className: true,
+          classCode: true,
+          level: true,
+        },
+      },
+    },
+    orderBy: { startTime: 'asc' },
+  });
+
+  return schedules.map((schedule) => ({
+    id: schedule.id,
+    classId: schedule.classId,
+    title: schedule.title,
+    description: schedule.description || undefined,
+    startTime: schedule.startTime.toISOString(),
+    endTime: schedule.endTime.toISOString(),
+    status: schedule.status,
+    recurrenceGroupId: schedule.recurrenceGroupId || undefined,
+    class: {
+      id: schedule.class.id,
+      className: schedule.class.className,
+      classCode: schedule.class.classCode,
+      level: schedule.class.level || '',
+    },
+  }));
+}
+
+/**
  * Fetch all classes for dropdown (used by schedule module)
  */
 export async function getClassesForSchedule(userId?: string): Promise<IClass[]> {

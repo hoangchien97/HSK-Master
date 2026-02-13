@@ -1,10 +1,10 @@
 /**
  * Setup Supabase Storage buckets
  * Run: npx tsx scripts/setup-storage.ts
- * 
+ *
  * This script creates the required storage buckets in Supabase.
  * Requires SUPABASE_SERVICE_ROLE_KEY to be a valid service role JWT.
- * 
+ *
  * If you can't run this script, create the buckets manually in
  * Supabase Dashboard > Storage:
  *   1. "avatars" - Public bucket for user avatars

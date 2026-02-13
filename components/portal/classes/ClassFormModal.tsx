@@ -196,6 +196,7 @@ export default function ClassFormModal({
               label="Ngày bắt đầu"
               name="startDate"
               labelPlacement="outside"
+              placeholder="dd/mm/yyyy"
               defaultValue={
                 initialData?.startDate
                   ? dayjs(initialData.startDate).format(FORMAT_DATE_INPUT)
@@ -213,6 +214,7 @@ export default function ClassFormModal({
               label="Ngày kết thúc"
               name="endDate"
               labelPlacement="outside"
+              placeholder="dd/mm/yyyy"
               defaultValue={
                 initialData?.endDate
                   ? dayjs(initialData.endDate).format(FORMAT_DATE_INPUT)
@@ -222,10 +224,12 @@ export default function ClassFormModal({
           </div>
 
           {/* Student Selection */}
-          <div className="space-y-2">
-            <label className="text-sm font-medium">Học viên</label>
+          <div className="space-y-2 w-full">
+            <label className="text-sm font-medium">
+              Học viên {selectedStudents.length > 0 && `(${selectedStudents.length})`}
+            </label>
             <div
-              className="border border-default-200 rounded-lg p-3 cursor-pointer hover:border-primary transition-colors min-h-11 flex items-center gap-2 flex-wrap"
+              className="w-full border border-default-200 rounded-lg p-3 cursor-pointer hover:border-primary hover:bg-primary-50/30 transition-colors min-h-15 flex items-center gap-2 flex-wrap"
               onClick={() => setShowUserPopup(true)}
             >
               {selectedStudents.length > 0 ? (
@@ -234,6 +238,7 @@ export default function ClassFormModal({
                     key={s.id}
                     size="sm"
                     variant="flat"
+                    color="primary"
                     onClose={() => removeStudent(s.id)}
                     avatar={<Avatar src={s.image || undefined} name={s.name?.charAt(0)} size="sm" />}
                   >
@@ -243,7 +248,7 @@ export default function ClassFormModal({
               ) : (
                 <span className="text-default-400 text-sm flex items-center gap-2">
                   <Users className="w-4 h-4" />
-                  Chọn học viên...
+                  Nhấn để chọn học viên...
                 </span>
               )}
             </div>

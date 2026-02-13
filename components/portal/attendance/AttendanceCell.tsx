@@ -34,6 +34,8 @@ interface AttendanceCellProps {
   onNotePopoverClose: () => void;
   onNoteTextChange: (text: string) => void;
   onNoteSave: (studentId: string, date: string, note: string) => void;
+  /** When true, all cells render as read-only (no edit buttons) */
+  readOnly?: boolean;
 }
 
 /* ───────────────── Component ───────────────── */
@@ -53,6 +55,7 @@ function AttendanceCell({
   onNotePopoverClose,
   onNoteTextChange,
   onNoteSave,
+  readOnly = false,
 }: AttendanceCellProps) {
   const isNoteOpen =
     notePopover?.studentId === studentId && notePopover?.date === date;
@@ -65,8 +68,8 @@ function AttendanceCell({
     );
   }
 
-  // For today: show two clickable options side by side
-  if (isToday) {
+  // For today: show two clickable options side by side (only when not readOnly)
+  if (isToday && !readOnly) {
     return (
       <td className="px-1.5 py-2 text-center border-r border-gray-100 bg-blue-50/30">
         <div className="relative">

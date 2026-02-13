@@ -8,6 +8,7 @@
 import { revalidatePath } from 'next/cache';
 import {
   getSchedules as getSchedulesService,
+  getStudentSchedules as getStudentSchedulesService,
   getClassesForSchedule as getClassesService,
   getScheduleById as getScheduleByIdService,
   createSchedules as createSchedulesService,
@@ -24,9 +25,11 @@ import type {
 import { auth } from '@/auth';
 import { prisma } from '@/lib/prisma';
 import { createGoogleCalendarEvent, scheduleToGoogleEvent } from '@/lib/utils/google-calendar';
+import { createBulkNotifications } from '@/services/portal/notification.service';
+import { USER_ROLE } from '@/constants/portal/roles';
 
 /**
- * Fetch all schedules for current user
+ * Fetch all schedules for current user (role-aware: teacher gets own, student gets enrolled)
  */
 export async function fetchSchedules(): Promise<{
   success: boolean;
@@ -39,7 +42,18 @@ export async function fetchSchedules(): Promise<{
       return { success: false, error: 'Unauthorized' };
     }
 
-    const schedules = await getSchedulesService(session.user.id);
+    const user = await prisma.portalUser.findUnique({
+      where: { id: session.user.id },
+      select: { role: true },
+    });
+
+    let schedules: ISchedule[];
+    if (user?.role === USER_ROLE.STUDENT) {
+      schedules = await getStudentSchedulesService(session.user.id);
+    } else {
+      schedules = await getSchedulesService(session.user.id);
+    }
+
     return { success: true, schedules };
   } catch (error) {
     console.error('Error fetching schedules:', error);
@@ -118,6 +132,24 @@ export async function createSchedule(
     }
 
     const result = await createSchedulesService(data, session.user.id);
+
+    // Notify enrolled students about new schedule
+    try {
+      const enrollments = await prisma.portalClassEnrollment.findMany({
+        where: { classId: data.classId, status: 'ENROLLED' },
+        select: { studentId: true },
+      });
+      const studentIds = enrollments.map((e) => e.studentId);
+      if (studentIds.length > 0) {
+        await createBulkNotifications(studentIds, {
+          type: 'SCHEDULE_CREATED',
+          title: 'L\u1ecbch h\u1ecdc m\u1edbi',
+          message: `L\u1ecbch h\u1ecdc m\u1edbi: "${data.title}"`,
+          link: '/portal/student/schedule',
+        });
+      }
+    } catch (e) { console.error('Schedule notification error:', e); }
+
     revalidatePath('/portal/teacher/schedule');
     return { success: true, ...result };
   } catch (error) {
@@ -147,6 +179,26 @@ export async function updateSchedule(
     }
 
     const schedule = await updateScheduleService(id, data);
+
+    // Notify enrolled students about schedule change
+    try {
+      if (schedule?.classId) {
+        const enrollments = await prisma.portalClassEnrollment.findMany({
+          where: { classId: schedule.classId, status: 'ENROLLED' },
+          select: { studentId: true },
+        });
+        const studentIds = enrollments.map((e) => e.studentId);
+        if (studentIds.length > 0) {
+          await createBulkNotifications(studentIds, {
+            type: 'SCHEDULE_UPDATED',
+            title: 'C\u1eadp nh\u1eadt l\u1ecbch h\u1ecdc',
+            message: `L\u1ecbch h\u1ecdc "${schedule.title}" \u0111\u00e3 \u0111\u01b0\u1ee3c c\u1eadp nh\u1eadt`,
+            link: '/portal/student/schedule',
+          });
+        }
+      }
+    } catch (e) { console.error('Schedule update notification error:', e); }
+
     revalidatePath('/portal/teacher/schedule');
     return { success: true, schedule };
   } catch (error) {

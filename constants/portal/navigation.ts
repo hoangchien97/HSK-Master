@@ -176,6 +176,12 @@ const studentNavItems: NavItem[] = [
     roles: [USER_ROLE.STUDENT],
   },
   {
+    href: "/portal/student/attendance",
+    label: "Điểm danh",
+    icon: ClipboardCheck,
+    roles: [USER_ROLE.STUDENT],
+  },
+  {
     href: "/portal/student/assignments",
     label: "Bài tập",
     icon: FileText,
