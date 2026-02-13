@@ -12,6 +12,8 @@ import {
   updateAssignment as updateAssignmentService,
   deleteAssignment as deleteAssignmentService,
 } from '@/services/portal/assignment.service';
+import { createBulkNotifications } from '@/services/portal/notification.service';
+import { prisma } from '@/lib/prisma';
 import { auth } from '@/auth';
 
 /**
@@ -62,6 +64,27 @@ export async function createAssignmentAction(
     if (!session?.user?.id) return { success: false, error: 'Unauthorized' };
 
     const assignment = await createAssignmentService(session.user.id, data);
+
+    // Notify all enrolled students
+    try {
+      const enrollments = await prisma.portalClassEnrollment.findMany({
+        where: { classId: data.classId },
+        select: { studentId: true },
+      });
+      const studentIds = enrollments.map((e) => e.studentId);
+      if (studentIds.length > 0) {
+        await createBulkNotifications(studentIds, {
+          type: 'ASSIGNMENT_CREATED',
+          title: 'Bài tập mới',
+          message: `Giáo viên vừa giao bài tập "${assignment.title}"`,
+          link: `/portal/student/assignments/${assignment.id}`,
+        });
+      }
+    } catch (notifyError) {
+      console.error('Error sending assignment notifications:', notifyError);
+      // Don't fail the whole action for a notification error
+    }
+
     revalidatePath('/portal/teacher/assignments');
     return { success: true, assignment };
   } catch (error) {

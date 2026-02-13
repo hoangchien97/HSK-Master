@@ -11,6 +11,68 @@ interface UploadResult {
 }
 
 /**
+ * Get Supabase config, preferring service role key for server-side operations.
+ * Falls back to anon key if service role key is missing or not a valid JWT.
+ */
+function getSupabaseConfig() {
+  const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL
+  const serviceRoleKey = process.env.SUPABASE_SERVICE_ROLE_KEY
+  const anonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY
+
+  if (!supabaseUrl) throw new Error("Missing NEXT_PUBLIC_SUPABASE_URL")
+
+  // Service role key must be a valid JWT (3 base64 parts separated by dots)
+  const isValidJwt = serviceRoleKey && serviceRoleKey.split(".").length === 3
+  const supabaseKey = isValidJwt ? serviceRoleKey : anonKey
+
+  if (!supabaseKey) throw new Error("Missing Supabase API key")
+
+  return { supabaseUrl, supabaseKey }
+}
+
+/**
+ * Ensure a storage bucket exists, creating it if needed.
+ */
+async function ensureBucket(bucket: string): Promise<void> {
+  try {
+    const { supabaseUrl, supabaseKey } = getSupabaseConfig()
+
+    // Check if bucket exists
+    const checkRes = await fetch(`${supabaseUrl}/storage/v1/bucket/${bucket}`, {
+      headers: {
+        Authorization: `Bearer ${supabaseKey}`,
+        apikey: supabaseKey,
+      },
+    })
+
+    if (checkRes.ok) return // Bucket exists
+
+    // Try to create bucket
+    const createRes = await fetch(`${supabaseUrl}/storage/v1/bucket`, {
+      method: "POST",
+      headers: {
+        Authorization: `Bearer ${supabaseKey}`,
+        apikey: supabaseKey,
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        id: bucket,
+        name: bucket,
+        public: true,
+        file_size_limit: MAX_FILE_SIZE,
+      }),
+    })
+
+    if (!createRes.ok) {
+      const error = await createRes.text()
+      console.warn(`Could not create bucket "${bucket}": ${error}. Please create it manually in Supabase dashboard.`)
+    }
+  } catch (error) {
+    console.warn(`Bucket check/create failed for "${bucket}":`, error)
+  }
+}
+
+/**
  * Upload file to Supabase Storage using REST API
  */
 export async function uploadToSupabaseStorage(
@@ -19,21 +81,20 @@ export async function uploadToSupabaseStorage(
   bucket: string = "avatars"
 ): Promise<UploadResult> {
   try {
-    const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL
-    const supabaseKey = process.env.SUPABASE_SERVICE_ROLE_KEY || process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY
+    const { supabaseUrl, supabaseKey } = getSupabaseConfig()
 
-    if (!supabaseUrl || !supabaseKey) {
-      throw new Error("Missing Supabase configuration")
-    }
+    // Ensure bucket exists
+    await ensureBucket(bucket)
 
     // Upload to Supabase Storage
     const uploadUrl = `${supabaseUrl}/storage/v1/object/${bucket}/${path}`
-    
+
     const uploadResponse = await fetch(uploadUrl, {
       method: "POST",
       headers: {
         Authorization: `Bearer ${supabaseKey}`,
-        "Content-Type": file.type || "image/jpeg",
+        apikey: supabaseKey,
+        "Content-Type": file.type || "application/octet-stream",
         "x-upsert": "true", // Overwrite if exists
       },
       body: file,
@@ -41,7 +102,7 @@ export async function uploadToSupabaseStorage(
 
     if (!uploadResponse.ok) {
       const error = await uploadResponse.text()
-      throw new Error(`Upload failed: ${error}`)
+      throw new Error(`Upload failed (${uploadResponse.status}): ${error}`)
     }
 
     // Get public URL
@@ -69,19 +130,15 @@ export async function deleteFromSupabaseStorage(
   bucket: string = "avatars"
 ): Promise<boolean> {
   try {
-    const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL
-    const supabaseKey = process.env.SUPABASE_SERVICE_ROLE_KEY || process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY
-
-    if (!supabaseUrl || !supabaseKey) {
-      throw new Error("Missing Supabase configuration")
-    }
+    const { supabaseUrl, supabaseKey } = getSupabaseConfig()
 
     const deleteUrl = `${supabaseUrl}/storage/v1/object/${bucket}/${path}`
-    
+
     const response = await fetch(deleteUrl, {
       method: "DELETE",
       headers: {
         Authorization: `Bearer ${supabaseKey}`,
+        apikey: supabaseKey,
       },
     })
 

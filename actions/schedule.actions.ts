@@ -8,7 +8,7 @@
 import { revalidatePath } from 'next/cache';
 import {
   getSchedules as getSchedulesService,
-  getClasses as getClassesService,
+  getClassesForSchedule as getClassesService,
   getScheduleById as getScheduleByIdService,
   createSchedules as createSchedulesService,
   updateSchedule as updateScheduleService,

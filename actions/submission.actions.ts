@@ -8,6 +8,7 @@
 import { revalidatePath } from 'next/cache';
 import { prisma } from '@/lib/prisma';
 import { auth } from '@/auth';
+import { createNotification } from '@/services/portal/notification.service';
 
 /**
  * Submit or update an assignment submission
@@ -93,6 +94,21 @@ export async function submitAssignmentAction(
     }
 
     revalidatePath('/portal/student/assignments');
+
+    // Notify the teacher about new submission
+    try {
+      const studentName = submission.student?.name || session.user.email || 'Học sinh';
+      await createNotification({
+        userId: assignment.teacherId,
+        type: 'SUBMISSION_RECEIVED',
+        title: 'Bài nộp mới',
+        message: `${studentName} vừa nộp bài "${assignment.title}"`,
+        link: `/portal/teacher/assignments/${assignment.id}`,
+      });
+    } catch (notifyError) {
+      console.error('Error sending submission notification:', notifyError);
+    }
+
     return { success: true, submission };
   } catch (error) {
     console.error('Error submitting assignment:', error);
@@ -141,6 +157,19 @@ export async function gradeSubmissionAction(
         status: 'GRADED',
       },
     });
+
+    // Notify the student about grading
+    try {
+      await createNotification({
+        userId: submission.studentId,
+        type: 'SUBMISSION_GRADED',
+        title: 'Bài tập đã được chấm điểm',
+        message: `Bạn đạt ${data.score}/${submission.assignment.maxScore} điểm cho bài "${submission.assignment.title}"`,
+        link: `/portal/student/assignments/${submission.assignment.id}`,
+      });
+    } catch (notifyError) {
+      console.error('Error sending grading notification:', notifyError);
+    }
 
     revalidatePath('/portal/teacher/assignments');
     return { success: true };

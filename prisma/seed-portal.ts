@@ -7,6 +7,8 @@ import {
   EnrollmentStatus,
   ScheduleStatus,
   AttendanceStatus,
+  AssignmentStatus,
+  SubmissionStatus,
 } from "@/enums/portal"
 
 const prisma = new PrismaClient()
@@ -55,7 +57,7 @@ export async function seedPortal() {
     prisma.portalUser.create({
       data: {
         name: "Nguyễn Văn An",
-        username: "nguyenvanan",
+        username: "nguyenan",
         email: "teacher1@hskmaster.com",
         password: hashedPassword,
         role: UserRole.TEACHER,
@@ -69,7 +71,7 @@ export async function seedPortal() {
     prisma.portalUser.create({
       data: {
         name: "Trần Thị Bình",
-        username: "tranthibinh",
+        username: "tranbinh",
         email: "teacher2@hskmaster.com",
         password: hashedPassword,
         role: UserRole.TEACHER,
@@ -83,7 +85,7 @@ export async function seedPortal() {
     prisma.portalUser.create({
       data: {
         name: "Lê Minh Châu",
-        username: "leminhchau",
+        username: "lechau",
         email: "teacher3@hskmaster.com",
         password: hashedPassword,
         role: UserRole.TEACHER,
@@ -97,7 +99,7 @@ export async function seedPortal() {
     prisma.portalUser.create({
       data: {
         name: "Phạm Thu Dung",
-        username: "phamthudung",
+        username: "phamdung",
         email: "teacher4@hskmaster.com",
         password: hashedPassword,
         role: UserRole.TEACHER,
@@ -111,7 +113,7 @@ export async function seedPortal() {
     prisma.portalUser.create({
       data: {
         name: "Võ Quang Em",
-        username: "voquangem",
+        username: "voem",
         email: "teacher5@hskmaster.com",
         password: hashedPassword,
         role: UserRole.TEACHER,
@@ -139,15 +141,28 @@ export async function seedPortal() {
   ]
 
   const students = await Promise.all(
-    studentNames.map((name, index) => {
-      const slug = name.toLowerCase()
+    studentNames.map(async (name, index) => {
+      // userName = họ + tên (first word + last word, no diacritics, lowercase)
+      const parts = name.trim().split(/\s+/)
+      const ho = parts[0]
+      const ten = parts[parts.length - 1]
+      const baseUsername = (ho + ten)
+        .toLowerCase()
         .normalize("NFD").replace(/[\u0300-\u036f]/g, "")
-        .replace(/đ/g, "d").replace(/\s+/g, "")
+        .replace(/đ/g, "d").replace(/Đ/g, "D")
+
+      // Check unique: append number if needed
+      let username = baseUsername
+      let suffix = 1
+      while (await prisma.portalUser.findUnique({ where: { username } })) {
+        username = `${baseUsername}${suffix}`
+        suffix++
+      }
 
       return prisma.portalUser.create({
         data: {
           name: name,
-          username: slug,
+          username,
           email: `student${index + 1}@gmail.com`,
           password: hashedPassword,
           role: UserRole.STUDENT,
@@ -324,6 +339,138 @@ export async function seedPortal() {
 
   await prisma.portalSchedule.createMany({ data: schedules })
   console.log(`✅ Created ${schedules.length} schedules`)
+
+  // ============= Portal Assignments =============
+  console.log("📝 Creating assignments...")
+
+  const assignmentTypes = ["HOMEWORK", "QUIZ", "PROJECT", "READING", "WRITING", "SPEAKING", "LISTENING"]
+
+  const assignmentTemplates = [
+    // HSK 1
+    { title: "Bài tập từ vựng HSK 1 - Tuần 1", desc: "Học thuộc 30 từ vựng HSK 1 cơ bản: chào hỏi, số đếm, gia đình. Hoàn thành bài tập trong file đính kèm.", type: "HOMEWORK", maxScore: 100 },
+    { title: "Kiểm tra nghe HSK 1 - Bài 1", desc: "Nghe và chọn đáp án đúng. 20 câu hỏi, mỗi câu 5 điểm.", type: "LISTENING", maxScore: 100 },
+    { title: "Luyện viết Hán tự cơ bản", desc: "Viết mỗi chữ 10 lần: 人、大、小、上、下、中、日、月. Chụp ảnh bài viết và nộp.", type: "WRITING", maxScore: 50 },
+    { title: "Bài đọc hiểu HSK 1 - Bài 1", desc: "Đọc đoạn văn ngắn và trả lời 10 câu hỏi. Chú ý ngữ pháp 是...的 và 在.", type: "READING", maxScore: 100 },
+    { title: "Kiểm tra giữa kỳ HSK 1", desc: "Kiểm tra tổng hợp: Nghe (30đ) + Đọc (30đ) + Viết (40đ). Thời gian: 60 phút.", type: "QUIZ", maxScore: 100 },
+    // HSK 2
+    { title: "Bài tập từ vựng HSK 2 - Tuần 1", desc: "Ôn tập 50 từ vựng HSK 2: thời tiết, giao thông, mua sắm. Làm bài tập kết hợp từ.", type: "HOMEWORK", maxScore: 100 },
+    { title: "Dự án nhóm: Hội thoại mua sắm", desc: "Nhóm 3-4 người, quay video hội thoại mua sắm tại cửa hàng (3-5 phút). Sử dụng ít nhất 20 từ vựng HSK 2.", type: "PROJECT", maxScore: 100 },
+    { title: "Luyện nói HSK 2 - Tự giới thiệu", desc: "Ghi âm bài tự giới thiệu 2 phút: tên, tuổi, quê, sở thích, công việc. Phát âm rõ ràng, thanh điệu chính xác.", type: "SPEAKING", maxScore: 80 },
+    // HSK 3
+    { title: "Bài tập ngữ pháp HSK 3 - 把字句", desc: "Hoàn thành 20 câu sử dụng cấu trúc 把字句. Phân biệt với câu bình thường.", type: "HOMEWORK", maxScore: 100 },
+    { title: "Kiểm tra đọc hiểu HSK 3", desc: "3 bài đọc dài, mỗi bài 5 câu hỏi. Tổng 15 câu, thời gian 30 phút.", type: "READING", maxScore: 75 },
+    { title: "Bài viết HSK 3 - Kể về kỳ nghỉ", desc: "Viết bài văn 200-300 chữ kể về kỳ nghỉ gần nhất. Sử dụng ít nhất 5 cấu trúc ngữ pháp HSK 3.", type: "WRITING", maxScore: 100 },
+    // HSK 4-5
+    { title: "Phân tích bài báo tiếng Trung", desc: "Đọc bài báo đính kèm, tóm tắt nội dung (150 chữ) và nêu ý kiến cá nhân (200 chữ).", type: "READING", maxScore: 100 },
+    { title: "Kiểm tra tổng hợp HSK 4", desc: "Đề thi mô phỏng HSK 4: Nghe (45 câu) + Đọc (40 câu) + Viết (15 câu). Thời gian: 105 phút.", type: "QUIZ", maxScore: 300 },
+    { title: "Thuyết trình: Văn hóa Trung Quốc", desc: "Thuyết trình 5-7 phút về một khía cạnh văn hóa Trung Quốc (lễ hội, ẩm thực, phong tục...). Chuẩn bị slide.", type: "SPEAKING", maxScore: 100 },
+    // Business / Advanced
+    { title: "Bài tập tiếng Trung thương mại - Email", desc: "Viết 3 email thương mại: hỏi giá, đặt hàng, khiếu nại. Mỗi email 100-150 chữ.", type: "WRITING", maxScore: 90 },
+    { title: "Luyện thi HSK 5 - Đề số 1", desc: "Làm đề thi thử HSK 5 đầy đủ. Nộp bài và tự chấm theo đáp án.", type: "QUIZ", maxScore: 300 },
+    // Communication
+    { title: "Bài tập giao tiếp: Đặt phòng khách sạn", desc: "Ghi âm hội thoại đặt phòng khách sạn (check-in, hỏi dịch vụ, check-out). 3-4 phút.", type: "SPEAKING", maxScore: 80 },
+    { title: "Bài tập từ vựng giao tiếp du lịch", desc: "Học 40 từ vựng chủ đề du lịch và hoàn thành bài tập điền từ.", type: "HOMEWORK", maxScore: 100 },
+    // General
+    { title: "Luyện viết chữ Hán - Bộ thủ", desc: "Luyện viết 20 bộ thủ thường gặp. Mỗi bộ thủ viết 5 lần kèm ví dụ chữ chứa bộ thủ đó.", type: "WRITING", maxScore: 60 },
+    { title: "Quiz từ vựng cuối tuần", desc: "20 câu trắc nghiệm từ vựng, 10 câu điền từ. Thời gian 15 phút.", type: "QUIZ", maxScore: 50 },
+  ]
+
+  const allAssignments: any[] = []
+
+  // Create 3-5 assignments per class (first 15 classes to keep it manageable)
+  for (let ci = 0; ci < Math.min(classes.length, 15); ci++) {
+    const cls = classes[ci]
+    const numAssignments = 3 + (ci % 3) // 3, 4, or 5
+
+    for (let ai = 0; ai < numAssignments; ai++) {
+      const template = assignmentTemplates[(ci * 3 + ai) % assignmentTemplates.length]
+      const dueDate = new Date("2026-02-15")
+      dueDate.setDate(dueDate.getDate() + ai * 7 + ci) // Spread due dates
+
+      const assignment = await prisma.portalAssignment.create({
+        data: {
+          classId: cls.id,
+          teacherId: cls.teacherId,
+          title: template.title,
+          description: template.desc,
+          assignmentType: template.type,
+          dueDate,
+          maxScore: template.maxScore,
+          attachments: [], // No actual files for seed data
+          status: ai === 0 && ci < 3 ? AssignmentStatus.DRAFT : AssignmentStatus.ACTIVE,
+        },
+      })
+      allAssignments.push({ ...assignment, classIndex: ci })
+    }
+  }
+
+  console.log(`✅ Created ${allAssignments.length} assignments`)
+
+  // ============= Portal Assignment Submissions =============
+  console.log("📤 Creating assignment submissions...")
+
+  let submissionCount = 0
+
+  for (const assignment of allAssignments) {
+    // Only active assignments get submissions
+    if (assignment.status === AssignmentStatus.DRAFT) continue
+
+    // Find enrolled students in this class
+    const classEnrollments = enrollments.filter((e: any) => e.classId === assignment.classId)
+    // 40-70% of students submit
+    const submitCount = Math.floor(classEnrollments.length * (0.4 + Math.random() * 0.3))
+
+    for (let si = 0; si < submitCount; si++) {
+      const enrollment = classEnrollments[si]
+      if (!enrollment) continue
+
+      const isLate = Math.random() < 0.15 // 15% chance of late submission
+      const isGraded = Math.random() < 0.6 // 60% chance of being graded
+
+      const submittedAt = new Date(assignment.dueDate)
+      if (isLate) {
+        submittedAt.setHours(submittedAt.getHours() + Math.floor(Math.random() * 48) + 1)
+      } else {
+        submittedAt.setHours(submittedAt.getHours() - Math.floor(Math.random() * 72) - 1)
+      }
+
+      const submissionData: any = {
+        assignmentId: assignment.id,
+        studentId: enrollment.studentId,
+        content: `Bài làm của học viên cho "${assignment.title}". Em đã hoàn thành theo yêu cầu.`,
+        attachments: [],
+        submittedAt,
+        status: isLate ? SubmissionStatus.LATE : SubmissionStatus.SUBMITTED,
+      }
+
+      if (isGraded && !isLate) {
+        // Score between 50-100% of maxScore
+        const scorePercent = 0.5 + Math.random() * 0.5
+        submissionData.score = Math.round(assignment.maxScore * scorePercent * 10) / 10
+        submissionData.status = SubmissionStatus.GRADED
+        const feedbacks = [
+          "Bài làm tốt, cần chú ý thêm thanh điệu.",
+          "Rất tốt! Ngữ pháp chính xác, từ vựng phong phú.",
+          "Khá, cần cải thiện phần viết chữ Hán.",
+          "Tốt, nhưng cần luyện thêm phần nghe.",
+          "Xuất sắc! Tiếp tục phát huy.",
+          "Cần ôn lại phần ngữ pháp 把字句 và 被字句.",
+          "Bài viết có tiến bộ rõ rệt so với lần trước.",
+          "Phát âm tốt, cần chú ý thêm thanh 3 và thanh 4.",
+        ]
+        submissionData.feedback = feedbacks[si % feedbacks.length]
+      }
+
+      try {
+        await prisma.portalAssignmentSubmission.create({ data: submissionData })
+        submissionCount++
+      } catch {
+        // Skip duplicate submissions (same student + assignment)
+      }
+    }
+  }
+
+  console.log(`✅ Created ${submissionCount} submissions`)
 
   console.log("\n✅ Portal seeding completed!")
 }

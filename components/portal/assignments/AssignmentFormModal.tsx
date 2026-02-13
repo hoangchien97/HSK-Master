@@ -2,11 +2,6 @@
 
 import { useEffect, useState } from "react"
 import {
-  Modal,
-  ModalContent,
-  ModalHeader,
-  ModalBody,
-  ModalFooter,
   Button,
   Input,
   Textarea,
@@ -17,6 +12,7 @@ import {
 import { toast } from "react-toastify"
 import { createAssignmentAction, updateAssignmentAction } from "@/actions/assignment.actions"
 import { FileUploadZone } from "@/components/portal/common"
+import { CModal } from "@/components/portal/common/CModal"
 
 interface ClassInfo {
   id: string
@@ -118,139 +114,144 @@ export default function AssignmentFormModal({
   }
 
   return (
-    <Modal isOpen={isOpen} onClose={onClose} size="3xl" scrollBehavior="inside">
-      <ModalContent>
-        <ModalHeader>
-          {isEdit ? "Chỉnh sửa bài tập" : "Tạo bài tập mới"}
-        </ModalHeader>
+    <CModal
+      isOpen={isOpen}
+      onClose={onClose}
+      size="3xl"
+      scrollBehavior="inside"
+      title={isEdit ? "Chỉnh sửa bài tập" : "Tạo bài tập mới"}
+      footer={
+        <div className="flex gap-2 justify-end w-full">
+          <Button variant="flat" onPress={onClose}>
+            Hủy
+          </Button>
+          <Button
+            color="primary"
+            type="submit"
+            form="assignment-form"
+            isLoading={isSubmitting}
+          >
+            {isEdit ? "Cập nhật" : "Tạo bài tập"}
+          </Button>
+        </div>
+      }
+    >
+      <Form id="assignment-form" validationErrors={errors} onSubmit={onSubmit} className="flex flex-col gap-4">
+        <Input
+          name="title"
+          label="Tiêu đề"
+          placeholder="Bài tập tuần 1 - Từ vựng"
+          labelPlacement="outside"
+          isRequired
+          defaultValue={editData?.title || ""}
+          errorMessage={({ validationDetails }) => {
+            if (validationDetails.valueMissing) {
+              return "Vui lòng nhập tiêu đề"
+            }
+          }}
+        />
 
-        <Form validationErrors={errors} onSubmit={onSubmit}>
-          <ModalBody className="gap-4 flex flex-col">
-            <Input
-              name="title"
-              label="Tiêu đề"
-              placeholder="Bài tập tuần 1 - Từ vựng"
-              labelPlacement="outside"
-              isRequired
-              defaultValue={editData?.title || ""}
-              errorMessage={({ validationDetails }) => {
-                if (validationDetails.valueMissing) {
-                  return "Vui lòng nhập tiêu đề"
-                }
-              }}
-            />
+        <Textarea
+          name="description"
+          label="Mô tả"
+          placeholder="Mô tả yêu cầu bài tập..."
+          labelPlacement="outside"
+          minRows={3}
+          defaultValue={editData?.description || ""}
+        />
 
-            <Textarea
-              name="description"
-              label="Mô tả"
-              placeholder="Mô tả yêu cầu bài tập..."
-              labelPlacement="outside"
-              minRows={3}
-              defaultValue={editData?.description || ""}
-            />
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          <Select
+            label="Lớp học"
+            name="classId"
+            labelPlacement="outside"
+            isRequired
+            selectedKeys={classId ? [classId] : []}
+            onSelectionChange={(keys) => {
+              const val = Array.from(keys)[0] as string
+              setClassId(val)
+            }}
+            errorMessage={({ validationDetails }) => {
+              if (validationDetails.valueMissing) {
+                return "Vui lòng chọn lớp học"
+              }
+            }}
+          >
+            {classes.map((c) => (
+              <SelectItem key={c.id}>
+                {c.className}
+              </SelectItem>
+            ))}
+          </Select>
 
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-              <Select
-                label="Lớp học"
-                name="classId"
-                labelPlacement="outside"
-                isRequired
-                selectedKeys={classId ? [classId] : []}
-                onSelectionChange={(keys) => {
-                  const val = Array.from(keys)[0] as string
-                  setClassId(val)
-                }}
-                errorMessage={({ validationDetails }) => {
-                  if (validationDetails.valueMissing) {
-                    return "Vui lòng chọn lớp học"
-                  }
-                }}
-              >
-                {classes.map((c) => (
-                  <SelectItem key={c.id}>
-                    {c.className}
-                  </SelectItem>
-                ))}
-              </Select>
+          <Select
+            label="Loại bài tập"
+            name="assignmentType"
+            labelPlacement="outside"
+            isRequired
+            selectedKeys={assignmentType ? [assignmentType] : []}
+            onSelectionChange={(keys) => {
+              const val = Array.from(keys)[0] as string
+              setAssignmentType(val)
+            }}
+            errorMessage={({ validationDetails }) => {
+              if (validationDetails.valueMissing) {
+                return "Vui lòng chọn loại bài tập"
+              }
+            }}
+          >
+            {ASSIGNMENT_TYPES.map((t) => (
+              <SelectItem key={t.key}>{t.label}</SelectItem>
+            ))}
+          </Select>
+        </div>
 
-              <Select
-                label="Loại bài tập"
-                name="assignmentType"
-                labelPlacement="outside"
-                isRequired
-                selectedKeys={assignmentType ? [assignmentType] : []}
-                onSelectionChange={(keys) => {
-                  const val = Array.from(keys)[0] as string
-                  setAssignmentType(val)
-                }}
-                errorMessage={({ validationDetails }) => {
-                  if (validationDetails.valueMissing) {
-                    return "Vui lòng chọn loại bài tập"
-                  }
-                }}
-              >
-                {ASSIGNMENT_TYPES.map((t) => (
-                  <SelectItem key={t.key}>{t.label}</SelectItem>
-                ))}
-              </Select>
-            </div>
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          <Input
+            name="dueDate"
+            type="datetime-local"
+            label="Hạn nộp"
+            labelPlacement="outside"
+            placeholder=" "
+            defaultValue={editData?.dueDate ? new Date(editData.dueDate).toISOString().slice(0, 16) : ""}
+          />
 
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-              <Input
-                name="dueDate"
-                type="datetime-local"
-                label="Hạn nộp"
-                labelPlacement="outside"
-                defaultValue={editData?.dueDate ? new Date(editData.dueDate).toISOString().slice(0, 16) : ""}
-              />
+          <Input
+            name="maxScore"
+            type="number"
+            label="Điểm tối đa"
+            labelPlacement="outside"
+            defaultValue={String(editData?.maxScore || 100)}
+            min={1}
+            max={1000}
+          />
+        </div>
 
-              <Input
-                name="maxScore"
-                type="number"
-                label="Điểm tối đa"
-                labelPlacement="outside"
-                defaultValue={String(editData?.maxScore || 100)}
-                min={1}
-                max={1000}
-              />
-            </div>
+        <Select
+          label="Trạng thái"
+          name="status"
+          labelPlacement="outside"
+          selectedKeys={status ? [status] : ["ACTIVE"]}
+          onSelectionChange={(keys) => {
+            const val = Array.from(keys)[0] as string
+            setStatus(val as "ACTIVE" | "DRAFT")
+          }}
+        >
+          <SelectItem key="ACTIVE">Đang mở</SelectItem>
+          <SelectItem key="DRAFT">Nháp</SelectItem>
+        </Select>
 
-            <Select
-              label="Trạng thái"
-              name="status"
-              labelPlacement="outside"
-              selectedKeys={status ? [status] : ["ACTIVE"]}
-              onSelectionChange={(keys) => {
-                const val = Array.from(keys)[0] as string
-                setStatus(val as "ACTIVE" | "DRAFT")
-              }}
-            >
-              <SelectItem key="ACTIVE">Đang mở</SelectItem>
-              <SelectItem key="DRAFT">Nháp</SelectItem>
-            </Select>
-
-            {/* ── File Attachments ── */}
-            <div>
-              <p className="text-sm font-medium mb-2">Tài liệu đính kèm</p>
-              <FileUploadZone
-                value={attachments}
-                onChange={setAttachments}
-                folder="assignments"
-                maxFiles={10}
-              />
-            </div>
-          </ModalBody>
-
-          <ModalFooter>
-            <Button variant="flat" onPress={onClose}>
-              Hủy
-            </Button>
-            <Button color="primary" type="submit" isLoading={isSubmitting}>
-              {isEdit ? "Cập nhật" : "Tạo bài tập"}
-            </Button>
-          </ModalFooter>
-        </Form>
-      </ModalContent>
-    </Modal>
+        {/* ── File Attachments ── */}
+        <div>
+          <p className="text-sm font-medium mb-2">Tài liệu đính kèm</p>
+          <FileUploadZone
+            value={attachments}
+            onChange={setAttachments}
+            folder="assignments"
+            maxFiles={10}
+          />
+        </div>
+      </Form>
+    </CModal>
   )
 }

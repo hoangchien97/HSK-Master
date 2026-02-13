@@ -247,7 +247,7 @@ export default function ClassDetailView({ classId, role }: ClassDetailViewProps)
                   <TableCell>
                     <UserAvatar
                       name={enrollment.student?.name || enrollment.student?.email || ""}
-                      description={enrollment.student?.email}
+                      description={enrollment.student?.username ? `@${enrollment.student.username}` : enrollment.student?.email}
                       avatarProps={{
                         src: enrollment.student?.image || undefined,
                         size: "sm",

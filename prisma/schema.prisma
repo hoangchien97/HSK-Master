@@ -356,6 +356,9 @@ model PortalUser {
   assignments      PortalAssignment[]
   teacherAttendances PortalAttendance[] @relation("TeacherAttendance")
 
+  // Notifications
+  notifications    PortalNotification[]
+
   @@map("portal_users")
 }
 
@@ -584,4 +587,23 @@ model PortalQuizAttempt {
   student          PortalUser @relation(fields: [studentId], references: [id], onDelete: Cascade)
 
   @@map("portal_quiz_attempts")
+}
+
+// Portal Notification
+model PortalNotification {
+  id               String   @id @default(cuid())
+  userId           String
+  type             String   // ASSIGNMENT_CREATED, SUBMISSION_GRADED, SUBMISSION_RECEIVED
+  title            String
+  message          String   @db.Text
+  link             String?  // URL to navigate when clicked
+  isRead           Boolean  @default(false)
+  metadata         Json?    // Extra data (assignmentId, submissionId, etc.)
+  createdAt        DateTime @default(now())
+
+  user             PortalUser @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId, isRead])
+  @@index([userId, createdAt])
+  @@map("portal_notifications")
 }

@@ -59,7 +59,7 @@ export async function POST(req: NextRequest) {
 
     for (const file of files) {
       const path = generateFilePath(folder, session.user.id, file.name)
-      const result = await uploadToSupabaseStorage(file, path, "portal-files")
+      const result = await uploadToSupabaseStorage(file, path, "documents")
 
       if (result.success && result.url) {
         uploaded.push({
@@ -116,7 +116,7 @@ export async function DELETE(req: NextRequest) {
       return NextResponse.json({ error: "Forbidden" }, { status: 403 })
     }
 
-    const ok = await deleteFromSupabaseStorage(path, "portal-files")
+    const ok = await deleteFromSupabaseStorage(path, "documents")
     if (!ok) {
       return NextResponse.json({ error: "Xóa file thất bại" }, { status: 500 })
     }

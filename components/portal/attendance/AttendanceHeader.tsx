@@ -58,8 +58,8 @@ export default function AttendanceHeader({
 
   return (
     <div className="shrink-0 space-y-3 pb-3">
-      {/* Row 1: Filters */}
-      <div className="flex flex-wrap items-end gap-3">
+      {/* Row 1: Filters - labels inline with inputs */}
+      <div className="flex flex-wrap items-center gap-3">
         {/* Search */}
         <Input
           label="Tên học viên"
@@ -71,13 +71,13 @@ export default function AttendanceHeader({
           className="w-56"
           isClearable
           onClear={() => onSearchChange("")}
-          labelPlacement="outside"
+          labelPlacement="inside"
         />
 
         {/* Class selector */}
         <Select
           label="Lớp học"
-          labelPlacement="outside"
+          labelPlacement="inside"
           selectedKeys={selectedClassId ? new Set([selectedClassId]) : new Set()}
           onSelectionChange={(keys) => {
             const val = Array.from(keys)[0] as string
@@ -99,7 +99,7 @@ export default function AttendanceHeader({
         {/* Month picker with HeroUI DatePicker (month granularity) */}
         <DatePicker
           label="Tháng"
-          labelPlacement="outside"
+          labelPlacement="inside"
           granularity="day"
           value={calendarValue}
           onChange={handleDateChange}

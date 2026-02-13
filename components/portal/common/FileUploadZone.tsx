@@ -111,7 +111,7 @@ export default function FileUploadZone({
       // Extract path from URL for deletion
       try {
         const urlObj = new URL(url)
-        const pathMatch = urlObj.pathname.match(/\/storage\/v1\/object\/public\/portal-files\/(.+)/)
+        const pathMatch = urlObj.pathname.match(/\/storage\/v1\/object\/public\/documents\/(.+)/)
         if (pathMatch) {
           await fetch("/api/portal/upload/file", {
             method: "DELETE",

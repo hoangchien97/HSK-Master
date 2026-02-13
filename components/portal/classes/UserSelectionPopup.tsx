@@ -2,7 +2,8 @@
 
 import { useState, useEffect, useCallback, useRef } from "react";
 import { Avatar, Button, Input, Spinner } from "@heroui/react";
-import { Check, Search, X } from "lucide-react";
+import { Check, Search, Users } from "lucide-react";
+import { CModal } from "@/components/portal/common/CModal";
 import api from "@/lib/http/client";
 
 export interface UserItem {
@@ -35,7 +36,6 @@ export default function UserSelectionPopup({
   const [hasMore, setHasMore] = useState(true);
   const scrollRef = useRef<HTMLDivElement>(null);
 
-  // Track selected IDs locally for quick lookup
   const selectedIds = new Set(selectedUsers.map((u) => u.id));
 
   const fetchUsers = useCallback(
@@ -61,7 +61,6 @@ export default function UserSelectionPopup({
     [role]
   );
 
-  // Load on open & search change
   useEffect(() => {
     if (isOpen) {
       setPage(1);
@@ -69,7 +68,6 @@ export default function UserSelectionPopup({
     }
   }, [isOpen, search, fetchUsers]);
 
-  // Reset state when closed
   useEffect(() => {
     if (!isOpen) {
       setSearch("");
@@ -97,27 +95,32 @@ export default function UserSelectionPopup({
     }
   };
 
-  if (!isOpen) return null;
-
   return (
-    <div
-      className="fixed inset-0 bg-black/40 z-100 flex items-center justify-center p-4"
-      onClick={onClose}
-    >
-      <div
-        className="bg-white dark:bg-content1 rounded-2xl shadow-2xl w-full max-w-md max-h-[70vh] flex flex-col overflow-hidden"
-        onClick={(e) => e.stopPropagation()}
-      >
-        {/* Header */}
-        <div className="flex items-center justify-between px-5 py-4 border-b border-default-200">
-          <h3 className="font-semibold text-lg">Chọn học viên</h3>
-          <Button isIconOnly size="sm" variant="light" onPress={onClose}>
-            <X className="w-4 h-4" />
+    <CModal
+      isOpen={isOpen}
+      onClose={onClose}
+      title={
+        <div className="flex items-center gap-2">
+          <Users className="w-5 h-5 text-primary" />
+          <span>Chọn học viên</span>
+        </div>
+      }
+      size="md"
+      scrollBehavior="inside"
+      footer={
+        <div className="flex items-center justify-between w-full">
+          <span className="text-sm text-default-500">
+            Đã chọn: <strong>{selectedUsers.length}</strong> học viên
+          </span>
+          <Button size="sm" color="primary" onPress={onClose}>
+            Xong
           </Button>
         </div>
-
-        {/* Search */}
-        <div className="px-4 py-3 border-b border-default-100">
+      }
+    >
+      <div className="flex flex-col h-[50vh]">
+        {/* Search - Sticky */}
+        <div className="sticky top-0 z-10 bg-white dark:bg-content1 pb-3">
           <Input
             placeholder="Tìm theo tên hoặc username..."
             startContent={<Search className="w-4 h-4 text-default-400" />}
@@ -129,10 +132,10 @@ export default function UserSelectionPopup({
           />
         </div>
 
-        {/* User List */}
+        {/* User List - Scrollable */}
         <div
           ref={scrollRef}
-          className="flex-1 overflow-y-auto px-2 py-1"
+          className="flex-1 overflow-y-auto -mx-1 px-1 scrollbar-thin scrollbar-thumb-gray-300 scrollbar-track-transparent"
           onScroll={handleScroll}
         >
           {users.map((user) => {
@@ -177,17 +180,7 @@ export default function UserSelectionPopup({
             </p>
           )}
         </div>
-
-        {/* Footer */}
-        <div className="px-5 py-3 border-t border-default-200 flex items-center justify-between">
-          <span className="text-sm text-default-500">
-            Đã chọn: <strong>{selectedUsers.length}</strong> học viên
-          </span>
-          <Button size="sm" color="primary" onPress={onClose}>
-            Xong
-          </Button>
-        </div>
       </div>
-    </div>
+    </CModal>
   );
 }

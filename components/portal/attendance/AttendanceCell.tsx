@@ -9,7 +9,7 @@ import {
   PopoverContent,
   Textarea,
 } from "@heroui/react";
-import { Check, X, StickyNote, Pencil } from "lucide-react";
+import { Check, X, StickyNote } from "lucide-react";
 
 /* ───────────────── Types ───────────────── */
 
@@ -70,7 +70,7 @@ function AttendanceCell({
     return (
       <td className="px-1.5 py-2 text-center border-r border-gray-100 bg-blue-50/30">
         <div className="relative">
-          <div className="flex items-center justify-center gap-2">
+          <div className="flex items-center justify-center gap-1.5">
             {/* PRESENT button */}
             <Tooltip content="Có mặt" placement="top" delay={300}>
               <button
@@ -104,60 +104,54 @@ function AttendanceCell({
                 />
               </button>
             </Tooltip>
-          </div>
 
-          {/* <span className="absolute -top-1 -right-1 w-2 h-2 bg-amber-400 rounded-full border border-white" /> */}
-
-          {!note && (
-            <Pencil className="absolute -top-1 -right-1 w-2.5 h-2.5 text-amber-500" />
-          )}
-
-          {/* Note indicator - positioned top-right */}
-          <Popover
-            isOpen={isNoteOpen}
-            onOpenChange={(open) => {
-              if (open) {
-                onNotePopoverOpen(studentId, date, note);
-              } else {
-                onNotePopoverClose();
-              }
-            }}
-            placement="bottom-start"
-          >
-            <PopoverTrigger>
-              <button
-                type="button"
-                className={`absolute -top-1.5 -right-1.5 p-0.5 rounded transition-colors z-10 ${
-                  note
-                    ? "text-red-500 hover:bg-amber-50"
-                    : "text-gray-300 hover:text-gray-400 hover:bg-gray-100 opacity-0 group-hover:opacity-100"
-                }`}
-                title="Ghi chú"
-              >
-                <StickyNote className="w-3 h-3 cursor-pointer" />
-              </button>
-            </PopoverTrigger>
-            <PopoverContent className="p-3 w-64">
-              <div className="space-y-2">
-                <p className="text-sm font-medium">Ghi chú</p>
-                <Textarea
-                  size="sm"
-                  placeholder="Nhập ghi chú..."
-                  value={noteText}
-                  onValueChange={onNoteTextChange}
-                  minRows={2}
-                />
-                <Button
-                  size="sm"
-                  color="primary"
-                  className="w-full"
-                  onPress={() => onNoteSave(studentId, date, noteText)}
+            {/* Note button - inline next to actions */}
+            <Popover
+              isOpen={isNoteOpen}
+              onOpenChange={(open) => {
+                if (open) {
+                  onNotePopoverOpen(studentId, date, note);
+                } else {
+                  onNotePopoverClose();
+                }
+              }}
+              placement="bottom-start"
+            >
+              <PopoverTrigger>
+                <button
+                  type="button"
+                  className={`w-4 h-4 flex items-center justify-center rounded transition-colors ${
+                    note
+                      ? "text-amber-500 hover:bg-amber-50"
+                      : "text-gray-300 hover:text-gray-400 hover:bg-gray-100"
+                  }`}
+                  title="Ghi chú"
                 >
-                  Lưu ghi chú
-                </Button>
-              </div>
-            </PopoverContent>
-          </Popover>
+                  <StickyNote className="w-3 h-3 cursor-pointer" />
+                </button>
+              </PopoverTrigger>
+              <PopoverContent className="p-3 w-64">
+                <div className="space-y-2">
+                  <p className="text-sm font-medium">Ghi chú</p>
+                  <Textarea
+                    size="sm"
+                    placeholder="Nhập ghi chú..."
+                    value={noteText}
+                    onValueChange={onNoteTextChange}
+                    minRows={2}
+                  />
+                  <Button
+                    size="sm"
+                    color="primary"
+                    className="w-full"
+                    onPress={() => onNoteSave(studentId, date, noteText)}
+                  >
+                    Lưu ghi chú
+                  </Button>
+                </div>
+              </PopoverContent>
+            </Popover>
+          </div>
         </div>
       </td>
     );

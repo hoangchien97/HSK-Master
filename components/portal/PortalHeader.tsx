@@ -1,8 +1,6 @@
 "use client"
 
 import { signOut } from "next-auth/react"
-import Link from "next/link"
-import Image from "next/image"
 import {
   Input,
   Dropdown,
@@ -10,13 +8,12 @@ import {
   DropdownMenu,
   DropdownItem,
   DropdownSection,
-  Badge,
   Avatar,
-  Button,
 } from "@heroui/react"
-import { Menu, Search, Bell, User, Settings, HelpCircle, LogOut, ChevronDown } from "lucide-react"
+import { Menu, Search, User, Settings, HelpCircle, LogOut, ChevronDown } from "lucide-react"
 import { ROLE_LABELS } from "@/constants/portal"
 import { type UserRole } from "@/constants/portal/roles"
+import NotificationDropdown from "./NotificationDropdown"
 
 interface PortalHeaderProps {
   userName: string
@@ -69,26 +66,7 @@ export default function PortalHeader({
         {/* Right: Notifications & User menu */}
         <div className="flex items-center gap-2 lg:gap-3">
           {/* Notifications */}
-          <Dropdown placement="bottom-end">
-            <DropdownTrigger>
-              <button className="relative p-2 text-gray-500 hover:text-gray-700 rounded-lg hover:bg-gray-100 transition-colors">
-                <Badge content="" color="danger" shape="circle" size="sm" placement="top-right">
-                  <Bell className="w-6 h-6" />
-                </Badge>
-              </button>
-            </DropdownTrigger>
-            <DropdownMenu aria-label="Thông báo" className="w-80">
-              <DropdownItem key="header" isReadOnly className="opacity-100">
-                <h3 className="font-semibold text-gray-900">Thông báo</h3>
-              </DropdownItem>
-              <DropdownItem key="empty" isReadOnly className="opacity-100">
-                <div className="py-4 text-center text-gray-500">
-                  <Bell className="w-12 h-12 mx-auto text-gray-300 mb-2" />
-                  <p className="text-sm">Chưa có thông báo mới</p>
-                </div>
-              </DropdownItem>
-            </DropdownMenu>
-          </Dropdown>
+          <NotificationDropdown />
 
           {/* User menu */}
           <Dropdown placement="bottom-end">

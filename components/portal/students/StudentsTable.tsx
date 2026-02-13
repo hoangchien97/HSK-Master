@@ -111,7 +111,7 @@ export default function StudentsTable() {
           <Avatar src={row.image || undefined} name={(row.name)?.charAt(0)} size="sm" />
           <div>
             <p className="font-medium">{row.name}</p>
-            <p className="text-xs text-default-400">{row.email}</p>
+            <p className="text-xs text-default-400">@{row.username || row.email}</p>
           </div>
         </div>
       ),

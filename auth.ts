@@ -91,12 +91,21 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
 
           // Create PortalUser if doesn't exist
           if (!existingUser) {
-            const baseUsername = (user.name || user.email!.split('@')[0])
+            // Auto-generate username from name: họ + tên (first word + last word)
+            const nameParts = (user.name || user.email!.split('@')[0]).trim().split(/\s+/)
+            const ho = nameParts[0]
+            const ten = nameParts.length > 1 ? nameParts[nameParts.length - 1] : ""
+            const baseUsername = (ho + ten)
               .toLowerCase()
               .normalize("NFD").replace(/[\u0300-\u036f]/g, "")
-              .replace(/đ/g, "d").replace(/[^a-z0-9]+/g, "")
-            // Ensure uniqueness by appending random chars
-            const username = `${baseUsername}${Date.now().toString(36).slice(-4)}`
+              .replace(/đ/g, "d").replace(/[^a-z0-9]/g, "")
+            // Ensure uniqueness
+            let username = baseUsername
+            let suffix = 1
+            while (await prisma.portalUser.findUnique({ where: { username } })) {
+              username = `${baseUsername}${suffix}`
+              suffix++
+            }
             const newUser = await prisma.portalUser.create({
               data: {
                 email: user.email!,

@@ -54,9 +54,9 @@ export async function getSchedules(userId?: string): Promise<ISchedule[]> {
 }
 
 /**
- * Fetch all classes for dropdown
+ * Fetch all classes for dropdown (used by schedule module)
  */
-export async function getClasses(userId?: string): Promise<IClass[]> {
+export async function getClassesForSchedule(userId?: string): Promise<IClass[]> {
   const classes = await prisma.portalClass.findMany({
     where: userId ? { teacherId: userId } : {},
     orderBy: {

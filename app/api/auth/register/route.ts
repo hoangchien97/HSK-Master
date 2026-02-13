@@ -32,10 +32,27 @@ export async function POST(request: Request) {
     // Hash password
     const hashedPassword = await bcrypt.hash(validatedData.password, 10);
 
+    // Auto-generate username from name: họ + tên (first word + last word)
+    const nameParts = validatedData.name.trim().split(/\s+/)
+    const ho = nameParts[0]
+    const ten = nameParts.length > 1 ? nameParts[nameParts.length - 1] : ""
+    const baseUsername = (ho + ten)
+      .toLowerCase()
+      .normalize("NFD").replace(/[\u0300-\u036f]/g, "")
+      .replace(/đ/g, "d").replace(/[^a-z0-9]/g, "")
+    // Ensure uniqueness
+    let username = baseUsername
+    let suffix = 1
+    while (await prisma.portalUser.findUnique({ where: { username } })) {
+      username = `${baseUsername}${suffix}`
+      suffix++
+    }
+
     // Create user
     const user = await prisma.portalUser.create({
       data: {
         name: validatedData.name,
+        username,
         email: validatedData.email,
         password: hashedPassword,
         role: USER_ROLE.STUDENT, // Default role

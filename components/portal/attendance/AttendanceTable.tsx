@@ -218,7 +218,7 @@ export default function AttendanceTable({
                     key={date}
                     className={`px-2 py-2 text-center border-r border-gray-100 ${
                       isToday
-                        ? "bg-blue-50 border-b-2 border-b-blue-400 min-w-18"
+                        ? "bg-blue-100 border-b-3 border-b-blue-500 min-w-18 ring-1 ring-blue-200"
                         : isFuture
                           ? "bg-gray-50 opacity-50 min-w-15"
                           : "bg-gray-50 min-w-15"
@@ -338,8 +338,9 @@ export default function AttendanceTable({
                 }
                 return (
                   <td key={date} className="px-1 py-1.5 text-center border-r border-gray-100 bg-gray-100">
-                    <div className="flex flex-col items-center gap-0.5">
+                    <div className="flex items-center justify-center gap-1">
                       <span className="text-[10px] font-bold text-emerald-600">{col.present}</span>
+                      <span className="text-[10px] text-gray-400">/</span>
                       <span className="text-[10px] font-bold text-red-500">{col.absent}</span>
                     </div>
                   </td>
