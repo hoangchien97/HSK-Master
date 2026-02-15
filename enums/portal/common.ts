@@ -27,19 +27,45 @@ export enum AttendanceStatus {
 }
 
 export enum AssignmentStatus {
-  ACTIVE = "ACTIVE",
   DRAFT = "DRAFT",
+  PUBLISHED = "PUBLISHED",
   ARCHIVED = "ARCHIVED",
 }
 
 export enum SubmissionStatus {
+  NOT_SUBMITTED = "NOT_SUBMITTED",
   SUBMITTED = "SUBMITTED",
+  RESUBMITTED = "RESUBMITTED",
   GRADED = "GRADED",
-  LATE = "LATE",
+  RETURNED = "RETURNED",
 }
 
 export enum EventState {
   PAST = "PAST",
   UPCOMING = "UPCOMING",
   FUTURE = "FUTURE",
+}
+
+export enum PracticeMode {
+  LOOKUP = "LOOKUP",
+  FLASHCARD = "FLASHCARD",
+  QUIZ = "QUIZ",
+  LISTEN = "LISTEN",
+  WRITE = "WRITE",
+}
+
+export enum ItemProgressStatus {
+  NEW = "NEW",
+  LEARNING = "LEARNING",
+  MASTERED = "MASTERED",
+}
+
+export enum QuestionType {
+  MCQ_MEANING = "MCQ_MEANING",
+  MCQ_HANZI = "MCQ_HANZI",
+  MCQ_PINYIN = "MCQ_PINYIN",
+  TYPE_PINYIN = "TYPE_PINYIN",
+  TYPE_HANZI = "TYPE_HANZI",
+  LISTEN_MCQ = "LISTEN_MCQ",
+  FLASHCARD = "FLASHCARD",
 }

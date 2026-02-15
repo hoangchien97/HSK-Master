@@ -54,6 +54,9 @@ export default async function AssignmentDetailPage({ params }: Props) {
   }
 
   if (userRole === "student") {
+    // Students can only see PUBLISHED assignments
+    if (assignment.status !== "PUBLISHED") notFound()
+
     const isEnrolled = assignment.class.enrollments.some(
       (e) => e.studentId === session.user!.id
     )
@@ -64,6 +67,7 @@ export default async function AssignmentDetailPage({ params }: Props) {
   const serializedAssignment = {
     ...assignment,
     dueDate: assignment.dueDate?.toISOString() || null,
+    publishedAt: assignment.publishedAt?.toISOString() || null,
     createdAt: assignment.createdAt.toISOString(),
     updatedAt: assignment.updatedAt.toISOString(),
     submissions: assignment.submissions.map((s) => ({

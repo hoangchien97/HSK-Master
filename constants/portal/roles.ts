@@ -25,8 +25,8 @@ export const CLASS_STATUS = {
 
 // Assignment Status
 export const ASSIGNMENT_STATUS = {
-  ACTIVE: 'ACTIVE',
   DRAFT: 'DRAFT',
+  PUBLISHED: 'PUBLISHED',
   ARCHIVED: 'ARCHIVED',
 } as const
 
@@ -54,7 +54,9 @@ export const ATTENDANCE_STATUS = {
 
 // Submission Status
 export const SUBMISSION_STATUS = {
+  NOT_SUBMITTED: 'NOT_SUBMITTED',
   SUBMITTED: 'SUBMITTED',
+  RESUBMITTED: 'RESUBMITTED',
   GRADED: 'GRADED',
-  LATE: 'LATE',
+  RETURNED: 'RETURNED',
 } as const

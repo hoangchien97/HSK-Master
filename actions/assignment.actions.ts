@@ -2,12 +2,13 @@
 
 /**
  * Assignment Server Actions
- * Server-side actions for assignment management
+ * Server-side actions for assignment management (V1 spec)
  */
 
 import { revalidatePath } from 'next/cache';
 import {
   getAssignments as getAssignmentsService,
+  getStudentAssignments as getStudentAssignmentsService,
   createAssignment as createAssignmentService,
   updateAssignment as updateAssignmentService,
   deleteAssignment as deleteAssignmentService,
@@ -15,9 +16,10 @@ import {
 import { createBulkNotifications } from '@/services/portal/notification.service';
 import { prisma } from '@/lib/prisma';
 import { auth } from '@/auth';
+import { ASSIGNMENT_STATUS } from '@/constants/portal/roles';
 
 /**
- * Fetch assignments with filtering & pagination
+ * Fetch assignments — role-aware (teacher sees all, student sees PUBLISHED only)
  */
 export async function fetchAssignments(
   params: { search?: string; classId?: string; status?: string; page?: number; pageSize?: number } = {}
@@ -31,7 +33,15 @@ export async function fetchAssignments(
     const session = await auth();
     if (!session?.user?.id) return { success: false, error: 'Unauthorized' };
 
-    const data = await getAssignmentsService(session.user.id, params);
+    const role = session.user.role?.toUpperCase();
+
+    let data;
+    if (role === 'STUDENT') {
+      data = await getStudentAssignmentsService(session.user.id, params);
+    } else {
+      data = await getAssignmentsService(session.user.id, params);
+    }
+
     return { success: true, data };
   } catch (error) {
     console.error('Error fetching assignments:', error);
@@ -41,17 +51,20 @@ export async function fetchAssignments(
 
 /**
  * Create a new assignment
+ * If status = PUBLISHED → set publishedAt + notify students
+ * If status = DRAFT → no notification
  */
 export async function createAssignmentAction(
   data: {
     classId: string;
     title: string;
     description?: string;
-    assignmentType?: string;
     dueDate?: string;
     maxScore?: number;
     status?: string;
     attachments?: string[];
+    tags?: string[];
+    externalLink?: string;
   }
 ): Promise<{
   success: boolean;
@@ -65,24 +78,25 @@ export async function createAssignmentAction(
 
     const assignment = await createAssignmentService(session.user.id, data);
 
-    // Notify all enrolled students
-    try {
-      const enrollments = await prisma.portalClassEnrollment.findMany({
-        where: { classId: data.classId },
-        select: { studentId: true },
-      });
-      const studentIds = enrollments.map((e) => e.studentId);
-      if (studentIds.length > 0) {
-        await createBulkNotifications(studentIds, {
-          type: 'ASSIGNMENT_CREATED',
-          title: 'Bài tập mới',
-          message: `Giáo viên vừa giao bài tập "${assignment.title}"`,
-          link: `/portal/student/assignments/${assignment.id}`,
+    // Only notify students when PUBLISHED
+    if (data.status === ASSIGNMENT_STATUS.PUBLISHED) {
+      try {
+        const enrollments = await prisma.portalClassEnrollment.findMany({
+          where: { classId: data.classId },
+          select: { studentId: true },
         });
+        const studentIds = enrollments.map((e) => e.studentId);
+        if (studentIds.length > 0) {
+          await createBulkNotifications(studentIds, {
+            type: 'ASSIGNMENT_PUBLISHED',
+            title: 'Bài tập mới',
+            message: `Giáo viên vừa giao bài tập "${assignment.title}"`,
+            link: `/portal/student/assignments/${assignment.id}`,
+          });
+        }
+      } catch (notifyError) {
+        console.error('Error sending assignment notifications:', notifyError);
       }
-    } catch (notifyError) {
-      console.error('Error sending assignment notifications:', notifyError);
-      // Don't fail the whole action for a notification error
     }
 
     revalidatePath('/portal/teacher/assignments');
@@ -95,6 +109,7 @@ export async function createAssignmentAction(
 
 /**
  * Update assignment
+ * If transition DRAFT → PUBLISHED → notify students
  */
 export async function updateAssignmentAction(
   assignmentId: string,
@@ -102,11 +117,12 @@ export async function updateAssignmentAction(
     classId?: string;
     title?: string;
     description?: string;
-    assignmentType?: string;
     dueDate?: string;
     maxScore?: number;
     status?: string;
     attachments?: string[];
+    tags?: string[];
+    externalLink?: string;
   }
 ): Promise<{
   success: boolean;
@@ -118,7 +134,38 @@ export async function updateAssignmentAction(
     const session = await auth();
     if (!session?.user?.id) return { success: false, error: 'Unauthorized' };
 
+    // Check if this is a DRAFT → PUBLISHED transition
+    const existing = await prisma.portalAssignment.findUnique({
+      where: { id: assignmentId },
+      select: { status: true, classId: true },
+    });
+    const isPublishTransition =
+      existing?.status === ASSIGNMENT_STATUS.DRAFT &&
+      data.status === ASSIGNMENT_STATUS.PUBLISHED;
+
     const assignment = await updateAssignmentService(assignmentId, session.user.id, data);
+
+    // Notify students on publish
+    if (isPublishTransition && existing) {
+      try {
+        const enrollments = await prisma.portalClassEnrollment.findMany({
+          where: { classId: existing.classId },
+          select: { studentId: true },
+        });
+        const studentIds = enrollments.map((e) => e.studentId);
+        if (studentIds.length > 0) {
+          await createBulkNotifications(studentIds, {
+            type: 'ASSIGNMENT_PUBLISHED',
+            title: 'Bài tập mới',
+            message: `Giáo viên vừa giao bài tập "${assignment.title}"`,
+            link: `/portal/student/assignments/${assignment.id}`,
+          });
+        }
+      } catch (notifyError) {
+        console.error('Error sending publish notifications:', notifyError);
+      }
+    }
+
     revalidatePath('/portal/teacher/assignments');
     return { success: true, assignment };
   } catch (error) {

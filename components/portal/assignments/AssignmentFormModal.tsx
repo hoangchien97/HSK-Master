@@ -1,14 +1,17 @@
 "use client"
 
-import { useEffect, useState } from "react"
+import { useEffect, useState, useCallback } from "react"
 import {
   Button,
   Input,
   Textarea,
   Select,
   SelectItem,
+  Chip,
   Form,
+  Switch,
 } from "@heroui/react"
+import { Hash, ExternalLink } from "lucide-react"
 import { toast } from "react-toastify"
 import { createAssignmentAction, updateAssignmentAction } from "@/actions/assignment.actions"
 import { FileUploadZone } from "@/components/portal/common"
@@ -29,24 +32,15 @@ interface AssignmentFormModalProps {
     id: string
     title: string
     description?: string | null
-    assignmentType: string
     dueDate?: Date | null
     maxScore: number
     classId?: string
     status?: string
     attachments?: string[]
+    tags?: string[]
+    externalLink?: string | null
   } | null
 }
-
-const ASSIGNMENT_TYPES = [
-  { key: "HOMEWORK", label: "Bài tập về nhà" },
-  { key: "QUIZ", label: "Kiểm tra" },
-  { key: "PROJECT", label: "Dự án" },
-  { key: "READING", label: "Đọc hiểu" },
-  { key: "WRITING", label: "Viết" },
-  { key: "SPEAKING", label: "Nói" },
-  { key: "LISTENING", label: "Nghe" },
-]
 
 export default function AssignmentFormModal({
   isOpen,
@@ -60,19 +54,49 @@ export default function AssignmentFormModal({
   const [errors, setErrors] = useState<Record<string, string>>({})
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [classId, setClassId] = useState(editData?.classId || classes[0]?.id || "")
-  const [assignmentType, setAssignmentType] = useState(editData?.assignmentType || "HOMEWORK")
-  const [status, setStatus] = useState((editData?.status as "ACTIVE" | "DRAFT") || "ACTIVE")
+  const [isPublished, setIsPublished] = useState(editData?.status === "PUBLISHED")
   const [attachments, setAttachments] = useState<string[]>(editData?.attachments || [])
+  const [tags, setTags] = useState<string[]>(editData?.tags || [])
+  const [tagInput, setTagInput] = useState("")
+  const [externalLink, setExternalLink] = useState(editData?.externalLink || "")
 
   useEffect(() => {
     if (isOpen) {
       setClassId(editData?.classId || classes[0]?.id || "")
-      setAssignmentType(editData?.assignmentType || "HOMEWORK")
-      setStatus((editData?.status as "ACTIVE" | "DRAFT") || "ACTIVE")
+      setIsPublished(editData?.status === "PUBLISHED")
       setAttachments(editData?.attachments || [])
+      setTags(editData?.tags || [])
+      setTagInput("")
+      setExternalLink(editData?.externalLink || "")
       setErrors({})
     }
   }, [isOpen, editData, classes])
+
+  /* ── Tag chip logic (Tab / Enter → add chip) ── */
+  const addTag = useCallback(() => {
+    const trimmed = tagInput.trim().replace(/^#/, "")
+    if (trimmed && !tags.includes(trimmed)) {
+      setTags((prev) => [...prev, trimmed])
+    }
+    setTagInput("")
+  }, [tagInput, tags])
+
+  const removeTag = useCallback((tag: string) => {
+    setTags((prev) => prev.filter((t) => t !== tag))
+  }, [])
+
+  const handleTagKeyDown = useCallback(
+    (e: React.KeyboardEvent<HTMLInputElement>) => {
+      if (e.key === "Tab" || e.key === "Enter") {
+        e.preventDefault()
+        addTag()
+      }
+      if (e.key === "Backspace" && !tagInput && tags.length > 0) {
+        setTags((prev) => prev.slice(0, -1))
+      }
+    },
+    [addTag, tagInput, tags],
+  )
 
   const onSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
@@ -82,15 +106,18 @@ export default function AssignmentFormModal({
     setIsSubmitting(true)
 
     try {
+      const status = isPublished ? "PUBLISHED" : "DRAFT"
+
       const values = {
         classId,
         title: formData.title as string,
         description: formData.description as string,
-        assignmentType,
         status,
-        maxScore: Number(formData.maxScore),
+        maxScore: 100,
         dueDate: (formData.dueDate as string) || undefined,
         attachments,
+        tags,
+        externalLink: externalLink || undefined,
       }
 
       if (isEdit) {
@@ -102,7 +129,11 @@ export default function AssignmentFormModal({
       } else {
         const result = await createAssignmentAction(values)
         if (!result.success) throw new Error(result.error)
-        toast.success("Tạo bài tập thành công!")
+        toast.success(
+          isPublished
+            ? "Tạo và công bố bài tập thành công!"
+            : "Tạo bài tập nháp thành công!"
+        )
         onClose()
         if (result.assignment) onSuccess(result.assignment)
       }
@@ -131,7 +162,11 @@ export default function AssignmentFormModal({
             form="assignment-form"
             isLoading={isSubmitting}
           >
-            {isEdit ? "Cập nhật" : "Tạo bài tập"}
+            {isEdit
+              ? "Cập nhật"
+              : isPublished
+                ? "Tạo & công bố"
+                : "Lưu nháp"}
           </Button>
         </div>
       }
@@ -160,86 +195,71 @@ export default function AssignmentFormModal({
           defaultValue={editData?.description || ""}
         />
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-          <Select
-            label="Lớp học"
-            name="classId"
-            labelPlacement="outside"
-            isRequired
-            selectedKeys={classId ? [classId] : []}
-            onSelectionChange={(keys) => {
-              const val = Array.from(keys)[0] as string
-              setClassId(val)
-            }}
-            errorMessage={({ validationDetails }) => {
-              if (validationDetails.valueMissing) {
-                return "Vui lòng chọn lớp học"
-              }
-            }}
-          >
-            {classes.map((c) => (
-              <SelectItem key={c.id}>
-                {c.className}
-              </SelectItem>
-            ))}
-          </Select>
-
-          <Select
-            label="Loại bài tập"
-            name="assignmentType"
-            labelPlacement="outside"
-            isRequired
-            selectedKeys={assignmentType ? [assignmentType] : []}
-            onSelectionChange={(keys) => {
-              const val = Array.from(keys)[0] as string
-              setAssignmentType(val)
-            }}
-            errorMessage={({ validationDetails }) => {
-              if (validationDetails.valueMissing) {
-                return "Vui lòng chọn loại bài tập"
-              }
-            }}
-          >
-            {ASSIGNMENT_TYPES.map((t) => (
-              <SelectItem key={t.key}>{t.label}</SelectItem>
-            ))}
-          </Select>
-        </div>
-
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-          <Input
-            name="dueDate"
-            type="datetime-local"
-            label="Hạn nộp"
-            labelPlacement="outside"
-            placeholder=" "
-            defaultValue={editData?.dueDate ? new Date(editData.dueDate).toISOString().slice(0, 16) : ""}
-          />
-
-          <Input
-            name="maxScore"
-            type="number"
-            label="Điểm tối đa"
-            labelPlacement="outside"
-            defaultValue={String(editData?.maxScore || 100)}
-            min={1}
-            max={1000}
-          />
-        </div>
-
         <Select
-          label="Trạng thái"
-          name="status"
+          label="Lớp học"
+          name="classId"
           labelPlacement="outside"
-          selectedKeys={status ? [status] : ["ACTIVE"]}
+          isRequired
+          selectedKeys={classId ? [classId] : []}
           onSelectionChange={(keys) => {
             const val = Array.from(keys)[0] as string
-            setStatus(val as "ACTIVE" | "DRAFT")
+            setClassId(val)
+          }}
+          errorMessage={({ validationDetails }) => {
+            if (validationDetails.valueMissing) {
+              return "Vui lòng chọn lớp học"
+            }
           }}
         >
-          <SelectItem key="ACTIVE">Đang mở</SelectItem>
-          <SelectItem key="DRAFT">Nháp</SelectItem>
+          {classes.map((c) => (
+            <SelectItem key={c.id}>
+              {c.className}
+            </SelectItem>
+          ))}
         </Select>
+
+        <Input
+          name="dueDate"
+          type="datetime-local"
+          label="Hạn nộp"
+          labelPlacement="outside"
+          placeholder=" "
+          defaultValue={editData?.dueDate ? new Date(editData.dueDate).toISOString().slice(0, 16) : ""}
+        />
+
+        {/* ── Tags / Hashtags ── */}
+        <div>
+          <Input
+            label="Hashtag"
+            labelPlacement="outside"
+            placeholder={tags.length === 0 ? "Nhập tag rồi nhấn Tab hoặc Enter..." : ""}
+            size="sm"
+            value={tagInput}
+            onValueChange={setTagInput}
+            onKeyDown={handleTagKeyDown}
+            onBlur={addTag}
+            startContent={
+              <div className="flex items-center gap-1 flex-wrap">
+                {tags.map((tag) => (
+                  <Chip
+                    key={tag}
+                    size="sm"
+                    variant="flat"
+                    color="primary"
+                    onClose={() => removeTag(tag)}
+                  >
+                    #{tag}
+                  </Chip>
+                ))}
+                <Hash className="w-4 h-4 text-default-400 shrink-0" />
+              </div>
+            }
+            classNames={{
+              input: "ml-1",
+              innerWrapper: "flex-wrap gap-1",
+            }}
+          />
+        </div>
 
         {/* ── File Attachments ── */}
         <div>
@@ -249,6 +269,36 @@ export default function AssignmentFormModal({
             onChange={setAttachments}
             folder="assignments"
             maxFiles={10}
+          />
+        </div>
+
+        {/* ── External Link ── */}
+        <Input
+          label="Link tài liệu bên ngoài"
+          labelPlacement="outside"
+          placeholder="https://..."
+          value={externalLink}
+          onValueChange={setExternalLink}
+          startContent={<ExternalLink className="w-4 h-4 text-default-400" />}
+        />
+
+        {/* ── Publish Toggle ── */}
+        <div className="flex items-center justify-between p-3 rounded-lg bg-default-50 border border-default-200">
+          <div>
+            <p className="text-sm font-medium">
+              {isPublished ? "Công bố bài tập" : "Lưu nháp"}
+            </p>
+            <p className="text-xs text-default-400">
+              {isPublished
+                ? "Học viên sẽ nhận được thông báo khi bạn lưu"
+                : "Chỉ giáo viên mới nhìn thấy bài tập nháp"}
+            </p>
+          </div>
+          <Switch
+            isSelected={isPublished}
+            onValueChange={setIsPublished}
+            color="primary"
+            size="sm"
           />
         </div>
       </Form>

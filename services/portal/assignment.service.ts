@@ -16,11 +16,13 @@ interface AssignmentItem {
   id: string;
   title: string;
   description?: string | null;
-  assignmentType: string;
   dueDate?: Date | null;
   maxScore: number;
   attachments: string[];
+  tags: string[];
+  externalLink?: string | null;
   status: string;
+  publishedAt?: Date | null;
   class: AssignmentClassInfo;
   submissions: { id: string; student: { id: string; name: string }; status: string; score?: number | null }[];
   createdAt: Date;
@@ -36,16 +38,17 @@ interface CreateAssignmentDTO {
   classId: string;
   title: string;
   description?: string;
-  assignmentType?: string;
   dueDate?: string;
   maxScore?: number;
   status?: string;
   attachments?: string[];
+  tags?: string[];
+  externalLink?: string;
 }
 
 type UpdateAssignmentDTO = Partial<CreateAssignmentDTO>
 
-/* ───────── Fetch assignments with filtering & pagination ───────── */
+/* ───────── Fetch teacher assignments with filtering & pagination ───────── */
 
 export async function getAssignments(
   teacherId: string,
@@ -88,6 +91,69 @@ export async function getAssignments(
   };
 }
 
+/* ───────── Fetch student assignments (only PUBLISHED) ───────── */
+
+export async function getStudentAssignments(
+  studentId: string,
+  params: { search?: string; classId?: string; status?: string; page?: number; pageSize?: number } = {}
+): Promise<GetAssignmentsResult> {
+  const { search = '', classId = '', status = '', page = 1, pageSize = 10 } = params;
+
+  // Get classes where student is enrolled
+  const enrollments = await prisma.portalClassEnrollment.findMany({
+    where: { studentId },
+    select: { classId: true },
+  });
+  const enrolledClassIds = enrollments.map((e) => e.classId);
+
+  if (enrolledClassIds.length === 0) {
+    return { items: [], total: 0, classes: [] };
+  }
+
+  const where: Prisma.PortalAssignmentWhereInput = {
+    classId: { in: classId ? [classId] : enrolledClassIds },
+    status: ASSIGNMENT_STATUS.PUBLISHED, // Students only see PUBLISHED
+    ...(search && { title: { contains: search, mode: 'insensitive' as const } }),
+  };
+
+  // Optional: filter by submission status
+  if (status === 'SUBMITTED') {
+    where.submissions = { some: { studentId } };
+  } else if (status === 'NOT_SUBMITTED') {
+    where.submissions = { none: { studentId } };
+  } else if (status === 'GRADED') {
+    where.submissions = { some: { studentId, status: 'GRADED' } };
+  }
+
+  const [items, total, classes] = await Promise.all([
+    prisma.portalAssignment.findMany({
+      where,
+      include: {
+        class: { select: { id: true, className: true, classCode: true } },
+        submissions: {
+          where: { studentId },
+          include: { student: { select: { id: true, name: true } } },
+        },
+      },
+      orderBy: { createdAt: 'desc' },
+      skip: (page - 1) * pageSize,
+      take: pageSize,
+    }),
+    prisma.portalAssignment.count({ where }),
+    prisma.portalClass.findMany({
+      where: { id: { in: enrolledClassIds }, status: 'ACTIVE' },
+      select: { id: true, className: true, classCode: true },
+      orderBy: { className: 'asc' },
+    }),
+  ]);
+
+  return {
+    items: items as unknown as AssignmentItem[],
+    total,
+    classes,
+  };
+}
+
 /* ───────── Create assignment ───────── */
 
 export async function createAssignment(
@@ -100,17 +166,22 @@ export async function createAssignment(
   });
   if (!classItem) throw new Error('Lớp học không hợp lệ');
 
+  const isPublished = data.status === ASSIGNMENT_STATUS.PUBLISHED;
+
   const created = await prisma.portalAssignment.create({
     data: {
       title: data.title,
       description: data.description || null,
       classId: data.classId,
       teacherId,
-      assignmentType: data.assignmentType || 'HOMEWORK',
+      assignmentType: 'HOMEWORK',
       dueDate: data.dueDate ? new Date(data.dueDate) : null,
       maxScore: data.maxScore || 100,
       attachments: data.attachments || [],
-      status: data.status || ASSIGNMENT_STATUS.ACTIVE,
+      tags: data.tags || [],
+      externalLink: data.externalLink || null,
+      status: data.status || ASSIGNMENT_STATUS.DRAFT,
+      publishedAt: isPublished ? new Date() : null,
     },
     include: {
       class: { select: { id: true, className: true, classCode: true } },
@@ -134,17 +205,24 @@ export async function updateAssignment(
   if (!existing) throw new Error('Không tìm thấy bài tập');
   if (existing.teacherId !== teacherId) throw new Error('Bạn không có quyền chỉnh sửa bài tập này');
 
+  // Detect publish transition: was DRAFT → now PUBLISHED
+  const isPublishTransition =
+    existing.status === ASSIGNMENT_STATUS.DRAFT &&
+    data.status === ASSIGNMENT_STATUS.PUBLISHED;
+
   const updated = await prisma.portalAssignment.update({
     where: { id: assignmentId },
     data: {
       ...(data.title && { title: data.title }),
       ...(data.description !== undefined && { description: data.description || null }),
       ...(data.classId && { classId: data.classId }),
-      ...(data.assignmentType && { assignmentType: data.assignmentType }),
       ...(data.dueDate !== undefined && { dueDate: data.dueDate ? new Date(data.dueDate) : null }),
       ...(data.maxScore !== undefined && { maxScore: data.maxScore }),
       ...(data.attachments !== undefined && { attachments: data.attachments }),
+      ...(data.tags !== undefined && { tags: data.tags }),
+      ...(data.externalLink !== undefined && { externalLink: data.externalLink || null }),
       ...(data.status && { status: data.status }),
+      ...(isPublishTransition && { publishedAt: new Date() }),
     },
     include: {
       class: { select: { id: true, className: true, classCode: true } },

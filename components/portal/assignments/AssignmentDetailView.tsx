@@ -29,7 +29,9 @@ import {
   Star,
   MessageSquare,
   BookOpen,
-  Loader2,
+  RotateCcw,
+  ExternalLink,
+  Hash,
 } from "lucide-react"
 import { toast } from "react-toastify"
 import dayjs from "dayjs"
@@ -70,11 +72,13 @@ interface AssignmentData {
   teacherId: string
   title: string
   description?: string | null
-  assignmentType: string
   dueDate: string | null
   maxScore: number
   attachments: string[]
+  tags?: string[]
+  externalLink?: string | null
   status: string
+  publishedAt?: string | null
   createdAt: string
   class: {
     id: string
@@ -97,26 +101,17 @@ interface AssignmentDetailViewProps {
 
 /* ──────────────────── config ──────────────────────── */
 
-const TYPE_CONFIG: Record<string, { label: string; color: "primary" | "secondary" | "success" | "warning" | "danger" | "default" }> = {
-  HOMEWORK: { label: "Bài tập về nhà", color: "primary" },
-  QUIZ: { label: "Kiểm tra", color: "secondary" },
-  PROJECT: { label: "Dự án", color: "success" },
-  READING: { label: "Đọc hiểu", color: "warning" },
-  WRITING: { label: "Viết", color: "warning" },
-  SPEAKING: { label: "Nói", color: "danger" },
-  LISTENING: { label: "Nghe", color: "default" },
-}
-
-const STATUS_CONFIG: Record<string, { label: string; color: "success" | "default" | "danger" }> = {
-  ACTIVE: { label: "Đang mở", color: "success" },
+const STATUS_CONFIG: Record<string, { label: string; color: "success" | "default" }> = {
+  PUBLISHED: { label: "Đã công bố", color: "success" },
   DRAFT: { label: "Nháp", color: "default" },
-  ARCHIVED: { label: "Đã đóng", color: "danger" },
 }
 
-const SUBMISSION_STATUS: Record<string, { label: string; color: "primary" | "success" | "warning" | "danger" }> = {
+const SUBMISSION_STATUS_CONFIG: Record<string, { label: string; color: "primary" | "success" | "warning" | "danger" | "secondary" }> = {
+  NOT_SUBMITTED: { label: "Chưa nộp", color: "warning" },
   SUBMITTED: { label: "Đã nộp", color: "primary" },
+  RESUBMITTED: { label: "Đã nộp lại", color: "secondary" },
   GRADED: { label: "Đã chấm", color: "success" },
-  LATE: { label: "Nộp muộn", color: "warning" },
+  RETURNED: { label: "Trả lại", color: "danger" },
 }
 
 /* ──────────────────── component ──────────────────────── */
@@ -126,7 +121,6 @@ export default function AssignmentDetailView({
   currentUserId,
   userRole,
 }: AssignmentDetailViewProps) {
-  const router = useRouter()
   const isTeacher = userRole === "teacher"
   const isStudent = userRole === "student"
 
@@ -160,13 +154,6 @@ export default function AssignmentDetailView({
           <div className="flex items-center gap-2 flex-wrap mb-1">
             <Chip
               size="sm"
-              color={TYPE_CONFIG[assignment.assignmentType]?.color ?? "default"}
-              variant="flat"
-            >
-              {TYPE_CONFIG[assignment.assignmentType]?.label ?? assignment.assignmentType}
-            </Chip>
-            <Chip
-              size="sm"
               color={STATUS_CONFIG[assignment.status]?.color ?? "default"}
               variant="flat"
             >
@@ -196,9 +183,23 @@ export default function AssignmentDetailView({
             </span>
             <span className="flex items-center gap-1">
               <Clock className="w-4 h-4" />
-              Tạo: {dayjs(assignment.createdAt).format("DD/MM/YYYY")}
+              {assignment.publishedAt
+                ? `Công bố: ${dayjs(assignment.publishedAt).format("DD/MM/YYYY")}`
+                : `Tạo: ${dayjs(assignment.createdAt).format("DD/MM/YYYY")}`}
             </span>
           </div>
+
+          {/* Tags */}
+          {assignment.tags && assignment.tags.length > 0 && (
+            <div className="flex items-center gap-1.5 mt-2 flex-wrap">
+              <Hash className="w-3.5 h-3.5 text-default-400" />
+              {assignment.tags.map((tag) => (
+                <Chip key={tag} size="sm" variant="flat" color="primary">
+                  #{tag}
+                </Chip>
+              ))}
+            </div>
+          )}
         </div>
       </div>
 
@@ -276,6 +277,19 @@ export default function AssignmentDetailView({
             <p className="text-default-400 italic">Không có mô tả</p>
           )}
 
+          {/* External link */}
+          {assignment.externalLink && (
+            <a
+              href={assignment.externalLink}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="flex items-center gap-2 text-sm text-primary hover:underline"
+            >
+              <ExternalLink className="w-4 h-4" />
+              {assignment.externalLink}
+            </a>
+          )}
+
           {assignment.attachments.length > 0 && (
             <>
               <Divider />
@@ -310,6 +324,7 @@ export default function AssignmentDetailView({
 
 /* ════════════════════════════════════════════════════
    Student Submission Section
+   Supports: NOT_SUBMITTED → SUBMITTED → GRADED / RETURNED → RESUBMITTED
    ════════════════════════════════════════════════════ */
 
 function StudentSubmissionSection({
@@ -326,8 +341,14 @@ function StudentSubmissionSection({
   const [attachments, setAttachments] = useState<string[]>(submission?.attachments || [])
   const [loading, setLoading] = useState(false)
 
-  const canSubmit = !submission && !isOverdue && assignment.status === "ACTIVE"
   const isGraded = submission?.status === "GRADED"
+  const isReturned = submission?.status === "RETURNED"
+  // Can submit if: no submission yet, or submission was RETURNED for revision
+  const canSubmit =
+    assignment.status === "PUBLISHED" &&
+    (!submission || isReturned) &&
+    !isOverdue
+  const isResubmit = !!submission && isReturned
 
   const handleSubmit = async () => {
     if (!content.trim() && attachments.length === 0) {
@@ -343,7 +364,7 @@ function StudentSubmissionSection({
         attachments,
       })
       if (!result.success) throw new Error(result.error)
-      toast.success("Nộp bài thành công!")
+      toast.success(isResubmit ? "Nộp lại bài thành công!" : "Nộp bài thành công!")
       router.refresh()
     } catch (err) {
       toast.error(err instanceof Error ? err.message : "Có lỗi xảy ra")
@@ -362,10 +383,10 @@ function StudentSubmissionSection({
         {submission && (
           <Chip
             size="sm"
-            color={SUBMISSION_STATUS[submission.status]?.color ?? "default"}
+            color={SUBMISSION_STATUS_CONFIG[submission.status]?.color ?? "default"}
             variant="flat"
           >
-            {SUBMISSION_STATUS[submission.status]?.label ?? submission.status}
+            {SUBMISSION_STATUS_CONFIG[submission.status]?.label ?? submission.status}
           </Chip>
         )}
       </CardHeader>
@@ -395,13 +416,36 @@ function StudentSubmissionSection({
           </Card>
         )}
 
-        {/* Waiting for grade */}
-        {submission && !isGraded && (
+        {/* RETURNED — teacher returned for revision */}
+        {isReturned && submission && (
+          <Card shadow="none" className="bg-danger-50 border border-danger-200">
+            <CardBody>
+              <div className="flex items-center gap-2 mb-2">
+                <RotateCcw className="w-5 h-5 text-danger" />
+                <span className="font-medium text-danger-800">Giáo viên đã trả bài để sửa lại</span>
+              </div>
+              {submission.feedback && (
+                <div className="mt-1 p-3 bg-white/50 rounded-lg">
+                  <p className="text-sm font-medium text-danger-800 mb-1 flex items-center gap-1">
+                    <MessageSquare className="w-4 h-4" /> Nhận xét:
+                  </p>
+                  <p className="text-sm text-danger-700">{submission.feedback}</p>
+                </div>
+              )}
+            </CardBody>
+          </Card>
+        )}
+
+        {/* Waiting for grade (SUBMITTED or RESUBMITTED) */}
+        {submission && (submission.status === "SUBMITTED" || submission.status === "RESUBMITTED") && (
           <Card shadow="none" className="bg-primary-50 border border-primary-200">
             <CardBody className="flex flex-row items-center gap-3">
               <Clock className="w-5 h-5 text-primary" />
               <div>
-                <p className="text-sm font-medium text-primary-800">Đang chờ giáo viên chấm bài</p>
+                <p className="text-sm font-medium text-primary-800">
+                  Đang chờ giáo viên chấm bài
+                  {submission.status === "RESUBMITTED" && " (đã nộp lại)"}
+                </p>
                 <p className="text-xs text-primary-600">
                   Đã nộp lúc: {dayjs(submission.submittedAt).format("DD/MM/YYYY HH:mm")}
                 </p>
@@ -437,18 +481,18 @@ function StudentSubmissionSection({
           )}
         </div>
 
-        {/* Submit button */}
+        {/* Submit / Resubmit button */}
         {canSubmit && (
           <div className="flex justify-end">
             <Button
-              color="primary"
+              color={isResubmit ? "warning" : "primary"}
               size="lg"
               isLoading={loading}
               isDisabled={!content.trim() && attachments.length === 0}
               onPress={handleSubmit}
-              startContent={!loading && <Upload className="w-4 h-4" />}
+              startContent={!loading && (isResubmit ? <RotateCcw className="w-4 h-4" /> : <Upload className="w-4 h-4" />)}
             >
-              Nộp bài
+              {isResubmit ? "Nộp lại bài" : "Nộp bài"}
             </Button>
           </div>
         )}
@@ -573,6 +617,7 @@ function TeacherSubmissionsSection({
 
 /* ════════════════════════════════════════════════════
    Single Submission Card (Teacher grading)
+   Supports: GRADED + RETURNED actions
    ════════════════════════════════════════════════════ */
 
 function SubmissionCard({
@@ -589,28 +634,49 @@ function SubmissionCard({
   const [feedback, setFeedback] = useState(submission.feedback || "")
   const [loading, setLoading] = useState(false)
   const isGraded = submission.status === "GRADED"
+  const isReturned = submission.status === "RETURNED"
 
-  const handleGrade = async () => {
-    const scoreNum = parseFloat(score)
-    if (isNaN(scoreNum) || scoreNum < 0 || scoreNum > maxScore) {
-      toast.warning(`Điểm phải từ 0 đến ${maxScore}`)
-      return
-    }
+  const handleGrade = async (action: "GRADED" | "RETURNED") => {
+    if (action === "GRADED") {
+      const scoreNum = parseFloat(score)
+      if (isNaN(scoreNum) || scoreNum < 0 || scoreNum > maxScore) {
+        toast.warning(`Điểm phải từ 0 đến ${maxScore}`)
+        return
+      }
 
-    setLoading(true)
-    try {
-      const result = await gradeSubmissionAction(submission.id, {
-        score: scoreNum,
-        feedback: feedback || undefined,
-      })
-      if (!result.success) throw new Error(result.error)
-      toast.success("Chấm bài thành công!")
-      gradeModal.onClose()
-      onGraded()
-    } catch (err) {
-      toast.error(err instanceof Error ? err.message : "Có lỗi xảy ra")
-    } finally {
-      setLoading(false)
+      setLoading(true)
+      try {
+        const result = await gradeSubmissionAction(submission.id, {
+          score: scoreNum,
+          feedback: feedback || undefined,
+          action: "GRADED",
+        })
+        if (!result.success) throw new Error(result.error)
+        toast.success("Chấm bài thành công!")
+        gradeModal.onClose()
+        onGraded()
+      } catch (err) {
+        toast.error(err instanceof Error ? err.message : "Có lỗi xảy ra")
+      } finally {
+        setLoading(false)
+      }
+    } else {
+      // RETURNED
+      setLoading(true)
+      try {
+        const result = await gradeSubmissionAction(submission.id, {
+          feedback: feedback || undefined,
+          action: "RETURNED",
+        })
+        if (!result.success) throw new Error(result.error)
+        toast.success("Đã trả bài cho học viên!")
+        gradeModal.onClose()
+        onGraded()
+      } catch (err) {
+        toast.error(err instanceof Error ? err.message : "Có lỗi xảy ra")
+      } finally {
+        setLoading(false)
+      }
     }
   }
 
@@ -637,10 +703,10 @@ function SubmissionCard({
           <div className="flex items-center gap-2">
             <Chip
               size="sm"
-              color={SUBMISSION_STATUS[submission.status]?.color ?? "default"}
+              color={SUBMISSION_STATUS_CONFIG[submission.status]?.color ?? "default"}
               variant="flat"
             >
-              {SUBMISSION_STATUS[submission.status]?.label ?? submission.status}
+              {SUBMISSION_STATUS_CONFIG[submission.status]?.label ?? submission.status}
             </Chip>
             {isGraded && (
               <Chip size="sm" color="success" variant="solid">
@@ -666,17 +732,21 @@ function SubmissionCard({
           />
         )}
 
-        {/* Feedback display */}
-        {isGraded && submission.feedback && (
-          <div className="p-3 bg-success-50 rounded-lg border border-success-200">
-            <p className="text-xs font-medium text-success-700 mb-1">Nhận xét:</p>
-            <p className="text-sm text-success-700">{submission.feedback}</p>
+        {/* Feedback display (when graded or returned) */}
+        {(isGraded || isReturned) && submission.feedback && (
+          <div className={`p-3 rounded-lg border ${isGraded ? "bg-success-50 border-success-200" : "bg-danger-50 border-danger-200"}`}>
+            <p className={`text-xs font-medium mb-1 ${isGraded ? "text-success-700" : "text-danger-700"}`}>
+              Nhận xét:
+            </p>
+            <p className={`text-sm ${isGraded ? "text-success-700" : "text-danger-700"}`}>
+              {submission.feedback}
+            </p>
           </div>
         )}
 
-        {/* Grade button / form */}
+        {/* Grade / Return buttons */}
         {!gradeModal.isOpen ? (
-          <div className="flex justify-end">
+          <div className="flex justify-end gap-2">
             <Button
               size="sm"
               color={isGraded ? "default" : "primary"}
@@ -691,7 +761,7 @@ function SubmissionCard({
           <>
             <Divider />
             <div className="space-y-3 p-3 bg-primary-50 rounded-lg border border-primary-200">
-              <p className="text-sm font-medium text-primary-800">Chấm điểm</p>
+              <p className="text-sm font-medium text-primary-800">Chấm điểm / Trả bài</p>
               <Input
                 type="number"
                 label={`Điểm (0 - ${maxScore})`}
@@ -715,12 +785,22 @@ function SubmissionCard({
                 </Button>
                 <Button
                   size="sm"
+                  color="warning"
+                  variant="flat"
+                  isLoading={loading}
+                  onPress={() => handleGrade("RETURNED")}
+                  startContent={!loading && <RotateCcw className="w-4 h-4" />}
+                >
+                  Trả lại
+                </Button>
+                <Button
+                  size="sm"
                   color="primary"
                   isLoading={loading}
-                  onPress={handleGrade}
+                  onPress={() => handleGrade("GRADED")}
                   startContent={!loading && <CheckCircle className="w-4 h-4" />}
                 >
-                  Xác nhận
+                  Chấm điểm
                 </Button>
               </div>
             </div>

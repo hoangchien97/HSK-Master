@@ -16,6 +16,7 @@ import {
   Languages,
   Home,
   Images,
+  PenLine,
   type LucideIcon,
 } from "lucide-react"
 import { USER_ROLE, type UserRole } from "@/constants/portal/roles"
@@ -185,6 +186,12 @@ const studentNavItems: NavItem[] = [
     href: "/portal/student/assignments",
     label: "Bài tập",
     icon: FileText,
+    roles: [USER_ROLE.STUDENT],
+  },
+  {
+    href: "/portal/student/practice",
+    label: "Luyện tập",
+    icon: PenLine,
     roles: [USER_ROLE.STUDENT],
   },
   {

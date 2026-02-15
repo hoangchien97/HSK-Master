@@ -47,9 +47,11 @@ interface NotificationItem {
 }
 
 const TYPE_ICON: Record<string, React.ReactNode> = {
-  ASSIGNMENT_CREATED: <FileText className="w-4 h-4 text-primary" />,
-  SUBMISSION_RECEIVED: <Upload className="w-4 h-4 text-warning" />,
+  ASSIGNMENT_PUBLISHED: <FileText className="w-4 h-4 text-primary" />,
+  SUBMISSION_SUBMITTED: <Upload className="w-4 h-4 text-warning" />,
+  SUBMISSION_RESUBMITTED: <Upload className="w-4 h-4 text-secondary" />,
   SUBMISSION_GRADED: <Star className="w-4 h-4 text-success" />,
+  SUBMISSION_RETURNED: <FileText className="w-4 h-4 text-danger" />,
   CLASS_ENROLLED: <BookOpen className="w-4 h-4 text-secondary" />,
   SCHEDULE_CREATED: <Calendar className="w-4 h-4 text-primary" />,
   SCHEDULE_UPDATED: <Calendar className="w-4 h-4 text-warning" />,

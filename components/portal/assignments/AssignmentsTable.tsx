@@ -61,7 +61,10 @@ interface AssignmentData {
   dueDate?: Date | null
   maxScore: number
   attachments?: string[]
+  tags?: string[]
+  externalLink?: string | null
   status: string
+  publishedAt?: Date | null
   class: ClassInfo
   submissions: StudentSubmission[]
   createdAt: Date
@@ -73,27 +76,17 @@ interface AssignmentsTableProps {
 
 /* ──────────────────── config ──────────────────────────── */
 
-const TYPE_CONFIG: Record<string, { label: string; color: "primary" | "secondary" | "success" | "warning" | "danger" | "default" }> = {
-  HOMEWORK: { label: "Bài tập về nhà", color: "primary" },
-  QUIZ: { label: "Kiểm tra", color: "secondary" },
-  PROJECT: { label: "Dự án", color: "success" },
-  READING: { label: "Đọc hiểu", color: "warning" },
-  WRITING: { label: "Viết", color: "warning" },
-  SPEAKING: { label: "Nói", color: "danger" },
-  LISTENING: { label: "Nghe", color: "default" },
-}
-
-const STATUS_CONFIG: Record<string, { label: string; color: "success" | "default" | "danger" }> = {
-  ACTIVE: { label: "Đang mở", color: "success" },
+const STATUS_CONFIG: Record<string, { label: string; color: "success" | "default" | "warning" }> = {
+  PUBLISHED: { label: "Đã công bố", color: "success" },
   DRAFT: { label: "Nháp", color: "default" },
-  ARCHIVED: { label: "Đã đóng", color: "danger" },
+  ARCHIVED: { label: "Lưu trữ", color: "warning" },
 }
 
 const STATUS_OPTIONS = [
   { key: "ALL", label: "Tất cả trạng thái" },
-  { key: "ACTIVE", label: "Đang mở" },
+  { key: "PUBLISHED", label: "Đã công bố" },
   { key: "DRAFT", label: "Nháp" },
-  { key: "ARCHIVED", label: "Đã đóng" },
+  { key: "ARCHIVED", label: "Lưu trữ" },
 ]
 
 /* ──────────────────── component ──────────────────────── */
@@ -246,13 +239,25 @@ export default function AssignmentsTable({
       render: (_v, row) => <span className="text-sm">{row.class.className}</span>,
     },
     {
-      key: "type",
-      label: "Loại",
-      render: (_v, row) => (
-        <Chip size="sm" color={TYPE_CONFIG[row.assignmentType]?.color ?? "default"} variant="flat">
-          {TYPE_CONFIG[row.assignmentType]?.label ?? row.assignmentType}
-        </Chip>
-      ),
+      key: "tags",
+      label: "Hashtag",
+      render: (_v, row) => {
+        if (!row.tags?.length) return <span className="text-default-300">—</span>
+        return (
+          <div className="flex flex-wrap gap-1 max-w-[200px]">
+            {row.tags.slice(0, 3).map((tag) => (
+              <Chip key={tag} size="sm" variant="flat" color="secondary" className="text-[11px]">
+                #{tag}
+              </Chip>
+            ))}
+            {row.tags.length > 3 && (
+              <Chip size="sm" variant="flat" className="text-[11px]">
+                +{row.tags.length - 3}
+              </Chip>
+            )}
+          </div>
+        )
+      },
     },
     {
       key: "dueDate",
@@ -429,12 +434,13 @@ export default function AssignmentsTable({
             id: editData.id,
             title: editData.title,
             description: editData.description,
-            assignmentType: editData.assignmentType,
             dueDate: editData.dueDate,
             maxScore: editData.maxScore,
             classId: editData.class.id,
             status: editData.status,
             attachments: editData.attachments || [],
+            tags: editData.tags || [],
+            externalLink: editData.externalLink || "",
           }}
         />
       )}

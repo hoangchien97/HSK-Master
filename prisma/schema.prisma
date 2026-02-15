@@ -82,6 +82,9 @@ model Lesson {
   createdAt    DateTime     @default(now())
   course       Course       @relation(fields: [courseId], references: [id])
   vocabularies Vocabulary[]
+
+  studentProgress  StudentLessonProgress[]
+  practiceSessions PracticeSession[]
 }
 
 model Vocabulary {
@@ -90,9 +93,93 @@ model Vocabulary {
   word      String
   pinyin    String?
   meaning   String
+  wordType  String?  // đại từ, danh từ, động từ, tính từ, phó từ, trợ từ, số từ, thành ngữ, etc.
   audioUrl  String?
   createdAt DateTime @default(now())
   lesson    Lesson   @relation(fields: [lessonId], references: [id])
+
+  itemProgress StudentItemProgress[]
+  attempts     PracticeAttempt[]
+}
+
+// ========================= PRACTICE FEATURE =========================
+
+// Student's progress per lesson (aggregated)
+model StudentLessonProgress {
+  id              String   @id @default(cuid())
+  studentId       String
+  lessonId        String
+  learnedCount    Int      @default(0)
+  masteredCount   Int      @default(0)
+  totalTimeSec    Int      @default(0)
+  masteryPercent  Float    @default(0)
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+
+  student         PortalUser @relation(fields: [studentId], references: [id], onDelete: Cascade)
+  lesson          Lesson     @relation(fields: [lessonId], references: [id], onDelete: Cascade)
+
+  @@unique([studentId, lessonId])
+  @@map("student_lesson_progress")
+}
+
+// Student's progress per vocabulary item
+model StudentItemProgress {
+  id              String   @id @default(cuid())
+  studentId       String
+  vocabularyId    String
+  seenCount       Int      @default(0)
+  correctCount    Int      @default(0)
+  wrongCount      Int      @default(0)
+  masteryScore    Float    @default(0) // 0..1
+  status          String   @default("NEW") // NEW, LEARNING, MASTERED
+  lastSeenAt      DateTime?
+  nextReviewAt    DateTime?
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+
+  student         PortalUser @relation(fields: [studentId], references: [id], onDelete: Cascade)
+  vocabulary      Vocabulary @relation(fields: [vocabularyId], references: [id], onDelete: Cascade)
+
+  @@unique([studentId, vocabularyId])
+  @@map("student_item_progress")
+}
+
+// Practice session (one study session)
+model PracticeSession {
+  id              String   @id @default(cuid())
+  studentId       String
+  lessonId        String
+  mode            String   // LOOKUP, FLASHCARD, QUIZ, LISTEN, WRITE
+  startedAt       DateTime @default(now())
+  endedAt         DateTime?
+  durationSec     Int      @default(0)
+  meta            Json?    // settings, totalQuestions, etc.
+  createdAt       DateTime @default(now())
+
+  student         PortalUser       @relation(fields: [studentId], references: [id], onDelete: Cascade)
+  lesson          Lesson           @relation(fields: [lessonId], references: [id], onDelete: Cascade)
+  attempts        PracticeAttempt[]
+
+  @@map("practice_sessions")
+}
+
+// Practice attempt (each question/interaction)
+model PracticeAttempt {
+  id              String   @id @default(cuid())
+  sessionId       String
+  vocabularyId    String
+  questionType    String   // MCQ_MEANING, MCQ_HANZI, MCQ_PINYIN, TYPE_PINYIN, TYPE_HANZI, LISTEN_MCQ, FLASHCARD
+  userAnswer      String?
+  correctAnswer   String
+  isCorrect       Boolean
+  timeSpentSec    Int      @default(0)
+  createdAt       DateTime @default(now())
+
+  session         PracticeSession @relation(fields: [sessionId], references: [id], onDelete: Cascade)
+  vocabulary      Vocabulary      @relation(fields: [vocabularyId], references: [id], onDelete: Cascade)
+
+  @@map("practice_attempts")
 }
 
 model Registration {
@@ -350,6 +437,11 @@ model PortalUser {
   bookmarks        PortalBookmark[]
   quizAttempts     PortalQuizAttempt[]
 
+  // Practice lesson relations
+  lessonProgress     StudentLessonProgress[]
+  itemProgress       StudentItemProgress[]
+  practiceSessions   PracticeSession[]
+
   // Teacher relations (when role=TEACHER or SYSTEM_ADMIN)
   classes          PortalClass[]
   schedules        PortalSchedule[]
@@ -463,7 +555,10 @@ model PortalAssignment {
   dueDate          DateTime?
   maxScore         Float    @default(100)
   attachments      String[] // Array of file URLs
-  status           String   @default("ACTIVE") // ACTIVE, DRAFT, ARCHIVED
+  tags             String[] // Hashtags / labels
+  externalLink     String?  // Optional external resource link
+  status           String   @default("DRAFT") // DRAFT, PUBLISHED, ARCHIVED
+  publishedAt      DateTime?
   createdAt        DateTime @default(now())
   updatedAt        DateTime @updatedAt
 
@@ -484,7 +579,7 @@ model PortalAssignmentSubmission {
   submittedAt      DateTime @default(now())
   score            Float?
   feedback         String?  @db.Text
-  status           String   @default("SUBMITTED") // SUBMITTED, GRADED, LATE
+  status           String   @default("NOT_SUBMITTED") // NOT_SUBMITTED, SUBMITTED, RESUBMITTED, GRADED, RETURNED
   createdAt        DateTime @default(now())
   updatedAt        DateTime @updatedAt
 

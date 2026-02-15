@@ -86,7 +86,7 @@ export async function POST(request: NextRequest) {
     }
 
     const body = await request.json()
-    const { title, description, classId, assignmentType, dueDate, maxScore } = body
+    const { title, description, classId, dueDate, maxScore } = body
 
     // Verify the class belongs to this teacher
     const classItem = await prisma.portalClass.findFirst({
@@ -106,10 +106,10 @@ export async function POST(request: NextRequest) {
         description: description || null,
         classId,
         teacherId: user.id,
-        assignmentType: assignmentType || "HOMEWORK",
+        assignmentType: "HOMEWORK",
         dueDate: dueDate ? new Date(dueDate) : null,
         maxScore: maxScore || 100,
-        status: ASSIGNMENT_STATUS.ACTIVE,
+        status: ASSIGNMENT_STATUS.DRAFT,
       },
     })
 

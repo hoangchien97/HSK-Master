@@ -1,17 +1,20 @@
 'use server';
 
 /**
- * Submission Server Actions
- * Server-side actions for student assignment submissions
+ * Submission Server Actions (V1 spec)
+ * Statuses: NOT_SUBMITTED → SUBMITTED → GRADED / RETURNED → RESUBMITTED → GRADED
  */
 
 import { revalidatePath } from 'next/cache';
 import { prisma } from '@/lib/prisma';
 import { auth } from '@/auth';
 import { createNotification } from '@/services/portal/notification.service';
+import { SUBMISSION_STATUS } from '@/constants/portal/roles';
 
 /**
- * Submit or update an assignment submission
+ * Submit or re-submit an assignment
+ * New submission → SUBMITTED + SUBMISSION_SUBMITTED notification
+ * Existing submission → RESUBMITTED + SUBMISSION_RESUBMITTED notification
  */
 export async function submitAssignmentAction(
   data: {
@@ -35,7 +38,7 @@ export async function submitAssignmentAction(
       return { success: false, error: 'Thiếu thông tin bài tập' };
     }
 
-    // Verify assignment exists and student is enrolled
+    // Verify assignment exists, is PUBLISHED, and student is enrolled
     const assignment = await prisma.portalAssignment.findUnique({
       where: { id: assignmentId },
       include: {
@@ -53,6 +56,10 @@ export async function submitAssignmentAction(
       return { success: false, error: 'Bài tập không tồn tại' };
     }
 
+    if (assignment.status !== 'PUBLISHED') {
+      return { success: false, error: 'Bài tập chưa được công bố' };
+    }
+
     if (assignment.class.enrollments.length === 0) {
       return { success: false, error: 'Bạn không được ghi danh trong lớp này' };
     }
@@ -63,22 +70,30 @@ export async function submitAssignmentAction(
     });
 
     let submission;
+    let notificationType: string;
+    let notificationTitle: string;
 
     if (existing) {
-      // Update existing
+      // Re-submit → status = RESUBMITTED
       submission = await prisma.portalAssignmentSubmission.update({
         where: { id: existing.id },
         data: {
           content: content || null,
           attachments: attachments || [],
           submittedAt: new Date(),
+          status: SUBMISSION_STATUS.RESUBMITTED,
+          // Reset score & feedback on resubmit
+          score: null,
+          feedback: null,
         },
         include: {
           student: { select: { id: true, name: true, email: true, image: true } },
         },
       });
+      notificationType = 'SUBMISSION_RESUBMITTED';
+      notificationTitle = 'Bài nộp lại';
     } else {
-      // Create new
+      // First submit → status = SUBMITTED
       submission = await prisma.portalAssignmentSubmission.create({
         data: {
           assignmentId,
@@ -86,23 +101,27 @@ export async function submitAssignmentAction(
           content: content || null,
           attachments: attachments || [],
           submittedAt: new Date(),
+          status: SUBMISSION_STATUS.SUBMITTED,
         },
         include: {
           student: { select: { id: true, name: true, email: true, image: true } },
         },
       });
+      notificationType = 'SUBMISSION_SUBMITTED';
+      notificationTitle = 'Bài nộp mới';
     }
 
     revalidatePath('/portal/student/assignments');
 
-    // Notify the teacher about new submission
+    // Notify the teacher
     try {
       const studentName = submission.student?.name || session.user.email || 'Học sinh';
+      const action = existing ? 'nộp lại' : 'nộp';
       await createNotification({
         userId: assignment.teacherId,
-        type: 'SUBMISSION_RECEIVED',
-        title: 'Bài nộp mới',
-        message: `${studentName} vừa nộp bài "${assignment.title}"`,
+        type: notificationType,
+        title: notificationTitle,
+        message: `${studentName} vừa ${action} bài "${assignment.title}"`,
         link: `/portal/teacher/assignments/${assignment.id}`,
       });
     } catch (notifyError) {
@@ -121,12 +140,16 @@ export async function submitAssignmentAction(
 
 /**
  * Grade a submission (teacher only)
+ * action = 'GRADED' | 'RETURNED'
+ * GRADED: final grade with score + feedback
+ * RETURNED: return for revision with feedback (no score required)
  */
 export async function gradeSubmissionAction(
   submissionId: string,
   data: {
-    score: number;
+    score?: number;
     feedback?: string;
+    action?: 'GRADED' | 'RETURNED';
   }
 ): Promise<{
   success: boolean;
@@ -149,29 +172,61 @@ export async function gradeSubmissionAction(
       return { success: false, error: 'Bạn không có quyền chấm bài này' };
     }
 
-    await prisma.portalAssignmentSubmission.update({
-      where: { id: submissionId },
-      data: {
-        score: data.score,
-        feedback: data.feedback || null,
-        status: 'GRADED',
-      },
-    });
+    const gradeAction = data.action || 'GRADED';
 
-    // Notify the student about grading
-    try {
-      await createNotification({
-        userId: submission.studentId,
-        type: 'SUBMISSION_GRADED',
-        title: 'Bài tập đã được chấm điểm',
-        message: `Bạn đạt ${data.score}/${submission.assignment.maxScore} điểm cho bài "${submission.assignment.title}"`,
-        link: `/portal/student/assignments/${submission.assignment.id}`,
+    if (gradeAction === 'GRADED') {
+      // Must have score for GRADED
+      if (data.score === undefined || data.score === null) {
+        return { success: false, error: 'Vui lòng nhập điểm' };
+      }
+
+      await prisma.portalAssignmentSubmission.update({
+        where: { id: submissionId },
+        data: {
+          score: data.score,
+          feedback: data.feedback || null,
+          status: SUBMISSION_STATUS.GRADED,
+        },
       });
-    } catch (notifyError) {
-      console.error('Error sending grading notification:', notifyError);
+
+      // Notify student — GRADED
+      try {
+        await createNotification({
+          userId: submission.studentId,
+          type: 'SUBMISSION_GRADED',
+          title: 'Bài tập đã được chấm điểm',
+          message: `Bạn đạt ${data.score}/${submission.assignment.maxScore} điểm cho bài "${submission.assignment.title}"`,
+          link: `/portal/student/assignments/${submission.assignment.id}`,
+        });
+      } catch (notifyError) {
+        console.error('Error sending grading notification:', notifyError);
+      }
+    } else {
+      // RETURNED — teacher returns for revision
+      await prisma.portalAssignmentSubmission.update({
+        where: { id: submissionId },
+        data: {
+          feedback: data.feedback || null,
+          status: SUBMISSION_STATUS.RETURNED,
+        },
+      });
+
+      // Notify student — RETURNED
+      try {
+        await createNotification({
+          userId: submission.studentId,
+          type: 'SUBMISSION_RETURNED',
+          title: 'Bài tập được trả lại',
+          message: `Giáo viên đã trả lại bài "${submission.assignment.title}" để bạn sửa lại`,
+          link: `/portal/student/assignments/${submission.assignment.id}`,
+        });
+      } catch (notifyError) {
+        console.error('Error sending return notification:', notifyError);
+      }
     }
 
     revalidatePath('/portal/teacher/assignments');
+    revalidatePath('/portal/student/assignments');
     return { success: true };
   } catch (error) {
     console.error('Error grading submission:', error);

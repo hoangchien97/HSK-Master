@@ -397,7 +397,7 @@ export async function seedPortal() {
           dueDate,
           maxScore: template.maxScore,
           attachments: [], // No actual files for seed data
-          status: ai === 0 && ci < 3 ? AssignmentStatus.DRAFT : AssignmentStatus.ACTIVE,
+          status: ai === 0 && ci < 3 ? AssignmentStatus.DRAFT : AssignmentStatus.PUBLISHED,
         },
       })
       allAssignments.push({ ...assignment, classIndex: ci })
@@ -440,7 +440,7 @@ export async function seedPortal() {
         content: `Bài làm của học viên cho "${assignment.title}". Em đã hoàn thành theo yêu cầu.`,
         attachments: [],
         submittedAt,
-        status: isLate ? SubmissionStatus.LATE : SubmissionStatus.SUBMITTED,
+        status: SubmissionStatus.SUBMITTED,
       }
 
       if (isGraded && !isLate) {
