@@ -25,6 +25,7 @@ export const routeMeta: Record<string, RouteMeta> = {
   schedule: { label: "Lịch giảng dạy" },
   attendance: { label: "Điểm danh" },
   assignments: { label: "Bài tập" },
+  practice: { label: "Luyện tập" },
   vocabulary: { label: "Từ vựng" },
   bookmarks: { label: "Đã lưu" },
   quizzes: { label: "Bài kiểm tra" },

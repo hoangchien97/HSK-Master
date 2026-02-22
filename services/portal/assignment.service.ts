@@ -3,6 +3,7 @@
 import { prisma } from '@/lib/prisma';
 import { ASSIGNMENT_STATUS } from '@/constants/portal/roles';
 import type { Prisma } from '@prisma/client';
+import { generateUniqueSlug } from '@/utils/slug';
 
 /* ───────── Types ───────── */
 
@@ -15,6 +16,7 @@ interface AssignmentClassInfo {
 interface AssignmentItem {
   id: string;
   title: string;
+  slug?: string | null;
   description?: string | null;
   dueDate?: Date | null;
   maxScore: number;
@@ -168,9 +170,16 @@ export async function createAssignment(
 
   const isPublished = data.status === ASSIGNMENT_STATUS.PUBLISHED;
 
+  // Auto-generate slug from title
+  const slug = await generateUniqueSlug(
+    data.title,
+    async (s) => !!(await prisma.portalAssignment.findUnique({ where: { slug: s } })),
+  );
+
   const created = await prisma.portalAssignment.create({
     data: {
       title: data.title,
+      slug,
       description: data.description || null,
       classId: data.classId,
       teacherId,
@@ -210,10 +219,24 @@ export async function updateAssignment(
     existing.status === ASSIGNMENT_STATUS.DRAFT &&
     data.status === ASSIGNMENT_STATUS.PUBLISHED;
 
+  // Regenerate slug if title changed
+  let slugUpdate: { slug: string } | Record<string, never> = {};
+  if (data.title && data.title !== existing.title) {
+    const newSlug = await generateUniqueSlug(
+      data.title,
+      async (s) => {
+        const found = await prisma.portalAssignment.findUnique({ where: { slug: s } });
+        return !!found && found.id !== assignmentId;
+      },
+    );
+    slugUpdate = { slug: newSlug };
+  }
+
   const updated = await prisma.portalAssignment.update({
     where: { id: assignmentId },
     data: {
       ...(data.title && { title: data.title }),
+      ...slugUpdate,
       ...(data.description !== undefined && { description: data.description || null }),
       ...(data.classId && { classId: data.classId }),
       ...(data.dueDate !== undefined && { dueDate: data.dueDate ? new Date(data.dueDate) : null }),

@@ -1,0 +1,116 @@
+{
+  "generated_at": "2026-02-22T09:17:37Z",
+  "courses": [
+    {
+      "hsk_level_code": "hsk1",
+      "title_vi": "HSK 1 – Tiếng Trung cho người mới bắt đầu",
+      "standard_course": {
+        "volumes": [
+          {
+            "code": "1",
+            "name": "HSK Standard Course 1",
+            "lessons": 15
+          }
+        ]
+      },
+      "lessons_count": 15,
+      "target_vocab_per_lesson": 10,
+      "notes": "Theo HSK Standard Course 1 (15 bài). Target vocab/lesson dùng để mock UI & phân bổ dữ liệu."
+    },
+    {
+      "hsk_level_code": "hsk2",
+      "title_vi": "HSK 2 – Giao tiếp tiếng Trung cơ bản",
+      "standard_course": {
+        "volumes": [
+          {
+            "code": "2",
+            "name": "HSK Standard Course 2",
+            "lessons": 15
+          }
+        ]
+      },
+      "lessons_count": 15,
+      "target_vocab_per_lesson": 10,
+      "notes": "Theo HSK Standard Course 2 (15 bài)."
+    },
+    {
+      "hsk_level_code": "hsk3",
+      "title_vi": "HSK 3 – Giao tiếp nâng cao",
+      "standard_course": {
+        "volumes": [
+          {
+            "code": "3",
+            "name": "HSK Standard Course 3",
+            "lessons": 20
+          }
+        ]
+      },
+      "lessons_count": 20,
+      "target_vocab_per_lesson": 15,
+      "notes": "Theo HSK Standard Course 3 (20 bài)."
+    },
+    {
+      "hsk_level_code": "hsk4",
+      "title_vi": "HSK 4 – Sẵn sàng du học & làm việc",
+      "standard_course": {
+        "volumes": [
+          {
+            "code": "4a",
+            "name": "HSK Standard Course 4A (上)",
+            "lessons": 10
+          },
+          {
+            "code": "4b",
+            "name": "HSK Standard Course 4B (下)",
+            "lessons": 10
+          }
+        ]
+      },
+      "lessons_count": 20,
+      "target_vocab_per_lesson": 32,
+      "notes": "Theo HSK Standard Course 4A+4B (20 bài). Target 30–35 từ/bài (mock)."
+    },
+    {
+      "hsk_level_code": "hsk5",
+      "title_vi": "HSK 5 – Nâng cao học thuật",
+      "standard_course": {
+        "volumes": [
+          {
+            "code": "5a",
+            "name": "HSK Standard Course 5A (上)",
+            "lessons": 18
+          },
+          {
+            "code": "5b",
+            "name": "HSK Standard Course 5B (下)",
+            "lessons": 18
+          }
+        ]
+      },
+      "lessons_count": 36,
+      "target_vocab_per_lesson": 68,
+      "notes": "Theo HSK Standard Course 5A+5B (36 bài). Target ~65–70 từ/bài (mock)."
+    },
+    {
+      "hsk_level_code": "hsk6",
+      "title_vi": "HSK 6 – Trình độ chuyên gia",
+      "standard_course": {
+        "volumes": [
+          {
+            "code": "6a",
+            "name": "HSK Standard Course 6A (上)",
+            "lessons": 20
+          },
+          {
+            "code": "6b",
+            "name": "HSK Standard Course 6B (下)",
+            "lessons": 20
+          }
+        ]
+      },
+      "lessons_count": 40,
+      "target_vocab_per_lesson": 65,
+      "notes": "Theo HSK Standard Course 6A+6B (40 bài). Target ~60–70 từ/bài (mock)."
+    }
+  ]
+}

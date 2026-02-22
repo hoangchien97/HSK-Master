@@ -1,16 +1,19 @@
 "use client"
 
-import { useState, useEffect, useCallback, useRef, useMemo } from "react"
+import { useState, useEffect, useCallback, useRef } from "react"
 import { Button, Card, CardBody, Chip, Progress } from "@heroui/react"
-import { Volume2, VolumeX, Eye, EyeOff } from "lucide-react"
-import { toast } from "react-toastify"
+import { Volume2, Eye, EyeOff, Lock, ChevronLeft, ChevronRight } from "lucide-react"
 import {
   startPracticeSessionAction,
   finishPracticeSessionAction,
   recordPracticeAttemptAction,
 } from "@/actions/practice.actions"
+import { useTTS } from "@/hooks/useTTS"
+import { getDisplayMeaning } from "@/enums/portal/common"
 import type { IVocabularyItem } from "@/interfaces/portal/practice"
 import { QuizResultScreen, McqOptions } from "../shared"
+
+const AUTO_NEXT_DELAY = 3000 // ms
 
 interface Props {
   vocabularies: IVocabularyItem[]
@@ -34,16 +37,16 @@ function shuffleArray<T>(arr: T[]): T[] {
 }
 
 function generateListenQuestions(vocabs: IVocabularyItem[]): ListenQuestion[] {
-  const withAudio = vocabs.filter((v) => v.audioUrl)
-  if (withAudio.length === 0) return []
+  if (vocabs.length < 2) return []
 
-  return shuffleArray(withAudio).map((vocab) => {
+  // Use ALL vocab — TTS will handle pronunciation when no audio URL
+  return shuffleArray(vocabs).map((vocab) => {
     const others = vocabs.filter((v) => v.id !== vocab.id)
     const distractors = shuffleArray(others).slice(0, Math.min(3, others.length))
 
     const allOptions = shuffleArray([
-      { key: "correct", label: vocab.meaning },
-      ...distractors.map((d, i) => ({ key: `d${i}`, label: d.meaning })),
+      { key: "correct", label: getDisplayMeaning(vocab) },
+      ...distractors.map((d, i) => ({ key: `d${i}`, label: getDisplayMeaning(d) })),
     ])
 
     return { vocab, options: allOptions, correctKey: "correct" }
@@ -60,11 +63,14 @@ export default function ListenTab({ vocabularies, lessonId, onProgressUpdate }: 
   const [sessionId, setSessionId] = useState<string | null>(null)
   const [isPlaying, setIsPlaying] = useState(false)
   const [showTranscript, setShowTranscript] = useState(false)
+  const [hasListened, setHasListened] = useState(false)
+  const [autoNextCountdown, setAutoNextCountdown] = useState<number | null>(null)
   const startTimeRef = useRef(Date.now())
   const questionStartRef = useRef(Date.now())
   const audioRef = useRef<HTMLAudioElement | null>(null)
-
-  const withAudioCount = useMemo(() => vocabularies.filter((v) => v.audioUrl).length, [vocabularies])
+  const autoNextTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null)
+  const countdownIntervalRef = useRef<ReturnType<typeof setInterval> | null>(null)
+  const { speak } = useTTS()
 
   // Generate questions
   useEffect(() => {
@@ -73,7 +79,6 @@ export default function ListenTab({ vocabularies, lessonId, onProgressUpdate }: 
 
   // Start session
   useEffect(() => {
-    if (withAudioCount === 0) return
     let active = true
     startPracticeSessionAction(lessonId, "LISTEN").then((res) => {
       if (active && res.success && res.data) {
@@ -82,8 +87,7 @@ export default function ListenTab({ vocabularies, lessonId, onProgressUpdate }: 
       }
     })
     return () => { active = false }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [lessonId, withAudioCount])
+  }, [lessonId])
 
   // Finish on unmount
   useEffect(() => {
@@ -93,26 +97,23 @@ export default function ListenTab({ vocabularies, lessonId, onProgressUpdate }: 
         finishPracticeSessionAction(sessionId, dur)
       }
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [sessionId])
 
   const currentQ = questions[currentIdx]
   const totalQ = questions.length
 
   const playAudio = useCallback(() => {
-    if (!currentQ?.vocab.audioUrl) return
+    if (!currentQ) return
+    // Use TTS hook which handles audioUrl OR TTS fallback
     if (audioRef.current) {
       audioRef.current.pause()
     }
-    const audio = new Audio(currentQ.vocab.audioUrl)
-    audioRef.current = audio
     setIsPlaying(true)
-    audio.play().catch(() => {
-      toast.error("Không thể phát audio")
-      setIsPlaying(false)
-    })
-    audio.onended = () => setIsPlaying(false)
-  }, [currentQ])
+    setHasListened(true)
+    speak(currentQ.vocab.word, currentQ.vocab.audioUrl)
+      .then(() => setIsPlaying(false))
+      .catch(() => setIsPlaying(false))
+  }, [currentQ, speak])
 
   // Auto-play on new question
   useEffect(() => {
@@ -123,9 +124,49 @@ export default function ListenTab({ vocabularies, lessonId, onProgressUpdate }: 
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [currentIdx, finished])
 
+  // Clear auto-next timers helper
+  const clearAutoNext = useCallback(() => {
+    if (autoNextTimerRef.current) {
+      clearTimeout(autoNextTimerRef.current)
+      autoNextTimerRef.current = null
+    }
+    if (countdownIntervalRef.current) {
+      clearInterval(countdownIntervalRef.current)
+      countdownIntervalRef.current = null
+    }
+    setAutoNextCountdown(null)
+  }, [])
+
+  // Cleanup timers on unmount
+  useEffect(() => {
+    return () => {
+      if (autoNextTimerRef.current) clearTimeout(autoNextTimerRef.current)
+      if (countdownIntervalRef.current) clearInterval(countdownIntervalRef.current)
+    }
+  }, [])
+
+  const handleNext = useCallback(() => {
+    clearAutoNext()
+    if (currentIdx < totalQ - 1) {
+      setCurrentIdx((i) => i + 1)
+      setSelectedKey(null)
+      setShowResult(false)
+      setShowTranscript(false)
+      setHasListened(false)
+      questionStartRef.current = Date.now()
+    } else {
+      setFinished(true)
+      if (sessionId) {
+        const dur = Math.round((Date.now() - startTimeRef.current) / 1000)
+        finishPracticeSessionAction(sessionId, dur)
+      }
+      onProgressUpdate()
+    }
+  }, [currentIdx, totalQ, sessionId, onProgressUpdate, clearAutoNext])
+
   const handleSelect = useCallback(
     async (key: string) => {
-      if (showResult || !currentQ || !sessionId) return
+      if (!hasListened || showResult || !currentQ || !sessionId) return
       setSelectedKey(key)
       setShowResult(true)
 
@@ -145,33 +186,29 @@ export default function ListenTab({ vocabularies, lessonId, onProgressUpdate }: 
         isCorrect,
         timeSpentSec: timeSec,
       })
+
+      // Auto-advance after 3s on correct answer
+      if (isCorrect) {
+        setAutoNextCountdown(3)
+        countdownIntervalRef.current = setInterval(() => {
+          setAutoNextCountdown((prev) => (prev !== null && prev > 1 ? prev - 1 : null))
+        }, 1000)
+        autoNextTimerRef.current = setTimeout(() => {
+          handleNext()
+        }, AUTO_NEXT_DELAY)
+      }
     },
-    [showResult, currentQ, sessionId],
+    [hasListened, showResult, currentQ, sessionId, handleNext],
   )
 
-  const handleNext = useCallback(() => {
-    if (currentIdx < totalQ - 1) {
-      setCurrentIdx((i) => i + 1)
-      setSelectedKey(null)
-      setShowResult(false)
-      setShowTranscript(false)
-      questionStartRef.current = Date.now()
-    } else {
-      setFinished(true)
-      if (sessionId) {
-        const dur = Math.round((Date.now() - startTimeRef.current) / 1000)
-        finishPracticeSessionAction(sessionId, dur)
-      }
-      onProgressUpdate()
-    }
-  }, [currentIdx, totalQ, sessionId, onProgressUpdate])
-
   const handleRestart = useCallback(() => {
+    clearAutoNext()
     setQuestions(generateListenQuestions(vocabularies))
     setCurrentIdx(0)
     setSelectedKey(null)
     setShowResult(false)
     setShowTranscript(false)
+    setHasListened(false)
     setResults([])
     setFinished(false)
     questionStartRef.current = Date.now()
@@ -179,23 +216,9 @@ export default function ListenTab({ vocabularies, lessonId, onProgressUpdate }: 
     startPracticeSessionAction(lessonId, "LISTEN").then((res) => {
       if (res.success && res.data) setSessionId(res.data.sessionId)
     })
-  }, [vocabularies, lessonId])
+  }, [vocabularies, lessonId, clearAutoNext])
 
-  // Empty state: no audio
-  if (withAudioCount === 0) {
-    return (
-      <Card>
-        <CardBody className="py-12 text-center">
-          <VolumeX className="w-12 h-12 text-default-300 mx-auto mb-3" />
-          <p className="text-default-500 font-medium">Chưa có audio cho bài học này</p>
-          <p className="text-sm text-default-400 mt-1">
-            Dữ liệu audio sẽ được cập nhật sau. Hãy thử các chế độ luyện tập khác!
-          </p>
-        </CardBody>
-      </Card>
-    )
-  }
-
+  // Empty state: not enough vocab
   if (totalQ === 0) {
     return (
       <Card>
@@ -257,7 +280,9 @@ export default function ListenTab({ vocabularies, lessonId, onProgressUpdate }: 
             <Volume2 className={`w-8 h-8 ${isPlaying ? "animate-pulse" : ""}`} />
           </Button>
           <p className="text-sm text-default-400 mb-2">
-            Nhấn để phát lại — Nghe và chọn nghĩa đúng
+            {hasListened
+              ? "Nhấn để phát lại — Chọn nghĩa đúng bên dưới"
+              : "Nhấn nút để nghe trước khi chọn đáp án"}
           </p>
 
           {/* Transcript toggle */}
@@ -280,8 +305,16 @@ export default function ListenTab({ vocabularies, lessonId, onProgressUpdate }: 
         </CardBody>
       </Card>
 
+      {/* Listen-first lock notice */}
+      {!hasListened && !showResult && (
+        <div className="flex items-center justify-center gap-2 mb-3 text-warning text-sm">
+          <Lock className="w-4 h-4" />
+          <span>Hãy nghe audio trước khi chọn đáp án</span>
+        </div>
+      )}
+
       {/* Options */}
-      <div className="mb-4">
+      <div className={`mb-4 ${!hasListened && !showResult ? "opacity-50 pointer-events-none" : ""}`}>
         <McqOptions
           options={currentQ.options}
           correctKey={currentQ.correctKey}
@@ -293,17 +326,85 @@ export default function ListenTab({ vocabularies, lessonId, onProgressUpdate }: 
 
       {/* Reveal answer info on result */}
       {showResult && (
-        <div className="mb-4 p-3 rounded-lg bg-default-100 text-center">
-          <p className="text-2xl font-bold">{currentQ.vocab.word}</p>
-          <p className="text-primary text-sm">{currentQ.vocab.pinyin} — {currentQ.vocab.meaning}</p>
+        <div className="mb-4">
+          {/* Correct/Wrong feedback banner */}
+          <div className={`w-full p-3 rounded-lg text-center mb-3 ${
+            selectedKey === currentQ.correctKey
+              ? "bg-success-50 dark:bg-success-950/20"
+              : "bg-danger-50 dark:bg-danger-950/20"
+          }`}>
+            {selectedKey === currentQ.correctKey ? (
+              <div>
+                <p className="text-success font-medium">✓ Chính xác!</p>
+                {autoNextCountdown !== null && (
+                  <p className="text-xs text-success-600/70 mt-1">Tự động chuyển sau {autoNextCountdown}s…</p>
+                )}
+              </div>
+            ) : (
+              <p className="text-danger font-medium">✗ Sai rồi</p>
+            )}
+          </div>
+          {/* Always show answer details */}
+          <div className="p-3 rounded-lg bg-default-100 text-center">
+            <p className="text-2xl font-bold text-red-600 dark:text-red-400">{currentQ.vocab.word}</p>
+            <p className="text-primary text-sm">
+              {currentQ.vocab.pinyin} — {getDisplayMeaning(currentQ.vocab)}
+            </p>
+            {currentQ.vocab.meaningVi && currentQ.vocab.meaning !== currentQ.vocab.meaningVi && (
+              <p className="text-xs text-default-400 mt-1">{currentQ.vocab.meaning}</p>
+            )}
+          </div>
         </div>
       )}
 
       {/* Next */}
       {showResult && (
-        <div className="flex justify-center">
+        <div className="flex justify-center mb-4">
           <Button color="secondary" onPress={handleNext}>
             {currentIdx < totalQ - 1 ? "Câu tiếp theo" : "Xem kết quả"}
+          </Button>
+        </div>
+      )}
+
+      {/* Prev/Next Navigation */}
+      {!showResult && (
+        <div className="flex items-center justify-between">
+          <Button
+            variant="bordered"
+            size="sm"
+            isDisabled={currentIdx === 0}
+            onPress={() => {
+              if (currentIdx > 0) {
+                setCurrentIdx((i) => i - 1)
+                setSelectedKey(null)
+                setShowResult(false)
+                setShowTranscript(false)
+                setHasListened(false)
+                questionStartRef.current = Date.now()
+              }
+            }}
+            startContent={<ChevronLeft className="w-4 h-4" />}
+          >
+            Trước
+          </Button>
+          <span className="text-xs text-default-400">{currentIdx + 1}/{totalQ}</span>
+          <Button
+            variant="bordered"
+            size="sm"
+            isDisabled={currentIdx >= totalQ - 1}
+            onPress={() => {
+              if (currentIdx < totalQ - 1) {
+                setCurrentIdx((i) => i + 1)
+                setSelectedKey(null)
+                setShowResult(false)
+                setShowTranscript(false)
+                setHasListened(false)
+                questionStartRef.current = Date.now()
+              }
+            }}
+            endContent={<ChevronRight className="w-4 h-4" />}
+          >
+            Tiếp
           </Button>
         </div>
       )}

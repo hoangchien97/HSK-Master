@@ -1,6 +1,5 @@
 "use client"
 
-import { Button } from "@heroui/react"
 import { CheckCircle, XCircle } from "lucide-react"
 
 interface Option {
@@ -31,8 +30,10 @@ export default function McqOptions({
       {options.map((option) => {
         let variant: "bordered" | "flat" = "bordered"
         let color: "default" | "success" | "danger" = "default"
+        let hoverClass = "hover:bg-primary-50 dark:hover:bg-primary-950/20 hover:border-primary-300"
 
         if (showResult) {
+          hoverClass = ""
           if (option.key === correctKey) {
             variant = "flat"
             color = "success"
@@ -43,25 +44,34 @@ export default function McqOptions({
         }
 
         return (
-          <Button
+          <button
             key={option.key}
-            variant={variant}
-            color={color}
-            className={`justify-start text-left h-auto py-3 px-4 ${largeFont ? "text-xl" : "text-sm"}`}
-            onPress={() => onSelect(option.key)}
-            isDisabled={showResult}
-            startContent={
-              showResult && option.key === correctKey ? (
-                <CheckCircle className="w-5 h-5 text-success shrink-0" />
-              ) : showResult && option.key === selectedKey ? (
-                <XCircle className="w-5 h-5 text-danger shrink-0" />
-              ) : (
-                <div className="w-5 h-5 rounded-full border-2 border-default-300 shrink-0" />
-              )
-            }
+            type="button"
+            disabled={showResult}
+            onClick={() => {
+              if (!showResult) onSelect(option.key)
+            }}
+            className={`flex items-center gap-3 w-full text-left h-auto py-3 px-4 rounded-lg border transition-all ${
+              largeFont ? "text-xl" : "text-sm"
+            } ${
+              showResult && option.key === correctKey
+                ? "border-success-300 bg-success-50 dark:bg-success-950/20 text-success-700 dark:text-success-300"
+                : showResult && option.key === selectedKey
+                  ? "border-danger-300 bg-danger-50 dark:bg-danger-950/20 text-danger-700 dark:text-danger-300"
+                  : showResult
+                    ? "border-default-200 opacity-60"
+                    : `border-default-200 cursor-pointer ${hoverClass} active:scale-[0.98]`
+            }`}
           >
-            {option.label}
-          </Button>
+            {showResult && option.key === correctKey ? (
+              <CheckCircle className="w-5 h-5 text-success shrink-0" />
+            ) : showResult && option.key === selectedKey ? (
+              <XCircle className="w-5 h-5 text-danger shrink-0" />
+            ) : (
+              <div className="w-5 h-5 rounded-full border-2 border-default-300 shrink-0" />
+            )}
+            <span>{option.label}</span>
+          </button>
         )
       })}
     </div>

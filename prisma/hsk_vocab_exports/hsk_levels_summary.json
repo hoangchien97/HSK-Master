@@ -1,0 +1,38 @@
+[
+  {
+    "hsk_level_code": "hsk1",
+    "lessons": 15,
+    "new_words_in_level": 150,
+    "cumulative_words_up_to_level": 150
+  },
+  {
+    "hsk_level_code": "hsk2",
+    "lessons": 15,
+    "new_words_in_level": 150,
+    "cumulative_words_up_to_level": 300
+  },
+  {
+    "hsk_level_code": "hsk3",
+    "lessons": 20,
+    "new_words_in_level": 299,
+    "cumulative_words_up_to_level": 599
+  },
+  {
+    "hsk_level_code": "hsk4",
+    "lessons": 20,
+    "new_words_in_level": 601,
+    "cumulative_words_up_to_level": 1200
+  },
+  {
+    "hsk_level_code": "hsk5",
+    "lessons": 25,
+    "new_words_in_level": 1300,
+    "cumulative_words_up_to_level": 2500
+  },
+  {
+    "hsk_level_code": "hsk6",
+    "lessons": 25,
+    "new_words_in_level": 2500,
+    "cumulative_words_up_to_level": 5000
+  }
+]

@@ -1,7 +1,7 @@
 "use client"
 
 import { Card, CardBody, Progress } from "@heroui/react"
-import { BookOpen, Award, Clock, TrendingUp } from "lucide-react"
+import { BookOpen, Award, Clock } from "lucide-react"
 
 interface ProgressCardProps {
   totalItems: number
@@ -29,11 +29,11 @@ export default function ProgressCard({
   const remaining = totalItems - learnedCount
 
   return (
-    <Card className="bg-gradient-to-r from-primary-50 to-secondary-50 dark:from-primary-950/30 dark:to-secondary-950/30 border border-primary-100 dark:border-primary-900/30">
+    <Card className="bg-linear-to-r from-primary-50 to-secondary-50 dark:from-primary-950/30 dark:to-secondary-950/30 border border-primary-100 dark:border-primary-900/30">
       <CardBody className="p-4 sm:p-5">
         <div className="flex flex-col sm:flex-row sm:items-center gap-4">
           {/* Mastery circle */}
-          <div className="flex items-center gap-3 sm:min-w-[200px]">
+          <div className="flex items-center gap-3 sm:min-w-50">
             <div className="relative w-16 h-16 sm:w-20 sm:h-20 shrink-0">
               <svg viewBox="0 0 36 36" className="w-full h-full -rotate-90">
                 <circle

@@ -141,7 +141,7 @@ export default function RootLayout({
     <html lang="vi" suppressHydrationWarning className="light">
       <head>
         <link
-          href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap"
+          href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&family=Noto+Sans+SC:wght@400;500;700&family=Noto+Sans:wght@400;500;700&display=swap"
           rel="stylesheet"
         />
         <meta name="apple-mobile-web-app-title" content="Ruby HSK" />
@@ -163,7 +163,7 @@ export default function RootLayout({
         className={`${geistSans.variable} ${geistMono.variable} antialiased min-h-screen bg-background-light dark:bg-background-dark text-text-main-light dark:text-text-main-dark flex flex-col`}
         suppressHydrationWarning
       >
-        <SessionProvider>
+        <SessionProvider refetchInterval={300} refetchOnWindowFocus={false}>
           <NextTopLoader
             color="#ec131e"
             initialPosition={0.08}

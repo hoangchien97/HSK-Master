@@ -2,14 +2,18 @@
 
 import { useState, useEffect, useCallback, useRef } from "react"
 import { Button, Card, CardBody, Chip, Progress } from "@heroui/react"
-import { toast } from "react-toastify"
+import { Volume2, ChevronLeft, ChevronRight } from "lucide-react"
 import {
   startPracticeSessionAction,
   finishPracticeSessionAction,
   recordPracticeAttemptAction,
 } from "@/actions/practice.actions"
+import { useTTS } from "@/hooks/useTTS"
+import { getDisplayMeaning } from "@/enums/portal/common"
 import type { IVocabularyItem } from "@/interfaces/portal/practice"
 import { QuizResultScreen, McqOptions } from "../shared"
+
+const AUTO_NEXT_DELAY = 3000 // ms
 
 interface Props {
   vocabularies: IVocabularyItem[]
@@ -19,8 +23,9 @@ interface Props {
 
 interface QuizQuestion {
   vocab: IVocabularyItem
-  type: "MCQ_MEANING" | "MCQ_HANZI" | "MCQ_PINYIN"
+  type: "MCQ_MEANING" | "MCQ_HANZI" | "MCQ_PINYIN" | "MCQ_EXAMPLE"
   prompt: string
+  promptSub?: string // secondary text under prompt (e.g. pinyin hint)
   options: { key: string; label: string }[]
   correctKey: string
 }
@@ -38,35 +43,54 @@ function generateQuestions(vocabs: IVocabularyItem[]): QuizQuestion[] {
   if (vocabs.length === 0) return []
 
   const questions: QuizQuestion[] = []
-  const types: QuizQuestion["type"][] = ["MCQ_MEANING", "MCQ_HANZI", "MCQ_PINYIN"]
+  const baseTypes: QuizQuestion["type"][] = ["MCQ_MEANING", "MCQ_HANZI", "MCQ_PINYIN"]
+
+  // Check if any vocab has example sentences for MCQ_EXAMPLE type
+  const withExamples = vocabs.filter((v) => v.exampleSentence)
 
   const shuffledVocabs = shuffleArray(vocabs)
 
   for (const vocab of shuffledVocabs) {
-    const type = types[Math.floor(Math.random() * types.length)]
+    // Randomly pick a type, include MCQ_EXAMPLE if this vocab has examples
+    const availableTypes = [...baseTypes]
+    if (vocab.exampleSentence && withExamples.length >= 2) {
+      availableTypes.push("MCQ_EXAMPLE")
+    }
+    const type = availableTypes[Math.floor(Math.random() * availableTypes.length)]
+
     const others = vocabs.filter((v) => v.id !== vocab.id)
     const distractorCount = Math.min(3, others.length)
     const distractors = shuffleArray(others).slice(0, distractorCount)
 
     let prompt: string
+    let promptSub: string | undefined
     let correctLabel: string
     let distractorLabels: string[]
 
     switch (type) {
       case "MCQ_MEANING":
         prompt = vocab.word
-        correctLabel = vocab.meaning
-        distractorLabels = distractors.map((d) => d.meaning)
+        promptSub = "Chọn nghĩa tiếng Việt"
+        correctLabel = getDisplayMeaning(vocab)
+        distractorLabels = distractors.map((d) => getDisplayMeaning(d))
         break
       case "MCQ_HANZI":
-        prompt = vocab.meaning
+        prompt = getDisplayMeaning(vocab)
+        promptSub = "Chọn Hán tự tương ứng"
         correctLabel = vocab.word
         distractorLabels = distractors.map((d) => d.word)
         break
       case "MCQ_PINYIN":
         prompt = vocab.word
+        promptSub = "Chọn phiên âm đúng"
         correctLabel = vocab.pinyin || ""
         distractorLabels = distractors.map((d) => d.pinyin || "")
+        break
+      case "MCQ_EXAMPLE":
+        prompt = vocab.exampleSentence || vocab.word
+        promptSub = vocab.examplePinyin || "Từ nào xuất hiện trong câu trên?"
+        correctLabel = `${vocab.word} — ${getDisplayMeaning(vocab)}`
+        distractorLabels = distractors.map((d) => `${d.word} — ${getDisplayMeaning(d)}`)
         break
     }
 
@@ -79,6 +103,7 @@ function generateQuestions(vocabs: IVocabularyItem[]): QuizQuestion[] {
       vocab,
       type,
       prompt,
+      promptSub,
       options: allOptions,
       correctKey: "correct",
     })
@@ -91,6 +116,7 @@ const TYPE_LABELS: Record<string, string> = {
   MCQ_MEANING: "Chọn nghĩa đúng",
   MCQ_HANZI: "Chọn Hán tự đúng",
   MCQ_PINYIN: "Chọn Pinyin đúng",
+  MCQ_EXAMPLE: "Từ vựng trong câu",
 }
 
 export default function QuizTab({ vocabularies, lessonId, onProgressUpdate }: Props) {
@@ -100,9 +126,20 @@ export default function QuizTab({ vocabularies, lessonId, onProgressUpdate }: Pr
   const [showResult, setShowResult] = useState(false)
   const [results, setResults] = useState<{ correct: boolean; vocab: IVocabularyItem }[]>([])
   const [finished, setFinished] = useState(false)
+  const [elapsedSec, setElapsedSec] = useState(0)
   const [sessionId, setSessionId] = useState<string | null>(null)
-  const startTimeRef = useRef(Date.now())
-  const questionStartRef = useRef(Date.now())
+  const [autoNextCountdown, setAutoNextCountdown] = useState<number | null>(null)
+  const startTimeRef = useRef(0)
+  const questionStartRef = useRef(0)
+  const autoNextTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null)
+  const countdownIntervalRef = useRef<ReturnType<typeof setInterval> | null>(null)
+  const { speak } = useTTS()
+
+  // Initialize time refs
+  useEffect(() => {
+    startTimeRef.current = Date.now()
+    questionStartRef.current = Date.now()
+  }, [])
 
   // Generate questions
   useEffect(() => {
@@ -119,7 +156,6 @@ export default function QuizTab({ vocabularies, lessonId, onProgressUpdate }: Pr
       }
     })
     return () => { active = false }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [lessonId])
 
   // Finish on unmount
@@ -130,11 +166,60 @@ export default function QuizTab({ vocabularies, lessonId, onProgressUpdate }: Pr
         finishPracticeSessionAction(sessionId, dur)
       }
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [sessionId])
 
   const currentQ = questions[currentIdx]
   const totalQ = questions.length
+
+  const handlePlayPromptAudio = useCallback(() => {
+    if (!currentQ) return
+    // For Chinese character prompts, speak the character
+    if (currentQ.type === "MCQ_MEANING" || currentQ.type === "MCQ_PINYIN") {
+      speak(currentQ.vocab.word, currentQ.vocab.audioUrl)
+    } else if (currentQ.type === "MCQ_EXAMPLE" && currentQ.vocab.exampleSentence) {
+      speak(currentQ.vocab.exampleSentence)
+    }
+  }, [currentQ, speak])
+
+  // Clear auto-next timers helper
+  const clearAutoNext = useCallback(() => {
+    if (autoNextTimerRef.current) {
+      clearTimeout(autoNextTimerRef.current)
+      autoNextTimerRef.current = null
+    }
+    if (countdownIntervalRef.current) {
+      clearInterval(countdownIntervalRef.current)
+      countdownIntervalRef.current = null
+    }
+    setAutoNextCountdown(null)
+  }, [])
+
+  // Cleanup timers on unmount
+  useEffect(() => {
+    return () => {
+      if (autoNextTimerRef.current) clearTimeout(autoNextTimerRef.current)
+      if (countdownIntervalRef.current) clearInterval(countdownIntervalRef.current)
+    }
+  }, [])
+
+  const handleNext = useCallback(() => {
+    clearAutoNext()
+    if (currentIdx < totalQ - 1) {
+      setCurrentIdx((i) => i + 1)
+      setSelectedKey(null)
+      setShowResult(false)
+      questionStartRef.current = Date.now()
+    } else {
+      // Finish
+      setFinished(true)
+      setElapsedSec(startTimeRef.current > 0 ? Math.round((Date.now() - startTimeRef.current) / 1000) : 0)
+      if (sessionId) {
+        const dur = Math.round((Date.now() - startTimeRef.current) / 1000)
+        finishPracticeSessionAction(sessionId, dur)
+      }
+      onProgressUpdate()
+    }
+  }, [currentIdx, totalQ, sessionId, onProgressUpdate, clearAutoNext])
 
   const handleSelect = useCallback(
     async (key: string) => {
@@ -160,28 +245,23 @@ export default function QuizTab({ vocabularies, lessonId, onProgressUpdate }: Pr
         isCorrect,
         timeSpentSec: timeSec,
       })
+
+      // Auto-advance after 3s on correct answer
+      if (isCorrect) {
+        setAutoNextCountdown(3)
+        countdownIntervalRef.current = setInterval(() => {
+          setAutoNextCountdown((prev) => (prev !== null && prev > 1 ? prev - 1 : null))
+        }, 1000)
+        autoNextTimerRef.current = setTimeout(() => {
+          handleNext()
+        }, AUTO_NEXT_DELAY)
+      }
     },
-    [showResult, currentQ, sessionId],
+    [showResult, currentQ, sessionId, handleNext],
   )
 
-  const handleNext = useCallback(() => {
-    if (currentIdx < totalQ - 1) {
-      setCurrentIdx((i) => i + 1)
-      setSelectedKey(null)
-      setShowResult(false)
-      questionStartRef.current = Date.now()
-    } else {
-      // Finish
-      setFinished(true)
-      if (sessionId) {
-        const dur = Math.round((Date.now() - startTimeRef.current) / 1000)
-        finishPracticeSessionAction(sessionId, dur)
-      }
-      onProgressUpdate()
-    }
-  }, [currentIdx, totalQ, sessionId, onProgressUpdate])
-
   const handleRestart = useCallback(() => {
+    clearAutoNext()
     setQuestions(generateQuestions(vocabularies))
     setCurrentIdx(0)
     setSelectedKey(null)
@@ -193,7 +273,7 @@ export default function QuizTab({ vocabularies, lessonId, onProgressUpdate }: Pr
     startPracticeSessionAction(lessonId, "QUIZ").then((res) => {
       if (res.success && res.data) setSessionId(res.data.sessionId)
     })
-  }, [vocabularies, lessonId])
+  }, [vocabularies, lessonId, clearAutoNext])
 
   if (totalQ === 0) {
     return (
@@ -203,16 +283,19 @@ export default function QuizTab({ vocabularies, lessonId, onProgressUpdate }: Pr
 
   // Results screen
   if (finished) {
-    const timeSec = Math.round((Date.now() - startTimeRef.current) / 1000)
     return (
       <QuizResultScreen
         results={results}
         totalQuestions={totalQ}
-        elapsedSec={timeSec}
+        elapsedSec={elapsedSec}
         onRestart={handleRestart}
       />
     )
   }
+
+  const isCorrectAnswer = showResult ? selectedKey === currentQ?.correctKey : null
+  // Determine if prompt is Chinese text (for font size + TTS)
+  const isChinPrompt = currentQ.type === "MCQ_MEANING" || currentQ.type === "MCQ_PINYIN"
 
   // Quiz question
   return (
@@ -230,17 +313,21 @@ export default function QuizTab({ vocabularies, lessonId, onProgressUpdate }: Pr
       {/* Question card */}
       <Card className="mb-4">
         <CardBody className="p-6 sm:p-8 text-center">
-          <p className={`font-bold ${currentQ.type === "MCQ_HANZI" ? "text-xl sm:text-2xl" : "text-3xl sm:text-5xl"}`}>
+          <p className={`font-bold ${isChinPrompt ? "text-3xl sm:text-5xl text-red-600 dark:text-red-400" : currentQ.type === "MCQ_EXAMPLE" ? "text-lg sm:text-xl text-red-600 dark:text-red-400" : "text-xl sm:text-2xl"}`}>
             {currentQ.prompt}
           </p>
-          {currentQ.type === "MCQ_HANZI" && (
-            <p className="text-sm text-default-400 mt-1">Chọn Hán tự tương ứng</p>
+          {currentQ.promptSub && (
+            <p className="text-sm text-default-400 mt-2">{currentQ.promptSub}</p>
           )}
-          {currentQ.type === "MCQ_MEANING" && (
-            <p className="text-sm text-default-400 mt-1">Chọn nghĩa tiếng Việt</p>
-          )}
-          {currentQ.type === "MCQ_PINYIN" && (
-            <p className="text-sm text-default-400 mt-1">Chọn phiên âm đúng</p>
+          {/* Speaker button for Chinese prompts */}
+          {(isChinPrompt || currentQ.type === "MCQ_EXAMPLE") && (
+            <button
+              onClick={handlePlayPromptAudio}
+              className="mt-3 p-2 rounded-full bg-primary-100 dark:bg-primary-900/30 text-primary hover:bg-primary-200 transition mx-auto inline-flex"
+              aria-label="Nghe phát âm"
+            >
+              <Volume2 className="w-5 h-5" />
+            </button>
           )}
         </CardBody>
       </Card>
@@ -257,11 +344,74 @@ export default function QuizTab({ vocabularies, lessonId, onProgressUpdate }: Pr
         />
       </div>
 
-      {/* Next button */}
+      {/* Result info + Next button */}
       {showResult && (
-        <div className="flex justify-center">
-          <Button color="primary" onPress={handleNext}>
-            {currentIdx < totalQ - 1 ? "Câu tiếp theo" : "Xem kết quả"}
+        <div className="flex flex-col items-center gap-3">
+          {/* Correct/Wrong feedback */}
+          <div className={`w-full p-3 rounded-lg text-center ${isCorrectAnswer ? "bg-success-50 dark:bg-success-950/20" : "bg-danger-50 dark:bg-danger-950/20"}`}>
+            {isCorrectAnswer ? (
+              <div>
+                <p className="text-success font-medium">✓ Chính xác!</p>
+                {autoNextCountdown !== null && (
+                  <p className="text-xs text-success-600/70 mt-1">Tự động chuyển sau {autoNextCountdown}s…</p>
+                )}
+              </div>
+            ) : (
+              <div>
+                <p className="text-danger font-medium mb-1">✗ Sai rồi</p>
+                <p className="text-sm text-default-600">
+                  Đáp án: <span className="font-bold text-red-600 dark:text-red-400">{currentQ.vocab.word}</span>
+                  {" — "}
+                  <span className="text-primary">{currentQ.vocab.pinyin}</span>
+                  {" — "}
+                  <span>{getDisplayMeaning(currentQ.vocab)}</span>
+                </p>
+              </div>
+            )}
+          </div>
+
+          {/* Next button — always visible, clicking cancels auto-next timer */}
+          <Button color="primary" onPress={handleNext} size="lg" className="font-medium">
+            {currentIdx < totalQ - 1 ? "Câu tiếp theo →" : "Xem kết quả"}
+          </Button>
+        </div>
+      )}
+
+      {/* Prev/Next navigation (for reviewing previous questions) */}
+      {!showResult && (
+        <div className="flex items-center justify-between mt-4">
+          <Button
+            variant="bordered"
+            size="sm"
+            isDisabled={currentIdx === 0}
+            onPress={() => {
+              if (currentIdx > 0) {
+                setCurrentIdx((i) => i - 1)
+                setSelectedKey(null)
+                setShowResult(false)
+              }
+            }}
+            startContent={<ChevronLeft className="w-4 h-4" />}
+          >
+            Trước
+          </Button>
+          <span className="text-xs text-default-400">
+            {currentIdx + 1}/{totalQ}
+          </span>
+          <Button
+            variant="bordered"
+            size="sm"
+            isDisabled={currentIdx >= totalQ - 1}
+            onPress={() => {
+              if (currentIdx < totalQ - 1) {
+                setCurrentIdx((i) => i + 1)
+                setSelectedKey(null)
+                setShowResult(false)
+              }
+            }}
+            endContent={<ChevronRight className="w-4 h-4" />}
+          >
+            Tiếp
           </Button>
         </div>
       )}

@@ -91,7 +91,7 @@ export async function createAssignmentAction(
             type: 'ASSIGNMENT_PUBLISHED',
             title: 'Bài tập mới',
             message: `Giáo viên vừa giao bài tập "${assignment.title}"`,
-            link: `/portal/student/assignments/${assignment.id}`,
+            link: `/portal/student/assignments/${assignment.slug || assignment.id}`,
           });
         }
       } catch (notifyError) {
@@ -158,7 +158,7 @@ export async function updateAssignmentAction(
             type: 'ASSIGNMENT_PUBLISHED',
             title: 'Bài tập mới',
             message: `Giáo viên vừa giao bài tập "${assignment.title}"`,
-            link: `/portal/student/assignments/${assignment.id}`,
+            link: `/portal/student/assignments/${assignment.slug || assignment.id}`,
           });
         }
       } catch (notifyError) {

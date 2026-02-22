@@ -5,25 +5,55 @@
  */
 
 import { prisma } from '@/lib/prisma';
+import type { Prisma } from '@prisma/client';
+import {
+  ItemProgressStatus,
+  PracticeMode,
+  QuestionType,
+  EnrollmentStatus,
+  ClassStatus,
+} from '@/enums/portal';
+
+const MASTERY_THRESHOLD = 0.8;
 
 /* ───────── Get lesson with vocabularies + course info ───────── */
 
-export async function getLessonWithVocabularies(lessonId: string) {
-  return prisma.lesson.findUnique({
-    where: { id: lessonId },
+export async function getLessonWithVocabularies(lessonIdOrSlug: string) {
+  const isUuid = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(lessonIdOrSlug);
+
+  return prisma.lesson.findFirst({
+    where: isUuid ? { id: lessonIdOrSlug } : { slug: lessonIdOrSlug },
     include: {
       course: { select: { id: true, title: true, slug: true, level: true } },
-      vocabularies: { orderBy: { createdAt: 'asc' } },
+      vocabularies: {
+        orderBy: { displayOrder: 'asc' },
+        select: {
+          id: true,
+          lessonId: true,
+          word: true,
+          pinyin: true,
+          meaning: true,
+          meaningVi: true,
+          wordType: true,
+          audioUrl: true,
+          exampleSentence: true,
+          examplePinyin: true,
+          exampleMeaning: true,
+        },
+      },
     },
   });
 }
 
-/* ───────── Get sibling lessons (same course) ───────── */
+/* ───────── Get sibling lessons (same course, only with vocab) ───────── */
 
 export async function getSiblingLessons(courseId: string) {
   return prisma.lesson.findMany({
-    where: { courseId },
-    select: { id: true, title: true, order: true },
+    where: {
+      courseId,
+      vocabularies: { some: {} }, // only lessons that have at least 1 vocabulary
+    },
+    select: { id: true, slug: true, title: true, order: true },
     orderBy: { order: 'asc' },
   });
 }
@@ -31,7 +61,7 @@ export async function getSiblingLessons(courseId: string) {
 /* ───────── Get student lesson progress ───────── */
 
 export async function getStudentLessonProgress(studentId: string, lessonId: string) {
-  return prisma.studentLessonProgress.findUnique({
+  return prisma.portalLessonProgress.findUnique({
     where: { studentId_lessonId: { studentId, lessonId } },
   });
 }
@@ -47,7 +77,7 @@ export async function getStudentItemProgressForLesson(studentId: string, lessonI
   if (!lesson) return {};
 
   const vocabIds = lesson.vocabularies.map((v) => v.id);
-  const items = await prisma.studentItemProgress.findMany({
+  const items = await prisma.portalItemProgress.findMany({
     where: { studentId, vocabularyId: { in: vocabIds } },
   });
 
@@ -62,19 +92,19 @@ export async function getStudentItemProgressForLesson(studentId: string, lessonI
 
 export async function recordVocabSeen(studentId: string, vocabularyId: string, lessonId: string) {
   // Upsert item progress
-  await prisma.studentItemProgress.upsert({
+  await prisma.portalItemProgress.upsert({
     where: { studentId_vocabularyId: { studentId, vocabularyId } },
     create: {
       studentId,
       vocabularyId,
       seenCount: 1,
       lastSeenAt: new Date(),
-      status: 'LEARNING',
+      status: ItemProgressStatus.LEARNING,
     },
     update: {
       seenCount: { increment: 1 },
       lastSeenAt: new Date(),
-      status: 'LEARNING', // At minimum LEARNING after seen
+      status: ItemProgressStatus.LEARNING,
     },
   });
 
@@ -85,7 +115,7 @@ export async function recordVocabSeen(studentId: string, vocabularyId: string, l
 /* ───────── Start practice session ───────── */
 
 export async function startPracticeSession(studentId: string, lessonId: string, mode: string) {
-  return prisma.practiceSession.create({
+  return prisma.portalPracticeSession.create({
     data: { studentId, lessonId, mode },
   });
 }
@@ -93,7 +123,7 @@ export async function startPracticeSession(studentId: string, lessonId: string, 
 /* ───────── Finish practice session ───────── */
 
 export async function finishPracticeSession(sessionId: string, durationSec: number) {
-  return prisma.practiceSession.update({
+  return prisma.portalPracticeSession.update({
     where: { id: sessionId },
     data: { endedAt: new Date(), durationSec },
   });
@@ -111,7 +141,7 @@ export async function recordPracticeAttempt(
   timeSpentSec: number,
 ) {
   // Create attempt record
-  await prisma.practiceAttempt.create({
+  await prisma.portalPracticeAttempt.create({
     data: {
       sessionId,
       vocabularyId,
@@ -124,7 +154,7 @@ export async function recordPracticeAttempt(
   });
 
   // Get session to know studentId & lessonId
-  const session = await prisma.practiceSession.findUnique({
+  const session = await prisma.portalPracticeSession.findUnique({
     where: { id: sessionId },
     select: { studentId: true, lessonId: true, mode: true },
   });
@@ -146,13 +176,13 @@ async function updateItemProgress(
   isCorrect: boolean,
   mode: string,
 ) {
-  const existing = await prisma.studentItemProgress.findUnique({
+  const existing = await prisma.portalItemProgress.findUnique({
     where: { studentId_vocabularyId: { studentId, vocabularyId } },
   });
 
   let masteryScore = existing?.masteryScore ?? 0;
 
-  if (mode === 'FLASHCARD') {
+  if (mode === PracticeMode.FLASHCARD) {
     // Flashcard uses its own mastery deltas passed via the attempt
     // But here we apply a simpler model for the DB update
     masteryScore = isCorrect
@@ -166,12 +196,12 @@ async function updateItemProgress(
   }
 
   const newStatus =
-    masteryScore >= 0.8 ? 'MASTERED' : masteryScore > 0 ? 'LEARNING' : 'NEW';
+    masteryScore >= MASTERY_THRESHOLD ? ItemProgressStatus.MASTERED : masteryScore > 0 ? ItemProgressStatus.LEARNING : ItemProgressStatus.NEW;
 
   // Calculate next review based on mastery
   const now = new Date();
   let nextReviewAt = now;
-  if (masteryScore >= 0.8) {
+  if (masteryScore >= MASTERY_THRESHOLD) {
     nextReviewAt = new Date(now.getTime() + 3 * 24 * 60 * 60 * 1000); // 3 days
   } else if (masteryScore >= 0.5) {
     nextReviewAt = new Date(now.getTime() + 1 * 24 * 60 * 60 * 1000); // 1 day
@@ -179,7 +209,7 @@ async function updateItemProgress(
     nextReviewAt = new Date(now.getTime() + 10 * 60 * 1000); // 10 minutes
   }
 
-  await prisma.studentItemProgress.upsert({
+  await prisma.portalItemProgress.upsert({
     where: { studentId_vocabularyId: { studentId, vocabularyId } },
     create: {
       studentId,
@@ -219,22 +249,22 @@ async function recomputeLessonProgress(studentId: string, lessonId: string) {
     })
   ).map((v) => v.id);
 
-  const itemProgressList = await prisma.studentItemProgress.findMany({
+  const itemProgressList = await prisma.portalItemProgress.findMany({
     where: { studentId, vocabularyId: { in: vocabIds } },
   });
 
   const learnedCount = itemProgressList.filter((ip) => ip.seenCount >= 1).length;
-  const masteredCount = itemProgressList.filter((ip) => ip.masteryScore >= 0.8).length;
+  const masteredCount = itemProgressList.filter((ip) => ip.masteryScore >= MASTERY_THRESHOLD).length;
   const masteryPercent = totalCount > 0 ? (masteredCount / totalCount) * 100 : 0;
 
   // Sum total time from sessions
-  const sessions = await prisma.practiceSession.findMany({
+  const sessions = await prisma.portalPracticeSession.findMany({
     where: { studentId, lessonId },
     select: { durationSec: true },
   });
   const totalTimeSec = sessions.reduce((acc, s) => acc + s.durationSec, 0);
 
-  await prisma.studentLessonProgress.upsert({
+  await prisma.portalLessonProgress.upsert({
     where: { studentId_lessonId: { studentId, lessonId } },
     create: { studentId, lessonId, learnedCount, masteredCount, totalTimeSec, masteryPercent },
     update: { learnedCount, masteredCount, totalTimeSec, masteryPercent },
@@ -250,7 +280,7 @@ export async function recordFlashcardAction(
   action: 'HARD' | 'GOOD' | 'EASY',
   sessionId: string,
 ) {
-  const existing = await prisma.studentItemProgress.findUnique({
+  const existing = await prisma.portalItemProgress.findUnique({
     where: { studentId_vocabularyId: { studentId, vocabularyId } },
   });
 
@@ -274,9 +304,9 @@ export async function recordFlashcardAction(
   }
 
   const status =
-    masteryScore >= 0.8 ? 'MASTERED' : masteryScore > 0 ? 'LEARNING' : 'NEW';
+    masteryScore >= MASTERY_THRESHOLD ? ItemProgressStatus.MASTERED : masteryScore > 0 ? ItemProgressStatus.LEARNING : ItemProgressStatus.NEW;
 
-  await prisma.studentItemProgress.upsert({
+  await prisma.portalItemProgress.upsert({
     where: { studentId_vocabularyId: { studentId, vocabularyId } },
     create: {
       studentId,
@@ -301,11 +331,11 @@ export async function recordFlashcardAction(
   });
 
   // Record attempt
-  await prisma.practiceAttempt.create({
+  await prisma.portalPracticeAttempt.create({
     data: {
       sessionId,
       vocabularyId,
-      questionType: 'FLASHCARD',
+      questionType: QuestionType.FLASHCARD,
       userAnswer: action,
       correctAnswer: action,
       isCorrect: action !== 'HARD',
@@ -322,8 +352,8 @@ export async function getStudentEnrolledHskLevels(studentId: string): Promise<nu
   const enrollments = await prisma.portalClassEnrollment.findMany({
     where: {
       studentId,
-      status: 'ENROLLED',
-      class: { status: 'ACTIVE' },
+      status: EnrollmentStatus.ENROLLED,
+      class: { status: ClassStatus.ACTIVE },
     },
     select: { class: { select: { level: true } } },
   });
@@ -342,7 +372,7 @@ export async function getStudentEnrolledHskLevels(studentId: string): Promise<nu
 /* ───────── Get courses with lessons (for practice list page) ───────── */
 
 export async function getCoursesForPractice(hskLevels?: number[]) {
-  const where: any = { isPublished: true, category: { slug: 'luyen-thi-hsk' } };
+  const where: Prisma.CourseWhereInput = { isPublished: true, category: { slug: 'luyen-thi-hsk' } };
 
   // Filter to only enrolled HSK levels when provided
   if (hskLevels && hskLevels.length > 0) {
@@ -360,7 +390,8 @@ export async function getCoursesForPractice(hskLevels?: number[]) {
       vocabularyCount: true,
       hskLevel: { select: { level: true, badge: true, badgeColor: true, accentColor: true } },
       lessons: {
-        select: { id: true, title: true, titleChinese: true, order: true, _count: { select: { vocabularies: true } } },
+        where: { vocabularies: { some: {} } }, // only lessons with vocabulary
+        select: { id: true, slug: true, title: true, titleChinese: true, order: true, _count: { select: { vocabularies: true } } },
         orderBy: { order: 'asc' },
       },
     },
@@ -371,7 +402,7 @@ export async function getCoursesForPractice(hskLevels?: number[]) {
 /* ───────── Get student progress for all lessons ───────── */
 
 export async function getStudentAllLessonProgress(studentId: string) {
-  const items = await prisma.studentLessonProgress.findMany({
+  const items = await prisma.portalLessonProgress.findMany({
     where: { studentId },
   });
 

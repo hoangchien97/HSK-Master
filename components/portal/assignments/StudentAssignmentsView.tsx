@@ -15,7 +15,7 @@ import {
   Search,
   Paperclip,
   ExternalLink,
-  Hash,
+  Eye,
 } from "lucide-react"
 import { toast } from "react-toastify"
 import dayjs from "dayjs"
@@ -45,6 +45,7 @@ interface StudentSubmission {
 
 interface AssignmentData {
   id: string
+  slug?: string | null
   title: string
   description?: string | null
   assignmentType: string
@@ -188,32 +189,53 @@ export default function StudentAssignmentsView() {
       render: (_v, row) => (
         <div className="max-w-xs">
           <Link
-            href={`/portal/student/assignments/${row.id}`}
+            href={`/portal/student/assignments/${row.slug || row.id}`}
             className="font-medium text-foreground hover:text-primary transition"
           >
             {row.title}
           </Link>
-          {row.description && (
-            <p className="text-xs text-default-400 line-clamp-1 mt-0.5">{row.description}</p>
-          )}
           <div className="flex items-center gap-1.5 mt-1 flex-wrap">
             <Chip size="sm" color={TYPE_CONFIG[row.assignmentType]?.color ?? "default"} variant="flat">
               {TYPE_CONFIG[row.assignmentType]?.label ?? row.assignmentType}
             </Chip>
-            {row.tags && row.tags.length > 0 && row.tags.slice(0, 2).map((tag) => (
-              <Chip key={tag} size="sm" variant="flat" className="text-xs">
-                <Hash className="w-3 h-3 mr-0.5 inline" />
-                {tag}
-              </Chip>
-            ))}
           </div>
         </div>
+      ),
+    },
+    {
+      key: "description",
+      label: "Mô tả",
+      render: (_v, row) => (
+        row.description
+          ? <p className="text-sm text-default-500 line-clamp-2 max-w-62.5">{row.description}</p>
+          : <span className="text-default-300">—</span>
       ),
     },
     {
       key: "class",
       label: "Lớp",
       render: (_v, row) => <span className="text-sm">{row.class.className}</span>,
+    },
+    {
+      key: "tags",
+      label: "Hashtag",
+      render: (_v, row) => {
+        if (!row.tags?.length) return <span className="text-default-300">—</span>
+        return (
+          <div className="flex flex-wrap gap-1 max-w-45">
+            {row.tags.slice(0, 2).map((tag) => (
+              <Chip key={tag} size="sm" variant="flat" color="secondary" className="text-[11px]">
+                #{tag}
+              </Chip>
+            ))}
+            {row.tags.length > 2 && (
+              <Chip size="sm" variant="flat" className="text-[11px]">
+                +{row.tags.length - 2}
+              </Chip>
+            )}
+          </div>
+        )
+      },
     },
     {
       key: "dueDate",
@@ -248,7 +270,7 @@ export default function StudentAssignmentsView() {
 
         return (
           <div className="flex flex-col gap-1">
-            <Chip size="sm" color={config?.color ?? "default"} variant="flat">
+            <Chip size="sm" color={config?.color ?? "default"} variant="flat" className="min-w-22.5 text-center">
               {config?.label ?? subStatus}
             </Chip>
             {subStatus === "GRADED" && sub?.score != null && (
@@ -262,17 +284,19 @@ export default function StudentAssignmentsView() {
     },
     {
       key: "actions",
-      label: "",
-      align: "end" as const,
+      label: "Hành động",
+      align: "center" as const,
       render: (_v, row) => (
         <Button
           as={Link}
-          href={`/portal/student/assignments/${row.id}`}
+          href={`/portal/student/assignments/${row.slug || row.id}`}
+          isIconOnly
           size="sm"
           variant="flat"
           color="primary"
+          title="Chi tiết"
         >
-          Chi tiết
+          <Eye className="w-4 h-4" />
         </Button>
       ),
     },

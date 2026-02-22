@@ -56,6 +56,7 @@ interface StudentSubmission {
 interface AssignmentData {
   id: string
   title: string
+  slug?: string | null
   description?: string | null
   assignmentType: string
   dueDate?: Date | null
@@ -222,15 +223,21 @@ export default function AssignmentsTable({
       render: (_v, row) => (
         <div className="max-w-xs">
           <Link
-            href={`/portal/${role}/assignments/${row.id}`}
+            href={`/portal/${role}/assignments/${row.slug || row.id}`}
             className="font-medium text-foreground hover:text-primary transition"
           >
             {row.title}
           </Link>
-          {row.description && (
-            <p className="text-xs text-default-400 line-clamp-1 mt-0.5">{row.description}</p>
-          )}
         </div>
+      ),
+    },
+    {
+      key: "description",
+      label: "Mô tả",
+      render: (_v, row) => (
+        row.description
+          ? <p className="text-sm text-default-500 line-clamp-2 max-w-62.5">{row.description}</p>
+          : <span className="text-default-300">—</span>
       ),
     },
     {
@@ -244,7 +251,7 @@ export default function AssignmentsTable({
       render: (_v, row) => {
         if (!row.tags?.length) return <span className="text-default-300">—</span>
         return (
-          <div className="flex flex-wrap gap-1 max-w-[200px]">
+          <div className="flex flex-wrap gap-1 max-w-50">
             {row.tags.slice(0, 3).map((tag) => (
               <Chip key={tag} size="sm" variant="flat" color="secondary" className="text-[11px]">
                 #{tag}
@@ -302,15 +309,15 @@ export default function AssignmentsTable({
       key: "status",
       label: "Trạng thái",
       render: (_v, row) => (
-        <Chip size="sm" color={STATUS_CONFIG[row.status]?.color ?? "default"} variant="flat">
+        <Chip size="sm" color={STATUS_CONFIG[row.status]?.color ?? "default"} variant="flat" className="min-w-22.5 text-center">
           {STATUS_CONFIG[row.status]?.label ?? row.status}
         </Chip>
       ),
     },
     {
       key: "actions",
-      label: "",
-      align: "end" as const,
+      label: "Hành động",
+      align: "center" as const,
       render: (_v, row) => (
         <div className="flex justify-end">
           <Dropdown>

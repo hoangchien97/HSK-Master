@@ -13,9 +13,10 @@ export default async function AssignmentDetailPage({ params }: Props) {
   const userRole = session.user.role.toLowerCase()
   if (urlRole !== userRole) notFound()
 
-  // Fetch the assignment with full details
-  const assignment = await prisma.portalAssignment.findUnique({
-    where: { id },
+  // Support lookup by slug or by ID
+  const isCuid = /^c[a-z0-9]{24,}$/.test(id)
+  const assignment = await prisma.portalAssignment.findFirst({
+    where: isCuid ? { id } : { slug: id },
     include: {
       class: {
         select: {

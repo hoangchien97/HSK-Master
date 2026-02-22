@@ -74,6 +74,7 @@ model Lesson {
   id           String       @id @default(uuid())
   courseId     String
   title        String
+  slug         String?  @unique
   titleChinese String?
   description  String?
   order        Int
@@ -83,29 +84,34 @@ model Lesson {
   course       Course       @relation(fields: [courseId], references: [id])
   vocabularies Vocabulary[]
 
-  studentProgress  StudentLessonProgress[]
-  practiceSessions PracticeSession[]
+  lessonProgress   PortalLessonProgress[]
+  practiceSessions PortalPracticeSession[]
 }
 
 model Vocabulary {
-  id        String   @id @default(uuid())
-  lessonId  String
-  word      String
-  pinyin    String?
-  meaning   String
-  wordType  String?  // đại từ, danh từ, động từ, tính từ, phó từ, trợ từ, số từ, thành ngữ, etc.
-  audioUrl  String?
-  createdAt DateTime @default(now())
-  lesson    Lesson   @relation(fields: [lessonId], references: [id])
+  id           String   @id @default(uuid())
+  lessonId     String
+  word         String
+  pinyin       String?
+  meaning      String      // Vietnamese meaning (primary)
+  meaningVi    String?     // Vietnamese meaning (curated, if different)
+  wordType     String?     // POS code: n, v, a, d, r, m, q, c, p, u
+  audioUrl     String?
+  displayOrder Int         @default(0)
+  exampleSentence  String?  // Example sentence in Chinese
+  examplePinyin    String?  // Pinyin of example sentence
+  exampleMeaning   String?  // Meaning of example sentence (Vietnamese)
+  createdAt    DateTime @default(now())
+  lesson       Lesson   @relation(fields: [lessonId], references: [id])
 
-  itemProgress StudentItemProgress[]
-  attempts     PracticeAttempt[]
+  itemProgress PortalItemProgress[]
+  attempts     PortalPracticeAttempt[]
 }
 
 // ========================= PRACTICE FEATURE =========================
 
 // Student's progress per lesson (aggregated)
-model StudentLessonProgress {
+model PortalLessonProgress {
   id              String   @id @default(cuid())
   studentId       String
   lessonId        String
@@ -120,11 +126,11 @@ model StudentLessonProgress {
   lesson          Lesson     @relation(fields: [lessonId], references: [id], onDelete: Cascade)
 
   @@unique([studentId, lessonId])
-  @@map("student_lesson_progress")
+  @@map("portal_lesson_progress")
 }
 
 // Student's progress per vocabulary item
-model StudentItemProgress {
+model PortalItemProgress {
   id              String   @id @default(cuid())
   studentId       String
   vocabularyId    String
@@ -142,11 +148,11 @@ model StudentItemProgress {
   vocabulary      Vocabulary @relation(fields: [vocabularyId], references: [id], onDelete: Cascade)
 
   @@unique([studentId, vocabularyId])
-  @@map("student_item_progress")
+  @@map("portal_item_progress")
 }
 
 // Practice session (one study session)
-model PracticeSession {
+model PortalPracticeSession {
   id              String   @id @default(cuid())
   studentId       String
   lessonId        String
@@ -157,15 +163,15 @@ model PracticeSession {
   meta            Json?    // settings, totalQuestions, etc.
   createdAt       DateTime @default(now())
 
-  student         PortalUser       @relation(fields: [studentId], references: [id], onDelete: Cascade)
-  lesson          Lesson           @relation(fields: [lessonId], references: [id], onDelete: Cascade)
-  attempts        PracticeAttempt[]
+  student         PortalUser            @relation(fields: [studentId], references: [id], onDelete: Cascade)
+  lesson          Lesson                @relation(fields: [lessonId], references: [id], onDelete: Cascade)
+  attempts        PortalPracticeAttempt[]
 
-  @@map("practice_sessions")
+  @@map("portal_practice_sessions")
 }
 
 // Practice attempt (each question/interaction)
-model PracticeAttempt {
+model PortalPracticeAttempt {
   id              String   @id @default(cuid())
   sessionId       String
   vocabularyId    String
@@ -176,10 +182,10 @@ model PracticeAttempt {
   timeSpentSec    Int      @default(0)
   createdAt       DateTime @default(now())
 
-  session         PracticeSession @relation(fields: [sessionId], references: [id], onDelete: Cascade)
-  vocabulary      Vocabulary      @relation(fields: [vocabularyId], references: [id], onDelete: Cascade)
+  session         PortalPracticeSession @relation(fields: [sessionId], references: [id], onDelete: Cascade)
+  vocabulary      Vocabulary            @relation(fields: [vocabularyId], references: [id], onDelete: Cascade)
 
-  @@map("practice_attempts")
+  @@map("portal_practice_attempts")
 }
 
 model Registration {
@@ -432,15 +438,11 @@ model PortalUser {
   enrollments      PortalClassEnrollment[]
   studentAttendances PortalAttendance[] @relation("StudentAttendance")
   submissions      PortalAssignmentSubmission[]
-  progress         PortalLearningProgress[]
-  vocabularies     PortalVocabulary[]
-  bookmarks        PortalBookmark[]
-  quizAttempts     PortalQuizAttempt[]
 
   // Practice lesson relations
-  lessonProgress     StudentLessonProgress[]
-  itemProgress       StudentItemProgress[]
-  practiceSessions   PracticeSession[]
+  lessonProgress     PortalLessonProgress[]
+  itemProgress       PortalItemProgress[]
+  practiceSessions   PortalPracticeSession[]
 
   // Teacher relations (when role=TEACHER or SYSTEM_ADMIN)
   classes          PortalClass[]
@@ -550,6 +552,7 @@ model PortalAssignment {
   classId          String
   teacherId        String
   title            String
+  slug             String?  @unique
   description      String?  @db.Text
   assignmentType   String   // HOMEWORK, QUIZ, PROJECT, READING, WRITING, SPEAKING, LISTENING
   dueDate          DateTime?
@@ -590,99 +593,10 @@ model PortalAssignmentSubmission {
   @@map("portal_assignment_submissions")
 }
 
-// Portal Learning Progress (Track student progress in skills)
-model PortalLearningProgress {
-  id               String   @id @default(cuid())
-  studentId        String
-  skillType        String   // LISTENING, SPEAKING, READING, WRITING
-  level            String   // HSK1, HSK2, etc.
-  lessonId         String?  // Reference to Course Lesson
-  completedAt      DateTime?
-  score            Float?
-  timeSpent        Int?     // in minutes
-  notes            String?  @db.Text
-  createdAt        DateTime @default(now())
-  updatedAt        DateTime @updatedAt
 
-  student          PortalUser @relation(fields: [studentId], references: [id], onDelete: Cascade)
 
-  @@map("portal_learning_progress")
-}
 
-// Portal Vocabulary (Student's vocabulary learning)
-model PortalVocabulary {
-  id               String   @id @default(cuid())
-  studentId        String
-  word             String
-  pinyin           String?
-  meaning          String
-  example          String?  @db.Text
-  level            String?  // HSK level
-  mastery          String   @default("NEW") // NEW, LEARNING, MASTERED
-  reviewCount      Int      @default(0)
-  lastReviewedAt   DateTime?
-  nextReviewAt     DateTime?
-  createdAt        DateTime @default(now())
-  updatedAt        DateTime @updatedAt
 
-  student          PortalUser @relation(fields: [studentId], references: [id], onDelete: Cascade)
-
-  @@map("portal_vocabularies")
-}
-
-// Portal Bookmark (Student bookmarks for lessons/vocabulary)
-model PortalBookmark {
-  id               String   @id @default(cuid())
-  studentId        String
-  resourceType     String   // LESSON, VOCABULARY, GRAMMAR, COURSE
-  resourceId       String   // ID of the bookmarked resource
-  notes            String?  @db.Text
-  createdAt        DateTime @default(now())
-
-  student          PortalUser @relation(fields: [studentId], references: [id], onDelete: Cascade)
-
-  @@unique([studentId, resourceType, resourceId])
-  @@map("portal_bookmarks")
-}
-
-// Portal Quiz
-model PortalQuiz {
-  id               String   @id @default(cuid())
-  title            String
-  description      String?  @db.Text
-  level            String?  // HSK level
-  questionCount    Int
-  timeLimit        Int?     // in minutes
-  passingScore     Float    @default(70)
-  quizType         String   // VOCABULARY, GRAMMAR, LISTENING, READING, COMPREHENSIVE
-  questions        Json     // Store quiz questions as JSON
-  status           String   @default("ACTIVE") // ACTIVE, DRAFT, ARCHIVED
-  createdAt        DateTime @default(now())
-  updatedAt        DateTime @updatedAt
-
-  attempts         PortalQuizAttempt[]
-
-  @@map("portal_quizzes")
-}
-
-// Portal Quiz Attempt
-model PortalQuizAttempt {
-  id               String   @id @default(cuid())
-  quizId           String
-  studentId        String
-  answers          Json     // Store student answers as JSON
-  score            Float
-  correctCount     Int
-  incorrectCount   Int
-  timeSpent        Int?     // in minutes
-  completedAt      DateTime @default(now())
-  passed           Boolean  @default(false)
-
-  quiz             PortalQuiz    @relation(fields: [quizId], references: [id], onDelete: Cascade)
-  student          PortalUser @relation(fields: [studentId], references: [id], onDelete: Cascade)
-
-  @@map("portal_quiz_attempts")
-}
 
 // Portal Notification
 model PortalNotification {

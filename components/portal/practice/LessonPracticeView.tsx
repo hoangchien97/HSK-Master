@@ -2,9 +2,8 @@
 
 import { useState, useEffect, useCallback } from "react"
 import { useRouter, useSearchParams, usePathname } from "next/navigation"
-import Link from "next/link"
 import { Tabs, Tab, Chip, Button } from "@heroui/react"
-import { Search, Layers, HelpCircle, Headphones, PenTool, ArrowLeft } from "lucide-react"
+import { Search, Layers, HelpCircle, Headphones, PenTool } from "lucide-react"
 import { toast } from "react-toastify"
 import { fetchLessonPracticeData, refreshLessonProgress } from "@/actions/practice.actions"
 import { usePortalUI } from "@/providers/portal-ui-provider"
@@ -18,6 +17,7 @@ import type { IVocabularyItem, IStudentItemProgress } from "@/interfaces/portal/
 
 interface LessonData {
   id: string
+  slug?: string | null
   title: string
   titleChinese: string | null
   description: string | null
@@ -36,6 +36,7 @@ interface ProgressData {
 
 interface SiblingLesson {
   id: string
+  slug?: string | null
   title: string
   order: number
 }
@@ -59,7 +60,7 @@ export default function LessonPracticeView({ lessonId }: Props) {
   const router = useRouter()
   const searchParams = useSearchParams()
   const pathname = usePathname()
-  const { startLoading, stopLoading } = usePortalUI()
+  const { startLoading, stopLoading, setDynamicLabel } = usePortalUI()
 
   const tabParam = (searchParams.get("tab") || "lookup") as TabKey
   const activeTab = TAB_KEYS.includes(tabParam) ? tabParam : "lookup"
@@ -73,16 +74,20 @@ export default function LessonPracticeView({ lessonId }: Props) {
     startLoading()
     const result = await fetchLessonPracticeData(lessonId)
     if (result.success && result.data) {
-      setLesson(result.data.lesson as unknown as LessonData)
+      const lessonData = result.data.lesson as unknown as LessonData
+      setLesson(lessonData)
       setProgress(result.data.progress as ProgressData | null)
       setItemProgress((result.data.itemProgress || {}) as Record<string, IStudentItemProgress>)
       setSiblings(result.data.siblings)
+      // Set breadcrumb dynamic label: lessonId → "HSK 1 / 1. Giới thiệu"
+      setDynamicLabel(lessonId, `${lessonData.order}. ${lessonData.title}`)
     } else {
       toast.error(result.error || "Không thể tải bài học")
       router.push("/portal/student/practice")
     }
     stopLoading()
-  }, [lessonId, startLoading, stopLoading, router])
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [lessonId, startLoading, stopLoading, router, setDynamicLabel])
 
   useEffect(() => {
     loadData()
@@ -111,19 +116,9 @@ export default function LessonPracticeView({ lessonId }: Props) {
   const totalItems = vocabs.length
 
   return (
-    <div className="space-y-4 sm:space-y-6 max-w-4xl mx-auto pb-24 sm:pb-6">
-      {/* Back + header */}
+    <div className="space-y-4 sm:space-y-6 pb-24 sm:pb-6">
+      {/* Header */}
       <div>
-        <Button
-          as={Link}
-          href="/portal/student/practice"
-          variant="light"
-          size="sm"
-          startContent={<ArrowLeft className="w-4 h-4" />}
-          className="mb-2 -ml-2 text-default-500"
-        >
-          Quay lại
-        </Button>
         <div className="flex flex-col sm:flex-row sm:items-center gap-1 sm:gap-3">
           <h1 className="text-lg sm:text-xl font-bold">
             Buổi {lesson.order}: {lesson.title}
@@ -156,21 +151,22 @@ export default function LessonPracticeView({ lessonId }: Props) {
           selectedKey={activeTab}
           onSelectionChange={handleTabChange}
           aria-label="Chế độ luyện tập"
-          variant="underlined"
+          variant="bordered"
+          fullWidth
+          size="lg"
           classNames={{
-            tabList: "gap-0 sm:gap-2 w-full overflow-x-auto scrollbar-hide border-b border-divider",
-            tab: "px-2 sm:px-4 py-2 text-xs sm:text-sm",
-            cursor: "bg-primary",
+            tabList: "gap-0 bg-default-100/50 p-1 rounded-xl",
+            tab: "px-3 py-2.5 text-sm font-medium",
+            cursor: "bg-white shadow-sm rounded-lg",
           }}
         >
           {TAB_KEYS.map((key) => (
             <Tab
               key={key}
               title={
-                <div className="flex items-center gap-1 sm:gap-1.5">
+                <div className="flex items-center gap-1.5 justify-center">
                   {TAB_CONFIG[key].icon}
-                  <span className="hidden sm:inline">{TAB_CONFIG[key].label}</span>
-                  <span className="sm:hidden text-[11px]">{TAB_CONFIG[key].label}</span>
+                  <span>{TAB_CONFIG[key].label}</span>
                 </div>
               }
             />
@@ -233,7 +229,7 @@ export default function LessonPracticeView({ lessonId }: Props) {
                 className="shrink-0 text-xs min-w-0"
                 onPress={() => {
                   if (s.id !== lessonId) {
-                    router.push(`/portal/student/practice/${s.id}?tab=${activeTab}`)
+                    router.push(`/portal/student/practice/${s.slug || s.id}?tab=${activeTab}`)
                   }
                 }}
               >

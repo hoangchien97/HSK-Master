@@ -1,0 +1,4102 @@
+[
+  {
+    "id": "edfee586-6768-4c4d-9975-7c5d9d9a033b",
+    "hsk_level_code": "hsk1",
+    "lesson_number": 1,
+    "chinese_word": "爱",
+    "pinyin": "ài",
+    "meaning": "to love; affection",
+    "example_sentence": "我爱我的家人。",
+    "example_pinyin": "Wǒ ài wǒ de jiārén.",
+    "example_meaning": "Tôi yêu gia đình tôi.",
+    "word_type": "v",
+    "audio_url": null,
+    "display_order": 1,
+    "meta": {
+      "source_id": 1,
+      "source_level": 1,
+      "radicals": "爫",
+      "strokes": "10",
+      "translations_eng_all": [
+        "to love",
+        "affection",
+        "to be fond of",
+        "to like"
+      ]
+    },
+    "meaning_vi": "yêu, thương"
+  },
+  {
+    "id": "ec1f3aa5-ee81-44a2-a681-10e976e65371",
+    "hsk_level_code": "hsk1",
+    "lesson_number": 1,
+    "chinese_word": "八",
+    "pinyin": "bā",
+    "meaning": "eight; 8",
+    "example_sentence": "我有八本书。",
+    "example_pinyin": "Wǒ yǒu bā běn shū.",
+    "example_meaning": "Tôi có tám quyển sách.",
+    "word_type": "m",
+    "audio_url": null,
+    "display_order": 2,
+    "meta": {
+      "source_id": 2,
+      "source_level": 1,
+      "radicals": "八",
+      "strokes": "2",
+      "translations_eng_all": [
+        "eight",
+        "8"
+      ]
+    },
+    "meaning_vi": "tám, 8"
+  },
+  {
+    "id": "116713f1-67df-4f3a-b102-e37b1bb7e733",
+    "hsk_level_code": "hsk1",
+    "lesson_number": 1,
+    "chinese_word": "爸爸",
+    "pinyin": "bà ba",
+    "meaning": "(informal) father; CL:個|个",
+    "example_sentence": "爸爸在家工作。",
+    "example_pinyin": "Bàba zài jiā gōngzuò.",
+    "example_meaning": "Bố làm việc ở nhà.",
+    "word_type": "n",
+    "audio_url": null,
+    "display_order": 3,
+    "meta": {
+      "source_id": 3,
+      "source_level": 1,
+      "radicals": null,
+      "strokes": null,
+      "translations_eng_all": [
+        "(informal) father",
+        "CL:個|个",
+        "位[wèi]"
+      ]
+    },
+    "meaning_vi": "bố, ba"
+  },
+  {
+    "id": "fedd2b30-d1ee-4364-8a5b-be95b2bc6db1",
+    "hsk_level_code": "hsk1",
+    "lesson_number": 1,
+    "chinese_word": "杯子",
+    "pinyin": "bēi zi",
+    "meaning": "cup; glass",
+    "example_sentence": "这个杯子是我的。",
+    "example_pinyin": "Zhège bēizi shì wǒ de.",
+    "example_meaning": "Cái cốc này là của tôi.",
+    "word_type": "n",
+    "audio_url": null,
+    "display_order": 4,
+    "meta": {
+      "source_id": 4,
+      "source_level": 1,
+      "radicals": null,
+      "strokes": null,
+      "translations_eng_all": [
+        "cup",
+        "glass",
+        "CL:個|个",
+        "支",
+        "枝[zhī]"
+      ]
+    },
+    "meaning_vi": "cốc, ly"
+  },
+  {
+    "id": "7da88574-7d9d-47e8-ab46-f9e4f1c88d36",
+    "hsk_level_code": "hsk1",
+    "lesson_number": 1,
+    "chinese_word": "北京",
+    "pinyin": "Běi jīng",
+    "meaning": "Beijing; capital of People's Republic of China",
+    "example_sentence": "我想去北京。",
+    "example_pinyin": "Wǒ xiǎng qù Běijīng.",
+    "example_meaning": "Tôi muốn đi Bắc Kinh.",
+    "word_type": "n",
+    "audio_url": null,
+    "display_order": 5,
+    "meta": {
+      "source_id": 5,
+      "source_level": 1,
+      "radicals": null,
+      "strokes": null,
+      "translations_eng_all": [
+        "Beijing",
+        "capital of People's Republic of China",
+        "Peking",
+        "PRC government"
+      ]
+    },
+    "meaning_vi": "Bắc Kinh"
+  },
+  {
+    "id": "1b03f4d1-c013-4528-ab49-7a67751bd31c",
+    "hsk_level_code": "hsk1",
+    "lesson_number": 1,
+    "chinese_word": "本",
+    "pinyin": "běn",
+    "meaning": "roots or stems of plants; origin",
+    "example_sentence": "我买了三本书。",
+    "example_pinyin": "Wǒ mǎile sān běn shū.",
+    "example_meaning": "Tôi mua ba quyển sách.",
+    "word_type": "q",
+    "audio_url": null,
+    "display_order": 6,
+    "meta": {
+      "source_id": 6,
+      "source_level": 1,
+      "radicals": "木",
+      "strokes": "5",
+      "translations_eng_all": [
+        "roots or stems of plants",
+        "origin",
+        "source",
+        "this",
+        "the current",
+        "root",
+        "foundation",
+        "basis",
+        "classifier for books",
+        "periodicals",
+        "files etc",
+        "originally"
+      ]
+    },
+    "meaning_vi": "cuốn, quyển (lượng từ)"
+  },
+  {
+    "id": "d9a25b32-1d13-4aee-8ae5-2d582727006a",
+    "hsk_level_code": "hsk1",
+    "lesson_number": 1,
+    "chinese_word": "不客气",
+    "pinyin": "bù kè qi",
+    "meaning": "you're welcome; impolite",
+    "example_sentence": "谢谢！不客气。",
+    "example_pinyin": "Xièxie! Bú kèqi.",
+    "example_meaning": "Cảm ơn! Không có gì.",
+    "word_type": "phr",
+    "audio_url": null,
+    "display_order": 7,
+    "meta": {
+      "source_id": 7,
+      "source_level": 1,
+      "radicals": null,
+      "strokes": null,
+      "translations_eng_all": [
+        "you're welcome",
+        "impolite",
+        "rude",
+        "blunt",
+        "don't mention it"
+      ]
+    },
+    "meaning_vi": "không có gì"
+  },
+  {
+    "id": "602bba18-60a6-4f79-a6c4-95a728cb61bc",
+    "hsk_level_code": "hsk1",
+    "lesson_number": 1,
+    "chinese_word": "不",
+    "pinyin": "bù",
+    "meaning": "(negative prefix); not",
+    "example_sentence": "我不喝茶。",
+    "example_pinyin": "Wǒ bù hē chá.",
+    "example_meaning": "Tôi không uống trà.",
+    "word_type": "d",
+    "audio_url": null,
+    "display_order": 8,
+    "meta": {
+      "source_id": 8,
+      "source_level": 1,
+      "radicals": "一",
+      "strokes": "4",
+      "translations_eng_all": [
+        "(negative prefix)",
+        "not",
+        "no"
+      ]
+    },
+    "meaning_vi": "không"
+  },
+  {
+    "id": "0230fd7f-d652-4ca7-87e0-48f01ecb8884",
+    "hsk_level_code": "hsk1",
+    "lesson_number": 1,
+    "chinese_word": "菜",
+    "pinyin": "cài",
+    "meaning": "dish (type of food); vegetables",
+    "example_sentence": "这个菜很好吃。",
+    "example_pinyin": "Zhège cài hěn hǎochī.",
+    "example_meaning": "Món này rất ngon.",
+    "word_type": "n",
+    "audio_url": null,
+    "display_order": 9,
+    "meta": {
+      "source_id": 9,
+      "source_level": 1,
+      "radicals": "艹",
+      "strokes": "11",
+      "translations_eng_all": [
+        "dish (type of food)",
+        "vegetables",
+        "vegetable",
+        "cuisine",
+        "CL:盤|盘",
+        "道[dào]"
+      ]
+    },
+    "meaning_vi": "rau, món ăn"
+  },
+  {
+    "id": "c92e8fbb-a1b7-4c52-accf-b8f259c684fd",
+    "hsk_level_code": "hsk1",
+    "lesson_number": 1,
+    "chinese_word": "茶",
+    "pinyin": "chá",
+    "meaning": "tea; tea plant",
+    "example_sentence": "你想喝茶吗？",
+    "example_pinyin": "Nǐ xiǎng hē chá ma?",
+    "example_meaning": "Bạn muốn uống trà không?",
+    "word_type": "n",
+    "audio_url": null,
+    "display_order": 10,
+    "meta": {
+      "source_id": 10,
+      "source_level": 1,
+      "radicals": "艹",
+      "strokes": "9",
+      "translations_eng_all": [
+        "tea",
+        "tea plant",
+        "CL:杯",
+        "壺|壶[hú]"
+      ]
+    },
+    "meaning_vi": "trà"
+  },
+  {
+    "id": "1d8ee4e5-a4ed-4840-a335-537c0a470303",
+    "hsk_level_code": "hsk1",
+    "lesson_number": 2,
+    "chinese_word": "吃",
+    "pinyin": "chī",
+    "meaning": "to eat; to consume",
+    "example_sentence": "我们去吃饭吧。",
+    "example_pinyin": "Wǒmen qù chīfàn ba.",
+    "example_meaning": "Chúng ta đi ăn cơm đi.",
+    "word_type": "v",
+    "audio_url": null,
+    "display_order": 1,
+    "meta": {
+      "source_id": 11,
+      "source_level": 1,
+      "radicals": "口",
+      "strokes": "6",
+      "translations_eng_all": [
+        "to eat",
+        "to consume",
+        "to eat at (a cafeteria etc)",
+        "to eradicate",
+        "to destroy",
+        "to absorb",
+        "to suffer"
+      ]
+    },
+    "meaning_vi": "ăn"
+  },
+  {
+    "id": "642e30f9-edad-47da-be9e-b1e359476339",
+    "hsk_level_code": "hsk1",
+    "lesson_number": 2,
+    "chinese_word": "出租车",
+    "pinyin": "chū zū chē",
+    "meaning": "taxi; (Taiwan) rental car",
+    "example_sentence": "我坐出租车去学校。",
+    "example_pinyin": "Wǒ zuò chūzūchē qù xuéxiào.",
+    "example_meaning": "Tôi đi taxi đến trường.",
+    "word_type": "n",
+    "audio_url": null,
+    "display_order": 2,
+    "meta": {
+      "source_id": 12,
+      "source_level": 1,
+      "radicals": null,
+      "strokes": null,
+      "translations_eng_all": [
+        "taxi",
+        "(Taiwan) rental car"
+      ]
+    },
+    "meaning_vi": "xe taxi"
+  },
+  {
+    "id": "cac9a4cc-916b-459e-8fae-1102d37affb0",
+    "hsk_level_code": "hsk1",
+    "lesson_number": 2,
+    "chinese_word": "打电话",
+    "pinyin": "dǎ diàn huà",
+    "meaning": "to make a telephone call",
+    "example_sentence": "我给妈妈打电话。",
+    "example_pinyin": "Wǒ gěi māma dǎ diànhuà.",
+    "example_meaning": "Tôi gọi điện cho mẹ.",
+    "word_type": "phr",
+    "audio_url": null,
+    "display_order": 3,
+    "meta": {
+      "source_id": 13,
+      "source_level": 1,
+      "radicals": null,
+      "strokes": null,
+      "translations_eng_all": [
+        "to make a telephone call"
+      ]
+    },
+    "meaning_vi": "gọi điện thoại"
+  },
+  {
+    "id": "84c0fa19-c41e-46e6-ad05-285837e73f4d",
+    "hsk_level_code": "hsk1",
+    "lesson_number": 2,
+    "chinese_word": "大",
+    "pinyin": "dà",
+    "meaning": "big; huge",
+    "example_sentence": "这个房间很大。",
+    "example_pinyin": "Zhège fángjiān hěn dà.",
+    "example_meaning": "Căn phòng này rất lớn.",
+    "word_type": "a",
+    "audio_url": null,
+    "display_order": 4,
+    "meta": {
+      "source_id": 14,
+      "source_level": 1,
+      "radicals": "大",
+      "strokes": "3",
+      "translations_eng_all": [
+        "big",
+        "huge",
+        "large",
+        "major",
+        "great",
+        "wide",
+        "deep",
+        "oldest",
+        "eldest"
+      ]
+    },
+    "meaning_vi": "lớn, to"
+  },
+  {
+    "id": "de6418fb-5560-43f1-a16d-54aa17cf4507",
+    "hsk_level_code": "hsk1",
+    "lesson_number": 2,
+    "chinese_word": "的",
+    "pinyin": "de",
+    "meaning": "of; ~'s (possessive particle)",
+    "example_sentence": "这是我的书。",
+    "example_pinyin": "Zhè shì wǒ de shū.",
+    "example_meaning": "Đây là sách của tôi.",
+    "word_type": "u",
+    "audio_url": null,
+    "display_order": 5,
+    "meta": {
+      "source_id": 15,
+      "source_level": 1,
+      "radicals": "白",
+      "strokes": "8",
+      "translations_eng_all": [
+        "of",
+        "~'s (possessive particle)",
+        "(used after an attribute)",
+        "(used to form a nominal expression)",
+        "(used at the end of a declarative sentence for emphasis)"
+      ]
+    },
+    "meaning_vi": "của (trợ từ)"
+  },
+  {
+    "id": "8c1b5480-840c-4f19-b538-2ac2e0b0280a",
+    "hsk_level_code": "hsk1",
+    "lesson_number": 2,
+    "chinese_word": "点",
+    "pinyin": "diǎn",
+    "meaning": "point; dot",
+    "example_sentence": "现在几点了？",
+    "example_pinyin": "Xiànzài jǐ diǎn le?",
+    "example_meaning": "Bây giờ mấy giờ rồi?",
+    "word_type": "q",
+    "audio_url": null,
+    "display_order": 6,
+    "meta": {
+      "source_id": 16,
+      "source_level": 1,
+      "radicals": "灬",
+      "strokes": "9",
+      "translations_eng_all": [
+        "point",
+        "dot",
+        "drop",
+        "speck",
+        "o'clock",
+        "point (in space or time)",
+        "to draw a dot",
+        "to check on a list",
+        "to choose",
+        "to order (food in a restaurant)",
+        "to touch briefly",
+        "to hint",
+        "to light",
+        "to ignite",
+        "to pour a liquid drop by drop",
+        "(old) one fifth of a two-hour watch 更[gēng]",
+        "dot stroke in Chinese characters",
+        "classifier for items"
+      ]
+    },
+    "meaning_vi": "giờ, điểm"
+  },
+  {
+    "id": "89f4da68-3363-4351-895e-e27ff9045cda",
+    "hsk_level_code": "hsk1",
+    "lesson_number": 2,
+    "chinese_word": "电脑",
+    "pinyin": "diàn nǎo",
+    "meaning": "computer; CL:臺|台[tái]",
+    "example_sentence": "我用电脑工作。",
+    "example_pinyin": "Wǒ yòng diànnǎo gōngzuò.",
+    "example_meaning": "Tôi dùng máy tính để làm việc.",
+    "word_type": "n",
+    "audio_url": null,
+    "display_order": 7,
+    "meta": {
+      "source_id": 17,
+      "source_level": 1,
+      "radicals": null,
+      "strokes": null,
+      "translations_eng_all": [
+        "computer",
+        "CL:臺|台[tái]"
+      ]
+    },
+    "meaning_vi": "máy tính"
+  },
+  {
+    "id": "c140cd86-9240-4434-ad74-b07ee9be86b5",
+    "hsk_level_code": "hsk1",
+    "lesson_number": 2,
+    "chinese_word": "电视",
+    "pinyin": "diàn shì",
+    "meaning": "television; TV",
+    "example_sentence": "他在看电视。",
+    "example_pinyin": "Tā zài kàn diànshì.",
+    "example_meaning": "Anh ấy đang xem tivi.",
+    "word_type": "n",
+    "audio_url": null,
+    "display_order": 8,
+    "meta": {
+      "source_id": 18,
+      "source_level": 1,
+      "radicals": null,
+      "strokes": null,
+      "translations_eng_all": [
+        "television",
+        "TV",
+        "CL:臺|台",
+        "個|个[gè]"
+      ]
+    },
+    "meaning_vi": "tivi, truyền hình"
+  },
+  {
+    "id": "5dde945f-8347-44f2-b8d3-65ca5242c7b3",
+    "hsk_level_code": "hsk1",
+    "lesson_number": 2,
+    "chinese_word": "电影",
+    "pinyin": "diàn yǐng",
+    "meaning": "movie; film",
+    "example_sentence": "我们去看电影吧。",
+    "example_pinyin": "Wǒmen qù kàn diànyǐng ba.",
+    "example_meaning": "Chúng ta đi xem phim đi.",
+    "word_type": "n",
+    "audio_url": null,
+    "display_order": 9,
+    "meta": {
+      "source_id": 19,
+      "source_level": 1,
+      "radicals": null,
+      "strokes": null,
+      "translations_eng_all": [
+        "movie",
+        "film",
+        "CL:部",
+        "片",
+        "幕",
+        "場|场[chǎng]"
+      ]
+    },
+    "meaning_vi": "phim, điện ảnh"
+  },
+  {
+    "id": "14137626-319d-4bb3-a54e-0a5f268a892e",
+    "hsk_level_code": "hsk1",
+    "lesson_number": 2,
+    "chinese_word": "东西",
+    "pinyin": "dōng xi",
+    "meaning": "thing; stuff",
+    "example_sentence": "你买了什么东西？",
+    "example_pinyin": "Nǐ mǎile shénme dōngxi?",
+    "example_meaning": "Bạn mua gì vậy?",
+    "word_type": "n",
+    "audio_url": null,
+    "display_order": 10,
+    "meta": {
+      "source_id": 20,
+      "source_level": 1,
+      "radicals": null,
+      "strokes": null,
+      "translations_eng_all": [
+        "thing",
+        "stuff",
+        "person",
+        "CL:個|个",
+        "件[jiàn]"
+      ]
+    },
+    "meaning_vi": "đồ vật, thứ"
+  },
+  {
+    "id": "56646630-39b5-4709-8b40-cb4677441237",
+    "hsk_level_code": "hsk1",
+    "lesson_number": 3,
+    "chinese_word": "都",
+    "pinyin": "dōu",
+    "meaning": "all; both",
+    "example_sentence": "我们都是学生。",
+    "example_pinyin": "Wǒmen dōu shì xuésheng.",
+    "example_meaning": "Chúng tôi đều là học sinh.",
+    "word_type": "d",
+    "audio_url": null,
+    "display_order": 1,
+    "meta": {
+      "source_id": 21,
+      "source_level": 1,
+      "radicals": "阝",
+      "strokes": "10",
+      "translations_eng_all": [
+        "all",
+        "both",
+        "entirely",
+        "(used for emphasis) even",
+        "already",
+        "(not) at all"
+      ]
+    },
+    "meaning_vi": "đều, cả"
+  },
+  {
+    "id": "bc0f98d1-7811-4430-bac8-91ee1ff5eabc",
+    "hsk_level_code": "hsk1",
+    "lesson_number": 3,
+    "chinese_word": "读",
+    "pinyin": "dú",
+    "meaning": "to read; to study",
+    "example_sentence": "请读这个字。",
+    "example_pinyin": "Qǐng dú zhège zì.",
+    "example_meaning": "Xin hãy đọc chữ này.",
+    "word_type": "v",
+    "audio_url": null,
+    "display_order": 2,
+    "meta": {
+      "source_id": 22,
+      "source_level": 1,
+      "radicals": "讠",
+      "strokes": "10",
+      "translations_eng_all": [
+        "to read",
+        "to study",
+        "reading of word (i.e. pronunciation)",
+        "similar to 拼音[pīn yīn]"
+      ]
+    },
+    "meaning_vi": "đọc"
+  },
+  {
+    "id": "eef8833f-2d4d-4633-91d4-043f8fafdae1",
+    "hsk_level_code": "hsk1",
+    "lesson_number": 3,
+    "chinese_word": "对不起",
+    "pinyin": "duì bu qǐ",
+    "meaning": "unworthy; to let down",
+    "example_sentence": "对不起，我来晚了。",
+    "example_pinyin": "Duìbuqǐ, wǒ lái wǎn le.",
+    "example_meaning": "Xin lỗi, tôi đến muộn.",
+    "word_type": "phr",
+    "audio_url": null,
+    "display_order": 3,
+    "meta": {
+      "source_id": 23,
+      "source_level": 1,
+      "radicals": null,
+      "strokes": null,
+      "translations_eng_all": [
+        "unworthy",
+        "to let down",
+        "I'm sorry",
+        "excuse me",
+        "pardon me",
+        "if you please",
+        "sorry? (please repeat)"
+      ]
+    },
+    "meaning_vi": "xin lỗi"
+  },
+  {
+    "id": "d9748b36-2a99-4c3c-9e7a-f2b114f5f942",
+    "hsk_level_code": "hsk1",
+    "lesson_number": 3,
+    "chinese_word": "多",
+    "pinyin": "duō",
+    "meaning": "many; much",
+    "example_sentence": "人很多。",
+    "example_pinyin": "Rén hěn duō.",
+    "example_meaning": "Người rất đông.",
+    "word_type": "a",
+    "audio_url": null,
+    "display_order": 4,
+    "meta": {
+      "source_id": 24,
+      "source_level": 1,
+      "radicals": "夕",
+      "strokes": "6",
+      "translations_eng_all": [
+        "many",
+        "much",
+        "a lot of",
+        "numerous",
+        "more",
+        "in excess",
+        "how (to what extent)",
+        "multi-",
+        "Taiwan pr.  when it means \"how\""
+      ]
+    },
+    "meaning_vi": "nhiều"
+  },
+  {
+    "id": "bd460b11-a24b-4b34-ad9f-977db9dcbeea",
+    "hsk_level_code": "hsk1",
+    "lesson_number": 3,
+    "chinese_word": "多少",
+    "pinyin": "duō shao",
+    "meaning": "how much; how many",
+    "example_sentence": "这个多少钱？",
+    "example_pinyin": "Zhège duōshao qián?",
+    "example_meaning": "Cái này bao nhiêu tiền?",
+    "word_type": "r",
+    "audio_url": null,
+    "display_order": 5,
+    "meta": {
+      "source_id": 25,
+      "source_level": 1,
+      "radicals": null,
+      "strokes": null,
+      "translations_eng_all": [
+        "how much",
+        "how many",
+        "which (number)",
+        "as much as"
+      ]
+    },
+    "meaning_vi": "bao nhiêu"
+  },
+  {
+    "id": "9a547d3c-0e8b-4006-b3ba-e2d5e454e240",
+    "hsk_level_code": "hsk1",
+    "lesson_number": 3,
+    "chinese_word": "儿子",
+    "pinyin": "ér zi",
+    "meaning": "son",
+    "example_sentence": "他的儿子五岁了。",
+    "example_pinyin": "Tā de érzi wǔ suì le.",
+    "example_meaning": "Con trai anh ấy năm tuổi rồi.",
+    "word_type": "n",
+    "audio_url": null,
+    "display_order": 6,
+    "meta": {
+      "source_id": 26,
+      "source_level": 1,
+      "radicals": null,
+      "strokes": null,
+      "translations_eng_all": [
+        "son"
+      ]
+    },
+    "meaning_vi": "con trai"
+  },
+  {
+    "id": "b45c9f38-f0f0-471c-bcf2-bc54bd304ce7",
+    "hsk_level_code": "hsk1",
+    "lesson_number": 3,
+    "chinese_word": "二",
+    "pinyin": "èr",
+    "meaning": "two; 2",
+    "example_sentence": "我有二个姐姐。",
+    "example_pinyin": "Wǒ yǒu èr gè jiějie.",
+    "example_meaning": "Tôi có hai chị gái.",
+    "word_type": "m",
+    "audio_url": null,
+    "display_order": 7,
+    "meta": {
+      "source_id": 27,
+      "source_level": 1,
+      "radicals": "二",
+      "strokes": "2",
+      "translations_eng_all": [
+        "two",
+        "2",
+        "stupid (Beijing dialect)"
+      ]
+    },
+    "meaning_vi": "hai, 2"
+  },
+  {
+    "id": "85a80528-849c-4fdd-a4cf-2a15a70e030b",
+    "hsk_level_code": "hsk1",
+    "lesson_number": 3,
+    "chinese_word": "饭馆",
+    "pinyin": "fàn guǎn",
+    "meaning": "restaurant; CL:家[jiā]",
+    "example_sentence": "那个饭馆很好。",
+    "example_pinyin": "Nàge fànguǎn hěn hǎo.",
+    "example_meaning": "Nhà hàng đó rất ngon.",
+    "word_type": "n",
+    "audio_url": null,
+    "display_order": 8,
+    "meta": {
+      "source_id": 28,
+      "source_level": 1,
+      "radicals": null,
+      "strokes": null,
+      "translations_eng_all": [
+        "restaurant",
+        "CL:家[jiā]"
+      ]
+    },
+    "meaning_vi": null
+  },
+  {
+    "id": "b14a932d-9b83-4687-b2ad-2d430d982024",
+    "hsk_level_code": "hsk1",
+    "lesson_number": 3,
+    "chinese_word": "飞机",
+    "pinyin": "fēi jī",
+    "meaning": "airplane; CL:架[jià]",
+    "example_sentence": "我坐飞机去北京。",
+    "example_pinyin": "Wǒ zuò fēijī qù Běijīng.",
+    "example_meaning": "Tôi đi máy bay đến Bắc Kinh.",
+    "word_type": "n",
+    "audio_url": null,
+    "display_order": 9,
+    "meta": {
+      "source_id": 29,
+      "source_level": 1,
+      "radicals": null,
+      "strokes": null,
+      "translations_eng_all": [
+        "airplane",
+        "CL:架[jià]"
+      ]
+    },
+    "meaning_vi": "máy bay"
+  },
+  {
+    "id": "c872b855-22ae-4b6e-90fa-797711c0cee9",
+    "hsk_level_code": "hsk1",
+    "lesson_number": 3,
+    "chinese_word": "分钟",
+    "pinyin": "fēn zhōng",
+    "meaning": "minute",
+    "example_sentence": "请等五分钟。",
+    "example_pinyin": "Qǐng děng wǔ fēnzhōng.",
+    "example_meaning": "Xin đợi năm phút.",
+    "word_type": "n",
+    "audio_url": null,
+    "display_order": 10,
+    "meta": {
+      "source_id": 30,
+      "source_level": 1,
+      "radicals": null,
+      "strokes": null,
+      "translations_eng_all": [
+        "minute"
+      ]
+    },
+    "meaning_vi": "phút"
+  },
+  {
+    "id": "35f2ac9f-5911-46be-a129-5bd4b58dbf17",
+    "hsk_level_code": "hsk1",
+    "lesson_number": 4,
+    "chinese_word": "高兴",
+    "pinyin": "gāo xìng",
+    "meaning": "happy; glad",
+    "example_sentence": "认识你很高兴。",
+    "example_pinyin": "Rènshi nǐ hěn gāoxìng.",
+    "example_meaning": "Rất vui được biết bạn.",
+    "word_type": "a",
+    "audio_url": null,
+    "display_order": 1,
+    "meta": {
+      "source_id": 31,
+      "source_level": 1,
+      "radicals": null,
+      "strokes": null,
+      "translations_eng_all": [
+        "happy",
+        "glad",
+        "willing (to do sth)",
+        "in a cheerful mood"
+      ]
+    },
+    "meaning_vi": "vui, vui vẻ"
+  },
+  {
+    "id": "ae4e6a09-405b-48b6-920f-0c4acf7c232b",
+    "hsk_level_code": "hsk1",
+    "lesson_number": 4,
+    "chinese_word": "个",
+    "pinyin": "gè",
+    "meaning": "variant of 個|个[gè]",
+    "example_sentence": "我有三个朋友。",
+    "example_pinyin": "Wǒ yǒu sān gè péngyou.",
+    "example_meaning": "Tôi có ba người bạn.",
+    "word_type": "q",
+    "audio_url": null,
+    "display_order": 2,
+    "meta": {
+      "source_id": 32,
+      "source_level": 1,
+      "radicals": "丨",
+      "strokes": "3",
+      "translations_eng_all": [
+        "variant of 個|个[gè]"
+      ]
+    },
+    "meaning_vi": "cái (lượng từ)"
+  },
+  {
+    "id": "37160d51-719b-46fc-9531-fe5dbd6517df",
+    "hsk_level_code": "hsk1",
+    "lesson_number": 4,
+    "chinese_word": "工作",
+    "pinyin": "gōng zuò",
+    "meaning": "to work; (of a machine) to operate",
+    "example_sentence": "你在哪儿工作？",
+    "example_pinyin": "Nǐ zài nǎr gōngzuò?",
+    "example_meaning": "Bạn làm việc ở đâu?",
+    "word_type": "v",
+    "audio_url": null,
+    "display_order": 3,
+    "meta": {
+      "source_id": 33,
+      "source_level": 1,
+      "radicals": null,
+      "strokes": null,
+      "translations_eng_all": [
+        "to work",
+        "(of a machine) to operate",
+        "job",
+        "work",
+        "task",
+        "CL:個|个",
+        "份",
+        "項|项[xiàng]"
+      ]
+    },
+    "meaning_vi": "làm việc, công việc"
+  },
+  {
+    "id": "958c2860-4254-4891-b3c0-08cec81d6661",
+    "hsk_level_code": "hsk1",
+    "lesson_number": 4,
+    "chinese_word": "狗",
+    "pinyin": "gǒu",
+    "meaning": "dog; CL:隻|只",
+    "example_sentence": "我家有一只狗。",
+    "example_pinyin": "Wǒ jiā yǒu yī zhī gǒu.",
+    "example_meaning": "Nhà tôi có một con chó.",
+    "word_type": "n",
+    "audio_url": null,
+    "display_order": 4,
+    "meta": {
+      "source_id": 34,
+      "source_level": 1,
+      "radicals": "犭",
+      "strokes": "8",
+      "translations_eng_all": [
+        "dog",
+        "CL:隻|只",
+        "條|条[tiáo]"
+      ]
+    },
+    "meaning_vi": "chó"
+  },
+  {
+    "id": "800d6f3b-8823-4955-9731-1b8a6a74f3cc",
+    "hsk_level_code": "hsk1",
+    "lesson_number": 4,
+    "chinese_word": "汉语",
+    "pinyin": "Hàn yǔ",
+    "meaning": "Chinese language; CL:門|门[mén]",
+    "example_sentence": "我在学汉语。",
+    "example_pinyin": "Wǒ zài xué Hànyǔ.",
+    "example_meaning": "Tôi đang học tiếng Trung.",
+    "word_type": "n",
+    "audio_url": null,
+    "display_order": 5,
+    "meta": {
+      "source_id": 35,
+      "source_level": 1,
+      "radicals": null,
+      "strokes": null,
+      "translations_eng_all": [
+        "Chinese language",
+        "CL:門|门[mén]"
+      ]
+    },
+    "meaning_vi": "tiếng Trung"
+  },
+  {
+    "id": "d3dc3907-98a1-470d-8a96-f6be36b6581b",
+    "hsk_level_code": "hsk1",
+    "lesson_number": 4,
+    "chinese_word": "好",
+    "pinyin": "hǎo",
+    "meaning": "good; well",
+    "example_sentence": "今天天气很好。",
+    "example_pinyin": "Jīntiān tiānqì hěn hǎo.",
+    "example_meaning": "Hôm nay thời tiết rất đẹp.",
+    "word_type": "a",
+    "audio_url": null,
+    "display_order": 6,
+    "meta": {
+      "source_id": 36,
+      "source_level": 1,
+      "radicals": "女",
+      "strokes": "6",
+      "translations_eng_all": [
+        "good",
+        "well",
+        "proper",
+        "good to",
+        "easy to",
+        "very",
+        "so",
+        "(suffix indicating completion or readiness)"
+      ]
+    },
+    "meaning_vi": "tốt, được"
+  },
+  {
+    "id": "9ab1851f-e261-4305-a2f8-74b7edd370b4",
+    "hsk_level_code": "hsk1",
+    "lesson_number": 4,
+    "chinese_word": "喝",
+    "pinyin": "hē",
+    "meaning": "to drink; My goodness!",
+    "example_sentence": "我喜欢喝水。",
+    "example_pinyin": "Wǒ xǐhuan hē shuǐ.",
+    "example_meaning": "Tôi thích uống nước.",
+    "word_type": "v",
+    "audio_url": null,
+    "display_order": 7,
+    "meta": {
+      "source_id": 37,
+      "source_level": 1,
+      "radicals": "口",
+      "strokes": "12",
+      "translations_eng_all": [
+        "to drink",
+        "My goodness!"
+      ]
+    },
+    "meaning_vi": "uống"
+  },
+  {
+    "id": "fb7d95de-a828-4aea-b792-ec06109d248a",
+    "hsk_level_code": "hsk1",
+    "lesson_number": 4,
+    "chinese_word": "和",
+    "pinyin": "hé",
+    "meaning": "and; together with",
+    "example_sentence": "我和你一起去。",
+    "example_pinyin": "Wǒ hé nǐ yīqǐ qù.",
+    "example_meaning": "Tôi và bạn cùng đi.",
+    "word_type": "c",
+    "audio_url": null,
+    "display_order": 8,
+    "meta": {
+      "source_id": 38,
+      "source_level": 1,
+      "radicals": "口",
+      "strokes": "8",
+      "translations_eng_all": [
+        "and",
+        "together with",
+        "with",
+        "sum",
+        "union",
+        "peace",
+        "harmony",
+        "Japanese related",
+        "Taiwan pr. [hàn]"
+      ]
+    },
+    "meaning_vi": "và"
+  },
+  {
+    "id": "8b9d3332-7f62-4df2-9494-7ca59ea875fa",
+    "hsk_level_code": "hsk1",
+    "lesson_number": 4,
+    "chinese_word": "很",
+    "pinyin": "hěn",
+    "meaning": "(adverb of degree); quite",
+    "example_sentence": "她很漂亮。",
+    "example_pinyin": "Tā hěn piàoliang.",
+    "example_meaning": "Cô ấy rất đẹp.",
+    "word_type": "d",
+    "audio_url": null,
+    "display_order": 9,
+    "meta": {
+      "source_id": 39,
+      "source_level": 1,
+      "radicals": "彳",
+      "strokes": "9",
+      "translations_eng_all": [
+        "(adverb of degree)",
+        "quite",
+        "very",
+        "awfully"
+      ]
+    },
+    "meaning_vi": "rất"
+  },
+  {
+    "id": "ee0ec4bd-3444-4d4c-b199-4140b73ca97e",
+    "hsk_level_code": "hsk1",
+    "lesson_number": 4,
+    "chinese_word": "后面",
+    "pinyin": "hòu mian",
+    "meaning": "rear; back",
+    "example_sentence": "学校在医院后面。",
+    "example_pinyin": "Xuéxiào zài yīyuàn hòumiàn.",
+    "example_meaning": "Trường học ở phía sau bệnh viện.",
+    "word_type": "n",
+    "audio_url": null,
+    "display_order": 10,
+    "meta": {
+      "source_id": 40,
+      "source_level": 1,
+      "radicals": null,
+      "strokes": null,
+      "translations_eng_all": [
+        "rear",
+        "back",
+        "behind",
+        "later",
+        "afterwards"
+      ]
+    },
+    "meaning_vi": "phía sau"
+  },
+  {
+    "id": "a25037f9-0afe-4c95-91d9-3ac9d898ab3e",
+    "hsk_level_code": "hsk1",
+    "lesson_number": 5,
+    "chinese_word": "回",
+    "pinyin": "huí",
+    "meaning": "to curve; to return",
+    "example_sentence": "我想回家。",
+    "example_pinyin": "Wǒ xiǎng huí jiā.",
+    "example_meaning": "Tôi muốn về nhà.",
+    "word_type": "v",
+    "audio_url": null,
+    "display_order": 1,
+    "meta": {
+      "source_id": 41,
+      "source_level": 1,
+      "radicals": "囗",
+      "strokes": "6",
+      "translations_eng_all": [
+        "to curve",
+        "to return",
+        "to revolve"
+      ]
+    },
+    "meaning_vi": "về, trở về"
+  },
+  {
+    "id": "ec46900d-d6ba-405b-808e-2e9b58e79d4f",
+    "hsk_level_code": "hsk1",
+    "lesson_number": 5,
+    "chinese_word": "会",
+    "pinyin": "huì",
+    "meaning": "can; be possible",
+    "example_sentence": "你会说汉语吗？",
+    "example_pinyin": "Nǐ huì shuō Hànyǔ ma?",
+    "example_meaning": "Bạn biết nói tiếng Trung không?",
+    "word_type": "v",
+    "audio_url": null,
+    "display_order": 2,
+    "meta": {
+      "source_id": 42,
+      "source_level": 1,
+      "radicals": "人",
+      "strokes": "6",
+      "translations_eng_all": [
+        "can",
+        "be possible",
+        "be able to",
+        "will",
+        "be likely to",
+        "be sure to",
+        "to assemble",
+        "to meet",
+        "to gather",
+        "to see",
+        "union",
+        "group",
+        "association",
+        "CL:個|个[gè]",
+        "a moment (Taiwan pr. for this sense is )"
+      ]
+    },
+    "meaning_vi": "biết, có thể"
+  },
+  {
+    "id": "58b4cfcc-5f56-4cdb-b180-4817b4600b67",
+    "hsk_level_code": "hsk1",
+    "lesson_number": 5,
+    "chinese_word": "火车站",
+    "pinyin": "huǒ chē zhàn",
+    "meaning": "train station",
+    "example_sentence": "火车站在哪里？",
+    "example_pinyin": "Huǒchēzhàn zài nǎli?",
+    "example_meaning": "Ga tàu ở đâu?",
+    "word_type": "n",
+    "audio_url": null,
+    "display_order": 3,
+    "meta": {
+      "source_id": 43,
+      "source_level": 1,
+      "radicals": null,
+      "strokes": null,
+      "translations_eng_all": [
+        "train station"
+      ]
+    },
+    "meaning_vi": "ga tàu"
+  },
+  {
+    "id": "e1db2756-2da8-47df-8075-87bc31cff092",
+    "hsk_level_code": "hsk1",
+    "lesson_number": 5,
+    "chinese_word": "几",
+    "pinyin": "jǐ",
+    "meaning": "how much; how many",
+    "example_sentence": "你家有几个人？",
+    "example_pinyin": "Nǐ jiā yǒu jǐ gè rén?",
+    "example_meaning": "Nhà bạn có mấy người?",
+    "word_type": "r",
+    "audio_url": null,
+    "display_order": 4,
+    "meta": {
+      "source_id": 44,
+      "source_level": 1,
+      "radicals": "几",
+      "strokes": "2",
+      "translations_eng_all": [
+        "how much",
+        "how many",
+        "several",
+        "a few"
+      ]
+    },
+    "meaning_vi": "mấy"
+  },
+  {
+    "id": "c5e57e9f-e8c5-4fa3-9dd4-35c6a248a3b0",
+    "hsk_level_code": "hsk1",
+    "lesson_number": 5,
+    "chinese_word": "家",
+    "pinyin": "jiā",
+    "meaning": "home; family",
+    "example_sentence": "我的家在北京。",
+    "example_pinyin": "Wǒ de jiā zài Běijīng.",
+    "example_meaning": "Nhà tôi ở Bắc Kinh.",
+    "word_type": "n",
+    "audio_url": null,
+    "display_order": 5,
+    "meta": {
+      "source_id": 45,
+      "source_level": 1,
+      "radicals": "宀",
+      "strokes": "10",
+      "translations_eng_all": [
+        "home",
+        "family",
+        "classifier for families or businesses",
+        "refers to the philosophical schools of pre-Han China",
+        "noun suffix for specialists in some activity such as musician or revolutionary",
+        "corresponds to English -ist",
+        "-er",
+        "-ary or -ian",
+        "CL:個|个[gè]"
+      ]
+    },
+    "meaning_vi": "nhà, gia đình"
+  },
+  {
+    "id": "ca22a667-7f0d-42bf-885b-7ffbde9a38d5",
+    "hsk_level_code": "hsk1",
+    "lesson_number": 5,
+    "chinese_word": "叫",
+    "pinyin": "jiào",
+    "meaning": "to shout; to call",
+    "example_sentence": "你叫什么名字？",
+    "example_pinyin": "Nǐ jiào shénme míngzi?",
+    "example_meaning": "Bạn tên gì?",
+    "word_type": "v",
+    "audio_url": null,
+    "display_order": 6,
+    "meta": {
+      "source_id": 46,
+      "source_level": 1,
+      "radicals": "口",
+      "strokes": "5",
+      "translations_eng_all": [
+        "to shout",
+        "to call",
+        "to order",
+        "to ask",
+        "to be called",
+        "by (indicates agent in the passive mood)"
+      ]
+    },
+    "meaning_vi": "gọi là, tên là"
+  },
+  {
+    "id": "e3f7900a-379e-4119-8333-2ca66ddb72e4",
+    "hsk_level_code": "hsk1",
+    "lesson_number": 5,
+    "chinese_word": "今天",
+    "pinyin": "jīn tiān",
+    "meaning": "today; at the present",
+    "example_sentence": "今天是星期一。",
+    "example_pinyin": "Jīntiān shì xīngqīyī.",
+    "example_meaning": "Hôm nay là thứ Hai.",
+    "word_type": "n",
+    "audio_url": null,
+    "display_order": 7,
+    "meta": {
+      "source_id": 47,
+      "source_level": 1,
+      "radicals": null,
+      "strokes": null,
+      "translations_eng_all": [
+        "today",
+        "at the present",
+        "now"
+      ]
+    },
+    "meaning_vi": "hôm nay"
+  },
+  {
+    "id": "540cd11b-f67f-4b79-9eab-c59b0a8d177d",
+    "hsk_level_code": "hsk1",
+    "lesson_number": 5,
+    "chinese_word": "九",
+    "pinyin": "jiǔ",
+    "meaning": "nine; 9",
+    "example_sentence": "现在九点了。",
+    "example_pinyin": "Xiànzài jiǔ diǎn le.",
+    "example_meaning": "Bây giờ chín giờ rồi.",
+    "word_type": "m",
+    "audio_url": null,
+    "display_order": 8,
+    "meta": {
+      "source_id": 48,
+      "source_level": 1,
+      "radicals": "丿",
+      "strokes": "2",
+      "translations_eng_all": [
+        "nine",
+        "9"
+      ]
+    },
+    "meaning_vi": "chín, 9"
+  },
+  {
+    "id": "a9e4ac24-95f0-4501-b72d-b0e7d165802f",
+    "hsk_level_code": "hsk1",
+    "lesson_number": 5,
+    "chinese_word": "开",
+    "pinyin": "kāi",
+    "meaning": "to open; to start",
+    "example_sentence": "请开门。",
+    "example_pinyin": "Qǐng kāi mén.",
+    "example_meaning": "Xin mở cửa.",
+    "word_type": "v",
+    "audio_url": null,
+    "display_order": 9,
+    "meta": {
+      "source_id": 49,
+      "source_level": 1,
+      "radicals": "廾",
+      "strokes": "4",
+      "translations_eng_all": [
+        "to open",
+        "to start",
+        "to turn on",
+        "to boil",
+        "to write out (a medical prescription)",
+        "to operate (vehicle)",
+        "abbr. for 開爾文|开尔文 degrees Kelvin"
+      ]
+    },
+    "meaning_vi": "mở"
+  },
+  {
+    "id": "1f35b907-663a-4b5d-b8a9-413357101a01",
+    "hsk_level_code": "hsk1",
+    "lesson_number": 5,
+    "chinese_word": "看",
+    "pinyin": "kàn",
+    "meaning": "to see; to look at",
+    "example_sentence": "我在看书。",
+    "example_pinyin": "Wǒ zài kàn shū.",
+    "example_meaning": "Tôi đang đọc sách.",
+    "word_type": "v",
+    "audio_url": null,
+    "display_order": 10,
+    "meta": {
+      "source_id": 50,
+      "source_level": 1,
+      "radicals": "目",
+      "strokes": "9",
+      "translations_eng_all": [
+        "to see",
+        "to look at",
+        "to read",
+        "to watch",
+        "to consider",
+        "to regard as",
+        "to view as",
+        "to treat as",
+        "to judge",
+        "(after repeated verb) to give it a try",
+        "depending on (how you're judging)",
+        "to visit",
+        "to call on",
+        "to treat (an illness)",
+        "to look after",
+        "Watch out! (for a danger)"
+      ]
+    },
+    "meaning_vi": "xem, nhìn"
+  },
+  {
+    "id": "3b8407f4-9f4c-40c1-b58c-c01190f82294",
+    "hsk_level_code": "hsk1",
+    "lesson_number": 6,
+    "chinese_word": "看见",
+    "pinyin": "kàn jiàn",
+    "meaning": "to see; to catch sight of",
+    "example_sentence": "我看见他了。",
+    "example_pinyin": "Wǒ kànjiàn tā le.",
+    "example_meaning": "Tôi nhìn thấy anh ấy rồi.",
+    "word_type": "v",
+    "audio_url": null,
+    "display_order": 1,
+    "meta": {
+      "source_id": 51,
+      "source_level": 1,
+      "radicals": null,
+      "strokes": null,
+      "translations_eng_all": [
+        "to see",
+        "to catch sight of"
+      ]
+    },
+    "meaning_vi": "nhìn thấy"
+  },
+  {
+    "id": "ef0c1163-2876-401c-9788-54bcad5a4853",
+    "hsk_level_code": "hsk1",
+    "lesson_number": 6,
+    "chinese_word": "块",
+    "pinyin": "kuài",
+    "meaning": "lump (of earth); chunk",
+    "example_sentence": "这个苹果两块钱。",
+    "example_pinyin": "Zhège píngguǒ liǎng kuài qián.",
+    "example_meaning": "Quả táo này hai đồng.",
+    "word_type": "q",
+    "audio_url": null,
+    "display_order": 2,
+    "meta": {
+      "source_id": 52,
+      "source_level": 1,
+      "radicals": "土",
+      "strokes": "7",
+      "translations_eng_all": [
+        "lump (of earth)",
+        "chunk",
+        "piece",
+        "classifier for pieces of cloth",
+        "cake",
+        "soap etc",
+        "colloquial word for yuan (or other unit of currency such as Hong Kong or US dollar etc)",
+        "usually as 塊錢|块钱"
+      ]
+    },
+    "meaning_vi": "đồng (tiền), miếng"
+  },
+  {
+    "id": "e7603b4a-594b-4493-8a01-01ce13866f7d",
+    "hsk_level_code": "hsk1",
+    "lesson_number": 6,
+    "chinese_word": "来",
+    "pinyin": "lái",
+    "meaning": "to come; to arrive",
+    "example_sentence": "你来我家吧。",
+    "example_pinyin": "Nǐ lái wǒ jiā ba.",
+    "example_meaning": "Bạn đến nhà tôi đi.",
+    "word_type": "v",
+    "audio_url": null,
+    "display_order": 3,
+    "meta": {
+      "source_id": 53,
+      "source_level": 1,
+      "radicals": "木",
+      "strokes": "7",
+      "translations_eng_all": [
+        "to come",
+        "to arrive",
+        "to come round",
+        "ever since",
+        "next"
+      ]
+    },
+    "meaning_vi": "đến"
+  },
+  {
+    "id": "efe72874-bbe3-4d3e-8172-5fed710388e8",
+    "hsk_level_code": "hsk1",
+    "lesson_number": 6,
+    "chinese_word": "老师",
+    "pinyin": "lǎo shī",
+    "meaning": "teacher; CL:個|个",
+    "example_sentence": "老师在教室里。",
+    "example_pinyin": "Lǎoshī zài jiàoshì lǐ.",
+    "example_meaning": "Giáo viên ở trong lớp học.",
+    "word_type": "n",
+    "audio_url": null,
+    "display_order": 4,
+    "meta": {
+      "source_id": 54,
+      "source_level": 1,
+      "radicals": null,
+      "strokes": null,
+      "translations_eng_all": [
+        "teacher",
+        "CL:個|个",
+        "位[wèi]"
+      ]
+    },
+    "meaning_vi": "thầy/cô giáo"
+  },
+  {
+    "id": "65199ce5-680d-4de6-ae65-1a6f18a6af63",
+    "hsk_level_code": "hsk1",
+    "lesson_number": 6,
+    "chinese_word": "了",
+    "pinyin": "le",
+    "meaning": "(modal particle intensifying preceding clause); (completed action marker)",
+    "example_sentence": "我吃了饭了。",
+    "example_pinyin": "Wǒ chīle fàn le.",
+    "example_meaning": "Tôi ăn cơm rồi.",
+    "word_type": "u",
+    "audio_url": null,
+    "display_order": 5,
+    "meta": {
+      "source_id": 55,
+      "source_level": 1,
+      "radicals": "乙",
+      "strokes": "2",
+      "translations_eng_all": [
+        "(modal particle intensifying preceding clause)",
+        "(completed action marker)"
+      ]
+    },
+    "meaning_vi": "rồi (trợ từ)"
+  },
+  {
+    "id": "bac1d855-eb78-4c61-902e-901ecc291d08",
+    "hsk_level_code": "hsk1",
+    "lesson_number": 6,
+    "chinese_word": "冷",
+    "pinyin": "lěng",
+    "meaning": "cold",
+    "example_sentence": "今天很冷。",
+    "example_pinyin": "Jīntiān hěn lěng.",
+    "example_meaning": "Hôm nay rất lạnh.",
+    "word_type": "a",
+    "audio_url": null,
+    "display_order": 6,
+    "meta": {
+      "source_id": 56,
+      "source_level": 1,
+      "radicals": "冫",
+      "strokes": "7",
+      "translations_eng_all": [
+        "cold"
+      ]
+    },
+    "meaning_vi": "lạnh"
+  },
+  {
+    "id": "98d8c592-d065-4e50-b20e-6bce8e9e51f8",
+    "hsk_level_code": "hsk1",
+    "lesson_number": 6,
+    "chinese_word": "里",
+    "pinyin": "lǐ",
+    "meaning": "li (Chinese mile); 500 meters (modern)",
+    "example_sentence": "书在桌子里面。",
+    "example_pinyin": "Shū zài zhuōzi lǐmiàn.",
+    "example_meaning": "Sách ở trong bàn.",
+    "word_type": "n",
+    "audio_url": null,
+    "display_order": 7,
+    "meta": {
+      "source_id": 57,
+      "source_level": 1,
+      "radicals": "里",
+      "strokes": "7",
+      "translations_eng_all": [
+        "li (Chinese mile)",
+        "500 meters (modern)",
+        "home",
+        "hometown",
+        "village",
+        "neighborhood",
+        "administrative unit"
+      ]
+    },
+    "meaning_vi": "trong, bên trong"
+  },
+  {
+    "id": "decd2bd6-831c-4f8a-a31b-bb9b80c011bf",
+    "hsk_level_code": "hsk1",
+    "lesson_number": 6,
+    "chinese_word": "零",
+    "pinyin": "líng",
+    "meaning": "zero; nought",
+    "example_sentence": "今天零度。",
+    "example_pinyin": "Jīntiān líng dù.",
+    "example_meaning": "Hôm nay không độ.",
+    "word_type": "m",
+    "audio_url": null,
+    "display_order": 8,
+    "meta": {
+      "source_id": 58,
+      "source_level": 1,
+      "radicals": "雨",
+      "strokes": "13",
+      "translations_eng_all": [
+        "zero",
+        "nought",
+        "zero sign",
+        "fractional",
+        "fragmentary",
+        "odd (of numbers)",
+        "(placed between two numbers to indicate a smaller quantity followed by a larger one)",
+        "fraction",
+        "(in mathematics) remainder (after division)",
+        "extra",
+        "to wither and fall",
+        "to wither"
+      ]
+    },
+    "meaning_vi": "số không, 0"
+  },
+  {
+    "id": "91633830-a331-4e3f-8589-cae977a6356e",
+    "hsk_level_code": "hsk1",
+    "lesson_number": 6,
+    "chinese_word": "六",
+    "pinyin": "liù",
+    "meaning": "six; 6",
+    "example_sentence": "我六点起床。",
+    "example_pinyin": "Wǒ liù diǎn qǐchuáng.",
+    "example_meaning": "Tôi dậy lúc sáu giờ.",
+    "word_type": "m",
+    "audio_url": null,
+    "display_order": 9,
+    "meta": {
+      "source_id": 59,
+      "source_level": 1,
+      "radicals": "八",
+      "strokes": "4",
+      "translations_eng_all": [
+        "six",
+        "6"
+      ]
+    },
+    "meaning_vi": "sáu, 6"
+  },
+  {
+    "id": "f0e2196d-0222-4dce-b6b9-9882f49d8348",
+    "hsk_level_code": "hsk1",
+    "lesson_number": 6,
+    "chinese_word": "妈妈",
+    "pinyin": "mā ma",
+    "meaning": "mama; mommy",
+    "example_sentence": "妈妈做了很多菜。",
+    "example_pinyin": "Māma zuòle hěn duō cài.",
+    "example_meaning": "Mẹ nấu rất nhiều món.",
+    "word_type": "n",
+    "audio_url": null,
+    "display_order": 10,
+    "meta": {
+      "source_id": 60,
+      "source_level": 1,
+      "radicals": null,
+      "strokes": null,
+      "translations_eng_all": [
+        "mama",
+        "mommy",
+        "mother",
+        "CL:個|个",
+        "位[wèi]"
+      ]
+    },
+    "meaning_vi": "mẹ, má"
+  },
+  {
+    "id": "fc306eb3-39cc-4d40-aaa8-cc64e7deab91",
+    "hsk_level_code": "hsk1",
+    "lesson_number": 7,
+    "chinese_word": "吗",
+    "pinyin": "ma",
+    "meaning": "(question tag)",
+    "example_sentence": "你是学生吗？",
+    "example_pinyin": "Nǐ shì xuésheng ma?",
+    "example_meaning": "Bạn là học sinh phải không?",
+    "word_type": "u",
+    "audio_url": null,
+    "display_order": 1,
+    "meta": {
+      "source_id": 61,
+      "source_level": 1,
+      "radicals": "口",
+      "strokes": "6",
+      "translations_eng_all": [
+        "(question tag)"
+      ]
+    },
+    "meaning_vi": "không? (trợ từ nghi vấn)"
+  },
+  {
+    "id": "112cd0eb-af65-4226-a1da-41cd934ceece",
+    "hsk_level_code": "hsk1",
+    "lesson_number": 7,
+    "chinese_word": "买",
+    "pinyin": "mǎi",
+    "meaning": "to buy; to purchase",
+    "example_sentence": "我想买水果。",
+    "example_pinyin": "Wǒ xiǎng mǎi shuǐguǒ.",
+    "example_meaning": "Tôi muốn mua trái cây.",
+    "word_type": "v",
+    "audio_url": null,
+    "display_order": 2,
+    "meta": {
+      "source_id": 62,
+      "source_level": 1,
+      "radicals": "乙",
+      "strokes": "6",
+      "translations_eng_all": [
+        "to buy",
+        "to purchase"
+      ]
+    },
+    "meaning_vi": "mua"
+  },
+  {
+    "id": "e162df19-7977-460a-98b4-ec9400501880",
+    "hsk_level_code": "hsk1",
+    "lesson_number": 7,
+    "chinese_word": "猫",
+    "pinyin": "māo",
+    "meaning": "cat; CL:隻|只[zhī]",
+    "example_sentence": "那只猫很可爱。",
+    "example_pinyin": "Nà zhī māo hěn kě'ài.",
+    "example_meaning": "Con mèo đó rất đáng yêu.",
+    "word_type": "n",
+    "audio_url": null,
+    "display_order": 3,
+    "meta": {
+      "source_id": 63,
+      "source_level": 1,
+      "radicals": "犭",
+      "strokes": "11",
+      "translations_eng_all": [
+        "cat",
+        "CL:隻|只[zhī]"
+      ]
+    },
+    "meaning_vi": "mèo"
+  },
+  {
+    "id": "169dfa87-367e-4ffc-b1f2-c1a25b2e58e2",
+    "hsk_level_code": "hsk1",
+    "lesson_number": 7,
+    "chinese_word": "没",
+    "pinyin": "méi",
+    "meaning": "(negative prefix for verbs); have not",
+    "example_sentence": "我没去过中国。",
+    "example_pinyin": "Wǒ méi qùguò Zhōngguó.",
+    "example_meaning": "Tôi chưa đi Trung Quốc.",
+    "word_type": "d",
+    "audio_url": null,
+    "display_order": 4,
+    "meta": {
+      "source_id": 64,
+      "source_level": 1,
+      "radicals": "氵",
+      "strokes": "7",
+      "translations_eng_all": [
+        "(negative prefix for verbs)",
+        "have not",
+        "not"
+      ]
+    },
+    "meaning_vi": "chưa, không có"
+  },
+  {
+    "id": "60722762-b320-4c39-b8c4-ad672d6a5966",
+    "hsk_level_code": "hsk1",
+    "lesson_number": 7,
+    "chinese_word": "没关系",
+    "pinyin": "méi guān xi",
+    "meaning": "it doesn't matter",
+    "example_sentence": "没关系，没问题。",
+    "example_pinyin": "Méi guānxi, méi wèntí.",
+    "example_meaning": "Không sao, không vấn đề gì.",
+    "word_type": "phr",
+    "audio_url": null,
+    "display_order": 5,
+    "meta": {
+      "source_id": 65,
+      "source_level": 1,
+      "radicals": null,
+      "strokes": null,
+      "translations_eng_all": [
+        "it doesn't matter"
+      ]
+    },
+    "meaning_vi": "không sao"
+  },
+  {
+    "id": "415f08ce-ad7e-4a51-9ff4-dc1a02db01b1",
+    "hsk_level_code": "hsk1",
+    "lesson_number": 7,
+    "chinese_word": "米饭",
+    "pinyin": "mǐ fàn",
+    "meaning": "(cooked) rice",
+    "example_sentence": "我每天吃米饭。",
+    "example_pinyin": "Wǒ měitiān chī mǐfàn.",
+    "example_meaning": "Tôi ăn cơm mỗi ngày.",
+    "word_type": "n",
+    "audio_url": null,
+    "display_order": 6,
+    "meta": {
+      "source_id": 66,
+      "source_level": 1,
+      "radicals": null,
+      "strokes": null,
+      "translations_eng_all": [
+        "(cooked) rice"
+      ]
+    },
+    "meaning_vi": "cơm"
+  },
+  {
+    "id": "8a3ad573-130c-42f8-b3fc-3664087e4cc1",
+    "hsk_level_code": "hsk1",
+    "lesson_number": 7,
+    "chinese_word": "明天",
+    "pinyin": "míng tiān",
+    "meaning": "tomorrow",
+    "example_sentence": "明天你有空吗？",
+    "example_pinyin": "Míngtiān nǐ yǒu kòng ma?",
+    "example_meaning": "Ngày mai bạn rảnh không?",
+    "word_type": "n",
+    "audio_url": null,
+    "display_order": 7,
+    "meta": {
+      "source_id": 67,
+      "source_level": 1,
+      "radicals": null,
+      "strokes": null,
+      "translations_eng_all": [
+        "tomorrow"
+      ]
+    },
+    "meaning_vi": "ngày mai"
+  },
+  {
+    "id": "1c09cbc8-b118-4447-bf9e-7561c7daf21d",
+    "hsk_level_code": "hsk1",
+    "lesson_number": 7,
+    "chinese_word": "名字",
+    "pinyin": "míng zi",
+    "meaning": "name (of a person or thing); CL:個|个[gè]",
+    "example_sentence": "你的名字真好听。",
+    "example_pinyin": "Nǐ de míngzi zhēn hǎotīng.",
+    "example_meaning": "Tên bạn thật hay.",
+    "word_type": "n",
+    "audio_url": null,
+    "display_order": 8,
+    "meta": {
+      "source_id": 68,
+      "source_level": 1,
+      "radicals": null,
+      "strokes": null,
+      "translations_eng_all": [
+        "name (of a person or thing)",
+        "CL:個|个[gè]"
+      ]
+    },
+    "meaning_vi": "tên"
+  },
+  {
+    "id": "860491d6-ce2e-4090-97c3-ef141de34c95",
+    "hsk_level_code": "hsk1",
+    "lesson_number": 7,
+    "chinese_word": "哪",
+    "pinyin": "nǎ",
+    "meaning": "how; which",
+    "example_sentence": "你是哪国人？",
+    "example_pinyin": "Nǐ shì nǎ guó rén?",
+    "example_meaning": "Bạn là người nước nào?",
+    "word_type": "r",
+    "audio_url": null,
+    "display_order": 9,
+    "meta": {
+      "source_id": 69,
+      "source_level": 1,
+      "radicals": "口",
+      "strokes": "9",
+      "translations_eng_all": [
+        "how",
+        "which"
+      ]
+    },
+    "meaning_vi": "nào, đâu"
+  },
+  {
+    "id": "707b3010-1a81-49e5-9760-dc00414fd2a1",
+    "hsk_level_code": "hsk1",
+    "lesson_number": 7,
+    "chinese_word": "那",
+    "pinyin": "nà",
+    "meaning": "that; those",
+    "example_sentence": "那是我的老师。",
+    "example_pinyin": "Nà shì wǒ de lǎoshī.",
+    "example_meaning": "Đó là giáo viên của tôi.",
+    "word_type": "r",
+    "audio_url": null,
+    "display_order": 10,
+    "meta": {
+      "source_id": 70,
+      "source_level": 1,
+      "radicals": "阝",
+      "strokes": "6",
+      "translations_eng_all": [
+        "that",
+        "those",
+        "then (in that case)",
+        "commonly pr.  before a classifier",
+        "esp. in Beijing"
+      ]
+    },
+    "meaning_vi": "đó, kia"
+  },
+  {
+    "id": "24c4f9bd-c6cd-46c6-b1af-6e6fca1375d2",
+    "hsk_level_code": "hsk1",
+    "lesson_number": 8,
+    "chinese_word": "呢",
+    "pinyin": "ne",
+    "meaning": "particle indicating that a previously asked question is to be applied to the preceding word (\"What about ...?\", \"And ...?\"); particle for inquiring about location (\"Where is ...?\")",
+    "example_sentence": "你呢？你去吗？",
+    "example_pinyin": "Nǐ ne? Nǐ qù ma?",
+    "example_meaning": "Còn bạn? Bạn đi không?",
+    "word_type": "u",
+    "audio_url": null,
+    "display_order": 1,
+    "meta": {
+      "source_id": 71,
+      "source_level": 1,
+      "radicals": "口",
+      "strokes": "8",
+      "translations_eng_all": [
+        "particle indicating that a previously asked question is to be applied to the preceding word (\"What about ...?\", \"And ...?\")",
+        "particle for inquiring about location (\"Where is ...?\")",
+        "particle signaling a pause",
+        "to emphasize the preceding words and allow the listener time to take them on board (\"ok?\", \"are you with me?\")",
+        "(at the end of a declarative sentence) particle indicating continuation of a state or action",
+        "particle indicating strong affirmation"
+      ]
+    },
+    "meaning_vi": "vậy? (trợ từ)"
+  },
+  {
+    "id": "7c5eea9b-a67e-4009-ad68-f755492abfd6",
+    "hsk_level_code": "hsk1",
+    "lesson_number": 8,
+    "chinese_word": "能",
+    "pinyin": "néng",
+    "meaning": "to be able to; to be capable of",
+    "example_sentence": "你能帮我吗？",
+    "example_pinyin": "Nǐ néng bāng wǒ ma?",
+    "example_meaning": "Bạn có thể giúp tôi không?",
+    "word_type": "v",
+    "audio_url": null,
+    "display_order": 2,
+    "meta": {
+      "source_id": 72,
+      "source_level": 1,
+      "radicals": "月",
+      "strokes": "10",
+      "translations_eng_all": [
+        "to be able to",
+        "to be capable of",
+        "ability",
+        "capability",
+        "able",
+        "capable",
+        "can possibly",
+        "(usually used in the negative) to have the possibility of"
+      ]
+    },
+    "meaning_vi": "có thể"
+  },
+  {
+    "id": "371eaa6d-ba57-4ae7-b857-58178257a817",
+    "hsk_level_code": "hsk1",
+    "lesson_number": 8,
+    "chinese_word": "你",
+    "pinyin": "nǐ",
+    "meaning": "you (informal, as opposed to courteous 您)",
+    "example_sentence": "你好！你是老师吗？",
+    "example_pinyin": "Nǐ hǎo! Nǐ shì lǎoshī ma?",
+    "example_meaning": "Xin chào! Bạn là giáo viên phải không?",
+    "word_type": "r",
+    "audio_url": null,
+    "display_order": 3,
+    "meta": {
+      "source_id": 73,
+      "source_level": 1,
+      "radicals": "亻",
+      "strokes": "7",
+      "translations_eng_all": [
+        "you (informal, as opposed to courteous 您)"
+      ]
+    },
+    "meaning_vi": "bạn, anh/chị"
+  },
+  {
+    "id": "6e0c5c8e-e37e-4be2-96ef-f596b65eae26",
+    "hsk_level_code": "hsk1",
+    "lesson_number": 8,
+    "chinese_word": "年",
+    "pinyin": "nián",
+    "meaning": "year; CL:個|个[gè]",
+    "example_sentence": "今年是二零二五年。",
+    "example_pinyin": "Jīnnián shì èr líng èr wǔ nián.",
+    "example_meaning": "Năm nay là năm 2025.",
+    "word_type": "n",
+    "audio_url": null,
+    "display_order": 4,
+    "meta": {
+      "source_id": 74,
+      "source_level": 1,
+      "radicals": "干",
+      "strokes": "6",
+      "translations_eng_all": [
+        "year",
+        "CL:個|个[gè]"
+      ]
+    },
+    "meaning_vi": "năm"
+  },
+  {
+    "id": "71af080d-b1fb-4488-ac13-cd38faa2d365",
+    "hsk_level_code": "hsk1",
+    "lesson_number": 8,
+    "chinese_word": "女儿",
+    "pinyin": "nǚ ér",
+    "meaning": "daughter",
+    "example_sentence": "她的女儿很漂亮。",
+    "example_pinyin": "Tā de nǚ'ér hěn piàoliang.",
+    "example_meaning": "Con gái cô ấy rất xinh.",
+    "word_type": "n",
+    "audio_url": null,
+    "display_order": 5,
+    "meta": {
+      "source_id": 75,
+      "source_level": 1,
+      "radicals": null,
+      "strokes": null,
+      "translations_eng_all": [
+        "daughter"
+      ]
+    },
+    "meaning_vi": "con gái"
+  },
+  {
+    "id": "b2bf6d61-88e3-4e42-b5e9-581bb065d221",
+    "hsk_level_code": "hsk1",
+    "lesson_number": 8,
+    "chinese_word": "朋友",
+    "pinyin": "péng you",
+    "meaning": "friend; CL:個|个",
+    "example_sentence": "他是我最好的朋友。",
+    "example_pinyin": "Tā shì wǒ zuì hǎo de péngyou.",
+    "example_meaning": "Anh ấy là bạn tốt nhất của tôi.",
+    "word_type": "n",
+    "audio_url": null,
+    "display_order": 6,
+    "meta": {
+      "source_id": 76,
+      "source_level": 1,
+      "radicals": null,
+      "strokes": null,
+      "translations_eng_all": [
+        "friend",
+        "CL:個|个",
+        "位[wèi]"
+      ]
+    },
+    "meaning_vi": "bạn bè"
+  },
+  {
+    "id": "125ffdcf-5dc5-42e2-999b-2809c4e8aa04",
+    "hsk_level_code": "hsk1",
+    "lesson_number": 8,
+    "chinese_word": "漂亮",
+    "pinyin": "piào liang",
+    "meaning": "pretty; beautiful",
+    "example_sentence": "这件衣服很漂亮。",
+    "example_pinyin": "Zhè jiàn yīfu hěn piàoliang.",
+    "example_meaning": "Bộ quần áo này rất đẹp.",
+    "word_type": "a",
+    "audio_url": null,
+    "display_order": 7,
+    "meta": {
+      "source_id": 77,
+      "source_level": 1,
+      "radicals": null,
+      "strokes": null,
+      "translations_eng_all": [
+        "pretty",
+        "beautiful"
+      ]
+    },
+    "meaning_vi": "đẹp"
+  },
+  {
+    "id": "8f84a0a9-2275-4e72-949d-8d7e5806e56d",
+    "hsk_level_code": "hsk1",
+    "lesson_number": 8,
+    "chinese_word": "苹果",
+    "pinyin": "píng guǒ",
+    "meaning": "apple; CL:個|个",
+    "example_sentence": "我想吃苹果。",
+    "example_pinyin": "Wǒ xiǎng chī píngguǒ.",
+    "example_meaning": "Tôi muốn ăn táo.",
+    "word_type": "n",
+    "audio_url": null,
+    "display_order": 8,
+    "meta": {
+      "source_id": 78,
+      "source_level": 1,
+      "radicals": null,
+      "strokes": null,
+      "translations_eng_all": [
+        "apple",
+        "CL:個|个",
+        "顆|颗[kē]"
+      ]
+    },
+    "meaning_vi": "quả táo"
+  },
+  {
+    "id": "b1e87a32-1ce2-4c85-8914-302e51623b20",
+    "hsk_level_code": "hsk1",
+    "lesson_number": 8,
+    "chinese_word": "七",
+    "pinyin": "qī",
+    "meaning": "seven; 7",
+    "example_sentence": "一个星期有七天。",
+    "example_pinyin": "Yī gè xīngqī yǒu qī tiān.",
+    "example_meaning": "Một tuần có bảy ngày.",
+    "word_type": "m",
+    "audio_url": null,
+    "display_order": 9,
+    "meta": {
+      "source_id": 79,
+      "source_level": 1,
+      "radicals": "一",
+      "strokes": "2",
+      "translations_eng_all": [
+        "seven",
+        "7"
+      ]
+    },
+    "meaning_vi": "bảy, 7"
+  },
+  {
+    "id": "0bde164c-dfdf-4c35-9cfa-b99924d5865f",
+    "hsk_level_code": "hsk1",
+    "lesson_number": 8,
+    "chinese_word": "钱",
+    "pinyin": "qián",
+    "meaning": "coin; money",
+    "example_sentence": "你有多少钱？",
+    "example_pinyin": "Nǐ yǒu duōshao qián?",
+    "example_meaning": "Bạn có bao nhiêu tiền?",
+    "word_type": "n",
+    "audio_url": null,
+    "display_order": 10,
+    "meta": {
+      "source_id": 80,
+      "source_level": 1,
+      "radicals": "钅",
+      "strokes": "10",
+      "translations_eng_all": [
+        "coin",
+        "money",
+        "CL:筆|笔[bǐ]",
+        "unit of weight",
+        "one tenth of a tael 兩|两[liǎng]"
+      ]
+    },
+    "meaning_vi": "tiền"
+  },
+  {
+    "id": "715b9f51-f852-440d-bc6b-a4a1451d6652",
+    "hsk_level_code": "hsk1",
+    "lesson_number": 9,
+    "chinese_word": "前面",
+    "pinyin": "qián miàn",
+    "meaning": "ahead; in front",
+    "example_sentence": "商店在前面。",
+    "example_pinyin": "Shāngdiàn zài qiánmiàn.",
+    "example_meaning": "Cửa hàng ở phía trước.",
+    "word_type": "n",
+    "audio_url": null,
+    "display_order": 1,
+    "meta": {
+      "source_id": 81,
+      "source_level": 1,
+      "radicals": null,
+      "strokes": null,
+      "translations_eng_all": [
+        "ahead",
+        "in front",
+        "preceding",
+        "above"
+      ]
+    },
+    "meaning_vi": "phía trước"
+  },
+  {
+    "id": "2204a778-1de0-4d07-83a9-756d61fc9543",
+    "hsk_level_code": "hsk1",
+    "lesson_number": 9,
+    "chinese_word": "请",
+    "pinyin": "qǐng",
+    "meaning": "to ask; to invite",
+    "example_sentence": "请坐。",
+    "example_pinyin": "Qǐng zuò.",
+    "example_meaning": "Xin mời ngồi.",
+    "word_type": "v",
+    "audio_url": null,
+    "display_order": 2,
+    "meta": {
+      "source_id": 82,
+      "source_level": 1,
+      "radicals": "讠",
+      "strokes": "10",
+      "translations_eng_all": [
+        "to ask",
+        "to invite",
+        "please (do sth)",
+        "to treat (to a meal etc)",
+        "to request"
+      ]
+    },
+    "meaning_vi": "mời, xin"
+  },
+  {
+    "id": "4d58a32c-d500-4fd4-8074-75db8efcc635",
+    "hsk_level_code": "hsk1",
+    "lesson_number": 9,
+    "chinese_word": "去",
+    "pinyin": "qù",
+    "meaning": "to go; to go to (a place)",
+    "example_sentence": "你去哪里？",
+    "example_pinyin": "Nǐ qù nǎli?",
+    "example_meaning": "Bạn đi đâu?",
+    "word_type": "v",
+    "audio_url": null,
+    "display_order": 3,
+    "meta": {
+      "source_id": 83,
+      "source_level": 1,
+      "radicals": "厶",
+      "strokes": "5",
+      "translations_eng_all": [
+        "to go",
+        "to go to (a place)",
+        "to cause to go or send (sb)",
+        "to remove",
+        "to get rid of",
+        "(when used either before or after a verb) to go in order to do sth",
+        "to be apart from in space or time",
+        "(after a verb of motion indicates movement away from the speaker)",
+        "(used after certain verbs to indicate detachment or separation)",
+        "(of a time or an event etc) just passed or elapsed"
+      ]
+    },
+    "meaning_vi": "đi"
+  },
+  {
+    "id": "84141620-067c-476c-8910-e49abd2819e3",
+    "hsk_level_code": "hsk1",
+    "lesson_number": 9,
+    "chinese_word": "热",
+    "pinyin": "rè",
+    "meaning": "to warm up; to heat up",
+    "example_sentence": "夏天很热。",
+    "example_pinyin": "Xiàtiān hěn rè.",
+    "example_meaning": "Mùa hè rất nóng.",
+    "word_type": "a",
+    "audio_url": null,
+    "display_order": 4,
+    "meta": {
+      "source_id": 84,
+      "source_level": 1,
+      "radicals": "灬",
+      "strokes": "10",
+      "translations_eng_all": [
+        "to warm up",
+        "to heat up",
+        "hot (of weather)",
+        "heat",
+        "fervent"
+      ]
+    },
+    "meaning_vi": "nóng"
+  },
+  {
+    "id": "2def06b3-0107-4963-8876-537cf418215b",
+    "hsk_level_code": "hsk1",
+    "lesson_number": 9,
+    "chinese_word": "人",
+    "pinyin": "rén",
+    "meaning": "man; person",
+    "example_sentence": "那个人是谁？",
+    "example_pinyin": "Nàge rén shì shéi?",
+    "example_meaning": "Người đó là ai?",
+    "word_type": "n",
+    "audio_url": null,
+    "display_order": 5,
+    "meta": {
+      "source_id": 85,
+      "source_level": 1,
+      "radicals": "人",
+      "strokes": "2",
+      "translations_eng_all": [
+        "man",
+        "person",
+        "people",
+        "CL:個|个",
+        "位[wèi]"
+      ]
+    },
+    "meaning_vi": "người"
+  },
+  {
+    "id": "3a5833e4-1d05-438a-9f8b-17b347e8b7ae",
+    "hsk_level_code": "hsk1",
+    "lesson_number": 9,
+    "chinese_word": "认识",
+    "pinyin": "rèn shi",
+    "meaning": "to know; to recognize",
+    "example_sentence": "认识你很高兴。",
+    "example_pinyin": "Rènshi nǐ hěn gāoxìng.",
+    "example_meaning": "Rất vui được biết bạn.",
+    "word_type": "v",
+    "audio_url": null,
+    "display_order": 6,
+    "meta": {
+      "source_id": 86,
+      "source_level": 1,
+      "radicals": null,
+      "strokes": null,
+      "translations_eng_all": [
+        "to know",
+        "to recognize",
+        "to be familiar with",
+        "to get acquainted with sb",
+        "knowledge",
+        "understanding",
+        "awareness",
+        "cognition"
+      ]
+    },
+    "meaning_vi": "quen biết"
+  },
+  {
+    "id": "eef0eb7c-049d-423a-844f-d06d6d5dfcb0",
+    "hsk_level_code": "hsk1",
+    "lesson_number": 9,
+    "chinese_word": "日",
+    "pinyin": "rì",
+    "meaning": "sun; day",
+    "example_sentence": "今天几月几日？",
+    "example_pinyin": "Jīntiān jǐ yuè jǐ rì?",
+    "example_meaning": "Hôm nay ngày mấy tháng mấy?",
+    "word_type": "n",
+    "audio_url": null,
+    "display_order": 7,
+    "meta": {
+      "source_id": 87,
+      "source_level": 1,
+      "radicals": "日",
+      "strokes": "4",
+      "translations_eng_all": [
+        "sun",
+        "day",
+        "date",
+        "day of the month",
+        "abbr. for 日本 Japan"
+      ]
+    },
+    "meaning_vi": "ngày"
+  },
+  {
+    "id": "891c283a-e085-40cb-8f20-3599912ff03a",
+    "hsk_level_code": "hsk1",
+    "lesson_number": 9,
+    "chinese_word": "三",
+    "pinyin": "sān",
+    "meaning": "three; 3",
+    "example_sentence": "我有三个孩子。",
+    "example_pinyin": "Wǒ yǒu sān gè háizi.",
+    "example_meaning": "Tôi có ba đứa con.",
+    "word_type": "m",
+    "audio_url": null,
+    "display_order": 8,
+    "meta": {
+      "source_id": 88,
+      "source_level": 1,
+      "radicals": "一",
+      "strokes": "3",
+      "translations_eng_all": [
+        "three",
+        "3"
+      ]
+    },
+    "meaning_vi": "ba, 3"
+  },
+  {
+    "id": "13871423-f0fb-4983-ad29-9fb56bfa9b99",
+    "hsk_level_code": "hsk1",
+    "lesson_number": 9,
+    "chinese_word": "商店",
+    "pinyin": "shāng diàn",
+    "meaning": "store; shop",
+    "example_sentence": "我去商店买东西。",
+    "example_pinyin": "Wǒ qù shāngdiàn mǎi dōngxi.",
+    "example_meaning": "Tôi đi cửa hàng mua đồ.",
+    "word_type": "n",
+    "audio_url": null,
+    "display_order": 9,
+    "meta": {
+      "source_id": 89,
+      "source_level": 1,
+      "radicals": null,
+      "strokes": null,
+      "translations_eng_all": [
+        "store",
+        "shop",
+        "CL:家",
+        "個|个[gè]"
+      ]
+    },
+    "meaning_vi": "cửa hàng"
+  },
+  {
+    "id": "99e53418-d96c-4a62-854d-f9e7b1962dd3",
+    "hsk_level_code": "hsk1",
+    "lesson_number": 9,
+    "chinese_word": "上",
+    "pinyin": "shàng",
+    "meaning": "on top; upon",
+    "example_sentence": "书在桌子上。",
+    "example_pinyin": "Shū zài zhuōzi shàng.",
+    "example_meaning": "Sách ở trên bàn.",
+    "word_type": "n",
+    "audio_url": null,
+    "display_order": 10,
+    "meta": {
+      "source_id": 90,
+      "source_level": 1,
+      "radicals": "一",
+      "strokes": "3",
+      "translations_eng_all": [
+        "on top",
+        "upon",
+        "above",
+        "upper",
+        "previous",
+        "first (of multiple parts)",
+        "to climb",
+        "to get onto",
+        "to go up",
+        "to attend (class or university)"
+      ]
+    },
+    "meaning_vi": "trên, lên"
+  },
+  {
+    "id": "67af4229-6490-4f05-97ac-84320266508f",
+    "hsk_level_code": "hsk1",
+    "lesson_number": 10,
+    "chinese_word": "上午",
+    "pinyin": "shàng wǔ",
+    "meaning": "morning; CL:個|个[gè]",
+    "example_sentence": "上午我在学校。",
+    "example_pinyin": "Shàngwǔ wǒ zài xuéxiào.",
+    "example_meaning": "Buổi sáng tôi ở trường.",
+    "word_type": "n",
+    "audio_url": null,
+    "display_order": 1,
+    "meta": {
+      "source_id": 91,
+      "source_level": 1,
+      "radicals": null,
+      "strokes": null,
+      "translations_eng_all": [
+        "morning",
+        "CL:個|个[gè]"
+      ]
+    },
+    "meaning_vi": "buổi sáng"
+  },
+  {
+    "id": "529b41d8-55d9-42fa-9f1c-e126dae6cb24",
+    "hsk_level_code": "hsk1",
+    "lesson_number": 10,
+    "chinese_word": "少",
+    "pinyin": "shǎo",
+    "meaning": "few; little",
+    "example_sentence": "今天人很少。",
+    "example_pinyin": "Jīntiān rén hěn shǎo.",
+    "example_meaning": "Hôm nay ít người.",
+    "word_type": "a",
+    "audio_url": null,
+    "display_order": 2,
+    "meta": {
+      "source_id": 92,
+      "source_level": 1,
+      "radicals": "小",
+      "strokes": "4",
+      "translations_eng_all": [
+        "few",
+        "little",
+        "lack"
+      ]
+    },
+    "meaning_vi": "ít"
+  },
+  {
+    "id": "1bd8e92f-71ae-49f3-903c-696f59a5344e",
+    "hsk_level_code": "hsk1",
+    "lesson_number": 10,
+    "chinese_word": "谁",
+    "pinyin": "shéi",
+    "meaning": "who; also pr. [shuí]",
+    "example_sentence": "他是谁？",
+    "example_pinyin": "Tā shì shéi?",
+    "example_meaning": "Anh ấy là ai?",
+    "word_type": "r",
+    "audio_url": null,
+    "display_order": 3,
+    "meta": {
+      "source_id": 93,
+      "source_level": 1,
+      "radicals": "讠",
+      "strokes": "10",
+      "translations_eng_all": [
+        "who",
+        "also pr. [shuí]"
+      ]
+    },
+    "meaning_vi": "ai"
+  },
+  {
+    "id": "ca63a60f-03f8-42f3-93be-70d3a3126eb5",
+    "hsk_level_code": "hsk1",
+    "lesson_number": 10,
+    "chinese_word": "什么",
+    "pinyin": "shén me",
+    "meaning": "what?; who?",
+    "example_sentence": "你在做什么？",
+    "example_pinyin": "Nǐ zài zuò shénme?",
+    "example_meaning": "Bạn đang làm gì?",
+    "word_type": "r",
+    "audio_url": null,
+    "display_order": 4,
+    "meta": {
+      "source_id": 94,
+      "source_level": 1,
+      "radicals": null,
+      "strokes": null,
+      "translations_eng_all": [
+        "what?",
+        "who?",
+        "something",
+        "anything"
+      ]
+    },
+    "meaning_vi": "cái gì"
+  },
+  {
+    "id": "3a82f6e3-e7a9-471c-9df9-7619320ac5c9",
+    "hsk_level_code": "hsk1",
+    "lesson_number": 10,
+    "chinese_word": "十",
+    "pinyin": "shí",
+    "meaning": "ten; 10",
+    "example_sentence": "我们班有十个人。",
+    "example_pinyin": "Wǒmen bān yǒu shí gè rén.",
+    "example_meaning": "Lớp chúng tôi có mười người.",
+    "word_type": "m",
+    "audio_url": null,
+    "display_order": 5,
+    "meta": {
+      "source_id": 95,
+      "source_level": 1,
+      "radicals": "十",
+      "strokes": "2",
+      "translations_eng_all": [
+        "ten",
+        "10"
+      ]
+    },
+    "meaning_vi": "mười, 10"
+  },
+  {
+    "id": "2e49bf14-ff16-485d-ada6-b748e6361511",
+    "hsk_level_code": "hsk1",
+    "lesson_number": 10,
+    "chinese_word": "时候",
+    "pinyin": "shí hou",
+    "meaning": "time; length of time",
+    "example_sentence": "你什么时候来？",
+    "example_pinyin": "Nǐ shénme shíhou lái?",
+    "example_meaning": "Bạn khi nào đến?",
+    "word_type": "n",
+    "audio_url": null,
+    "display_order": 6,
+    "meta": {
+      "source_id": 96,
+      "source_level": 1,
+      "radicals": null,
+      "strokes": null,
+      "translations_eng_all": [
+        "time",
+        "length of time",
+        "moment",
+        "period"
+      ]
+    },
+    "meaning_vi": "lúc, khi"
+  },
+  {
+    "id": "7f2bb51d-0bc5-47bd-8fb9-b5291600c34d",
+    "hsk_level_code": "hsk1",
+    "lesson_number": 10,
+    "chinese_word": "是",
+    "pinyin": "shì",
+    "meaning": "is; are",
+    "example_sentence": "我是中国人。",
+    "example_pinyin": "Wǒ shì Zhōngguó rén.",
+    "example_meaning": "Tôi là người Trung Quốc.",
+    "word_type": "v",
+    "audio_url": null,
+    "display_order": 7,
+    "meta": {
+      "source_id": 97,
+      "source_level": 1,
+      "radicals": "日",
+      "strokes": "9",
+      "translations_eng_all": [
+        "is",
+        "are",
+        "am",
+        "yes",
+        "to be"
+      ]
+    },
+    "meaning_vi": "là"
+  },
+  {
+    "id": "0262f3b4-21d0-478c-8f23-4baa9d909588",
+    "hsk_level_code": "hsk1",
+    "lesson_number": 10,
+    "chinese_word": "书",
+    "pinyin": "shū",
+    "meaning": "book; letter",
+    "example_sentence": "这本书很有意思。",
+    "example_pinyin": "Zhè běn shū hěn yǒu yìsi.",
+    "example_meaning": "Quyển sách này rất thú vị.",
+    "word_type": "n",
+    "audio_url": null,
+    "display_order": 8,
+    "meta": {
+      "source_id": 98,
+      "source_level": 1,
+      "radicals": "乛",
+      "strokes": "4",
+      "translations_eng_all": [
+        "book",
+        "letter",
+        "CL:本",
+        "冊|册",
+        "部[bù]",
+        "see also 書經|书经 Book of History"
+      ]
+    },
+    "meaning_vi": "sách"
+  },
+  {
+    "id": "31ecc530-1942-4330-9c2c-09789ac1a48d",
+    "hsk_level_code": "hsk1",
+    "lesson_number": 10,
+    "chinese_word": "水",
+    "pinyin": "shuǐ",
+    "meaning": "water; river",
+    "example_sentence": "请给我一杯水。",
+    "example_pinyin": "Qǐng gěi wǒ yī bēi shuǐ.",
+    "example_meaning": "Xin cho tôi một cốc nước.",
+    "word_type": "n",
+    "audio_url": null,
+    "display_order": 9,
+    "meta": {
+      "source_id": 99,
+      "source_level": 1,
+      "radicals": "水",
+      "strokes": "4",
+      "translations_eng_all": [
+        "water",
+        "river",
+        "liquid",
+        "beverage",
+        "additional charges or income",
+        "(of clothes) classifier for number of washes"
+      ]
+    },
+    "meaning_vi": "nước"
+  },
+  {
+    "id": "a3af4cbf-f366-4e79-883a-964ca2772b20",
+    "hsk_level_code": "hsk1",
+    "lesson_number": 10,
+    "chinese_word": "水果",
+    "pinyin": "shuǐ guǒ",
+    "meaning": "fruit; CL:個|个[gè]",
+    "example_sentence": "我喜欢吃水果。",
+    "example_pinyin": "Wǒ xǐhuan chī shuǐguǒ.",
+    "example_meaning": "Tôi thích ăn trái cây.",
+    "word_type": "n",
+    "audio_url": null,
+    "display_order": 10,
+    "meta": {
+      "source_id": 100,
+      "source_level": 1,
+      "radicals": null,
+      "strokes": null,
+      "translations_eng_all": [
+        "fruit",
+        "CL:個|个[gè]"
+      ]
+    },
+    "meaning_vi": "hoa quả, trái cây"
+  },
+  {
+    "id": "2b606487-a7af-40de-a3a8-bf97c8443f44",
+    "hsk_level_code": "hsk1",
+    "lesson_number": 11,
+    "chinese_word": "睡觉",
+    "pinyin": "shuì jiào",
+    "meaning": "to go to bed; to sleep",
+    "example_sentence": "我十点睡觉。",
+    "example_pinyin": "Wǒ shí diǎn shuìjiào.",
+    "example_meaning": "Tôi ngủ lúc mười giờ.",
+    "word_type": "v",
+    "audio_url": null,
+    "display_order": 1,
+    "meta": {
+      "source_id": 101,
+      "source_level": 1,
+      "radicals": null,
+      "strokes": null,
+      "translations_eng_all": [
+        "to go to bed",
+        "to sleep"
+      ]
+    },
+    "meaning_vi": "ngủ"
+  },
+  {
+    "id": "2b977bfe-9f19-4771-8f6b-649327d02c08",
+    "hsk_level_code": "hsk1",
+    "lesson_number": 11,
+    "chinese_word": "说话",
+    "pinyin": "shuō huà",
+    "meaning": "to speak; to say",
+    "example_sentence": "请不要说话。",
+    "example_pinyin": "Qǐng búyào shuōhuà.",
+    "example_meaning": "Xin đừng nói chuyện.",
+    "word_type": "v",
+    "audio_url": null,
+    "display_order": 2,
+    "meta": {
+      "source_id": 102,
+      "source_level": 1,
+      "radicals": null,
+      "strokes": null,
+      "translations_eng_all": [
+        "to speak",
+        "to say",
+        "to talk",
+        "to gossip",
+        "to tell stories",
+        "talk",
+        "word"
+      ]
+    },
+    "meaning_vi": "nói chuyện"
+  },
+  {
+    "id": "c525e408-8abc-45ba-a731-ed2ddd195ee9",
+    "hsk_level_code": "hsk1",
+    "lesson_number": 11,
+    "chinese_word": "四",
+    "pinyin": "sì",
+    "meaning": "four; 4",
+    "example_sentence": "一年有四个季节。",
+    "example_pinyin": "Yī nián yǒu sì gè jìjié.",
+    "example_meaning": "Một năm có bốn mùa.",
+    "word_type": "m",
+    "audio_url": null,
+    "display_order": 3,
+    "meta": {
+      "source_id": 103,
+      "source_level": 1,
+      "radicals": "囗",
+      "strokes": "5",
+      "translations_eng_all": [
+        "four",
+        "4"
+      ]
+    },
+    "meaning_vi": "bốn, 4"
+  },
+  {
+    "id": "88db3008-eb17-4e30-9589-cd63482dfed0",
+    "hsk_level_code": "hsk1",
+    "lesson_number": 11,
+    "chinese_word": "岁",
+    "pinyin": "suì",
+    "meaning": "classifier for years (of age); year",
+    "example_sentence": "你今年几岁？",
+    "example_pinyin": "Nǐ jīnnián jǐ suì?",
+    "example_meaning": "Năm nay bạn bao nhiêu tuổi?",
+    "word_type": "q",
+    "audio_url": null,
+    "display_order": 4,
+    "meta": {
+      "source_id": 104,
+      "source_level": 1,
+      "radicals": "山",
+      "strokes": "6",
+      "translations_eng_all": [
+        "classifier for years (of age)",
+        "year",
+        "year (of crop harvests)"
+      ]
+    },
+    "meaning_vi": "tuổi"
+  },
+  {
+    "id": "5120613e-90ff-447c-9435-f4bc52079be3",
+    "hsk_level_code": "hsk1",
+    "lesson_number": 11,
+    "chinese_word": "他",
+    "pinyin": "tā",
+    "meaning": "he or him; (used for either sex when the sex is unknown or unimportant)",
+    "example_sentence": "他是我的朋友。",
+    "example_pinyin": "Tā shì wǒ de péngyou.",
+    "example_meaning": "Anh ấy là bạn tôi.",
+    "word_type": "r",
+    "audio_url": null,
+    "display_order": 5,
+    "meta": {
+      "source_id": 105,
+      "source_level": 1,
+      "radicals": "亻",
+      "strokes": "5",
+      "translations_eng_all": [
+        "he or him",
+        "(used for either sex when the sex is unknown or unimportant)",
+        "(used before sb's name for emphasis)",
+        "(used as a meaningless mock object)",
+        "other",
+        "another"
+      ]
+    },
+    "meaning_vi": "anh ấy, ông ấy"
+  },
+  {
+    "id": "afbbb7bc-4d53-43e9-9338-775d1f11d099",
+    "hsk_level_code": "hsk1",
+    "lesson_number": 11,
+    "chinese_word": "她",
+    "pinyin": "tā",
+    "meaning": "she",
+    "example_sentence": "她在学校工作。",
+    "example_pinyin": "Tā zài xuéxiào gōngzuò.",
+    "example_meaning": "Cô ấy làm việc ở trường.",
+    "word_type": "r",
+    "audio_url": null,
+    "display_order": 6,
+    "meta": {
+      "source_id": 106,
+      "source_level": 1,
+      "radicals": "女",
+      "strokes": "6",
+      "translations_eng_all": [
+        "she"
+      ]
+    },
+    "meaning_vi": "cô ấy, bà ấy"
+  },
+  {
+    "id": "f2ab8871-c960-49b7-84e8-d930b9de5da9",
+    "hsk_level_code": "hsk1",
+    "lesson_number": 11,
+    "chinese_word": "太",
+    "pinyin": "tài",
+    "meaning": "highest; greatest",
+    "example_sentence": "这个太贵了。",
+    "example_pinyin": "Zhège tài guì le.",
+    "example_meaning": "Cái này đắt quá.",
+    "word_type": "d",
+    "audio_url": null,
+    "display_order": 7,
+    "meta": {
+      "source_id": 107,
+      "source_level": 1,
+      "radicals": "大",
+      "strokes": "4",
+      "translations_eng_all": [
+        "highest",
+        "greatest",
+        "too (much)",
+        "very",
+        "extremely"
+      ]
+    },
+    "meaning_vi": "quá"
+  },
+  {
+    "id": "1ca6f937-93fe-43e6-9d72-081898719fbf",
+    "hsk_level_code": "hsk1",
+    "lesson_number": 11,
+    "chinese_word": "天气",
+    "pinyin": "tiān qì",
+    "meaning": "weather",
+    "example_sentence": "今天天气怎么样？",
+    "example_pinyin": "Jīntiān tiānqì zěnmeyàng?",
+    "example_meaning": "Hôm nay thời tiết thế nào?",
+    "word_type": "n",
+    "audio_url": null,
+    "display_order": 8,
+    "meta": {
+      "source_id": 108,
+      "source_level": 1,
+      "radicals": null,
+      "strokes": null,
+      "translations_eng_all": [
+        "weather"
+      ]
+    },
+    "meaning_vi": "thời tiết"
+  },
+  {
+    "id": "985accc1-031d-48a2-a909-f309d148cb95",
+    "hsk_level_code": "hsk1",
+    "lesson_number": 11,
+    "chinese_word": "听",
+    "pinyin": "tīng",
+    "meaning": "to listen; to hear",
+    "example_sentence": "我在听音乐。",
+    "example_pinyin": "Wǒ zài tīng yīnyuè.",
+    "example_meaning": "Tôi đang nghe nhạc.",
+    "word_type": "v",
+    "audio_url": null,
+    "display_order": 9,
+    "meta": {
+      "source_id": 109,
+      "source_level": 1,
+      "radicals": "口",
+      "strokes": "7",
+      "translations_eng_all": [
+        "to listen",
+        "to hear",
+        "to obey",
+        "a can (loanword from English \"tin\")",
+        "classifier for canned beverages"
+      ]
+    },
+    "meaning_vi": "nghe"
+  },
+  {
+    "id": "d89696b3-f3c0-46fc-8f22-09952e888f87",
+    "hsk_level_code": "hsk1",
+    "lesson_number": 11,
+    "chinese_word": "同学",
+    "pinyin": "tóng xué",
+    "meaning": "to study at the same school; fellow student",
+    "example_sentence": "他是我的同学。",
+    "example_pinyin": "Tā shì wǒ de tóngxué.",
+    "example_meaning": "Anh ấy là bạn học của tôi.",
+    "word_type": "n",
+    "audio_url": null,
+    "display_order": 10,
+    "meta": {
+      "source_id": 110,
+      "source_level": 1,
+      "radicals": null,
+      "strokes": null,
+      "translations_eng_all": [
+        "to study at the same school",
+        "fellow student",
+        "classmate",
+        "CL:位",
+        "個|个[gè]"
+      ]
+    },
+    "meaning_vi": "bạn học"
+  },
+  {
+    "id": "5285bb46-f23e-4591-b294-d2fb14431bef",
+    "hsk_level_code": "hsk1",
+    "lesson_number": 12,
+    "chinese_word": "喂",
+    "pinyin": "wèi",
+    "meaning": "to feed",
+    "example_sentence": "喂，你好！",
+    "example_pinyin": "Wèi, nǐ hǎo!",
+    "example_meaning": "A lô, xin chào!",
+    "word_type": "i",
+    "audio_url": null,
+    "display_order": 1,
+    "meta": {
+      "source_id": 111,
+      "source_level": 1,
+      "radicals": "口",
+      "strokes": "12",
+      "translations_eng_all": [
+        "to feed"
+      ]
+    },
+    "meaning_vi": "a lô"
+  },
+  {
+    "id": "eb65e248-fb67-4fd1-827b-2c8e95dde084",
+    "hsk_level_code": "hsk1",
+    "lesson_number": 12,
+    "chinese_word": "我",
+    "pinyin": "wǒ",
+    "meaning": "I; me",
+    "example_sentence": "我叫小明。",
+    "example_pinyin": "Wǒ jiào Xiǎo Míng.",
+    "example_meaning": "Tôi tên là Tiểu Minh.",
+    "word_type": "r",
+    "audio_url": null,
+    "display_order": 2,
+    "meta": {
+      "source_id": 112,
+      "source_level": 1,
+      "radicals": "戈",
+      "strokes": "7",
+      "translations_eng_all": [
+        "I",
+        "me",
+        "my"
+      ]
+    },
+    "meaning_vi": "tôi"
+  },
+  {
+    "id": "fd5e02bd-b738-4ef5-976c-d5cf5b2b456e",
+    "hsk_level_code": "hsk1",
+    "lesson_number": 12,
+    "chinese_word": "我们",
+    "pinyin": "wǒ men",
+    "meaning": "we; us",
+    "example_sentence": "我们是好朋友。",
+    "example_pinyin": "Wǒmen shì hǎo péngyou.",
+    "example_meaning": "Chúng tôi là bạn tốt.",
+    "word_type": "r",
+    "audio_url": null,
+    "display_order": 3,
+    "meta": {
+      "source_id": 113,
+      "source_level": 1,
+      "radicals": null,
+      "strokes": null,
+      "translations_eng_all": [
+        "we",
+        "us",
+        "ourselves",
+        "our"
+      ]
+    },
+    "meaning_vi": "chúng tôi"
+  },
+  {
+    "id": "80a08efd-10ea-459d-b411-9152ad828791",
+    "hsk_level_code": "hsk1",
+    "lesson_number": 12,
+    "chinese_word": "五",
+    "pinyin": "wǔ",
+    "meaning": "five; 5",
+    "example_sentence": "我有五本书。",
+    "example_pinyin": "Wǒ yǒu wǔ běn shū.",
+    "example_meaning": "Tôi có năm quyển sách.",
+    "word_type": "m",
+    "audio_url": null,
+    "display_order": 4,
+    "meta": {
+      "source_id": 114,
+      "source_level": 1,
+      "radicals": "二",
+      "strokes": "4",
+      "translations_eng_all": [
+        "five",
+        "5"
+      ]
+    },
+    "meaning_vi": "năm, 5"
+  },
+  {
+    "id": "1fa55ecb-b71e-40e3-9c49-bc4ed01cd12f",
+    "hsk_level_code": "hsk1",
+    "lesson_number": 12,
+    "chinese_word": "喜欢",
+    "pinyin": "xǐ huan",
+    "meaning": "to like; to be fond of",
+    "example_sentence": "我喜欢学汉语。",
+    "example_pinyin": "Wǒ xǐhuan xué Hànyǔ.",
+    "example_meaning": "Tôi thích học tiếng Trung.",
+    "word_type": "v",
+    "audio_url": null,
+    "display_order": 5,
+    "meta": {
+      "source_id": 115,
+      "source_level": 1,
+      "radicals": null,
+      "strokes": null,
+      "translations_eng_all": [
+        "to like",
+        "to be fond of"
+      ]
+    },
+    "meaning_vi": "thích"
+  },
+  {
+    "id": "6f1c18bb-189e-4412-99fa-ef0624106d8e",
+    "hsk_level_code": "hsk1",
+    "lesson_number": 12,
+    "chinese_word": "下",
+    "pinyin": "xià",
+    "meaning": "down; downwards",
+    "example_sentence": "猫在桌子下面。",
+    "example_pinyin": "Māo zài zhuōzi xiàmiàn.",
+    "example_meaning": "Con mèo ở dưới bàn.",
+    "word_type": "n",
+    "audio_url": null,
+    "display_order": 6,
+    "meta": {
+      "source_id": 116,
+      "source_level": 1,
+      "radicals": "一",
+      "strokes": "3",
+      "translations_eng_all": [
+        "down",
+        "downwards",
+        "below",
+        "lower",
+        "later",
+        "next (week etc)",
+        "second (of two parts)",
+        "to decline",
+        "to go down"
+      ]
+    },
+    "meaning_vi": "dưới, xuống"
+  },
+  {
+    "id": "1cc52a46-3e61-4111-abac-79f4012fc5e3",
+    "hsk_level_code": "hsk1",
+    "lesson_number": 12,
+    "chinese_word": "下午",
+    "pinyin": "xià wǔ",
+    "meaning": "afternoon; CL:個|个[gè]",
+    "example_sentence": "下午你做什么？",
+    "example_pinyin": "Xiàwǔ nǐ zuò shénme?",
+    "example_meaning": "Buổi chiều bạn làm gì?",
+    "word_type": "n",
+    "audio_url": null,
+    "display_order": 7,
+    "meta": {
+      "source_id": 117,
+      "source_level": 1,
+      "radicals": null,
+      "strokes": null,
+      "translations_eng_all": [
+        "afternoon",
+        "CL:個|个[gè]",
+        "p.m."
+      ]
+    },
+    "meaning_vi": "buổi chiều"
+  },
+  {
+    "id": "aacd57a9-b4f2-449f-a432-2c9eda000a93",
+    "hsk_level_code": "hsk1",
+    "lesson_number": 12,
+    "chinese_word": "下雨",
+    "pinyin": "xià yǔ",
+    "meaning": "to rain; rainy",
+    "example_sentence": "今天下雨了。",
+    "example_pinyin": "Jīntiān xià yǔ le.",
+    "example_meaning": "Hôm nay trời mưa rồi.",
+    "word_type": "v",
+    "audio_url": null,
+    "display_order": 8,
+    "meta": {
+      "source_id": 118,
+      "source_level": 1,
+      "radicals": null,
+      "strokes": null,
+      "translations_eng_all": [
+        "to rain",
+        "rainy"
+      ]
+    },
+    "meaning_vi": "mưa"
+  },
+  {
+    "id": "7f8ac8b5-8ab7-492d-9446-c5413c20f06e",
+    "hsk_level_code": "hsk1",
+    "lesson_number": 12,
+    "chinese_word": "先生",
+    "pinyin": "xiān sheng",
+    "meaning": "teacher; husband",
+    "example_sentence": "王先生，你好！",
+    "example_pinyin": "Wáng xiānsheng, nǐ hǎo!",
+    "example_meaning": "Ông Vương, xin chào!",
+    "word_type": "n",
+    "audio_url": null,
+    "display_order": 9,
+    "meta": {
+      "source_id": 119,
+      "source_level": 1,
+      "radicals": null,
+      "strokes": null,
+      "translations_eng_all": [
+        "teacher",
+        "husband",
+        "doctor (topolect)",
+        "CL:位[wèi]"
+      ]
+    },
+    "meaning_vi": "ông, ngài"
+  },
+  {
+    "id": "7d17e808-401f-474e-acea-b5d455c06229",
+    "hsk_level_code": "hsk1",
+    "lesson_number": 12,
+    "chinese_word": "现在",
+    "pinyin": "xiàn zài",
+    "meaning": "now; at present",
+    "example_sentence": "现在几点了？",
+    "example_pinyin": "Xiànzài jǐ diǎn le?",
+    "example_meaning": "Bây giờ mấy giờ rồi?",
+    "word_type": "n",
+    "audio_url": null,
+    "display_order": 10,
+    "meta": {
+      "source_id": 120,
+      "source_level": 1,
+      "radicals": null,
+      "strokes": null,
+      "translations_eng_all": [
+        "now",
+        "at present",
+        "at the moment",
+        "modern",
+        "current",
+        "nowadays"
+      ]
+    },
+    "meaning_vi": "bây giờ"
+  },
+  {
+    "id": "724434a7-6388-4d25-9cd0-6451fc577155",
+    "hsk_level_code": "hsk1",
+    "lesson_number": 13,
+    "chinese_word": "想",
+    "pinyin": "xiǎng",
+    "meaning": "to think; to believe",
+    "example_sentence": "我想去中国。",
+    "example_pinyin": "Wǒ xiǎng qù Zhōngguó.",
+    "example_meaning": "Tôi muốn đi Trung Quốc.",
+    "word_type": "v",
+    "audio_url": null,
+    "display_order": 1,
+    "meta": {
+      "source_id": 121,
+      "source_level": 1,
+      "radicals": "心",
+      "strokes": "13",
+      "translations_eng_all": [
+        "to think",
+        "to believe",
+        "to suppose",
+        "to wish",
+        "to want",
+        "to miss"
+      ]
+    },
+    "meaning_vi": "muốn, nghĩ"
+  },
+  {
+    "id": "0ba878b9-06b4-40fe-b83a-4c1c956f97a5",
+    "hsk_level_code": "hsk1",
+    "lesson_number": 13,
+    "chinese_word": "小",
+    "pinyin": "xiǎo",
+    "meaning": "small; tiny",
+    "example_sentence": "我的房间很小。",
+    "example_pinyin": "Wǒ de fángjiān hěn xiǎo.",
+    "example_meaning": "Phòng tôi rất nhỏ.",
+    "word_type": "a",
+    "audio_url": null,
+    "display_order": 2,
+    "meta": {
+      "source_id": 122,
+      "source_level": 1,
+      "radicals": "小",
+      "strokes": "3",
+      "translations_eng_all": [
+        "small",
+        "tiny",
+        "few",
+        "young"
+      ]
+    },
+    "meaning_vi": "nhỏ, bé"
+  },
+  {
+    "id": "881eb04a-9272-44b4-9799-a4a6e3bb937a",
+    "hsk_level_code": "hsk1",
+    "lesson_number": 13,
+    "chinese_word": "小姐",
+    "pinyin": "xiǎo jie",
+    "meaning": "young lady; miss",
+    "example_sentence": "李小姐，请坐。",
+    "example_pinyin": "Lǐ xiǎojiě, qǐng zuò.",
+    "example_meaning": "Cô Lý, xin mời ngồi.",
+    "word_type": "n",
+    "audio_url": null,
+    "display_order": 3,
+    "meta": {
+      "source_id": 123,
+      "source_level": 1,
+      "radicals": null,
+      "strokes": null,
+      "translations_eng_all": [
+        "young lady",
+        "miss",
+        "(slang) prostitute",
+        "CL:個|个",
+        "位[wèi]"
+      ]
+    },
+    "meaning_vi": "cô, tiểu thư"
+  },
+  {
+    "id": "a6e28edf-2370-45ac-8464-c6ac53c5c138",
+    "hsk_level_code": "hsk1",
+    "lesson_number": 13,
+    "chinese_word": "些",
+    "pinyin": "xiē",
+    "meaning": "some; few",
+    "example_sentence": "给我一些水。",
+    "example_pinyin": "Gěi wǒ yīxiē shuǐ.",
+    "example_meaning": "Cho tôi một ít nước.",
+    "word_type": "q",
+    "audio_url": null,
+    "display_order": 4,
+    "meta": {
+      "source_id": 124,
+      "source_level": 1,
+      "radicals": "二",
+      "strokes": "8",
+      "translations_eng_all": [
+        "some",
+        "few",
+        "several",
+        "measure word indicating a small amount or small number (greater than 1)"
+      ]
+    },
+    "meaning_vi": "một số, vài"
+  },
+  {
+    "id": "54128b03-9650-40d2-a6bb-47535e6609f3",
+    "hsk_level_code": "hsk1",
+    "lesson_number": 13,
+    "chinese_word": "写",
+    "pinyin": "xiě",
+    "meaning": "to write",
+    "example_sentence": "请写你的名字。",
+    "example_pinyin": "Qǐng xiě nǐ de míngzi.",
+    "example_meaning": "Xin viết tên bạn.",
+    "word_type": "v",
+    "audio_url": null,
+    "display_order": 5,
+    "meta": {
+      "source_id": 125,
+      "source_level": 1,
+      "radicals": "冖",
+      "strokes": "5",
+      "translations_eng_all": [
+        "to write"
+      ]
+    },
+    "meaning_vi": "viết"
+  },
+  {
+    "id": "76ae4f1c-f999-4186-8b27-a6a613e81e1b",
+    "hsk_level_code": "hsk1",
+    "lesson_number": 13,
+    "chinese_word": "谢谢",
+    "pinyin": "xiè xie",
+    "meaning": "to thank; thanks",
+    "example_sentence": "谢谢你的帮助。",
+    "example_pinyin": "Xièxie nǐ de bāngzhù.",
+    "example_meaning": "Cảm ơn sự giúp đỡ của bạn.",
+    "word_type": "v",
+    "audio_url": null,
+    "display_order": 6,
+    "meta": {
+      "source_id": 126,
+      "source_level": 1,
+      "radicals": null,
+      "strokes": null,
+      "translations_eng_all": [
+        "to thank",
+        "thanks"
+      ]
+    },
+    "meaning_vi": "cảm ơn"
+  },
+  {
+    "id": "d396c396-23b3-4c21-a4c2-fa18a41a5c21",
+    "hsk_level_code": "hsk1",
+    "lesson_number": 13,
+    "chinese_word": "星期",
+    "pinyin": "xīng qī",
+    "meaning": "week; CL:個|个[gè]",
+    "example_sentence": "今天星期几？",
+    "example_pinyin": "Jīntiān xīngqī jǐ?",
+    "example_meaning": "Hôm nay thứ mấy?",
+    "word_type": "n",
+    "audio_url": null,
+    "display_order": 7,
+    "meta": {
+      "source_id": 127,
+      "source_level": 1,
+      "radicals": null,
+      "strokes": null,
+      "translations_eng_all": [
+        "week",
+        "CL:個|个[gè]",
+        "day of the week",
+        "Sunday"
+      ]
+    },
+    "meaning_vi": "tuần, thứ"
+  },
+  {
+    "id": "c54f1ab1-d03a-42be-90cf-ab480e6ae650",
+    "hsk_level_code": "hsk1",
+    "lesson_number": 13,
+    "chinese_word": "学生",
+    "pinyin": "xué sheng",
+    "meaning": "student; schoolchild",
+    "example_sentence": "我是一个学生。",
+    "example_pinyin": "Wǒ shì yī gè xuésheng.",
+    "example_meaning": "Tôi là một học sinh.",
+    "word_type": "n",
+    "audio_url": null,
+    "display_order": 8,
+    "meta": {
+      "source_id": 128,
+      "source_level": 1,
+      "radicals": null,
+      "strokes": null,
+      "translations_eng_all": [
+        "student",
+        "schoolchild"
+      ]
+    },
+    "meaning_vi": "học sinh"
+  },
+  {
+    "id": "1d5c5361-2b3f-406d-a7fe-9563a7643c38",
+    "hsk_level_code": "hsk1",
+    "lesson_number": 13,
+    "chinese_word": "学习",
+    "pinyin": "xué xí",
+    "meaning": "to learn; to study",
+    "example_sentence": "我每天学习汉语。",
+    "example_pinyin": "Wǒ měitiān xuéxí Hànyǔ.",
+    "example_meaning": "Tôi học tiếng Trung mỗi ngày.",
+    "word_type": "v",
+    "audio_url": null,
+    "display_order": 9,
+    "meta": {
+      "source_id": 129,
+      "source_level": 1,
+      "radicals": null,
+      "strokes": null,
+      "translations_eng_all": [
+        "to learn",
+        "to study"
+      ]
+    },
+    "meaning_vi": "học tập"
+  },
+  {
+    "id": "a6921f89-04bd-45a9-863c-b224d273861b",
+    "hsk_level_code": "hsk1",
+    "lesson_number": 13,
+    "chinese_word": "学校",
+    "pinyin": "xué xiào",
+    "meaning": "school; CL:所[suǒ]",
+    "example_sentence": "我们的学校很大。",
+    "example_pinyin": "Wǒmen de xuéxiào hěn dà.",
+    "example_meaning": "Trường chúng tôi rất lớn.",
+    "word_type": "n",
+    "audio_url": null,
+    "display_order": 10,
+    "meta": {
+      "source_id": 130,
+      "source_level": 1,
+      "radicals": null,
+      "strokes": null,
+      "translations_eng_all": [
+        "school",
+        "CL:所[suǒ]"
+      ]
+    },
+    "meaning_vi": "trường học"
+  },
+  {
+    "id": "164d0d43-8935-47cb-897f-03dcb9350fee",
+    "hsk_level_code": "hsk1",
+    "lesson_number": 14,
+    "chinese_word": "一",
+    "pinyin": "yī",
+    "meaning": "one; 1",
+    "example_sentence": "我有一个哥哥。",
+    "example_pinyin": "Wǒ yǒu yī gè gēge.",
+    "example_meaning": "Tôi có một anh trai.",
+    "word_type": "m",
+    "audio_url": null,
+    "display_order": 1,
+    "meta": {
+      "source_id": 131,
+      "source_level": 1,
+      "radicals": "一",
+      "strokes": "1",
+      "translations_eng_all": [
+        "one",
+        "1",
+        "single",
+        "a (article)",
+        "as soon as",
+        "entire",
+        "whole",
+        "all",
+        "throughout",
+        "\"one\" radical in Chinese characters (Kangxi radical 1)"
+      ]
+    },
+    "meaning_vi": "một, 1"
+  },
+  {
+    "id": "68b15ae8-0b48-41f1-b005-4ac898810164",
+    "hsk_level_code": "hsk1",
+    "lesson_number": 14,
+    "chinese_word": "衣服",
+    "pinyin": "yī fu",
+    "meaning": "clothes; CL:件",
+    "example_sentence": "这件衣服多少钱？",
+    "example_pinyin": "Zhè jiàn yīfu duōshao qián?",
+    "example_meaning": "Bộ quần áo này bao nhiêu tiền?",
+    "word_type": "n",
+    "audio_url": null,
+    "display_order": 2,
+    "meta": {
+      "source_id": 132,
+      "source_level": 1,
+      "radicals": null,
+      "strokes": null,
+      "translations_eng_all": [
+        "clothes",
+        "CL:件",
+        "套[tào]"
+      ]
+    },
+    "meaning_vi": "quần áo"
+  },
+  {
+    "id": "b7e3af78-d067-4b42-a99a-263d973f4b07",
+    "hsk_level_code": "hsk1",
+    "lesson_number": 14,
+    "chinese_word": "医生",
+    "pinyin": "yī shēng",
+    "meaning": "doctor; CL:個|个",
+    "example_sentence": "他是一个医生。",
+    "example_pinyin": "Tā shì yī gè yīshēng.",
+    "example_meaning": "Anh ấy là bác sĩ.",
+    "word_type": "n",
+    "audio_url": null,
+    "display_order": 3,
+    "meta": {
+      "source_id": 133,
+      "source_level": 1,
+      "radicals": null,
+      "strokes": null,
+      "translations_eng_all": [
+        "doctor",
+        "CL:個|个",
+        "位",
+        "名[míng]"
+      ]
+    },
+    "meaning_vi": "bác sĩ"
+  },
+  {
+    "id": "47f286ae-8735-4035-8e89-740b32d88c07",
+    "hsk_level_code": "hsk1",
+    "lesson_number": 14,
+    "chinese_word": "医院",
+    "pinyin": "yī yuàn",
+    "meaning": "hospital; CL:所",
+    "example_sentence": "医院在学校旁边。",
+    "example_pinyin": "Yīyuàn zài xuéxiào pángbiān.",
+    "example_meaning": "Bệnh viện ở bên cạnh trường.",
+    "word_type": "n",
+    "audio_url": null,
+    "display_order": 4,
+    "meta": {
+      "source_id": 134,
+      "source_level": 1,
+      "radicals": null,
+      "strokes": null,
+      "translations_eng_all": [
+        "hospital",
+        "CL:所",
+        "家",
+        "座[zuò]"
+      ]
+    },
+    "meaning_vi": "bệnh viện"
+  },
+  {
+    "id": "d23d10b2-5d6c-4aa8-9180-cc52d492c0fc",
+    "hsk_level_code": "hsk1",
+    "lesson_number": 14,
+    "chinese_word": "椅子",
+    "pinyin": "yǐ zi",
+    "meaning": "chair; CL:把",
+    "example_sentence": "请坐这把椅子。",
+    "example_pinyin": "Qǐng zuò zhè bǎ yǐzi.",
+    "example_meaning": "Xin ngồi chiếc ghế này.",
+    "word_type": "n",
+    "audio_url": null,
+    "display_order": 5,
+    "meta": {
+      "source_id": 135,
+      "source_level": 1,
+      "radicals": null,
+      "strokes": null,
+      "translations_eng_all": [
+        "chair",
+        "CL:把",
+        "套[tào]"
+      ]
+    },
+    "meaning_vi": "ghế"
+  },
+  {
+    "id": "f9a1dc18-924d-4485-ae70-b962d7abea96",
+    "hsk_level_code": "hsk1",
+    "lesson_number": 14,
+    "chinese_word": "有",
+    "pinyin": "yǒu",
+    "meaning": "to have; there is",
+    "example_sentence": "我有一只猫。",
+    "example_pinyin": "Wǒ yǒu yī zhī māo.",
+    "example_meaning": "Tôi có một con mèo.",
+    "word_type": "v",
+    "audio_url": null,
+    "display_order": 6,
+    "meta": {
+      "source_id": 136,
+      "source_level": 1,
+      "radicals": "月",
+      "strokes": "6",
+      "translations_eng_all": [
+        "to have",
+        "there is",
+        "there are",
+        "to exist",
+        "to be"
+      ]
+    },
+    "meaning_vi": "có"
+  },
+  {
+    "id": "a04d5083-7d00-4987-9361-9a0dddf45c68",
+    "hsk_level_code": "hsk1",
+    "lesson_number": 14,
+    "chinese_word": "月",
+    "pinyin": "yuè",
+    "meaning": "moon; month",
+    "example_sentence": "一月很冷。",
+    "example_pinyin": "Yī yuè hěn lěng.",
+    "example_meaning": "Tháng Giêng rất lạnh.",
+    "word_type": "n",
+    "audio_url": null,
+    "display_order": 7,
+    "meta": {
+      "source_id": 137,
+      "source_level": 1,
+      "radicals": "月",
+      "strokes": "4",
+      "translations_eng_all": [
+        "moon",
+        "month",
+        "CL:個|个",
+        "輪|轮[lún]"
+      ]
+    },
+    "meaning_vi": "tháng"
+  },
+  {
+    "id": "7cd1bc76-7c9b-4c05-9eb5-c9d93998c214",
+    "hsk_level_code": "hsk1",
+    "lesson_number": 14,
+    "chinese_word": "在",
+    "pinyin": "zài",
+    "meaning": "(located) at; (to be) in",
+    "example_sentence": "他在家里。",
+    "example_pinyin": "Tā zài jiā lǐ.",
+    "example_meaning": "Anh ấy ở nhà.",
+    "word_type": "p",
+    "audio_url": null,
+    "display_order": 8,
+    "meta": {
+      "source_id": 138,
+      "source_level": 1,
+      "radicals": "土",
+      "strokes": "6",
+      "translations_eng_all": [
+        "(located) at",
+        "(to be) in",
+        "to exist",
+        "in the middle of doing sth",
+        "(indicating an action in progress)"
+      ]
+    },
+    "meaning_vi": "ở, tại"
+  },
+  {
+    "id": "6f32c080-a661-4a3a-a388-66767d8d5cb9",
+    "hsk_level_code": "hsk1",
+    "lesson_number": 14,
+    "chinese_word": "再见",
+    "pinyin": "zài jiàn",
+    "meaning": "goodbye; see you again later",
+    "example_sentence": "老师再见！",
+    "example_pinyin": "Lǎoshī zàijiàn!",
+    "example_meaning": "Giáo viên tạm biệt!",
+    "word_type": "phr",
+    "audio_url": null,
+    "display_order": 9,
+    "meta": {
+      "source_id": 139,
+      "source_level": 1,
+      "radicals": null,
+      "strokes": null,
+      "translations_eng_all": [
+        "goodbye",
+        "see you again later"
+      ]
+    },
+    "meaning_vi": "tạm biệt"
+  },
+  {
+    "id": "c65e8d58-62e8-47af-b29e-2630d7138bf4",
+    "hsk_level_code": "hsk1",
+    "lesson_number": 14,
+    "chinese_word": "怎么",
+    "pinyin": "zěn me",
+    "meaning": "variant of 怎麼|怎么[zěn me]",
+    "example_sentence": "这个字怎么读？",
+    "example_pinyin": "Zhège zì zěnme dú?",
+    "example_meaning": "Chữ này đọc thế nào?",
+    "word_type": "r",
+    "audio_url": null,
+    "display_order": 10,
+    "meta": {
+      "source_id": 140,
+      "source_level": 1,
+      "radicals": null,
+      "strokes": null,
+      "translations_eng_all": [
+        "variant of 怎麼|怎么[zěn me]"
+      ]
+    },
+    "meaning_vi": "thế nào, làm sao"
+  },
+  {
+    "id": "a9bf9cd4-3296-4e37-a4d4-81c420fde29c",
+    "hsk_level_code": "hsk1",
+    "lesson_number": 15,
+    "chinese_word": "怎么样",
+    "pinyin": "zěn me yàng",
+    "meaning": "how?; how about?",
+    "example_sentence": "你觉得怎么样？",
+    "example_pinyin": "Nǐ juéde zěnmeyàng?",
+    "example_meaning": "Bạn thấy thế nào?",
+    "word_type": "r",
+    "audio_url": null,
+    "display_order": 1,
+    "meta": {
+      "source_id": 141,
+      "source_level": 1,
+      "radicals": null,
+      "strokes": null,
+      "translations_eng_all": [
+        "how?",
+        "how about?",
+        "how was it?",
+        "how are things?"
+      ]
+    },
+    "meaning_vi": "thế nào"
+  },
+  {
+    "id": "c1d497c5-670a-4521-8902-03a7794fc6ac",
+    "hsk_level_code": "hsk1",
+    "lesson_number": 15,
+    "chinese_word": "这",
+    "pinyin": "zhè",
+    "meaning": "this; these",
+    "example_sentence": "这是我的书。",
+    "example_pinyin": "Zhè shì wǒ de shū.",
+    "example_meaning": "Đây là sách của tôi.",
+    "word_type": "r",
+    "audio_url": null,
+    "display_order": 2,
+    "meta": {
+      "source_id": 142,
+      "source_level": 1,
+      "radicals": "辶",
+      "strokes": "7",
+      "translations_eng_all": [
+        "this",
+        "these",
+        "(commonly pr.  before a classifier, esp. in Beijing)"
+      ]
+    },
+    "meaning_vi": "đây, này"
+  },
+  {
+    "id": "972c8696-e3ce-4d30-ac47-33fbc8098e13",
+    "hsk_level_code": "hsk1",
+    "lesson_number": 15,
+    "chinese_word": "中国",
+    "pinyin": "Zhōng guó",
+    "meaning": "China; Middle Kingdom",
+    "example_sentence": "中国很大。",
+    "example_pinyin": "Zhōngguó hěn dà.",
+    "example_meaning": "Trung Quốc rất lớn.",
+    "word_type": "n",
+    "audio_url": null,
+    "display_order": 3,
+    "meta": {
+      "source_id": 143,
+      "source_level": 1,
+      "radicals": null,
+      "strokes": null,
+      "translations_eng_all": [
+        "China",
+        "Middle Kingdom"
+      ]
+    },
+    "meaning_vi": "Trung Quốc"
+  },
+  {
+    "id": "c8fcd679-7208-4e98-8e23-70775be4791e",
+    "hsk_level_code": "hsk1",
+    "lesson_number": 15,
+    "chinese_word": "中午",
+    "pinyin": "zhōng wǔ",
+    "meaning": "noon; midday",
+    "example_sentence": "中午我们吃饭。",
+    "example_pinyin": "Zhōngwǔ wǒmen chīfàn.",
+    "example_meaning": "Buổi trưa chúng tôi ăn cơm.",
+    "word_type": "n",
+    "audio_url": null,
+    "display_order": 4,
+    "meta": {
+      "source_id": 144,
+      "source_level": 1,
+      "radicals": null,
+      "strokes": null,
+      "translations_eng_all": [
+        "noon",
+        "midday",
+        "CL:個|个[gè]"
+      ]
+    },
+    "meaning_vi": "buổi trưa"
+  },
+  {
+    "id": "e1f03fff-53a9-462b-a59c-283ea954a2e2",
+    "hsk_level_code": "hsk1",
+    "lesson_number": 15,
+    "chinese_word": "住",
+    "pinyin": "zhù",
+    "meaning": "to live; to dwell",
+    "example_sentence": "你住在哪里？",
+    "example_pinyin": "Nǐ zhù zài nǎli?",
+    "example_meaning": "Bạn sống ở đâu?",
+    "word_type": "v",
+    "audio_url": null,
+    "display_order": 5,
+    "meta": {
+      "source_id": 145,
+      "source_level": 1,
+      "radicals": "亻",
+      "strokes": "7",
+      "translations_eng_all": [
+        "to live",
+        "to dwell",
+        "to stay",
+        "to reside",
+        "to stop",
+        "(suffix indicating firmness, steadiness, or coming to a halt)"
+      ]
+    },
+    "meaning_vi": "sống, ở"
+  },
+  {
+    "id": "da7cf9c3-797d-453d-a014-f50abadb3715",
+    "hsk_level_code": "hsk1",
+    "lesson_number": 15,
+    "chinese_word": "桌子",
+    "pinyin": "zhuō zi",
+    "meaning": "table; desk",
+    "example_sentence": "桌子上有一本书。",
+    "example_pinyin": "Zhuōzi shàng yǒu yī běn shū.",
+    "example_meaning": "Trên bàn có một quyển sách.",
+    "word_type": "n",
+    "audio_url": null,
+    "display_order": 6,
+    "meta": {
+      "source_id": 146,
+      "source_level": 1,
+      "radicals": null,
+      "strokes": null,
+      "translations_eng_all": [
+        "table",
+        "desk",
+        "CL:張|张",
+        "套[tào]"
+      ]
+    },
+    "meaning_vi": "cái bàn"
+  },
+  {
+    "id": "55a04f75-20a9-4321-90c6-740c5006eca6",
+    "hsk_level_code": "hsk1",
+    "lesson_number": 15,
+    "chinese_word": "字",
+    "pinyin": "zì",
+    "meaning": "letter; symbol",
+    "example_sentence": "这个字很难写。",
+    "example_pinyin": "Zhège zì hěn nán xiě.",
+    "example_meaning": "Chữ này rất khó viết.",
+    "word_type": "n",
+    "audio_url": null,
+    "display_order": 7,
+    "meta": {
+      "source_id": 147,
+      "source_level": 1,
+      "radicals": "子",
+      "strokes": "6",
+      "translations_eng_all": [
+        "letter",
+        "symbol",
+        "character",
+        "word",
+        "CL:個|个[gè]",
+        "courtesy or style name traditionally given to males aged 20 in dynastic China"
+      ]
+    },
+    "meaning_vi": "chữ"
+  },
+  {
+    "id": "c2efaa5e-f0f5-44f2-af9a-ede41e1fb407",
+    "hsk_level_code": "hsk1",
+    "lesson_number": 15,
+    "chinese_word": "昨天",
+    "pinyin": "zuó tiān",
+    "meaning": "yesterday",
+    "example_sentence": "昨天我去了商店。",
+    "example_pinyin": "Zuótiān wǒ qùle shāngdiàn.",
+    "example_meaning": "Hôm qua tôi đi cửa hàng.",
+    "word_type": "n",
+    "audio_url": null,
+    "display_order": 8,
+    "meta": {
+      "source_id": 148,
+      "source_level": 1,
+      "radicals": null,
+      "strokes": null,
+      "translations_eng_all": [
+        "yesterday"
+      ]
+    },
+    "meaning_vi": "hôm qua"
+  },
+  {
+    "id": "1315cb6d-1d23-4a74-99eb-ad1befa6054f",
+    "hsk_level_code": "hsk1",
+    "lesson_number": 15,
+    "chinese_word": "坐",
+    "pinyin": "zuò",
+    "meaning": "to sit; to take a seat",
+    "example_sentence": "请坐。",
+    "example_pinyin": "Qǐng zuò.",
+    "example_meaning": "Xin mời ngồi.",
+    "word_type": "v",
+    "audio_url": null,
+    "display_order": 9,
+    "meta": {
+      "source_id": 149,
+      "source_level": 1,
+      "radicals": "土",
+      "strokes": "7",
+      "translations_eng_all": [
+        "to sit",
+        "to take a seat",
+        "to take (a bus, airplane etc)",
+        "to bear fruit",
+        "variant of 座[zuò]"
+      ]
+    },
+    "meaning_vi": "ngồi"
+  },
+  {
+    "id": "b5ea2f95-5311-4298-a8d0-eabbee3c5cf5",
+    "hsk_level_code": "hsk1",
+    "lesson_number": 15,
+    "chinese_word": "做",
+    "pinyin": "zuò",
+    "meaning": "to do; to make",
+    "example_sentence": "你在做什么？",
+    "example_pinyin": "Nǐ zài zuò shénme?",
+    "example_meaning": "Bạn đang làm gì?",
+    "word_type": "v",
+    "audio_url": null,
+    "display_order": 10,
+    "meta": {
+      "source_id": 150,
+      "source_level": 1,
+      "radicals": "亻",
+      "strokes": "11",
+      "translations_eng_all": [
+        "to do",
+        "to make",
+        "to produce",
+        "to write",
+        "to compose",
+        "to act as",
+        "to engage in",
+        "to hold (a party)",
+        "to be",
+        "to become",
+        "to function (in some capacity)",
+        "to serve as",
+        "to be used for",
+        "to form (a bond or relationship)",
+        "to pretend",
+        "to feign",
+        "to act a part",
+        "to put on appearance"
+      ]
+    },
+    "meaning_vi": "làm"
+  }
+]

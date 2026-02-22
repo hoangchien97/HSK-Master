@@ -49,7 +49,7 @@ export async function fetchLessonPracticeData(lessonId: string) {
         },
         progress,
         itemProgress,
-        siblings: siblings.map((s) => ({ id: s.id, title: s.title, order: s.order })),
+        siblings: siblings.map((s) => ({ id: s.id, slug: s.slug, title: s.title, order: s.order })),
       },
     };
   } catch (error) {

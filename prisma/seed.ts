@@ -1,6 +1,7 @@
 import 'dotenv/config'
 import { PrismaClient } from '@prisma/client'
 import { seedPortal } from './seed-portal'
+import { generateSlug } from '@/utils/slug'
 
 const prisma = new PrismaClient()
 
@@ -160,8 +161,8 @@ async function main() {
       badgeColor: "bg-orange-100 text-orange-800 dark:bg-orange-900/30 dark:text-orange-200",
       vocabularyCount: 150,
       grammarCount: 45,
-      lessonCount: 18,
-      lectures: 18,
+      lessonCount: 15,
+      lectures: 15,
       durationHours: 40,
       categoryId: hskCategory.id,
       hskLevelId: hskLevelMap[1],
@@ -187,8 +188,8 @@ async function main() {
       badgeColor: "bg-orange-100 text-orange-800 dark:bg-orange-900/30 dark:text-orange-200",
       vocabularyCount: 300,
       grammarCount: 60,
-      lessonCount: 16,
-      lectures: 16,
+      lessonCount: 15,
+      lectures: 15,
       durationHours: 60,
       categoryId: hskCategory.id,
       hskLevelId: hskLevelMap[2],
@@ -241,8 +242,8 @@ async function main() {
       badgeColor: "bg-red-100 text-red-800 dark:bg-red-900/30 dark:text-red-200",
       vocabularyCount: 1200,
       grammarCount: 120,
-      lessonCount: 22,
-      lectures: 22,
+      lessonCount: 20,
+      lectures: 20,
       durationHours: 100,
       categoryId: hskCategory.id,
       hskLevelId: hskLevelMap[4],
@@ -268,8 +269,8 @@ async function main() {
       badgeColor: "bg-indigo-100 text-indigo-800 dark:bg-indigo-900/30 dark:text-indigo-200",
       vocabularyCount: 2500,
       grammarCount: 150,
-      lessonCount: 24,
-      lectures: 24,
+      lessonCount: 25,
+      lectures: 25,
       durationHours: 120,
       categoryId: hskCategory.id,
       hskLevelId: hskLevelMap[5],
@@ -295,8 +296,8 @@ async function main() {
       badgeColor: "bg-blue-100 text-blue-800 dark:bg-blue-900/30 dark:text-blue-200",
       vocabularyCount: 5000,
       grammarCount: 200,
-      lessonCount: 26,
-      lectures: 26,
+      lessonCount: 25,
+      lectures: 25,
       durationHours: 150,
       categoryId: hskCategory.id,
       hskLevelId: hskLevelMap[6],
@@ -380,13 +381,13 @@ async function main() {
   // ============= Lessons =============
   console.log("📝 Creating lessons...")
 
-  // HSK 1 Lessons
+  // HSK 1 Lessons (15 bài — HSK Standard Course)
   const hsk1Lessons = [
-    { title: "Giới thiệu làm quen Tiếng Trung", titleChinese: "汉语入门", description: "Các nét và quy tắc viết trong tiếng Trung", order: 1, courseId: courseMap["hsk-1"], isLocked: false, progress: 75 },
-    { title: "Xin chào", titleChinese: "你好", description: "Cách nói xin chào với từ 你好, Cách đếm số từ 1-99", order: 2, courseId: courseMap["hsk-1"], isLocked: false, progress: 75 },
-    { title: "Tiếng Trung không khó lắm", titleChinese: "汉语不太难", description: "Từ vựng về các thành viên trong gia đình, Cấu trúc câu 不太 + ADJ", order: 3, courseId: courseMap["hsk-1"], isLocked: false, progress: 60 },
+    { title: "Giới thiệu làm quen Tiếng Trung", titleChinese: "汉语入门", description: "Các nét và quy tắc viết trong tiếng Trung", order: 1, courseId: courseMap["hsk-1"], isLocked: false, progress: 0 },
+    { title: "Xin chào", titleChinese: "你好", description: "Cách nói xin chào với từ 你好, Cách đếm số từ 1-99", order: 2, courseId: courseMap["hsk-1"], isLocked: false, progress: 0 },
+    { title: "Tiếng Trung không khó lắm", titleChinese: "汉语不太难", description: "Từ vựng về các thành viên trong gia đình, Cấu trúc câu 不太 + ADJ", order: 3, courseId: courseMap["hsk-1"], isLocked: false, progress: 0 },
     { title: "Hẹn ngày mai gặp lại", titleChinese: "明天见", description: "Từ vựng về các ngôn ngữ, Hỏi đáp đi đâu làm gì", order: 4, courseId: courseMap["hsk-1"], isLocked: false, progress: 0 },
-    { title: "Học nghe nói bài 1, 2, 3", titleChinese: "", description: "Nắm được cách phân biệt của các vận mẫu và thanh mẫu", order: 5, courseId: courseMap["hsk-1"], isLocked: false, progress: 0 },
+    { title: "Luyện nghe nói cơ bản", titleChinese: "听说练习", description: "Nắm được cách phân biệt của các vận mẫu và thanh mẫu", order: 5, courseId: courseMap["hsk-1"], isLocked: false, progress: 0 },
     { title: "Bạn đi đâu?", titleChinese: "你去哪儿？", description: "Hỏi đáp đi đâu với chữ 哪儿, Hỏi đáp về thứ trong tuần", order: 6, courseId: courseMap["hsk-1"], isLocked: false, progress: 0 },
     { title: "Đây là thầy Vương", titleChinese: "这是王老师", description: "Hỏi đáp về công việc, sức khỏe, Cách nói lời cảm ơn", order: 7, courseId: courseMap["hsk-1"], isLocked: false, progress: 0 },
     { title: "Tôi học tiếng Trung", titleChinese: "我学汉语", description: "Hỏi đáp về họ tên, quốc gia, Hỏi đáp với từ 什么", order: 8, courseId: courseMap["hsk-1"], isLocked: false, progress: 0 },
@@ -394,15 +395,12 @@ async function main() {
     { title: "Một cân táo bao nhiêu tiền?", titleChinese: "一斤苹果多少钱？", description: "Từ vựng về hoa quả, Cách hỏi về số lượng", order: 10, courseId: courseMap["hsk-1"], isLocked: false, progress: 0 },
     { title: "Bạn sống ở đâu?", titleChinese: "你住在哪儿？", description: "Hỏi đáp về nơi sống, Cách hỏi đáp về số điện thoại", order: 11, courseId: courseMap["hsk-1"], isLocked: false, progress: 0 },
     { title: "Chúng tôi đều là du học sinh", titleChinese: "我们都是留学生", description: "Cách giới thiệu về bản thân, Cách dùng của chữ 都 và 也", order: 12, courseId: courseMap["hsk-1"], isLocked: false, progress: 0 },
-    { title: "KIỂM TRA GIỮA KHÓA", titleChinese: "", description: "Kiểm tra tổng hợp kiến thức các bài đã học", order: 13, courseId: courseMap["hsk-1"], isLocked: false, progress: 0 },
-    { title: "Đây có phải là thuốc bắc không?", titleChinese: "这是中药吗？", description: "Từ vựng về các đồ vật cơ bản, Làm quen với lượng từ", order: 14, courseId: courseMap["hsk-1"], isLocked: false, progress: 0 },
-    { title: "Xe của bạn là cái mới hay cũ?", titleChinese: "你的车是新的还是旧的？", description: "Từ vựng về các loại xe và động từ đi kèm", order: 15, courseId: courseMap["hsk-1"], isLocked: false, progress: 0 },
-    { title: "Công ty có bao nhiêu nhân viên?", titleChinese: "公司有多少员工？", description: "Từ vựng về nghề nghiệp, Cách nói về sự ước lượng", order: 16, courseId: courseMap["hsk-1"], isLocked: false, progress: 0 },
-    { title: "KIỂM TRA CUỐI KHÓA", titleChinese: "", description: "Kiểm tra tổng hợp toàn bộ kiến thức HSK 1", order: 17, courseId: courseMap["hsk-1"], isLocked: false, progress: 0 },
-    { title: "ÔN TẬP TỔNG HỢP", titleChinese: "", description: "Ôn tập và củng cố toàn bộ kiến thức HSK 1", order: 18, courseId: courseMap["hsk-1"], isLocked: false, progress: 0 },
+    { title: "Đây có phải là thuốc bắc không?", titleChinese: "这是中药吗？", description: "Từ vựng về các đồ vật cơ bản, Làm quen với lượng từ", order: 13, courseId: courseMap["hsk-1"], isLocked: false, progress: 0 },
+    { title: "Xe của bạn là mới hay cũ?", titleChinese: "你的车是新的还是旧的？", description: "Từ vựng về các loại xe và động từ đi kèm", order: 14, courseId: courseMap["hsk-1"], isLocked: false, progress: 0 },
+    { title: "Công ty có bao nhiêu nhân viên?", titleChinese: "公司有多少员工？", description: "Từ vựng về nghề nghiệp, Cách nói về sự ước lượng", order: 15, courseId: courseMap["hsk-1"], isLocked: false, progress: 0 },
   ]
 
-  // HSK 2 Lessons
+  // HSK 2 Lessons (15 bài — HSK Standard Course)
   const hsk2Lessons = [
     { title: "Ôn tập HSK 1", titleChinese: "复习 HSK 1", description: "Ôn tập lại kiến thức HSK 1", order: 1, courseId: courseMap["hsk-2"], isLocked: false, progress: 0 },
     { title: "Bây giờ mấy giờ rồi?", titleChinese: "现在几点了？", description: "Học cách hỏi và trả lời về thời gian", order: 2, courseId: courseMap["hsk-2"], isLocked: false, progress: 0 },
@@ -412,41 +410,40 @@ async function main() {
     { title: "Đi mua sắm", titleChinese: "去购物", description: "Từ vựng về mua sắm, Cách hỏi giá và mặc cả", order: 6, courseId: courseMap["hsk-2"], isLocked: false, progress: 0 },
     { title: "Gia đình tôi có 4 người", titleChinese: "我家有四口人", description: "Từ vựng về thành viên gia đình", order: 7, courseId: courseMap["hsk-2"], isLocked: false, progress: 0 },
     { title: "Sở thích của tôi", titleChinese: "我的爱好", description: "Từ vựng về sở thích, hoạt động giải trí", order: 8, courseId: courseMap["hsk-2"], isLocked: false, progress: 0 },
-    { title: "KIỂM TRA GIỮA KHÓA", titleChinese: "", description: "Kiểm tra tổng hợp kiến thức nửa đầu khóa học", order: 9, courseId: courseMap["hsk-2"], isLocked: false, progress: 0 },
-    { title: "Đi bệnh viện", titleChinese: "去医院", description: "Từ vựng về sức khỏe và bệnh viện", order: 10, courseId: courseMap["hsk-2"], isLocked: false, progress: 0 },
-    { title: "Phương tiện giao thông", titleChinese: "交通工具", description: "Từ vựng về các loại xe và phương tiện", order: 11, courseId: courseMap["hsk-2"], isLocked: false, progress: 0 },
-    { title: "Đi du lịch", titleChinese: "去旅游", description: "Từ vựng về du lịch, khách sạn", order: 12, courseId: courseMap["hsk-2"], isLocked: false, progress: 0 },
-    { title: "Học ở thư viện", titleChinese: "在图书馆学习", description: "Từ vựng về học tập, thư viện", order: 13, courseId: courseMap["hsk-2"], isLocked: false, progress: 0 },
-    { title: "Cuối tuần làm gì?", titleChinese: "周末做什么？", description: "Từ vựng về hoạt động cuối tuần", order: 14, courseId: courseMap["hsk-2"], isLocked: false, progress: 0 },
-    { title: "KIỂM TRA CUỐI KHÓA", titleChinese: "", description: "Kiểm tra tổng hợp toàn bộ khóa học HSK 2", order: 15, courseId: courseMap["hsk-2"], isLocked: false, progress: 0 },
-    { title: "ÔN TẬP TỔNG HỢP", titleChinese: "", description: "Ôn tập và củng cố toàn bộ kiến thức HSK 2", order: 16, courseId: courseMap["hsk-2"], isLocked: false, progress: 0 },
+    { title: "Đi bệnh viện", titleChinese: "去医院", description: "Từ vựng về sức khỏe và bệnh viện", order: 9, courseId: courseMap["hsk-2"], isLocked: false, progress: 0 },
+    { title: "Phương tiện giao thông", titleChinese: "交通工具", description: "Từ vựng về các loại xe và phương tiện", order: 10, courseId: courseMap["hsk-2"], isLocked: false, progress: 0 },
+    { title: "Đi du lịch", titleChinese: "去旅游", description: "Từ vựng về du lịch, khách sạn", order: 11, courseId: courseMap["hsk-2"], isLocked: false, progress: 0 },
+    { title: "Học ở thư viện", titleChinese: "在图书馆学习", description: "Từ vựng về học tập, thư viện", order: 12, courseId: courseMap["hsk-2"], isLocked: false, progress: 0 },
+    { title: "Cuối tuần làm gì?", titleChinese: "周末做什么？", description: "Từ vựng về hoạt động cuối tuần", order: 13, courseId: courseMap["hsk-2"], isLocked: false, progress: 0 },
+    { title: "Mua điện thoại mới", titleChinese: "买新手机", description: "Từ vựng về đồ điện tử, Cách so sánh sản phẩm", order: 14, courseId: courseMap["hsk-2"], isLocked: false, progress: 0 },
+    { title: "Thể dục thể thao", titleChinese: "体育运动", description: "Từ vựng về thể thao, Cách diễn đạt sở thích thể thao", order: 15, courseId: courseMap["hsk-2"], isLocked: false, progress: 0 },
   ]
 
-  // HSK 3 Lessons
+  // HSK 3 Lessons (20 bài — HSK Standard Course)
   const hsk3Lessons = [
     { title: "Ôn tập HSK 2", titleChinese: "复习 HSK 2", description: "Ôn tập lại kiến thức HSK 2", order: 1, courseId: courseMap["hsk-3"], isLocked: false, progress: 0 },
     { title: "Tôi thích uống trà", titleChinese: "我喜欢喝茶", description: "Cách diễn đạt sở thích với 喜欢, Từ vựng về đồ uống", order: 2, courseId: courseMap["hsk-3"], isLocked: false, progress: 0 },
-    { title: "Căn hộ này bao nhiêu tiền một tháng?", titleChinese: "这套公寓一个月多少钱？", description: "Từ vựng về thuê nhà, Cách hỏi về giá thuê", order: 3, courseId: courseMap["hsk-3"], isLocked: false, progress: 0 },
+    { title: "Căn hộ bao nhiêu tiền một tháng?", titleChinese: "这套公寓一个月多少钱？", description: "Từ vựng về thuê nhà, Cách hỏi về giá thuê", order: 3, courseId: courseMap["hsk-3"], isLocked: false, progress: 0 },
     { title: "Bạn có thể giúp tôi không?", titleChinese: "你能帮我吗？", description: "Cách yêu cầu giúp đỡ với 能, 可以, Từ vựng về nhờ vả", order: 4, courseId: courseMap["hsk-3"], isLocked: false, progress: 0 },
     { title: "Tôi đang học tiếng Trung", titleChinese: "我正在学汉语", description: "Cấu trúc đang làm gì với 正在, Thể tiếp diễn", order: 5, courseId: courseMap["hsk-3"], isLocked: false, progress: 0 },
     { title: "Chúng ta đi ăn nhà hàng nhé", titleChinese: "我们去饭店吃饭吧", description: "Từ vựng về nhà hàng, Cách rủ rê với 吧", order: 6, courseId: courseMap["hsk-3"], isLocked: false, progress: 0 },
     { title: "Tôi đã từng đến Trung Quốc", titleChinese: "我去过中国", description: "Cấu trúc kinh nghiệm với 过, Từ vựng về du lịch", order: 7, courseId: courseMap["hsk-3"], isLocked: false, progress: 0 },
     { title: "Thời tiết mùa xuân rất đẹp", titleChinese: "春天的天气很好", description: "Từ vựng về 4 mùa, Cách mô tả thời tiết", order: 8, courseId: courseMap["hsk-3"], isLocked: false, progress: 0 },
-    { title: "Tôi sẽ đi du lịch vào tháng sau", titleChinese: "下个月我要去旅游", description: "Thì tương lai với 要, 会, 将, Kế hoạch tương lai", order: 9, courseId: courseMap["hsk-3"], isLocked: false, progress: 0 },
-    { title: "KIỂM TRA GIỮA KHÓA", titleChinese: "", description: "Kiểm tra tổng hợp kiến thức nửa đầu khóa học", order: 10, courseId: courseMap["hsk-3"], isLocked: false, progress: 0 },
-    { title: "Tôi đã làm xong bài tập", titleChinese: "我做完作业了", description: "Cấu trúc hoàn thành với 完, 好, Từ vựng về học tập", order: 11, courseId: courseMap["hsk-3"], isLocked: false, progress: 0 },
-    { title: "Càng học càng thấy hay", titleChinese: "越学越有意思", description: "Cấu trúc 越...越..., So sánh và đối chiếu", order: 12, courseId: courseMap["hsk-3"], isLocked: false, progress: 0 },
-    { title: "Nếu trời mưa thì không đi", titleChinese: "如果下雨就不去", description: "Câu điều kiện với 如果...就..., Từ vựng về thời tiết", order: 13, courseId: courseMap["hsk-3"], isLocked: false, progress: 0 },
-    { title: "Tôi vừa học vừa làm", titleChinese: "我一边学习一边工作", description: "Cấu trúc 一边...一边..., Hoạt động đồng thời", order: 14, courseId: courseMap["hsk-3"], isLocked: false, progress: 0 },
-    { title: "Tôi bị ốm rồi", titleChinese: "我生病了", description: "Từ vựng về bệnh tật, Cách diễn đạt trạng thái", order: 15, courseId: courseMap["hsk-3"], isLocked: false, progress: 0 },
-    { title: "So với năm ngoái, tôi tiến bộ nhiều", titleChinese: "跟去年相比，我进步了很多", description: "So sánh với 比, 跟...相比, Từ vựng về tiến bộ", order: 16, courseId: courseMap["hsk-3"], isLocked: false, progress: 0 },
-    { title: "Tôi bị người ta chê", titleChinese: "我被人批评了", description: "Câu bị động với 被, Từ vựng về cảm xúc", order: 17, courseId: courseMap["hsk-3"], isLocked: false, progress: 0 },
-    { title: "Luyện thi HSK 3 tổng hợp", titleChinese: "HSK 3 综合练习", description: "Luyện đề và kỹ năng làm bài thi HSK 3", order: 18, courseId: courseMap["hsk-3"], isLocked: false, progress: 0 },
-    { title: "KIỂM TRA CUỐI KHÓA", titleChinese: "", description: "Kiểm tra tổng hợp toàn bộ khóa học HSK 3", order: 19, courseId: courseMap["hsk-3"], isLocked: false, progress: 0 },
-    { title: "ÔN TẬP TỔNG HỢP", titleChinese: "", description: "Ôn tập và củng cố toàn bộ kiến thức HSK 3", order: 20, courseId: courseMap["hsk-3"], isLocked: false, progress: 0 },
+    { title: "Tháng sau tôi sẽ đi du lịch", titleChinese: "下个月我要去旅游", description: "Thì tương lai với 要, 会, 将, Kế hoạch tương lai", order: 9, courseId: courseMap["hsk-3"], isLocked: false, progress: 0 },
+    { title: "Tôi đã làm xong bài tập", titleChinese: "我做完作业了", description: "Cấu trúc hoàn thành với 完, 好, Từ vựng về học tập", order: 10, courseId: courseMap["hsk-3"], isLocked: false, progress: 0 },
+    { title: "Càng học càng thấy hay", titleChinese: "越学越有意思", description: "Cấu trúc 越...越..., So sánh và đối chiếu", order: 11, courseId: courseMap["hsk-3"], isLocked: false, progress: 0 },
+    { title: "Nếu trời mưa thì không đi", titleChinese: "如果下雨就不去", description: "Câu điều kiện với 如果...就..., Từ vựng về thời tiết", order: 12, courseId: courseMap["hsk-3"], isLocked: false, progress: 0 },
+    { title: "Tôi vừa học vừa làm", titleChinese: "我一边学习一边工作", description: "Cấu trúc 一边...一边..., Hoạt động đồng thời", order: 13, courseId: courseMap["hsk-3"], isLocked: false, progress: 0 },
+    { title: "Tôi bị ốm rồi", titleChinese: "我生病了", description: "Từ vựng về bệnh tật, Cách diễn đạt trạng thái", order: 14, courseId: courseMap["hsk-3"], isLocked: false, progress: 0 },
+    { title: "So với năm ngoái tôi tiến bộ nhiều", titleChinese: "跟去年相比，我进步了很多", description: "So sánh với 比, 跟...相比, Từ vựng về tiến bộ", order: 15, courseId: courseMap["hsk-3"], isLocked: false, progress: 0 },
+    { title: "Tôi bị người ta phê bình", titleChinese: "我被人批评了", description: "Câu bị động với 被, Từ vựng về cảm xúc", order: 16, courseId: courseMap["hsk-3"], isLocked: false, progress: 0 },
+    { title: "Mặc dù mệt nhưng rất vui", titleChinese: "虽然累但很开心", description: "Cấu trúc 虽然...但是..., Diễn đạt nhượng bộ", order: 17, courseId: courseMap["hsk-3"], isLocked: false, progress: 0 },
+    { title: "Cuộc sống ở thành phố", titleChinese: "城市生活", description: "Từ vựng về đô thị, So sánh thành phố và nông thôn", order: 18, courseId: courseMap["hsk-3"], isLocked: false, progress: 0 },
+    { title: "Kế hoạch tương lai", titleChinese: "未来计划", description: "Từ vựng về kế hoạch, Cách diễn đạt mong muốn", order: 19, courseId: courseMap["hsk-3"], isLocked: false, progress: 0 },
+    { title: "Tổng hợp luyện tập HSK 3", titleChinese: "HSK 3 综合练习", description: "Luyện đề và kỹ năng làm bài thi HSK 3", order: 20, courseId: courseMap["hsk-3"], isLocked: false, progress: 0 },
   ]
 
-  // HSK 4 Lessons
+  // HSK 4 Lessons (20 bài — HSK Standard Course)
   const hsk4Lessons = [
     { title: "Ôn tập HSK 3", titleChinese: "复习 HSK 3", description: "Ôn tập lại kiến thức HSK 3", order: 1, courseId: courseMap["hsk-4"], isLocked: false, progress: 0 },
     { title: "Tôi đang chuẩn bị đi du học", titleChinese: "我准备去留学", description: "Từ vựng về du học, Cách diễn đạt kế hoạch", order: 2, courseId: courseMap["hsk-4"], isLocked: false, progress: 0 },
@@ -456,23 +453,21 @@ async function main() {
     { title: "Văn hóa Trung Quốc rất phong phú", titleChinese: "中国文化很丰富", description: "Từ vựng về văn hóa, Cách diễn đạt đặc điểm", order: 6, courseId: courseMap["hsk-4"], isLocked: false, progress: 0 },
     { title: "Chỉ cần có ý chí là được", titleChinese: "只要有意志就行", description: "Cấu trúc 只要...就..., Điều kiện đủ", order: 7, courseId: courseMap["hsk-4"], isLocked: false, progress: 0 },
     { title: "Bất kể ai cũng thích du lịch", titleChinese: "无论谁都喜欢旅游", description: "Cấu trúc 无论...都..., 不管...也...", order: 8, courseId: courseMap["hsk-4"], isLocked: false, progress: 0 },
-    { title: "Tôi không những học tiếng Trung mà còn học văn hóa", titleChinese: "我不但学汉语而且学文化", description: "Cấu trúc 不但...而且..., Diễn đạt bổ sung", order: 9, courseId: courseMap["hsk-4"], isLocked: false, progress: 0 },
+    { title: "Không những học tiếng Trung mà còn học văn hóa", titleChinese: "不但学汉语而且学文化", description: "Cấu trúc 不但...而且..., Diễn đạt bổ sung", order: 9, courseId: courseMap["hsk-4"], isLocked: false, progress: 0 },
     { title: "Với tư cách là sinh viên", titleChinese: "作为学生", description: "Từ vựng về vai trò, Cách dùng 作为", order: 10, courseId: courseMap["hsk-4"], isLocked: false, progress: 0 },
-    { title: "KIỂM TRA GIỮA KHÓA", titleChinese: "", description: "Kiểm tra tổng hợp kiến thức nửa đầu khóa học", order: 11, courseId: courseMap["hsk-4"], isLocked: false, progress: 0 },
-    { title: "Theo ý kiến tôi", titleChinese: "依我看", description: "Cách bày tỏ quan điểm, Từ vựng về ý kiến", order: 12, courseId: courseMap["hsk-4"], isLocked: false, progress: 0 },
-    { title: "Về vấn đề môi trường", titleChinese: "关于环境问题", description: "Từ vựng về môi trường, Cách thảo luận vấn đề", order: 13, courseId: courseMap["hsk-4"], isLocked: false, progress: 0 },
-    { title: "Đối với vấn đề này", titleChinese: "对于这个问题", description: "Cách sử dụng 对于, 关于, Phân tích vấn đề", order: 14, courseId: courseMap["hsk-4"], isLocked: false, progress: 0 },
-    { title: "Dựa vào kinh nghiệm", titleChinese: "根据经验", description: "Từ vựng về kinh nghiệm, Cách dùng 根据", order: 15, courseId: courseMap["hsk-4"], isLocked: false, progress: 0 },
-    { title: "Phát triển kinh tế", titleChinese: "发展经济", description: "Từ vựng về kinh tế, Xu hướng phát triển", order: 16, courseId: courseMap["hsk-4"], isLocked: false, progress: 0 },
-    { title: "Xã hội hiện đại", titleChinese: "现代社会", description: "Từ vựng về xã hội, Vấn đề xã hội", order: 17, courseId: courseMap["hsk-4"], isLocked: false, progress: 0 },
-    { title: "Quan hệ quốc tế", titleChinese: "国际关系", description: "Từ vựng về chính trị quốc tế, Quan hệ ngoại giao", order: 18, courseId: courseMap["hsk-4"], isLocked: false, progress: 0 },
-    { title: "Luyện thi HSK 4 tổng hợp", titleChinese: "HSK 4 综合练习", description: "Luyện đề và kỹ năng làm bài thi HSK 4", order: 19, courseId: courseMap["hsk-4"], isLocked: false, progress: 0 },
-    { title: "Kỹ năng đọc hiểu nâng cao", titleChinese: "高级阅读技巧", description: "Luyện kỹ năng đọc hiểu cho HSK 4", order: 20, courseId: courseMap["hsk-4"], isLocked: false, progress: 0 },
-    { title: "KIỂM TRA CUỐI KHÓA", titleChinese: "", description: "Kiểm tra tổng hợp toàn bộ khóa học HSK 4", order: 21, courseId: courseMap["hsk-4"], isLocked: false, progress: 0 },
-    { title: "ÔN TẬP TỔNG HỢP", titleChinese: "", description: "Ôn tập và củng cố toàn bộ kiến thức HSK 4", order: 22, courseId: courseMap["hsk-4"], isLocked: false, progress: 0 },
+    { title: "Theo ý kiến tôi", titleChinese: "依我看", description: "Cách bày tỏ quan điểm, Từ vựng về ý kiến", order: 11, courseId: courseMap["hsk-4"], isLocked: false, progress: 0 },
+    { title: "Về vấn đề môi trường", titleChinese: "关于环境问题", description: "Từ vựng về môi trường, Cách thảo luận vấn đề", order: 12, courseId: courseMap["hsk-4"], isLocked: false, progress: 0 },
+    { title: "Đối với vấn đề này", titleChinese: "对于这个问题", description: "Cách sử dụng 对于, 关于, Phân tích vấn đề", order: 13, courseId: courseMap["hsk-4"], isLocked: false, progress: 0 },
+    { title: "Dựa vào kinh nghiệm", titleChinese: "根据经验", description: "Từ vựng về kinh nghiệm, Cách dùng 根据", order: 14, courseId: courseMap["hsk-4"], isLocked: false, progress: 0 },
+    { title: "Phát triển kinh tế", titleChinese: "发展经济", description: "Từ vựng về kinh tế, Xu hướng phát triển", order: 15, courseId: courseMap["hsk-4"], isLocked: false, progress: 0 },
+    { title: "Xã hội hiện đại", titleChinese: "现代社会", description: "Từ vựng về xã hội, Vấn đề xã hội", order: 16, courseId: courseMap["hsk-4"], isLocked: false, progress: 0 },
+    { title: "Quan hệ quốc tế", titleChinese: "国际关系", description: "Từ vựng về chính trị quốc tế, Quan hệ ngoại giao", order: 17, courseId: courseMap["hsk-4"], isLocked: false, progress: 0 },
+    { title: "Kỹ năng đọc hiểu nâng cao", titleChinese: "高级阅读技巧", description: "Luyện kỹ năng đọc hiểu cho HSK 4", order: 18, courseId: courseMap["hsk-4"], isLocked: false, progress: 0 },
+    { title: "Kỹ năng viết và diễn đạt", titleChinese: "写作与表达", description: "Luyện kỹ năng viết câu và diễn đạt ý", order: 19, courseId: courseMap["hsk-4"], isLocked: false, progress: 0 },
+    { title: "Tổng hợp luyện tập HSK 4", titleChinese: "HSK 4 综合练习", description: "Luyện đề và kỹ năng làm bài thi HSK 4", order: 20, courseId: courseMap["hsk-4"], isLocked: false, progress: 0 },
   ]
 
-  // HSK 5 Lessons
+  // HSK 5 Lessons (25 bài — HSK Standard Course)
   const hsk5Lessons = [
     { title: "Ôn tập HSK 4", titleChinese: "复习 HSK 4", description: "Ôn tập lại kiến thức HSK 4", order: 1, courseId: courseMap["hsk-5"], isLocked: false, progress: 0 },
     { title: "Phân tích hiện tượng xã hội", titleChinese: "分析社会现象", description: "Từ vựng học thuật, Kỹ năng phân tích", order: 2, courseId: courseMap["hsk-5"], isLocked: false, progress: 0 },
@@ -484,23 +479,24 @@ async function main() {
     { title: "Kinh tế thị trường", titleChinese: "市场经济", description: "Từ vựng kinh tế, Thương mại quốc tế", order: 8, courseId: courseMap["hsk-5"], isLocked: false, progress: 0 },
     { title: "Môi trường và bảo vệ", titleChinese: "环境保护", description: "Từ vựng môi trường, Phát triển bền vững", order: 9, courseId: courseMap["hsk-5"], isLocked: false, progress: 0 },
     { title: "Văn hóa ẩm thực", titleChinese: "饮食文化", description: "Từ vựng ẩm thực, Đặc sản vùng miền", order: 10, courseId: courseMap["hsk-5"], isLocked: false, progress: 0 },
-    { title: "KIỂM TRA GIỮA KHÓA", titleChinese: "", description: "Kiểm tra tổng hợp kiến thức nửa đầu khóa học", order: 11, courseId: courseMap["hsk-5"], isLocked: false, progress: 0 },
-    { title: "Nghệ thuật và thẩm mỹ", titleChinese: "艺术与审美", description: "Từ vựng nghệ thuật, Giá trị thẩm mỹ", order: 12, courseId: courseMap["hsk-5"], isLocked: false, progress: 0 },
-    { title: "Y học và sức khỏe", titleChinese: "医疗健康", description: "Từ vựng y tế, Chăm sóc sức khỏe", order: 13, courseId: courseMap["hsk-5"], isLocked: false, progress: 0 },
-    { title: "Truyền thông đại chúng", titleChinese: "大众传媒", description: "Từ vựng truyền thông, Mạng xã hội", order: 14, courseId: courseMap["hsk-5"], isLocked: false, progress: 0 },
-    { title: "Quan hệ nhân sự", titleChinese: "人际关系", description: "Từ vựng giao tiếp, Văn hóa ứng xử", order: 15, courseId: courseMap["hsk-5"], isLocked: false, progress: 0 },
-    { title: "Du lịch và văn hóa", titleChinese: "旅游文化", description: "Từ vựng du lịch, Điểm đến nổi tiếng", order: 16, courseId: courseMap["hsk-5"], isLocked: false, progress: 0 },
-    { title: "Thể thao và giải trí", titleChinese: "体育娱乐", description: "Từ vựng thể thao, Hoạt động giải trí", order: 17, courseId: courseMap["hsk-5"], isLocked: false, progress: 0 },
-    { title: "Khởi nghiệp và đổi mới", titleChinese: "创业创新", description: "Từ vựng kinh doanh, Tinh thần đổi mới", order: 18, courseId: courseMap["hsk-5"], isLocked: false, progress: 0 },
-    { title: "Đô thị hóa", titleChinese: "城市化", description: "Từ vựng đô thị, Phát triển đô thị", order: 19, courseId: courseMap["hsk-5"], isLocked: false, progress: 0 },
-    { title: "Luyện thi HSK 5 tổng hợp", titleChinese: "HSK 5 综合练习", description: "Luyện đề và kỹ năng làm bài thi HSK 5", order: 20, courseId: courseMap["hsk-5"], isLocked: false, progress: 0 },
-    { title: "Kỹ năng viết luận", titleChinese: "写作技巧", description: "Luyện kỹ năng viết bài luận HSK 5", order: 21, courseId: courseMap["hsk-5"], isLocked: false, progress: 0 },
-    { title: "KIỂM TRA CUỐI KHÓA", titleChinese: "", description: "Kiểm tra tổng hợp toàn bộ khóa học HSK 5", order: 22, courseId: courseMap["hsk-5"], isLocked: false, progress: 0 },
-    { title: "ÔN TẬP TỔNG HỢP", titleChinese: "", description: "Ôn tập và củng cố toàn bộ kiến thức HSK 5", order: 23, courseId: courseMap["hsk-5"], isLocked: false, progress: 0 },
+    { title: "Nghệ thuật và thẩm mỹ", titleChinese: "艺术与审美", description: "Từ vựng nghệ thuật, Giá trị thẩm mỹ", order: 11, courseId: courseMap["hsk-5"], isLocked: false, progress: 0 },
+    { title: "Y học và sức khỏe", titleChinese: "医疗健康", description: "Từ vựng y tế, Chăm sóc sức khỏe", order: 12, courseId: courseMap["hsk-5"], isLocked: false, progress: 0 },
+    { title: "Truyền thông đại chúng", titleChinese: "大众传媒", description: "Từ vựng truyền thông, Mạng xã hội", order: 13, courseId: courseMap["hsk-5"], isLocked: false, progress: 0 },
+    { title: "Quan hệ nhân sự", titleChinese: "人际关系", description: "Từ vựng giao tiếp, Văn hóa ứng xử", order: 14, courseId: courseMap["hsk-5"], isLocked: false, progress: 0 },
+    { title: "Du lịch và văn hóa", titleChinese: "旅游文化", description: "Từ vựng du lịch, Điểm đến nổi tiếng", order: 15, courseId: courseMap["hsk-5"], isLocked: false, progress: 0 },
+    { title: "Thể thao và giải trí", titleChinese: "体育娱乐", description: "Từ vựng thể thao, Hoạt động giải trí", order: 16, courseId: courseMap["hsk-5"], isLocked: false, progress: 0 },
+    { title: "Khởi nghiệp và đổi mới", titleChinese: "创业创新", description: "Từ vựng kinh doanh, Tinh thần đổi mới", order: 17, courseId: courseMap["hsk-5"], isLocked: false, progress: 0 },
+    { title: "Đô thị hóa", titleChinese: "城市化", description: "Từ vựng đô thị, Phát triển đô thị", order: 18, courseId: courseMap["hsk-5"], isLocked: false, progress: 0 },
+    { title: "Tâm lý học ứng dụng", titleChinese: "应用心理学", description: "Từ vựng tâm lý học, Ứng dụng trong đời sống", order: 19, courseId: courseMap["hsk-5"], isLocked: false, progress: 0 },
+    { title: "Triết học và tư tưởng", titleChinese: "哲学与思想", description: "Tư tưởng Trung Quốc, Triết học đông tây", order: 20, courseId: courseMap["hsk-5"], isLocked: false, progress: 0 },
+    { title: "Ngoại giao và hợp tác", titleChinese: "外交合作", description: "Từ vựng ngoại giao, Quan hệ quốc tế", order: 21, courseId: courseMap["hsk-5"], isLocked: false, progress: 0 },
+    { title: "Nghệ thuật ngôn ngữ", titleChinese: "语言艺术", description: "Tu từ học, Nghệ thuật diễn đạt", order: 22, courseId: courseMap["hsk-5"], isLocked: false, progress: 0 },
+    { title: "Kỹ năng viết luận", titleChinese: "写作技巧", description: "Luyện kỹ năng viết bài luận HSK 5", order: 23, courseId: courseMap["hsk-5"], isLocked: false, progress: 0 },
     { title: "Thi thử HSK 5", titleChinese: "HSK 5 模拟考试", description: "Thi thử toàn bộ bài thi HSK 5", order: 24, courseId: courseMap["hsk-5"], isLocked: false, progress: 0 },
+    { title: "Tổng hợp từ vựng HSK 5", titleChinese: "HSK 5 词汇总结", description: "Tổng hợp và ôn tập toàn bộ từ vựng HSK 5", order: 25, courseId: courseMap["hsk-5"], isLocked: false, progress: 0 },
   ]
 
-  // HSK 6 Lessons
+  // HSK 6 Lessons (25 bài — HSK Standard Course)
   const hsk6Lessons = [
     { title: "Ôn tập HSK 5", titleChinese: "复习 HSK 5", description: "Ôn tập lại kiến thức HSK 5", order: 1, courseId: courseMap["hsk-6"], isLocked: false, progress: 0 },
     { title: "Triết học Trung Quốc cổ đại", titleChinese: "中国古代哲学", description: "Tư tưởng Nho giáo, Đạo giáo, Phật giáo", order: 2, courseId: courseMap["hsk-6"], isLocked: false, progress: 0 },
@@ -513,21 +509,20 @@ async function main() {
     { title: "Điện ảnh và văn hóa đại chúng", titleChinese: "电影与大众文化", description: "Điện ảnh Trung Quốc, Văn hóa đại chúng", order: 9, courseId: courseMap["hsk-6"], isLocked: false, progress: 0 },
     { title: "Giáo dục và phát triển", titleChinese: "教育与发展", description: "Cải cách giáo dục, Phát triển nhân lực", order: 10, courseId: courseMap["hsk-6"], isLocked: false, progress: 0 },
     { title: "Môi trường sinh thái", titleChinese: "生态环境", description: "Bảo vệ môi trường, Phát triển xanh", order: 11, courseId: courseMap["hsk-6"], isLocked: false, progress: 0 },
-    { title: "KIỂM TRA GIỮA KHÓA", titleChinese: "", description: "Kiểm tra tổng hợp kiến thức nửa đầu khóa học", order: 12, courseId: courseMap["hsk-6"], isLocked: false, progress: 0 },
-    { title: "Tâm lý học xã hội", titleChinese: "社会心理学", description: "Hành vi xã hội, Tâm lý đám đông", order: 13, courseId: courseMap["hsk-6"], isLocked: false, progress: 0 },
-    { title: "Đổi mới sáng tạo", titleChinese: "创新创造", description: "Tinh thần đổi mới, Sáng tạo công nghệ", order: 14, courseId: courseMap["hsk-6"], isLocked: false, progress: 0 },
-    { title: "Pháp luật và đạo đức", titleChinese: "法律与道德", description: "Hệ thống pháp luật, Đạo đức xã hội", order: 15, courseId: courseMap["hsk-6"], isLocked: false, progress: 0 },
-    { title: "Văn hóa doanh nghiệp", titleChinese: "企业文化", description: "Quản trị doanh nghiệp, Văn hóa tổ chức", order: 16, courseId: courseMap["hsk-6"], isLocked: false, progress: 0 },
-    { title: "Quan hệ quốc tế", titleChinese: "国际关系", description: "Ngoại giao đa phương, Hợp tác khu vực", order: 17, courseId: courseMap["hsk-6"], isLocked: false, progress: 0 },
-    { title: "Chủ nghĩa nhân văn", titleChinese: "人文主义", description: "Giá trị nhân văn, Phát triển con người", order: 18, courseId: courseMap["hsk-6"], isLocked: false, progress: 0 },
-    { title: "Khoa học công nghệ tiên tiến", titleChinese: "前沿科技", description: "AI, Sinh học, Vật lý lượng tử", order: 19, courseId: courseMap["hsk-6"], isLocked: false, progress: 0 },
-    { title: "Lịch sử văn minh", titleChinese: "文明史", description: "Văn minh Trung Hoa, Giao lưu văn hóa", order: 20, courseId: courseMap["hsk-6"], isLocked: false, progress: 0 },
-    { title: "Luyện thi HSK 6 tổng hợp", titleChinese: "HSK 6 综合练习", description: "Luyện đề và kỹ năng làm bài thi HSK 6", order: 21, courseId: courseMap["hsk-6"], isLocked: false, progress: 0 },
-    { title: "Kỹ năng đọc hiểu chuyên sâu", titleChinese: "深度阅读技巧", description: "Đọc hiểu văn bản phức tạp, phân tích sâu", order: 22, courseId: courseMap["hsk-6"], isLocked: false, progress: 0 },
+    { title: "Tâm lý học xã hội", titleChinese: "社会心理学", description: "Hành vi xã hội, Tâm lý đám đông", order: 12, courseId: courseMap["hsk-6"], isLocked: false, progress: 0 },
+    { title: "Đổi mới sáng tạo", titleChinese: "创新创造", description: "Tinh thần đổi mới, Sáng tạo công nghệ", order: 13, courseId: courseMap["hsk-6"], isLocked: false, progress: 0 },
+    { title: "Pháp luật và đạo đức", titleChinese: "法律与道德", description: "Hệ thống pháp luật, Đạo đức xã hội", order: 14, courseId: courseMap["hsk-6"], isLocked: false, progress: 0 },
+    { title: "Văn hóa doanh nghiệp", titleChinese: "企业文化", description: "Quản trị doanh nghiệp, Văn hóa tổ chức", order: 15, courseId: courseMap["hsk-6"], isLocked: false, progress: 0 },
+    { title: "Quan hệ quốc tế", titleChinese: "国际关系", description: "Ngoại giao đa phương, Hợp tác khu vực", order: 16, courseId: courseMap["hsk-6"], isLocked: false, progress: 0 },
+    { title: "Chủ nghĩa nhân văn", titleChinese: "人文主义", description: "Giá trị nhân văn, Phát triển con người", order: 17, courseId: courseMap["hsk-6"], isLocked: false, progress: 0 },
+    { title: "Khoa học công nghệ tiên tiến", titleChinese: "前沿科技", description: "AI, Sinh học, Vật lý lượng tử", order: 18, courseId: courseMap["hsk-6"], isLocked: false, progress: 0 },
+    { title: "Lịch sử văn minh", titleChinese: "文明史", description: "Văn minh Trung Hoa, Giao lưu văn hóa", order: 19, courseId: courseMap["hsk-6"], isLocked: false, progress: 0 },
+    { title: "Ngôn ngữ học ứng dụng", titleChinese: "应用语言学", description: "Phân tích ngôn ngữ, Ngữ pháp ứng dụng", order: 20, courseId: courseMap["hsk-6"], isLocked: false, progress: 0 },
+    { title: "Kinh tế số và thương mại điện tử", titleChinese: "数字经济与电子商务", description: "Từ vựng công nghệ số, Kinh doanh trực tuyến", order: 21, courseId: courseMap["hsk-6"], isLocked: false, progress: 0 },
+    { title: "Kỹ năng đọc hiểu chuyên sâu", titleChinese: "深度阅读技巧", description: "Đọc hiểu văn bản phức tạp, Phân tích sâu", order: 22, courseId: courseMap["hsk-6"], isLocked: false, progress: 0 },
     { title: "Kỹ năng viết luận nâng cao", titleChinese: "高级写作技巧", description: "Viết luận học thuật, Nghị luận chuyên sâu", order: 23, courseId: courseMap["hsk-6"], isLocked: false, progress: 0 },
-    { title: "KIỂM TRA CUỐI KHÓA", titleChinese: "", description: "Kiểm tra tổng hợp toàn bộ khóa học HSK 6", order: 24, courseId: courseMap["hsk-6"], isLocked: false, progress: 0 },
-    { title: "ÔN TẬP TỔNG HỢP", titleChinese: "", description: "Ôn tập và củng cố toàn bộ kiến thức HSK 6", order: 25, courseId: courseMap["hsk-6"], isLocked: false, progress: 0 },
-    { title: "Thi thử HSK 6", titleChinese: "HSK 6 模拟考试", description: "Thi thử toàn bộ bài thi HSK 6", order: 26, courseId: courseMap["hsk-6"], isLocked: false, progress: 0 },
+    { title: "Thi thử HSK 6", titleChinese: "HSK 6 模拟考试", description: "Thi thử toàn bộ bài thi HSK 6", order: 24, courseId: courseMap["hsk-6"], isLocked: false, progress: 0 },
+    { title: "Tổng hợp kiến thức HSK 6", titleChinese: "HSK 6 知识总结", description: "Tổng hợp và ôn tập toàn bộ kiến thức HSK 6", order: 25, courseId: courseMap["hsk-6"], isLocked: false, progress: 0 },
   ]
 
   const allLessons = [
@@ -539,7 +534,20 @@ async function main() {
     ...hsk6Lessons,
   ]
 
-  await prisma.lesson.createMany({ data: allLessons })
+  // Generate unique slugs for all lessons
+  const usedLessonSlugs = new Set<string>()
+  const allLessonsWithSlugs = allLessons.map((l) => {
+    let slug = generateSlug(l.title)
+    let suffix = 1
+    while (usedLessonSlugs.has(slug)) {
+      slug = `${generateSlug(l.title)}-${suffix}`
+      suffix++
+    }
+    usedLessonSlugs.add(slug)
+    return { ...l, slug }
+  })
+
+  await prisma.lesson.createMany({ data: allLessonsWithSlugs })
   console.log(`✅ Created ${allLessons.length} lessons`)
 
   // ============= Hero Slides =============

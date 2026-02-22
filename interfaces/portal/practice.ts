@@ -8,8 +8,12 @@ export interface IVocabularyItem {
   word: string
   pinyin: string | null
   meaning: string
+  meaningVi: string | null
   wordType: string | null
   audioUrl: string | null
+  exampleSentence: string | null
+  examplePinyin: string | null
+  exampleMeaning: string | null
 }
 
 export interface ILessonInfo {
@@ -93,5 +97,5 @@ export interface ILessonPracticeData {
   lesson: ILessonInfo
   progress: IStudentLessonProgress | null
   itemProgress: Record<string, IStudentItemProgress> // keyed by vocabularyId
-  siblings: { id: string; title: string; order: number }[]
+  siblings: { id: string; slug: string; title: string; order: number }[]
 }

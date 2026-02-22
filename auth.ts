@@ -155,15 +155,24 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
 
       return true
     },
-    async jwt({ token, user }) {
-      // Initial sign in
+    async jwt({ token, user, trigger }) {
+      // Initial sign in — populate token from user object
       if (user) {
         token.id = user.id
         token.role = user.role
         token.status = user.status
+        token.name = user.name
+        token.username = (user as Record<string, unknown>).username as string | undefined
+        token.picture = user.image
+        token.lastRefreshed = Date.now()
       }
-      // Always fetch fresh data from DB to keep name and image updated
-      if (token.email) {
+
+      // Refresh user data from DB periodically (every 5 minutes) or on explicit update trigger
+      const REFRESH_INTERVAL = 5 * 60 * 1000 // 5 minutes
+      const lastRefreshed = (token.lastRefreshed as number) || 0
+      const shouldRefresh = trigger === "update" || (Date.now() - lastRefreshed > REFRESH_INTERVAL)
+
+      if (shouldRefresh && token.email) {
         try {
           const dbUser = await prisma.portalUser.findUnique({
             where: { email: token.email },
@@ -176,6 +185,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
             token.username = dbUser.username
             token.picture = dbUser.image
           }
+          token.lastRefreshed = Date.now()
         } catch (error) {
           console.error("Error fetching user in JWT callback:", error)
         }

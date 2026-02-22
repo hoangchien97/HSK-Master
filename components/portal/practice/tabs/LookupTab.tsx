@@ -8,10 +8,13 @@ import {
   Chip,
   Divider,
 } from "@heroui/react"
-import { Search, Volume2, BookOpen, Award, Eye } from "lucide-react"
+import { Search, Volume2, BookOpen, Award } from "lucide-react"
 import { CDrawer } from "@/components/portal/common"
 import { recordVocabSeenAction } from "@/actions/practice.actions"
+import { useTTS } from "@/hooks/useTTS"
+import { WORD_TYPE_COLORS, WORD_TYPE_LABELS, STATUS_LABELS, getDisplayMeaning } from "@/enums/portal/common"
 import type { IVocabularyItem, IStudentItemProgress } from "@/interfaces/portal/practice"
+import { VocabItem } from "../shared"
 
 interface Props {
   vocabularies: IVocabularyItem[]
@@ -20,30 +23,11 @@ interface Props {
   onProgressUpdate: () => void
 }
 
-const WORD_TYPE_COLORS: Record<string, "primary" | "secondary" | "success" | "warning" | "danger" | "default"> = {
-  "đại từ": "primary",
-  "danh từ": "secondary",
-  "động từ": "success",
-  "tính từ": "warning",
-  "phó từ": "danger",
-  "số từ": "default",
-  "trợ từ": "default",
-  "thành ngữ": "primary",
-  "giới từ": "secondary",
-  "liên từ": "warning",
-  "lượng từ": "danger",
-}
-
-const STATUS_LABELS: Record<string, { label: string; color: "default" | "warning" | "success" }> = {
-  NEW: { label: "Mới", color: "default" },
-  LEARNING: { label: "Đang học", color: "warning" },
-  MASTERED: { label: "Thành thạo", color: "success" },
-}
-
 export default function LookupTab({ vocabularies, lessonId, itemProgress, onProgressUpdate }: Props) {
   const [search, setSearch] = useState("")
   const [selectedVocab, setSelectedVocab] = useState<IVocabularyItem | null>(null)
   const [isDrawerOpen, setIsDrawerOpen] = useState(false)
+  const { speak } = useTTS()
 
   const filteredVocabs = useMemo(() => {
     if (!search.trim()) return vocabularies
@@ -52,7 +36,8 @@ export default function LookupTab({ vocabularies, lessonId, itemProgress, onProg
       (v) =>
         v.word.toLowerCase().includes(q) ||
         (v.pinyin && v.pinyin.toLowerCase().includes(q)) ||
-        v.meaning.toLowerCase().includes(q),
+        v.meaning.toLowerCase().includes(q) ||
+        (v.meaningVi && v.meaningVi.toLowerCase().includes(q)),
     )
   }, [vocabularies, search])
 
@@ -68,12 +53,10 @@ export default function LookupTab({ vocabularies, lessonId, itemProgress, onProg
     [lessonId, onProgressUpdate],
   )
 
-  const playAudio = useCallback((audioUrl: string | null, e?: React.MouseEvent) => {
+  const playAudio = useCallback((word: string, audioUrl: string | null, e?: React.MouseEvent) => {
     e?.stopPropagation()
-    if (!audioUrl) return
-    const audio = new Audio(audioUrl)
-    audio.play().catch(() => {})
-  }, [])
+    speak(word, audioUrl)
+  }, [speak])
 
   const selectedProgress = selectedVocab ? itemProgress[selectedVocab.id] : undefined
 
@@ -108,70 +91,15 @@ export default function LookupTab({ vocabularies, lessonId, itemProgress, onProg
         </Card>
       ) : (
         <div className="grid gap-2">
-          {filteredVocabs.map((vocab) => {
-            const progress = itemProgress[vocab.id]
-            const status = progress?.status || "NEW"
-
-            return (
-              <button
-                key={vocab.id}
-                onClick={() => handleSelectVocab(vocab)}
-                className="w-full text-left p-3 sm:p-4 rounded-lg border border-default-200 hover:border-primary-300 hover:bg-primary-50/30 dark:hover:bg-primary-950/20 transition-all group"
-              >
-                <div className="flex items-center gap-3">
-                  {/* Hanzi */}
-                  <div className="text-xl sm:text-2xl font-bold text-foreground min-w-[48px] sm:min-w-[64px] text-center">
-                    {vocab.word}
-                  </div>
-
-                  {/* Info */}
-                  <div className="flex-1 min-w-0">
-                    <div className="flex items-center gap-1.5">
-                      <span className="text-sm text-primary font-medium">{vocab.pinyin}</span>
-                      {vocab.audioUrl && (
-                        <button
-                          onClick={(e) => playAudio(vocab.audioUrl, e)}
-                          className="p-0.5 rounded hover:bg-primary-100 transition"
-                        >
-                          <Volume2 className="w-3.5 h-3.5 text-primary" />
-                        </button>
-                      )}
-                    </div>
-                    <p className="text-sm text-default-600 truncate">{vocab.meaning}</p>
-                    <div className="flex items-center gap-1.5 mt-1">
-                      {vocab.wordType && (
-                        <Chip
-                          size="sm"
-                          variant="flat"
-                          color={WORD_TYPE_COLORS[vocab.wordType] ?? "default"}
-                          className="text-[10px] h-5"
-                        >
-                          {vocab.wordType}
-                        </Chip>
-                      )}
-                      {status !== "NEW" && (
-                        <Chip
-                          size="sm"
-                          variant="dot"
-                          color={STATUS_LABELS[status]?.color ?? "default"}
-                          className="text-[10px] h-5"
-                        >
-                          {STATUS_LABELS[status]?.label}
-                        </Chip>
-                      )}
-                    </div>
-                  </div>
-
-                  {/* Mastery indicator */}
-                  {progress && progress.masteryScore > 0 && (
-                    <div className="shrink-0 text-center">
-                      <div className="text-xs font-bold text-primary">{Math.round(progress.masteryScore * 100)}%</div>
-                    </div>
-                  )}
-                </div>
-              </button>
-            )
-          })}
+          {filteredVocabs.map((vocab) => (
+            <VocabItem
+              key={vocab.id}
+              vocab={vocab}
+              progress={itemProgress[vocab.id]}
+              onSelect={handleSelectVocab}
+              onPlayAudio={playAudio}
+            />
+          ))}
         </div>
       )}
 
@@ -189,18 +117,20 @@ export default function LookupTab({ vocabularies, lessonId, itemProgress, onProg
           <div className="space-y-5">
             {/* Main display */}
             <div className="text-center py-4">
-              <p className="text-4xl sm:text-5xl font-bold mb-3">{selectedVocab.word}</p>
+              <p className="text-4xl sm:text-5xl font-bold mb-3 text-red-600 dark:text-red-400">{selectedVocab.word}</p>
               <p className="text-lg text-primary font-medium">{selectedVocab.pinyin}</p>
-              <p className="text-base text-default-600 mt-1">{selectedVocab.meaning}</p>
-              {selectedVocab.audioUrl && (
-                <button
-                  onClick={() => playAudio(selectedVocab.audioUrl)}
-                  className="mt-3 inline-flex items-center gap-1.5 px-4 py-2 rounded-full bg-primary-100 dark:bg-primary-900/30 text-primary hover:bg-primary-200 transition"
-                >
-                  <Volume2 className="w-4 h-4" />
-                  <span className="text-sm">Phát âm</span>
-                </button>
+              <p className="text-base text-default-600 mt-1">{getDisplayMeaning(selectedVocab)}</p>
+              {/* Show English meaning as secondary info when Vietnamese is available */}
+              {selectedVocab.meaningVi && (
+                <p className="text-xs text-default-400 mt-0.5">EN: {selectedVocab.meaning}</p>
               )}
+              <button
+                onClick={() => playAudio(selectedVocab.word, selectedVocab.audioUrl)}
+                className="mt-3 inline-flex items-center gap-1.5 px-4 py-2 rounded-full bg-primary-100 dark:bg-primary-900/30 text-primary hover:bg-primary-200 transition"
+              >
+                <Volume2 className="w-4 h-4" />
+                <span className="text-sm">Phát âm</span>
+              </button>
             </div>
 
             <Divider />
@@ -210,8 +140,27 @@ export default function LookupTab({ vocabularies, lessonId, itemProgress, onProg
               <div className="flex items-center gap-2">
                 <span className="text-sm text-default-500">Từ loại:</span>
                 <Chip size="sm" variant="flat" color={WORD_TYPE_COLORS[selectedVocab.wordType] ?? "default"}>
-                  {selectedVocab.wordType}
+                  {WORD_TYPE_LABELS[selectedVocab.wordType] ?? selectedVocab.wordType}
                 </Chip>
+              </div>
+            )}
+
+            {/* Example sentence */}
+            {selectedVocab.exampleSentence && (
+              <div>
+                <p className="text-sm font-medium mb-1.5 flex items-center gap-1.5">
+                  <BookOpen className="w-4 h-4 text-primary" />
+                  Câu ví dụ
+                </p>
+                <div className="p-3 rounded-lg bg-default-50 dark:bg-default-800/50 space-y-1">
+                  <p className="text-base font-medium text-red-600 dark:text-red-400">{selectedVocab.exampleSentence}</p>
+                  {selectedVocab.examplePinyin && (
+                    <p className="text-sm text-primary">{selectedVocab.examplePinyin}</p>
+                  )}
+                  {selectedVocab.exampleMeaning && (
+                    <p className="text-sm text-default-500">{selectedVocab.exampleMeaning}</p>
+                  )}
+                </div>
               </div>
             )}
 

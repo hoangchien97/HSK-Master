@@ -6,10 +6,12 @@ import {
   ClassStatus,
   EnrollmentStatus,
   ScheduleStatus,
-  AttendanceStatus,
   AssignmentStatus,
   SubmissionStatus,
+  ItemProgressStatus,
+  PracticeMode,
 } from "@/enums/portal"
+import { generateSlug } from "@/utils/slug"
 
 const prisma = new PrismaClient()
 
@@ -17,12 +19,12 @@ export async function seedPortal() {
   console.log("\n��� Seeding portal data...")
 
   // ============= Clear existing portal data =============
-  console.log("���️  Clearing existing portal data...")
-  await prisma.portalQuizAttempt.deleteMany()
-  await prisma.portalQuiz.deleteMany()
-  await prisma.portalBookmark.deleteMany()
-  await prisma.portalVocabulary.deleteMany()
-  await prisma.portalLearningProgress.deleteMany()
+  console.log("���️  Clearing existing portal data...")  // Practice-related tables (must clear before users)
+  await prisma.portalPracticeAttempt.deleteMany()
+  await prisma.portalPracticeSession.deleteMany()
+  await prisma.portalItemProgress.deleteMany()
+  await prisma.portalLessonProgress.deleteMany()
+  // Portal tables
   await prisma.portalAssignmentSubmission.deleteMany()
   await prisma.portalAssignment.deleteMany()
   await prisma.portalAttendance.deleteMany()
@@ -37,7 +39,7 @@ export async function seedPortal() {
   const hashedPassword = await bcrypt.hash("password123", 10)
 
   // Create Admin
-  const admin = await prisma.portalUser.create({
+  await prisma.portalUser.create({
     data: {
       name: "Admin Ruby HSK",
       username: "admin",
@@ -232,7 +234,7 @@ export async function seedPortal() {
 
   // ============= Enroll students (varied distribution) =============
   console.log("��� Enrolling students into classes...")
-  const enrollments: any[] = []
+  const enrollments: { classId: string; studentId: string; status: string }[] = []
 
   // Distribute students across classes (15-17 per class)
   let studentIndex = 0
@@ -249,16 +251,45 @@ export async function seedPortal() {
     }
   })
 
+  // Ensure student1 (Lê Văn Cường) is enrolled in at least one class per HSK level
+  // The round-robin above may skip HSK3 and HSK5 for student1
+  const student1Id = students[0].id
+  const student1ClassIds = new Set(
+    enrollments.filter((e) => e.studentId === student1Id).map((e) => e.classId),
+  )
+  const student1HskLevels = new Set(
+    [...student1ClassIds].map((classId) => {
+      const idx = classes.findIndex((c) => c.id === classId)
+      return idx >= 0 ? classesData[idx].level : null
+    }).filter(Boolean),
+  )
+
+  // Add enrollments for missing HSK levels
+  for (const cls of classesData) {
+    if (!cls.level.startsWith("HSK")) continue
+    if (student1HskLevels.has(cls.level)) continue
+    const classRecord = classes[classesData.indexOf(cls)]
+    if (classRecord && !student1ClassIds.has(classRecord.id)) {
+      enrollments.push({
+        classId: classRecord.id,
+        studentId: student1Id,
+        status: EnrollmentStatus.ENROLLED,
+      })
+      student1HskLevels.add(cls.level)
+      student1ClassIds.add(classRecord.id)
+    }
+  }
+
   await prisma.portalClassEnrollment.createMany({ data: enrollments })
   console.log(`✅ Created ${enrollments.length} enrollments`)
 
   // ============= Portal Schedules =============
   console.log("��� Creating class schedules...")
-  const schedules: any[] = []
+  const schedules: { classId: string; teacherId: string; title: string; description: string; startTime: Date; endTime: Date; status: string }[] = []
 
   // Helper to create schedules for a class
   const createSchedules = (
-    cls: any,
+    cls: { id: string; teacherId: string; className: string; description: string | null },
     weekdays: number[],
     startHour: number,
     endHour: number
@@ -277,7 +308,7 @@ export async function seedPortal() {
           classId: cls.id,
           teacherId: cls.teacherId,
           title: `${cls.className} - Buổi học`,
-          description: cls.description,
+          description: cls.description ?? "",
           startTime,
           endTime,
           status: ScheduleStatus.SCHEDULED,
@@ -343,38 +374,51 @@ export async function seedPortal() {
   // ============= Portal Assignments =============
   console.log("📝 Creating assignments...")
 
-  const assignmentTypes = ["HOMEWORK", "QUIZ", "PROJECT", "READING", "WRITING", "SPEAKING", "LISTENING"]
 
   const assignmentTemplates = [
     // HSK 1
-    { title: "Bài tập từ vựng HSK 1 - Tuần 1", desc: "Học thuộc 30 từ vựng HSK 1 cơ bản: chào hỏi, số đếm, gia đình. Hoàn thành bài tập trong file đính kèm.", type: "HOMEWORK", maxScore: 100 },
-    { title: "Kiểm tra nghe HSK 1 - Bài 1", desc: "Nghe và chọn đáp án đúng. 20 câu hỏi, mỗi câu 5 điểm.", type: "LISTENING", maxScore: 100 },
-    { title: "Luyện viết Hán tự cơ bản", desc: "Viết mỗi chữ 10 lần: 人、大、小、上、下、中、日、月. Chụp ảnh bài viết và nộp.", type: "WRITING", maxScore: 50 },
-    { title: "Bài đọc hiểu HSK 1 - Bài 1", desc: "Đọc đoạn văn ngắn và trả lời 10 câu hỏi. Chú ý ngữ pháp 是...的 và 在.", type: "READING", maxScore: 100 },
-    { title: "Kiểm tra giữa kỳ HSK 1", desc: "Kiểm tra tổng hợp: Nghe (30đ) + Đọc (30đ) + Viết (40đ). Thời gian: 60 phút.", type: "QUIZ", maxScore: 100 },
+    { title: "Bài tập từ vựng HSK 1 - Tuần 1", desc: "Học thuộc 30 từ vựng HSK 1 cơ bản: chào hỏi, số đếm, gia đình. Hoàn thành bài tập trong file đính kèm.", type: "HOMEWORK", maxScore: 100, tags: ["từ-vựng", "HSK1"] },
+    { title: "Kiểm tra nghe HSK 1 - Bài 1", desc: "Nghe và chọn đáp án đúng. 20 câu hỏi, mỗi câu 5 điểm.", type: "LISTENING", maxScore: 100, tags: ["nghe", "HSK1"] },
+    { title: "Luyện viết Hán tự cơ bản", desc: "Viết mỗi chữ 10 lần: 人、大、小、上、下、中、日、月. Chụp ảnh bài viết và nộp.", type: "WRITING", maxScore: 50, tags: ["viết", "hán-tự"] },
+    { title: "Bài đọc hiểu HSK 1 - Bài 1", desc: "Đọc đoạn văn ngắn và trả lời 10 câu hỏi. Chú ý ngữ pháp 是...的 và 在.", type: "READING", maxScore: 100, tags: ["đọc-hiểu", "HSK1"] },
+    { title: "Kiểm tra giữa kỳ HSK 1", desc: "Kiểm tra tổng hợp: Nghe (30đ) + Đọc (30đ) + Viết (40đ). Thời gian: 60 phút.", type: "QUIZ", maxScore: 100, tags: ["kiểm-tra", "HSK1"] },
     // HSK 2
-    { title: "Bài tập từ vựng HSK 2 - Tuần 1", desc: "Ôn tập 50 từ vựng HSK 2: thời tiết, giao thông, mua sắm. Làm bài tập kết hợp từ.", type: "HOMEWORK", maxScore: 100 },
-    { title: "Dự án nhóm: Hội thoại mua sắm", desc: "Nhóm 3-4 người, quay video hội thoại mua sắm tại cửa hàng (3-5 phút). Sử dụng ít nhất 20 từ vựng HSK 2.", type: "PROJECT", maxScore: 100 },
-    { title: "Luyện nói HSK 2 - Tự giới thiệu", desc: "Ghi âm bài tự giới thiệu 2 phút: tên, tuổi, quê, sở thích, công việc. Phát âm rõ ràng, thanh điệu chính xác.", type: "SPEAKING", maxScore: 80 },
+    { title: "Bài tập từ vựng HSK 2 - Tuần 1", desc: "Ôn tập 50 từ vựng HSK 2: thời tiết, giao thông, mua sắm. Làm bài tập kết hợp từ.", type: "HOMEWORK", maxScore: 100, tags: ["từ-vựng", "HSK2"] },
+    { title: "Dự án nhóm: Hội thoại mua sắm", desc: "Nhóm 3-4 người, quay video hội thoại mua sắm tại cửa hàng (3-5 phút). Sử dụng ít nhất 20 từ vựng HSK 2.", type: "PROJECT", maxScore: 100, tags: ["dự-án", "giao-tiếp", "HSK2"] },
+    { title: "Luyện nói HSK 2 - Tự giới thiệu", desc: "Ghi âm bài tự giới thiệu 2 phút: tên, tuổi, quê, sở thích, công việc. Phát âm rõ ràng, thanh điệu chính xác.", type: "SPEAKING", maxScore: 80, tags: ["nói", "phát-âm", "HSK2"] },
     // HSK 3
-    { title: "Bài tập ngữ pháp HSK 3 - 把字句", desc: "Hoàn thành 20 câu sử dụng cấu trúc 把字句. Phân biệt với câu bình thường.", type: "HOMEWORK", maxScore: 100 },
-    { title: "Kiểm tra đọc hiểu HSK 3", desc: "3 bài đọc dài, mỗi bài 5 câu hỏi. Tổng 15 câu, thời gian 30 phút.", type: "READING", maxScore: 75 },
-    { title: "Bài viết HSK 3 - Kể về kỳ nghỉ", desc: "Viết bài văn 200-300 chữ kể về kỳ nghỉ gần nhất. Sử dụng ít nhất 5 cấu trúc ngữ pháp HSK 3.", type: "WRITING", maxScore: 100 },
+    { title: "Bài tập ngữ pháp HSK 3 - 把字句", desc: "Hoàn thành 20 câu sử dụng cấu trúc 把字句. Phân biệt với câu bình thường.", type: "HOMEWORK", maxScore: 100, tags: ["ngữ-pháp", "HSK3"] },
+    { title: "Kiểm tra đọc hiểu HSK 3", desc: "3 bài đọc dài, mỗi bài 5 câu hỏi. Tổng 15 câu, thời gian 30 phút.", type: "READING", maxScore: 75, tags: ["đọc-hiểu", "HSK3"] },
+    { title: "Bài viết HSK 3 - Kể về kỳ nghỉ", desc: "Viết bài văn 200-300 chữ kể về kỳ nghỉ gần nhất. Sử dụng ít nhất 5 cấu trúc ngữ pháp HSK 3.", type: "WRITING", maxScore: 100, tags: ["viết", "HSK3"] },
     // HSK 4-5
-    { title: "Phân tích bài báo tiếng Trung", desc: "Đọc bài báo đính kèm, tóm tắt nội dung (150 chữ) và nêu ý kiến cá nhân (200 chữ).", type: "READING", maxScore: 100 },
-    { title: "Kiểm tra tổng hợp HSK 4", desc: "Đề thi mô phỏng HSK 4: Nghe (45 câu) + Đọc (40 câu) + Viết (15 câu). Thời gian: 105 phút.", type: "QUIZ", maxScore: 300 },
-    { title: "Thuyết trình: Văn hóa Trung Quốc", desc: "Thuyết trình 5-7 phút về một khía cạnh văn hóa Trung Quốc (lễ hội, ẩm thực, phong tục...). Chuẩn bị slide.", type: "SPEAKING", maxScore: 100 },
+    { title: "Phân tích bài báo tiếng Trung", desc: "Đọc bài báo đính kèm, tóm tắt nội dung (150 chữ) và nêu ý kiến cá nhân (200 chữ).", type: "READING", maxScore: 100, tags: ["đọc-hiểu", "HSK4"] },
+    { title: "Kiểm tra tổng hợp HSK 4", desc: "Đề thi mô phỏng HSK 4: Nghe (45 câu) + Đọc (40 câu) + Viết (15 câu). Thời gian: 105 phút.", type: "QUIZ", maxScore: 300, tags: ["kiểm-tra", "HSK4"] },
+    { title: "Thuyết trình: Văn hóa Trung Quốc", desc: "Thuyết trình 5-7 phút về một khía cạnh văn hóa Trung Quốc (lễ hội, ẩm thực, phong tục...). Chuẩn bị slide.", type: "SPEAKING", maxScore: 100, tags: ["thuyết-trình", "văn-hóa"] },
     // Business / Advanced
-    { title: "Bài tập tiếng Trung thương mại - Email", desc: "Viết 3 email thương mại: hỏi giá, đặt hàng, khiếu nại. Mỗi email 100-150 chữ.", type: "WRITING", maxScore: 90 },
-    { title: "Luyện thi HSK 5 - Đề số 1", desc: "Làm đề thi thử HSK 5 đầy đủ. Nộp bài và tự chấm theo đáp án.", type: "QUIZ", maxScore: 300 },
+    { title: "Bài tập tiếng Trung thương mại - Email", desc: "Viết 3 email thương mại: hỏi giá, đặt hàng, khiếu nại. Mỗi email 100-150 chữ.", type: "WRITING", maxScore: 90, tags: ["thương-mại", "viết"] },
+    { title: "Luyện thi HSK 5 - Đề số 1", desc: "Làm đề thi thử HSK 5 đầy đủ. Nộp bài và tự chấm theo đáp án.", type: "QUIZ", maxScore: 300, tags: ["luyện-thi", "HSK5"] },
     // Communication
-    { title: "Bài tập giao tiếp: Đặt phòng khách sạn", desc: "Ghi âm hội thoại đặt phòng khách sạn (check-in, hỏi dịch vụ, check-out). 3-4 phút.", type: "SPEAKING", maxScore: 80 },
-    { title: "Bài tập từ vựng giao tiếp du lịch", desc: "Học 40 từ vựng chủ đề du lịch và hoàn thành bài tập điền từ.", type: "HOMEWORK", maxScore: 100 },
+    { title: "Bài tập giao tiếp: Đặt phòng khách sạn", desc: "Ghi âm hội thoại đặt phòng khách sạn (check-in, hỏi dịch vụ, check-out). 3-4 phút.", type: "SPEAKING", maxScore: 80, tags: ["giao-tiếp", "nói"] },
+    { title: "Bài tập từ vựng giao tiếp du lịch", desc: "Học 40 từ vựng chủ đề du lịch và hoàn thành bài tập điền từ.", type: "HOMEWORK", maxScore: 100, tags: ["từ-vựng", "du-lịch"] },
     // General
-    { title: "Luyện viết chữ Hán - Bộ thủ", desc: "Luyện viết 20 bộ thủ thường gặp. Mỗi bộ thủ viết 5 lần kèm ví dụ chữ chứa bộ thủ đó.", type: "WRITING", maxScore: 60 },
-    { title: "Quiz từ vựng cuối tuần", desc: "20 câu trắc nghiệm từ vựng, 10 câu điền từ. Thời gian 15 phút.", type: "QUIZ", maxScore: 50 },
+    { title: "Luyện viết chữ Hán - Bộ thủ", desc: "Luyện viết 20 bộ thủ thường gặp. Mỗi bộ thủ viết 5 lần kèm ví dụ chữ chứa bộ thủ đó.", type: "WRITING", maxScore: 60, tags: ["viết", "hán-tự", "bộ-thủ"] },
+    { title: "Quiz từ vựng cuối tuần", desc: "20 câu trắc nghiệm từ vựng, 10 câu điền từ. Thời gian 15 phút.", type: "QUIZ", maxScore: 50, tags: ["quiz", "từ-vựng"] },
   ]
 
+  // Track used slugs for assignment uniqueness
+  const usedAssignmentSlugs = new Set<string>()
+  function getUniqueAssignmentSlug(title: string): string {
+    let slug = generateSlug(title)
+    let suffix = 1
+    while (usedAssignmentSlugs.has(slug)) {
+      slug = `${generateSlug(title)}-${suffix}`
+      suffix++
+    }
+    usedAssignmentSlugs.add(slug)
+    return slug
+  }
+
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const allAssignments: any[] = []
 
   // Create 3-5 assignments per class (first 15 classes to keep it manageable)
@@ -392,11 +436,13 @@ export async function seedPortal() {
           classId: cls.id,
           teacherId: cls.teacherId,
           title: template.title,
+          slug: getUniqueAssignmentSlug(template.title),
           description: template.desc,
           assignmentType: template.type,
           dueDate,
           maxScore: template.maxScore,
-          attachments: [], // No actual files for seed data
+          attachments: [],
+          tags: template.tags || [],
           status: ai === 0 && ci < 3 ? AssignmentStatus.DRAFT : AssignmentStatus.PUBLISHED,
         },
       })
@@ -416,7 +462,7 @@ export async function seedPortal() {
     if (assignment.status === AssignmentStatus.DRAFT) continue
 
     // Find enrolled students in this class
-    const classEnrollments = enrollments.filter((e: any) => e.classId === assignment.classId)
+    const classEnrollments = enrollments.filter((e) => e.classId === assignment.classId)
     // 40-70% of students submit
     const submitCount = Math.floor(classEnrollments.length * (0.4 + Math.random() * 0.3))
 
@@ -434,6 +480,7 @@ export async function seedPortal() {
         submittedAt.setHours(submittedAt.getHours() - Math.floor(Math.random() * 72) - 1)
       }
 
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       const submissionData: any = {
         assignmentId: assignment.id,
         studentId: enrollment.studentId,
@@ -472,5 +519,140 @@ export async function seedPortal() {
 
   console.log(`✅ Created ${submissionCount} submissions`)
 
+  // ============= Practice Data for student1@gmail.com =============
+  console.log("📖 Seeding practice data for student1@gmail.com...")
+
+  const student1 = students[0] // student1@gmail.com = "Lê Văn Cường"
+
+  // Get HSK 1 course with lessons & vocabularies
+  const hsk1Course = await prisma.course.findFirst({
+    where: { slug: "hsk-1" },
+    include: {
+      lessons: {
+        orderBy: { order: "asc" },
+        include: { vocabularies: { select: { id: true } } },
+      },
+    },
+  })
+
+  if (hsk1Course && hsk1Course.lessons.length > 0) {
+    let practiceItemCount = 0
+    let practiceSessionCount = 0
+
+    // Seed progress for the first 6 lessons (varying levels of mastery)
+    const lessonProgressConfigs = [
+      { lessonIndex: 0, masteryPercent: 85, learnedPct: 1.0, masteredPct: 0.85, timeSec: 1800 },
+      { lessonIndex: 1, masteryPercent: 70, learnedPct: 1.0, masteredPct: 0.7, timeSec: 1500 },
+      { lessonIndex: 2, masteryPercent: 45, learnedPct: 0.9, masteredPct: 0.45, timeSec: 1200 },
+      { lessonIndex: 3, masteryPercent: 20, learnedPct: 0.6, masteredPct: 0.2, timeSec: 600 },
+      { lessonIndex: 4, masteryPercent: 10, learnedPct: 0.3, masteredPct: 0.1, timeSec: 300 },
+      { lessonIndex: 5, masteryPercent: 0, learnedPct: 0.1, masteredPct: 0, timeSec: 60 },
+    ]
+
+    for (const config of lessonProgressConfigs) {
+      const lesson = hsk1Course.lessons[config.lessonIndex]
+      if (!lesson || lesson.vocabularies.length === 0) continue
+
+      const vocabIds = lesson.vocabularies.map((v) => v.id)
+      const totalVocab = vocabIds.length
+      const learnedCount = Math.round(totalVocab * config.learnedPct)
+      const masteredCount = Math.round(totalVocab * config.masteredPct)
+
+      // Create lesson-level progress
+      await prisma.portalLessonProgress.create({
+        data: {
+          studentId: student1.id,
+          lessonId: lesson.id,
+          learnedCount,
+          masteredCount,
+          totalTimeSec: config.timeSec,
+          masteryPercent: config.masteryPercent,
+        },
+      })
+
+      // Create item-level progress for vocabularies
+      for (let vi = 0; vi < vocabIds.length; vi++) {
+        const vocabId = vocabIds[vi]
+        let masteryScore = 0
+        let status: string = ItemProgressStatus.NEW
+        let seenCount = 0
+        let correctCount = 0
+        let wrongCount = 0
+
+        if (vi < masteredCount) {
+          // MASTERED items
+          masteryScore = 0.8 + Math.random() * 0.2 // 0.8-1.0
+          status = ItemProgressStatus.MASTERED
+          seenCount = 5 + Math.floor(Math.random() * 10)
+          correctCount = Math.floor(seenCount * 0.85)
+          wrongCount = seenCount - correctCount
+        } else if (vi < learnedCount) {
+          // LEARNING items
+          masteryScore = 0.2 + Math.random() * 0.5 // 0.2-0.7
+          status = ItemProgressStatus.LEARNING
+          seenCount = 2 + Math.floor(Math.random() * 5)
+          correctCount = Math.floor(seenCount * 0.6)
+          wrongCount = seenCount - correctCount
+        } else {
+          continue // NEW — no progress record needed
+        }
+
+        const now = new Date()
+        const lastSeenAt = new Date(now.getTime() - Math.random() * 7 * 24 * 60 * 60 * 1000) // within 7 days
+
+        await prisma.portalItemProgress.create({
+          data: {
+            studentId: student1.id,
+            vocabularyId: vocabId,
+            seenCount,
+            correctCount,
+            wrongCount,
+            masteryScore,
+            status,
+            lastSeenAt,
+            nextReviewAt: new Date(lastSeenAt.getTime() + (status === ItemProgressStatus.MASTERED ? 3 : 1) * 24 * 60 * 60 * 1000),
+          },
+        })
+        practiceItemCount++
+      }
+
+      // Create some practice sessions for the lesson
+      const sessionModes = [PracticeMode.LOOKUP, PracticeMode.FLASHCARD, PracticeMode.QUIZ]
+      for (const mode of sessionModes) {
+        if (Math.random() < 0.7) { // 70% chance per mode
+          const startedAt = new Date(Date.now() - Math.random() * 14 * 24 * 60 * 60 * 1000)
+          const durationSec = 120 + Math.floor(Math.random() * 600)
+
+          await prisma.portalPracticeSession.create({
+            data: {
+              studentId: student1.id,
+              lessonId: lesson.id,
+              mode,
+              startedAt,
+              endedAt: new Date(startedAt.getTime() + durationSec * 1000),
+              durationSec,
+            },
+          })
+          practiceSessionCount++
+        }
+      }
+    }
+
+    console.log(`✅ Created practice data: ${practiceItemCount} item progress, ${practiceSessionCount} sessions`)
+  } else {
+    console.log("⚠️  HSK 1 course or vocabulary not found — skipping practice seed. Run seed-vocabulary.ts first.")
+  }
+
   console.log("\n✅ Portal seeding completed!")
+}
+
+// Self-execute when run directly (not when imported from seed.ts)
+const isMainModule = import.meta.url === `file:///${process.argv[1].replace(/\\/g, "/")}`
+if (isMainModule) {
+  seedPortal()
+    .then(() => process.exit(0))
+    .catch((e) => {
+      console.error("❌ Portal seed failed:", e)
+      process.exit(1)
+    })
 }

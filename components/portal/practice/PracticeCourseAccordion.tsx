@@ -1,10 +1,12 @@
 "use client"
 
-import { Accordion, AccordionItem, Chip } from "@heroui/react"
+import { useMemo } from "react"
+import { Accordion, AccordionItem, Chip, Progress } from "@heroui/react"
 import PracticeLessonItem from "./PracticeLessonItem"
 
 interface LessonItem {
   id: string
+  slug?: string | null
   title: string
   titleChinese: string | null
   order: number
@@ -41,17 +43,33 @@ function getLevelColor(level: number): "warning" | "danger" | "secondary" {
 }
 
 export default function PracticeCourseAccordion({ courses, progressMap }: Props) {
+  // Compute per-course progress
+  const courseProgress = useMemo(() => {
+    const map: Record<string, { avgMastery: number; started: number; total: number }> = {}
+    for (const course of courses) {
+      const lessonIds = course.lessons.map((l) => l.id)
+      const total = lessonIds.length
+      const started = lessonIds.filter((id) => progressMap[id]?.learnedCount > 0).length
+      const avgMastery = total > 0
+        ? lessonIds.reduce((sum, id) => sum + (progressMap[id]?.masteryPercent ?? 0), 0) / total
+        : 0
+      map[course.id] = { avgMastery, started, total }
+    }
+    return map
+  }, [courses, progressMap])
+
   return (
     <Accordion variant="splitted" defaultExpandedKeys={[courses[0]?.id]}>
       {courses.map((course) => {
         const hskLevel = course.hskLevel?.level ?? 0
+        const cp = courseProgress[course.id]
 
         return (
           <AccordionItem
             key={course.id}
             aria-label={course.title}
             title={
-              <div className="flex items-center gap-2 flex-wrap">
+              <div className="flex items-center gap-2 flex-wrap w-full">
                 <Chip
                   size="sm"
                   color={getLevelColor(hskLevel)}
@@ -64,6 +82,20 @@ export default function PracticeCourseAccordion({ courses, progressMap }: Props)
                 <span className="text-xs text-default-400 hidden sm:inline">
                   ({course.lessons.length} bài · {course.vocabularyCount} từ vựng)
                 </span>
+                {cp && cp.started > 0 && (
+                  <div className="flex items-center gap-2 ml-auto">
+                    <Progress
+                      value={cp.avgMastery}
+                      size="sm"
+                      color={cp.avgMastery >= 70 ? "success" : cp.avgMastery >= 30 ? "warning" : "primary"}
+                      className="w-20 hidden sm:block"
+                      aria-label="Tiến độ khóa học"
+                    />
+                    <span className="text-xs font-medium text-default-500">
+                      {Math.round(cp.avgMastery)}%
+                    </span>
+                  </div>
+                )}
               </div>
             }
           >

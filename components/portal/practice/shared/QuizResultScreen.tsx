@@ -90,9 +90,9 @@ export default function QuizResultScreen({
                     key={i}
                     className="flex items-center gap-2 p-2 rounded-lg bg-danger-50 dark:bg-danger-950/20"
                   >
-                    <span className="text-lg font-bold">{item.vocab.word}</span>
+                    <span className="text-lg font-bold text-red-600 dark:text-red-400">{item.vocab.word}</span>
                     <span className="text-sm text-primary">{item.vocab.pinyin}</span>
-                    <span className="text-sm text-default-500">— {item.vocab.meaning}</span>
+                    <span className="text-sm text-default-500">— {item.vocab.meaningVi || item.vocab.meaning}</span>
                   </div>
                 ))}
               </div>

@@ -1,0 +1,4159 @@
+[
+  {
+    "id": "1f2bcc4b-aa98-452e-a75e-c9826db13a13",
+    "hsk_level_code": "hsk2",
+    "lesson_number": 1,
+    "chinese_word": "吧",
+    "pinyin": "ba",
+    "meaning": "(modal particle indicating suggestion or surmise); ...right?",
+    "example_sentence": null,
+    "example_pinyin": null,
+    "example_meaning": null,
+    "word_type": null,
+    "audio_url": null,
+    "display_order": 1,
+    "meta": {
+      "source_id": 151,
+      "source_level": 2,
+      "radicals": "口",
+      "strokes": "7",
+      "translations_eng_all": [
+        "(modal particle indicating suggestion or surmise)",
+        "...right?",
+        "...OK?",
+        "...I presume."
+      ]
+    },
+    "meaning_vi": "nhé, đi (trợ từ)"
+  },
+  {
+    "id": "907b2c28-2ad5-447c-8a10-fd999a52eee7",
+    "hsk_level_code": "hsk2",
+    "lesson_number": 1,
+    "chinese_word": "白",
+    "pinyin": "bái",
+    "meaning": "white; snowy",
+    "example_sentence": null,
+    "example_pinyin": null,
+    "example_meaning": null,
+    "word_type": null,
+    "audio_url": null,
+    "display_order": 2,
+    "meta": {
+      "source_id": 152,
+      "source_level": 2,
+      "radicals": "白",
+      "strokes": "5",
+      "translations_eng_all": [
+        "white",
+        "snowy",
+        "pure",
+        "bright",
+        "empty",
+        "blank",
+        "plain",
+        "clear",
+        "to make clear",
+        "in vain",
+        "gratuitous",
+        "free of charge",
+        "reactionary",
+        "anti-communist",
+        "funeral",
+        "to stare coldly",
+        "to write wrong character",
+        "to state",
+        "to explain",
+        "vernacular",
+        "spoken lines in opera"
+      ]
+    },
+    "meaning_vi": "trắng"
+  },
+  {
+    "id": "b57c328e-360f-4f07-83c3-6ed674dfcff2",
+    "hsk_level_code": "hsk2",
+    "lesson_number": 1,
+    "chinese_word": "百",
+    "pinyin": "bǎi",
+    "meaning": "hundred; numerous",
+    "example_sentence": null,
+    "example_pinyin": null,
+    "example_meaning": null,
+    "word_type": null,
+    "audio_url": null,
+    "display_order": 3,
+    "meta": {
+      "source_id": 153,
+      "source_level": 2,
+      "radicals": "白",
+      "strokes": "6",
+      "translations_eng_all": [
+        "hundred",
+        "numerous",
+        "all kinds of"
+      ]
+    },
+    "meaning_vi": "trăm"
+  },
+  {
+    "id": "7e3e928a-f6e1-488d-86ba-27783d966246",
+    "hsk_level_code": "hsk2",
+    "lesson_number": 1,
+    "chinese_word": "帮助",
+    "pinyin": "bāng zhù",
+    "meaning": "assistance; aid",
+    "example_sentence": null,
+    "example_pinyin": null,
+    "example_meaning": null,
+    "word_type": null,
+    "audio_url": null,
+    "display_order": 4,
+    "meta": {
+      "source_id": 154,
+      "source_level": 2,
+      "radicals": null,
+      "strokes": null,
+      "translations_eng_all": [
+        "assistance",
+        "aid",
+        "to help",
+        "to assist"
+      ]
+    },
+    "meaning_vi": "giúp đỡ"
+  },
+  {
+    "id": "56a64da9-aec7-40ea-aebc-b327d62865f4",
+    "hsk_level_code": "hsk2",
+    "lesson_number": 1,
+    "chinese_word": "报纸",
+    "pinyin": "bào zhǐ",
+    "meaning": "newspaper; newsprint",
+    "example_sentence": null,
+    "example_pinyin": null,
+    "example_meaning": null,
+    "word_type": null,
+    "audio_url": null,
+    "display_order": 5,
+    "meta": {
+      "source_id": 155,
+      "source_level": 2,
+      "radicals": null,
+      "strokes": null,
+      "translations_eng_all": [
+        "newspaper",
+        "newsprint",
+        "CL:份",
+        "期",
+        "張|张[zhāng]"
+      ]
+    },
+    "meaning_vi": "báo"
+  },
+  {
+    "id": "bb06bd4a-0b88-416d-80f8-a890910759ec",
+    "hsk_level_code": "hsk2",
+    "lesson_number": 1,
+    "chinese_word": "比",
+    "pinyin": "bǐ",
+    "meaning": "(particle used for comparison and \"-er than\"); to compare",
+    "example_sentence": null,
+    "example_pinyin": null,
+    "example_meaning": null,
+    "word_type": null,
+    "audio_url": null,
+    "display_order": 6,
+    "meta": {
+      "source_id": 156,
+      "source_level": 2,
+      "radicals": "比",
+      "strokes": "4",
+      "translations_eng_all": [
+        "(particle used for comparison and \"-er than\")",
+        "to compare",
+        "to contrast",
+        "to gesture (with hands)",
+        "ratio"
+      ]
+    },
+    "meaning_vi": "so với, hơn"
+  },
+  {
+    "id": "51d58614-e3c6-4166-8212-abeb525fbd71",
+    "hsk_level_code": "hsk2",
+    "lesson_number": 1,
+    "chinese_word": "别",
+    "pinyin": "bié",
+    "meaning": "to leave; to depart",
+    "example_sentence": null,
+    "example_pinyin": null,
+    "example_meaning": null,
+    "word_type": null,
+    "audio_url": null,
+    "display_order": 7,
+    "meta": {
+      "source_id": 157,
+      "source_level": 2,
+      "radicals": "刂",
+      "strokes": "7",
+      "translations_eng_all": [
+        "to leave",
+        "to depart",
+        "to separate",
+        "to distinguish",
+        "to classify",
+        "other",
+        "another",
+        "do not",
+        "must not",
+        "to pin"
+      ]
+    },
+    "meaning_vi": "đừng, chớ"
+  },
+  {
+    "id": "84a219cf-15c0-4834-b5f2-4af99d4a2e22",
+    "hsk_level_code": "hsk2",
+    "lesson_number": 1,
+    "chinese_word": "长",
+    "pinyin": "cháng",
+    "meaning": "length; long",
+    "example_sentence": null,
+    "example_pinyin": null,
+    "example_meaning": null,
+    "word_type": null,
+    "audio_url": null,
+    "display_order": 8,
+    "meta": {
+      "source_id": 158,
+      "source_level": 2,
+      "radicals": "长",
+      "strokes": "4",
+      "translations_eng_all": [
+        "length",
+        "long",
+        "forever",
+        "always",
+        "constantly"
+      ]
+    },
+    "meaning_vi": "dài"
+  },
+  {
+    "id": "71f2b4ec-28b9-43aa-9f63-3c2cd3cd4421",
+    "hsk_level_code": "hsk2",
+    "lesson_number": 1,
+    "chinese_word": "唱歌",
+    "pinyin": "chàng gē",
+    "meaning": "to sing a song",
+    "example_sentence": null,
+    "example_pinyin": null,
+    "example_meaning": null,
+    "word_type": null,
+    "audio_url": null,
+    "display_order": 9,
+    "meta": {
+      "source_id": 159,
+      "source_level": 2,
+      "radicals": null,
+      "strokes": null,
+      "translations_eng_all": [
+        "to sing a song"
+      ]
+    },
+    "meaning_vi": "hát"
+  },
+  {
+    "id": "e9e75613-012b-4b47-add6-537037bb4982",
+    "hsk_level_code": "hsk2",
+    "lesson_number": 1,
+    "chinese_word": "出",
+    "pinyin": "chū",
+    "meaning": "to go out; to come out",
+    "example_sentence": null,
+    "example_pinyin": null,
+    "example_meaning": null,
+    "word_type": null,
+    "audio_url": null,
+    "display_order": 10,
+    "meta": {
+      "source_id": 160,
+      "source_level": 2,
+      "radicals": "凵",
+      "strokes": "5",
+      "translations_eng_all": [
+        "to go out",
+        "to come out",
+        "to occur",
+        "to produce",
+        "to go beyond",
+        "to rise",
+        "to put forth",
+        "to happen",
+        "classifier for dramas",
+        "plays",
+        "operas etc"
+      ]
+    },
+    "meaning_vi": "ra"
+  },
+  {
+    "id": "fa8ab818-310f-4973-8c60-838f0647a146",
+    "hsk_level_code": "hsk2",
+    "lesson_number": 2,
+    "chinese_word": "穿",
+    "pinyin": "chuān",
+    "meaning": "to bore through; to pierce",
+    "example_sentence": null,
+    "example_pinyin": null,
+    "example_meaning": null,
+    "word_type": null,
+    "audio_url": null,
+    "display_order": 1,
+    "meta": {
+      "source_id": 161,
+      "source_level": 2,
+      "radicals": "穴",
+      "strokes": "9",
+      "translations_eng_all": [
+        "to bore through",
+        "to pierce",
+        "to perforate",
+        "to penetrate",
+        "to pass through",
+        "to dress",
+        "to wear",
+        "to put on",
+        "to thread"
+      ]
+    },
+    "meaning_vi": "mặc (quần áo)"
+  },
+  {
+    "id": "4a688e50-59da-4804-ae3a-e788c5f883af",
+    "hsk_level_code": "hsk2",
+    "lesson_number": 2,
+    "chinese_word": "船",
+    "pinyin": "chuán",
+    "meaning": "a boat; vessel",
+    "example_sentence": null,
+    "example_pinyin": null,
+    "example_meaning": null,
+    "word_type": null,
+    "audio_url": null,
+    "display_order": 2,
+    "meta": {
+      "source_id": 162,
+      "source_level": 2,
+      "radicals": "舟",
+      "strokes": "11",
+      "translations_eng_all": [
+        "a boat",
+        "vessel",
+        "ship",
+        "CL:條|条",
+        "艘",
+        "隻|只[zhī]"
+      ]
+    },
+    "meaning_vi": "thuyền, tàu"
+  },
+  {
+    "id": "bba1dc57-d4a8-4d23-bde6-e7f9e05805f6",
+    "hsk_level_code": "hsk2",
+    "lesson_number": 2,
+    "chinese_word": "次",
+    "pinyin": "cì",
+    "meaning": "next in sequence; second",
+    "example_sentence": null,
+    "example_pinyin": null,
+    "example_meaning": null,
+    "word_type": null,
+    "audio_url": null,
+    "display_order": 3,
+    "meta": {
+      "source_id": 163,
+      "source_level": 2,
+      "radicals": "欠",
+      "strokes": "6",
+      "translations_eng_all": [
+        "next in sequence",
+        "second",
+        "the second (day, time etc)",
+        "secondary",
+        "vice-",
+        "sub-",
+        "infra-",
+        "inferior quality",
+        "substandard",
+        "order",
+        "sequence",
+        "hypo- (chemistry)",
+        "classifier for enumerated events: time"
+      ]
+    },
+    "meaning_vi": "lần"
+  },
+  {
+    "id": "fa5debd6-0936-4d0a-8a7c-e5c56b1e19df",
+    "hsk_level_code": "hsk2",
+    "lesson_number": 2,
+    "chinese_word": "从",
+    "pinyin": "cóng",
+    "meaning": "from; via",
+    "example_sentence": null,
+    "example_pinyin": null,
+    "example_meaning": null,
+    "word_type": null,
+    "audio_url": null,
+    "display_order": 4,
+    "meta": {
+      "source_id": 164,
+      "source_level": 2,
+      "radicals": "人",
+      "strokes": "4",
+      "translations_eng_all": [
+        "from",
+        "via",
+        "passing through",
+        "through (a gap)",
+        "past",
+        "ever (followed by negative, meaning never)",
+        "(formerly pr.  and related to 縱|纵) to follow",
+        "to comply with",
+        "to obey",
+        "to join",
+        "to engage in",
+        "adopting some mode of action or attitude",
+        "follower",
+        "retainer",
+        "accessory",
+        "accomplice",
+        "related by common paternal grandfather or earlier ancestor"
+      ]
+    },
+    "meaning_vi": "từ"
+  },
+  {
+    "id": "8e730b03-3a08-4e56-ac20-d5d611694c8a",
+    "hsk_level_code": "hsk2",
+    "lesson_number": 2,
+    "chinese_word": "错",
+    "pinyin": "cuò",
+    "meaning": "mistake; wrong",
+    "example_sentence": null,
+    "example_pinyin": null,
+    "example_meaning": null,
+    "word_type": null,
+    "audio_url": null,
+    "display_order": 5,
+    "meta": {
+      "source_id": 165,
+      "source_level": 2,
+      "radicals": "钅",
+      "strokes": "13",
+      "translations_eng_all": [
+        "mistake",
+        "wrong",
+        "bad",
+        "interlocking",
+        "complex",
+        "to grind",
+        "to polish",
+        "to alternate",
+        "to stagger",
+        "to miss",
+        "to let slip",
+        "to evade",
+        "to inlay with gold or silver"
+      ]
+    },
+    "meaning_vi": "sai"
+  },
+  {
+    "id": "2f4a88a4-8aff-4eb7-a33a-ae953701568a",
+    "hsk_level_code": "hsk2",
+    "lesson_number": 2,
+    "chinese_word": "打篮球",
+    "pinyin": "dá lán qiú",
+    "meaning": "Play basketball",
+    "example_sentence": null,
+    "example_pinyin": null,
+    "example_meaning": null,
+    "word_type": null,
+    "audio_url": null,
+    "display_order": 6,
+    "meta": {
+      "source_id": 166,
+      "source_level": 2,
+      "radicals": null,
+      "strokes": null,
+      "translations_eng_all": [
+        "Play basketball"
+      ]
+    },
+    "meaning_vi": "chơi bóng rổ"
+  },
+  {
+    "id": "acbda5c1-eea3-4aca-a653-d365914fd0e4",
+    "hsk_level_code": "hsk2",
+    "lesson_number": 2,
+    "chinese_word": "大家",
+    "pinyin": "dà jiā",
+    "meaning": "everyone; influential family",
+    "example_sentence": null,
+    "example_pinyin": null,
+    "example_meaning": null,
+    "word_type": null,
+    "audio_url": null,
+    "display_order": 7,
+    "meta": {
+      "source_id": 167,
+      "source_level": 2,
+      "radicals": null,
+      "strokes": null,
+      "translations_eng_all": [
+        "everyone",
+        "influential family",
+        "great expert"
+      ]
+    },
+    "meaning_vi": "mọi người"
+  },
+  {
+    "id": "86aad9c3-d28d-4fcb-8576-cdefec9d460a",
+    "hsk_level_code": "hsk2",
+    "lesson_number": 2,
+    "chinese_word": "但是",
+    "pinyin": "dàn shì",
+    "meaning": "but; however",
+    "example_sentence": null,
+    "example_pinyin": null,
+    "example_meaning": null,
+    "word_type": null,
+    "audio_url": null,
+    "display_order": 8,
+    "meta": {
+      "source_id": 168,
+      "source_level": 2,
+      "radicals": null,
+      "strokes": null,
+      "translations_eng_all": [
+        "but",
+        "however"
+      ]
+    },
+    "meaning_vi": null
+  },
+  {
+    "id": "0c57dcf4-9c2e-4bc3-868e-9110e15d4797",
+    "hsk_level_code": "hsk2",
+    "lesson_number": 2,
+    "chinese_word": "到",
+    "pinyin": "dào",
+    "meaning": "to (a place); until (a time)",
+    "example_sentence": null,
+    "example_pinyin": null,
+    "example_meaning": null,
+    "word_type": null,
+    "audio_url": null,
+    "display_order": 9,
+    "meta": {
+      "source_id": 169,
+      "source_level": 2,
+      "radicals": "刂",
+      "strokes": "8",
+      "translations_eng_all": [
+        "to (a place)",
+        "until (a time)",
+        "up to",
+        "to go",
+        "to arrive"
+      ]
+    },
+    "meaning_vi": "đến, tới"
+  },
+  {
+    "id": "c76467fa-b7f4-4866-8c10-a9f0ccfaa7ed",
+    "hsk_level_code": "hsk2",
+    "lesson_number": 2,
+    "chinese_word": "得",
+    "pinyin": "de",
+    "meaning": "structural particle: used after a verb (or adjective as main verb); linking it to following phrase indicating effect",
+    "example_sentence": null,
+    "example_pinyin": null,
+    "example_meaning": null,
+    "word_type": null,
+    "audio_url": null,
+    "display_order": 10,
+    "meta": {
+      "source_id": 170,
+      "source_level": 2,
+      "radicals": "彳",
+      "strokes": "11",
+      "translations_eng_all": [
+        "structural particle: used after a verb (or adjective as main verb)",
+        "linking it to following phrase indicating effect",
+        "degree",
+        "possibility etc"
+      ]
+    },
+    "meaning_vi": "được (trợ từ)"
+  },
+  {
+    "id": "ca07acd8-8102-4834-b344-75668237b117",
+    "hsk_level_code": "hsk2",
+    "lesson_number": 3,
+    "chinese_word": "得",
+    "pinyin": "děi",
+    "meaning": "to have to; must",
+    "example_sentence": null,
+    "example_pinyin": null,
+    "example_meaning": null,
+    "word_type": null,
+    "audio_url": null,
+    "display_order": 1,
+    "meta": {
+      "source_id": 171,
+      "source_level": 2,
+      "radicals": "彳",
+      "strokes": "11",
+      "translations_eng_all": [
+        "to have to",
+        "must",
+        "ought to",
+        "to need to"
+      ]
+    },
+    "meaning_vi": "được (trợ từ)"
+  },
+  {
+    "id": "94cbed8c-50fd-4a3e-b4fc-f0926077eeff",
+    "hsk_level_code": "hsk2",
+    "lesson_number": 3,
+    "chinese_word": "弟弟",
+    "pinyin": "dì di",
+    "meaning": "younger brother; CL:個|个",
+    "example_sentence": null,
+    "example_pinyin": null,
+    "example_meaning": null,
+    "word_type": null,
+    "audio_url": null,
+    "display_order": 2,
+    "meta": {
+      "source_id": 172,
+      "source_level": 2,
+      "radicals": null,
+      "strokes": null,
+      "translations_eng_all": [
+        "younger brother",
+        "CL:個|个",
+        "位[wèi]"
+      ]
+    },
+    "meaning_vi": "em trai"
+  },
+  {
+    "id": "553f5daa-20cd-4fc6-b363-dfe557a8e742",
+    "hsk_level_code": "hsk2",
+    "lesson_number": 3,
+    "chinese_word": "第一",
+    "pinyin": "dì yī",
+    "meaning": "first; number one",
+    "example_sentence": null,
+    "example_pinyin": null,
+    "example_meaning": null,
+    "word_type": null,
+    "audio_url": null,
+    "display_order": 3,
+    "meta": {
+      "source_id": 173,
+      "source_level": 2,
+      "radicals": null,
+      "strokes": null,
+      "translations_eng_all": [
+        "first",
+        "number one"
+      ]
+    },
+    "meaning_vi": "thứ nhất"
+  },
+  {
+    "id": "45079902-a6bd-49a1-88dd-06dc90abfe5c",
+    "hsk_level_code": "hsk2",
+    "lesson_number": 3,
+    "chinese_word": "懂",
+    "pinyin": "dǒng",
+    "meaning": "to understand; to know",
+    "example_sentence": null,
+    "example_pinyin": null,
+    "example_meaning": null,
+    "word_type": null,
+    "audio_url": null,
+    "display_order": 4,
+    "meta": {
+      "source_id": 174,
+      "source_level": 2,
+      "radicals": "忄",
+      "strokes": "15",
+      "translations_eng_all": [
+        "to understand",
+        "to know"
+      ]
+    },
+    "meaning_vi": "hiểu"
+  },
+  {
+    "id": "6d669a41-f251-4438-bf0a-4561f7459fbc",
+    "hsk_level_code": "hsk2",
+    "lesson_number": 3,
+    "chinese_word": "房间",
+    "pinyin": "fáng jiān",
+    "meaning": "room; CL:間|间[jiān]",
+    "example_sentence": null,
+    "example_pinyin": null,
+    "example_meaning": null,
+    "word_type": null,
+    "audio_url": null,
+    "display_order": 5,
+    "meta": {
+      "source_id": 175,
+      "source_level": 2,
+      "radicals": null,
+      "strokes": null,
+      "translations_eng_all": [
+        "room",
+        "CL:間|间[jiān]"
+      ]
+    },
+    "meaning_vi": "phòng"
+  },
+  {
+    "id": "8005774f-3f03-40c3-8b3c-fc30ee86c94f",
+    "hsk_level_code": "hsk2",
+    "lesson_number": 3,
+    "chinese_word": "非常",
+    "pinyin": "fēi cháng",
+    "meaning": "unusual; extraordinary",
+    "example_sentence": null,
+    "example_pinyin": null,
+    "example_meaning": null,
+    "word_type": null,
+    "audio_url": null,
+    "display_order": 6,
+    "meta": {
+      "source_id": 176,
+      "source_level": 2,
+      "radicals": null,
+      "strokes": null,
+      "translations_eng_all": [
+        "unusual",
+        "extraordinary",
+        "extreme",
+        "very",
+        "exceptional"
+      ]
+    },
+    "meaning_vi": "rất, vô cùng"
+  },
+  {
+    "id": "4b990f20-299e-4f9b-8880-617492cd3f1a",
+    "hsk_level_code": "hsk2",
+    "lesson_number": 3,
+    "chinese_word": "服务员",
+    "pinyin": "fú wù yuán",
+    "meaning": "waiter; waitress",
+    "example_sentence": null,
+    "example_pinyin": null,
+    "example_meaning": null,
+    "word_type": null,
+    "audio_url": null,
+    "display_order": 7,
+    "meta": {
+      "source_id": 177,
+      "source_level": 2,
+      "radicals": null,
+      "strokes": null,
+      "translations_eng_all": [
+        "waiter",
+        "waitress",
+        "attendant",
+        "customer service personnel",
+        "CL:個|个[gè]"
+      ]
+    },
+    "meaning_vi": "nhân viên phục vụ"
+  },
+  {
+    "id": "cf5b08e3-bcf2-41d3-a2c9-b968070ec82f",
+    "hsk_level_code": "hsk2",
+    "lesson_number": 3,
+    "chinese_word": "高",
+    "pinyin": "gāo",
+    "meaning": "high; tall",
+    "example_sentence": null,
+    "example_pinyin": null,
+    "example_meaning": null,
+    "word_type": null,
+    "audio_url": null,
+    "display_order": 8,
+    "meta": {
+      "source_id": 178,
+      "source_level": 2,
+      "radicals": "高",
+      "strokes": "10",
+      "translations_eng_all": [
+        "high",
+        "tall",
+        "above average",
+        "loud",
+        "your (honorific)"
+      ]
+    },
+    "meaning_vi": "cao"
+  },
+  {
+    "id": "1a0f363a-a755-4b70-ae70-5ed6d5b0ea7d",
+    "hsk_level_code": "hsk2",
+    "lesson_number": 3,
+    "chinese_word": "告诉",
+    "pinyin": "gào su",
+    "meaning": "to tell; to inform",
+    "example_sentence": null,
+    "example_pinyin": null,
+    "example_meaning": null,
+    "word_type": null,
+    "audio_url": null,
+    "display_order": 9,
+    "meta": {
+      "source_id": 179,
+      "source_level": 2,
+      "radicals": null,
+      "strokes": null,
+      "translations_eng_all": [
+        "to tell",
+        "to inform",
+        "to let know"
+      ]
+    },
+    "meaning_vi": "nói cho, báo"
+  },
+  {
+    "id": "b60fe169-f9d8-4055-aaae-0fbc4c887a25",
+    "hsk_level_code": "hsk2",
+    "lesson_number": 3,
+    "chinese_word": "哥哥",
+    "pinyin": "gē ge",
+    "meaning": "older brother; CL:個|个",
+    "example_sentence": null,
+    "example_pinyin": null,
+    "example_meaning": null,
+    "word_type": null,
+    "audio_url": null,
+    "display_order": 10,
+    "meta": {
+      "source_id": 180,
+      "source_level": 2,
+      "radicals": null,
+      "strokes": null,
+      "translations_eng_all": [
+        "older brother",
+        "CL:個|个",
+        "位[wèi]"
+      ]
+    },
+    "meaning_vi": "anh trai"
+  },
+  {
+    "id": "adbcdee5-80f3-4fef-8d13-dcfa0c1c8583",
+    "hsk_level_code": "hsk2",
+    "lesson_number": 4,
+    "chinese_word": "给",
+    "pinyin": "gěi",
+    "meaning": "to; for",
+    "example_sentence": null,
+    "example_pinyin": null,
+    "example_meaning": null,
+    "word_type": null,
+    "audio_url": null,
+    "display_order": 1,
+    "meta": {
+      "source_id": 181,
+      "source_level": 2,
+      "radicals": "纟",
+      "strokes": "9",
+      "translations_eng_all": [
+        "to",
+        "for",
+        "for the benefit of",
+        "to give",
+        "to allow",
+        "to do sth (for sb)",
+        "(passive particle)"
+      ]
+    },
+    "meaning_vi": "cho, đưa"
+  },
+  {
+    "id": "def14a44-880b-4b3f-8415-739338ca24ae",
+    "hsk_level_code": "hsk2",
+    "lesson_number": 4,
+    "chinese_word": "公共汽车",
+    "pinyin": "gōng gòng qì chē",
+    "meaning": "bus; CL:輛|辆",
+    "example_sentence": null,
+    "example_pinyin": null,
+    "example_meaning": null,
+    "word_type": null,
+    "audio_url": null,
+    "display_order": 2,
+    "meta": {
+      "source_id": 182,
+      "source_level": 2,
+      "radicals": null,
+      "strokes": null,
+      "translations_eng_all": [
+        "bus",
+        "CL:輛|辆",
+        "班[bān]"
+      ]
+    },
+    "meaning_vi": "xe buýt"
+  },
+  {
+    "id": "dde28323-89ff-41bd-8e34-22144caf80da",
+    "hsk_level_code": "hsk2",
+    "lesson_number": 4,
+    "chinese_word": "公斤",
+    "pinyin": "gōng jīn",
+    "meaning": "kilogram (kg)",
+    "example_sentence": null,
+    "example_pinyin": null,
+    "example_meaning": null,
+    "word_type": null,
+    "audio_url": null,
+    "display_order": 3,
+    "meta": {
+      "source_id": 183,
+      "source_level": 2,
+      "radicals": null,
+      "strokes": null,
+      "translations_eng_all": [
+        "kilogram (kg)"
+      ]
+    },
+    "meaning_vi": null
+  },
+  {
+    "id": "cb0f24d1-6d67-4896-9f8b-c19333e4edfc",
+    "hsk_level_code": "hsk2",
+    "lesson_number": 4,
+    "chinese_word": "公司",
+    "pinyin": "gōng sī",
+    "meaning": "(business) company; company",
+    "example_sentence": null,
+    "example_pinyin": null,
+    "example_meaning": null,
+    "word_type": null,
+    "audio_url": null,
+    "display_order": 4,
+    "meta": {
+      "source_id": 184,
+      "source_level": 2,
+      "radicals": null,
+      "strokes": null,
+      "translations_eng_all": [
+        "(business) company",
+        "company",
+        "firm",
+        "corporation",
+        "incorporated",
+        "CL:家[jiā]"
+      ]
+    },
+    "meaning_vi": "công ty"
+  },
+  {
+    "id": "1cb0d729-81fd-4120-905e-7a1a3d47c567",
+    "hsk_level_code": "hsk2",
+    "lesson_number": 4,
+    "chinese_word": "贵",
+    "pinyin": "guì",
+    "meaning": "expensive; noble",
+    "example_sentence": null,
+    "example_pinyin": null,
+    "example_meaning": null,
+    "word_type": null,
+    "audio_url": null,
+    "display_order": 5,
+    "meta": {
+      "source_id": 185,
+      "source_level": 2,
+      "radicals": "贝",
+      "strokes": "9",
+      "translations_eng_all": [
+        "expensive",
+        "noble",
+        "your (name)",
+        "precious"
+      ]
+    },
+    "meaning_vi": "đắt, quý"
+  },
+  {
+    "id": "72ad652b-874a-4f30-822b-75e47d130b8b",
+    "hsk_level_code": "hsk2",
+    "lesson_number": 4,
+    "chinese_word": "还",
+    "pinyin": "hái",
+    "meaning": "still; still in progress",
+    "example_sentence": null,
+    "example_pinyin": null,
+    "example_meaning": null,
+    "word_type": null,
+    "audio_url": null,
+    "display_order": 6,
+    "meta": {
+      "source_id": 186,
+      "source_level": 2,
+      "radicals": "辶",
+      "strokes": "7",
+      "translations_eng_all": [
+        "still",
+        "still in progress",
+        "still more",
+        "yet",
+        "even more",
+        "in addition",
+        "fairly",
+        "passably (good)",
+        "as early as",
+        "even",
+        "also",
+        "else"
+      ]
+    },
+    "meaning_vi": "vẫn, còn"
+  },
+  {
+    "id": "4d881f59-c112-458c-911d-a6818a1c7af5",
+    "hsk_level_code": "hsk2",
+    "lesson_number": 4,
+    "chinese_word": "孩子",
+    "pinyin": "hái zi",
+    "meaning": "child",
+    "example_sentence": null,
+    "example_pinyin": null,
+    "example_meaning": null,
+    "word_type": null,
+    "audio_url": null,
+    "display_order": 7,
+    "meta": {
+      "source_id": 187,
+      "source_level": 2,
+      "radicals": null,
+      "strokes": null,
+      "translations_eng_all": [
+        "child"
+      ]
+    },
+    "meaning_vi": "con, trẻ con"
+  },
+  {
+    "id": "48bcebcd-c85f-454a-9b30-50ee2d11318a",
+    "hsk_level_code": "hsk2",
+    "lesson_number": 4,
+    "chinese_word": "好吃",
+    "pinyin": "hǎo chī",
+    "meaning": "tasty; delicious",
+    "example_sentence": null,
+    "example_pinyin": null,
+    "example_meaning": null,
+    "word_type": null,
+    "audio_url": null,
+    "display_order": 8,
+    "meta": {
+      "source_id": 188,
+      "source_level": 2,
+      "radicals": null,
+      "strokes": null,
+      "translations_eng_all": [
+        "tasty",
+        "delicious"
+      ]
+    },
+    "meaning_vi": "ngon"
+  },
+  {
+    "id": "56182c11-fcef-4fa0-b03b-a275c7c4db98",
+    "hsk_level_code": "hsk2",
+    "lesson_number": 4,
+    "chinese_word": "号",
+    "pinyin": "hào",
+    "meaning": "ordinal number; day of a month",
+    "example_sentence": null,
+    "example_pinyin": null,
+    "example_meaning": null,
+    "word_type": null,
+    "audio_url": null,
+    "display_order": 9,
+    "meta": {
+      "source_id": 189,
+      "source_level": 2,
+      "radicals": "口",
+      "strokes": "5",
+      "translations_eng_all": [
+        "ordinal number",
+        "day of a month",
+        "mark",
+        "sign",
+        "business establishment",
+        "size",
+        "ship suffix",
+        "horn (wind instrument)",
+        "bugle call",
+        "assumed name",
+        "to take a pulse",
+        "classifier used to indicate number of people"
+      ]
+    },
+    "meaning_vi": null
+  },
+  {
+    "id": "a020c101-eca6-4dcc-8825-a8478dc63477",
+    "hsk_level_code": "hsk2",
+    "lesson_number": 4,
+    "chinese_word": "黑",
+    "pinyin": "hēi",
+    "meaning": "black; dark",
+    "example_sentence": null,
+    "example_pinyin": null,
+    "example_meaning": null,
+    "word_type": null,
+    "audio_url": null,
+    "display_order": 10,
+    "meta": {
+      "source_id": 190,
+      "source_level": 2,
+      "radicals": "黑",
+      "strokes": "12",
+      "translations_eng_all": [
+        "black",
+        "dark",
+        "(loanword) to hack"
+      ]
+    },
+    "meaning_vi": "đen"
+  },
+  {
+    "id": "3e9166a5-af75-41f5-9cde-04237323bf6a",
+    "hsk_level_code": "hsk2",
+    "lesson_number": 5,
+    "chinese_word": "红",
+    "pinyin": "hóng",
+    "meaning": "red; popular",
+    "example_sentence": null,
+    "example_pinyin": null,
+    "example_meaning": null,
+    "word_type": null,
+    "audio_url": null,
+    "display_order": 1,
+    "meta": {
+      "source_id": 191,
+      "source_level": 2,
+      "radicals": "纟",
+      "strokes": "6",
+      "translations_eng_all": [
+        "red",
+        "popular",
+        "revolutionary",
+        "bonus"
+      ]
+    },
+    "meaning_vi": "đỏ"
+  },
+  {
+    "id": "b85b2d7e-aa03-4178-ab13-0ae9317d4ce0",
+    "hsk_level_code": "hsk2",
+    "lesson_number": 5,
+    "chinese_word": "欢迎",
+    "pinyin": "huān yíng",
+    "meaning": "to welcome; welcome",
+    "example_sentence": null,
+    "example_pinyin": null,
+    "example_meaning": null,
+    "word_type": null,
+    "audio_url": null,
+    "display_order": 2,
+    "meta": {
+      "source_id": 192,
+      "source_level": 2,
+      "radicals": null,
+      "strokes": null,
+      "translations_eng_all": [
+        "to welcome",
+        "welcome"
+      ]
+    },
+    "meaning_vi": null
+  },
+  {
+    "id": "fd4dd167-8f99-47fd-9ebb-711289bb38e4",
+    "hsk_level_code": "hsk2",
+    "lesson_number": 5,
+    "chinese_word": "还",
+    "pinyin": "huán",
+    "meaning": "to pay back; to return",
+    "example_sentence": null,
+    "example_pinyin": null,
+    "example_meaning": null,
+    "word_type": null,
+    "audio_url": null,
+    "display_order": 3,
+    "meta": {
+      "source_id": 193,
+      "source_level": 2,
+      "radicals": "辶",
+      "strokes": "7",
+      "translations_eng_all": [
+        "to pay back",
+        "to return"
+      ]
+    },
+    "meaning_vi": "vẫn, còn"
+  },
+  {
+    "id": "73784730-ce9d-4dbc-b531-4e4aea691f26",
+    "hsk_level_code": "hsk2",
+    "lesson_number": 5,
+    "chinese_word": "回答",
+    "pinyin": "huí dá",
+    "meaning": "to reply; to answer",
+    "example_sentence": null,
+    "example_pinyin": null,
+    "example_meaning": null,
+    "word_type": null,
+    "audio_url": null,
+    "display_order": 4,
+    "meta": {
+      "source_id": 194,
+      "source_level": 2,
+      "radicals": null,
+      "strokes": null,
+      "translations_eng_all": [
+        "to reply",
+        "to answer",
+        "the answer",
+        "CL:個|个[gè]"
+      ]
+    },
+    "meaning_vi": "trả lời"
+  },
+  {
+    "id": "06bd51e6-8be3-48dd-bad3-da7db41dc810",
+    "hsk_level_code": "hsk2",
+    "lesson_number": 5,
+    "chinese_word": "机场",
+    "pinyin": "jī chǎng",
+    "meaning": "airport; airfield",
+    "example_sentence": null,
+    "example_pinyin": null,
+    "example_meaning": null,
+    "word_type": null,
+    "audio_url": null,
+    "display_order": 5,
+    "meta": {
+      "source_id": 195,
+      "source_level": 2,
+      "radicals": null,
+      "strokes": null,
+      "translations_eng_all": [
+        "airport",
+        "airfield",
+        "CL:家",
+        "處|处[chù]"
+      ]
+    },
+    "meaning_vi": "sân bay"
+  },
+  {
+    "id": "afb6b6a9-c031-40d8-8473-9447a17a8223",
+    "hsk_level_code": "hsk2",
+    "lesson_number": 5,
+    "chinese_word": "鸡蛋",
+    "pinyin": "jī dàn",
+    "meaning": "(chicken) egg; hen's egg",
+    "example_sentence": null,
+    "example_pinyin": null,
+    "example_meaning": null,
+    "word_type": null,
+    "audio_url": null,
+    "display_order": 6,
+    "meta": {
+      "source_id": 196,
+      "source_level": 2,
+      "radicals": null,
+      "strokes": null,
+      "translations_eng_all": [
+        "(chicken) egg",
+        "hen's egg",
+        "CL:個|个",
+        "打[dá]"
+      ]
+    },
+    "meaning_vi": "trứng gà"
+  },
+  {
+    "id": "0691f25b-1b93-4135-9e82-7ad019902c86",
+    "hsk_level_code": "hsk2",
+    "lesson_number": 5,
+    "chinese_word": "件",
+    "pinyin": "jiàn",
+    "meaning": "item; component",
+    "example_sentence": null,
+    "example_pinyin": null,
+    "example_meaning": null,
+    "word_type": null,
+    "audio_url": null,
+    "display_order": 7,
+    "meta": {
+      "source_id": 197,
+      "source_level": 2,
+      "radicals": "亻",
+      "strokes": "6",
+      "translations_eng_all": [
+        "item",
+        "component",
+        "classifier for events",
+        "things",
+        "clothes etc"
+      ]
+    },
+    "meaning_vi": "cái, chiếc (lượng từ)"
+  },
+  {
+    "id": "da98a425-129d-4ab4-8646-01d684e791d4",
+    "hsk_level_code": "hsk2",
+    "lesson_number": 5,
+    "chinese_word": "教室",
+    "pinyin": "jiào shì",
+    "meaning": "classroom; CL:間|间[jiān]",
+    "example_sentence": null,
+    "example_pinyin": null,
+    "example_meaning": null,
+    "word_type": null,
+    "audio_url": null,
+    "display_order": 8,
+    "meta": {
+      "source_id": 198,
+      "source_level": 2,
+      "radicals": null,
+      "strokes": null,
+      "translations_eng_all": [
+        "classroom",
+        "CL:間|间[jiān]"
+      ]
+    },
+    "meaning_vi": "phòng học"
+  },
+  {
+    "id": "309840ae-1a22-4141-bc78-c972a252106c",
+    "hsk_level_code": "hsk2",
+    "lesson_number": 5,
+    "chinese_word": "姐姐",
+    "pinyin": "jiě jie",
+    "meaning": "older sister; CL:個|个[gè]",
+    "example_sentence": null,
+    "example_pinyin": null,
+    "example_meaning": null,
+    "word_type": null,
+    "audio_url": null,
+    "display_order": 9,
+    "meta": {
+      "source_id": 199,
+      "source_level": 2,
+      "radicals": null,
+      "strokes": null,
+      "translations_eng_all": [
+        "older sister",
+        "CL:個|个[gè]"
+      ]
+    },
+    "meaning_vi": "chị gái"
+  },
+  {
+    "id": "d2fa2bfb-91dc-4fe4-89d6-adc24dd4e6a0",
+    "hsk_level_code": "hsk2",
+    "lesson_number": 5,
+    "chinese_word": "介绍",
+    "pinyin": "jiè shào",
+    "meaning": "to introduce (sb to sb); to give a presentation",
+    "example_sentence": null,
+    "example_pinyin": null,
+    "example_meaning": null,
+    "word_type": null,
+    "audio_url": null,
+    "display_order": 10,
+    "meta": {
+      "source_id": 200,
+      "source_level": 2,
+      "radicals": null,
+      "strokes": null,
+      "translations_eng_all": [
+        "to introduce (sb to sb)",
+        "to give a presentation",
+        "to present (sb for a job etc)",
+        "introduction"
+      ]
+    },
+    "meaning_vi": "giới thiệu"
+  },
+  {
+    "id": "00a8edf5-fb29-4f22-8864-1418da7923ca",
+    "hsk_level_code": "hsk2",
+    "lesson_number": 6,
+    "chinese_word": "进",
+    "pinyin": "jìn",
+    "meaning": "to advance; to enter",
+    "example_sentence": null,
+    "example_pinyin": null,
+    "example_meaning": null,
+    "word_type": null,
+    "audio_url": null,
+    "display_order": 1,
+    "meta": {
+      "source_id": 201,
+      "source_level": 2,
+      "radicals": "辶",
+      "strokes": "7",
+      "translations_eng_all": [
+        "to advance",
+        "to enter",
+        "to come (or go) into",
+        "to receive or admit",
+        "to eat or drink",
+        "to submit or present",
+        "(used after a verb) into",
+        "in",
+        "to score a goal"
+      ]
+    },
+    "meaning_vi": "vào"
+  },
+  {
+    "id": "0b32c5e6-95b0-4db2-9d25-5a7756b70985",
+    "hsk_level_code": "hsk2",
+    "lesson_number": 6,
+    "chinese_word": "近",
+    "pinyin": "jìn",
+    "meaning": "near; close to",
+    "example_sentence": null,
+    "example_pinyin": null,
+    "example_meaning": null,
+    "word_type": null,
+    "audio_url": null,
+    "display_order": 2,
+    "meta": {
+      "source_id": 202,
+      "source_level": 2,
+      "radicals": "辶",
+      "strokes": "7",
+      "translations_eng_all": [
+        "near",
+        "close to",
+        "approximately"
+      ]
+    },
+    "meaning_vi": "gần"
+  },
+  {
+    "id": "4c69b466-4227-4366-bad3-979b3fb81101",
+    "hsk_level_code": "hsk2",
+    "lesson_number": 6,
+    "chinese_word": "就",
+    "pinyin": "jiù",
+    "meaning": "at once; right away",
+    "example_sentence": null,
+    "example_pinyin": null,
+    "example_meaning": null,
+    "word_type": null,
+    "audio_url": null,
+    "display_order": 3,
+    "meta": {
+      "source_id": 203,
+      "source_level": 2,
+      "radicals": "尢",
+      "strokes": "12",
+      "translations_eng_all": [
+        "at once",
+        "right away",
+        "only",
+        "just (emphasis)",
+        "as early as",
+        "already",
+        "as soon as",
+        "then",
+        "in that case",
+        "as many as",
+        "even if",
+        "to approach",
+        "to move towards",
+        "to undertake",
+        "to engage in",
+        "to suffer",
+        "subjected to",
+        "to accomplish",
+        "to take advantage of",
+        "to go with (of foods)",
+        "with regard to",
+        "concerning"
+      ]
+    },
+    "meaning_vi": "liền, ngay"
+  },
+  {
+    "id": "dc1b9459-cb48-4623-8894-75af10a5776e",
+    "hsk_level_code": "hsk2",
+    "lesson_number": 6,
+    "chinese_word": "觉得",
+    "pinyin": "jué de",
+    "meaning": "to think; to feel",
+    "example_sentence": null,
+    "example_pinyin": null,
+    "example_meaning": null,
+    "word_type": null,
+    "audio_url": null,
+    "display_order": 4,
+    "meta": {
+      "source_id": 204,
+      "source_level": 2,
+      "radicals": null,
+      "strokes": null,
+      "translations_eng_all": [
+        "to think",
+        "to feel"
+      ]
+    },
+    "meaning_vi": "cảm thấy, nghĩ"
+  },
+  {
+    "id": "349ceff6-3121-45ad-819a-55dd12929650",
+    "hsk_level_code": "hsk2",
+    "lesson_number": 6,
+    "chinese_word": "咖啡",
+    "pinyin": "kā fēi",
+    "meaning": "coffee; CL:杯[bēi]",
+    "example_sentence": null,
+    "example_pinyin": null,
+    "example_meaning": null,
+    "word_type": null,
+    "audio_url": null,
+    "display_order": 5,
+    "meta": {
+      "source_id": 205,
+      "source_level": 2,
+      "radicals": null,
+      "strokes": null,
+      "translations_eng_all": [
+        "coffee",
+        "CL:杯[bēi]"
+      ]
+    },
+    "meaning_vi": "cà phê"
+  },
+  {
+    "id": "6161a5fc-c5a5-4d63-b5a1-99e00e080442",
+    "hsk_level_code": "hsk2",
+    "lesson_number": 6,
+    "chinese_word": "开始",
+    "pinyin": "kāi shǐ",
+    "meaning": "to begin; beginning",
+    "example_sentence": null,
+    "example_pinyin": null,
+    "example_meaning": null,
+    "word_type": null,
+    "audio_url": null,
+    "display_order": 6,
+    "meta": {
+      "source_id": 206,
+      "source_level": 2,
+      "radicals": null,
+      "strokes": null,
+      "translations_eng_all": [
+        "to begin",
+        "beginning",
+        "to start",
+        "initial",
+        "CL:個|个[gè]"
+      ]
+    },
+    "meaning_vi": "bắt đầu"
+  },
+  {
+    "id": "c0a30c0b-87bc-4ec7-a6c2-5d1c71a86ac4",
+    "hsk_level_code": "hsk2",
+    "lesson_number": 6,
+    "chinese_word": "考试",
+    "pinyin": "kǎo shì",
+    "meaning": "to take an exam; exam",
+    "example_sentence": null,
+    "example_pinyin": null,
+    "example_meaning": null,
+    "word_type": null,
+    "audio_url": null,
+    "display_order": 7,
+    "meta": {
+      "source_id": 207,
+      "source_level": 2,
+      "radicals": null,
+      "strokes": null,
+      "translations_eng_all": [
+        "to take an exam",
+        "exam",
+        "CL:次[cì]"
+      ]
+    },
+    "meaning_vi": "thi, kiểm tra"
+  },
+  {
+    "id": "63fed435-173f-4f9c-918f-c43a3f3cb1a2",
+    "hsk_level_code": "hsk2",
+    "lesson_number": 6,
+    "chinese_word": "可能",
+    "pinyin": "kě néng",
+    "meaning": "might (happen); possible",
+    "example_sentence": null,
+    "example_pinyin": null,
+    "example_meaning": null,
+    "word_type": null,
+    "audio_url": null,
+    "display_order": 8,
+    "meta": {
+      "source_id": 208,
+      "source_level": 2,
+      "radicals": null,
+      "strokes": null,
+      "translations_eng_all": [
+        "might (happen)",
+        "possible",
+        "probable",
+        "possibility",
+        "probability",
+        "maybe",
+        "perhaps",
+        "CL:個|个[gè]"
+      ]
+    },
+    "meaning_vi": "có thể, có lẽ"
+  },
+  {
+    "id": "9dc39597-7c0c-4094-850d-a91019eeebec",
+    "hsk_level_code": "hsk2",
+    "lesson_number": 6,
+    "chinese_word": "可以",
+    "pinyin": "kě yǐ",
+    "meaning": "can; may",
+    "example_sentence": null,
+    "example_pinyin": null,
+    "example_meaning": null,
+    "word_type": null,
+    "audio_url": null,
+    "display_order": 9,
+    "meta": {
+      "source_id": 209,
+      "source_level": 2,
+      "radicals": null,
+      "strokes": null,
+      "translations_eng_all": [
+        "can",
+        "may",
+        "possible",
+        "able to"
+      ]
+    },
+    "meaning_vi": "được, có thể"
+  },
+  {
+    "id": "7f39f675-e4aa-4d10-ab13-c38dd5c3d57f",
+    "hsk_level_code": "hsk2",
+    "lesson_number": 6,
+    "chinese_word": "课",
+    "pinyin": "kè",
+    "meaning": "subject; course",
+    "example_sentence": null,
+    "example_pinyin": null,
+    "example_meaning": null,
+    "word_type": null,
+    "audio_url": null,
+    "display_order": 10,
+    "meta": {
+      "source_id": 210,
+      "source_level": 2,
+      "radicals": "讠",
+      "strokes": "10",
+      "translations_eng_all": [
+        "subject",
+        "course",
+        "CL: 門|门[mén]",
+        "class",
+        "lesson",
+        "CL:堂",
+        "節|节[jié]",
+        "to levy",
+        "tax",
+        "form of divination"
+      ]
+    },
+    "meaning_vi": "bài học, tiết học"
+  },
+  {
+    "id": "a9d1f481-7468-4cd4-8650-87854910dbfc",
+    "hsk_level_code": "hsk2",
+    "lesson_number": 7,
+    "chinese_word": "快",
+    "pinyin": "kuài",
+    "meaning": "rapid; quick",
+    "example_sentence": null,
+    "example_pinyin": null,
+    "example_meaning": null,
+    "word_type": null,
+    "audio_url": null,
+    "display_order": 1,
+    "meta": {
+      "source_id": 211,
+      "source_level": 2,
+      "radicals": "忄",
+      "strokes": "7",
+      "translations_eng_all": [
+        "rapid",
+        "quick",
+        "speed",
+        "rate",
+        "soon",
+        "almost",
+        "to make haste",
+        "clever",
+        "sharp (of knives or wits)",
+        "forthright",
+        "plain-spoken",
+        "gratified",
+        "pleased",
+        "pleasant"
+      ]
+    },
+    "meaning_vi": "nhanh"
+  },
+  {
+    "id": "080107a2-9a0f-4dbc-a5a9-ee4a8a22d232",
+    "hsk_level_code": "hsk2",
+    "lesson_number": 7,
+    "chinese_word": "快乐",
+    "pinyin": "kuài lè",
+    "meaning": "happy; merry",
+    "example_sentence": null,
+    "example_pinyin": null,
+    "example_meaning": null,
+    "word_type": null,
+    "audio_url": null,
+    "display_order": 2,
+    "meta": {
+      "source_id": 212,
+      "source_level": 2,
+      "radicals": null,
+      "strokes": null,
+      "translations_eng_all": [
+        "happy",
+        "merry"
+      ]
+    },
+    "meaning_vi": "vui vẻ, hạnh phúc"
+  },
+  {
+    "id": "11e9f7cc-5805-4e70-a6e2-561c9a8e02b2",
+    "hsk_level_code": "hsk2",
+    "lesson_number": 7,
+    "chinese_word": "累",
+    "pinyin": "lèi",
+    "meaning": "tired; weary",
+    "example_sentence": null,
+    "example_pinyin": null,
+    "example_meaning": null,
+    "word_type": null,
+    "audio_url": null,
+    "display_order": 3,
+    "meta": {
+      "source_id": 213,
+      "source_level": 2,
+      "radicals": "糸",
+      "strokes": "11",
+      "translations_eng_all": [
+        "tired",
+        "weary",
+        "to strain",
+        "to wear out",
+        "to work hard"
+      ]
+    },
+    "meaning_vi": "mệt"
+  },
+  {
+    "id": "186aaf88-dd1a-48c1-b14a-c7e5244f5257",
+    "hsk_level_code": "hsk2",
+    "lesson_number": 7,
+    "chinese_word": "离",
+    "pinyin": "lí",
+    "meaning": "to leave; to part from",
+    "example_sentence": null,
+    "example_pinyin": null,
+    "example_meaning": null,
+    "word_type": null,
+    "audio_url": null,
+    "display_order": 4,
+    "meta": {
+      "source_id": 214,
+      "source_level": 2,
+      "radicals": "忄",
+      "strokes": "10",
+      "translations_eng_all": [
+        "to leave",
+        "to part from",
+        "to be away from",
+        "(in giving distances) from",
+        "without (sth)",
+        "independent of",
+        "one of the Eight Trigrams 八卦",
+        "symbolizing fire",
+        "☲"
+      ]
+    },
+    "meaning_vi": "cách, xa"
+  },
+  {
+    "id": "391616a5-72ad-4aea-81a5-d1bb022063e6",
+    "hsk_level_code": "hsk2",
+    "lesson_number": 7,
+    "chinese_word": "两",
+    "pinyin": "liǎng",
+    "meaning": "both; two",
+    "example_sentence": null,
+    "example_pinyin": null,
+    "example_meaning": null,
+    "word_type": null,
+    "audio_url": null,
+    "display_order": 5,
+    "meta": {
+      "source_id": 215,
+      "source_level": 2,
+      "radicals": "一",
+      "strokes": "7",
+      "translations_eng_all": [
+        "both",
+        "two",
+        "ounce",
+        "some",
+        "a few",
+        "tael",
+        "weight equal to 50 grams"
+      ]
+    },
+    "meaning_vi": "hai (lượng)"
+  },
+  {
+    "id": "b5d8ea54-9370-4609-8a2f-4eb9e2c05a4b",
+    "hsk_level_code": "hsk2",
+    "lesson_number": 7,
+    "chinese_word": "路",
+    "pinyin": "lù",
+    "meaning": "road; CL:條|条[tiáo]",
+    "example_sentence": null,
+    "example_pinyin": null,
+    "example_meaning": null,
+    "word_type": null,
+    "audio_url": null,
+    "display_order": 6,
+    "meta": {
+      "source_id": 216,
+      "source_level": 2,
+      "radicals": "足",
+      "strokes": "13",
+      "translations_eng_all": [
+        "road",
+        "CL:條|条[tiáo]",
+        "journey",
+        "route",
+        "line (bus etc)",
+        "sort",
+        "kind"
+      ]
+    },
+    "meaning_vi": "đường"
+  },
+  {
+    "id": "1f70eb60-5484-4d00-8ab6-9f7db0f9b93b",
+    "hsk_level_code": "hsk2",
+    "lesson_number": 7,
+    "chinese_word": "旅游",
+    "pinyin": "lǚ yóu",
+    "meaning": "trip; journey",
+    "example_sentence": null,
+    "example_pinyin": null,
+    "example_meaning": null,
+    "word_type": null,
+    "audio_url": null,
+    "display_order": 7,
+    "meta": {
+      "source_id": 217,
+      "source_level": 2,
+      "radicals": null,
+      "strokes": null,
+      "translations_eng_all": [
+        "trip",
+        "journey",
+        "tourism",
+        "travel",
+        "tour"
+      ]
+    },
+    "meaning_vi": "du lịch"
+  },
+  {
+    "id": "8224dcf4-90e0-4fcd-9400-9a76cd7fed0d",
+    "hsk_level_code": "hsk2",
+    "lesson_number": 7,
+    "chinese_word": "卖",
+    "pinyin": "mài",
+    "meaning": "to sell; to betray",
+    "example_sentence": null,
+    "example_pinyin": null,
+    "example_meaning": null,
+    "word_type": null,
+    "audio_url": null,
+    "display_order": 8,
+    "meta": {
+      "source_id": 218,
+      "source_level": 2,
+      "radicals": "十",
+      "strokes": "8",
+      "translations_eng_all": [
+        "to sell",
+        "to betray",
+        "to spare no effort",
+        "to show off or flaunt"
+      ]
+    },
+    "meaning_vi": "bán"
+  },
+  {
+    "id": "3f0e3f44-3920-4537-b86b-1882091517b8",
+    "hsk_level_code": "hsk2",
+    "lesson_number": 7,
+    "chinese_word": "慢",
+    "pinyin": "màn",
+    "meaning": "slow",
+    "example_sentence": null,
+    "example_pinyin": null,
+    "example_meaning": null,
+    "word_type": null,
+    "audio_url": null,
+    "display_order": 9,
+    "meta": {
+      "source_id": 219,
+      "source_level": 2,
+      "radicals": "忄",
+      "strokes": "14",
+      "translations_eng_all": [
+        "slow"
+      ]
+    },
+    "meaning_vi": "chậm"
+  },
+  {
+    "id": "d85ad292-d8bf-4fe3-9afa-bdb6a3de4550",
+    "hsk_level_code": "hsk2",
+    "lesson_number": 7,
+    "chinese_word": "忙",
+    "pinyin": "máng",
+    "meaning": "busy; hurriedly",
+    "example_sentence": null,
+    "example_pinyin": null,
+    "example_meaning": null,
+    "word_type": null,
+    "audio_url": null,
+    "display_order": 10,
+    "meta": {
+      "source_id": 220,
+      "source_level": 2,
+      "radicals": "忄",
+      "strokes": "6",
+      "translations_eng_all": [
+        "busy",
+        "hurriedly",
+        "to hurry",
+        "to rush"
+      ]
+    },
+    "meaning_vi": "bận"
+  },
+  {
+    "id": "1ed86673-d2a1-4570-a9ef-a77766957003",
+    "hsk_level_code": "hsk2",
+    "lesson_number": 8,
+    "chinese_word": "每",
+    "pinyin": "měi",
+    "meaning": "each; every",
+    "example_sentence": null,
+    "example_pinyin": null,
+    "example_meaning": null,
+    "word_type": null,
+    "audio_url": null,
+    "display_order": 1,
+    "meta": {
+      "source_id": 221,
+      "source_level": 2,
+      "radicals": "母",
+      "strokes": "7",
+      "translations_eng_all": [
+        "each",
+        "every"
+      ]
+    },
+    "meaning_vi": "mỗi, hằng"
+  },
+  {
+    "id": "e59cb9fe-d453-4bb2-b708-ce35b7c61eb8",
+    "hsk_level_code": "hsk2",
+    "lesson_number": 8,
+    "chinese_word": "妹妹",
+    "pinyin": "mèi mei",
+    "meaning": "younger sister; fig. younger woman (esp. girl friend or rival)",
+    "example_sentence": null,
+    "example_pinyin": null,
+    "example_meaning": null,
+    "word_type": null,
+    "audio_url": null,
+    "display_order": 2,
+    "meta": {
+      "source_id": 222,
+      "source_level": 2,
+      "radicals": null,
+      "strokes": null,
+      "translations_eng_all": [
+        "younger sister",
+        "fig. younger woman (esp. girl friend or rival)",
+        "CL:個|个[gè]"
+      ]
+    },
+    "meaning_vi": "em gái"
+  },
+  {
+    "id": "ecdae717-b1a7-4d3b-b8dd-dfc90355b76e",
+    "hsk_level_code": "hsk2",
+    "lesson_number": 8,
+    "chinese_word": "门",
+    "pinyin": "mén",
+    "meaning": "gate; door",
+    "example_sentence": null,
+    "example_pinyin": null,
+    "example_meaning": null,
+    "word_type": null,
+    "audio_url": null,
+    "display_order": 3,
+    "meta": {
+      "source_id": 223,
+      "source_level": 2,
+      "radicals": "门",
+      "strokes": "3",
+      "translations_eng_all": [
+        "gate",
+        "door",
+        "CL:扇[shàn]",
+        "gateway",
+        "doorway",
+        "CL:個|个[gè]",
+        "opening",
+        "valve",
+        "switch",
+        "way to do something",
+        "knack",
+        "family",
+        "house",
+        "(religious) sect",
+        "school (of thought)",
+        "class",
+        "category",
+        "phylum or division (taxonomy)",
+        "classifier for large guns",
+        "classifier for lessons",
+        "subjects",
+        "branches of technology"
+      ]
+    },
+    "meaning_vi": "cửa"
+  },
+  {
+    "id": "7744f68a-838e-4b02-a16a-043b443b58db",
+    "hsk_level_code": "hsk2",
+    "lesson_number": 8,
+    "chinese_word": "男人",
+    "pinyin": "nán rén",
+    "meaning": "a man; a male",
+    "example_sentence": null,
+    "example_pinyin": null,
+    "example_meaning": null,
+    "word_type": null,
+    "audio_url": null,
+    "display_order": 4,
+    "meta": {
+      "source_id": 224,
+      "source_level": 2,
+      "radicals": null,
+      "strokes": null,
+      "translations_eng_all": [
+        "a man",
+        "a male",
+        "men",
+        "CL:個|个[gè]"
+      ]
+    },
+    "meaning_vi": "đàn ông"
+  },
+  {
+    "id": "f99d0670-c9fe-4a72-9d2d-afd37a64d217",
+    "hsk_level_code": "hsk2",
+    "lesson_number": 8,
+    "chinese_word": "您",
+    "pinyin": "nín",
+    "meaning": "you (courteous, as opposed to informal 你)",
+    "example_sentence": null,
+    "example_pinyin": null,
+    "example_meaning": null,
+    "word_type": null,
+    "audio_url": null,
+    "display_order": 5,
+    "meta": {
+      "source_id": 225,
+      "source_level": 2,
+      "radicals": "心",
+      "strokes": "11",
+      "translations_eng_all": [
+        "you (courteous, as opposed to informal 你)"
+      ]
+    },
+    "meaning_vi": "ngài, quý vị"
+  },
+  {
+    "id": "45982915-9be1-447b-8178-5da76188b368",
+    "hsk_level_code": "hsk2",
+    "lesson_number": 8,
+    "chinese_word": "牛奶",
+    "pinyin": "niú nǎi",
+    "meaning": "cow's milk; CL:瓶",
+    "example_sentence": null,
+    "example_pinyin": null,
+    "example_meaning": null,
+    "word_type": null,
+    "audio_url": null,
+    "display_order": 6,
+    "meta": {
+      "source_id": 226,
+      "source_level": 2,
+      "radicals": null,
+      "strokes": null,
+      "translations_eng_all": [
+        "cow's milk",
+        "CL:瓶",
+        "杯[bēi]"
+      ]
+    },
+    "meaning_vi": "sữa bò"
+  },
+  {
+    "id": "6ff6b0a2-d170-4683-b184-dc6580ed6688",
+    "hsk_level_code": "hsk2",
+    "lesson_number": 8,
+    "chinese_word": "女人",
+    "pinyin": "nǚ rén",
+    "meaning": "woman",
+    "example_sentence": null,
+    "example_pinyin": null,
+    "example_meaning": null,
+    "word_type": null,
+    "audio_url": null,
+    "display_order": 7,
+    "meta": {
+      "source_id": 227,
+      "source_level": 2,
+      "radicals": null,
+      "strokes": null,
+      "translations_eng_all": [
+        "woman"
+      ]
+    },
+    "meaning_vi": "phụ nữ"
+  },
+  {
+    "id": "c6543284-2d98-4f86-83a2-329ea4e91485",
+    "hsk_level_code": "hsk2",
+    "lesson_number": 8,
+    "chinese_word": "旁边",
+    "pinyin": "páng biān",
+    "meaning": "lateral; side",
+    "example_sentence": null,
+    "example_pinyin": null,
+    "example_meaning": null,
+    "word_type": null,
+    "audio_url": null,
+    "display_order": 8,
+    "meta": {
+      "source_id": 228,
+      "source_level": 2,
+      "radicals": null,
+      "strokes": null,
+      "translations_eng_all": [
+        "lateral",
+        "side",
+        "to the side",
+        "beside"
+      ]
+    },
+    "meaning_vi": "bên cạnh"
+  },
+  {
+    "id": "0c3dbba7-cad1-4f8f-bb85-f1443df8a3a1",
+    "hsk_level_code": "hsk2",
+    "lesson_number": 8,
+    "chinese_word": "跑步",
+    "pinyin": "pǎo bù",
+    "meaning": "to walk quickly; to march",
+    "example_sentence": null,
+    "example_pinyin": null,
+    "example_meaning": null,
+    "word_type": null,
+    "audio_url": null,
+    "display_order": 9,
+    "meta": {
+      "source_id": 229,
+      "source_level": 2,
+      "radicals": null,
+      "strokes": null,
+      "translations_eng_all": [
+        "to walk quickly",
+        "to march",
+        "to run"
+      ]
+    },
+    "meaning_vi": "chạy bộ"
+  },
+  {
+    "id": "569cae27-6047-412c-9864-a6fbcc5185bd",
+    "hsk_level_code": "hsk2",
+    "lesson_number": 8,
+    "chinese_word": "便宜",
+    "pinyin": "pián yi",
+    "meaning": "small advantages; to let sb off lightly",
+    "example_sentence": null,
+    "example_pinyin": null,
+    "example_meaning": null,
+    "word_type": null,
+    "audio_url": null,
+    "display_order": 10,
+    "meta": {
+      "source_id": 230,
+      "source_level": 2,
+      "radicals": null,
+      "strokes": null,
+      "translations_eng_all": [
+        "small advantages",
+        "to let sb off lightly",
+        "cheap",
+        "inexpensive"
+      ]
+    },
+    "meaning_vi": "rẻ"
+  },
+  {
+    "id": "c874dded-e54e-4212-95ec-1095a1e7c661",
+    "hsk_level_code": "hsk2",
+    "lesson_number": 9,
+    "chinese_word": "票",
+    "pinyin": "piào",
+    "meaning": "ticket; ballot",
+    "example_sentence": null,
+    "example_pinyin": null,
+    "example_meaning": null,
+    "word_type": null,
+    "audio_url": null,
+    "display_order": 1,
+    "meta": {
+      "source_id": 231,
+      "source_level": 2,
+      "radicals": "示",
+      "strokes": "11",
+      "translations_eng_all": [
+        "ticket",
+        "ballot",
+        "bank note",
+        "CL:張|张[zhāng]",
+        "person held for ransom",
+        "amateur performance of Chinese opera",
+        "classifier for shipments and business transactions (topolect)"
+      ]
+    },
+    "meaning_vi": "vé"
+  },
+  {
+    "id": "c175a7c7-3875-47bb-a607-f87fa5678d6e",
+    "hsk_level_code": "hsk2",
+    "lesson_number": 9,
+    "chinese_word": "妻子",
+    "pinyin": "qī zi",
+    "meaning": "wife; CL:個|个[gè]",
+    "example_sentence": null,
+    "example_pinyin": null,
+    "example_meaning": null,
+    "word_type": null,
+    "audio_url": null,
+    "display_order": 2,
+    "meta": {
+      "source_id": 232,
+      "source_level": 2,
+      "radicals": null,
+      "strokes": null,
+      "translations_eng_all": [
+        "wife",
+        "CL:個|个[gè]"
+      ]
+    },
+    "meaning_vi": "vợ"
+  },
+  {
+    "id": "3f88e028-793f-42b1-b976-f631673f00ed",
+    "hsk_level_code": "hsk2",
+    "lesson_number": 9,
+    "chinese_word": "起床",
+    "pinyin": "qǐ chuáng",
+    "meaning": "to get out of bed; to get up",
+    "example_sentence": null,
+    "example_pinyin": null,
+    "example_meaning": null,
+    "word_type": null,
+    "audio_url": null,
+    "display_order": 3,
+    "meta": {
+      "source_id": 233,
+      "source_level": 2,
+      "radicals": null,
+      "strokes": null,
+      "translations_eng_all": [
+        "to get out of bed",
+        "to get up"
+      ]
+    },
+    "meaning_vi": "thức dậy"
+  },
+  {
+    "id": "119f72d3-d4e5-4ed2-a8f7-c275d44c6d3c",
+    "hsk_level_code": "hsk2",
+    "lesson_number": 9,
+    "chinese_word": "千",
+    "pinyin": "qiān",
+    "meaning": "a swing",
+    "example_sentence": null,
+    "example_pinyin": null,
+    "example_meaning": null,
+    "word_type": null,
+    "audio_url": null,
+    "display_order": 4,
+    "meta": {
+      "source_id": 234,
+      "source_level": 2,
+      "radicals": "十",
+      "strokes": "3",
+      "translations_eng_all": [
+        "a swing"
+      ]
+    },
+    "meaning_vi": "nghìn"
+  },
+  {
+    "id": "a4cdd89d-107a-45cd-906b-5f347460a1f1",
+    "hsk_level_code": "hsk2",
+    "lesson_number": 9,
+    "chinese_word": "晴",
+    "pinyin": "qíng",
+    "meaning": "clear; fine (weather)",
+    "example_sentence": null,
+    "example_pinyin": null,
+    "example_meaning": null,
+    "word_type": null,
+    "audio_url": null,
+    "display_order": 5,
+    "meta": {
+      "source_id": 235,
+      "source_level": 2,
+      "radicals": "日",
+      "strokes": "12",
+      "translations_eng_all": [
+        "clear",
+        "fine (weather)"
+      ]
+    },
+    "meaning_vi": "nắng, trời quang"
+  },
+  {
+    "id": "ff7f92a3-5309-4d68-a20d-2a266de483ac",
+    "hsk_level_code": "hsk2",
+    "lesson_number": 9,
+    "chinese_word": "去年",
+    "pinyin": "qù nián",
+    "meaning": "last year",
+    "example_sentence": null,
+    "example_pinyin": null,
+    "example_meaning": null,
+    "word_type": null,
+    "audio_url": null,
+    "display_order": 6,
+    "meta": {
+      "source_id": 236,
+      "source_level": 2,
+      "radicals": null,
+      "strokes": null,
+      "translations_eng_all": [
+        "last year"
+      ]
+    },
+    "meaning_vi": null
+  },
+  {
+    "id": "2c6aa896-e5ca-42d4-811d-798e31e3423e",
+    "hsk_level_code": "hsk2",
+    "lesson_number": 9,
+    "chinese_word": "让",
+    "pinyin": "ràng",
+    "meaning": "to yield; to permit",
+    "example_sentence": null,
+    "example_pinyin": null,
+    "example_meaning": null,
+    "word_type": null,
+    "audio_url": null,
+    "display_order": 7,
+    "meta": {
+      "source_id": 237,
+      "source_level": 2,
+      "radicals": "讠",
+      "strokes": "5",
+      "translations_eng_all": [
+        "to yield",
+        "to permit",
+        "to let sb do sth",
+        "to have sb do sth"
+      ]
+    },
+    "meaning_vi": "để, cho phép"
+  },
+  {
+    "id": "9cfdf149-99c2-4c61-bf09-a5ae26fef39d",
+    "hsk_level_code": "hsk2",
+    "lesson_number": 9,
+    "chinese_word": "上班",
+    "pinyin": "shàng bān",
+    "meaning": "to go to work; to be on duty",
+    "example_sentence": null,
+    "example_pinyin": null,
+    "example_meaning": null,
+    "word_type": null,
+    "audio_url": null,
+    "display_order": 8,
+    "meta": {
+      "source_id": 238,
+      "source_level": 2,
+      "radicals": null,
+      "strokes": null,
+      "translations_eng_all": [
+        "to go to work",
+        "to be on duty",
+        "to start work",
+        "to go to the office"
+      ]
+    },
+    "meaning_vi": "đi làm"
+  },
+  {
+    "id": "bb7bd1a5-42f1-4729-aad7-10002b037ed9",
+    "hsk_level_code": "hsk2",
+    "lesson_number": 9,
+    "chinese_word": "身体",
+    "pinyin": "shēn tǐ",
+    "meaning": "(human) body; health",
+    "example_sentence": null,
+    "example_pinyin": null,
+    "example_meaning": null,
+    "word_type": null,
+    "audio_url": null,
+    "display_order": 9,
+    "meta": {
+      "source_id": 239,
+      "source_level": 2,
+      "radicals": null,
+      "strokes": null,
+      "translations_eng_all": [
+        "(human) body",
+        "health",
+        "CL:個|个[gè]"
+      ]
+    },
+    "meaning_vi": "cơ thể, sức khỏe"
+  },
+  {
+    "id": "6a714451-9aab-4ced-b804-5aec1ba5d329",
+    "hsk_level_code": "hsk2",
+    "lesson_number": 9,
+    "chinese_word": "生病",
+    "pinyin": "shēng bìng",
+    "meaning": "to fall ill",
+    "example_sentence": null,
+    "example_pinyin": null,
+    "example_meaning": null,
+    "word_type": null,
+    "audio_url": null,
+    "display_order": 10,
+    "meta": {
+      "source_id": 240,
+      "source_level": 2,
+      "radicals": null,
+      "strokes": null,
+      "translations_eng_all": [
+        "to fall ill"
+      ]
+    },
+    "meaning_vi": "bị ốm, bệnh"
+  },
+  {
+    "id": "7522e180-80eb-4424-8461-f79b116a32e9",
+    "hsk_level_code": "hsk2",
+    "lesson_number": 10,
+    "chinese_word": "生日",
+    "pinyin": "shēng rì",
+    "meaning": "birthday; CL:個|个[gè]",
+    "example_sentence": null,
+    "example_pinyin": null,
+    "example_meaning": null,
+    "word_type": null,
+    "audio_url": null,
+    "display_order": 1,
+    "meta": {
+      "source_id": 241,
+      "source_level": 2,
+      "radicals": null,
+      "strokes": null,
+      "translations_eng_all": [
+        "birthday",
+        "CL:個|个[gè]"
+      ]
+    },
+    "meaning_vi": "sinh nhật"
+  },
+  {
+    "id": "3204a54f-f15f-4e1a-9c4a-4b8a5d952884",
+    "hsk_level_code": "hsk2",
+    "lesson_number": 10,
+    "chinese_word": "时间",
+    "pinyin": "shí jiān",
+    "meaning": "time; period",
+    "example_sentence": null,
+    "example_pinyin": null,
+    "example_meaning": null,
+    "word_type": null,
+    "audio_url": null,
+    "display_order": 2,
+    "meta": {
+      "source_id": 242,
+      "source_level": 2,
+      "radicals": null,
+      "strokes": null,
+      "translations_eng_all": [
+        "time",
+        "period",
+        "CL:段[duàn]"
+      ]
+    },
+    "meaning_vi": "thời gian"
+  },
+  {
+    "id": "2af0113c-f7ac-4114-a14d-4f64d01278de",
+    "hsk_level_code": "hsk2",
+    "lesson_number": 10,
+    "chinese_word": "事情",
+    "pinyin": "shì qing",
+    "meaning": "affair; matter",
+    "example_sentence": null,
+    "example_pinyin": null,
+    "example_meaning": null,
+    "word_type": null,
+    "audio_url": null,
+    "display_order": 3,
+    "meta": {
+      "source_id": 243,
+      "source_level": 2,
+      "radicals": null,
+      "strokes": null,
+      "translations_eng_all": [
+        "affair",
+        "matter",
+        "thing",
+        "business",
+        "CL:件",
+        "樁|桩[zhuāng]"
+      ]
+    },
+    "meaning_vi": "việc, chuyện"
+  },
+  {
+    "id": "e56ed579-6bd4-4588-a8ba-0123f48a1e2f",
+    "hsk_level_code": "hsk2",
+    "lesson_number": 10,
+    "chinese_word": "手表",
+    "pinyin": "shǒu biǎo",
+    "meaning": "wrist watch; CL:塊|块",
+    "example_sentence": null,
+    "example_pinyin": null,
+    "example_meaning": null,
+    "word_type": null,
+    "audio_url": null,
+    "display_order": 4,
+    "meta": {
+      "source_id": 244,
+      "source_level": 2,
+      "radicals": null,
+      "strokes": null,
+      "translations_eng_all": [
+        "wrist watch",
+        "CL:塊|块",
+        "隻|只",
+        "個|个[gè]"
+      ]
+    },
+    "meaning_vi": "đồng hồ đeo tay"
+  },
+  {
+    "id": "4deaac76-9ca4-4326-8aca-62bf3802eda3",
+    "hsk_level_code": "hsk2",
+    "lesson_number": 10,
+    "chinese_word": "手机",
+    "pinyin": "shǒu jī",
+    "meaning": "cell phone; mobile phone",
+    "example_sentence": null,
+    "example_pinyin": null,
+    "example_meaning": null,
+    "word_type": null,
+    "audio_url": null,
+    "display_order": 5,
+    "meta": {
+      "source_id": 245,
+      "source_level": 2,
+      "radicals": null,
+      "strokes": null,
+      "translations_eng_all": [
+        "cell phone",
+        "mobile phone",
+        "CL:部",
+        "支[zhī]"
+      ]
+    },
+    "meaning_vi": "điện thoại di động"
+  },
+  {
+    "id": "40efff3d-573d-4156-86f4-6c98edea1dc9",
+    "hsk_level_code": "hsk2",
+    "lesson_number": 10,
+    "chinese_word": "送",
+    "pinyin": "sòng",
+    "meaning": "to deliver; to carry",
+    "example_sentence": null,
+    "example_pinyin": null,
+    "example_meaning": null,
+    "word_type": null,
+    "audio_url": null,
+    "display_order": 6,
+    "meta": {
+      "source_id": 246,
+      "source_level": 2,
+      "radicals": "辶",
+      "strokes": "9",
+      "translations_eng_all": [
+        "to deliver",
+        "to carry",
+        "to give (as a present)",
+        "to present (with)",
+        "to see off",
+        "to send"
+      ]
+    },
+    "meaning_vi": "tặng, gửi"
+  },
+  {
+    "id": "79c8bddf-783f-452f-89c2-095f945c47b1",
+    "hsk_level_code": "hsk2",
+    "lesson_number": 10,
+    "chinese_word": "所以",
+    "pinyin": "suǒ yǐ",
+    "meaning": "therefore; as a result",
+    "example_sentence": null,
+    "example_pinyin": null,
+    "example_meaning": null,
+    "word_type": null,
+    "audio_url": null,
+    "display_order": 7,
+    "meta": {
+      "source_id": 247,
+      "source_level": 2,
+      "radicals": null,
+      "strokes": null,
+      "translations_eng_all": [
+        "therefore",
+        "as a result",
+        "so"
+      ]
+    },
+    "meaning_vi": null
+  },
+  {
+    "id": "09b02958-1996-4d0a-99cb-d0a9c121792c",
+    "hsk_level_code": "hsk2",
+    "lesson_number": 10,
+    "chinese_word": "它",
+    "pinyin": "tā",
+    "meaning": "it",
+    "example_sentence": null,
+    "example_pinyin": null,
+    "example_meaning": null,
+    "word_type": null,
+    "audio_url": null,
+    "display_order": 8,
+    "meta": {
+      "source_id": 248,
+      "source_level": 2,
+      "radicals": "宀",
+      "strokes": "5",
+      "translations_eng_all": [
+        "it"
+      ]
+    },
+    "meaning_vi": "nó (vật)"
+  },
+  {
+    "id": "f45fd609-7346-497b-b1b9-9f1d3b9870c4",
+    "hsk_level_code": "hsk2",
+    "lesson_number": 10,
+    "chinese_word": "踢",
+    "pinyin": "tī",
+    "meaning": "to kick; to play (e.g. soccer)",
+    "example_sentence": null,
+    "example_pinyin": null,
+    "example_meaning": null,
+    "word_type": null,
+    "audio_url": null,
+    "display_order": 9,
+    "meta": {
+      "source_id": 249,
+      "source_level": 2,
+      "radicals": "足",
+      "strokes": "15",
+      "translations_eng_all": [
+        "to kick",
+        "to play (e.g. soccer)"
+      ]
+    },
+    "meaning_vi": null
+  },
+  {
+    "id": "ac4e0b3b-3fbc-4fbe-8e78-5f929c3d78ba",
+    "hsk_level_code": "hsk2",
+    "lesson_number": 10,
+    "chinese_word": "题",
+    "pinyin": "tí",
+    "meaning": "topic; problem for discussion",
+    "example_sentence": null,
+    "example_pinyin": null,
+    "example_meaning": null,
+    "word_type": null,
+    "audio_url": null,
+    "display_order": 10,
+    "meta": {
+      "source_id": 250,
+      "source_level": 2,
+      "radicals": "页",
+      "strokes": "15",
+      "translations_eng_all": [
+        "topic",
+        "problem for discussion",
+        "exam question",
+        "subject",
+        "to inscribe",
+        "to mention",
+        "CL:個|个",
+        "道[dào]"
+      ]
+    },
+    "meaning_vi": "câu hỏi, đề bài"
+  },
+  {
+    "id": "0ab9a248-2754-42b3-8d10-09d79bda69f7",
+    "hsk_level_code": "hsk2",
+    "lesson_number": 11,
+    "chinese_word": "跳舞",
+    "pinyin": "tiào wǔ",
+    "meaning": "to dance",
+    "example_sentence": null,
+    "example_pinyin": null,
+    "example_meaning": null,
+    "word_type": null,
+    "audio_url": null,
+    "display_order": 1,
+    "meta": {
+      "source_id": 251,
+      "source_level": 2,
+      "radicals": null,
+      "strokes": null,
+      "translations_eng_all": [
+        "to dance"
+      ]
+    },
+    "meaning_vi": "nhảy, khiêu vũ"
+  },
+  {
+    "id": "e4c238bd-da24-4809-9b04-1c9c21c0ea9b",
+    "hsk_level_code": "hsk2",
+    "lesson_number": 11,
+    "chinese_word": "外",
+    "pinyin": "wài",
+    "meaning": "outside; in addition",
+    "example_sentence": null,
+    "example_pinyin": null,
+    "example_meaning": null,
+    "word_type": null,
+    "audio_url": null,
+    "display_order": 2,
+    "meta": {
+      "source_id": 252,
+      "source_level": 2,
+      "radicals": "夕",
+      "strokes": "5",
+      "translations_eng_all": [
+        "outside",
+        "in addition",
+        "foreign",
+        "external"
+      ]
+    },
+    "meaning_vi": "ngoài"
+  },
+  {
+    "id": "4c94fef1-b0dd-4eab-9f50-c2e71b839a0b",
+    "hsk_level_code": "hsk2",
+    "lesson_number": 11,
+    "chinese_word": "完",
+    "pinyin": "wán",
+    "meaning": "to finish; to be over",
+    "example_sentence": null,
+    "example_pinyin": null,
+    "example_meaning": null,
+    "word_type": null,
+    "audio_url": null,
+    "display_order": 3,
+    "meta": {
+      "source_id": 253,
+      "source_level": 2,
+      "radicals": "宀",
+      "strokes": "7",
+      "translations_eng_all": [
+        "to finish",
+        "to be over",
+        "whole",
+        "complete",
+        "entire"
+      ]
+    },
+    "meaning_vi": "xong, hết"
+  },
+  {
+    "id": "ca45cea9-f7a7-422e-b9f8-f8d33a55f801",
+    "hsk_level_code": "hsk2",
+    "lesson_number": 11,
+    "chinese_word": "玩",
+    "pinyin": "wán",
+    "meaning": "toy; sth used for amusement",
+    "example_sentence": null,
+    "example_pinyin": null,
+    "example_meaning": null,
+    "word_type": null,
+    "audio_url": null,
+    "display_order": 4,
+    "meta": {
+      "source_id": 254,
+      "source_level": 2,
+      "radicals": "王",
+      "strokes": "8",
+      "translations_eng_all": [
+        "toy",
+        "sth used for amusement",
+        "curio or antique (Taiwan pr. )",
+        "to play",
+        "to have fun",
+        "to trifle with",
+        "to keep sth for entertainment"
+      ]
+    },
+    "meaning_vi": "chơi"
+  },
+  {
+    "id": "15011eb1-a3b4-4a2e-aaa4-2a34e3a32f7d",
+    "hsk_level_code": "hsk2",
+    "lesson_number": 11,
+    "chinese_word": "晚上",
+    "pinyin": "wǎn shang",
+    "meaning": "evening; night",
+    "example_sentence": null,
+    "example_pinyin": null,
+    "example_meaning": null,
+    "word_type": null,
+    "audio_url": null,
+    "display_order": 5,
+    "meta": {
+      "source_id": 255,
+      "source_level": 2,
+      "radicals": null,
+      "strokes": null,
+      "translations_eng_all": [
+        "evening",
+        "night",
+        "CL:個|个[gè]",
+        "in the evening"
+      ]
+    },
+    "meaning_vi": "buổi tối"
+  },
+  {
+    "id": "c6269aad-4d63-429a-b741-46de7fbcc5b0",
+    "hsk_level_code": "hsk2",
+    "lesson_number": 11,
+    "chinese_word": "为",
+    "pinyin": "wèi",
+    "meaning": "variant of 為|为; because of",
+    "example_sentence": null,
+    "example_pinyin": null,
+    "example_meaning": null,
+    "word_type": null,
+    "audio_url": null,
+    "display_order": 6,
+    "meta": {
+      "source_id": 256,
+      "source_level": 2,
+      "radicals": "丶",
+      "strokes": "4",
+      "translations_eng_all": [
+        "variant of 為|为",
+        "because of",
+        "for",
+        "to"
+      ]
+    },
+    "meaning_vi": "vì, cho"
+  },
+  {
+    "id": "19c505b9-5ad4-4c22-97ea-cdf95c229180",
+    "hsk_level_code": "hsk2",
+    "lesson_number": 11,
+    "chinese_word": "问",
+    "pinyin": "wèn",
+    "meaning": "to ask",
+    "example_sentence": null,
+    "example_pinyin": null,
+    "example_meaning": null,
+    "word_type": null,
+    "audio_url": null,
+    "display_order": 7,
+    "meta": {
+      "source_id": 257,
+      "source_level": 2,
+      "radicals": "门",
+      "strokes": "6",
+      "translations_eng_all": [
+        "to ask"
+      ]
+    },
+    "meaning_vi": "hỏi"
+  },
+  {
+    "id": "92899e73-2f5c-4765-b0b5-92cd6b37f949",
+    "hsk_level_code": "hsk2",
+    "lesson_number": 11,
+    "chinese_word": "问题",
+    "pinyin": "wèn tí",
+    "meaning": "question; problem",
+    "example_sentence": null,
+    "example_pinyin": null,
+    "example_meaning": null,
+    "word_type": null,
+    "audio_url": null,
+    "display_order": 8,
+    "meta": {
+      "source_id": 258,
+      "source_level": 2,
+      "radicals": null,
+      "strokes": null,
+      "translations_eng_all": [
+        "question",
+        "problem",
+        "issue",
+        "topic",
+        "CL:個|个[gè]"
+      ]
+    },
+    "meaning_vi": "câu hỏi, vấn đề"
+  },
+  {
+    "id": "9bb72c73-ccb0-403b-b208-4821e7c05dbc",
+    "hsk_level_code": "hsk2",
+    "lesson_number": 11,
+    "chinese_word": "西瓜",
+    "pinyin": "xī guā",
+    "meaning": "watermelon; CL:條|条[tiáo]",
+    "example_sentence": null,
+    "example_pinyin": null,
+    "example_meaning": null,
+    "word_type": null,
+    "audio_url": null,
+    "display_order": 9,
+    "meta": {
+      "source_id": 259,
+      "source_level": 2,
+      "radicals": null,
+      "strokes": null,
+      "translations_eng_all": [
+        "watermelon",
+        "CL:條|条[tiáo]"
+      ]
+    },
+    "meaning_vi": "dưa hấu"
+  },
+  {
+    "id": "68648214-d3cd-42d7-b1cc-6bc8644ff2ce",
+    "hsk_level_code": "hsk2",
+    "lesson_number": 11,
+    "chinese_word": "希望",
+    "pinyin": "xī wàng",
+    "meaning": "to wish for; to desire",
+    "example_sentence": null,
+    "example_pinyin": null,
+    "example_meaning": null,
+    "word_type": null,
+    "audio_url": null,
+    "display_order": 10,
+    "meta": {
+      "source_id": 260,
+      "source_level": 2,
+      "radicals": null,
+      "strokes": null,
+      "translations_eng_all": [
+        "to wish for",
+        "to desire",
+        "hope CL:個|个[gè]"
+      ]
+    },
+    "meaning_vi": "hy vọng"
+  },
+  {
+    "id": "794b4652-c824-40d5-8afa-be38bba9e0de",
+    "hsk_level_code": "hsk2",
+    "lesson_number": 12,
+    "chinese_word": "洗",
+    "pinyin": "xǐ",
+    "meaning": "to wash; to bathe",
+    "example_sentence": null,
+    "example_pinyin": null,
+    "example_meaning": null,
+    "word_type": null,
+    "audio_url": null,
+    "display_order": 1,
+    "meta": {
+      "source_id": 261,
+      "source_level": 2,
+      "radicals": "氵",
+      "strokes": "9",
+      "translations_eng_all": [
+        "to wash",
+        "to bathe",
+        "to develop (photo)"
+      ]
+    },
+    "meaning_vi": "rửa, giặt"
+  },
+  {
+    "id": "bfc053a1-84b4-4755-9316-3bf3da68a301",
+    "hsk_level_code": "hsk2",
+    "lesson_number": 12,
+    "chinese_word": "向",
+    "pinyin": "xiàng",
+    "meaning": "towards; to face",
+    "example_sentence": null,
+    "example_pinyin": null,
+    "example_meaning": null,
+    "word_type": null,
+    "audio_url": null,
+    "display_order": 2,
+    "meta": {
+      "source_id": 262,
+      "source_level": 2,
+      "radicals": "口",
+      "strokes": "6",
+      "translations_eng_all": [
+        "towards",
+        "to face",
+        "to turn towards",
+        "direction",
+        "to support",
+        "to side with",
+        "shortly before",
+        "formerly",
+        "always",
+        "all along"
+      ]
+    },
+    "meaning_vi": "về phía, hướng"
+  },
+  {
+    "id": "b1c3ed69-b354-4ca3-b45e-6a332f1be1c2",
+    "hsk_level_code": "hsk2",
+    "lesson_number": 12,
+    "chinese_word": "小时",
+    "pinyin": "xiǎo shí",
+    "meaning": "hour; CL:個|个[gè]",
+    "example_sentence": null,
+    "example_pinyin": null,
+    "example_meaning": null,
+    "word_type": null,
+    "audio_url": null,
+    "display_order": 3,
+    "meta": {
+      "source_id": 263,
+      "source_level": 2,
+      "radicals": null,
+      "strokes": null,
+      "translations_eng_all": [
+        "hour",
+        "CL:個|个[gè]"
+      ]
+    },
+    "meaning_vi": "giờ (thời lượng)"
+  },
+  {
+    "id": "0aac6451-3bef-4d28-a574-ab692cfc15cc",
+    "hsk_level_code": "hsk2",
+    "lesson_number": 12,
+    "chinese_word": "笑",
+    "pinyin": "xiào",
+    "meaning": "laugh; smile",
+    "example_sentence": null,
+    "example_pinyin": null,
+    "example_meaning": null,
+    "word_type": null,
+    "audio_url": null,
+    "display_order": 4,
+    "meta": {
+      "source_id": 264,
+      "source_level": 2,
+      "radicals": "竹",
+      "strokes": "10",
+      "translations_eng_all": [
+        "laugh",
+        "smile",
+        "CL:個|个[gè]"
+      ]
+    },
+    "meaning_vi": "cười"
+  },
+  {
+    "id": "23cf437d-671d-4ca8-bc14-a9549ac8d7b8",
+    "hsk_level_code": "hsk2",
+    "lesson_number": 12,
+    "chinese_word": "新",
+    "pinyin": "xīn",
+    "meaning": "new; newly",
+    "example_sentence": null,
+    "example_pinyin": null,
+    "example_meaning": null,
+    "word_type": null,
+    "audio_url": null,
+    "display_order": 5,
+    "meta": {
+      "source_id": 265,
+      "source_level": 2,
+      "radicals": "斤",
+      "strokes": "13",
+      "translations_eng_all": [
+        "new",
+        "newly",
+        "meso- (chemistry)"
+      ]
+    },
+    "meaning_vi": "mới"
+  },
+  {
+    "id": "941e6cb0-403c-46a3-a329-0ae97b83f6fe",
+    "hsk_level_code": "hsk2",
+    "lesson_number": 12,
+    "chinese_word": "姓",
+    "pinyin": "xìng",
+    "meaning": "family name; surname",
+    "example_sentence": null,
+    "example_pinyin": null,
+    "example_meaning": null,
+    "word_type": null,
+    "audio_url": null,
+    "display_order": 6,
+    "meta": {
+      "source_id": 266,
+      "source_level": 2,
+      "radicals": "女",
+      "strokes": "8",
+      "translations_eng_all": [
+        "family name",
+        "surname",
+        "name",
+        "CL:個|个[gè]"
+      ]
+    },
+    "meaning_vi": "họ"
+  },
+  {
+    "id": "4613473b-b4f6-46c5-bec6-3e3210a80b22",
+    "hsk_level_code": "hsk2",
+    "lesson_number": 12,
+    "chinese_word": "休息",
+    "pinyin": "xiū xi",
+    "meaning": "rest; to rest",
+    "example_sentence": null,
+    "example_pinyin": null,
+    "example_meaning": null,
+    "word_type": null,
+    "audio_url": null,
+    "display_order": 7,
+    "meta": {
+      "source_id": 267,
+      "source_level": 2,
+      "radicals": null,
+      "strokes": null,
+      "translations_eng_all": [
+        "rest",
+        "to rest"
+      ]
+    },
+    "meaning_vi": "nghỉ ngơi"
+  },
+  {
+    "id": "48864398-c661-4d73-ab19-ca8cdfbcb8cc",
+    "hsk_level_code": "hsk2",
+    "lesson_number": 12,
+    "chinese_word": "雪",
+    "pinyin": "xuě",
+    "meaning": "snow; snowfall",
+    "example_sentence": null,
+    "example_pinyin": null,
+    "example_meaning": null,
+    "word_type": null,
+    "audio_url": null,
+    "display_order": 8,
+    "meta": {
+      "source_id": 268,
+      "source_level": 2,
+      "radicals": "雨",
+      "strokes": "11",
+      "translations_eng_all": [
+        "snow",
+        "snowfall",
+        "CL:場|场[cháng]",
+        "to have the appearance of snow",
+        "to wipe away",
+        "off or out",
+        "to clean"
+      ]
+    },
+    "meaning_vi": "tuyết"
+  },
+  {
+    "id": "58c81e4d-b90f-499a-8c7a-4efd7fcf9af6",
+    "hsk_level_code": "hsk2",
+    "lesson_number": 12,
+    "chinese_word": "颜色",
+    "pinyin": "yán sè",
+    "meaning": "color; CL:個|个[gè]",
+    "example_sentence": null,
+    "example_pinyin": null,
+    "example_meaning": null,
+    "word_type": null,
+    "audio_url": null,
+    "display_order": 9,
+    "meta": {
+      "source_id": 269,
+      "source_level": 2,
+      "radicals": null,
+      "strokes": null,
+      "translations_eng_all": [
+        "color",
+        "CL:個|个[gè]"
+      ]
+    },
+    "meaning_vi": "màu sắc"
+  },
+  {
+    "id": "65e9723b-a0b0-418e-9cec-65bb79d28bc3",
+    "hsk_level_code": "hsk2",
+    "lesson_number": 12,
+    "chinese_word": "眼睛",
+    "pinyin": "yǎn jing",
+    "meaning": "eye; CL:隻|只",
+    "example_sentence": null,
+    "example_pinyin": null,
+    "example_meaning": null,
+    "word_type": null,
+    "audio_url": null,
+    "display_order": 10,
+    "meta": {
+      "source_id": 270,
+      "source_level": 2,
+      "radicals": null,
+      "strokes": null,
+      "translations_eng_all": [
+        "eye",
+        "CL:隻|只",
+        "雙|双[shuāng]"
+      ]
+    },
+    "meaning_vi": "mắt"
+  },
+  {
+    "id": "a58dc415-0b18-45a9-9922-951cff27ffec",
+    "hsk_level_code": "hsk2",
+    "lesson_number": 13,
+    "chinese_word": "羊肉",
+    "pinyin": "yáng ròu",
+    "meaning": "mutton",
+    "example_sentence": null,
+    "example_pinyin": null,
+    "example_meaning": null,
+    "word_type": null,
+    "audio_url": null,
+    "display_order": 1,
+    "meta": {
+      "source_id": 271,
+      "source_level": 2,
+      "radicals": null,
+      "strokes": null,
+      "translations_eng_all": [
+        "mutton"
+      ]
+    },
+    "meaning_vi": "thịt cừu"
+  },
+  {
+    "id": "dff91b46-79bf-4d28-ba5c-dc0d696817b5",
+    "hsk_level_code": "hsk2",
+    "lesson_number": 13,
+    "chinese_word": "药",
+    "pinyin": "yào",
+    "meaning": "medicine; drug",
+    "example_sentence": null,
+    "example_pinyin": null,
+    "example_meaning": null,
+    "word_type": null,
+    "audio_url": null,
+    "display_order": 2,
+    "meta": {
+      "source_id": 272,
+      "source_level": 2,
+      "radicals": "艹",
+      "strokes": "9",
+      "translations_eng_all": [
+        "medicine",
+        "drug",
+        "cure",
+        "CL:種|种",
+        "服[fù]"
+      ]
+    },
+    "meaning_vi": "thuốc"
+  },
+  {
+    "id": "21a631e6-c57f-47ab-a37a-4d343ca661d2",
+    "hsk_level_code": "hsk2",
+    "lesson_number": 13,
+    "chinese_word": "要",
+    "pinyin": "yào",
+    "meaning": "important; vital",
+    "example_sentence": null,
+    "example_pinyin": null,
+    "example_meaning": null,
+    "word_type": null,
+    "audio_url": null,
+    "display_order": 3,
+    "meta": {
+      "source_id": 273,
+      "source_level": 2,
+      "radicals": "覀",
+      "strokes": "9",
+      "translations_eng_all": [
+        "important",
+        "vital",
+        "to want",
+        "will",
+        "going to (as future auxiliary)",
+        "may",
+        "must",
+        "(used in a comparison) must be",
+        "probably"
+      ]
+    },
+    "meaning_vi": "muốn, cần"
+  },
+  {
+    "id": "b442f73a-12f5-4f75-a95e-da89bf5bb487",
+    "hsk_level_code": "hsk2",
+    "lesson_number": 13,
+    "chinese_word": "也",
+    "pinyin": "yě",
+    "meaning": "also; too",
+    "example_sentence": null,
+    "example_pinyin": null,
+    "example_meaning": null,
+    "word_type": null,
+    "audio_url": null,
+    "display_order": 4,
+    "meta": {
+      "source_id": 274,
+      "source_level": 2,
+      "radicals": "乙",
+      "strokes": "3",
+      "translations_eng_all": [
+        "also",
+        "too",
+        "(in Classical Chinese) final particle implying affirmation"
+      ]
+    },
+    "meaning_vi": "cũng"
+  },
+  {
+    "id": "60f187dc-f1e5-434a-9a5c-abcb5e277205",
+    "hsk_level_code": "hsk2",
+    "lesson_number": 13,
+    "chinese_word": "已经",
+    "pinyin": "yǐ jīng",
+    "meaning": "already",
+    "example_sentence": null,
+    "example_pinyin": null,
+    "example_meaning": null,
+    "word_type": null,
+    "audio_url": null,
+    "display_order": 5,
+    "meta": {
+      "source_id": 275,
+      "source_level": 2,
+      "radicals": null,
+      "strokes": null,
+      "translations_eng_all": [
+        "already"
+      ]
+    },
+    "meaning_vi": "đã, rồi"
+  },
+  {
+    "id": "2737b782-5c49-4edb-9930-e2c2b773a3c0",
+    "hsk_level_code": "hsk2",
+    "lesson_number": 13,
+    "chinese_word": "一起",
+    "pinyin": "yī qǐ",
+    "meaning": "in the same place; together",
+    "example_sentence": null,
+    "example_pinyin": null,
+    "example_meaning": null,
+    "word_type": null,
+    "audio_url": null,
+    "display_order": 6,
+    "meta": {
+      "source_id": 276,
+      "source_level": 2,
+      "radicals": null,
+      "strokes": null,
+      "translations_eng_all": [
+        "in the same place",
+        "together",
+        "with",
+        "altogether (in total)"
+      ]
+    },
+    "meaning_vi": "cùng nhau"
+  },
+  {
+    "id": "2a3aae39-7823-461f-805e-13bd0c719467",
+    "hsk_level_code": "hsk2",
+    "lesson_number": 13,
+    "chinese_word": "意思",
+    "pinyin": "yì si",
+    "meaning": "idea; opinion",
+    "example_sentence": null,
+    "example_pinyin": null,
+    "example_meaning": null,
+    "word_type": null,
+    "audio_url": null,
+    "display_order": 7,
+    "meta": {
+      "source_id": 277,
+      "source_level": 2,
+      "radicals": null,
+      "strokes": null,
+      "translations_eng_all": [
+        "idea",
+        "opinion",
+        "meaning",
+        "wish",
+        "desire",
+        "CL:個|个[gè]"
+      ]
+    },
+    "meaning_vi": "ý nghĩa, nghĩa"
+  },
+  {
+    "id": "99280d70-098b-4aca-9aec-355da690e278",
+    "hsk_level_code": "hsk2",
+    "lesson_number": 13,
+    "chinese_word": "阴",
+    "pinyin": "yīn",
+    "meaning": "overcast (weather); cloudy",
+    "example_sentence": null,
+    "example_pinyin": null,
+    "example_meaning": null,
+    "word_type": null,
+    "audio_url": null,
+    "display_order": 8,
+    "meta": {
+      "source_id": 278,
+      "source_level": 2,
+      "radicals": "阝",
+      "strokes": "6",
+      "translations_eng_all": [
+        "overcast (weather)",
+        "cloudy",
+        "shady",
+        "Yin (the negative principle of Yin and Yang)",
+        "negative (electric.)",
+        "feminine",
+        "moon",
+        "implicit",
+        "hidden",
+        "genitalia"
+      ]
+    },
+    "meaning_vi": "âm u, u ám"
+  },
+  {
+    "id": "f144e3dd-b2de-47b4-a937-abc3d9f178ec",
+    "hsk_level_code": "hsk2",
+    "lesson_number": 13,
+    "chinese_word": "因为",
+    "pinyin": "yīn wèi",
+    "meaning": "because; owing to",
+    "example_sentence": null,
+    "example_pinyin": null,
+    "example_meaning": null,
+    "word_type": null,
+    "audio_url": null,
+    "display_order": 9,
+    "meta": {
+      "source_id": 279,
+      "source_level": 2,
+      "radicals": null,
+      "strokes": null,
+      "translations_eng_all": [
+        "because",
+        "owing to",
+        "on account of"
+      ]
+    },
+    "meaning_vi": null
+  },
+  {
+    "id": "bac4b59d-fe3b-4f3a-b47f-d51edf21ef94",
+    "hsk_level_code": "hsk2",
+    "lesson_number": 13,
+    "chinese_word": "游泳",
+    "pinyin": "yóu yǒng",
+    "meaning": "swimming; to swim",
+    "example_sentence": null,
+    "example_pinyin": null,
+    "example_meaning": null,
+    "word_type": null,
+    "audio_url": null,
+    "display_order": 10,
+    "meta": {
+      "source_id": 280,
+      "source_level": 2,
+      "radicals": null,
+      "strokes": null,
+      "translations_eng_all": [
+        "swimming",
+        "to swim"
+      ]
+    },
+    "meaning_vi": "bơi"
+  },
+  {
+    "id": "a8649a1d-ee0a-4829-8ef2-051eea1c5fcc",
+    "hsk_level_code": "hsk2",
+    "lesson_number": 14,
+    "chinese_word": "右边",
+    "pinyin": "yòu bian",
+    "meaning": "right side; right",
+    "example_sentence": null,
+    "example_pinyin": null,
+    "example_meaning": null,
+    "word_type": null,
+    "audio_url": null,
+    "display_order": 1,
+    "meta": {
+      "source_id": 281,
+      "source_level": 2,
+      "radicals": null,
+      "strokes": null,
+      "translations_eng_all": [
+        "right side",
+        "right",
+        "to the right"
+      ]
+    },
+    "meaning_vi": "bên phải"
+  },
+  {
+    "id": "10708cd7-6be8-4f85-bf35-341e232d6ef1",
+    "hsk_level_code": "hsk2",
+    "lesson_number": 14,
+    "chinese_word": "鱼",
+    "pinyin": "yú",
+    "meaning": "fish; CL:條|条",
+    "example_sentence": null,
+    "example_pinyin": null,
+    "example_meaning": null,
+    "word_type": null,
+    "audio_url": null,
+    "display_order": 2,
+    "meta": {
+      "source_id": 282,
+      "source_level": 2,
+      "radicals": "鱼",
+      "strokes": "8",
+      "translations_eng_all": [
+        "fish",
+        "CL:條|条",
+        "尾[wěi]"
+      ]
+    },
+    "meaning_vi": "cá"
+  },
+  {
+    "id": "9bc0b72b-8abf-425a-84d8-d27691f3af52",
+    "hsk_level_code": "hsk2",
+    "lesson_number": 14,
+    "chinese_word": "元",
+    "pinyin": "yuán",
+    "meaning": "Chinese monetary unit; dollar",
+    "example_sentence": null,
+    "example_pinyin": null,
+    "example_meaning": null,
+    "word_type": null,
+    "audio_url": null,
+    "display_order": 3,
+    "meta": {
+      "source_id": 283,
+      "source_level": 2,
+      "radicals": "儿",
+      "strokes": "4",
+      "translations_eng_all": [
+        "Chinese monetary unit",
+        "dollar",
+        "primary",
+        "first"
+      ]
+    },
+    "meaning_vi": null
+  },
+  {
+    "id": "be492cab-f700-4e44-b3ab-138279e12060",
+    "hsk_level_code": "hsk2",
+    "lesson_number": 14,
+    "chinese_word": "远",
+    "pinyin": "yuǎn",
+    "meaning": "far; distant",
+    "example_sentence": null,
+    "example_pinyin": null,
+    "example_meaning": null,
+    "word_type": null,
+    "audio_url": null,
+    "display_order": 4,
+    "meta": {
+      "source_id": 284,
+      "source_level": 2,
+      "radicals": "辶",
+      "strokes": "7",
+      "translations_eng_all": [
+        "far",
+        "distant",
+        "remote"
+      ]
+    },
+    "meaning_vi": "xa"
+  },
+  {
+    "id": "4d20cfd4-faa0-474b-b10e-8a674e88d1b2",
+    "hsk_level_code": "hsk2",
+    "lesson_number": 14,
+    "chinese_word": "运动",
+    "pinyin": "yùn dòng",
+    "meaning": "to move; to exercise",
+    "example_sentence": null,
+    "example_pinyin": null,
+    "example_meaning": null,
+    "word_type": null,
+    "audio_url": null,
+    "display_order": 5,
+    "meta": {
+      "source_id": 285,
+      "source_level": 2,
+      "radicals": null,
+      "strokes": null,
+      "translations_eng_all": [
+        "to move",
+        "to exercise",
+        "sports",
+        "exercise",
+        "motion",
+        "movement",
+        "campaign",
+        "CL:場|场[chǎng]"
+      ]
+    },
+    "meaning_vi": "vận động, thể thao"
+  },
+  {
+    "id": "2549c6a4-6886-4439-8849-d6d66184bc54",
+    "hsk_level_code": "hsk2",
+    "lesson_number": 14,
+    "chinese_word": "再",
+    "pinyin": "zài",
+    "meaning": "again; once more",
+    "example_sentence": null,
+    "example_pinyin": null,
+    "example_meaning": null,
+    "word_type": null,
+    "audio_url": null,
+    "display_order": 6,
+    "meta": {
+      "source_id": 286,
+      "source_level": 2,
+      "radicals": "冂",
+      "strokes": "6",
+      "translations_eng_all": [
+        "again",
+        "once more",
+        "re-",
+        "second",
+        "another",
+        "then (after sth, and not until then)"
+      ]
+    },
+    "meaning_vi": "lại, nữa"
+  },
+  {
+    "id": "854bb8fc-7251-4f23-b8f3-9d8939b6f80c",
+    "hsk_level_code": "hsk2",
+    "lesson_number": 14,
+    "chinese_word": "早上",
+    "pinyin": "zǎo shang",
+    "meaning": "early morning; CL:個|个[gè]",
+    "example_sentence": null,
+    "example_pinyin": null,
+    "example_meaning": null,
+    "word_type": null,
+    "audio_url": null,
+    "display_order": 7,
+    "meta": {
+      "source_id": 287,
+      "source_level": 2,
+      "radicals": null,
+      "strokes": null,
+      "translations_eng_all": [
+        "early morning",
+        "CL:個|个[gè]"
+      ]
+    },
+    "meaning_vi": "buổi sáng sớm"
+  },
+  {
+    "id": "563e337a-a62c-4d21-8894-4d3d8589d555",
+    "hsk_level_code": "hsk2",
+    "lesson_number": 14,
+    "chinese_word": "张",
+    "pinyin": "zhāng",
+    "meaning": "to open up; to spread",
+    "example_sentence": null,
+    "example_pinyin": null,
+    "example_meaning": null,
+    "word_type": null,
+    "audio_url": null,
+    "display_order": 8,
+    "meta": {
+      "source_id": 288,
+      "source_level": 2,
+      "radicals": "弓",
+      "strokes": "7",
+      "translations_eng_all": [
+        "to open up",
+        "to spread",
+        "sheet of paper",
+        "classifier for flat objects",
+        "sheet",
+        "classifier for votes"
+      ]
+    },
+    "meaning_vi": "tờ (lượng từ)"
+  },
+  {
+    "id": "5f5fbbc4-7c2e-4e17-8fc1-e0bdf145a1df",
+    "hsk_level_code": "hsk2",
+    "lesson_number": 14,
+    "chinese_word": "长",
+    "pinyin": "zhǎng",
+    "meaning": "chief; head",
+    "example_sentence": null,
+    "example_pinyin": null,
+    "example_meaning": null,
+    "word_type": null,
+    "audio_url": null,
+    "display_order": 9,
+    "meta": {
+      "source_id": 289,
+      "source_level": 2,
+      "radicals": "长",
+      "strokes": "4",
+      "translations_eng_all": [
+        "chief",
+        "head",
+        "elder",
+        "to grow",
+        "to develop",
+        "to increase",
+        "to enhance"
+      ]
+    },
+    "meaning_vi": "dài"
+  },
+  {
+    "id": "6f35b4f7-2549-4467-9193-c49d2964cd7a",
+    "hsk_level_code": "hsk2",
+    "lesson_number": 14,
+    "chinese_word": "丈夫",
+    "pinyin": "zhàng fu",
+    "meaning": "husband; CL:個|个[gè]",
+    "example_sentence": null,
+    "example_pinyin": null,
+    "example_meaning": null,
+    "word_type": null,
+    "audio_url": null,
+    "display_order": 10,
+    "meta": {
+      "source_id": 290,
+      "source_level": 2,
+      "radicals": null,
+      "strokes": null,
+      "translations_eng_all": [
+        "husband",
+        "CL:個|个[gè]"
+      ]
+    },
+    "meaning_vi": "chồng"
+  },
+  {
+    "id": "8e65c704-743a-472b-af7d-9d49690ff5a9",
+    "hsk_level_code": "hsk2",
+    "lesson_number": 15,
+    "chinese_word": "找",
+    "pinyin": "zhǎo",
+    "meaning": "to try to find; to look for",
+    "example_sentence": null,
+    "example_pinyin": null,
+    "example_meaning": null,
+    "word_type": null,
+    "audio_url": null,
+    "display_order": 1,
+    "meta": {
+      "source_id": 291,
+      "source_level": 2,
+      "radicals": "扌",
+      "strokes": "7",
+      "translations_eng_all": [
+        "to try to find",
+        "to look for",
+        "to call on sb",
+        "to find",
+        "to seek",
+        "to return",
+        "to give change"
+      ]
+    },
+    "meaning_vi": "tìm"
+  },
+  {
+    "id": "571d65c5-4bae-42f9-a2b3-558f8d39264c",
+    "hsk_level_code": "hsk2",
+    "lesson_number": 15,
+    "chinese_word": "着",
+    "pinyin": "zhe",
+    "meaning": "aspect particle indicating action in progress",
+    "example_sentence": null,
+    "example_pinyin": null,
+    "example_meaning": null,
+    "word_type": null,
+    "audio_url": null,
+    "display_order": 2,
+    "meta": {
+      "source_id": 292,
+      "source_level": 2,
+      "radicals": "目",
+      "strokes": "11",
+      "translations_eng_all": [
+        "aspect particle indicating action in progress"
+      ]
+    },
+    "meaning_vi": "đang (trợ từ)"
+  },
+  {
+    "id": "26622322-dad0-47c5-ac20-f865de6326dd",
+    "hsk_level_code": "hsk2",
+    "lesson_number": 15,
+    "chinese_word": "真",
+    "pinyin": "zhēn",
+    "meaning": "really; truly",
+    "example_sentence": null,
+    "example_pinyin": null,
+    "example_meaning": null,
+    "word_type": null,
+    "audio_url": null,
+    "display_order": 3,
+    "meta": {
+      "source_id": 293,
+      "source_level": 2,
+      "radicals": "目",
+      "strokes": "10",
+      "translations_eng_all": [
+        "really",
+        "truly",
+        "indeed",
+        "real",
+        "true",
+        "genuine"
+      ]
+    },
+    "meaning_vi": "thật, thật sự"
+  },
+  {
+    "id": "d4801a14-5e97-47c0-8230-9c4df681e376",
+    "hsk_level_code": "hsk2",
+    "lesson_number": 15,
+    "chinese_word": "正在",
+    "pinyin": "zhèng zài",
+    "meaning": "in the process of (doing something or happening); while (doing)",
+    "example_sentence": null,
+    "example_pinyin": null,
+    "example_meaning": null,
+    "word_type": null,
+    "audio_url": null,
+    "display_order": 4,
+    "meta": {
+      "source_id": 294,
+      "source_level": 2,
+      "radicals": null,
+      "strokes": null,
+      "translations_eng_all": [
+        "in the process of (doing something or happening)",
+        "while (doing)"
+      ]
+    },
+    "meaning_vi": "đang"
+  },
+  {
+    "id": "21aba23d-e285-40ee-be00-421aa57f2959",
+    "hsk_level_code": "hsk2",
+    "lesson_number": 15,
+    "chinese_word": "知道",
+    "pinyin": "zhī dào",
+    "meaning": "to know; to be aware of",
+    "example_sentence": null,
+    "example_pinyin": null,
+    "example_meaning": null,
+    "word_type": null,
+    "audio_url": null,
+    "display_order": 5,
+    "meta": {
+      "source_id": 295,
+      "source_level": 2,
+      "radicals": null,
+      "strokes": null,
+      "translations_eng_all": [
+        "to know",
+        "to be aware of",
+        "also pron. [zhī dao]"
+      ]
+    },
+    "meaning_vi": "biết"
+  },
+  {
+    "id": "c63380af-7a22-4539-9c1c-599fd7448460",
+    "hsk_level_code": "hsk2",
+    "lesson_number": 15,
+    "chinese_word": "准备",
+    "pinyin": "zhǔn bèi",
+    "meaning": "preparation; to prepare",
+    "example_sentence": null,
+    "example_pinyin": null,
+    "example_meaning": null,
+    "word_type": null,
+    "audio_url": null,
+    "display_order": 6,
+    "meta": {
+      "source_id": 296,
+      "source_level": 2,
+      "radicals": null,
+      "strokes": null,
+      "translations_eng_all": [
+        "preparation",
+        "to prepare",
+        "to intend",
+        "to be about to",
+        "reserve (fund)"
+      ]
+    },
+    "meaning_vi": "chuẩn bị"
+  },
+  {
+    "id": "8a204c34-9e48-4f56-bd92-aaae9d66fec9",
+    "hsk_level_code": "hsk2",
+    "lesson_number": 15,
+    "chinese_word": "自行车",
+    "pinyin": "zì xíng chē",
+    "meaning": "bicycle; bike",
+    "example_sentence": null,
+    "example_pinyin": null,
+    "example_meaning": null,
+    "word_type": null,
+    "audio_url": null,
+    "display_order": 7,
+    "meta": {
+      "source_id": 297,
+      "source_level": 2,
+      "radicals": null,
+      "strokes": null,
+      "translations_eng_all": [
+        "bicycle",
+        "bike",
+        "CL:輛|辆[liàng]"
+      ]
+    },
+    "meaning_vi": "xe đạp"
+  },
+  {
+    "id": "ec62a8e3-141f-4d10-a861-4d618e903a6b",
+    "hsk_level_code": "hsk2",
+    "lesson_number": 15,
+    "chinese_word": "走",
+    "pinyin": "zǒu",
+    "meaning": "to walk; to go",
+    "example_sentence": null,
+    "example_pinyin": null,
+    "example_meaning": null,
+    "word_type": null,
+    "audio_url": null,
+    "display_order": 8,
+    "meta": {
+      "source_id": 298,
+      "source_level": 2,
+      "radicals": "走",
+      "strokes": "7",
+      "translations_eng_all": [
+        "to walk",
+        "to go",
+        "to run",
+        "to move (of vehicle)",
+        "to visit",
+        "to leave",
+        "to go away",
+        "to die (euph.)",
+        "from",
+        "through",
+        "away (in compound verbs, such as 撤走)",
+        "to change (shape, form, meaning)"
+      ]
+    },
+    "meaning_vi": "đi bộ"
+  },
+  {
+    "id": "5c0addd1-f49a-4e58-b1dd-0844fc4a5f5a",
+    "hsk_level_code": "hsk2",
+    "lesson_number": 15,
+    "chinese_word": "最",
+    "pinyin": "zuì",
+    "meaning": "most; the most",
+    "example_sentence": null,
+    "example_pinyin": null,
+    "example_meaning": null,
+    "word_type": null,
+    "audio_url": null,
+    "display_order": 9,
+    "meta": {
+      "source_id": 299,
+      "source_level": 2,
+      "radicals": "曰",
+      "strokes": "12",
+      "translations_eng_all": [
+        "most",
+        "the most",
+        "-est (superlative suffix)"
+      ]
+    },
+    "meaning_vi": "nhất"
+  },
+  {
+    "id": "d176b1d9-c791-4bb0-af90-a2566204acd9",
+    "hsk_level_code": "hsk2",
+    "lesson_number": 15,
+    "chinese_word": "左边",
+    "pinyin": "zuǒ bian",
+    "meaning": "left; the left side",
+    "example_sentence": null,
+    "example_pinyin": null,
+    "example_meaning": null,
+    "word_type": null,
+    "audio_url": null,
+    "display_order": 10,
+    "meta": {
+      "source_id": 300,
+      "source_level": 2,
+      "radicals": null,
+      "strokes": null,
+      "translations_eng_all": [
+        "left",
+        "the left side",
+        "to the left of"
+      ]
+    },
+    "meaning_vi": "bên trái"
+  }
+]
