@@ -49,7 +49,7 @@ export default function HeroSlideShowClient({ slides }: HeroSlideShowClientProps
   // Render container structure immediately, but prevent hydration mismatch for carousel
   const containerContent = (
     <section className="relative bg-gradient-to-b from-gray-50 to-white dark:from-gray-900 dark:to-background-dark pt-4 pb-6 md:pt-6 md:pb-10 lg:pt-10 lg:pb-16">
-      <div className="mx-auto max-w-7xl px-3 sm:px-4 md:px-6 lg:px-8">
+      <div className="mx-auto max-w-[1400px] px-3 sm:px-4 md:px-6 lg:px-8">
         <div className="relative rounded-xl md:rounded-3xl overflow-hidden shadow-2xl md:shadow-3xl aspect-[4/3] sm:aspect-video md:aspect-[21/9] group border-2 border-gray-200 dark:border-gray-700 hover:shadow-4xl transition-shadow duration-500">
           {!mounted ? (
             // SSR: Show first slide without carousel

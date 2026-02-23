@@ -10,14 +10,15 @@ const prisma = new PrismaClient()
  * Reads from prisma/hsk_vocab_exports/vocabulary_hsk{1-6}.json
  * Maps JSON lesson_number → lesson order in DB.
  *
- * JSON files now contain `meaning_vi` field (merged from vietnamese_meanings.ts).
+ * After seeding vocabulary, updates Course.lessonCount and Course.vocabularyCount
+ * from actual DB counts so that the UI displays correct values.
  *
- * Run with: npx tsx prisma/seed-vocabulary.ts
+ * Run standalone: npx tsx prisma/seed-vocabulary.ts
+ * Also called from main seed.ts via seedVocabulary()
  */
 
-/** JSON vocab entry structure from hsk_vocab_exports */
+/** JSON vocab entry structure from hsk_vocab_exports (meta removed, id removed) */
 interface VocabExportEntry {
-  id: string
   hsk_level_code: string
   lesson_number: number
   chinese_word: string
@@ -30,13 +31,6 @@ interface VocabExportEntry {
   word_type: string | null
   audio_url: string | null
   display_order: number
-  meta: {
-    source_id: number
-    source_level: number
-    radicals?: string
-    strokes?: string
-    translations_eng_all?: string[]
-  }
 }
 
 /** HSK level config */
@@ -49,7 +43,10 @@ const HSK_LEVELS = [
   { level: 6, slug: "hsk-6", file: "vocabulary_hsk6.json" },
 ]
 
-async function main() {
+/**
+ * Main seed function — exported so seed.ts can call it directly.
+ */
+export async function seedVocabulary() {
   console.log("🌱 Seeding HSK vocabulary data for ALL levels (1-6)...")
   console.log("📂 Reading from prisma/hsk_vocab_exports/\n")
 
@@ -141,13 +138,22 @@ async function main() {
       levelCreated += vocabRecords.length
     }
 
-    // 7. Update course vocabularyCount with actual DB count
-    const actualCount = await prisma.vocabulary.count({
+    // 7. Update course vocabularyCount AND lessonCount from actual DB counts
+    const actualVocabCount = await prisma.vocabulary.count({
       where: { lessonId: { in: lessonIds } },
+    })
+    const actualLessonCount = await prisma.lesson.count({
+      where: {
+        courseId: course.id,
+        vocabularies: { some: {} }, // only lessons that have at least 1 vocabulary
+      },
     })
     await prisma.course.update({
       where: { id: course.id },
-      data: { vocabularyCount: actualCount },
+      data: {
+        vocabularyCount: actualVocabCount,
+        lessonCount: actualLessonCount,
+      },
     })
 
     totalCreated += levelCreated
@@ -157,7 +163,7 @@ async function main() {
         `  ⚠️  Skipped JSON lessons [${skippedLessons.join(", ")}] (no matching lesson order in DB)`
       )
     }
-    console.log(`  📊 Course vocabularyCount → ${actualCount}`)
+    console.log(`  📊 Course: vocabularyCount → ${actualVocabCount}, lessonCount → ${actualLessonCount}`)
   }
 
   console.log(`\n━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━`)
@@ -167,9 +173,14 @@ async function main() {
   }
 }
 
-main()
-  .catch((e) => {
-    console.error("❌ Seed error:", e)
-    process.exit(1)
-  })
-  .finally(() => prisma.$disconnect())
+/* ───────── Standalone execution ───────── */
+const isMainModule = require.main === module || process.argv[1]?.includes("seed-vocabulary")
+
+if (isMainModule) {
+  seedVocabulary()
+    .catch((e) => {
+      console.error("❌ Seed error:", e)
+      process.exit(1)
+    })
+    .finally(() => prisma.$disconnect())
+}

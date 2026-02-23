@@ -22,7 +22,7 @@ export default function CTASectionClient({ stats }: Props) {
       <div className="hidden md:block absolute top-0 right-0 w-64 h-64 bg-white/10 rounded-full -mr-32 -mt-32" />
       <div className="hidden md:block absolute bottom-0 left-0 w-96 h-96 bg-white/10 rounded-full -ml-48 -mb-48" />
 
-      <div className="relative mx-auto max-w-7xl px-3 sm:px-4 md:px-6 lg:px-8">
+      <div className="relative mx-auto max-w-[1400px] px-3 sm:px-4 md:px-6 lg:px-8">
         <div className="text-center">
           {/* Badge */}
           <div className="inline-flex items-center gap-2 px-2.5 py-1 md:px-3 md:py-1.5 rounded-full bg-white/20 backdrop-blur-sm text-white text-[10px] md:text-xs font-bold uppercase tracking-wider mb-3 md:mb-4">

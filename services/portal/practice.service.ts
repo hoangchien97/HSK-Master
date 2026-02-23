@@ -114,7 +114,15 @@ export async function recordVocabSeen(studentId: string, vocabularyId: string, l
 
 /* ───────── Start practice session ───────── */
 
-export async function startPracticeSession(studentId: string, lessonId: string, mode: string) {
+export async function startPracticeSession(studentId: string, lessonIdOrSlug: string, mode: string) {
+  // Resolve slug → actual lesson UUID
+  const isUuid = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(lessonIdOrSlug);
+  let lessonId = lessonIdOrSlug;
+  if (!isUuid) {
+    const lesson = await prisma.lesson.findFirst({ where: { slug: lessonIdOrSlug }, select: { id: true } });
+    if (!lesson) throw new Error(`Lesson not found: ${lessonIdOrSlug}`);
+    lessonId = lesson.id;
+  }
   return prisma.portalPracticeSession.create({
     data: { studentId, lessonId, mode },
   });
@@ -123,10 +131,15 @@ export async function startPracticeSession(studentId: string, lessonId: string, 
 /* ───────── Finish practice session ───────── */
 
 export async function finishPracticeSession(sessionId: string, durationSec: number) {
-  return prisma.portalPracticeSession.update({
+  const session = await prisma.portalPracticeSession.update({
     where: { id: sessionId },
     data: { endedAt: new Date(), durationSec },
   });
+
+  // Recompute lesson progress so totalTimeSec includes this session
+  await recomputeLessonProgress(session.studentId, session.lessonId);
+
+  return session;
 }
 
 /* ───────── Record practice attempt ───────── */

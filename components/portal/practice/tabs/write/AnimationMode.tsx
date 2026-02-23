@@ -145,25 +145,13 @@ export default function AnimationMode({ item, currentIdx, totalItems, onNext, on
           <div className="flex items-center gap-2 mt-3 flex-wrap justify-center">
             <Button
               size="sm"
-              color="secondary"
+              color={isAnimating ? "warning" : "secondary"}
               variant="bordered"
-              isDisabled={isAnimating && !isPaused}
-              onPress={handleAnimate}
-              startContent={<Play className="w-3.5 h-3.5" />}
+              onPress={isAnimating ? handlePauseResume : handleAnimate}
+              startContent={isAnimating && !isPaused ? <Pause className="w-3.5 h-3.5" /> : <Play className="w-3.5 h-3.5" />}
             >
-              Xem nét viết
+              {isAnimating ? (isPaused ? "Tiếp tục" : "Tạm dừng") : "Xem nét viết"}
             </Button>
-            {isAnimating && (
-              <Button
-                size="sm"
-                color="warning"
-                variant="bordered"
-                onPress={handlePauseResume}
-                startContent={isPaused ? <Play className="w-3.5 h-3.5" /> : <Pause className="w-3.5 h-3.5" />}
-              >
-                {isPaused ? "Tiếp tục" : "Tạm dừng"}
-              </Button>
-            )}
             {onSwitchToPractice && (
               <Button
                 size="sm"

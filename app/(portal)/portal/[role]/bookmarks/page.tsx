@@ -9,26 +9,32 @@ async function getStudentBookmarks(email: string) {
   const user = await prisma.portalUser.findUnique({
     where: { email },
     include: {
-      bookmarks: true,
-      vocabularies: {
-        where: { mastery: "MASTERED" },
+      itemProgress: {
+        where: { status: "MASTERED" },
+        include: {
+          vocabulary: {
+            include: { lesson: { include: { course: true } } },
+          },
+        },
       },
     },
   })
 
-  // Convert vocabularies to bookmark format for UI
-  const bookmarks = user?.vocabularies.map((v) => ({
-    id: v.id,
+  // Convert itemProgress to bookmark format for UI
+  const bookmarks = user?.itemProgress.map((ip) => ({
+    id: ip.id,
     vocabulary: {
-      id: v.id,
-      hanzi: v.word,
-      pinyin: v.pinyin,
-      meaning: v.meaning,
-      hskLevel: v.level ? { level: parseInt(v.level.replace("HSK", "")), name: v.level } : null,
+      id: ip.vocabulary.id,
+      hanzi: ip.vocabulary.word,
+      pinyin: ip.vocabulary.pinyin,
+      meaning: ip.vocabulary.meaningVi || ip.vocabulary.meaning,
+      hskLevel: ip.vocabulary.lesson?.course
+        ? { level: parseInt(ip.vocabulary.lesson.course.level?.replace("HSK", "") || "0"), name: ip.vocabulary.lesson.course.title }
+        : null,
     },
-    mastered: v.mastery === "MASTERED",
-    reviewCount: v.reviewCount,
-    lastReviewedAt: v.lastReviewedAt,
+    mastered: ip.status === "MASTERED",
+    reviewCount: ip.seenCount,
+    lastReviewedAt: ip.lastSeenAt,
   })) || []
 
   return {

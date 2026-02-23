@@ -28,7 +28,7 @@ interface GallerySectionClientProps {
 export function GallerySectionClient({ albums }: GallerySectionClientProps) {
   return (
     <section className="py-8 md:py-12 lg:py-16 xl:py-20 bg-gray-50 dark:bg-gray-900 overflow-hidden">
-      <div className="container mx-auto px-3 sm:px-4 md:px-6 max-w-7xl">
+      <div className="container mx-auto px-3 sm:px-4 md:px-6 max-w-[1400px]">
         <SectionHeader
           icon={<Camera />}
           tag="Kỷ niệm lớp học"

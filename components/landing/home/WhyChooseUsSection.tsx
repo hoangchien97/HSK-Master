@@ -7,7 +7,7 @@ export default async function WhyChooseUsSection() {
 
   return (
     <section className="py-8 md:py-12 lg:py-16 bg-gradient-to-br from-red-50 via-orange-50 to-yellow-50 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900 overflow-hidden">
-      <div className="mx-auto max-w-7xl px-3 sm:px-4 md:px-6 lg:px-8 overflow-hidden">
+      <div className="mx-auto max-w-[1400px] px-3 sm:px-4 md:px-6 lg:px-8 overflow-hidden">
         {/* Section Header */}
         <SectionHeader
           icon="👩‍🏫"

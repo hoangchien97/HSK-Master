@@ -16,7 +16,13 @@ async function getVocabularyData(email: string) {
   const user = await prisma.portalUser.findUnique({
     where: { email },
     include: {
-      vocabularies: true,
+      itemProgress: {
+        include: {
+          vocabulary: {
+            include: { lesson: { include: { course: true } } },
+          },
+        },
+      },
     },
   })
 
@@ -28,7 +34,15 @@ async function getVocabularyData(email: string) {
       description: level.description,
       vocabularyCount: level.vocabularyCount,
     })),
-    progress: user?.vocabularies || [],
+    progress: (user?.itemProgress || []).map((ip) => ({
+      id: ip.id,
+      word: ip.vocabulary.word,
+      pinyin: ip.vocabulary.pinyin,
+      meaning: ip.vocabulary.meaningVi || ip.vocabulary.meaning,
+      level: ip.vocabulary.lesson?.course?.level || null,
+      mastery: ip.status,
+      reviewCount: ip.seenCount,
+    })),
     studentId: user?.id,
   }
 }

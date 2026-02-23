@@ -7,7 +7,7 @@ export default async function HSKLevelsSection() {
 
   return (
     <section className="py-8 md:py-12 lg:py-16 bg-linear-to-b from-gray-50 to-white dark:from-gray-900 dark:to-gray-800">
-      <div className="mx-auto max-w-7xl px-3 sm:px-4 md:px-6 lg:px-8">
+      <div className="mx-auto max-w-[1400px] px-3 sm:px-4 md:px-6 lg:px-8">
         {/* Section Header */}
         <SectionHeader
           icon="🎯"

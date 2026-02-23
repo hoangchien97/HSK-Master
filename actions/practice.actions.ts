@@ -31,9 +31,12 @@ export async function fetchLessonPracticeData(lessonId: string) {
     const lesson = await getLessonWithVocabularies(lessonId);
     if (!lesson) return { success: false, error: 'Bài học không tồn tại' };
 
+    // Use actual lesson.id (UUID) for all DB queries — lessonId param may be a slug
+    const realLessonId = lesson.id;
+
     const [progress, itemProgress, siblings] = await Promise.all([
-      getStudentLessonProgress(session.user.id, lessonId),
-      getStudentItemProgressForLesson(session.user.id, lessonId),
+      getStudentLessonProgress(session.user.id, realLessonId),
+      getStudentItemProgressForLesson(session.user.id, realLessonId),
       getSiblingLessons(lesson.courseId),
     ]);
 

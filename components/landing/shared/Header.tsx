@@ -24,7 +24,7 @@ export default function Header() {
 
   return (
     <header className="sticky top-0 z-50 w-full border-b border-border-light dark:border-border-dark bg-surface-light/95 supports-[backdrop-filter]:bg-surface-light/80 dark:bg-surface-dark/95 shadow-sm">
-      <div className="mx-auto flex h-16 max-w-7xl items-center justify-between px-4 sm:px-6 lg:px-8">
+      <div className="mx-auto flex h-16 max-w-[1400px] items-center justify-between px-4 sm:px-6 lg:px-8">
         {/* Left Section - Mobile Menu + Logo */}
         <div className="flex justify-between w-full md:w-auto items-center gap-4">
           <button

@@ -1,6 +1,7 @@
 import 'dotenv/config'
 import { PrismaClient } from '@prisma/client'
 import { seedPortal } from './seed-portal'
+import { seedVocabulary } from './seed-vocabulary'
 import { generateSlug } from '@/utils/slug'
 
 const prisma = new PrismaClient()
@@ -555,11 +556,11 @@ async function main() {
   await prisma.heroSlide.createMany({
     data: [
       {
-        image: "https://images.unsplash.com/photo-1523050854058-8df90110c9f1?w=1920&h=1080&fit=crop&q=80",
+        image: "https://images.unsplash.com/photo-1547981609-4b6bfe67ca0b?w=1920&h=1080&fit=crop&q=80",
         badge: "Khai giảng tháng 2/2026",
         badgeColor: "bg-orange-100 text-orange-800 dark:bg-orange-900/30 dark:text-orange-200",
-        title: "Chinh Phục HSK 1-6 Cùng Chúng Tôi",
-        description: "Lộ trình học tiếng Trung bài bản từ cơ bản đến nâng cao. Giáo viên giàu kinh nghiệm, phương pháp giảng dạy hiện đại.",
+        title: "Chinh Phục HSK 1-6 Cùng Cô Ngọc",
+        description: "Lộ trình học tiếng Trung bài bản từ cơ bản đến nâng cao. Phương pháp giảng dạy hiện đại, lớp học sinh động và thân thiện.",
         primaryCtaText: "Đăng ký ngay",
         primaryCtaHref: "/courses",
         secondaryCtaText: "Xem khóa học",
@@ -569,11 +570,11 @@ async function main() {
         isActive: true,
       },
       {
-        image: "https://images.unsplash.com/photo-1522202176988-66273c2fd55f?w=1920&h=1080&fit=crop&q=80",
+        image: "https://images.unsplash.com/photo-1606761568499-6d2451b23c66?w=1920&h=1080&fit=crop&q=80",
         badge: "Ưu đãi đặc biệt",
         badgeColor: "bg-red-100 text-red-800 dark:bg-red-900/30 dark:text-red-200",
         title: "Học Tiếng Trung Giao Tiếp Thực Tế",
-        description: "Tập trung vào kỹ năng giao tiếp, phát âm chuẩn. Áp dụng ngay vào cuộc sống và công việc.",
+        description: "Luyện phát âm chuẩn, giao tiếp tự tin trong mọi tình huống. Áp dụng ngay vào cuộc sống hàng ngày và công việc.",
         primaryCtaText: "Tìm hiểu thêm",
         primaryCtaHref: "/about",
         secondaryCtaText: "Liên hệ",
@@ -583,13 +584,13 @@ async function main() {
         isActive: true,
       },
       {
-        image: "https://images.unsplash.com/photo-1517842645767-c639042777db?w=1920&h=1080&fit=crop&q=80",
+        image: "https://images.unsplash.com/photo-1490806843957-31f4c9a91c65?w=1920&h=1080&fit=crop&q=80",
         badge: "Chương trình mới",
         badgeColor: "bg-blue-100 text-blue-800 dark:bg-blue-900/30 dark:text-blue-200",
-        title: "Tiếng Trung Thương Mại Chuyên Nghiệp",
-        description: "Nâng cao kỹ năng tiếng Trung trong môi trường kinh doanh. Từ vựng chuyên ngành, đàm phán, viết email.",
+        title: "Khám Phá Văn Hóa Trung Hoa",
+        description: "Học tiếng Trung không chỉ là ngôn ngữ — hòa mình vào văn hóa, lịch sử và nghệ thuật thư pháp Trung Quốc.",
         primaryCtaText: "Khám phá ngay",
-        primaryCtaHref: "/courses/tieng-trung-thuong-mai-chuyen-nghiep",
+        primaryCtaHref: "/courses",
         secondaryCtaText: "Xem chi tiết",
         secondaryCtaHref: "/about",
         overlayGradient: "bg-gradient-to-br from-black/70 via-black/40 to-transparent",
@@ -653,24 +654,24 @@ async function main() {
     data: [
       {
         title: "Hoạt động lớp học",
-        description: "Hình ảnh các buổi học sinh động tại trung tâm",
-        thumbnail: "https://images.unsplash.com/photo-1523050854058-8df90110c9f1?w=400&h=300&fit=crop&q=80",
+        description: "Hình ảnh các buổi học sinh động, tương tác và đầy năng lượng tại trung tâm",
+        thumbnail: "https://images.unsplash.com/photo-1524178232363-1fb2b075b655?w=400&h=300&fit=crop&q=80",
         photoCount: 8,
         order: 1,
         isActive: true,
       },
       {
-        title: "Sự kiện văn hóa",
-        description: "Các hoạt động văn hóa Trung Quốc tại trung tâm",
-        thumbnail: "https://images.unsplash.com/photo-1528991435120-e73e05a58897?w=400&h=300&fit=crop&q=80",
+        title: "Sự kiện văn hóa Trung Hoa",
+        description: "Trải nghiệm văn hóa Trung Quốc qua các hoạt động thư pháp, ẩm thực và lễ hội",
+        thumbnail: "https://images.unsplash.com/photo-1547981609-4b6bfe67ca0b?w=400&h=300&fit=crop&q=80",
         photoCount: 6,
         order: 2,
         isActive: true,
       },
       {
-        title: "Lễ tốt nghiệp",
-        description: "Những khoảnh khắc đáng nhớ trong lễ tốt nghiệp",
-        thumbnail: "https://alfbzgjpjvrcfaxxvijl.supabase.co/storage/v1/object/sign/slides/ChatGPT%20Image%20Jan%2022,%202026,%2001_07_42%20PM.png?token=eyJraWQiOiJzdG9yYWdlLXVybC1zaWduaW5nLWtleV9mMmYzNzRkNy05YWRkLTQ3NWMtYTQ0Yi05ZWNlNDRmZDUwMWQiLCJhbGciOiJIUzI1NiJ9.eyJ1cmwiOiJzbGlkZXMvQ2hhdEdQVCBJbWFnZSBKYW4gMjIsIDIwMjYsIDAxXzA3XzQyIFBNLnBuZyIsImlhdCI6MTc2OTA3MjAyMCwiZXhwIjoxODAwNjA4MDIwfQ.RbwyQMQcIxMTCv1nHAjr0IrSNgEjqGsGu_QOICbZpfU",
+        title: "Lễ tốt nghiệp & Trao chứng chỉ",
+        description: "Những khoảnh khắc tự hào khi học viên hoàn thành khóa học và nhận chứng chỉ HSK",
+        thumbnail: "https://images.unsplash.com/photo-1523580494863-6f3031224c94?w=400&h=300&fit=crop&q=80",
         photoCount: 5,
         order: 3,
         isActive: true,
@@ -679,32 +680,36 @@ async function main() {
   })
   console.log(`✅ Created ${albums.length} albums`)
 
-  // Album 1: Hoạt động lớp học
-  const album1Photos = Array.from({ length: 8 }, (_, i) => ({
-    albumId: albums[0].id,
-    url: `https://images.unsplash.com/photo-${1516979187457 + i * 1000}-${i}?w=1200&h=800&fit=crop&q=80`,
-    title: `Hoạt động lớp học ${i + 1}`,
-    description: `Học viên tham gia hoạt động học tập`,
-    order: i + 1,
-  }))
+  // Album 1: Hoạt động lớp học — real Unsplash photos of classrooms & learning
+  const album1Photos = [
+    { url: "https://images.unsplash.com/photo-1524178232363-1fb2b075b655?w=1200&h=800&fit=crop&q=80", title: "Giờ học trên lớp", description: "Học viên chăm chú nghe giảng bài" },
+    { url: "https://images.unsplash.com/photo-1577896851231-70ef18881754?w=1200&h=800&fit=crop&q=80", title: "Thảo luận nhóm", description: "Các bạn học viên thảo luận bài tập nhóm" },
+    { url: "https://images.unsplash.com/photo-1503676260728-1c00da094a0b?w=1200&h=800&fit=crop&q=80", title: "Luyện viết chữ Hán", description: "Thực hành viết chữ Hán trên lớp" },
+    { url: "https://images.unsplash.com/photo-1522071820081-009f0129c71c?w=1200&h=800&fit=crop&q=80", title: "Làm việc nhóm", description: "Học viên cùng nhau hoàn thành bài tập" },
+    { url: "https://images.unsplash.com/photo-1523240795612-9a054b0db644?w=1200&h=800&fit=crop&q=80", title: "Giờ luyện nghe", description: "Phòng học với thiết bị luyện nghe hiện đại" },
+    { url: "https://images.unsplash.com/photo-1427504494785-3a9ca7044f45?w=1200&h=800&fit=crop&q=80", title: "Không gian học tập", description: "Lớp học rộng rãi, thoáng mát" },
+    { url: "https://images.unsplash.com/photo-1509062522246-3755977927d7?w=1200&h=800&fit=crop&q=80", title: "Bài thuyết trình", description: "Học viên thuyết trình bằng tiếng Trung" },
+    { url: "https://images.unsplash.com/photo-1571260899304-425eee4c7efc?w=1200&h=800&fit=crop&q=80", title: "Giờ ôn tập", description: "Ôn luyện trước kỳ thi HSK" },
+  ].map((p, i) => ({ albumId: albums[0].id, ...p, order: i + 1 }))
 
-  // Album 2: Sự kiện văn hóa
-  const album2Photos = Array.from({ length: 6 }, (_, i) => ({
-    albumId: albums[1].id,
-    url: `https://images.unsplash.com/photo-${1528991435120 + i * 1000}-${i}?w=1200&h=800&fit=crop&q=80`,
-    title: `Sự kiện văn hóa ${i + 1}`,
-    description: `Hoạt động văn hóa Trung Quốc`,
-    order: i + 1,
-  }))
+  // Album 2: Sự kiện văn hóa — real Unsplash photos of Chinese culture
+  const album2Photos = [
+    { url: "https://images.unsplash.com/photo-1547981609-4b6bfe67ca0b?w=1200&h=800&fit=crop&q=80", title: "Thư pháp Trung Quốc", description: "Trải nghiệm nghệ thuật thư pháp truyền thống" },
+    { url: "https://images.unsplash.com/photo-1582192730841-2a682d7375f9?w=1200&h=800&fit=crop&q=80", title: "Ẩm thực Trung Hoa", description: "Thưởng thức các món ăn truyền thống" },
+    { url: "https://images.unsplash.com/photo-1513673054901-2b5f51551112?w=1200&h=800&fit=crop&q=80", title: "Đèn lồng đỏ", description: "Trang trí lễ hội Tết Nguyên Đán" },
+    { url: "https://images.unsplash.com/photo-1604928141064-207cea6f571f?w=1200&h=800&fit=crop&q=80", title: "Trà đạo", description: "Tìm hiểu nghệ thuật pha trà Trung Quốc" },
+    { url: "https://images.unsplash.com/photo-1590736969955-71cc94901144?w=1200&h=800&fit=crop&q=80", title: "Cắt giấy nghệ thuật", description: "Học nghệ thuật cắt giấy truyền thống" },
+    { url: "https://images.unsplash.com/photo-1517325003633-93e8e9750e70?w=1200&h=800&fit=crop&q=80", title: "Trung thu", description: "Lễ hội Trung thu cùng học viên" },
+  ].map((p, i) => ({ albumId: albums[1].id, ...p, order: i + 1 }))
 
-  // Album 3: Lễ tốt nghiệp
-  const album3Photos = Array.from({ length: 5 }, (_, i) => ({
-    albumId: albums[2].id,
-    url: `https://images.unsplash.com/photo-${1523580494863 + i * 1000}-${i}?w=1200&h=800&fit=crop&q=80`,
-    title: `Lễ tốt nghiệp ${i + 1}`,
-    description: `Khoảnh khắc tốt nghiệp đáng nhớ`,
-    order: i + 1,
-  }))
+  // Album 3: Lễ tốt nghiệp — real Unsplash photos of graduation/celebration
+  const album3Photos = [
+    { url: "https://images.unsplash.com/photo-1523580494863-6f3031224c94?w=1200&h=800&fit=crop&q=80", title: "Lễ trao chứng chỉ", description: "Học viên nhận chứng chỉ HSK" },
+    { url: "https://images.unsplash.com/photo-1627556704302-624286467c65?w=1200&h=800&fit=crop&q=80", title: "Niềm vui tốt nghiệp", description: "Khoảnh khắc hạnh phúc ngày tốt nghiệp" },
+    { url: "https://images.unsplash.com/photo-1540575467063-178a50c2df87?w=1200&h=800&fit=crop&q=80", title: "Buổi lễ trang trọng", description: "Buổi lễ tốt nghiệp diễn ra trang trọng" },
+    { url: "https://images.unsplash.com/photo-1529070538774-1843cb3265df?w=1200&h=800&fit=crop&q=80", title: "Ảnh kỷ niệm", description: "Chụp ảnh kỷ niệm cùng thầy cô và bạn bè" },
+    { url: "https://images.unsplash.com/photo-1559223607-a43c990c692c?w=1200&h=800&fit=crop&q=80", title: "Chúc mừng học viên", description: "Cô giáo chúc mừng học viên xuất sắc" },
+  ].map((p, i) => ({ albumId: albums[2].id, ...p, order: i + 1 }))
 
   await prisma.photo.createMany({ data: [...album1Photos, ...album2Photos, ...album3Photos] })
   console.log("✅ Created 19 photos")
@@ -812,6 +817,9 @@ async function main() {
     ],
   })
   console.log("✅ Created page metadata")
+
+  // ============= Seed Vocabulary from JSON files =============
+  await seedVocabulary()
 
   console.log("\n🎉 Seeding completed successfully!")
   console.log("=".repeat(50))

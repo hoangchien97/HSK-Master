@@ -106,6 +106,8 @@ model Vocabulary {
 
   itemProgress PortalItemProgress[]
   attempts     PortalPracticeAttempt[]
+
+  @@map("portal_vocabulary")
 }
 
 // ========================= PRACTICE FEATURE =========================

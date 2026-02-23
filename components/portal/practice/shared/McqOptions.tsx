@@ -28,19 +28,10 @@ export default function McqOptions({
   return (
     <div className="grid gap-2">
       {options.map((option) => {
-        let variant: "bordered" | "flat" = "bordered"
-        let color: "default" | "success" | "danger" = "default"
         let hoverClass = "hover:bg-primary-50 dark:hover:bg-primary-950/20 hover:border-primary-300"
 
         if (showResult) {
           hoverClass = ""
-          if (option.key === correctKey) {
-            variant = "flat"
-            color = "success"
-          } else if (option.key === selectedKey) {
-            variant = "flat"
-            color = "danger"
-          }
         }
 
         return (

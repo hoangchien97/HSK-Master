@@ -11,6 +11,8 @@ import {
 } from "@/actions/practice.actions"
 import { useTTS } from "@/hooks/useTTS"
 import { WORD_TYPE_COLORS, WORD_TYPE_LABELS, getDisplayMeaning } from "@/enums/portal/common"
+import { PracticeMode } from "@/enums/portal"
+import { FlashcardPhase, FlashcardAction } from "@/constants/portal/practice"
 import type { IVocabularyItem, IStudentItemProgress } from "@/interfaces/portal/practice"
 
 interface Props {
@@ -20,8 +22,6 @@ interface Props {
   onProgressUpdate: () => void
 }
 
-type FlashcardPhase = "MAIN" | "REVIEW_UNKNOWN"
-
 export default function FlashcardTab({ vocabularies, lessonId, itemProgress, onProgressUpdate }: Props) {
   const [currentIndex, setCurrentIndex] = useState(0)
   const [isFlipped, setIsFlipped] = useState(false)
@@ -30,7 +30,7 @@ export default function FlashcardTab({ vocabularies, lessonId, itemProgress, onP
   const [knownSet, setKnownSet] = useState<Set<string>>(new Set())
   const [unknownSet, setUnknownSet] = useState<Set<string>>(new Set())
   const [swipeDir, setSwipeDir] = useState<"left" | "right" | null>(null)
-  const [phase, setPhase] = useState<FlashcardPhase>("MAIN")
+  const [phase, setPhase] = useState<FlashcardPhase>(FlashcardPhase.MAIN)
   const [reviewItems, setReviewItems] = useState<IVocabularyItem[]>([])
   const [roundComplete, setRoundComplete] = useState(false)
   const startTimeRef = useRef(Date.now())
@@ -43,14 +43,14 @@ export default function FlashcardTab({ vocabularies, lessonId, itemProgress, onP
   }, [vocabularies, shuffled])
 
   // Current items based on phase
-  const items = phase === "REVIEW_UNKNOWN" ? reviewItems : mainItems
+  const items = phase === FlashcardPhase.REVIEW_UNKNOWN ? reviewItems : mainItems
   const currentItem = items[currentIndex]
   const total = items.length
 
   // Start session
   useEffect(() => {
     let active = true
-    startPracticeSessionAction(lessonId, "FLASHCARD").then((res) => {
+    startPracticeSessionAction(lessonId, PracticeMode.FLASHCARD).then((res) => {
       if (active && res.success && res.data) {
         setSessionId(res.data.sessionId)
         startTimeRef.current = Date.now()
@@ -80,14 +80,14 @@ export default function FlashcardTab({ vocabularies, lessonId, itemProgress, onP
   )
 
   const handleAction = useCallback(
-    async (action: "HARD" | "EASY") => {
-      if (!currentItem || !sessionId) return
+    async (action: FlashcardAction) => {
+      if (!currentItem) return
 
       // Visual swipe animation
-      setSwipeDir(action === "EASY" ? "right" : "left")
+      setSwipeDir(action === FlashcardAction.EASY ? "right" : "left")
 
       // Track known/unknown
-      if (action === "EASY") {
+      if (action === FlashcardAction.EASY) {
         setKnownSet((prev) => new Set(prev).add(currentItem.id))
         setUnknownSet((prev) => {
           const next = new Set(prev)
@@ -103,12 +103,14 @@ export default function FlashcardTab({ vocabularies, lessonId, itemProgress, onP
         })
       }
 
-      await recordFlashcardActionServer({
-        vocabularyId: currentItem.id,
-        lessonId,
-        action: action === "EASY" ? "EASY" : "HARD",
-        sessionId,
-      })
+      if (sessionId) {
+        await recordFlashcardActionServer({
+          vocabularyId: currentItem.id,
+          lessonId,
+          action: action === FlashcardAction.EASY ? FlashcardAction.EASY : FlashcardAction.HARD,
+          sessionId,
+        })
+      }
 
       onProgressUpdate()
 
@@ -128,12 +130,12 @@ export default function FlashcardTab({ vocabularies, lessonId, itemProgress, onP
   )
 
   const handleRoundComplete = useCallback(() => {
-    if (phase === "MAIN") {
+    if (phase === FlashcardPhase.MAIN) {
       // After main round, check for unknown words
       const unknowns = mainItems.filter((v) => unknownSet.has(v.id))
       if (unknowns.length > 0) {
         setReviewItems(unknowns)
-        setPhase("REVIEW_UNKNOWN")
+        setPhase(FlashcardPhase.REVIEW_UNKNOWN)
         setCurrentIndex(0)
         setIsFlipped(false)
         toast.info(`Ôn lại ${unknowns.length} từ chưa thuộc 📖`)
@@ -172,7 +174,7 @@ export default function FlashcardTab({ vocabularies, lessonId, itemProgress, onP
     setSwipeDir(null)
     setKnownSet(new Set())
     setUnknownSet(new Set())
-    setPhase("MAIN")
+    setPhase(FlashcardPhase.MAIN)
     setReviewItems([])
     setRoundComplete(false)
     if (shuffled) setShuffled(false)
@@ -226,7 +228,7 @@ export default function FlashcardTab({ vocabularies, lessonId, itemProgress, onP
   return (
     <div className="max-w-lg mx-auto">
       {/* Phase indicator */}
-      {phase === "REVIEW_UNKNOWN" && (
+      {phase === FlashcardPhase.REVIEW_UNKNOWN && (
         <div className="mb-3 p-2 rounded-lg bg-warning-50 dark:bg-warning-950/20 text-center">
           <p className="text-sm text-warning-700 dark:text-warning-300 font-medium">
             📖 Ôn lại {reviewItems.length} từ chưa thuộc
@@ -244,7 +246,7 @@ export default function FlashcardTab({ vocabularies, lessonId, itemProgress, onP
           <span className="text-danger text-xs">✗ {unknownSet.size}</span>
         </div>
         <div className="flex items-center gap-3">
-          {phase === "MAIN" && (
+          {phase === FlashcardPhase.MAIN && (
             <div className="flex items-center gap-1.5">
               <span className="text-xs text-default-400">Trộn</span>
               <Switch
@@ -265,7 +267,7 @@ export default function FlashcardTab({ vocabularies, lessonId, itemProgress, onP
       <Progress
         value={((currentIndex + 1) / total) * 100}
         size="sm"
-        color={phase === "REVIEW_UNKNOWN" ? "warning" : "primary"}
+        color={phase === FlashcardPhase.REVIEW_UNKNOWN ? "warning" : "primary"}
         className="mb-4"
         aria-label="progress"
       />
@@ -273,21 +275,20 @@ export default function FlashcardTab({ vocabularies, lessonId, itemProgress, onP
       {/* Flashcard — Click to flip */}
       <div
         className="relative perspective-1000 cursor-pointer mb-4"
-        style={{ minHeight: 320 }}
         onClick={() => setIsFlipped(!isFlipped)}
       >
         <div
-          className={`relative w-full transition-all duration-500 preserve-3d ${isFlipped ? "rotate-y-180" : ""} ${
+          className={`relative w-full transition-all duration-500 preserve-3d grid ${isFlipped ? "rotate-y-180" : ""} ${
             swipeDir === "right" ? "translate-x-[120%] opacity-0" : swipeDir === "left" ? "-translate-x-[120%] opacity-0" : ""
           }`}
-          style={{ minHeight: 320, transformStyle: "preserve-3d" }}
+          style={{ transformStyle: "preserve-3d" }}
         >
           {/* ───────── FRONT: Chinese character + word type + speaker ───────── */}
           <Card
-            className="absolute inset-0 backface-hidden"
+            className="col-start-1 row-start-1 backface-hidden"
             style={{ backfaceVisibility: "hidden" }}
           >
-            <CardBody className="flex flex-col items-center justify-center p-6 sm:p-8 min-h-80">
+            <CardBody className="flex flex-col items-center justify-center p-6 sm:p-8">
               {/* Chinese character — large, red */}
               <p className="text-5xl sm:text-7xl font-bold text-red-600 dark:text-red-400 text-center leading-tight">
                 {currentItem.word}
@@ -327,10 +328,10 @@ export default function FlashcardTab({ vocabularies, lessonId, itemProgress, onP
 
           {/* ───────── BACK: Pinyin + Meaning + Example ───────── */}
           <Card
-            className="absolute inset-0"
+            className="col-start-1 row-start-1"
             style={{ backfaceVisibility: "hidden", transform: "rotateY(180deg)" }}
           >
-            <CardBody className="flex flex-col items-center justify-center p-6 sm:p-8 min-h-80 bg-primary-50 dark:bg-primary-950/20">
+            <CardBody className="flex flex-col items-center justify-center p-6 sm:p-8 bg-primary-50 dark:bg-primary-950/20">
               {/* Chinese character (smaller on back) */}
               <p className="text-2xl sm:text-3xl font-bold text-red-600 dark:text-red-400 mb-1">
                 {currentItem.word}
@@ -345,11 +346,6 @@ export default function FlashcardTab({ vocabularies, lessonId, itemProgress, onP
               <p className="text-base sm:text-lg text-default-700 dark:text-default-300 text-center mt-1">
                 {meaningText}
               </p>
-
-              {/* English (secondary if Vietnamese is present) */}
-              {currentItem.meaningVi && currentItem.meaning !== currentItem.meaningVi && (
-                <p className="text-xs text-default-400 mt-0.5">EN: {currentItem.meaning}</p>
-              )}
 
               {/* Word type */}
               {currentItem.wordType && (
@@ -408,7 +404,7 @@ export default function FlashcardTab({ vocabularies, lessonId, itemProgress, onP
             variant="flat"
             size="lg"
             className="font-medium"
-            onPress={() => handleAction("HARD")}
+            onPress={() => handleAction(FlashcardAction.HARD)}
           >
             ✗ Chưa thuộc
           </Button>
@@ -417,7 +413,7 @@ export default function FlashcardTab({ vocabularies, lessonId, itemProgress, onP
             variant="flat"
             size="lg"
             className="font-medium"
-            onPress={() => handleAction("EASY")}
+            onPress={() => handleAction(FlashcardAction.EASY)}
           >
             ✓ Đã thuộc
           </Button>

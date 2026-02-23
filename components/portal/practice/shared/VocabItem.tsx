@@ -39,12 +39,6 @@ export default function VocabItem({ vocab, progress, onSelect, onPlayAudio }: Pr
         <div className="flex-1 min-w-0">
           <div className="flex items-center gap-1.5">
             <span className="text-sm text-primary font-medium">{vocab.pinyin}</span>
-            {/* Word type badge */}
-            {wordTypeLabel && (
-              <Chip size="sm" variant="flat" color={wordTypeColor} className="text-[10px] h-5">
-                {wordTypeLabel}
-              </Chip>
-            )}
             {status !== "NEW" && (
               <Chip
                 size="sm"
@@ -59,17 +53,22 @@ export default function VocabItem({ vocab, progress, onSelect, onPlayAudio }: Pr
           <p className="text-sm text-default-600 truncate">{getDisplayMeaning(vocab)}</p>
         </div>
 
-        {/* Right side: speaker + mastery */}
-        <div className="shrink-0 flex items-center gap-2">
+        {/* Right side: word type + mastery + speaker */}
+        <div className="shrink-0 flex items-center gap-1.5 sm:gap-2">
+          {wordTypeLabel && (
+            <Chip size="sm" variant="flat" color={wordTypeColor} className="text-[10px] h-5 hidden sm:inline-flex">
+              {wordTypeLabel}
+            </Chip>
+          )}
           {progress && progress.masteryScore > 0 && (
             <div className="text-xs font-bold text-primary">{Math.round(progress.masteryScore * 100)}%</div>
           )}
           <button
             onClick={(e) => onPlayAudio(vocab.word, vocab.audioUrl, e)}
-            className="p-1.5 rounded-full transition hover:bg-primary-100 dark:hover:bg-primary-900/30 text-primary cursor-pointer"
+            className="p-2 rounded-full transition hover:bg-primary-100 dark:hover:bg-primary-900/30 text-primary cursor-pointer"
             aria-label="Nghe phát âm"
           >
-            <Volume2 className="w-4 h-4" />
+            <Volume2 className="w-4 h-4 sm:w-5 sm:h-5" />
           </button>
         </div>
       </div>

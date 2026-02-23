@@ -8,6 +8,9 @@ import {
   finishPracticeSessionAction,
   recordPracticeAttemptAction,
 } from "@/actions/practice.actions"
+import { PracticeMode, QuestionType } from "@/enums/portal"
+import { WriteMode } from "@/constants/portal/practice"
+import { shuffleArray } from "@/utils/practice"
 import type { IVocabularyItem } from "@/interfaces/portal/practice"
 import { QuizResultScreen } from "../shared"
 import { AnimationMode, PracticeStrokeMode, TypePinyinMode } from "./write"
@@ -18,21 +21,10 @@ interface Props {
   onProgressUpdate: () => void
 }
 
-type WriteMode = "ANIMATION" | "PRACTICE" | "TYPE_PINYIN"
-
-function shuffleArray<T>(arr: T[]): T[] {
-  const shuffled = [...arr]
-  for (let i = shuffled.length - 1; i > 0; i--) {
-    const j = Math.floor(Math.random() * (i + 1));
-    [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]]
-  }
-  return shuffled
-}
-
 export default function WriteTab({ vocabularies, lessonId, onProgressUpdate }: Props) {
   const [items, setItems] = useState<IVocabularyItem[]>([])
   const [currentIdx, setCurrentIdx] = useState(0)
-  const [mode, setMode] = useState<WriteMode>("ANIMATION")
+  const [mode, setMode] = useState<WriteMode>(WriteMode.ANIMATION)
   const [finished, setFinished] = useState(false)
   const [elapsedSec, setElapsedSec] = useState(0)
   const [results, setResults] = useState<{ correct: boolean; vocab: IVocabularyItem }[]>([])
@@ -53,7 +45,7 @@ export default function WriteTab({ vocabularies, lessonId, onProgressUpdate }: P
     let active = true
     startTimeRef.current = Date.now()
     questionStartRef.current = Date.now()
-    startPracticeSessionAction(lessonId, "WRITE").then((res) => {
+    startPracticeSessionAction(lessonId, PracticeMode.WRITE).then((res) => {
       if (active && res.success && res.data) {
         setSessionId(res.data.sessionId)
         startTimeRef.current = Date.now()
@@ -81,7 +73,7 @@ export default function WriteTab({ vocabularies, lessonId, onProgressUpdate }: P
         vocabularyId: currentItem.id,
         questionType,
         userAnswer,
-        correctAnswer: questionType === "TYPE_PINYIN" ? (currentItem.pinyin || "") : currentItem.word.charAt(0),
+        correctAnswer: questionType === QuestionType.TYPE_PINYIN ? (currentItem.pinyin || "") : currentItem.word.charAt(0),
         isCorrect,
         timeSpentSec: timeSec,
       })
@@ -89,7 +81,7 @@ export default function WriteTab({ vocabularies, lessonId, onProgressUpdate }: P
     [sessionId, currentItem],
   )
 
-  const goNext = useCallback(() => {
+  const goNext = useCallback(async () => {
     if (currentIdx < totalItems - 1) {
       setCurrentIdx((i) => i + 1)
       questionStartRef.current = Date.now()
@@ -98,7 +90,7 @@ export default function WriteTab({ vocabularies, lessonId, onProgressUpdate }: P
       setElapsedSec(dur)
       setFinished(true)
       if (sessionId) {
-        finishPracticeSessionAction(sessionId, dur)
+        await finishPracticeSessionAction(sessionId, dur)
       }
       onProgressUpdate()
     }
@@ -115,7 +107,7 @@ export default function WriteTab({ vocabularies, lessonId, onProgressUpdate }: P
     (isCorrect: boolean, mistakes: number) => {
       if (!currentItem) return
       setResults((prev) => [...prev, { correct: isCorrect, vocab: currentItem }])
-      recordAttempt(isCorrect, `stroke_mistakes:${mistakes}`, "TYPE_HANZI")
+      recordAttempt(isCorrect, `stroke_mistakes:${mistakes}`, QuestionType.TYPE_HANZI)
       goNext()
     },
     [currentItem, recordAttempt, goNext],
@@ -124,7 +116,7 @@ export default function WriteTab({ vocabularies, lessonId, onProgressUpdate }: P
   const handleStrokeSkip = useCallback(() => {
     if (!currentItem) return
     setResults((prev) => [...prev, { correct: false, vocab: currentItem }])
-    recordAttempt(false, "skipped", "TYPE_HANZI")
+    recordAttempt(false, "skipped", QuestionType.TYPE_HANZI)
     goNext()
   }, [currentItem, recordAttempt, goNext])
 
@@ -132,7 +124,7 @@ export default function WriteTab({ vocabularies, lessonId, onProgressUpdate }: P
     (isCorrect: boolean, answer: string) => {
       if (!currentItem) return
       setResults((prev) => [...prev, { correct: isCorrect, vocab: currentItem }])
-      recordAttempt(isCorrect, answer, "TYPE_PINYIN")
+      recordAttempt(isCorrect, answer, QuestionType.TYPE_PINYIN)
     },
     [currentItem, recordAttempt],
   )
@@ -144,7 +136,7 @@ export default function WriteTab({ vocabularies, lessonId, onProgressUpdate }: P
     setResults([])
     questionStartRef.current = Date.now()
     startTimeRef.current = Date.now()
-    startPracticeSessionAction(lessonId, "WRITE").then((res) => {
+    startPracticeSessionAction(lessonId, PracticeMode.WRITE).then((res) => {
       if (res.success && res.data) setSessionId(res.data.sessionId)
     })
   }, [vocabularies, lessonId])
@@ -180,10 +172,10 @@ export default function WriteTab({ vocabularies, lessonId, onProgressUpdate }: P
         <span className="text-sm text-default-500">
           Từ <span className="font-medium text-foreground">{currentIdx + 1}</span>/{totalItems}
         </span>
-        {mode === "TYPE_PINYIN" && (
+        {mode === WriteMode.TYPE_PINYIN && (
           <Chip size="sm" variant="flat" color="primary">Gõ Pinyin</Chip>
         )}
-        {mode === "PRACTICE" && (
+        {mode === WriteMode.PRACTICE && (
           <Chip size="sm" variant="flat" color="primary">Luyện viết</Chip>
         )}
       </div>
@@ -191,17 +183,17 @@ export default function WriteTab({ vocabularies, lessonId, onProgressUpdate }: P
       <Progress value={((currentIdx + 1) / totalItems) * 100} size="sm" color="primary" className="mb-4" aria-label="write progress" />
 
       {/* Mode content */}
-      {mode === "ANIMATION" && (
+      {mode === WriteMode.ANIMATION && (
         <AnimationMode
           item={currentItem}
           currentIdx={currentIdx}
           totalItems={totalItems}
           onNext={goNext}
-          onSwitchToPractice={() => setMode("PRACTICE")}
+          onSwitchToPractice={() => setMode(WriteMode.PRACTICE)}
         />
       )}
 
-      {mode === "PRACTICE" && (
+      {mode === WriteMode.PRACTICE && (
         <PracticeStrokeMode
           key={`stroke-${currentItem.id}`}
           item={currentItem}
@@ -212,7 +204,7 @@ export default function WriteTab({ vocabularies, lessonId, onProgressUpdate }: P
         />
       )}
 
-      {mode === "TYPE_PINYIN" && (
+      {mode === WriteMode.TYPE_PINYIN && (
         <TypePinyinMode
           key={`pinyin-${currentItem.id}`}
           item={currentItem}

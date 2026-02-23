@@ -10,47 +10,17 @@ import {
 } from "@/actions/practice.actions"
 import { useTTS } from "@/hooks/useTTS"
 import { getDisplayMeaning } from "@/enums/portal/common"
+import { PracticeMode, QuestionType } from "@/enums/portal"
+import { AUTO_NEXT_DELAY_MS } from "@/constants/portal/practice"
+import { generateListenQuestions } from "@/utils/practice"
+import type { ListenQuestion } from "@/utils/practice"
 import type { IVocabularyItem } from "@/interfaces/portal/practice"
 import { QuizResultScreen, McqOptions } from "../shared"
-
-const AUTO_NEXT_DELAY = 3000 // ms
 
 interface Props {
   vocabularies: IVocabularyItem[]
   lessonId: string
   onProgressUpdate: () => void
-}
-
-interface ListenQuestion {
-  vocab: IVocabularyItem
-  options: { key: string; label: string }[]
-  correctKey: string
-}
-
-function shuffleArray<T>(arr: T[]): T[] {
-  const shuffled = [...arr]
-  for (let i = shuffled.length - 1; i > 0; i--) {
-    const j = Math.floor(Math.random() * (i + 1));
-    [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]]
-  }
-  return shuffled
-}
-
-function generateListenQuestions(vocabs: IVocabularyItem[]): ListenQuestion[] {
-  if (vocabs.length < 2) return []
-
-  // Use ALL vocab — TTS will handle pronunciation when no audio URL
-  return shuffleArray(vocabs).map((vocab) => {
-    const others = vocabs.filter((v) => v.id !== vocab.id)
-    const distractors = shuffleArray(others).slice(0, Math.min(3, others.length))
-
-    const allOptions = shuffleArray([
-      { key: "correct", label: getDisplayMeaning(vocab) },
-      ...distractors.map((d, i) => ({ key: `d${i}`, label: getDisplayMeaning(d) })),
-    ])
-
-    return { vocab, options: allOptions, correctKey: "correct" }
-  })
 }
 
 export default function ListenTab({ vocabularies, lessonId, onProgressUpdate }: Props) {
@@ -67,7 +37,6 @@ export default function ListenTab({ vocabularies, lessonId, onProgressUpdate }: 
   const [autoNextCountdown, setAutoNextCountdown] = useState<number | null>(null)
   const startTimeRef = useRef(Date.now())
   const questionStartRef = useRef(Date.now())
-  const audioRef = useRef<HTMLAudioElement | null>(null)
   const autoNextTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null)
   const countdownIntervalRef = useRef<ReturnType<typeof setInterval> | null>(null)
   const { speak } = useTTS()
@@ -80,7 +49,7 @@ export default function ListenTab({ vocabularies, lessonId, onProgressUpdate }: 
   // Start session
   useEffect(() => {
     let active = true
-    startPracticeSessionAction(lessonId, "LISTEN").then((res) => {
+    startPracticeSessionAction(lessonId, PracticeMode.LISTEN).then((res) => {
       if (active && res.success && res.data) {
         setSessionId(res.data.sessionId)
         startTimeRef.current = Date.now()
@@ -105,9 +74,6 @@ export default function ListenTab({ vocabularies, lessonId, onProgressUpdate }: 
   const playAudio = useCallback(() => {
     if (!currentQ) return
     // Use TTS hook which handles audioUrl OR TTS fallback
-    if (audioRef.current) {
-      audioRef.current.pause()
-    }
     setIsPlaying(true)
     setHasListened(true)
     speak(currentQ.vocab.word, currentQ.vocab.audioUrl)
@@ -145,7 +111,7 @@ export default function ListenTab({ vocabularies, lessonId, onProgressUpdate }: 
     }
   }, [])
 
-  const handleNext = useCallback(() => {
+  const handleNext = useCallback(async () => {
     clearAutoNext()
     if (currentIdx < totalQ - 1) {
       setCurrentIdx((i) => i + 1)
@@ -158,7 +124,7 @@ export default function ListenTab({ vocabularies, lessonId, onProgressUpdate }: 
       setFinished(true)
       if (sessionId) {
         const dur = Math.round((Date.now() - startTimeRef.current) / 1000)
-        finishPracticeSessionAction(sessionId, dur)
+        await finishPracticeSessionAction(sessionId, dur)
       }
       onProgressUpdate()
     }
@@ -166,7 +132,8 @@ export default function ListenTab({ vocabularies, lessonId, onProgressUpdate }: 
 
   const handleSelect = useCallback(
     async (key: string) => {
-      if (!hasListened || showResult || !currentQ || !sessionId) return
+      if (!hasListened || showResult || !currentQ) return
+
       setSelectedKey(key)
       setShowResult(true)
 
@@ -177,15 +144,17 @@ export default function ListenTab({ vocabularies, lessonId, onProgressUpdate }: 
 
       setResults((prev) => [...prev, { correct: isCorrect, vocab: currentQ.vocab }])
 
-      await recordPracticeAttemptAction({
-        sessionId,
-        vocabularyId: currentQ.vocab.id,
-        questionType: "LISTEN_MCQ",
-        userAnswer: selectedOption?.label || null,
-        correctAnswer: correctOption?.label || "",
-        isCorrect,
-        timeSpentSec: timeSec,
-      })
+      if (sessionId) {
+        await recordPracticeAttemptAction({
+          sessionId,
+          vocabularyId: currentQ.vocab.id,
+          questionType: QuestionType.LISTEN_MCQ,
+          userAnswer: selectedOption?.label || null,
+          correctAnswer: correctOption?.label || "",
+          isCorrect,
+          timeSpentSec: timeSec,
+        })
+      }
 
       // Auto-advance after 3s on correct answer
       if (isCorrect) {
@@ -195,7 +164,7 @@ export default function ListenTab({ vocabularies, lessonId, onProgressUpdate }: 
         }, 1000)
         autoNextTimerRef.current = setTimeout(() => {
           handleNext()
-        }, AUTO_NEXT_DELAY)
+        }, AUTO_NEXT_DELAY_MS)
       }
     },
     [hasListened, showResult, currentQ, sessionId, handleNext],
@@ -213,7 +182,7 @@ export default function ListenTab({ vocabularies, lessonId, onProgressUpdate }: 
     setFinished(false)
     questionStartRef.current = Date.now()
     startTimeRef.current = Date.now()
-    startPracticeSessionAction(lessonId, "LISTEN").then((res) => {
+    startPracticeSessionAction(lessonId, PracticeMode.LISTEN).then((res) => {
       if (res.success && res.data) setSessionId(res.data.sessionId)
     })
   }, [vocabularies, lessonId, clearAutoNext])
@@ -273,11 +242,11 @@ export default function ListenTab({ vocabularies, lessonId, onProgressUpdate }: 
             radius="full"
             color="secondary"
             variant={isPlaying ? "solid" : "bordered"}
-            className="w-20 h-20 mb-4"
+            className="w-16 h-16 sm:w-20 sm:h-20 mb-4"
             onPress={playAudio}
             aria-label="Phát audio"
           >
-            <Volume2 className={`w-8 h-8 ${isPlaying ? "animate-pulse" : ""}`} />
+            <Volume2 className={`w-6 h-6 sm:w-8 sm:h-8 ${isPlaying ? "animate-pulse" : ""}`} />
           </Button>
           <p className="text-sm text-default-400 mb-2">
             {hasListened
@@ -298,7 +267,7 @@ export default function ListenTab({ vocabularies, lessonId, onProgressUpdate }: 
           </div>
           {showTranscript && (
             <div className="mt-2 p-2 rounded bg-default-100">
-              <p className="text-2xl font-bold">{currentQ.vocab.word}</p>
+              <p className="text-xl sm:text-2xl font-bold">{currentQ.vocab.word}</p>
               <p className="text-primary text-sm">{currentQ.vocab.pinyin}</p>
             </div>
           )}

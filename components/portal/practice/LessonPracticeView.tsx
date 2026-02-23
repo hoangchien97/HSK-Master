@@ -1,19 +1,31 @@
 "use client"
 
-import { useState, useEffect, useCallback } from "react"
+import { useState, useCallback, useEffect, useRef } from "react"
+import dynamic from "next/dynamic"
 import { useRouter, useSearchParams, usePathname } from "next/navigation"
-import { Tabs, Tab, Chip, Button } from "@heroui/react"
+import { Tabs, Tab, Chip, Button, Spinner } from "@heroui/react"
 import { Search, Layers, HelpCircle, Headphones, PenTool } from "lucide-react"
-import { toast } from "react-toastify"
-import { fetchLessonPracticeData, refreshLessonProgress } from "@/actions/practice.actions"
+import { refreshLessonProgress } from "@/actions/practice.actions"
 import { usePortalUI } from "@/providers/portal-ui-provider"
+import { TAB_KEYS, DEFAULT_TAB } from "@/constants/portal/practice"
+import type { PracticeTabKey } from "@/constants/portal/practice"
 import ProgressCard from "./ProgressCard"
 import LookupTab from "./tabs/LookupTab"
-import FlashcardTab from "./tabs/FlashcardTab"
-import QuizTab from "./tabs/QuizTab"
-import ListenTab from "./tabs/ListenTab"
-import WriteTab from "./tabs/WriteTab"
 import type { IVocabularyItem, IStudentItemProgress } from "@/interfaces/portal/practice"
+
+/* ── Lazy-load heavy tabs (quiz/listen/write use hanzi-writer, TTS, etc.) ── */
+const FlashcardTab = dynamic(() => import("./tabs/FlashcardTab"), {
+  loading: () => <div className="flex justify-center py-12"><Spinner size="lg" /></div>,
+})
+const QuizTab = dynamic(() => import("./tabs/QuizTab"), {
+  loading: () => <div className="flex justify-center py-12"><Spinner size="lg" /></div>,
+})
+const ListenTab = dynamic(() => import("./tabs/ListenTab"), {
+  loading: () => <div className="flex justify-center py-12"><Spinner size="lg" /></div>,
+})
+const WriteTab = dynamic(() => import("./tabs/WriteTab"), {
+  loading: () => <div className="flex justify-center py-12"><Spinner size="lg" /></div>,
+})
 
 interface LessonData {
   id: string
@@ -41,10 +53,7 @@ interface SiblingLesson {
   order: number
 }
 
-const TAB_KEYS = ["lookup", "flashcard", "quiz", "listen", "write"] as const
-type TabKey = (typeof TAB_KEYS)[number]
-
-const TAB_CONFIG: Record<TabKey, { label: string; icon: React.ReactNode }> = {
+const TAB_CONFIG: Record<PracticeTabKey, { label: string; icon: React.ReactNode }> = {
   lookup: { label: "Tra cứu", icon: <Search className="w-4 h-4" /> },
   flashcard: { label: "Flashcard", icon: <Layers className="w-4 h-4" /> },
   quiz: { label: "Quiz", icon: <HelpCircle className="w-4 h-4" /> },
@@ -53,45 +62,54 @@ const TAB_CONFIG: Record<TabKey, { label: string; icon: React.ReactNode }> = {
 }
 
 interface Props {
-  lessonId: string
+  /** Slug from URL, used for breadcrumbs & sibling nav comparison */
+  lessonSlug: string
+  /** Pre-fetched from server (SSR) */
+  initialLesson: LessonData
+  initialProgress: ProgressData | null
+  initialItemProgress: Record<string, IStudentItemProgress>
+  initialSiblings: SiblingLesson[]
 }
 
-export default function LessonPracticeView({ lessonId }: Props) {
+export default function LessonPracticeView({
+  lessonSlug,
+  initialLesson,
+  initialProgress,
+  initialItemProgress,
+  initialSiblings,
+}: Props) {
   const router = useRouter()
   const searchParams = useSearchParams()
   const pathname = usePathname()
-  const { startLoading, stopLoading, setDynamicLabel } = usePortalUI()
+  const { setDynamicLabel } = usePortalUI()
+  const siblingScrollRef = useRef<HTMLDivElement>(null)
 
-  const tabParam = (searchParams.get("tab") || "lookup") as TabKey
-  const activeTab = TAB_KEYS.includes(tabParam) ? tabParam : "lookup"
+  const tabParam = (searchParams.get("tab") || DEFAULT_TAB) as PracticeTabKey
+  const activeTab = TAB_KEYS.includes(tabParam) ? tabParam : DEFAULT_TAB
 
-  const [lesson, setLesson] = useState<LessonData | null>(null)
-  const [progress, setProgress] = useState<ProgressData | null>(null)
-  const [itemProgress, setItemProgress] = useState<Record<string, IStudentItemProgress>>({})
-  const [siblings, setSiblings] = useState<SiblingLesson[]>([])
+  // State hydrated from SSR props; progress can be refreshed client-side
+  const lesson = initialLesson
+  const [progress, setProgress] = useState<ProgressData | null>(initialProgress)
+  const [itemProgress, setItemProgress] = useState<Record<string, IStudentItemProgress>>(initialItemProgress)
+  const siblings = initialSiblings
 
-  const loadData = useCallback(async () => {
-    startLoading()
-    const result = await fetchLessonPracticeData(lessonId)
-    if (result.success && result.data) {
-      const lessonData = result.data.lesson as unknown as LessonData
-      setLesson(lessonData)
-      setProgress(result.data.progress as ProgressData | null)
-      setItemProgress((result.data.itemProgress || {}) as Record<string, IStudentItemProgress>)
-      setSiblings(result.data.siblings)
-      // Set breadcrumb dynamic label: lessonId → "HSK 1 / 1. Giới thiệu"
-      setDynamicLabel(lessonId, `${lessonData.order}. ${lessonData.title}`)
-    } else {
-      toast.error(result.error || "Không thể tải bài học")
-      router.push("/portal/student/practice")
-    }
-    stopLoading()
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [lessonId, startLoading, stopLoading, router, setDynamicLabel])
+  // Always use the resolved UUID for all DB operations
+  const lessonId = lesson.id
 
+  // Set breadcrumb dynamic label
   useEffect(() => {
-    loadData()
-  }, [loadData])
+    setDynamicLabel(lessonSlug, `${lesson.order}. ${lesson.title}`)
+  }, [lessonSlug, lesson.order, lesson.title, setDynamicLabel])
+
+  // Auto-scroll sibling nav to current lesson on mount
+  useEffect(() => {
+    const container = siblingScrollRef.current
+    if (!container) return
+    const activeBtn = container.querySelector<HTMLElement>("[data-active-lesson]")
+    if (activeBtn) {
+      activeBtn.scrollIntoView({ inline: "center", block: "nearest", behavior: "smooth" })
+    }
+  }, [lessonId])
 
   const handleRefreshProgress = useCallback(async () => {
     const result = await refreshLessonProgress(lessonId)
@@ -110,29 +128,27 @@ export default function LessonPracticeView({ lessonId }: Props) {
     [searchParams, router, pathname],
   )
 
-  if (!lesson) return null
-
   const vocabs = lesson.vocabularies
   const totalItems = vocabs.length
 
   return (
-    <div className="space-y-4 sm:space-y-6 pb-24 sm:pb-6">
-      {/* Header */}
+    <div className="space-y-3 sm:space-y-6 pb-20 sm:pb-6">
+      {/* Header — compact on mobile */}
       <div>
-        <div className="flex flex-col sm:flex-row sm:items-center gap-1 sm:gap-3">
-          <h1 className="text-lg sm:text-xl font-bold">
+        <div className="flex flex-col sm:flex-row sm:items-center gap-0.5 sm:gap-3">
+          <h1 className="text-base sm:text-xl font-bold leading-tight">
             Buổi {lesson.order}: {lesson.title}
           </h1>
           {lesson.titleChinese && (
-            <span className="text-base sm:text-lg text-default-400">{lesson.titleChinese}</span>
+            <span className="text-sm sm:text-lg text-default-400">{lesson.titleChinese}</span>
           )}
         </div>
         {lesson.description && (
-          <p className="text-sm text-default-500 mt-1">{lesson.description}</p>
+          <p className="text-xs sm:text-sm text-default-500 mt-0.5 sm:mt-1 line-clamp-2">{lesson.description}</p>
         )}
-        <div className="flex items-center gap-2 mt-2">
-          <Chip size="sm" variant="flat" color="primary">{lesson.course.title}</Chip>
-          <Chip size="sm" variant="flat">{totalItems} từ vựng</Chip>
+        <div className="flex items-center gap-1.5 sm:gap-2 mt-1.5 sm:mt-2">
+          <Chip size="sm" variant="flat" color="primary" className="text-[10px] sm:text-xs">{lesson.course.title}</Chip>
+          <Chip size="sm" variant="flat" className="text-[10px] sm:text-xs">{totalItems} từ vựng</Chip>
         </div>
       </div>
 
@@ -145,7 +161,7 @@ export default function LessonPracticeView({ lessonId }: Props) {
         masteryPercent={progress?.masteryPercent ?? 0}
       />
 
-      {/* Practice Tabs */}
+      {/* Practice Tabs — icon-only on mobile, icon+label on sm+ */}
       <div>
         <Tabs
           selectedKey={activeTab}
@@ -156,7 +172,7 @@ export default function LessonPracticeView({ lessonId }: Props) {
           size="lg"
           classNames={{
             tabList: "gap-0 bg-default-100/50 p-1 rounded-xl",
-            tab: "px-3 py-2.5 text-sm font-medium",
+            tab: "px-2 sm:px-3 py-2 sm:py-2.5 text-sm font-medium min-w-0",
             cursor: "bg-white shadow-sm rounded-lg",
           }}
         >
@@ -164,9 +180,9 @@ export default function LessonPracticeView({ lessonId }: Props) {
             <Tab
               key={key}
               title={
-                <div className="flex items-center gap-1.5 justify-center">
+                <div className="flex items-center gap-1 sm:gap-1.5 justify-center">
                   {TAB_CONFIG[key].icon}
-                  <span>{TAB_CONFIG[key].label}</span>
+                  <span className="hidden sm:inline text-xs sm:text-sm">{TAB_CONFIG[key].label}</span>
                 </div>
               }
             />
@@ -174,7 +190,7 @@ export default function LessonPracticeView({ lessonId }: Props) {
         </Tabs>
 
         {/* Tab content */}
-        <div className="mt-4">
+        <div className="mt-3 sm:mt-4">
           {activeTab === "lookup" && (
             <LookupTab
               vocabularies={vocabs}
@@ -217,25 +233,30 @@ export default function LessonPracticeView({ lessonId }: Props) {
 
       {/* Sibling lessons nav — sticky bottom on mobile */}
       {siblings.length > 1 && (
-        <div className="fixed bottom-0 left-0 right-0 sm:relative sm:bottom-auto bg-background/95 backdrop-blur border-t sm:border-t-0 sm:border border-divider sm:rounded-lg p-2 sm:p-3 z-40">
+        <div className="fixed bottom-0 left-0 right-0 sm:relative sm:bottom-auto bg-background/95 backdrop-blur border-t sm:border-t-0 sm:border border-divider sm:rounded-lg shadow-none p-2 sm:p-3 z-40">
           <p className="text-xs text-default-400 mb-1.5 px-1 hidden sm:block">Các bài học khác</p>
-          <div className="flex gap-1.5 overflow-x-auto scrollbar-hide pb-safe">
-            {siblings.map((s) => (
-              <Button
-                key={s.id}
-                size="sm"
-                variant={s.id === lessonId ? "flat" : "bordered"}
-                color={s.id === lessonId ? "primary" : "default"}
-                className="shrink-0 text-xs min-w-0"
-                onPress={() => {
-                  if (s.id !== lessonId) {
-                    router.push(`/portal/student/practice/${s.slug || s.id}?tab=${activeTab}`)
-                  }
-                }}
-              >
-                {s.order}
-              </Button>
-            ))}
+          <div ref={siblingScrollRef} className="flex gap-1.5 overflow-x-auto scrollbar-hide pb-safe">
+            {siblings.map((s) => {
+              const isCurrent = s.id === lessonId
+              return (
+                <Button
+                  key={s.id}
+                  size="sm"
+                  variant={isCurrent ? "flat" : "bordered"}
+                  color={isCurrent ? "primary" : "default"}
+                  className="shrink-0 text-xs min-w-0"
+                  {...(isCurrent ? { "data-active-lesson": true } : {})}
+                  onPress={() => {
+                    if (!isCurrent) {
+                      // Always reset to lookup tab when switching lesson
+                      router.push(`/portal/student/practice/${s.slug || s.id}`)
+                    }
+                  }}
+                >
+                  Bài {s.order}
+                </Button>
+              )
+            })}
           </div>
         </div>
       )}

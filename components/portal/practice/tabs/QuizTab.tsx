@@ -10,113 +10,17 @@ import {
 } from "@/actions/practice.actions"
 import { useTTS } from "@/hooks/useTTS"
 import { getDisplayMeaning } from "@/enums/portal/common"
+import { PracticeMode } from "@/enums/portal"
+import { AUTO_NEXT_DELAY_MS, QUESTION_TYPE_LABELS } from "@/constants/portal/practice"
+import { generateQuizQuestions } from "@/utils/practice"
+import type { QuizQuestion } from "@/utils/practice"
 import type { IVocabularyItem } from "@/interfaces/portal/practice"
 import { QuizResultScreen, McqOptions } from "../shared"
-
-const AUTO_NEXT_DELAY = 3000 // ms
 
 interface Props {
   vocabularies: IVocabularyItem[]
   lessonId: string
   onProgressUpdate: () => void
-}
-
-interface QuizQuestion {
-  vocab: IVocabularyItem
-  type: "MCQ_MEANING" | "MCQ_HANZI" | "MCQ_PINYIN" | "MCQ_EXAMPLE"
-  prompt: string
-  promptSub?: string // secondary text under prompt (e.g. pinyin hint)
-  options: { key: string; label: string }[]
-  correctKey: string
-}
-
-function shuffleArray<T>(arr: T[]): T[] {
-  const shuffled = [...arr]
-  for (let i = shuffled.length - 1; i > 0; i--) {
-    const j = Math.floor(Math.random() * (i + 1));
-    [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]]
-  }
-  return shuffled
-}
-
-function generateQuestions(vocabs: IVocabularyItem[]): QuizQuestion[] {
-  if (vocabs.length === 0) return []
-
-  const questions: QuizQuestion[] = []
-  const baseTypes: QuizQuestion["type"][] = ["MCQ_MEANING", "MCQ_HANZI", "MCQ_PINYIN"]
-
-  // Check if any vocab has example sentences for MCQ_EXAMPLE type
-  const withExamples = vocabs.filter((v) => v.exampleSentence)
-
-  const shuffledVocabs = shuffleArray(vocabs)
-
-  for (const vocab of shuffledVocabs) {
-    // Randomly pick a type, include MCQ_EXAMPLE if this vocab has examples
-    const availableTypes = [...baseTypes]
-    if (vocab.exampleSentence && withExamples.length >= 2) {
-      availableTypes.push("MCQ_EXAMPLE")
-    }
-    const type = availableTypes[Math.floor(Math.random() * availableTypes.length)]
-
-    const others = vocabs.filter((v) => v.id !== vocab.id)
-    const distractorCount = Math.min(3, others.length)
-    const distractors = shuffleArray(others).slice(0, distractorCount)
-
-    let prompt: string
-    let promptSub: string | undefined
-    let correctLabel: string
-    let distractorLabels: string[]
-
-    switch (type) {
-      case "MCQ_MEANING":
-        prompt = vocab.word
-        promptSub = "Chọn nghĩa tiếng Việt"
-        correctLabel = getDisplayMeaning(vocab)
-        distractorLabels = distractors.map((d) => getDisplayMeaning(d))
-        break
-      case "MCQ_HANZI":
-        prompt = getDisplayMeaning(vocab)
-        promptSub = "Chọn Hán tự tương ứng"
-        correctLabel = vocab.word
-        distractorLabels = distractors.map((d) => d.word)
-        break
-      case "MCQ_PINYIN":
-        prompt = vocab.word
-        promptSub = "Chọn phiên âm đúng"
-        correctLabel = vocab.pinyin || ""
-        distractorLabels = distractors.map((d) => d.pinyin || "")
-        break
-      case "MCQ_EXAMPLE":
-        prompt = vocab.exampleSentence || vocab.word
-        promptSub = vocab.examplePinyin || "Từ nào xuất hiện trong câu trên?"
-        correctLabel = `${vocab.word} — ${getDisplayMeaning(vocab)}`
-        distractorLabels = distractors.map((d) => `${d.word} — ${getDisplayMeaning(d)}`)
-        break
-    }
-
-    const allOptions = shuffleArray([
-      { key: "correct", label: correctLabel },
-      ...distractorLabels.map((label, i) => ({ key: `d${i}`, label })),
-    ])
-
-    questions.push({
-      vocab,
-      type,
-      prompt,
-      promptSub,
-      options: allOptions,
-      correctKey: "correct",
-    })
-  }
-
-  return questions
-}
-
-const TYPE_LABELS: Record<string, string> = {
-  MCQ_MEANING: "Chọn nghĩa đúng",
-  MCQ_HANZI: "Chọn Hán tự đúng",
-  MCQ_PINYIN: "Chọn Pinyin đúng",
-  MCQ_EXAMPLE: "Từ vựng trong câu",
 }
 
 export default function QuizTab({ vocabularies, lessonId, onProgressUpdate }: Props) {
@@ -143,13 +47,13 @@ export default function QuizTab({ vocabularies, lessonId, onProgressUpdate }: Pr
 
   // Generate questions
   useEffect(() => {
-    setQuestions(generateQuestions(vocabularies))
+    setQuestions(generateQuizQuestions(vocabularies))
   }, [vocabularies])
 
   // Start session
   useEffect(() => {
     let active = true
-    startPracticeSessionAction(lessonId, "QUIZ").then((res) => {
+    startPracticeSessionAction(lessonId, PracticeMode.QUIZ).then((res) => {
       if (active && res.success && res.data) {
         setSessionId(res.data.sessionId)
         startTimeRef.current = Date.now()
@@ -202,7 +106,7 @@ export default function QuizTab({ vocabularies, lessonId, onProgressUpdate }: Pr
     }
   }, [])
 
-  const handleNext = useCallback(() => {
+  const handleNext = useCallback(async () => {
     clearAutoNext()
     if (currentIdx < totalQ - 1) {
       setCurrentIdx((i) => i + 1)
@@ -215,7 +119,7 @@ export default function QuizTab({ vocabularies, lessonId, onProgressUpdate }: Pr
       setElapsedSec(startTimeRef.current > 0 ? Math.round((Date.now() - startTimeRef.current) / 1000) : 0)
       if (sessionId) {
         const dur = Math.round((Date.now() - startTimeRef.current) / 1000)
-        finishPracticeSessionAction(sessionId, dur)
+        await finishPracticeSessionAction(sessionId, dur)
       }
       onProgressUpdate()
     }
@@ -223,7 +127,7 @@ export default function QuizTab({ vocabularies, lessonId, onProgressUpdate }: Pr
 
   const handleSelect = useCallback(
     async (key: string) => {
-      if (showResult || !currentQ || !sessionId) return
+      if (showResult || !currentQ) return
 
       setSelectedKey(key)
       setShowResult(true)
@@ -236,15 +140,17 @@ export default function QuizTab({ vocabularies, lessonId, onProgressUpdate }: Pr
       setResults((prev) => [...prev, { correct: isCorrect, vocab: currentQ.vocab }])
 
       // Record attempt
-      await recordPracticeAttemptAction({
-        sessionId,
-        vocabularyId: currentQ.vocab.id,
-        questionType: currentQ.type,
-        userAnswer: selectedOption?.label || null,
-        correctAnswer: correctOption?.label || "",
-        isCorrect,
-        timeSpentSec: timeSec,
-      })
+      if (sessionId) {
+        await recordPracticeAttemptAction({
+          sessionId,
+          vocabularyId: currentQ.vocab.id,
+          questionType: currentQ.type,
+          userAnswer: selectedOption?.label || null,
+          correctAnswer: correctOption?.label || "",
+          isCorrect,
+          timeSpentSec: timeSec,
+        })
+      }
 
       // Auto-advance after 3s on correct answer
       if (isCorrect) {
@@ -254,7 +160,7 @@ export default function QuizTab({ vocabularies, lessonId, onProgressUpdate }: Pr
         }, 1000)
         autoNextTimerRef.current = setTimeout(() => {
           handleNext()
-        }, AUTO_NEXT_DELAY)
+        }, AUTO_NEXT_DELAY_MS)
       }
     },
     [showResult, currentQ, sessionId, handleNext],
@@ -262,7 +168,7 @@ export default function QuizTab({ vocabularies, lessonId, onProgressUpdate }: Pr
 
   const handleRestart = useCallback(() => {
     clearAutoNext()
-    setQuestions(generateQuestions(vocabularies))
+    setQuestions(generateQuizQuestions(vocabularies))
     setCurrentIdx(0)
     setSelectedKey(null)
     setShowResult(false)
@@ -270,7 +176,7 @@ export default function QuizTab({ vocabularies, lessonId, onProgressUpdate }: Pr
     setFinished(false)
     questionStartRef.current = Date.now()
     startTimeRef.current = Date.now()
-    startPracticeSessionAction(lessonId, "QUIZ").then((res) => {
+    startPracticeSessionAction(lessonId, PracticeMode.QUIZ).then((res) => {
       if (res.success && res.data) setSessionId(res.data.sessionId)
     })
   }, [vocabularies, lessonId, clearAutoNext])
@@ -305,7 +211,7 @@ export default function QuizTab({ vocabularies, lessonId, onProgressUpdate }: Pr
         <span className="text-sm text-default-500">
           Câu <span className="font-medium text-foreground">{currentIdx + 1}</span>/{totalQ}
         </span>
-        <Chip size="sm" variant="flat">{TYPE_LABELS[currentQ.type]}</Chip>
+        <Chip size="sm" variant="flat">{QUESTION_TYPE_LABELS[currentQ.type]}</Chip>
       </div>
 
       <Progress value={((currentIdx + 1) / totalQ) * 100} size="sm" color="primary" className="mb-4" aria-label="quiz progress" />

@@ -61,20 +61,20 @@ export default function QuizResultScreen({
             </div>
           </div>
 
-          <h2 className="text-2xl font-bold mb-1">
+          <h2 className="text-xl sm:text-2xl font-bold mb-1">
             {score >= 80 ? excellent : score >= 50 ? good : needWork}
           </h2>
           <p className="text-default-500 mb-4">
             Bạn trả lời đúng {correctCount}/{totalQuestions} câu
           </p>
 
-          <div className="flex items-center justify-center gap-6 mb-4">
+          <div className="flex items-center justify-center gap-4 sm:gap-6 mb-4">
             <div className="text-center">
-              <p className="text-3xl font-bold text-primary">{score}%</p>
+              <p className="text-2xl sm:text-3xl font-bold text-primary">{score}%</p>
               <p className="text-xs text-default-400">Điểm số</p>
             </div>
             <div className="text-center">
-              <p className="text-3xl font-bold text-default-600">{elapsedSec}s</p>
+              <p className="text-2xl sm:text-3xl font-bold text-default-600">{elapsedSec}s</p>
               <p className="text-xs text-default-400">Thời gian</p>
             </div>
           </div>

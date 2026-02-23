@@ -16,7 +16,7 @@ export default function Footer() {
 
   return (
     <footer className="bg-gradient-to-r from-yellow-500 to-red-600 text-white mt-auto">
-      <div className="mx-auto max-w-7xl px-4 py-10 md:py-12 sm:px-6 lg:px-8">
+      <div className="mx-auto max-w-[1400px] px-4 py-10 md:py-12 sm:px-6 lg:px-8">
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 md:gap-8">
           {/* Brand Section */}
           <div className="sm:col-span-2 lg:col-span-1">
