@@ -2,11 +2,9 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import LanguageSwitcher from "./LanguageSwitcher";
 import { useEffect } from "react";
 import Image from "next/image";
 import { X, ArrowRight } from "lucide-react";
-import { BRAND_NAME } from "@/constants/brand";
 import { LANDING_NAV_ITEMS } from "@/constants/landing";
 
 interface MobileMenuProps {
@@ -68,23 +66,19 @@ export default function MobileMenu({ isOpen, onClose }: MobileMenuProps) {
         aria-label="Mobile navigation menu"
         onClick={(e) => e.stopPropagation()}
       >
-        {/* Header with Close Button and Language Switcher */}
+        {/* Header with Logo and Close Button */}
         <div className="flex items-center justify-between p-4 border-b border-gray-200 dark:border-gray-700 flex-shrink-0">
-          <div className="flex items-center gap-2">
-            <Image src="/logo.png" alt={BRAND_NAME} width={32} height={32} className="rounded-lg" />
-            <span className="font-bold text-lg bg-clip-text text-transparent bg-gradient-to-r from-yellow-400 to-red-600">{BRAND_NAME}</span>
-          </div>
+          <Link href="/" onClick={onClose}>
+            <Image src="/logo.png" alt="Ruby HSK" width={120} height={48} className="rounded-lg" />
+          </Link>
 
-          <div className="flex items-center gap-2">
-            <LanguageSwitcher />
-            <button
-              onClick={onClose}
-              className="flex p-2 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-lg transition-colors cursor-pointer"
-              aria-label="Close menu"
-            >
-              <X className="w-6 h-6 text-text-main-light dark:text-text-main-dark" />
-            </button>
-          </div>
+          <button
+            onClick={onClose}
+            className="flex p-2 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-lg transition-colors cursor-pointer"
+            aria-label="Close menu"
+          >
+            <X className="w-6 h-6 text-text-main-light dark:text-text-main-dark" />
+          </button>
         </div>
 
         {/* Navigation Menu - Scrollable */}

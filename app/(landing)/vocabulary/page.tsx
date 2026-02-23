@@ -27,7 +27,7 @@ export default async function VocabularyPage({
     <main className="flex-1">
       {/* Breadcrumb Section */}
       <div className="bg-gray-50 dark:bg-surface-dark border-b border-border-light dark:border-border-dark">
-        <div className="mx-auto max-w-7xl px-4 py-3 sm:px-6 lg:px-8">
+        <div className="mx-auto max-w-[1400px] px-3 sm:px-4 md:px-6 lg:px-8 py-3">
           <Breadcrumb
             items={[
               { label: "Trang chủ", href: "/" },
@@ -38,7 +38,7 @@ export default async function VocabularyPage({
       </div>
 
       {/* Main Content */}
-      <div className="mx-auto max-w-7xl px-4 py-12 sm:px-6 lg:px-8">
+      <div className="mx-auto max-w-[1400px] px-3 sm:px-4 md:px-6 lg:px-8 py-12">
         <h1 className="text-3xl font-bold text-gray-900 dark:text-white mb-6">
           Từ vựng tiếng Trung
         </h1>

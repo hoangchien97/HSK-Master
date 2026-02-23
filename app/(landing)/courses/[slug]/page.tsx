@@ -136,7 +136,7 @@ export default async function CourseDetail({ params }: Props) {
       />
       {/* Breadcrumb Section */}
       <div className="bg-gray-50 dark:bg-surface-dark border-b border-border-light dark:border-border-dark">
-        <div className="mx-auto max-w-7xl px-4 py-3 sm:px-6 lg:px-8">
+        <div className="mx-auto max-w-[1400px] px-3 sm:px-4 md:px-6 lg:px-8 py-3">
           <Breadcrumb
             items={[
               { label: "Trang chủ", href: "/" },
@@ -148,7 +148,7 @@ export default async function CourseDetail({ params }: Props) {
       </div>
 
       {/* Main Content */}
-      <div className="mx-auto max-w-7xl px-4 py-12 sm:px-6 lg:px-8">
+      <div className="mx-auto max-w-[1400px] px-3 sm:px-4 md:px-6 lg:px-8 py-12">
         {/* Page Heading & Hero */}
         <AnimatedSection variant="fadeInUp">
           <div className="flex flex-col gap-6 items-center text-center mb-16 max-w-4xl mx-auto">

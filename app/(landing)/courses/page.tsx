@@ -53,7 +53,7 @@ export default async function CoursesPage({
     <main className="flex-1">
       {/* Breadcrumb Section */}
       <div className="bg-gray-50 dark:bg-surface-dark border-b border-border-light dark:border-border-dark">
-        <div className="mx-auto max-w-7xl px-4 py-3 sm:px-6 lg:px-8">
+        <div className="mx-auto max-w-[1400px] px-3 sm:px-4 md:px-6 lg:px-8 py-3">
           <Breadcrumb
             items={[
               { label: "Trang chủ", href: "/" },
@@ -64,7 +64,7 @@ export default async function CoursesPage({
       </div>
 
       {/* Main Content */}
-      <div className="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8">
+      <div className="mx-auto max-w-[1400px] px-3 sm:px-4 md:px-6 lg:px-8 py-8">
         {/* Page Header */}
         <AnimatedSection variant="fadeInUp">
           <div className="mb-8 flex flex-col gap-4 md:flex-row md:items-end md:justify-between">

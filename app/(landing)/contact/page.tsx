@@ -58,7 +58,7 @@ export default function ContactPage() {
 
       {/* Breadcrumb Section */}
       <div className="bg-gray-50 dark:bg-surface-dark border-b border-border-light dark:border-border-dark">
-        <div className="mx-auto max-w-7xl px-4 py-3 sm:px-6 lg:px-8">
+        <div className="mx-auto max-w-[1400px] px-3 sm:px-4 md:px-6 lg:px-8 py-3">
           <Breadcrumb
             items={[
               { label: "Trang chủ", href: "/" },
@@ -69,7 +69,7 @@ export default function ContactPage() {
       </div>
 
       {/* Main Content */}
-      <div className="mx-auto max-w-7xl px-4 py-12 sm:px-6 lg:px-8">
+      <div className="mx-auto max-w-[1400px] px-3 sm:px-4 md:px-6 lg:px-8 py-12">
 
         <AnimatedSection variant="fadeInUp" className="mb-12 text-center max-w-3xl mx-auto">
           <h1 className="text-3xl font-bold tracking-tight text-gray-900 dark:text-white sm:text-4xl mb-3">

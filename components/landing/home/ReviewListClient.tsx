@@ -37,7 +37,7 @@ export default function ReviewListClient({ reviews }: Props) {
 
   return (
     <div className="overflow-hidden" ref={emblaRef}>
-      <div className="flex gap-4 md:gap-6">
+      <div className="flex gap-4 md:gap-6 py-1 md:py-2">
         {reviews.map((review) => (
           <div
             key={review.id}
