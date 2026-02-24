@@ -1,11 +1,8 @@
 "use client"
 
-import { useState, useEffect, useRef, useMemo } from "react"
+import { useMemo } from "react"
 import { Card, CardBody } from "@heroui/react"
 import { PenLine, GraduationCap, BookOpen, Trophy, Clock } from "lucide-react"
-import { toast } from "react-toastify"
-import { fetchCoursesForPractice } from "@/actions/practice.actions"
-import { usePortalUI } from "@/providers/portal-ui-provider"
 import PracticeCourseAccordion from "./PracticeCourseAccordion"
 
 interface LessonItem {
@@ -36,30 +33,14 @@ interface ProgressItem {
   totalTimeSec?: number
 }
 
-export default function PracticeListView() {
-  const { startLoading, stopLoading } = usePortalUI()
-  const [courses, setCourses] = useState<CourseItem[]>([])
-  const [progressMap, setProgressMap] = useState<Record<string, ProgressItem>>({})
-  const didLoad = useRef(false)
+interface Props {
+  initialCourses: CourseItem[]
+  initialProgressMap: Record<string, ProgressItem>
+}
 
-  useEffect(() => {
-    if (didLoad.current) return
-    didLoad.current = true
-
-    let cancelled = false
-    startLoading()
-    fetchCoursesForPractice().then((result) => {
-      if (cancelled) return
-      if (result.success && result.data) {
-        setCourses(result.data.courses as unknown as CourseItem[])
-        setProgressMap(result.data.progressMap as unknown as Record<string, ProgressItem>)
-      } else {
-        toast.error(result.error || "Không thể tải dữ liệu")
-      }
-      stopLoading()
-    })
-    return () => { cancelled = true }
-  }, [startLoading, stopLoading])
+export default function PracticeListView({ initialCourses, initialProgressMap }: Props) {
+  const courses = initialCourses
+  const progressMap = initialProgressMap
 
   // Compute overall stats
   const stats = useMemo(() => {

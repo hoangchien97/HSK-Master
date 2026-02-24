@@ -96,7 +96,6 @@ model Vocabulary {
   meaning      String      // Vietnamese meaning (primary)
   meaningVi    String?     // Vietnamese meaning (curated, if different)
   wordType     String?     // POS code: n, v, a, d, r, m, q, c, p, u
-  audioUrl     String?
   displayOrder Int         @default(0)
   exampleSentence  String?  // Example sentence in Chinese
   examplePinyin    String?  // Pinyin of example sentence

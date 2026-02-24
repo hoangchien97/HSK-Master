@@ -3,7 +3,7 @@
 import { useState, useEffect, useCallback, useRef } from "react"
 import { Button, Card, CardBody, Chip } from "@heroui/react"
 import { Play, Pause, SkipForward, PenLine, Volume2 } from "lucide-react"
-import { useTTS } from "@/hooks/useTTS"
+import { useSpeech } from "@/hooks/useSpeech"
 import { getDisplayMeaning } from "@/enums/portal/common"
 import type { IVocabularyItem } from "@/interfaces/portal/practice"
 
@@ -22,7 +22,7 @@ export default function AnimationMode({ item, currentIdx, totalItems, onNext, on
   const [isAnimating, setIsAnimating] = useState(false)
   const [isPaused, setIsPaused] = useState(false)
   const [charIdx, setCharIdx] = useState(0)
-  const { speak } = useTTS()
+  const { speak } = useSpeech()
 
   // Reset charIdx when item changes
   useEffect(() => {
@@ -106,7 +106,7 @@ export default function AnimationMode({ item, currentIdx, totalItems, onNext, on
             <p className="text-xs text-default-400">{item.meaning}</p>
           )}
           <button
-            onClick={() => speak(item.word, item.audioUrl)}
+            onClick={() => speak(item.word)}
             className="mt-2 p-2 rounded-full bg-primary-100 dark:bg-primary-900/30 text-primary hover:bg-primary-200 transition mx-auto inline-flex"
             aria-label="Nghe phát âm"
           >

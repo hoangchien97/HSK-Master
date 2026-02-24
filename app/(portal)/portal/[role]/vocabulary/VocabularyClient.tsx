@@ -18,6 +18,7 @@ import { PageHeader } from "@/components/portal/common/PageHeader"
 import { StatCard } from "@/components/portal/common/StatCard"
 import { EmptyState } from "@/components/portal/common/EmptyState"
 import { cn } from "@/lib/utils"
+import { ItemProgressStatus } from "@/enums/portal/common"
 
 interface HSKLevel {
   id: string
@@ -121,9 +122,9 @@ export default function VocabularyClient({
   const stats = useMemo(() => {
     return {
       total: progress.length,
-      mastered: progress.filter((v) => v.mastery === "MASTERED").length,
-      learning: progress.filter((v) => v.mastery === "LEARNING").length,
-      new: progress.filter((v) => v.mastery === "NEW").length,
+      mastered: progress.filter((v) => v.mastery === ItemProgressStatus.MASTERED).length,
+      learning: progress.filter((v) => v.mastery === ItemProgressStatus.LEARNING).length,
+      new: progress.filter((v) => v.mastery === ItemProgressStatus.NEW).length,
     }
   }, [progress])
 
@@ -379,14 +380,14 @@ export default function VocabularyClient({
                       <span
                         className={cn(
                           "px-2 py-0.5 rounded text-xs font-medium",
-                          vocab.mastery === "MASTERED" && "bg-green-100 text-green-700",
-                          vocab.mastery === "LEARNING" && "bg-yellow-100 text-yellow-700",
-                          vocab.mastery === "NEW" && "bg-gray-100 text-gray-700"
+                          vocab.mastery === ItemProgressStatus.MASTERED && "bg-green-100 text-green-700",
+                          vocab.mastery === ItemProgressStatus.LEARNING && "bg-yellow-100 text-yellow-700",
+                          vocab.mastery === ItemProgressStatus.NEW && "bg-gray-100 text-gray-700"
                         )}
                       >
-                        {vocab.mastery === "MASTERED" && "Thành thạo"}
-                        {vocab.mastery === "LEARNING" && "Đang học"}
-                        {vocab.mastery === "NEW" && "Mới"}
+                        {vocab.mastery === ItemProgressStatus.MASTERED && "Thành thạo"}
+                        {vocab.mastery === ItemProgressStatus.LEARNING && "Đang học"}
+                        {vocab.mastery === ItemProgressStatus.NEW && "Mới"}
                       </span>
                     </div>
                   </div>
@@ -421,7 +422,7 @@ export default function VocabularyClient({
       <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4">
         {hskLevels.map((level) => {
           const levelVocabs = progress.filter((v) => v.level === `HSK${level.level}`)
-          const masteredCount = levelVocabs.filter((v) => v.mastery === "MASTERED").length
+          const masteredCount = levelVocabs.filter((v) => v.mastery === ItemProgressStatus.MASTERED).length
           const percentage =
             levelVocabs.length > 0
               ? Math.round((masteredCount / levelVocabs.length) * 100)

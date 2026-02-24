@@ -3,7 +3,7 @@
 import { useState, useEffect, useCallback, useRef } from "react"
 import { Button, Card, CardBody } from "@heroui/react"
 import { CheckCircle, XCircle, SkipForward, RotateCcw, Volume2 } from "lucide-react"
-import { useTTS } from "@/hooks/useTTS"
+import { useSpeech } from "@/hooks/useSpeech"
 import { getDisplayMeaning } from "@/enums/portal/common"
 import type { IVocabularyItem } from "@/interfaces/portal/practice"
 
@@ -22,7 +22,7 @@ export default function PracticeStrokeMode({ item, currentIdx, totalItems, onCom
   const [strokeComplete, setStrokeComplete] = useState(false)
   const [strokeMistakes, setStrokeMistakes] = useState(0)
   const [retryKey, setRetryKey] = useState(0)
-  const { speak } = useTTS()
+  const { speak } = useSpeech()
 
   // Setup HanziWriter in quiz mode
   useEffect(() => {
@@ -100,7 +100,7 @@ export default function PracticeStrokeMode({ item, currentIdx, totalItems, onCom
           <p className="text-primary text-sm mb-1">{item.pinyin}</p>
           <p className="text-default-500 text-sm">{getDisplayMeaning(item)}</p>
           <button
-            onClick={() => speak(item.word, item.audioUrl)}
+            onClick={() => speak(item.word)}
             className="mt-2 p-2 rounded-full bg-primary-100 dark:bg-primary-900/30 text-primary hover:bg-primary-200 transition mx-auto inline-flex"
             aria-label="Nghe phát âm"
           >

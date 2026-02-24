@@ -9,7 +9,7 @@
     "example_pinyin": "Zhège ài qíng hěn zhòngyào.",
     "example_meaning": "Romance này rất quan trọng.",
     "word_type": "n",
-    "audio_url": null,
+
     "display_order": 1,
     "meaning_vi": null
   },
@@ -23,7 +23,7 @@
     "example_pinyin": "Tā zhèngzài ān pái.",
     "example_meaning": "Anh ấy đang Sắp xếp.",
     "word_type": "v",
-    "audio_url": null,
+
     "display_order": 2,
     "meaning_vi": "sắp xếp"
   },
@@ -37,7 +37,7 @@
     "example_pinyin": "Tā de xìnggé fēicháng ān quán.",
     "example_meaning": "Tính cách anh ấy rất An toàn.",
     "word_type": "a",
-    "audio_url": null,
+
     "display_order": 3,
     "meaning_vi": "an toàn"
   },
@@ -51,7 +51,7 @@
     "example_pinyin": "Tā hěn xǐhuan àn.",
     "example_meaning": "Cô ấy rất thích Close (a door).",
     "word_type": "a",
-    "audio_url": null,
+
     "display_order": 4,
     "meaning_vi": null
   },
@@ -65,7 +65,7 @@
     "example_pinyin": "Nǐ àn shí qùguò Zhōngguó ma?",
     "example_meaning": "Bạn Đúng giờ đã đến Trung Quốc chưa?",
     "word_type": "d",
-    "audio_url": null,
+
     "display_order": 5,
     "meaning_vi": "đúng giờ"
   },
@@ -79,7 +79,7 @@
     "example_pinyin": "Qǐng yòng \"àn zhào\" zào gè jùzi.",
     "example_meaning": "Hãy đặt một câu với \"Theo, căn cứ theo\".",
     "word_type": "p",
-    "audio_url": null,
+
     "display_order": 6,
     "meaning_vi": "theo, căn cứ theo"
   },
@@ -93,7 +93,7 @@
     "example_pinyin": "Nǐ xiǎng bāo kuò ma?",
     "example_meaning": "Bạn muốn Comprise không?",
     "word_type": "v",
-    "audio_url": null,
+
     "display_order": 7,
     "meaning_vi": null
   },
@@ -107,7 +107,7 @@
     "example_pinyin": "Qǐng nǐ bǎo hù yīxià.",
     "example_meaning": "Xin bạn Bảo vệ một chút.",
     "word_type": "v",
-    "audio_url": null,
+
     "display_order": 8,
     "meaning_vi": "bảo vệ"
   },
@@ -121,7 +121,7 @@
     "example_pinyin": "Wǒmen yīnggāi bǎo zhèng.",
     "example_meaning": "Chúng ta nên Bảo đảm.",
     "word_type": "v",
-    "audio_url": null,
+
     "display_order": 9,
     "meaning_vi": "bảo đảm"
   },
@@ -135,7 +135,7 @@
     "example_pinyin": "Tā bù xiǎng bào.",
     "example_meaning": "Anh ấy không muốn Ôm.",
     "word_type": "v",
-    "audio_url": null,
+
     "display_order": 10,
     "meaning_vi": "ôm"
   },
@@ -149,7 +149,7 @@
     "example_pinyin": "Nǐ xūyào bào qiàn.",
     "example_meaning": "Bạn cần Xin lỗi.",
     "word_type": "v",
-    "audio_url": null,
+
     "display_order": 11,
     "meaning_vi": "xin lỗi"
   },
@@ -163,7 +163,7 @@
     "example_pinyin": "Xiànzài de bào dào yuèláiyuè hǎo le.",
     "example_meaning": "Report bây giờ ngày càng tốt hơn.",
     "word_type": "n",
-    "audio_url": null,
+
     "display_order": 12,
     "meaning_vi": null
   },
@@ -177,7 +177,7 @@
     "example_pinyin": "Wǒ měitiān dōu bào míng.",
     "example_meaning": "Tôi Đăng ký mỗi ngày.",
     "word_type": "v",
-    "audio_url": null,
+
     "display_order": 13,
     "meaning_vi": "đăng ký"
   },
@@ -191,7 +191,7 @@
     "example_pinyin": "Wǒ duì bèi hěn gǎn xìngqù.",
     "example_meaning": "Tôi rất quan tâm đến Lần (gấp).",
     "word_type": "n",
-    "audio_url": null,
+
     "display_order": 14,
     "meaning_vi": "lần (gấp)"
   },
@@ -205,7 +205,7 @@
     "example_pinyin": "Tā běn lái shì gè hǎo xuéshēng.",
     "example_meaning": "Anh ấy Vốn, ban đầu là học sinh giỏi.",
     "word_type": "d",
-    "audio_url": null,
+
     "display_order": 15,
     "meaning_vi": "vốn, ban đầu"
   },
@@ -219,7 +219,7 @@
     "example_pinyin": "Zhè běn shū hěn bèn.",
     "example_meaning": "Quyển sách này rất Ngu, dốt.",
     "word_type": "a",
-    "audio_url": null,
+
     "display_order": 16,
     "meaning_vi": "ngu, dốt"
   },
@@ -233,7 +233,7 @@
     "example_pinyin": "Wǒ xūyào yī gè hǎo de bǐ jì běn.",
     "example_meaning": "Tôi cần một Notebook tốt.",
     "word_type": "n",
-    "audio_url": null,
+
     "display_order": 17,
     "meaning_vi": null
   },
@@ -247,7 +247,7 @@
     "example_pinyin": "Dàjiā yīqǐ bì yè ba.",
     "example_meaning": "Mọi người cùng Tốt nghiệp nhé.",
     "word_type": "v",
-    "audio_url": null,
+
     "display_order": 18,
     "meaning_vi": "tốt nghiệp"
   },
@@ -261,7 +261,7 @@
     "example_pinyin": "\"biàn\" zài Hànyǔ zhōng hěn chángjiàn.",
     "example_meaning": "\"Lần, lượt\" rất phổ biến trong tiếng Trung.",
     "word_type": "q",
-    "audio_url": null,
+
     "display_order": 19,
     "meaning_vi": "lần, lượt"
   },
@@ -275,7 +275,7 @@
     "example_pinyin": "Wǒmen tǎolùn le biāo zhǔn de wèntí.",
     "example_meaning": "Chúng tôi đã thảo luận về vấn đề Tiêu chuẩn.",
     "word_type": "n",
-    "audio_url": null,
+
     "display_order": 20,
     "meaning_vi": "tiêu chuẩn"
   },
@@ -289,7 +289,7 @@
     "example_pinyin": "Wǒmen yīnggāi biǎo dá.",
     "example_meaning": "Chúng ta nên Biểu đạt.",
     "word_type": "v",
-    "audio_url": null,
+
     "display_order": 21,
     "meaning_vi": "biểu đạt"
   },
@@ -303,7 +303,7 @@
     "example_pinyin": "Tā de biǎo gé hěn hǎo.",
     "example_meaning": "Form của cô ấy rất tốt.",
     "word_type": "n",
-    "audio_url": null,
+
     "display_order": 22,
     "meaning_vi": null
   },
@@ -317,7 +317,7 @@
     "example_pinyin": "Nǐ xūyào biǎo yáng.",
     "example_meaning": "Bạn cần Khen ngợi.",
     "word_type": "v",
-    "audio_url": null,
+
     "display_order": 23,
     "meaning_vi": "khen ngợi"
   },
@@ -331,7 +331,7 @@
     "example_pinyin": "Xiànzài de bǐng gān yuèláiyuè hǎo le.",
     "example_meaning": "Biscuit bây giờ ngày càng tốt hơn.",
     "word_type": "n",
-    "audio_url": null,
+
     "display_order": 24,
     "meaning_vi": null
   },
@@ -345,7 +345,7 @@
     "example_pinyin": "Wǒ zhèngzài xuéxí \"bìng qiě\" zhège cí.",
     "example_meaning": "Tôi đang học từ \"Hơn nữa, và\".",
     "word_type": "c",
-    "audio_url": null,
+
     "display_order": 25,
     "meaning_vi": "hơn nữa, và"
   },
@@ -359,7 +359,7 @@
     "example_pinyin": "Wǒ duì bó shì hěn gǎn xìngqù.",
     "example_meaning": "Tôi rất quan tâm đến Tiến sĩ.",
     "word_type": "n",
-    "audio_url": null,
+
     "display_order": 26,
     "meaning_vi": "tiến sĩ"
   },
@@ -373,7 +373,7 @@
     "example_pinyin": "\"bù dàn\" zài Hànyǔ zhōng hěn chángjiàn.",
     "example_meaning": "\"Not only (... but also...)\" rất phổ biến trong tiếng Trung.",
     "word_type": "c",
-    "audio_url": null,
+
     "display_order": 27,
     "meaning_vi": null
   },
@@ -387,7 +387,7 @@
     "example_pinyin": "Wǒmen jīntiān xué \"bù guò\".",
     "example_meaning": "Hôm nay chúng ta học \"Chỉ\".",
     "word_type": "c",
-    "audio_url": null,
+
     "display_order": 28,
     "meaning_vi": "chỉ"
   },
@@ -401,7 +401,7 @@
     "example_pinyin": "Nǐ bù dé bù qùguò Zhōngguó ma?",
     "example_meaning": "Bạn Không thể không, buộc phải đã đến Trung Quốc chưa?",
     "word_type": "d",
-    "audio_url": null,
+
     "display_order": 29,
     "meaning_vi": "không thể không, buộc phải"
   },
@@ -415,7 +415,7 @@
     "example_pinyin": "Qǐng yòng \"bù guǎn\" zào gè jùzi.",
     "example_meaning": "Hãy đặt một câu với \"Bất kể, dù\".",
     "word_type": "c",
-    "audio_url": null,
+
     "display_order": 30,
     "meaning_vi": "bất kể, dù"
   },
@@ -429,7 +429,7 @@
     "example_pinyin": "\"bù jǐn\" zài Hànyǔ zhōng hěn chángjiàn.",
     "example_meaning": "\"Not only (this one)\" rất phổ biến trong tiếng Trung.",
     "word_type": "c",
-    "audio_url": null,
+
     "display_order": 31,
     "meaning_vi": null
   },
@@ -443,7 +443,7 @@
     "example_pinyin": "Wǒmen tǎolùn le bù fèn de wèntí.",
     "example_meaning": "Chúng tôi đã thảo luận về vấn đề Phần, bộ phận.",
     "word_type": "n",
-    "audio_url": null,
+
     "display_order": 1,
     "meaning_vi": "phần, bộ phận"
   },
@@ -457,7 +457,7 @@
     "example_pinyin": "Wǒmen yīnggāi cā.",
     "example_meaning": "Chúng ta nên Wipe.",
     "word_type": "v",
-    "audio_url": null,
+
     "display_order": 2,
     "meaning_vi": null
   },
@@ -471,7 +471,7 @@
     "example_pinyin": "Tā bù xiǎng cāi.",
     "example_meaning": "Anh ấy không muốn Đoán.",
     "word_type": "v",
-    "audio_url": null,
+
     "display_order": 3,
     "meaning_vi": "đoán"
   },
@@ -485,7 +485,7 @@
     "example_pinyin": "Guānyú cái liào nǐ liǎojiě duōshǎo?",
     "example_meaning": "Về Vật liệu, tài liệu, bạn biết bao nhiêu?",
     "word_type": "n",
-    "audio_url": null,
+
     "display_order": 4,
     "meaning_vi": "vật liệu, tài liệu"
   },
@@ -499,7 +499,7 @@
     "example_pinyin": "Wǒ gāng cān guān wán.",
     "example_meaning": "Tôi vừa Tham quan xong.",
     "word_type": "v",
-    "audio_url": null,
+
     "display_order": 5,
     "meaning_vi": "tham quan"
   },
@@ -513,7 +513,7 @@
     "example_pinyin": "Nǐ chà bu duō qùguò Zhōngguó ma?",
     "example_meaning": "Bạn Gần giống, xấp xỉ đã đến Trung Quốc chưa?",
     "word_type": "d",
-    "audio_url": null,
+
     "display_order": 6,
     "meaning_vi": "gần giống, xấp xỉ"
   },
@@ -527,7 +527,7 @@
     "example_pinyin": "Wǒ duì Cháng chéng hěn gǎn xìngqù.",
     "example_meaning": "Tôi rất quan tâm đến The Great Wall.",
     "word_type": "n",
-    "audio_url": null,
+
     "display_order": 7,
     "meaning_vi": null
   },
@@ -541,7 +541,7 @@
     "example_pinyin": "Cháng Jiāng shì hěn zhòngyào de.",
     "example_meaning": "Yangtze River rất là quan trọng.",
     "word_type": "n",
-    "audio_url": null,
+
     "display_order": 8,
     "meaning_vi": null
   },
@@ -555,7 +555,7 @@
     "example_pinyin": "Tā hěn xǐhuan cháng.",
     "example_meaning": "Cô ấy rất thích Nếm, thử.",
     "word_type": "v",
-    "audio_url": null,
+
     "display_order": 9,
     "meaning_vi": "nếm, thử"
   },
@@ -569,7 +569,7 @@
     "example_pinyin": "Wǒ zhèngzài xuéxí \"chǎng\" zhège cí.",
     "example_meaning": "Tôi đang học từ \"Sân; trận\".",
     "word_type": "q",
-    "audio_url": null,
+
     "display_order": 10,
     "meaning_vi": "sân; trận"
   },
@@ -583,7 +583,7 @@
     "example_pinyin": "Dàjiā yīqǐ chāo guò ba.",
     "example_meaning": "Mọi người cùng Surpass nhé.",
     "word_type": "v",
-    "audio_url": null,
+
     "display_order": 11,
     "meaning_vi": null
   },
@@ -597,7 +597,7 @@
     "example_pinyin": "Nǐ xiǎng chǎo ma?",
     "example_meaning": "Bạn muốn Ồn, cãi nhau không?",
     "word_type": "v",
-    "audio_url": null,
+
     "display_order": 12,
     "meaning_vi": "ồn, cãi nhau"
   },
@@ -611,7 +611,7 @@
     "example_pinyin": "Qǐng nǐ chéng zuò yīxià.",
     "example_meaning": "Xin bạn Đi (phương tiện) một chút.",
     "word_type": "v",
-    "audio_url": null,
+
     "display_order": 13,
     "meaning_vi": "đi (phương tiện)"
   },
@@ -625,7 +625,7 @@
     "example_pinyin": "Wǒmen yīnggāi chéng gōng.",
     "example_meaning": "Chúng ta nên Thành công.",
     "word_type": "v",
-    "audio_url": null,
+
     "display_order": 14,
     "meaning_vi": "thành công"
   },
@@ -639,7 +639,7 @@
     "example_pinyin": "Zhè jiàn shì hěn chéng shú.",
     "example_meaning": "Việc này rất Trưởng thành, chín.",
     "word_type": "a",
-    "audio_url": null,
+
     "display_order": 15,
     "meaning_vi": "trưởng thành, chín"
   },
@@ -653,7 +653,7 @@
     "example_pinyin": "Nǐ xūyào chéng wéi.",
     "example_meaning": "Bạn cần Become.",
     "word_type": "v",
-    "audio_url": null,
+
     "display_order": 16,
     "meaning_vi": null
   },
@@ -667,7 +667,7 @@
     "example_pinyin": "Dàjiā dōu juédé hěn chéng shí.",
     "example_meaning": "Mọi người đều thấy rất Trung thực.",
     "word_type": "a",
-    "audio_url": null,
+
     "display_order": 17,
     "meaning_vi": "trung thực"
   },
@@ -681,7 +681,7 @@
     "example_pinyin": "Wǒ měitiān dōu chī jīng.",
     "example_meaning": "Tôi Ngạc nhiên, bất ngờ mỗi ngày.",
     "word_type": "v",
-    "audio_url": null,
+
     "display_order": 18,
     "meaning_vi": "ngạc nhiên, bất ngờ"
   },
@@ -695,7 +695,7 @@
     "example_pinyin": "Wǒ chóng xīn juédé zhèyàng hěn hǎo.",
     "example_meaning": "Tôi Lại, làm lại thấy như vậy rất tốt.",
     "word_type": "d",
-    "audio_url": null,
+
     "display_order": 19,
     "meaning_vi": "lại, làm lại"
   },
@@ -709,7 +709,7 @@
     "example_pinyin": "Nǐ kěyǐ chōu yān ma?",
     "example_meaning": "Bạn có thể Hút thuốc không?",
     "word_type": "v",
-    "audio_url": null,
+
     "display_order": 20,
     "meaning_vi": "hút thuốc"
   },
@@ -723,7 +723,7 @@
     "example_pinyin": "Tā hěn xǐhuan chū chāi.",
     "example_meaning": "Cô ấy rất thích Đi công tác.",
     "word_type": "v",
-    "audio_url": null,
+
     "display_order": 21,
     "meaning_vi": "đi công tác"
   },
@@ -737,7 +737,7 @@
     "example_pinyin": "Wǒ yǐjīng chū fā le.",
     "example_meaning": "Tôi đã Khởi hành, xuất phát rồi.",
     "word_type": "v",
-    "audio_url": null,
+
     "display_order": 22,
     "meaning_vi": "khởi hành, xuất phát"
   },
@@ -751,7 +751,7 @@
     "example_pinyin": "Dàjiā yīqǐ chū shēng ba.",
     "example_meaning": "Mọi người cùng Sinh ra nhé.",
     "word_type": "v",
-    "audio_url": null,
+
     "display_order": 23,
     "meaning_vi": "sinh ra"
   },
@@ -765,7 +765,7 @@
     "example_pinyin": "chuán zhēn duì xuéxí hěn yǒu bāngzhù.",
     "example_meaning": "Fax rất hữu ích cho việc học.",
     "word_type": "n",
-    "audio_url": null,
+
     "display_order": 24,
     "meaning_vi": null
   },
@@ -779,7 +779,7 @@
     "example_pinyin": "Wǒmen tǎolùn le chuāng hu de wèntí.",
     "example_meaning": "Chúng tôi đã thảo luận về vấn đề Cửa sổ.",
     "word_type": "n",
-    "audio_url": null,
+
     "display_order": 25,
     "meaning_vi": "cửa sổ"
   },
@@ -793,7 +793,7 @@
     "example_pinyin": "Zhège cí diǎn fēicháng yǒuyòng.",
     "example_meaning": "Từ điển này rất hữu ích.",
     "word_type": "n",
-    "audio_url": null,
+
     "display_order": 26,
     "meaning_vi": "từ điển"
   },
@@ -807,7 +807,7 @@
     "example_pinyin": "Wǒ cóng lái juédé zhèyàng hěn hǎo.",
     "example_meaning": "Tôi Từ trước đến nay thấy như vậy rất tốt.",
     "word_type": "d",
-    "audio_url": null,
+
     "display_order": 27,
     "meaning_vi": "từ trước đến nay"
   },
@@ -821,7 +821,7 @@
     "example_pinyin": "Zhōngguó cài zhēn cū xīn.",
     "example_meaning": "Món Trung thật Bất cẩn.",
     "word_type": "a",
-    "audio_url": null,
+
     "display_order": 28,
     "meaning_vi": "bất cẩn"
   },
@@ -835,7 +835,7 @@
     "example_pinyin": "Wǒ gāng dá àn wán.",
     "example_meaning": "Tôi vừa Đáp án xong.",
     "word_type": "v",
-    "audio_url": null,
+
     "display_order": 29,
     "meaning_vi": "đáp án"
   },
@@ -849,7 +849,7 @@
     "example_pinyin": "Wǒ měitiān dōu dǎ ban.",
     "example_meaning": "Tôi Decorate mỗi ngày.",
     "word_type": "v",
-    "audio_url": null,
+
     "display_order": 30,
     "meaning_vi": null
   },
@@ -863,7 +863,7 @@
     "example_pinyin": "Tā zhèngzài dǎ rǎo.",
     "example_meaning": "Anh ấy đang Disturb.",
     "word_type": "v",
-    "audio_url": null,
+
     "display_order": 31,
     "meaning_vi": null
   },
@@ -877,7 +877,7 @@
     "example_pinyin": "Nǐ kěyǐ dǎ yìn ma?",
     "example_meaning": "Bạn có thể Print không?",
     "word_type": "v",
-    "audio_url": null,
+
     "display_order": 1,
     "meaning_vi": null
   },
@@ -891,7 +891,7 @@
     "example_pinyin": "Tā hěn xǐhuan dǎ zhé.",
     "example_meaning": "Cô ấy rất thích Give a discount.",
     "word_type": "v",
-    "audio_url": null,
+
     "display_order": 2,
     "meaning_vi": null
   },
@@ -905,7 +905,7 @@
     "example_pinyin": "Wǒ yǐjīng dǎ zhēn le.",
     "example_meaning": "Tôi đã Give or have an injection rồi.",
     "word_type": "v",
-    "audio_url": null,
+
     "display_order": 3,
     "meaning_vi": null
   },
@@ -919,7 +919,7 @@
     "example_pinyin": "Wǒ dà gài juédé zhèyàng hěn hǎo.",
     "example_meaning": "Tôi Đại khái, khoảng thấy như vậy rất tốt.",
     "word_type": "d",
-    "audio_url": null,
+
     "display_order": 4,
     "meaning_vi": "đại khái, khoảng"
   },
@@ -933,7 +933,7 @@
     "example_pinyin": "dà shǐ guǎn duì xuéxí hěn yǒu bāngzhù.",
     "example_meaning": "Embassy rất hữu ích cho việc học.",
     "word_type": "n",
-    "audio_url": null,
+
     "display_order": 5,
     "meaning_vi": null
   },
@@ -947,7 +947,7 @@
     "example_pinyin": "Wǒmen dà yuē zhèyàng zuò.",
     "example_meaning": "Chúng tôi Khoảng, chừng làm như vậy.",
     "word_type": "d",
-    "audio_url": null,
+
     "display_order": 6,
     "meaning_vi": "khoảng, chừng"
   },
@@ -961,7 +961,7 @@
     "example_pinyin": "Wǒmen yīnggāi dài.",
     "example_meaning": "Chúng ta nên Put on or wear (glasses, hat, gloves etc).",
     "word_type": "v",
-    "audio_url": null,
+
     "display_order": 7,
     "meaning_vi": null
   },
@@ -975,7 +975,7 @@
     "example_pinyin": "Tā de dài biǎo hěn hǎo.",
     "example_meaning": "Representative của cô ấy rất tốt.",
     "word_type": "n",
-    "audio_url": null,
+
     "display_order": 8,
     "meaning_vi": null
   },
@@ -989,7 +989,7 @@
     "example_pinyin": "Nǐ xūyào dài tì.",
     "example_meaning": "Bạn cần Thay thế.",
     "word_type": "v",
-    "audio_url": null,
+
     "display_order": 9,
     "meaning_vi": "thay thế"
   },
@@ -1003,7 +1003,7 @@
     "example_pinyin": "Xiànzài de dài fu yuèláiyuè hǎo le.",
     "example_meaning": "Bác sĩ bây giờ ngày càng tốt hơn.",
     "word_type": "n",
-    "audio_url": null,
+
     "display_order": 10,
     "meaning_vi": "bác sĩ"
   },
@@ -1017,7 +1017,7 @@
     "example_pinyin": "Wǒ měitiān dōu dāng.",
     "example_meaning": "Tôi Khi, lúc mỗi ngày.",
     "word_type": "v",
-    "audio_url": null,
+
     "display_order": 11,
     "meaning_vi": "khi, lúc"
   },
@@ -1031,7 +1031,7 @@
     "example_pinyin": "Zhèlǐ de huánjìng hěn dāng dì.",
     "example_meaning": "Môi trường ở đây rất Địa phương.",
     "word_type": "a",
-    "audio_url": null,
+
     "display_order": 12,
     "meaning_vi": "địa phương"
   },
@@ -1045,7 +1045,7 @@
     "example_pinyin": "dāng shí shì hěn zhòngyào de.",
     "example_meaning": "Then rất là quan trọng.",
     "word_type": "n",
-    "audio_url": null,
+
     "display_order": 13,
     "meaning_vi": null
   },
@@ -1059,7 +1059,7 @@
     "example_pinyin": "Nǐ zhīdào dāo shì shénme ma?",
     "example_meaning": "Bạn biết Dao là gì không?",
     "word_type": "n",
-    "audio_url": null,
+
     "display_order": 14,
     "meaning_vi": "dao"
   },
@@ -1073,7 +1073,7 @@
     "example_pinyin": "Wǒ xūyào yī gè hǎo de dǎo yóu.",
     "example_meaning": "Tôi cần một Hướng dẫn viên tốt.",
     "word_type": "n",
-    "audio_url": null,
+
     "display_order": 15,
     "meaning_vi": "hướng dẫn viên"
   },
@@ -1087,7 +1087,7 @@
     "example_pinyin": "Tā gěi le wǒ yī gè dào chù.",
     "example_meaning": "Anh ấy cho tôi một Everywhere.",
     "word_type": "n",
-    "audio_url": null,
+
     "display_order": 16,
     "meaning_vi": null
   },
@@ -1101,7 +1101,7 @@
     "example_pinyin": "Tā dào dǐ shì gè hǎo xuéshēng.",
     "example_meaning": "Anh ấy Cuối cùng là học sinh giỏi.",
     "word_type": "d",
-    "audio_url": null,
+
     "display_order": 17,
     "meaning_vi": "cuối cùng"
   },
@@ -1115,7 +1115,7 @@
     "example_pinyin": "Qǐng nǐ dào qiàn yīxià.",
     "example_meaning": "Xin bạn Xin lỗi một chút.",
     "word_type": "v",
-    "audio_url": null,
+
     "display_order": 18,
     "meaning_vi": "xin lỗi"
   },
@@ -1129,7 +1129,7 @@
     "example_pinyin": "Zhège dé yì fēicháng yǒuyòng.",
     "example_meaning": "Đắc ý, tự hào này rất hữu ích.",
     "word_type": "n",
-    "audio_url": null,
+
     "display_order": 19,
     "meaning_vi": "đắc ý, tự hào"
   },
@@ -1143,7 +1143,7 @@
     "example_pinyin": "Tā de děng hěn hǎo.",
     "example_meaning": "Đợi, chờ của cô ấy rất tốt.",
     "word_type": "n",
-    "audio_url": null,
+
     "display_order": 20,
     "meaning_vi": "đợi, chờ"
   },
@@ -1157,7 +1157,7 @@
     "example_pinyin": "Guānyú děng nǐ liǎojiě duōshǎo?",
     "example_meaning": "Về Đợi, chờ, bạn biết bao nhiêu?",
     "word_type": "n",
-    "audio_url": null,
+
     "display_order": 21,
     "meaning_vi": "đợi, chờ"
   },
@@ -1171,7 +1171,7 @@
     "example_pinyin": "Xiànzài de dǐ yuèláiyuè hǎo le.",
     "example_meaning": "Đáy bây giờ ngày càng tốt hơn.",
     "word_type": "n",
-    "audio_url": null,
+
     "display_order": 22,
     "meaning_vi": "đáy"
   },
@@ -1185,7 +1185,7 @@
     "example_pinyin": "Zhège dì qiú hěn zhòngyào.",
     "example_meaning": "Trái đất này rất quan trọng.",
     "word_type": "n",
-    "audio_url": null,
+
     "display_order": 23,
     "meaning_vi": "trái đất"
   },
@@ -1199,7 +1199,7 @@
     "example_pinyin": "Wǒ duì dì zhǐ hěn gǎn xìngqù.",
     "example_meaning": "Tôi rất quan tâm đến Địa chỉ.",
     "word_type": "n",
-    "audio_url": null,
+
     "display_order": 24,
     "meaning_vi": "địa chỉ"
   },
@@ -1213,7 +1213,7 @@
     "example_pinyin": "Nǐ kěyǐ diào ma?",
     "example_meaning": "Bạn có thể Rơi, mất không?",
     "word_type": "v",
-    "audio_url": null,
+
     "display_order": 25,
     "meaning_vi": "rơi, mất"
   },
@@ -1227,7 +1227,7 @@
     "example_pinyin": "Nǐ zhīdào diào chá shì shénme ma?",
     "example_meaning": "Bạn biết Điều tra là gì không?",
     "word_type": "n",
-    "audio_url": null,
+
     "display_order": 26,
     "meaning_vi": "điều tra"
   },
@@ -1241,7 +1241,7 @@
     "example_pinyin": "Wǒ yǐjīng diū le.",
     "example_meaning": "Tôi đã Mất, đánh mất rồi.",
     "word_type": "v",
-    "audio_url": null,
+
     "display_order": 27,
     "meaning_vi": "mất, đánh mất"
   },
@@ -1255,7 +1255,7 @@
     "example_pinyin": "Tā gěi le wǒ yī gè dòng zuò.",
     "example_meaning": "Anh ấy cho tôi một Động tác.",
     "word_type": "n",
-    "audio_url": null,
+
     "display_order": 28,
     "meaning_vi": "động tác"
   },
@@ -1269,7 +1269,7 @@
     "example_pinyin": "dǔ chē duì xuéxí hěn yǒu bāngzhù.",
     "example_meaning": "Tắc đường rất hữu ích cho việc học.",
     "word_type": "n",
-    "audio_url": null,
+
     "display_order": 29,
     "meaning_vi": "tắc đường"
   },
@@ -1283,7 +1283,7 @@
     "example_pinyin": "Wǒmen dù zi zhèyàng zuò.",
     "example_meaning": "Chúng tôi Belly làm như vậy.",
     "word_type": "d",
-    "audio_url": null,
+
     "display_order": 30,
     "meaning_vi": null
   },
@@ -1297,7 +1297,7 @@
     "example_pinyin": "Wǒmen yīnggāi duàn.",
     "example_meaning": "Chúng ta nên Break.",
     "word_type": "v",
-    "audio_url": null,
+
     "display_order": 31,
     "meaning_vi": null
   },
@@ -1311,7 +1311,7 @@
     "example_pinyin": "Qǐng yòng \"duì\" zào gè jùzi.",
     "example_meaning": "Hãy đặt một câu với \"Đúng\".",
     "word_type": "a",
-    "audio_url": null,
+
     "display_order": 1,
     "meaning_vi": "đúng"
   },
@@ -1325,7 +1325,7 @@
     "example_pinyin": "\"duì\" zài Hànyǔ zhōng hěn chángjiàn.",
     "example_meaning": "\"Đúng\" rất phổ biến trong tiếng Trung.",
     "word_type": "a",
-    "audio_url": null,
+
     "display_order": 2,
     "meaning_vi": "đúng"
   },
@@ -1339,7 +1339,7 @@
     "example_pinyin": "Xiànzài de duì huà yuèláiyuè hǎo le.",
     "example_meaning": "Đối thoại, hội thoại bây giờ ngày càng tốt hơn.",
     "word_type": "n",
-    "audio_url": null,
+
     "display_order": 3,
     "meaning_vi": "đối thoại, hội thoại"
   },
@@ -1353,7 +1353,7 @@
     "example_pinyin": "Zhège duì miàn hěn zhòngyào.",
     "example_meaning": "Đối diện này rất quan trọng.",
     "word_type": "n",
-    "audio_url": null,
+
     "display_order": 4,
     "meaning_vi": "đối diện"
   },
@@ -1367,7 +1367,7 @@
     "example_pinyin": "Qǐng yòng \"dùn\" zào gè jùzi.",
     "example_meaning": "Hãy đặt một câu với \"Dừng\".",
     "word_type": "q",
-    "audio_url": null,
+
     "display_order": 5,
     "meaning_vi": "dừng"
   },
@@ -1381,7 +1381,7 @@
     "example_pinyin": "duǒ shì hěn zhòngyào de.",
     "example_meaning": "Bông (hoa) rất là quan trọng.",
     "word_type": "n",
-    "audio_url": null,
+
     "display_order": 6,
     "meaning_vi": "bông (hoa)"
   },
@@ -1395,7 +1395,7 @@
     "example_pinyin": "Wǒmen jīntiān xué \"ér\".",
     "example_meaning": "Hôm nay chúng ta học \"Mà, nhưng\".",
     "word_type": "c",
-    "audio_url": null,
+
     "display_order": 7,
     "meaning_vi": "mà, nhưng"
   },
@@ -1409,7 +1409,7 @@
     "example_pinyin": "Wǒ xūyào yī gè hǎo de ér tóng.",
     "example_meaning": "Tôi cần một Trẻ em tốt.",
     "word_type": "n",
-    "audio_url": null,
+
     "display_order": 8,
     "meaning_vi": "trẻ em"
   },
@@ -1423,7 +1423,7 @@
     "example_pinyin": "Dàjiā yīqǐ fā ba.",
     "example_meaning": "Mọi người cùng Gửi, phát nhé.",
     "word_type": "v",
-    "audio_url": null,
+
     "display_order": 9,
     "meaning_vi": "gửi, phát"
   },
@@ -1437,7 +1437,7 @@
     "example_pinyin": "Nǐ xiǎng fā shēng ma?",
     "example_meaning": "Bạn muốn Happen không?",
     "word_type": "v",
-    "audio_url": null,
+
     "display_order": 10,
     "meaning_vi": null
   },
@@ -1451,7 +1451,7 @@
     "example_pinyin": "Wǒmen tǎolùn le fā zhǎn de wèntí.",
     "example_meaning": "Chúng tôi đã thảo luận về vấn đề Phát triển.",
     "word_type": "v",
-    "audio_url": null,
+
     "display_order": 11,
     "meaning_vi": "phát triển"
   },
@@ -1465,7 +1465,7 @@
     "example_pinyin": "Zhège fǎ lǜ fēicháng yǒuyòng.",
     "example_meaning": "Pháp luật này rất hữu ích.",
     "word_type": "n",
-    "audio_url": null,
+
     "display_order": 12,
     "meaning_vi": "pháp luật"
   },
@@ -1479,7 +1479,7 @@
     "example_pinyin": "Tā bù xiǎng fān yì.",
     "example_meaning": "Anh ấy không muốn Phiên dịch, dịch.",
     "word_type": "v",
-    "audio_url": null,
+
     "display_order": 13,
     "meaning_vi": "phiên dịch, dịch"
   },
@@ -1493,7 +1493,7 @@
     "example_pinyin": "Nǐ xūyào fán nǎo.",
     "example_meaning": "Bạn cần Phiền não.",
     "word_type": "v",
-    "audio_url": null,
+
     "display_order": 14,
     "meaning_vi": "phiền não"
   },
@@ -1507,7 +1507,7 @@
     "example_pinyin": "Wǒ gāng fǎn duì wán.",
     "example_meaning": "Tôi vừa Phản đối xong.",
     "word_type": "v",
-    "audio_url": null,
+
     "display_order": 15,
     "meaning_vi": "phản đối"
   },
@@ -1521,7 +1521,7 @@
     "example_pinyin": "Wǒ měitiān dōu fǎn yìng.",
     "example_meaning": "Tôi Phản ánh mỗi ngày.",
     "word_type": "v",
-    "audio_url": null,
+
     "display_order": 16,
     "meaning_vi": "phản ánh"
   },
@@ -1535,7 +1535,7 @@
     "example_pinyin": "Wǒ duì fàn wéi hěn gǎn xìngqù.",
     "example_meaning": "Tôi rất quan tâm đến Phạm vi.",
     "word_type": "n",
-    "audio_url": null,
+
     "display_order": 17,
     "meaning_vi": "phạm vi"
   },
@@ -1549,7 +1549,7 @@
     "example_pinyin": "fāng fǎ shì hěn zhòngyào de.",
     "example_meaning": "Phương pháp rất là quan trọng.",
     "word_type": "n",
-    "audio_url": null,
+
     "display_order": 18,
     "meaning_vi": "phương pháp"
   },
@@ -1563,7 +1563,7 @@
     "example_pinyin": "Nǐ zhīdào fāng miàn shì shénme ma?",
     "example_meaning": "Bạn biết Phương diện, mặt là gì không?",
     "word_type": "n",
-    "audio_url": null,
+
     "display_order": 19,
     "meaning_vi": "phương diện, mặt"
   },
@@ -1577,7 +1577,7 @@
     "example_pinyin": "Wǒ xūyào yī gè hǎo de fāng xiàng.",
     "example_meaning": "Tôi cần một Phương hướng, hướng tốt.",
     "word_type": "n",
-    "audio_url": null,
+
     "display_order": 20,
     "meaning_vi": "phương hướng, hướng"
   },
@@ -1591,7 +1591,7 @@
     "example_pinyin": "Dàjiā yīqǐ fǎng wèn ba.",
     "example_meaning": "Mọi người cùng Visit nhé.",
     "word_type": "v",
-    "audio_url": null,
+
     "display_order": 21,
     "meaning_vi": null
   },
@@ -1605,7 +1605,7 @@
     "example_pinyin": "Nǐ xiǎng fàng qì ma?",
     "example_meaning": "Bạn muốn Từ bỏ không?",
     "word_type": "v",
-    "audio_url": null,
+
     "display_order": 22,
     "meaning_vi": "từ bỏ"
   },
@@ -1619,7 +1619,7 @@
     "example_pinyin": "Wǒmen tǎolùn le fàng shǔ jià de wèntí.",
     "example_meaning": "Chúng tôi đã thảo luận về vấn đề Nghỉ hè.",
     "word_type": "n",
-    "audio_url": null,
+
     "display_order": 23,
     "meaning_vi": "nghỉ hè"
   },
@@ -1633,7 +1633,7 @@
     "example_pinyin": "Zhège fēn zhī fēicháng yǒuyòng.",
     "example_meaning": "(indicating a fraction) này rất hữu ích.",
     "word_type": "n",
-    "audio_url": null,
+
     "display_order": 24,
     "meaning_vi": null
   },
@@ -1647,7 +1647,7 @@
     "example_pinyin": "Qǐng yòng \"fèn\" zào gè jùzi.",
     "example_meaning": "Hãy đặt một câu với \"Phần, suất\".",
     "word_type": "q",
-    "audio_url": null,
+
     "display_order": 25,
     "meaning_vi": "phần, suất"
   },
@@ -1661,7 +1661,7 @@
     "example_pinyin": "Guānyú fēng jǐng nǐ liǎojiě duōshǎo?",
     "example_meaning": "Về Phong cảnh, bạn biết bao nhiêu?",
     "word_type": "n",
-    "audio_url": null,
+
     "display_order": 26,
     "meaning_vi": "phong cảnh"
   },
@@ -1675,7 +1675,7 @@
     "example_pinyin": "Wǒ gāng fēng fù wán.",
     "example_meaning": "Tôi vừa Phong phú xong.",
     "word_type": "a",
-    "audio_url": null,
+
     "display_order": 27,
     "meaning_vi": "phong phú"
   },
@@ -1689,7 +1689,7 @@
     "example_pinyin": "Wǒ zhèngzài xuéxí \"fǒu zé\" zhège cí.",
     "example_meaning": "Tôi đang học từ \"Nếu không thì\".",
     "word_type": "c",
-    "audio_url": null,
+
     "display_order": 28,
     "meaning_vi": "nếu không thì"
   },
@@ -1703,7 +1703,7 @@
     "example_pinyin": "Wǒ duì fú hé hěn gǎn xìngqù.",
     "example_meaning": "Tôi rất quan tâm đến Phù hợp.",
     "word_type": "n",
-    "audio_url": null,
+
     "display_order": 29,
     "meaning_vi": "phù hợp"
   },
@@ -1717,7 +1717,7 @@
     "example_pinyin": "Tā de xìnggé fēicháng fù.",
     "example_meaning": "Tính cách anh ấy rất Giàu.",
     "word_type": "a",
-    "audio_url": null,
+
     "display_order": 30,
     "meaning_vi": "giàu"
   },
@@ -1731,7 +1731,7 @@
     "example_pinyin": "Tā hěn xǐhuan fù zé.",
     "example_meaning": "Cô ấy rất thích Be in charge of.",
     "word_type": "v",
-    "audio_url": null,
+
     "display_order": 31,
     "meaning_vi": null
   },
@@ -1745,7 +1745,7 @@
     "example_pinyin": "Wǒ yǐjīng fù yìn le.",
     "example_meaning": "Tôi đã Photocopy rồi.",
     "word_type": "v",
-    "audio_url": null,
+
     "display_order": 1,
     "meaning_vi": null
   },
@@ -1759,7 +1759,7 @@
     "example_pinyin": "Tā gěi le wǒ yī gè fù zá.",
     "example_meaning": "Anh ấy cho tôi một Phức tạp.",
     "word_type": "a",
-    "audio_url": null,
+
     "display_order": 2,
     "meaning_vi": "phức tạp"
   },
@@ -1773,7 +1773,7 @@
     "example_pinyin": "fù qīn duì xuéxí hěn yǒu bāngzhù.",
     "example_meaning": "Cha, bố rất hữu ích cho việc học.",
     "word_type": "n",
-    "audio_url": null,
+
     "display_order": 3,
     "meaning_vi": "cha, bố"
   },
@@ -1787,7 +1787,7 @@
     "example_pinyin": "Qǐng nǐ gǎi biàn yīxià.",
     "example_meaning": "Xin bạn Thay đổi một chút.",
     "word_type": "v",
-    "audio_url": null,
+
     "display_order": 4,
     "meaning_vi": "thay đổi"
   },
@@ -1801,7 +1801,7 @@
     "example_pinyin": "Wǒmen yīnggāi gān bēi.",
     "example_meaning": "Chúng ta nên Drink a toast.",
     "word_type": "v",
-    "audio_url": null,
+
     "display_order": 5,
     "meaning_vi": null
   },
@@ -1815,7 +1815,7 @@
     "example_pinyin": "Tā bù xiǎng gān zào.",
     "example_meaning": "Anh ấy không muốn Dry (of weather, paint, cement etc).",
     "word_type": "v",
-    "audio_url": null,
+
     "display_order": 6,
     "meaning_vi": null
   },
@@ -1829,7 +1829,7 @@
     "example_pinyin": "Nǐ xūyào gǎn dòng.",
     "example_meaning": "Bạn cần Cảm động.",
     "word_type": "v",
-    "audio_url": null,
+
     "display_order": 7,
     "meaning_vi": "cảm động"
   },
@@ -1843,7 +1843,7 @@
     "example_pinyin": "Wǒ gāng gǎn jué wán.",
     "example_meaning": "Tôi vừa Cảm giác xong.",
     "word_type": "v",
-    "audio_url": null,
+
     "display_order": 8,
     "meaning_vi": "cảm giác"
   },
@@ -1857,7 +1857,7 @@
     "example_pinyin": "Zhège gǎn qíng hěn zhòngyào.",
     "example_meaning": "Feeling này rất quan trọng.",
     "word_type": "n",
-    "audio_url": null,
+
     "display_order": 9,
     "meaning_vi": null
   },
@@ -1871,7 +1871,7 @@
     "example_pinyin": "Wǒ duì gǎn xiè hěn gǎn xìngqù.",
     "example_meaning": "Tôi rất quan tâm đến Cảm ơn.",
     "word_type": "n",
-    "audio_url": null,
+
     "display_order": 10,
     "meaning_vi": "cảm ơn"
   },
@@ -1885,7 +1885,7 @@
     "example_pinyin": "gàn shì hěn zhòngyào de.",
     "example_meaning": "Khô; làm rất là quan trọng.",
     "word_type": "n",
-    "audio_url": null,
+
     "display_order": 11,
     "meaning_vi": "khô; làm"
   },
@@ -1899,7 +1899,7 @@
     "example_pinyin": "Wǒ gāng gang tóngyì nǐ de kànfǎ.",
     "example_meaning": "Tôi Just recently đồng ý quan điểm của bạn.",
     "word_type": "d",
-    "audio_url": null,
+
     "display_order": 12,
     "meaning_vi": null
   },
@@ -1913,7 +1913,7 @@
     "example_pinyin": "Wǒ xūyào yī gè hǎo de gāo jí.",
     "example_meaning": "Tôi cần một High level tốt.",
     "word_type": "n",
-    "audio_url": null,
+
     "display_order": 13,
     "meaning_vi": null
   },
@@ -1927,7 +1927,7 @@
     "example_pinyin": "Tā gěi le wǒ yī gè gè zi.",
     "example_meaning": "Anh ấy cho tôi một Height.",
     "word_type": "n",
-    "audio_url": null,
+
     "display_order": 14,
     "meaning_vi": null
   },
@@ -1941,7 +1941,7 @@
     "example_pinyin": "\"gè\" zài Hànyǔ zhōng hěn chángjiàn.",
     "example_meaning": "\"Mỗi, các\" rất phổ biến trong tiếng Trung.",
     "word_type": "r",
-    "audio_url": null,
+
     "display_order": 15,
     "meaning_vi": "mỗi, các"
   },
@@ -1955,7 +1955,7 @@
     "example_pinyin": "Wǒmen tǎolùn le gōng lǐ de wèntí.",
     "example_meaning": "Chúng tôi đã thảo luận về vấn đề Kilometer.",
     "word_type": "n",
-    "audio_url": null,
+
     "display_order": 16,
     "meaning_vi": null
   },
@@ -1969,7 +1969,7 @@
     "example_pinyin": "Zhège gōng jù fēicháng yǒuyòng.",
     "example_meaning": "Dụng cụ, công cụ này rất hữu ích.",
     "word_type": "n",
-    "audio_url": null,
+
     "display_order": 17,
     "meaning_vi": "dụng cụ, công cụ"
   },
@@ -1983,7 +1983,7 @@
     "example_pinyin": "Tā de gōng zī hěn hǎo.",
     "example_meaning": "Lương, tiền lương của cô ấy rất tốt.",
     "word_type": "n",
-    "audio_url": null,
+
     "display_order": 18,
     "meaning_vi": "lương, tiền lương"
   },
@@ -1997,7 +1997,7 @@
     "example_pinyin": "Zhōngguó cài zhēn gòng tóng.",
     "example_meaning": "Món Trung thật Chung, cùng.",
     "word_type": "a",
-    "audio_url": null,
+
     "display_order": 19,
     "meaning_vi": "chung, cùng"
   },
@@ -2011,7 +2011,7 @@
     "example_pinyin": "Wǒ gāng gòu wán.",
     "example_meaning": "Tôi vừa Đủ xong.",
     "word_type": "v",
-    "audio_url": null,
+
     "display_order": 20,
     "meaning_vi": "đủ"
   },
@@ -2025,7 +2025,7 @@
     "example_pinyin": "Zhège gòu wù hěn zhòngyào.",
     "example_meaning": "Mua sắm này rất quan trọng.",
     "word_type": "n",
-    "audio_url": null,
+
     "display_order": 21,
     "meaning_vi": "mua sắm"
   },
@@ -2039,7 +2039,7 @@
     "example_pinyin": "Wǒ duì gū dān hěn gǎn xìngqù.",
     "example_meaning": "Tôi rất quan tâm đến Lone.",
     "word_type": "n",
-    "audio_url": null,
+
     "display_order": 22,
     "meaning_vi": null
   },
@@ -2053,7 +2053,7 @@
     "example_pinyin": "Nǐ kěyǐ gū jì ma?",
     "example_meaning": "Bạn có thể Ước tính, đoán không?",
     "word_type": "v",
-    "audio_url": null,
+
     "display_order": 23,
     "meaning_vi": "ước tính, đoán"
   },
@@ -2067,7 +2067,7 @@
     "example_pinyin": "Tā hěn xǐhuan gǔ lì.",
     "example_meaning": "Cô ấy rất thích Khuyến khích.",
     "word_type": "v",
-    "audio_url": null,
+
     "display_order": 24,
     "meaning_vi": "khuyến khích"
   },
@@ -2081,7 +2081,7 @@
     "example_pinyin": "Wǒ yǐjīng gǔ zhǎng le.",
     "example_meaning": "Tôi đã Applaud rồi.",
     "word_type": "v",
-    "audio_url": null,
+
     "display_order": 25,
     "meaning_vi": null
   },
@@ -2095,7 +2095,7 @@
     "example_pinyin": "Tā gěi le wǒ yī gè gù kè.",
     "example_meaning": "Anh ấy cho tôi một Khách hàng.",
     "word_type": "n",
-    "audio_url": null,
+
     "display_order": 26,
     "meaning_vi": "khách hàng"
   },
@@ -2109,7 +2109,7 @@
     "example_pinyin": "Tā gù yì shì gè hǎo xuéshēng.",
     "example_meaning": "Anh ấy Cố ý là học sinh giỏi.",
     "word_type": "d",
-    "audio_url": null,
+
     "display_order": 27,
     "meaning_vi": "cố ý"
   },
@@ -2123,7 +2123,7 @@
     "example_pinyin": "Qǐng nǐ guà yīxià.",
     "example_meaning": "Xin bạn Treo một chút.",
     "word_type": "v",
-    "audio_url": null,
+
     "display_order": 28,
     "meaning_vi": "treo"
   },
@@ -2137,7 +2137,7 @@
     "example_pinyin": "Zhège guān jiàn fēicháng yǒuyòng.",
     "example_meaning": "Crucial point này rất hữu ích.",
     "word_type": "n",
-    "audio_url": null,
+
     "display_order": 29,
     "meaning_vi": null
   },
@@ -2151,7 +2151,7 @@
     "example_pinyin": "Tā de guān zhòng hěn hǎo.",
     "example_meaning": "Spectators của cô ấy rất tốt.",
     "word_type": "n",
-    "audio_url": null,
+
     "display_order": 30,
     "meaning_vi": null
   },
@@ -2165,7 +2165,7 @@
     "example_pinyin": "Nǐ xūyào guǎn lǐ.",
     "example_meaning": "Bạn cần Quản lý.",
     "word_type": "v",
-    "audio_url": null,
+
     "display_order": 31,
     "meaning_vi": "quản lý"
   },
@@ -2179,7 +2179,7 @@
     "example_pinyin": "Dàjiā dōu juédé hěn guāng.",
     "example_meaning": "Mọi người đều thấy rất Ánh sáng.",
     "word_type": "a",
-    "audio_url": null,
+
     "display_order": 1,
     "meaning_vi": "ánh sáng"
   },
@@ -2193,7 +2193,7 @@
     "example_pinyin": "Zhège guǎng bō hěn zhòngyào.",
     "example_meaning": "Phát thanh này rất quan trọng.",
     "word_type": "n",
-    "audio_url": null,
+
     "display_order": 2,
     "meaning_vi": "phát thanh"
   },
@@ -2207,7 +2207,7 @@
     "example_pinyin": "Tā zhèngzài guǎng gào.",
     "example_meaning": "Anh ấy đang Quảng cáo.",
     "word_type": "v",
-    "audio_url": null,
+
     "display_order": 3,
     "meaning_vi": "quảng cáo"
   },
@@ -2221,7 +2221,7 @@
     "example_pinyin": "Nǐ kěyǐ guàng ma?",
     "example_meaning": "Bạn có thể Dạo chơi không?",
     "word_type": "v",
-    "audio_url": null,
+
     "display_order": 4,
     "meaning_vi": "dạo chơi"
   },
@@ -2235,7 +2235,7 @@
     "example_pinyin": "Tā hěn xǐhuan guī dìng.",
     "example_meaning": "Cô ấy rất thích Quy định.",
     "word_type": "v",
-    "audio_url": null,
+
     "display_order": 5,
     "meaning_vi": "quy định"
   },
@@ -2249,7 +2249,7 @@
     "example_pinyin": "Tā kàn qǐlái hěn guó jì.",
     "example_meaning": "Cô ấy trông rất Quốc tế.",
     "word_type": "a",
-    "audio_url": null,
+
     "display_order": 6,
     "meaning_vi": "quốc tế"
   },
@@ -2263,7 +2263,7 @@
     "example_pinyin": "Wǒ guǒ rán juédé zhèyàng hěn hǎo.",
     "example_meaning": "Tôi Quả nhiên thấy như vậy rất tốt.",
     "word_type": "d",
-    "audio_url": null,
+
     "display_order": 7,
     "meaning_vi": "quả nhiên"
   },
@@ -2277,7 +2277,7 @@
     "example_pinyin": "\"guò\" zài Hànyǔ zhōng hěn chángjiàn.",
     "example_meaning": "\"Qua, đã từng\" rất phổ biến trong tiếng Trung.",
     "word_type": "u",
-    "audio_url": null,
+
     "display_order": 8,
     "meaning_vi": "qua, đã từng"
   },
@@ -2291,7 +2291,7 @@
     "example_pinyin": "Wǒmen jīntiān xué \"guò\".",
     "example_meaning": "Hôm nay chúng ta học \"Qua, đã từng\".",
     "word_type": "u",
-    "audio_url": null,
+
     "display_order": 9,
     "meaning_vi": "qua, đã từng"
   },
@@ -2305,7 +2305,7 @@
     "example_pinyin": "Zhège guò chéng fēicháng yǒuyòng.",
     "example_meaning": "Quá trình này rất hữu ích.",
     "word_type": "n",
-    "audio_url": null,
+
     "display_order": 10,
     "meaning_vi": "quá trình"
   },
@@ -2319,7 +2319,7 @@
     "example_pinyin": "Tā de hǎi yáng hěn hǎo.",
     "example_meaning": "Ocean của cô ấy rất tốt.",
     "word_type": "n",
-    "audio_url": null,
+
     "display_order": 11,
     "meaning_vi": null
   },
@@ -2333,7 +2333,7 @@
     "example_pinyin": "Zhōngguó cài zhēn hài xiū.",
     "example_meaning": "Món Trung thật Shy.",
     "word_type": "a",
-    "audio_url": null,
+
     "display_order": 12,
     "meaning_vi": null
   },
@@ -2347,7 +2347,7 @@
     "example_pinyin": "Xiànzài de hán jià yuèláiyuè hǎo le.",
     "example_meaning": "Winter vacation bây giờ ngày càng tốt hơn.",
     "word_type": "n",
-    "audio_url": null,
+
     "display_order": 13,
     "meaning_vi": null
   },
@@ -2361,7 +2361,7 @@
     "example_pinyin": "Zhège hàn hěn zhòngyào.",
     "example_meaning": "Perspiration này rất quan trọng.",
     "word_type": "n",
-    "audio_url": null,
+
     "display_order": 14,
     "meaning_vi": null
   },
@@ -2375,7 +2375,7 @@
     "example_pinyin": "Wǒ duì háng bān hěn gǎn xìngqù.",
     "example_meaning": "Tôi rất quan tâm đến Scheduled flight.",
     "word_type": "n",
-    "audio_url": null,
+
     "display_order": 15,
     "meaning_vi": null
   },
@@ -2389,7 +2389,7 @@
     "example_pinyin": "hǎo chu shì hěn zhòngyào de.",
     "example_meaning": "Benefit rất là quan trọng.",
     "word_type": "n",
-    "audio_url": null,
+
     "display_order": 16,
     "meaning_vi": null
   },
@@ -2403,7 +2403,7 @@
     "example_pinyin": "Tā hěn xǐhuan hǎo xiàng.",
     "example_meaning": "Cô ấy rất thích As if.",
     "word_type": "v",
-    "audio_url": null,
+
     "display_order": 17,
     "meaning_vi": null
   },
@@ -2417,7 +2417,7 @@
     "example_pinyin": "Wǒ xūyào yī gè hǎo de hào mǎ.",
     "example_meaning": "Tôi cần một Số tốt.",
     "word_type": "n",
-    "audio_url": null,
+
     "display_order": 18,
     "meaning_vi": "số"
   },
@@ -2431,7 +2431,7 @@
     "example_pinyin": "Tā gěi le wǒ yī gè hé gé.",
     "example_meaning": "Anh ấy cho tôi một Đạt, hợp cách.",
     "word_type": "n",
-    "audio_url": null,
+
     "display_order": 19,
     "meaning_vi": "đạt, hợp cách"
   },
@@ -2445,7 +2445,7 @@
     "example_pinyin": "Nǐ zuò de hěn hé shì.",
     "example_meaning": "Bạn làm rất Phù hợp, vừa vặn.",
     "word_type": "a",
-    "audio_url": null,
+
     "display_order": 20,
     "meaning_vi": "phù hợp, vừa vặn"
   },
@@ -2459,7 +2459,7 @@
     "example_pinyin": "Wǒmen tǎolùn le hé zi de wèntí.",
     "example_meaning": "Chúng tôi đã thảo luận về vấn đề Hộp.",
     "word_type": "n",
-    "audio_url": null,
+
     "display_order": 21,
     "meaning_vi": "hộp"
   },
@@ -2473,7 +2473,7 @@
     "example_pinyin": "Zhège hóu zi fēicháng yǒuyòng.",
     "example_meaning": "Monkey này rất hữu ích.",
     "word_type": "n",
-    "audio_url": null,
+
     "display_order": 22,
     "meaning_vi": null
   },
@@ -2487,7 +2487,7 @@
     "example_pinyin": "Zhè jiàn shì hěn hòu.",
     "example_meaning": "Việc này rất Dày.",
     "word_type": "a",
-    "audio_url": null,
+
     "display_order": 23,
     "meaning_vi": "dày"
   },
@@ -2501,7 +2501,7 @@
     "example_pinyin": "Nǐ xūyào hòu huǐ.",
     "example_meaning": "Bạn cần Hối hận.",
     "word_type": "v",
-    "audio_url": null,
+
     "display_order": 24,
     "meaning_vi": "hối hận"
   },
@@ -2515,7 +2515,7 @@
     "example_pinyin": "Wǒmen hòu lái zhèyàng zuò.",
     "example_meaning": "Chúng tôi Afterwards làm như vậy.",
     "word_type": "d",
-    "audio_url": null,
+
     "display_order": 25,
     "meaning_vi": null
   },
@@ -2529,7 +2529,7 @@
     "example_pinyin": "Nǐ hū rán qùguò Zhōngguó ma?",
     "example_meaning": "Bạn Đột nhiên đã đến Trung Quốc chưa?",
     "word_type": "d",
-    "audio_url": null,
+
     "display_order": 26,
     "meaning_vi": "đột nhiên"
   },
@@ -2543,7 +2543,7 @@
     "example_pinyin": "Wǒ hù xiāng xiǎng gàosu nǐ yī jiàn shì.",
     "example_meaning": "Tôi Lẫn nhau muốn nói với bạn một chuyện.",
     "word_type": "d",
-    "audio_url": null,
+
     "display_order": 27,
     "meaning_vi": "lẫn nhau"
   },
@@ -2557,7 +2557,7 @@
     "example_pinyin": "Nǐ kěyǐ hù shi ma?",
     "example_meaning": "Bạn có thể Nurse không?",
     "word_type": "v",
-    "audio_url": null,
+
     "display_order": 28,
     "meaning_vi": null
   },
@@ -2571,7 +2571,7 @@
     "example_pinyin": "Tā hěn xǐhuan huái yí.",
     "example_meaning": "Cô ấy rất thích Nghi ngờ.",
     "word_type": "v",
-    "audio_url": null,
+
     "display_order": 29,
     "meaning_vi": "nghi ngờ"
   },
@@ -2585,7 +2585,7 @@
     "example_pinyin": "Wǒ yǐjīng huí yì le.",
     "example_meaning": "Tôi đã Hồi ức, nhớ lại rồi.",
     "word_type": "v",
-    "audio_url": null,
+
     "display_order": 30,
     "meaning_vi": "hồi ức, nhớ lại"
   },
@@ -2599,7 +2599,7 @@
     "example_pinyin": "Dàjiā yīqǐ huó dòng ba.",
     "example_meaning": "Mọi người cùng Hoạt động nhé.",
     "word_type": "v",
-    "audio_url": null,
+
     "display_order": 31,
     "meaning_vi": "hoạt động"
   },
@@ -2613,7 +2613,7 @@
     "example_pinyin": "Nǐ zuò de hěn huó po.",
     "example_meaning": "Bạn làm rất Hoạt bát.",
     "word_type": "a",
-    "audio_url": null,
+
     "display_order": 1,
     "meaning_vi": "hoạt bát"
   },
@@ -2627,7 +2627,7 @@
     "example_pinyin": "Qǐng nǐ huǒ yīxià.",
     "example_meaning": "Xin bạn Lửa một chút.",
     "word_type": "v",
-    "audio_url": null,
+
     "display_order": 2,
     "meaning_vi": "lửa"
   },
@@ -2641,7 +2641,7 @@
     "example_pinyin": "Wǒmen yīnggāi huò dé.",
     "example_meaning": "Chúng ta nên Đạt được.",
     "word_type": "v",
-    "audio_url": null,
+
     "display_order": 3,
     "meaning_vi": "đạt được"
   },
@@ -2655,7 +2655,7 @@
     "example_pinyin": "Tā de jī chǔ hěn hǎo.",
     "example_meaning": "Cơ sở, nền tảng của cô ấy rất tốt.",
     "word_type": "n",
-    "audio_url": null,
+
     "display_order": 4,
     "meaning_vi": "cơ sở, nền tảng"
   },
@@ -2669,7 +2669,7 @@
     "example_pinyin": "Nǐ xūyào jī dòng.",
     "example_meaning": "Bạn cần Xúc động.",
     "word_type": "v",
-    "audio_url": null,
+
     "display_order": 5,
     "meaning_vi": "xúc động"
   },
@@ -2683,7 +2683,7 @@
     "example_pinyin": "Dàjiā dōu juédé hěn jī jí.",
     "example_meaning": "Mọi người đều thấy rất Tích cực.",
     "word_type": "a",
-    "audio_url": null,
+
     "display_order": 6,
     "meaning_vi": "tích cực"
   },
@@ -2697,7 +2697,7 @@
     "example_pinyin": "Wǒ měitiān dōu jī lěi.",
     "example_meaning": "Tôi Accumulate mỗi ngày.",
     "word_type": "v",
-    "audio_url": null,
+
     "display_order": 7,
     "meaning_vi": null
   },
@@ -2711,7 +2711,7 @@
     "example_pinyin": "Wǒ jí qí juédé zhèyàng hěn hǎo.",
     "example_meaning": "Tôi Extremely thấy như vậy rất tốt.",
     "word_type": "d",
-    "audio_url": null,
+
     "display_order": 8,
     "meaning_vi": null
   },
@@ -2725,7 +2725,7 @@
     "example_pinyin": "\"jí shǐ\" zài Hànyǔ zhōng hěn chángjiàn.",
     "example_meaning": "\"Dù, cho dù\" rất phổ biến trong tiếng Trung.",
     "word_type": "c",
-    "audio_url": null,
+
     "display_order": 9,
     "meaning_vi": "dù, cho dù"
   },
@@ -2739,7 +2739,7 @@
     "example_pinyin": "Wǒmen jí shí zhèyàng zuò.",
     "example_meaning": "Chúng tôi Kịp thời làm như vậy.",
     "word_type": "d",
-    "audio_url": null,
+
     "display_order": 10,
     "meaning_vi": "kịp thời"
   },
@@ -2753,7 +2753,7 @@
     "example_pinyin": "Wǒ yǐjīng jí hé le.",
     "example_meaning": "Tôi đã Gather rồi.",
     "word_type": "v",
-    "audio_url": null,
+
     "display_order": 11,
     "meaning_vi": null
   },
@@ -2767,7 +2767,7 @@
     "example_pinyin": "Dàjiā yīqǐ jì ba.",
     "example_meaning": "Mọi người cùng Live (in a house) nhé.",
     "word_type": "v",
-    "audio_url": null,
+
     "display_order": 12,
     "meaning_vi": null
   },
@@ -2781,7 +2781,7 @@
     "example_pinyin": "Nǐ xiǎng jì xù ma?",
     "example_meaning": "Bạn muốn Tiếp tục không?",
     "word_type": "v",
-    "audio_url": null,
+
     "display_order": 13,
     "meaning_vi": "tiếp tục"
   },
@@ -2795,7 +2795,7 @@
     "example_pinyin": "Wǒmen tǎolùn le jì zhě de wèntí.",
     "example_meaning": "Chúng tôi đã thảo luận về vấn đề Reporter.",
     "word_type": "n",
-    "audio_url": null,
+
     "display_order": 14,
     "meaning_vi": null
   },
@@ -2809,7 +2809,7 @@
     "example_pinyin": "Wǒmen yīnggāi jì huà.",
     "example_meaning": "Chúng ta nên Plan.",
     "word_type": "v",
-    "audio_url": null,
+
     "display_order": 15,
     "meaning_vi": null
   },
@@ -2823,7 +2823,7 @@
     "example_pinyin": "Tā de jì shù hěn hǎo.",
     "example_meaning": "Kỹ thuật của cô ấy rất tốt.",
     "word_type": "n",
-    "audio_url": null,
+
     "display_order": 16,
     "meaning_vi": "kỹ thuật"
   },
@@ -2837,7 +2837,7 @@
     "example_pinyin": "\"jì rán\" zài Hànyǔ zhōng hěn chángjiàn.",
     "example_meaning": "\"Đã…thì…\" rất phổ biến trong tiếng Trung.",
     "word_type": "c",
-    "audio_url": null,
+
     "display_order": 17,
     "meaning_vi": "đã…thì…"
   },
@@ -2851,7 +2851,7 @@
     "example_pinyin": "Xiànzài de jiā jù yuèláiyuè hǎo le.",
     "example_meaning": "Đồ nội thất bây giờ ngày càng tốt hơn.",
     "word_type": "n",
-    "audio_url": null,
+
     "display_order": 18,
     "meaning_vi": "đồ nội thất"
   },
@@ -2865,7 +2865,7 @@
     "example_pinyin": "Wǒ měitiān dōu jiā bān.",
     "example_meaning": "Tôi Làm thêm giờ mỗi ngày.",
     "word_type": "v",
-    "audio_url": null,
+
     "display_order": 19,
     "meaning_vi": "làm thêm giờ"
   },
@@ -2879,7 +2879,7 @@
     "example_pinyin": "Wǒ duì jiā yóu zhàn hěn gǎn xìngqù.",
     "example_meaning": "Tôi rất quan tâm đến Trạm xăng.",
     "word_type": "n",
-    "audio_url": null,
+
     "display_order": 20,
     "meaning_vi": "trạm xăng"
   },
@@ -2893,7 +2893,7 @@
     "example_pinyin": "Tā de xìnggé fēicháng jiǎ.",
     "example_meaning": "Tính cách anh ấy rất Nghỉ, giả.",
     "word_type": "a",
-    "audio_url": null,
+
     "display_order": 21,
     "meaning_vi": "nghỉ, giả"
   },
@@ -2907,7 +2907,7 @@
     "example_pinyin": "Nǐ zhīdào jià gé shì shénme ma?",
     "example_meaning": "Bạn biết Giá cả là gì không?",
     "word_type": "n",
-    "audio_url": null,
+
     "display_order": 22,
     "meaning_vi": "giá cả"
   },
@@ -2921,7 +2921,7 @@
     "example_pinyin": "Wǒ yǐjīng jiān chí le.",
     "example_meaning": "Tôi đã Kiên trì rồi.",
     "word_type": "v",
-    "audio_url": null,
+
     "display_order": 23,
     "meaning_vi": "kiên trì"
   },
@@ -2935,7 +2935,7 @@
     "example_pinyin": "Dàjiā yīqǐ jiǎn féi ba.",
     "example_meaning": "Mọi người cùng Lose weight nhé.",
     "word_type": "v",
-    "audio_url": null,
+
     "display_order": 24,
     "meaning_vi": null
   },
@@ -2949,7 +2949,7 @@
     "example_pinyin": "Nǐ xiǎng jiǎn shǎo ma?",
     "example_meaning": "Bạn muốn Giảm không?",
     "word_type": "v",
-    "audio_url": null,
+
     "display_order": 25,
     "meaning_vi": "giảm"
   },
@@ -2963,7 +2963,7 @@
     "example_pinyin": "Wǒmen tǎolùn le jiāng lái de wèntí.",
     "example_meaning": "Chúng tôi đã thảo luận về vấn đề Tương lai.",
     "word_type": "n",
-    "audio_url": null,
+
     "display_order": 26,
     "meaning_vi": "tương lai"
   },
@@ -2977,7 +2977,7 @@
     "example_pinyin": "Zhège jiǎng jīn fēicháng yǒuyòng.",
     "example_meaning": "Tiền thưởng này rất hữu ích.",
     "word_type": "n",
-    "audio_url": null,
+
     "display_order": 27,
     "meaning_vi": "tiền thưởng"
   },
@@ -2991,7 +2991,7 @@
     "example_pinyin": "Tā bù xiǎng jiàng dī.",
     "example_meaning": "Anh ấy không muốn Hạ thấp, giảm.",
     "word_type": "v",
-    "audio_url": null,
+
     "display_order": 28,
     "meaning_vi": "hạ thấp, giảm"
   },
@@ -3005,7 +3005,7 @@
     "example_pinyin": "Nǐ xūyào jiāo.",
     "example_meaning": "Bạn cần Giao, nộp.",
     "word_type": "v",
-    "audio_url": null,
+
     "display_order": 29,
     "meaning_vi": "giao, nộp"
   },
@@ -3019,7 +3019,7 @@
     "example_pinyin": "Wǒ gāng jiāo liú wán.",
     "example_meaning": "Tôi vừa Giao lưu, trao đổi xong.",
     "word_type": "v",
-    "audio_url": null,
+
     "display_order": 30,
     "meaning_vi": "giao lưu, trao đổi"
   },
@@ -3033,7 +3033,7 @@
     "example_pinyin": "Wǒ měitiān dōu jiāo tōng.",
     "example_meaning": "Tôi Giao thông mỗi ngày.",
     "word_type": "v",
-    "audio_url": null,
+
     "display_order": 31,
     "meaning_vi": "giao thông"
   },
@@ -3047,7 +3047,7 @@
     "example_pinyin": "Wǒ duì jiāo ào hěn gǎn xìngqù.",
     "example_meaning": "Tôi rất quan tâm đến Kiêu ngạo, tự hào.",
     "word_type": "n",
-    "audio_url": null,
+
     "display_order": 1,
     "meaning_vi": "kiêu ngạo, tự hào"
   },
@@ -3061,7 +3061,7 @@
     "example_pinyin": "jiǎo zi shì hěn zhòngyào de.",
     "example_meaning": "Dumpling rất là quan trọng.",
     "word_type": "n",
-    "audio_url": null,
+
     "display_order": 2,
     "meaning_vi": null
   },
@@ -3075,7 +3075,7 @@
     "example_pinyin": "Tā hěn xǐhuan jiào shòu.",
     "example_meaning": "Cô ấy rất thích Professor.",
     "word_type": "v",
-    "audio_url": null,
+
     "display_order": 3,
     "meaning_vi": null
   },
@@ -3089,7 +3089,7 @@
     "example_pinyin": "Wǒ yǐjīng jiào yù le.",
     "example_meaning": "Tôi đã Giáo dục rồi.",
     "word_type": "v",
-    "audio_url": null,
+
     "display_order": 4,
     "meaning_vi": "giáo dục"
   },
@@ -3103,7 +3103,7 @@
     "example_pinyin": "Dàjiā yīqǐ jiē shòu ba.",
     "example_meaning": "Mọi người cùng Tiếp nhận, chấp nhận nhé.",
     "word_type": "v",
-    "audio_url": null,
+
     "display_order": 5,
     "meaning_vi": "tiếp nhận, chấp nhận"
   },
@@ -3117,7 +3117,7 @@
     "example_pinyin": "Nǐ xiǎng jié yuē ma?",
     "example_meaning": "Bạn muốn Tiết kiệm không?",
     "word_type": "v",
-    "audio_url": null,
+
     "display_order": 6,
     "meaning_vi": "tiết kiệm"
   },
@@ -3131,7 +3131,7 @@
     "example_pinyin": "Wǒmen tǎolùn le jié guǒ de wèntí.",
     "example_meaning": "Chúng tôi đã thảo luận về vấn đề Kết quả.",
     "word_type": "n",
-    "audio_url": null,
+
     "display_order": 7,
     "meaning_vi": "kết quả"
   },
@@ -3145,7 +3145,7 @@
     "example_pinyin": "Wǒmen yīnggāi jiě shì.",
     "example_meaning": "Chúng ta nên Explanation.",
     "word_type": "v",
-    "audio_url": null,
+
     "display_order": 8,
     "meaning_vi": null
   },
@@ -3159,7 +3159,7 @@
     "example_pinyin": "Zhè jiàn shì hěn jǐn zhāng.",
     "example_meaning": "Việc này rất Căng thẳng.",
     "word_type": "a",
-    "audio_url": null,
+
     "display_order": 9,
     "meaning_vi": "căng thẳng"
   },
@@ -3173,7 +3173,7 @@
     "example_pinyin": "\"jǐn guǎn\" zài Hànyǔ zhōng hěn chángjiàn.",
     "example_meaning": "\"Mặc dù\" rất phổ biến trong tiếng Trung.",
     "word_type": "c",
-    "audio_url": null,
+
     "display_order": 10,
     "meaning_vi": "mặc dù"
   },
@@ -3187,7 +3187,7 @@
     "example_pinyin": "Wǒ gāng jìn xíng wán.",
     "example_meaning": "Tôi vừa Advance xong.",
     "word_type": "v",
-    "audio_url": null,
+
     "display_order": 11,
     "meaning_vi": null
   },
@@ -3201,7 +3201,7 @@
     "example_pinyin": "Wǒ měitiān dōu jìn zhǐ.",
     "example_meaning": "Tôi Cấm mỗi ngày.",
     "word_type": "v",
-    "audio_url": null,
+
     "display_order": 12,
     "meaning_vi": "cấm"
   },
@@ -3215,7 +3215,7 @@
     "example_pinyin": "Wǒ duì jīng cǎi hěn gǎn xìngqù.",
     "example_meaning": "Tôi rất quan tâm đến Tuyệt vời.",
     "word_type": "n",
-    "audio_url": null,
+
     "display_order": 13,
     "meaning_vi": "tuyệt vời"
   },
@@ -3229,7 +3229,7 @@
     "example_pinyin": "jīng shén shì hěn zhòngyào de.",
     "example_meaning": "Spirit rất là quan trọng.",
     "word_type": "n",
-    "audio_url": null,
+
     "display_order": 14,
     "meaning_vi": null
   },
@@ -3243,7 +3243,7 @@
     "example_pinyin": "Nǐ zhīdào jīng jì shì shénme ma?",
     "example_meaning": "Bạn biết Kinh tế là gì không?",
     "word_type": "n",
-    "audio_url": null,
+
     "display_order": 15,
     "meaning_vi": "kinh tế"
   },
@@ -3257,7 +3257,7 @@
     "example_pinyin": "Wǒ yǐjīng jīng lì le.",
     "example_meaning": "Tôi đã Kinh nghiệm rồi.",
     "word_type": "v",
-    "audio_url": null,
+
     "display_order": 16,
     "meaning_vi": "kinh nghiệm"
   },
@@ -3271,7 +3271,7 @@
     "example_pinyin": "Dàjiā yīqǐ jīng yàn ba.",
     "example_meaning": "Mọi người cùng Kinh nghiệm nhé.",
     "word_type": "v",
-    "audio_url": null,
+
     "display_order": 17,
     "meaning_vi": "kinh nghiệm"
   },
@@ -3285,7 +3285,7 @@
     "example_pinyin": "Jīng jù duì xuéxí hěn yǒu bāngzhù.",
     "example_meaning": "Beijing opera rất hữu ích cho việc học.",
     "word_type": "n",
-    "audio_url": null,
+
     "display_order": 18,
     "meaning_vi": null
   },
@@ -3299,7 +3299,7 @@
     "example_pinyin": "Wǒmen tǎolùn le jǐng chá de wèntí.",
     "example_meaning": "Chúng tôi đã thảo luận về vấn đề Police.",
     "word_type": "n",
-    "audio_url": null,
+
     "display_order": 19,
     "meaning_vi": null
   },
@@ -3313,7 +3313,7 @@
     "example_pinyin": "Nǐ jìng rán qùguò Zhōngguó ma?",
     "example_meaning": "Bạn Unexpectedly đã đến Trung Quốc chưa?",
     "word_type": "d",
-    "audio_url": null,
+
     "display_order": 20,
     "meaning_vi": null
   },
@@ -3327,7 +3327,7 @@
     "example_pinyin": "Tā bù xiǎng jìng zhēng.",
     "example_meaning": "Anh ấy không muốn Cạnh tranh.",
     "word_type": "v",
-    "audio_url": null,
+
     "display_order": 21,
     "meaning_vi": "cạnh tranh"
   },
@@ -3341,7 +3341,7 @@
     "example_pinyin": "Guānyú jìng zi nǐ liǎojiě duōshǎo?",
     "example_meaning": "Về Gương, bạn biết bao nhiêu?",
     "word_type": "n",
-    "audio_url": null,
+
     "display_order": 22,
     "meaning_vi": "gương"
   },
@@ -3355,7 +3355,7 @@
     "example_pinyin": "Wǒ jiū jìng tóngyì nǐ de kànfǎ.",
     "example_meaning": "Tôi Rốt cuộc đồng ý quan điểm của bạn.",
     "word_type": "d",
-    "audio_url": null,
+
     "display_order": 23,
     "meaning_vi": "rốt cuộc"
   },
@@ -3369,7 +3369,7 @@
     "example_pinyin": "Wǒ měitiān dōu jǔ bàn.",
     "example_meaning": "Tôi Tổ chức mỗi ngày.",
     "word_type": "v",
-    "audio_url": null,
+
     "display_order": 24,
     "meaning_vi": "tổ chức"
   },
@@ -3383,7 +3383,7 @@
     "example_pinyin": "Tā zhèngzài jù jué.",
     "example_meaning": "Anh ấy đang Từ chối.",
     "word_type": "v",
-    "audio_url": null,
+
     "display_order": 25,
     "meaning_vi": "từ chối"
   },
@@ -3397,7 +3397,7 @@
     "example_pinyin": "Nǐ kěyǐ jù lí ma?",
     "example_meaning": "Bạn có thể Khoảng cách không?",
     "word_type": "v",
-    "audio_url": null,
+
     "display_order": 26,
     "meaning_vi": "khoảng cách"
   },
@@ -3411,7 +3411,7 @@
     "example_pinyin": "Tā hěn xǐhuan kāi wán xiào.",
     "example_meaning": "Cô ấy rất thích Play a joke.",
     "word_type": "v",
-    "audio_url": null,
+
     "display_order": 27,
     "meaning_vi": null
   },
@@ -3425,7 +3425,7 @@
     "example_pinyin": "Wǒ xūyào yī gè hǎo de kàn fǎ.",
     "example_meaning": "Tôi cần một Way of looking at a thing tốt.",
     "word_type": "n",
-    "audio_url": null,
+
     "display_order": 28,
     "meaning_vi": null
   },
@@ -3439,7 +3439,7 @@
     "example_pinyin": "Dàjiā yīqǐ kǎo lǜ ba.",
     "example_meaning": "Mọi người cùng Think over nhé.",
     "word_type": "v",
-    "audio_url": null,
+
     "display_order": 29,
     "meaning_vi": null
   },
@@ -3453,7 +3453,7 @@
     "example_pinyin": "\"kē\" zài Hànyǔ zhōng hěn chángjiàn.",
     "example_meaning": "\"Classifier for trees\" rất phổ biến trong tiếng Trung.",
     "word_type": "q",
-    "audio_url": null,
+
     "display_order": 30,
     "meaning_vi": null
   },
@@ -3467,7 +3467,7 @@
     "example_pinyin": "Wǒmen tǎolùn le kē xué de wèntí.",
     "example_meaning": "Chúng tôi đã thảo luận về vấn đề Khoa học.",
     "word_type": "n",
-    "audio_url": null,
+
     "display_order": 31,
     "meaning_vi": "khoa học"
   },
@@ -3481,7 +3481,7 @@
     "example_pinyin": "Wǒmen yīnggāi ké sou.",
     "example_meaning": "Chúng ta nên Cough.",
     "word_type": "v",
-    "audio_url": null,
+
     "display_order": 1,
     "meaning_vi": null
   },
@@ -3495,7 +3495,7 @@
     "example_pinyin": "Tā de kě lián hěn hǎo.",
     "example_meaning": "Pitiful của cô ấy rất tốt.",
     "word_type": "n",
-    "audio_url": null,
+
     "display_order": 2,
     "meaning_vi": null
   },
@@ -3509,7 +3509,7 @@
     "example_pinyin": "\"kě shì\" zài Hànyǔ zhōng hěn chángjiàn.",
     "example_meaning": "\"But\" rất phổ biến trong tiếng Trung.",
     "word_type": "c",
-    "audio_url": null,
+
     "display_order": 3,
     "meaning_vi": null
   },
@@ -3523,7 +3523,7 @@
     "example_pinyin": "Wǒmen jīntiān xué \"kě xī\".",
     "example_meaning": "Hôm nay chúng ta học \"It is a pity\".",
     "word_type": "r",
-    "audio_url": null,
+
     "display_order": 4,
     "meaning_vi": null
   },
@@ -3537,7 +3537,7 @@
     "example_pinyin": "Wǒ měitiān dōu kěn dìng.",
     "example_meaning": "Tôi Be sure mỗi ngày.",
     "word_type": "v",
-    "audio_url": null,
+
     "display_order": 5,
     "meaning_vi": null
   },
@@ -3551,7 +3551,7 @@
     "example_pinyin": "Wǒ duì kōng qì hěn gǎn xìngqù.",
     "example_meaning": "Tôi rất quan tâm đến Air.",
     "word_type": "n",
-    "audio_url": null,
+
     "display_order": 6,
     "meaning_vi": null
   },
@@ -3565,7 +3565,7 @@
     "example_pinyin": "Tā kǒng pà shì gè hǎo xuéshēng.",
     "example_meaning": "Anh ấy Fear là học sinh giỏi.",
     "word_type": "d",
-    "audio_url": null,
+
     "display_order": 7,
     "meaning_vi": null
   },
@@ -3579,7 +3579,7 @@
     "example_pinyin": "Zhè běn shū hěn kǔ.",
     "example_meaning": "Quyển sách này rất Đắng.",
     "word_type": "a",
-    "audio_url": null,
+
     "display_order": 8,
     "meaning_vi": "đắng"
   },
@@ -3593,7 +3593,7 @@
     "example_pinyin": "Wǒ xūyào yī gè hǎo de kuān.",
     "example_meaning": "Tôi cần một Lenient tốt.",
     "word_type": "n",
-    "audio_url": null,
+
     "display_order": 9,
     "meaning_vi": null
   },
@@ -3607,7 +3607,7 @@
     "example_pinyin": "Zhège dìfāng tèbié kùn.",
     "example_meaning": "Nơi này đặc biệt Sleepy.",
     "word_type": "a",
-    "audio_url": null,
+
     "display_order": 10,
     "meaning_vi": null
   },
@@ -3621,7 +3621,7 @@
     "example_pinyin": "Nǐ zuò de hěn kùn nan.",
     "example_meaning": "Bạn làm rất Khó.",
     "word_type": "a",
-    "audio_url": null,
+
     "display_order": 11,
     "meaning_vi": "khó"
   },
@@ -3635,7 +3635,7 @@
     "example_pinyin": "Qǐng nǐ kuò dà yīxià.",
     "example_meaning": "Xin bạn Expand một chút.",
     "word_type": "v",
-    "audio_url": null,
+
     "display_order": 12,
     "meaning_vi": null
   },
@@ -3649,7 +3649,7 @@
     "example_pinyin": "Wǒmen yīnggāi lā.",
     "example_meaning": "Chúng ta nên Pull.",
     "word_type": "v",
-    "audio_url": null,
+
     "display_order": 13,
     "meaning_vi": null
   },
@@ -3663,7 +3663,7 @@
     "example_pinyin": "Tā de lā jī tǒng hěn hǎo.",
     "example_meaning": "Rubbish bin của cô ấy rất tốt.",
     "word_type": "n",
-    "audio_url": null,
+
     "display_order": 14,
     "meaning_vi": null
   },
@@ -3677,7 +3677,7 @@
     "example_pinyin": "Guānyú là nǐ liǎojiě duōshǎo?",
     "example_meaning": "Về Hot (spicy), bạn biết bao nhiêu?",
     "word_type": "a",
-    "audio_url": null,
+
     "display_order": 15,
     "meaning_vi": null
   },
@@ -3691,7 +3691,7 @@
     "example_pinyin": "Xiànzài de lái bu jí yuèláiyuè hǎo le.",
     "example_meaning": "There's not enough time (to do sth) bây giờ ngày càng tốt hơn.",
     "word_type": "n",
-    "audio_url": null,
+
     "display_order": 16,
     "meaning_vi": null
   },
@@ -3705,7 +3705,7 @@
     "example_pinyin": "Zhège lái de jí hěn zhòngyào.",
     "example_meaning": "There's still time này rất quan trọng.",
     "word_type": "n",
-    "audio_url": null,
+
     "display_order": 17,
     "meaning_vi": null
   },
@@ -3719,7 +3719,7 @@
     "example_pinyin": "Zhèlǐ de huánjìng hěn lǎn.",
     "example_meaning": "Môi trường ở đây rất Lazy.",
     "word_type": "a",
-    "audio_url": null,
+
     "display_order": 18,
     "meaning_vi": null
   },
@@ -3733,7 +3733,7 @@
     "example_pinyin": "Nǐ kěyǐ làng fèi ma?",
     "example_meaning": "Bạn có thể Waste không?",
     "word_type": "v",
-    "audio_url": null,
+
     "display_order": 19,
     "meaning_vi": null
   },
@@ -3747,7 +3747,7 @@
     "example_pinyin": "Zhè běn shū hěn làng màn.",
     "example_meaning": "Quyển sách này rất Lãng mạn.",
     "word_type": "a",
-    "audio_url": null,
+
     "display_order": 20,
     "meaning_vi": "lãng mạn"
   },
@@ -3761,7 +3761,7 @@
     "example_pinyin": "Wǒ xūyào yī gè hǎo de lǎo hǔ.",
     "example_meaning": "Tôi cần một Tiger tốt.",
     "word_type": "n",
-    "audio_url": null,
+
     "display_order": 21,
     "meaning_vi": null
   },
@@ -3775,7 +3775,7 @@
     "example_pinyin": "Zhège dìfāng tèbié lěng jìng.",
     "example_meaning": "Nơi này đặc biệt Bình tĩnh.",
     "word_type": "a",
-    "audio_url": null,
+
     "display_order": 22,
     "meaning_vi": "bình tĩnh"
   },
@@ -3789,7 +3789,7 @@
     "example_pinyin": "lǐ mào duì xuéxí hěn yǒu bāngzhù.",
     "example_meaning": "Courtesy rất hữu ích cho việc học.",
     "word_type": "n",
-    "audio_url": null,
+
     "display_order": 23,
     "meaning_vi": null
   },
@@ -3803,7 +3803,7 @@
     "example_pinyin": "Wǒmen tǎolùn le lǐ fà de wèntí.",
     "example_meaning": "Chúng tôi đã thảo luận về vấn đề A barber.",
     "word_type": "n",
-    "audio_url": null,
+
     "display_order": 24,
     "meaning_vi": null
   },
@@ -3817,7 +3817,7 @@
     "example_pinyin": "Wǒmen yīnggāi lǐ jiě.",
     "example_meaning": "Chúng ta nên Comprehend.",
     "word_type": "v",
-    "audio_url": null,
+
     "display_order": 25,
     "meaning_vi": null
   },
@@ -3831,7 +3831,7 @@
     "example_pinyin": "Tā de lǐ xiǎng hěn hǎo.",
     "example_meaning": "A dream của cô ấy rất tốt.",
     "word_type": "n",
-    "audio_url": null,
+
     "display_order": 26,
     "meaning_vi": null
   },
@@ -3845,7 +3845,7 @@
     "example_pinyin": "Guānyú lì hai nǐ liǎojiě duōshǎo?",
     "example_meaning": "Về Difficult to deal with, bạn biết bao nhiêu?",
     "word_type": "n",
-    "audio_url": null,
+
     "display_order": 27,
     "meaning_vi": null
   },
@@ -3859,7 +3859,7 @@
     "example_pinyin": "Xiànzài de lì qi yuèláiyuè hǎo le.",
     "example_meaning": "Strength bây giờ ngày càng tốt hơn.",
     "word_type": "n",
-    "audio_url": null,
+
     "display_order": 28,
     "meaning_vi": null
   },
@@ -3873,7 +3873,7 @@
     "example_pinyin": "Zhège lì rú hěn zhòngyào.",
     "example_meaning": "For example này rất quan trọng.",
     "word_type": "n",
-    "audio_url": null,
+
     "display_order": 29,
     "meaning_vi": null
   },
@@ -3887,7 +3887,7 @@
     "example_pinyin": "Qǐng yòng \"liǎ\" zào gè jùzi.",
     "example_meaning": "Hãy đặt một câu với \"Two (colloquial equivalent of 兩個|两个)\".",
     "word_type": "m",
-    "audio_url": null,
+
     "display_order": 30,
     "meaning_vi": null
   },
@@ -3901,7 +3901,7 @@
     "example_pinyin": "Nǐ kěyǐ lián ma?",
     "example_meaning": "Bạn có thể Link không?",
     "word_type": "v",
-    "audio_url": null,
+
     "display_order": 31,
     "meaning_vi": null
   },
@@ -3915,7 +3915,7 @@
     "example_pinyin": "Nǐ zhīdào lián xì shì shénme ma?",
     "example_meaning": "Bạn biết Connection là gì không?",
     "word_type": "n",
-    "audio_url": null,
+
     "display_order": 1,
     "meaning_vi": null
   },
@@ -3929,7 +3929,7 @@
     "example_pinyin": "Wǒ xūyào yī gè hǎo de liáng kuai.",
     "example_meaning": "Tôi cần một Nice and cold tốt.",
     "word_type": "n",
-    "audio_url": null,
+
     "display_order": 2,
     "meaning_vi": null
   },
@@ -3943,7 +3943,7 @@
     "example_pinyin": "Zhège dìfāng tèbié liàng.",
     "example_meaning": "Nơi này đặc biệt Sáng.",
     "word_type": "a",
-    "audio_url": null,
+
     "display_order": 3,
     "meaning_vi": "sáng"
   },
@@ -3957,7 +3957,7 @@
     "example_pinyin": "Nǐ xiǎng liáo tiān ma?",
     "example_meaning": "Bạn muốn Chat không?",
     "word_type": "v",
-    "audio_url": null,
+
     "display_order": 4,
     "meaning_vi": null
   },
@@ -3971,7 +3971,7 @@
     "example_pinyin": "Wǒmen jīntiān xué \"lìng wài\".",
     "example_meaning": "Hôm nay chúng ta học \"Additional\".",
     "word_type": "c",
-    "audio_url": null,
+
     "display_order": 5,
     "meaning_vi": null
   },
@@ -3985,7 +3985,7 @@
     "example_pinyin": "Wǒmen yīnggāi liú.",
     "example_meaning": "Chúng ta nên Leave (a message etc).",
     "word_type": "v",
-    "audio_url": null,
+
     "display_order": 6,
     "meaning_vi": null
   },
@@ -3999,7 +3999,7 @@
     "example_pinyin": "Tā bù xiǎng liú xué.",
     "example_meaning": "Anh ấy không muốn Du học.",
     "word_type": "v",
-    "audio_url": null,
+
     "display_order": 7,
     "meaning_vi": "du học"
   },
@@ -4013,7 +4013,7 @@
     "example_pinyin": "Nǐ xūyào liú lèi.",
     "example_meaning": "Bạn cần Shed tears.",
     "word_type": "v",
-    "audio_url": null,
+
     "display_order": 8,
     "meaning_vi": null
   },
@@ -4027,7 +4027,7 @@
     "example_pinyin": "Xiànzài de liú lì yuèláiyuè hǎo le.",
     "example_meaning": "Fluent bây giờ ngày càng tốt hơn.",
     "word_type": "n",
-    "audio_url": null,
+
     "display_order": 9,
     "meaning_vi": null
   },
@@ -4041,7 +4041,7 @@
     "example_pinyin": "Wǒ měitiān dōu liú xíng.",
     "example_meaning": "Tôi Spread mỗi ngày.",
     "word_type": "v",
-    "audio_url": null,
+
     "display_order": 10,
     "meaning_vi": null
   },
@@ -4055,7 +4055,7 @@
     "example_pinyin": "Wǒ duì luàn hěn gǎn xìngqù.",
     "example_meaning": "Tôi rất quan tâm đến In confusion or disorder.",
     "word_type": "n",
-    "audio_url": null,
+
     "display_order": 11,
     "meaning_vi": null
   },
@@ -4069,7 +4069,7 @@
     "example_pinyin": "lǜ shī shì hěn zhòngyào de.",
     "example_meaning": "Lawyer rất là quan trọng.",
     "word_type": "n",
-    "audio_url": null,
+
     "display_order": 12,
     "meaning_vi": null
   },
@@ -4083,7 +4083,7 @@
     "example_pinyin": "Nǐ zhīdào má fan shì shénme ma?",
     "example_meaning": "Bạn biết Inconvenient là gì không?",
     "word_type": "n",
-    "audio_url": null,
+
     "display_order": 13,
     "meaning_vi": null
   },
@@ -4097,7 +4097,7 @@
     "example_pinyin": "Tā kàn qǐlái hěn mǎ hu.",
     "example_meaning": "Cô ấy trông rất Careless.",
     "word_type": "a",
-    "audio_url": null,
+
     "display_order": 14,
     "meaning_vi": null
   },
@@ -4111,7 +4111,7 @@
     "example_pinyin": "Zhège dìfāng tèbié mǎn.",
     "example_meaning": "Nơi này đặc biệt Đầy.",
     "word_type": "a",
-    "audio_url": null,
+
     "display_order": 15,
     "meaning_vi": "đầy"
   },
@@ -4125,7 +4125,7 @@
     "example_pinyin": "máo jīn duì xuéxí hěn yǒu bāngzhù.",
     "example_meaning": "Towel rất hữu ích cho việc học.",
     "word_type": "n",
-    "audio_url": null,
+
     "display_order": 16,
     "meaning_vi": null
   },
@@ -4139,7 +4139,7 @@
     "example_pinyin": "Shēnghuó biàn de yuèláiyuè měi lì.",
     "example_meaning": "Cuộc sống trở nên ngày càng Đẹp.",
     "word_type": "a",
-    "audio_url": null,
+
     "display_order": 17,
     "meaning_vi": "đẹp"
   },
@@ -4153,7 +4153,7 @@
     "example_pinyin": "Zhège mèng fēicháng yǒuyòng.",
     "example_meaning": "Dream này rất hữu ích.",
     "word_type": "n",
-    "audio_url": null,
+
     "display_order": 18,
     "meaning_vi": null
   },
@@ -4167,7 +4167,7 @@
     "example_pinyin": "Tā de mì mǎ hěn hǎo.",
     "example_meaning": "Code của cô ấy rất tốt.",
     "word_type": "n",
-    "audio_url": null,
+
     "display_order": 19,
     "meaning_vi": null
   },
@@ -4181,7 +4181,7 @@
     "example_pinyin": "Guānyú miǎn fèi nǐ liǎojiě duōshǎo?",
     "example_meaning": "Về Free (of charge), bạn biết bao nhiêu?",
     "word_type": "n",
-    "audio_url": null,
+
     "display_order": 20,
     "meaning_vi": null
   },
@@ -4195,7 +4195,7 @@
     "example_pinyin": "Xiànzài de mín zú yuèláiyuè hǎo le.",
     "example_meaning": "Nationality bây giờ ngày càng tốt hơn.",
     "word_type": "n",
-    "audio_url": null,
+
     "display_order": 21,
     "meaning_vi": null
   },
@@ -4209,7 +4209,7 @@
     "example_pinyin": "Zhège mǔ qīn hěn zhòngyào.",
     "example_meaning": "Mother này rất quan trọng.",
     "word_type": "n",
-    "audio_url": null,
+
     "display_order": 22,
     "meaning_vi": null
   },
@@ -4223,7 +4223,7 @@
     "example_pinyin": "Wǒ duì mù dì hěn gǎn xìngqù.",
     "example_meaning": "Tôi rất quan tâm đến Mục đích.",
     "word_type": "n",
-    "audio_url": null,
+
     "display_order": 23,
     "meaning_vi": "mục đích"
   },
@@ -4237,7 +4237,7 @@
     "example_pinyin": "Nǐ kěyǐ nài xīn ma?",
     "example_meaning": "Bạn có thể Be patient không?",
     "word_type": "v",
-    "audio_url": null,
+
     "display_order": 24,
     "meaning_vi": null
   },
@@ -4251,7 +4251,7 @@
     "example_pinyin": "Wǒ nán dào tóngyì nǐ de kànfǎ.",
     "example_meaning": "Tôi Don't tell me ... đồng ý quan điểm của bạn.",
     "word_type": "d",
-    "audio_url": null,
+
     "display_order": 25,
     "meaning_vi": null
   },
@@ -4265,7 +4265,7 @@
     "example_pinyin": "Wǒ yǐjīng nán shòu le.",
     "example_meaning": "Tôi đã Feel unwell rồi.",
     "word_type": "v",
-    "audio_url": null,
+
     "display_order": 26,
     "meaning_vi": null
   },
@@ -4279,7 +4279,7 @@
     "example_pinyin": "Tā gěi le wǒ yī gè nèi.",
     "example_meaning": "Anh ấy cho tôi một Inside.",
     "word_type": "n",
-    "audio_url": null,
+
     "display_order": 27,
     "meaning_vi": null
   },
@@ -4293,7 +4293,7 @@
     "example_pinyin": "Nǐ zuò de hěn nèi róng.",
     "example_meaning": "Bạn làm rất Content.",
     "word_type": "a",
-    "audio_url": null,
+
     "display_order": 28,
     "meaning_vi": null
   },
@@ -4307,7 +4307,7 @@
     "example_pinyin": "Wǒmen tǎolùn le néng lì de wèntí.",
     "example_meaning": "Chúng tôi đã thảo luận về vấn đề Capability.",
     "word_type": "n",
-    "audio_url": null,
+
     "display_order": 29,
     "meaning_vi": null
   },
@@ -4321,7 +4321,7 @@
     "example_pinyin": "Zhège nián líng fēicháng yǒuyòng.",
     "example_meaning": "(a person's) age này rất hữu ích.",
     "word_type": "n",
-    "audio_url": null,
+
     "display_order": 30,
     "meaning_vi": null
   },
@@ -4335,7 +4335,7 @@
     "example_pinyin": "Tā de nóng cūn hěn hǎo.",
     "example_meaning": "Rural area của cô ấy rất tốt.",
     "word_type": "n",
-    "audio_url": null,
+
     "display_order": 31,
     "meaning_vi": null
   },
@@ -4349,7 +4349,7 @@
     "example_pinyin": "Nǐ xūyào nòng.",
     "example_meaning": "Bạn cần Làm.",
     "word_type": "v",
-    "audio_url": null,
+
     "display_order": 1,
     "meaning_vi": "làm"
   },
@@ -4363,7 +4363,7 @@
     "example_pinyin": "Dàjiā dōu juédé hěn nuǎn huo.",
     "example_meaning": "Mọi người đều thấy rất Ấm.",
     "word_type": "a",
-    "audio_url": null,
+
     "display_order": 2,
     "meaning_vi": "ấm"
   },
@@ -4377,7 +4377,7 @@
     "example_pinyin": "Tā ǒu ěr lái shàngkè.",
     "example_meaning": "Anh ấy Occasionally đến lớp.",
     "word_type": "d",
-    "audio_url": null,
+
     "display_order": 3,
     "meaning_vi": null
   },
@@ -4391,7 +4391,7 @@
     "example_pinyin": "Wǒ duì pái liè hěn gǎn xìngqù.",
     "example_meaning": "Tôi rất quan tâm đến Array.",
     "word_type": "n",
-    "audio_url": null,
+
     "display_order": 4,
     "meaning_vi": null
   },
@@ -4405,7 +4405,7 @@
     "example_pinyin": "Nǐ kěyǐ pàn duàn ma?",
     "example_meaning": "Bạn có thể Quyết định không?",
     "word_type": "v",
-    "audio_url": null,
+
     "display_order": 5,
     "meaning_vi": "quyết định"
   },
@@ -4419,7 +4419,7 @@
     "example_pinyin": "Tā hěn xǐhuan péi.",
     "example_meaning": "Cô ấy rất thích Accompany.",
     "word_type": "v",
-    "audio_url": null,
+
     "display_order": 6,
     "meaning_vi": null
   },
@@ -4433,7 +4433,7 @@
     "example_pinyin": "Wǒ yǐjīng pī píng le.",
     "example_meaning": "Tôi đã Phê bình rồi.",
     "word_type": "v",
-    "audio_url": null,
+
     "display_order": 7,
     "meaning_vi": "phê bình"
   },
@@ -4447,7 +4447,7 @@
     "example_pinyin": "Tā gěi le wǒ yī gè pí fū.",
     "example_meaning": "Anh ấy cho tôi một Skin.",
     "word_type": "n",
-    "audio_url": null,
+
     "display_order": 8,
     "meaning_vi": null
   },
@@ -4461,7 +4461,7 @@
     "example_pinyin": "pí qi duì xuéxí hěn yǒu bāngzhù.",
     "example_meaning": "Character rất hữu ích cho việc học.",
     "word_type": "n",
-    "audio_url": null,
+
     "display_order": 9,
     "meaning_vi": null
   },
@@ -4475,7 +4475,7 @@
     "example_pinyin": "Wǒmen jīntiān xué \"piān\".",
     "example_meaning": "Hôm nay chúng ta học \"Sheet\".",
     "word_type": "q",
-    "audio_url": null,
+
     "display_order": 10,
     "meaning_vi": null
   },
@@ -4489,7 +4489,7 @@
     "example_pinyin": "Wǒmen yīnggāi piàn.",
     "example_meaning": "Chúng ta nên Cheat.",
     "word_type": "v",
-    "audio_url": null,
+
     "display_order": 11,
     "meaning_vi": null
   },
@@ -4503,7 +4503,7 @@
     "example_pinyin": "Tā de pīng pāng qiú hěn hǎo.",
     "example_meaning": "Table tennis của cô ấy rất tốt.",
     "word_type": "n",
-    "audio_url": null,
+
     "display_order": 12,
     "meaning_vi": null
   },
@@ -4517,7 +4517,7 @@
     "example_pinyin": "Tā píng shí hěn nǔlì xuéxí.",
     "example_meaning": "Cô ấy Ordinarily rất chăm chỉ học.",
     "word_type": "d",
-    "audio_url": null,
+
     "display_order": 13,
     "meaning_vi": null
   },
@@ -4531,7 +4531,7 @@
     "example_pinyin": "Xiànzài de píng zi yuèláiyuè hǎo le.",
     "example_meaning": "Chai, lọ bây giờ ngày càng tốt hơn.",
     "word_type": "n",
-    "audio_url": null,
+
     "display_order": 14,
     "meaning_vi": "chai, lọ"
   },
@@ -4545,7 +4545,7 @@
     "example_pinyin": "Zhège pò hěn zhòngyào.",
     "example_meaning": "Broken này rất quan trọng.",
     "word_type": "n",
-    "audio_url": null,
+
     "display_order": 15,
     "meaning_vi": null
   },
@@ -4559,7 +4559,7 @@
     "example_pinyin": "Wǒ duì pǔ biàn hěn gǎn xìngqù.",
     "example_meaning": "Tôi rất quan tâm đến Universal.",
     "word_type": "n",
-    "audio_url": null,
+
     "display_order": 16,
     "meaning_vi": null
   },
@@ -4573,7 +4573,7 @@
     "example_pinyin": "Tā de xìnggé fēicháng qí cì.",
     "example_meaning": "Tính cách anh ấy rất Next.",
     "word_type": "a",
-    "audio_url": null,
+
     "display_order": 17,
     "meaning_vi": null
   },
@@ -4587,7 +4587,7 @@
     "example_pinyin": "Wǒmen jīntiān xué \"qí zhōng\".",
     "example_meaning": "Hôm nay chúng ta học \"Among\".",
     "word_type": "p",
-    "audio_url": null,
+
     "display_order": 18,
     "meaning_vi": null
   },
@@ -4601,7 +4601,7 @@
     "example_pinyin": "Wǒ yǐjīng qǐ fēi le.",
     "example_meaning": "Tôi đã Take off (in an airplane) rồi.",
     "word_type": "v",
-    "audio_url": null,
+
     "display_order": 19,
     "meaning_vi": null
   },
@@ -4615,7 +4615,7 @@
     "example_pinyin": "Tā gěi le wǒ yī gè qi lai.",
     "example_meaning": "Anh ấy cho tôi một Đứng dậy, lên.",
     "word_type": "n",
-    "audio_url": null,
+
     "display_order": 20,
     "meaning_vi": "đứng dậy, lên"
   },
@@ -4629,7 +4629,7 @@
     "example_pinyin": "qì hòu duì xuéxí hěn yǒu bāngzhù.",
     "example_meaning": "Climate rất hữu ích cho việc học.",
     "word_type": "n",
-    "audio_url": null,
+
     "display_order": 21,
     "meaning_vi": null
   },
@@ -4643,7 +4643,7 @@
     "example_pinyin": "Wǒmen qiān wàn zhèyàng zuò.",
     "example_meaning": "Chúng tôi Ten million làm như vậy.",
     "word_type": "d",
-    "audio_url": null,
+
     "display_order": 22,
     "meaning_vi": null
   },
@@ -4657,7 +4657,7 @@
     "example_pinyin": "Zhège qiān zhèng fēicháng yǒuyòng.",
     "example_meaning": "Visa này rất hữu ích.",
     "word_type": "n",
-    "audio_url": null,
+
     "display_order": 23,
     "meaning_vi": null
   },
@@ -4671,7 +4671,7 @@
     "example_pinyin": "Tā de qiáng hěn hǎo.",
     "example_meaning": "Wall của cô ấy rất tốt.",
     "word_type": "n",
-    "audio_url": null,
+
     "display_order": 24,
     "meaning_vi": null
   },
@@ -4685,7 +4685,7 @@
     "example_pinyin": "Nǐ xūyào qiāo.",
     "example_meaning": "Bạn cần Hit.",
     "word_type": "v",
-    "audio_url": null,
+
     "display_order": 25,
     "meaning_vi": null
   },
@@ -4699,7 +4699,7 @@
     "example_pinyin": "Xiànzài de qiáo yuèláiyuè hǎo le.",
     "example_meaning": "Bridge bây giờ ngày càng tốt hơn.",
     "word_type": "n",
-    "audio_url": null,
+
     "display_order": 26,
     "meaning_vi": null
   },
@@ -4713,7 +4713,7 @@
     "example_pinyin": "Zhège qiǎo kè lì hěn zhòngyào.",
     "example_meaning": "Chocolate (loanword) này rất quan trọng.",
     "word_type": "n",
-    "audio_url": null,
+
     "display_order": 27,
     "meaning_vi": null
   },
@@ -4727,7 +4727,7 @@
     "example_pinyin": "Wǒ duì qīn qi hěn gǎn xìngqù.",
     "example_meaning": "Tôi rất quan tâm đến A relative (i.e. family relation).",
     "word_type": "n",
-    "audio_url": null,
+
     "display_order": 28,
     "meaning_vi": null
   },
@@ -4741,7 +4741,7 @@
     "example_pinyin": "Tā de xìnggé fēicháng qīng.",
     "example_meaning": "Tính cách anh ấy rất Nhẹ.",
     "word_type": "a",
-    "audio_url": null,
+
     "display_order": 29,
     "meaning_vi": "nhẹ"
   },
@@ -4755,7 +4755,7 @@
     "example_pinyin": "Zhè běn shū hěn qīng sōng.",
     "example_meaning": "Quyển sách này rất Gentle.",
     "word_type": "a",
-    "audio_url": null,
+
     "display_order": 30,
     "meaning_vi": null
   },
@@ -4769,7 +4769,7 @@
     "example_pinyin": "Wǒ xūyào yī gè hǎo de qíng kuàng.",
     "example_meaning": "Tôi cần một Circumstances tốt.",
     "word_type": "n",
-    "audio_url": null,
+
     "display_order": 31,
     "meaning_vi": null
   },
@@ -4783,7 +4783,7 @@
     "example_pinyin": "Dàjiā yīqǐ qǐng jià ba.",
     "example_meaning": "Mọi người cùng Request leave of absence nhé.",
     "word_type": "v",
-    "audio_url": null,
+
     "display_order": 1,
     "meaning_vi": null
   },
@@ -4797,7 +4797,7 @@
     "example_pinyin": "Nǐ xiǎng qǐng kè ma?",
     "example_meaning": "Bạn muốn Give a dinner party không?",
     "word_type": "v",
-    "audio_url": null,
+
     "display_order": 2,
     "meaning_vi": null
   },
@@ -4811,7 +4811,7 @@
     "example_pinyin": "Wǒmen tǎolùn le qióng de wèntí.",
     "example_meaning": "Chúng tôi đã thảo luận về vấn đề Exhausted.",
     "word_type": "n",
-    "audio_url": null,
+
     "display_order": 3,
     "meaning_vi": null
   },
@@ -4825,7 +4825,7 @@
     "example_pinyin": "Wǒmen yīnggāi qū bié.",
     "example_meaning": "Chúng ta nên Difference.",
     "word_type": "v",
-    "audio_url": null,
+
     "display_order": 4,
     "meaning_vi": null
   },
@@ -4839,7 +4839,7 @@
     "example_pinyin": "Tā bù xiǎng qǔ.",
     "example_meaning": "Anh ấy không muốn Lấy.",
     "word_type": "v",
-    "audio_url": null,
+
     "display_order": 5,
     "meaning_vi": "lấy"
   },
@@ -4853,7 +4853,7 @@
     "example_pinyin": "Zhōngguó cài zhēn quán bù.",
     "example_meaning": "Món Trung thật Whole.",
     "word_type": "a",
-    "audio_url": null,
+
     "display_order": 6,
     "meaning_vi": null
   },
@@ -4867,7 +4867,7 @@
     "example_pinyin": "Xiànzài de quē diǎn yuèláiyuè hǎo le.",
     "example_meaning": "Weak point bây giờ ngày càng tốt hơn.",
     "word_type": "n",
-    "audio_url": null,
+
     "display_order": 7,
     "meaning_vi": null
   },
@@ -4881,7 +4881,7 @@
     "example_pinyin": "Wǒ měitiān dōu quē shǎo.",
     "example_meaning": "Tôi Lack mỗi ngày.",
     "word_type": "v",
-    "audio_url": null,
+
     "display_order": 8,
     "meaning_vi": null
   },
@@ -4895,7 +4895,7 @@
     "example_pinyin": "Qǐng yòng \"què\" zào gè jùzi.",
     "example_meaning": "Hãy đặt một câu với \"But\".",
     "word_type": "c",
-    "audio_url": null,
+
     "display_order": 9,
     "meaning_vi": null
   },
@@ -4909,7 +4909,7 @@
     "example_pinyin": "Tā què shí shì gè hǎo xuéshēng.",
     "example_meaning": "Anh ấy Quả thật là học sinh giỏi.",
     "word_type": "d",
-    "audio_url": null,
+
     "display_order": 10,
     "meaning_vi": "quả thật"
   },
@@ -4923,7 +4923,7 @@
     "example_pinyin": "Wǒmen jīntiān xué \"qún\".",
     "example_meaning": "Hôm nay chúng ta học \"Group\".",
     "word_type": "q",
-    "audio_url": null,
+
     "display_order": 11,
     "meaning_vi": null
   },
@@ -4937,7 +4937,7 @@
     "example_pinyin": "Wǒ zhèngzài xuéxí \"rán ér\" zhège cí.",
     "example_meaning": "Tôi đang học từ \"However\".",
     "word_type": "c",
-    "audio_url": null,
+
     "display_order": 12,
     "meaning_vi": null
   },
@@ -4951,7 +4951,7 @@
     "example_pinyin": "Tā gěi le wǒ yī gè rè nao.",
     "example_meaning": "Anh ấy cho tôi một Bustling with noise and excitement.",
     "word_type": "n",
-    "audio_url": null,
+
     "display_order": 13,
     "meaning_vi": null
   },
@@ -4965,7 +4965,7 @@
     "example_pinyin": "rén mín bì duì xuéxí hěn yǒu bāngzhù.",
     "example_meaning": "Renminbi (RMB) rất hữu ích cho việc học.",
     "word_type": "n",
-    "audio_url": null,
+
     "display_order": 14,
     "meaning_vi": null
   },
@@ -4979,7 +4979,7 @@
     "example_pinyin": "Wǒmen jīntiān xué \"rèn hé\".",
     "example_meaning": "Hôm nay chúng ta học \"Any\".",
     "word_type": "r",
-    "audio_url": null,
+
     "display_order": 15,
     "meaning_vi": null
   },
@@ -4993,7 +4993,7 @@
     "example_pinyin": "Zhège rèn wu fēicháng yǒuyòng.",
     "example_meaning": "Mission này rất hữu ích.",
     "word_type": "n",
-    "audio_url": null,
+
     "display_order": 16,
     "meaning_vi": null
   },
@@ -5007,7 +5007,7 @@
     "example_pinyin": "Tā bù xiǎng rēng.",
     "example_meaning": "Anh ấy không muốn Throw.",
     "word_type": "v",
-    "audio_url": null,
+
     "display_order": 17,
     "meaning_vi": null
   },
@@ -5021,7 +5021,7 @@
     "example_pinyin": "Tā réng rán shì gè hǎo xuéshēng.",
     "example_meaning": "Anh ấy Vẫn là học sinh giỏi.",
     "word_type": "d",
-    "audio_url": null,
+
     "display_order": 18,
     "meaning_vi": "vẫn"
   },
@@ -5035,7 +5035,7 @@
     "example_pinyin": "Xiànzài de rì jì yuèláiyuè hǎo le.",
     "example_meaning": "Nhật ký bây giờ ngày càng tốt hơn.",
     "word_type": "n",
-    "audio_url": null,
+
     "display_order": 19,
     "meaning_vi": "nhật ký"
   },
@@ -5049,7 +5049,7 @@
     "example_pinyin": "Zhège rù kǒu hěn zhòngyào.",
     "example_meaning": "Entrance này rất quan trọng.",
     "word_type": "n",
-    "audio_url": null,
+
     "display_order": 20,
     "meaning_vi": null
   },
@@ -5063,7 +5063,7 @@
     "example_pinyin": "Zhèlǐ de huánjìng hěn ruǎn.",
     "example_meaning": "Môi trường ở đây rất Mềm.",
     "word_type": "a",
-    "audio_url": null,
+
     "display_order": 21,
     "meaning_vi": "mềm"
   },
@@ -5077,7 +5077,7 @@
     "example_pinyin": "Nǐ kěyǐ sàn bù ma?",
     "example_meaning": "Bạn có thể Take a walk không?",
     "word_type": "v",
-    "audio_url": null,
+
     "display_order": 22,
     "meaning_vi": null
   },
@@ -5091,7 +5091,7 @@
     "example_pinyin": "Nǐ zhīdào sēn lín shì shénme ma?",
     "example_meaning": "Bạn biết Forest là gì không?",
     "word_type": "n",
-    "audio_url": null,
+
     "display_order": 23,
     "meaning_vi": null
   },
@@ -5105,7 +5105,7 @@
     "example_pinyin": "Wǒ xūyào yī gè hǎo de shā fā.",
     "example_meaning": "Tôi cần một Sofa tốt.",
     "word_type": "n",
-    "audio_url": null,
+
     "display_order": 24,
     "meaning_vi": null
   },
@@ -5119,7 +5119,7 @@
     "example_pinyin": "Dàjiā yīqǐ shāng liang ba.",
     "example_meaning": "Mọi người cùng Consult nhé.",
     "word_type": "v",
-    "audio_url": null,
+
     "display_order": 25,
     "meaning_vi": null
   },
@@ -5133,7 +5133,7 @@
     "example_pinyin": "Nǐ xiǎng shāng xīn ma?",
     "example_meaning": "Bạn muốn Grieve không?",
     "word_type": "v",
-    "audio_url": null,
+
     "display_order": 26,
     "meaning_vi": null
   },
@@ -5147,7 +5147,7 @@
     "example_pinyin": "Wǒ shāo wēi tóngyì nǐ de kànfǎ.",
     "example_meaning": "Tôi A little bit đồng ý quan điểm của bạn.",
     "word_type": "d",
-    "audio_url": null,
+
     "display_order": 27,
     "meaning_vi": null
   },
@@ -5161,7 +5161,7 @@
     "example_pinyin": "Zhège shè huì fēicháng yǒuyòng.",
     "example_meaning": "Xã hội này rất hữu ích.",
     "word_type": "n",
-    "audio_url": null,
+
     "display_order": 28,
     "meaning_vi": "xã hội"
   },
@@ -5175,7 +5175,7 @@
     "example_pinyin": "Tā bù xiǎng shēn.",
     "example_meaning": "Anh ấy không muốn Close.",
     "word_type": "v",
-    "audio_url": null,
+
     "display_order": 29,
     "meaning_vi": null
   },
@@ -5189,7 +5189,7 @@
     "example_pinyin": "Nǐ xūyào shēn qǐng.",
     "example_meaning": "Bạn cần Apply for sth.",
     "word_type": "v",
-    "audio_url": null,
+
     "display_order": 30,
     "meaning_vi": null
   },
@@ -5203,7 +5203,7 @@
     "example_pinyin": "Wǒmen shèn zhì zhèyàng zuò.",
     "example_meaning": "Chúng tôi Thậm chí làm như vậy.",
     "word_type": "d",
-    "audio_url": null,
+
     "display_order": 31,
     "meaning_vi": "thậm chí"
   },
@@ -5217,7 +5217,7 @@
     "example_pinyin": "Zhège shēng huó hěn zhòngyào.",
     "example_meaning": "Cuộc sống này rất quan trọng.",
     "word_type": "n",
-    "audio_url": null,
+
     "display_order": 1,
     "meaning_vi": "cuộc sống"
   },
@@ -5231,7 +5231,7 @@
     "example_pinyin": "Wǒ duì shēng mìng hěn gǎn xìngqù.",
     "example_meaning": "Tôi rất quan tâm đến Cuộc sống.",
     "word_type": "n",
-    "audio_url": null,
+
     "display_order": 2,
     "meaning_vi": "cuộc sống"
   },
@@ -5245,7 +5245,7 @@
     "example_pinyin": "Nǐ kěyǐ shěng ma?",
     "example_meaning": "Bạn có thể Tiết kiệm không?",
     "word_type": "v",
-    "audio_url": null,
+
     "display_order": 3,
     "meaning_vi": "tiết kiệm"
   },
@@ -5259,7 +5259,7 @@
     "example_pinyin": "Tā hěn xǐhuan shèng.",
     "example_meaning": "Cô ấy rất thích Remain.",
     "word_type": "v",
-    "audio_url": null,
+
     "display_order": 4,
     "meaning_vi": null
   },
@@ -5273,7 +5273,7 @@
     "example_pinyin": "Wǒ yǐjīng shī bài le.",
     "example_meaning": "Tôi đã Be defeated rồi.",
     "word_type": "v",
-    "audio_url": null,
+
     "display_order": 5,
     "meaning_vi": null
   },
@@ -5287,7 +5287,7 @@
     "example_pinyin": "Dàjiā yīqǐ shī wàng ba.",
     "example_meaning": "Mọi người cùng Disappointed nhé.",
     "word_type": "v",
-    "audio_url": null,
+
     "display_order": 6,
     "meaning_vi": null
   },
@@ -5301,7 +5301,7 @@
     "example_pinyin": "shī fu duì xuéxí hěn yǒu bāngzhù.",
     "example_meaning": "Master rất hữu ích cho việc học.",
     "word_type": "n",
-    "audio_url": null,
+
     "display_order": 7,
     "meaning_vi": null
   },
@@ -5315,7 +5315,7 @@
     "example_pinyin": "Wǒmen tǎolùn le shī rùn de wèntí.",
     "example_meaning": "Chúng tôi đã thảo luận về vấn đề Moist.",
     "word_type": "n",
-    "audio_url": null,
+
     "display_order": 8,
     "meaning_vi": null
   },
@@ -5329,7 +5329,7 @@
     "example_pinyin": "Zhège shī zi fēicháng yǒuyòng.",
     "example_meaning": "Lion này rất hữu ích.",
     "word_type": "n",
-    "audio_url": null,
+
     "display_order": 9,
     "meaning_vi": null
   },
@@ -5343,7 +5343,7 @@
     "example_pinyin": "Tā bù xiǎng shí fēn.",
     "example_meaning": "Anh ấy không muốn Divide into ten equal parts.",
     "word_type": "v",
-    "audio_url": null,
+
     "display_order": 10,
     "meaning_vi": null
   },
@@ -5357,7 +5357,7 @@
     "example_pinyin": "Guānyú shí jì nǐ liǎojiě duōshǎo?",
     "example_meaning": "Về Actual, bạn biết bao nhiêu?",
     "word_type": "a",
-    "audio_url": null,
+
     "display_order": 11,
     "meaning_vi": null
   },
@@ -5371,7 +5371,7 @@
     "example_pinyin": "Wǒ shí zài tóngyì nǐ de kànfǎ.",
     "example_meaning": "Tôi Thật sự đồng ý quan điểm của bạn.",
     "word_type": "d",
-    "audio_url": null,
+
     "display_order": 12,
     "meaning_vi": "thật sự"
   },
@@ -5385,7 +5385,7 @@
     "example_pinyin": "Zhège shí pǐn hěn zhòngyào.",
     "example_meaning": "Foodstuff này rất quan trọng.",
     "word_type": "n",
-    "audio_url": null,
+
     "display_order": 13,
     "meaning_vi": null
   },
@@ -5399,7 +5399,7 @@
     "example_pinyin": "Tā zhèngzài shǐ yòng.",
     "example_meaning": "Anh ấy đang Dùng.",
     "word_type": "v",
-    "audio_url": null,
+
     "display_order": 14,
     "meaning_vi": "dùng"
   },
@@ -5413,7 +5413,7 @@
     "example_pinyin": "Nǐ kěyǐ shì ma?",
     "example_meaning": "Bạn có thể Test không?",
     "word_type": "v",
-    "audio_url": null,
+
     "display_order": 15,
     "meaning_vi": null
   },
@@ -5427,7 +5427,7 @@
     "example_pinyin": "Nǐ zhīdào shì chǎng shì shénme ma?",
     "example_meaning": "Bạn biết Marketplace là gì không?",
     "word_type": "n",
-    "audio_url": null,
+
     "display_order": 16,
     "meaning_vi": null
   },
@@ -5441,7 +5441,7 @@
     "example_pinyin": "Wǒ xūyào yī gè hǎo de shì jì.",
     "example_meaning": "Tôi cần một Century tốt.",
     "word_type": "n",
-    "audio_url": null,
+
     "display_order": 17,
     "meaning_vi": null
   },
@@ -5455,7 +5455,7 @@
     "example_pinyin": "Dàjiā yīqǐ shì hé ba.",
     "example_meaning": "Mọi người cùng Fit nhé.",
     "word_type": "v",
-    "audio_url": null,
+
     "display_order": 18,
     "meaning_vi": null
   },
@@ -5469,7 +5469,7 @@
     "example_pinyin": "Nǐ xiǎng shì yìng ma?",
     "example_meaning": "Bạn muốn Adapt không?",
     "word_type": "v",
-    "audio_url": null,
+
     "display_order": 19,
     "meaning_vi": null
   },
@@ -5483,7 +5483,7 @@
     "example_pinyin": "Qǐng nǐ shōu yīxià.",
     "example_meaning": "Xin bạn Nhận một chút.",
     "word_type": "v",
-    "audio_url": null,
+
     "display_order": 20,
     "meaning_vi": "nhận"
   },
@@ -5497,7 +5497,7 @@
     "example_pinyin": "Wǒmen yīnggāi shōu rù.",
     "example_meaning": "Chúng ta nên Take in.",
     "word_type": "v",
-    "audio_url": null,
+
     "display_order": 21,
     "meaning_vi": null
   },
@@ -5511,7 +5511,7 @@
     "example_pinyin": "Tā bù xiǎng shōu shi.",
     "example_meaning": "Anh ấy không muốn Put in order.",
     "word_type": "v",
-    "audio_url": null,
+
     "display_order": 22,
     "meaning_vi": null
   },
@@ -5525,7 +5525,7 @@
     "example_pinyin": "Guānyú shǒu dū nǐ liǎojiě duōshǎo?",
     "example_meaning": "Về Capital (city), bạn biết bao nhiêu?",
     "word_type": "n",
-    "audio_url": null,
+
     "display_order": 23,
     "meaning_vi": null
   },
@@ -5539,7 +5539,7 @@
     "example_pinyin": "Wǒmen jīntiān xué \"shǒu xiān\".",
     "example_meaning": "Hôm nay chúng ta học \"First (of all)\".",
     "word_type": "m",
-    "audio_url": null,
+
     "display_order": 24,
     "meaning_vi": null
   },
@@ -5553,7 +5553,7 @@
     "example_pinyin": "Zhège shòu bù liǎo hěn zhòngyào.",
     "example_meaning": "Unbearable này rất quan trọng.",
     "word_type": "n",
-    "audio_url": null,
+
     "display_order": 25,
     "meaning_vi": null
   },
@@ -5567,7 +5567,7 @@
     "example_pinyin": "Tā zhèngzài shòu dào.",
     "example_meaning": "Anh ấy đang Nhận.",
     "word_type": "v",
-    "audio_url": null,
+
     "display_order": 26,
     "meaning_vi": "nhận"
   },
@@ -5581,7 +5581,7 @@
     "example_pinyin": "shòu huò yuán shì hěn zhòngyào de.",
     "example_meaning": "Salesperson rất là quan trọng.",
     "word_type": "n",
-    "audio_url": null,
+
     "display_order": 27,
     "meaning_vi": null
   },
@@ -5595,7 +5595,7 @@
     "example_pinyin": "Tā hěn xǐhuan shū.",
     "example_meaning": "Cô ấy rất thích Mất.",
     "word_type": "v",
-    "audio_url": null,
+
     "display_order": 28,
     "meaning_vi": "mất"
   },
@@ -5609,7 +5609,7 @@
     "example_pinyin": "Wǒ yǐjīng shú xī le.",
     "example_meaning": "Tôi đã Be familiar with rồi.",
     "word_type": "v",
-    "audio_url": null,
+
     "display_order": 29,
     "meaning_vi": null
   },
@@ -5623,7 +5623,7 @@
     "example_pinyin": "Tā gěi le wǒ yī gè shù liàng.",
     "example_meaning": "Anh ấy cho tôi một Amount.",
     "word_type": "n",
-    "audio_url": null,
+
     "display_order": 30,
     "meaning_vi": null
   },
@@ -5637,7 +5637,7 @@
     "example_pinyin": "shù zì duì xuéxí hěn yǒu bāngzhù.",
     "example_meaning": "Numeral rất hữu ích cho việc học.",
     "word_type": "n",
-    "audio_url": null,
+
     "display_order": 31,
     "meaning_vi": null
   },
@@ -5651,7 +5651,7 @@
     "example_pinyin": "Shēnghuó biàn de yuèláiyuè shuài.",
     "example_meaning": "Cuộc sống trở nên ngày càng Handsome.",
     "word_type": "a",
-    "audio_url": null,
+
     "display_order": 1,
     "meaning_vi": null
   },
@@ -5665,7 +5665,7 @@
     "example_pinyin": "Nǐ shùn biàn qùguò Zhōngguó ma?",
     "example_meaning": "Bạn Conveniently đã đến Trung Quốc chưa?",
     "word_type": "d",
-    "audio_url": null,
+
     "display_order": 2,
     "meaning_vi": null
   },
@@ -5679,7 +5679,7 @@
     "example_pinyin": "Wǒ shùn lì xiǎng gàosu nǐ yī jiàn shì.",
     "example_meaning": "Tôi Smoothly muốn nói với bạn một chuyện.",
     "word_type": "d",
-    "audio_url": null,
+
     "display_order": 3,
     "meaning_vi": null
   },
@@ -5693,7 +5693,7 @@
     "example_pinyin": "Guānyú shùn xù nǐ liǎojiě duōshǎo?",
     "example_meaning": "Về Sequence, bạn biết bao nhiêu?",
     "word_type": "n",
-    "audio_url": null,
+
     "display_order": 4,
     "meaning_vi": null
   },
@@ -5707,7 +5707,7 @@
     "example_pinyin": "Wǒ gāng shuō míng wán.",
     "example_meaning": "Tôi vừa Giải thích xong.",
     "word_type": "v",
-    "audio_url": null,
+
     "display_order": 5,
     "meaning_vi": "giải thích"
   },
@@ -5721,7 +5721,7 @@
     "example_pinyin": "Zhège shuò shì hěn zhòngyào.",
     "example_meaning": "Master's degree này rất quan trọng.",
     "word_type": "n",
-    "audio_url": null,
+
     "display_order": 6,
     "meaning_vi": null
   },
@@ -5735,7 +5735,7 @@
     "example_pinyin": "Tā zhèngzài sǐ.",
     "example_meaning": "Anh ấy đang Chết.",
     "word_type": "v",
-    "audio_url": null,
+
     "display_order": 7,
     "meaning_vi": "chết"
   },
@@ -5749,7 +5749,7 @@
     "example_pinyin": "Nǐ kěyǐ sù dù ma?",
     "example_meaning": "Bạn có thể Speed không?",
     "word_type": "v",
-    "audio_url": null,
+
     "display_order": 8,
     "meaning_vi": null
   },
@@ -5763,7 +5763,7 @@
     "example_pinyin": "Nǐ zhīdào sù liào dài shì shénme ma?",
     "example_meaning": "Bạn biết Plastic bag là gì không?",
     "word_type": "n",
-    "audio_url": null,
+
     "display_order": 9,
     "meaning_vi": null
   },
@@ -5777,7 +5777,7 @@
     "example_pinyin": "Tā kàn qǐlái hěn suān.",
     "example_meaning": "Cô ấy trông rất Chua.",
     "word_type": "a",
-    "audio_url": null,
+
     "display_order": 10,
     "meaning_vi": "chua"
   },
@@ -5791,7 +5791,7 @@
     "example_pinyin": "Dàjiā yīqǐ suàn ba.",
     "example_meaning": "Mọi người cùng Regard as nhé.",
     "word_type": "v",
-    "audio_url": null,
+
     "display_order": 11,
     "meaning_vi": null
   },
@@ -5805,7 +5805,7 @@
     "example_pinyin": "suí biàn duì xuéxí hěn yǒu bāngzhù.",
     "example_meaning": "As one wishes rất hữu ích cho việc học.",
     "word_type": "n",
-    "audio_url": null,
+
     "display_order": 12,
     "meaning_vi": null
   },
@@ -5819,7 +5819,7 @@
     "example_pinyin": "Wǒmen jīntiān xué \"suí zhe\".",
     "example_meaning": "Hôm nay chúng ta học \"Along with\".",
     "word_type": "p",
-    "audio_url": null,
+
     "display_order": 13,
     "meaning_vi": null
   },
@@ -5833,7 +5833,7 @@
     "example_pinyin": "Zhège sūn zi fēicháng yǒuyòng.",
     "example_meaning": "Grandson này rất hữu ích.",
     "word_type": "n",
-    "audio_url": null,
+
     "display_order": 14,
     "meaning_vi": null
   },
@@ -5847,7 +5847,7 @@
     "example_pinyin": "Wǒ suǒ yǒu juédé zhèyàng hěn hǎo.",
     "example_meaning": "Tôi All thấy như vậy rất tốt.",
     "word_type": "d",
-    "audio_url": null,
+
     "display_order": 15,
     "meaning_vi": null
   },
@@ -5861,7 +5861,7 @@
     "example_pinyin": "Nǐ xūyào tái.",
     "example_meaning": "Bạn cần Lift.",
     "word_type": "v",
-    "audio_url": null,
+
     "display_order": 16,
     "meaning_vi": null
   },
@@ -5875,7 +5875,7 @@
     "example_pinyin": "Wǒmen jīntiān xué \"tái\".",
     "example_meaning": "Hôm nay chúng ta học \"Typhoon\".",
     "word_type": "q",
-    "audio_url": null,
+
     "display_order": 17,
     "meaning_vi": null
   },
@@ -5889,7 +5889,7 @@
     "example_pinyin": "Zhège tài du hěn zhòngyào.",
     "example_meaning": "Manner này rất quan trọng.",
     "word_type": "n",
-    "audio_url": null,
+
     "display_order": 18,
     "meaning_vi": null
   },
@@ -5903,7 +5903,7 @@
     "example_pinyin": "Tā zhèngzài tán.",
     "example_meaning": "Anh ấy đang Nói.",
     "word_type": "v",
-    "audio_url": null,
+
     "display_order": 19,
     "meaning_vi": "nói"
   },
@@ -5917,7 +5917,7 @@
     "example_pinyin": "Nǐ kěyǐ tán ma?",
     "example_meaning": "Bạn có thể Pluck (a string) không?",
     "word_type": "v",
-    "audio_url": null,
+
     "display_order": 20,
     "meaning_vi": null
   },
@@ -5931,7 +5931,7 @@
     "example_pinyin": "Nǐ zhīdào tāng shì shénme ma?",
     "example_meaning": "Bạn biết Soup là gì không?",
     "word_type": "n",
-    "audio_url": null,
+
     "display_order": 21,
     "meaning_vi": null
   },
@@ -5945,7 +5945,7 @@
     "example_pinyin": "Wǒ yǐjīng tǎng le.",
     "example_meaning": "Tôi đã Recline rồi.",
     "word_type": "v",
-    "audio_url": null,
+
     "display_order": 22,
     "meaning_vi": null
   },
@@ -5959,7 +5959,7 @@
     "example_pinyin": "Qǐng yòng \"tàng\" zào gè jùzi.",
     "example_meaning": "Hãy đặt một câu với \"Classifier for times\".",
     "word_type": "q",
-    "audio_url": null,
+
     "display_order": 23,
     "meaning_vi": null
   },
@@ -5973,7 +5973,7 @@
     "example_pinyin": "Nǐ xiǎng tǎo lùn ma?",
     "example_meaning": "Bạn muốn Thảo luận không?",
     "word_type": "v",
-    "audio_url": null,
+
     "display_order": 24,
     "meaning_vi": "thảo luận"
   },
@@ -5987,7 +5987,7 @@
     "example_pinyin": "Qǐng nǐ tǎo yàn yīxià.",
     "example_meaning": "Xin bạn Dislike một chút.",
     "word_type": "v",
-    "audio_url": null,
+
     "display_order": 25,
     "meaning_vi": null
   },
@@ -6001,7 +6001,7 @@
     "example_pinyin": "Zhège tè diǎn fēicháng yǒuyòng.",
     "example_meaning": "Characteristic (feature) này rất hữu ích.",
     "word_type": "n",
-    "audio_url": null,
+
     "display_order": 26,
     "meaning_vi": null
   },
@@ -6015,7 +6015,7 @@
     "example_pinyin": "Tā bù xiǎng tí gōng.",
     "example_meaning": "Anh ấy không muốn Offer.",
     "word_type": "v",
-    "audio_url": null,
+
     "display_order": 27,
     "meaning_vi": null
   },
@@ -6029,7 +6029,7 @@
     "example_pinyin": "Nǐ xūyào tí qián.",
     "example_meaning": "Bạn cần Shift to an earlier date.",
     "word_type": "v",
-    "audio_url": null,
+
     "display_order": 28,
     "meaning_vi": null
   },
@@ -6043,7 +6043,7 @@
     "example_pinyin": "Wǒ gāng tí xǐng wán.",
     "example_meaning": "Tôi vừa Remind xong.",
     "word_type": "v",
-    "audio_url": null,
+
     "display_order": 29,
     "meaning_vi": null
   },
@@ -6057,7 +6057,7 @@
     "example_pinyin": "Wǒ měitiān dōu tián kòng.",
     "example_meaning": "Tôi Fill a job vacancy mỗi ngày.",
     "word_type": "v",
-    "audio_url": null,
+
     "display_order": 30,
     "meaning_vi": null
   },
@@ -6071,7 +6071,7 @@
     "example_pinyin": "Wǒ duì tiáo jiàn hěn gǎn xìngqù.",
     "example_meaning": "Tôi rất quan tâm đến Điều kiện.",
     "word_type": "n",
-    "audio_url": null,
+
     "display_order": 31,
     "meaning_vi": "điều kiện"
   },
@@ -6085,7 +6085,7 @@
     "example_pinyin": "Nǐ kěyǐ tíng zhǐ ma?",
     "example_meaning": "Bạn có thể Dừng không?",
     "word_type": "v",
-    "audio_url": null,
+
     "display_order": 1,
     "meaning_vi": "dừng"
   },
@@ -6099,7 +6099,7 @@
     "example_pinyin": "Tā hěn xǐhuan tǐng.",
     "example_meaning": "Cô ấy rất thích Stick out.",
     "word_type": "d",
-    "audio_url": null,
+
     "display_order": 2,
     "meaning_vi": null
   },
@@ -6113,7 +6113,7 @@
     "example_pinyin": "Wǒ zhèngzài xuéxí \"tōng guò\" zhège cí.",
     "example_meaning": "Tôi đang học từ \"By means of\".",
     "word_type": "p",
-    "audio_url": null,
+
     "display_order": 3,
     "meaning_vi": null
   },
@@ -6127,7 +6127,7 @@
     "example_pinyin": "Dàjiā yīqǐ tōng zhī ba.",
     "example_meaning": "Mọi người cùng Notify nhé.",
     "word_type": "v",
-    "audio_url": null,
+
     "display_order": 4,
     "meaning_vi": null
   },
@@ -6141,7 +6141,7 @@
     "example_pinyin": "Nǐ xiǎng tóng qíng ma?",
     "example_meaning": "Bạn muốn Sympathize with không?",
     "word_type": "v",
-    "audio_url": null,
+
     "display_order": 5,
     "meaning_vi": null
   },
@@ -6155,7 +6155,7 @@
     "example_pinyin": "Qǐng nǐ tuī yīxià.",
     "example_meaning": "Xin bạn Push một chút.",
     "word_type": "v",
-    "audio_url": null,
+
     "display_order": 6,
     "meaning_vi": null
   },
@@ -6169,7 +6169,7 @@
     "example_pinyin": "Wǒmen yīnggāi tuī chí.",
     "example_meaning": "Chúng ta nên Postpone.",
     "word_type": "v",
-    "audio_url": null,
+
     "display_order": 7,
     "meaning_vi": null
   },
@@ -6183,7 +6183,7 @@
     "example_pinyin": "Tā bù xiǎng tuō.",
     "example_meaning": "Anh ấy không muốn Shed.",
     "word_type": "v",
-    "audio_url": null,
+
     "display_order": 8,
     "meaning_vi": null
   },
@@ -6197,7 +6197,7 @@
     "example_pinyin": "Guānyú wà zi nǐ liǎojiě duōshǎo?",
     "example_meaning": "Về Socks, bạn biết bao nhiêu?",
     "word_type": "n",
-    "audio_url": null,
+
     "display_order": 9,
     "meaning_vi": null
   },
@@ -6211,7 +6211,7 @@
     "example_pinyin": "Dàjiā dōu juédé hěn wán quán.",
     "example_meaning": "Mọi người đều thấy rất Hoàn chỉnh.",
     "word_type": "a",
-    "audio_url": null,
+
     "display_order": 10,
     "meaning_vi": "hoàn chỉnh"
   },
@@ -6225,7 +6225,7 @@
     "example_pinyin": "Wǒ zhèngzài xuéxí \"wǎng\" zhège cí.",
     "example_meaning": "Tôi đang học từ \"Go (in a direction)\".",
     "word_type": "p",
-    "audio_url": null,
+
     "display_order": 11,
     "meaning_vi": null
   },
@@ -6239,7 +6239,7 @@
     "example_pinyin": "Wǒ wǎng wǎng xiǎng gàosu nǐ yī jiàn shì.",
     "example_meaning": "Tôi Thường muốn nói với bạn một chuyện.",
     "word_type": "d",
-    "audio_url": null,
+
     "display_order": 12,
     "meaning_vi": "thường"
   },
@@ -6253,7 +6253,7 @@
     "example_pinyin": "wǎng qiú shì hěn zhòngyào de.",
     "example_meaning": "Tennis rất là quan trọng.",
     "word_type": "n",
-    "audio_url": null,
+
     "display_order": 13,
     "meaning_vi": null
   },
@@ -6267,7 +6267,7 @@
     "example_pinyin": "Nǐ zhīdào wǎng zhàn shì shénme ma?",
     "example_meaning": "Bạn biết Website là gì không?",
     "word_type": "n",
-    "audio_url": null,
+
     "display_order": 14,
     "meaning_vi": null
   },
@@ -6281,7 +6281,7 @@
     "example_pinyin": "Wǒ xūyào yī gè hǎo de wēi xiǎn.",
     "example_meaning": "Tôi cần một Danger tốt.",
     "word_type": "n",
-    "audio_url": null,
+
     "display_order": 15,
     "meaning_vi": null
   },
@@ -6295,7 +6295,7 @@
     "example_pinyin": "Tā gěi le wǒ yī gè wèi dao.",
     "example_meaning": "Anh ấy cho tôi một Flavor.",
     "word_type": "n",
-    "audio_url": null,
+
     "display_order": 16,
     "meaning_vi": null
   },
@@ -6309,7 +6309,7 @@
     "example_pinyin": "wēn dù duì xuéxí hěn yǒu bāngzhù.",
     "example_meaning": "Temperature rất hữu ích cho việc học.",
     "word_type": "n",
-    "audio_url": null,
+
     "display_order": 17,
     "meaning_vi": null
   },
@@ -6323,7 +6323,7 @@
     "example_pinyin": "Wǒmen tǎolùn le wén zhāng de wèntí.",
     "example_meaning": "Chúng tôi đã thảo luận về vấn đề Article.",
     "word_type": "n",
-    "audio_url": null,
+
     "display_order": 18,
     "meaning_vi": null
   },
@@ -6337,7 +6337,7 @@
     "example_pinyin": "Wǒmen yīnggāi wò shǒu.",
     "example_meaning": "Chúng ta nên Shake hands.",
     "word_type": "v",
-    "audio_url": null,
+
     "display_order": 19,
     "meaning_vi": null
   },
@@ -6351,7 +6351,7 @@
     "example_pinyin": "Tā de wū rǎn hěn hǎo.",
     "example_meaning": "Pollution của cô ấy rất tốt.",
     "word_type": "n",
-    "audio_url": null,
+
     "display_order": 20,
     "meaning_vi": null
   },
@@ -6365,7 +6365,7 @@
     "example_pinyin": "Guānyú wú nǐ liǎojiě duōshǎo?",
     "example_meaning": "Về -less, bạn biết bao nhiêu?",
     "word_type": "n",
-    "audio_url": null,
+
     "display_order": 21,
     "meaning_vi": null
   },
@@ -6379,7 +6379,7 @@
     "example_pinyin": "Dàjiā dōu juédé hěn wú liáo.",
     "example_meaning": "Mọi người đều thấy rất Bored.",
     "word_type": "a",
-    "audio_url": null,
+
     "display_order": 22,
     "meaning_vi": null
   },
@@ -6393,7 +6393,7 @@
     "example_pinyin": "Wǒ zhèngzài xuéxí \"wú lùn\" zhège cí.",
     "example_meaning": "Tôi đang học từ \"No matter what or how\".",
     "word_type": "c",
-    "audio_url": null,
+
     "display_order": 23,
     "meaning_vi": null
   },
@@ -6407,7 +6407,7 @@
     "example_pinyin": "Tā zhèngzài wù huì.",
     "example_meaning": "Anh ấy đang Misunderstand.",
     "word_type": "v",
-    "audio_url": null,
+
     "display_order": 24,
     "meaning_vi": null
   },
@@ -6421,7 +6421,7 @@
     "example_pinyin": "xī hóng shì shì hěn zhòngyào de.",
     "example_meaning": "Tomato rất là quan trọng.",
     "word_type": "n",
-    "audio_url": null,
+
     "display_order": 25,
     "meaning_vi": null
   },
@@ -6435,7 +6435,7 @@
     "example_pinyin": "Tā hěn xǐhuan xī yǐn.",
     "example_meaning": "Cô ấy rất thích Attract (interest, investment etc).",
     "word_type": "v",
-    "audio_url": null,
+
     "display_order": 26,
     "meaning_vi": null
   },
@@ -6449,7 +6449,7 @@
     "example_pinyin": "Wǒ xūyào yī gè hǎo de xǐ yī jī.",
     "example_meaning": "Tôi cần một Washer tốt.",
     "word_type": "n",
-    "audio_url": null,
+
     "display_order": 27,
     "meaning_vi": null
   },
@@ -6463,7 +6463,7 @@
     "example_pinyin": "Tā gěi le wǒ yī gè xián.",
     "example_meaning": "Anh ấy cho tôi một Salted.",
     "word_type": "a",
-    "audio_url": null,
+
     "display_order": 28,
     "meaning_vi": null
   },
@@ -6477,7 +6477,7 @@
     "example_pinyin": "xiàn dài duì xuéxí hěn yǒu bāngzhù.",
     "example_meaning": "Modern times rất hữu ích cho việc học.",
     "word_type": "n",
-    "audio_url": null,
+
     "display_order": 29,
     "meaning_vi": null
   },
@@ -6491,7 +6491,7 @@
     "example_pinyin": "Qǐng nǐ xiàn mù yīxià.",
     "example_meaning": "Xin bạn Envy một chút.",
     "word_type": "v",
-    "audio_url": null,
+
     "display_order": 30,
     "meaning_vi": null
   },
@@ -6505,7 +6505,7 @@
     "example_pinyin": "Wǒmen yīnggāi xiàn zhì.",
     "example_meaning": "Chúng ta nên Restrict.",
     "word_type": "v",
-    "audio_url": null,
+
     "display_order": 31,
     "meaning_vi": null
   },
@@ -6519,7 +6519,7 @@
     "example_pinyin": "Tā de xiāng hěn hǎo.",
     "example_meaning": "Fragrant của cô ấy rất tốt.",
     "word_type": "a",
-    "audio_url": null,
+
     "display_order": 1,
     "meaning_vi": null
   },
@@ -6533,7 +6533,7 @@
     "example_pinyin": "Guānyú xiāng fǎn nǐ liǎojiě duōshǎo?",
     "example_meaning": "Về Opposite, bạn biết bao nhiêu?",
     "word_type": "n",
-    "audio_url": null,
+
     "display_order": 2,
     "meaning_vi": null
   },
@@ -6547,7 +6547,7 @@
     "example_pinyin": "Xiànzài de xiáng xì yuèláiyuè hǎo le.",
     "example_meaning": "Detailed bây giờ ngày càng tốt hơn.",
     "word_type": "a",
-    "audio_url": null,
+
     "display_order": 3,
     "meaning_vi": null
   },
@@ -6561,7 +6561,7 @@
     "example_pinyin": "Zhège xiǎng hěn zhòngyào.",
     "example_meaning": "Echo này rất quan trọng.",
     "word_type": "n",
-    "audio_url": null,
+
     "display_order": 4,
     "meaning_vi": null
   },
@@ -6575,7 +6575,7 @@
     "example_pinyin": "Wǒ duì xiāo xi hěn gǎn xìngqù.",
     "example_meaning": "Tôi rất quan tâm đến Tin tức.",
     "word_type": "n",
-    "audio_url": null,
+
     "display_order": 5,
     "meaning_vi": "tin tức"
   },
@@ -6589,7 +6589,7 @@
     "example_pinyin": "xiǎo shuō shì hěn zhòngyào de.",
     "example_meaning": "Novel rất là quan trọng.",
     "word_type": "n",
-    "audio_url": null,
+
     "display_order": 6,
     "meaning_vi": null
   },
@@ -6603,7 +6603,7 @@
     "example_pinyin": "Nǐ zhīdào xiào huà shì shénme ma?",
     "example_meaning": "Bạn biết Joke là gì không?",
     "word_type": "n",
-    "audio_url": null,
+
     "display_order": 7,
     "meaning_vi": null
   },
@@ -6617,7 +6617,7 @@
     "example_pinyin": "Wǒ xūyào yī gè hǎo de xiào guǒ.",
     "example_meaning": "Tôi cần một Kết quả tốt.",
     "word_type": "n",
-    "audio_url": null,
+
     "display_order": 8,
     "meaning_vi": "kết quả"
   },
@@ -6631,7 +6631,7 @@
     "example_pinyin": "Tā gěi le wǒ yī gè xīn qíng.",
     "example_meaning": "Anh ấy cho tôi một Mood.",
     "word_type": "n",
-    "audio_url": null,
+
     "display_order": 9,
     "meaning_vi": null
   },
@@ -6645,7 +6645,7 @@
     "example_pinyin": "Nǐ zuò de hěn xīn kǔ.",
     "example_meaning": "Bạn làm rất Khó.",
     "word_type": "a",
-    "audio_url": null,
+
     "display_order": 10,
     "meaning_vi": "khó"
   },
@@ -6659,7 +6659,7 @@
     "example_pinyin": "Qǐng nǐ xìn rèn yīxià.",
     "example_meaning": "Xin bạn Trust một chút.",
     "word_type": "v",
-    "audio_url": null,
+
     "display_order": 11,
     "meaning_vi": null
   },
@@ -6673,7 +6673,7 @@
     "example_pinyin": "Zhège xìn xīn fēicháng yǒuyòng.",
     "example_meaning": "Confidence này rất hữu ích.",
     "word_type": "n",
-    "audio_url": null,
+
     "display_order": 12,
     "meaning_vi": null
   },
@@ -6687,7 +6687,7 @@
     "example_pinyin": "Tā de xìn yòng kǎ hěn hǎo.",
     "example_meaning": "Thẻ tín dụng của cô ấy rất tốt.",
     "word_type": "n",
-    "audio_url": null,
+
     "display_order": 13,
     "meaning_vi": "thẻ tín dụng"
   },
@@ -6701,7 +6701,7 @@
     "example_pinyin": "Guānyú xīng fèn nǐ liǎojiě duōshǎo?",
     "example_meaning": "Về Excited, bạn biết bao nhiêu?",
     "word_type": "n",
-    "audio_url": null,
+
     "display_order": 14,
     "meaning_vi": null
   },
@@ -6715,7 +6715,7 @@
     "example_pinyin": "Wǒ gāng xíng wán.",
     "example_meaning": "Tôi vừa Đi bộ xong.",
     "word_type": "v",
-    "audio_url": null,
+
     "display_order": 15,
     "meaning_vi": "đi bộ"
   },
@@ -6729,7 +6729,7 @@
     "example_pinyin": "Wǒ měitiān dōu xǐng.",
     "example_meaning": "Tôi Wake up mỗi ngày.",
     "word_type": "v",
-    "audio_url": null,
+
     "display_order": 16,
     "meaning_vi": null
   },
@@ -6743,7 +6743,7 @@
     "example_pinyin": "Wǒ duì xìng bié hěn gǎn xìngqù.",
     "example_meaning": "Tôi rất quan tâm đến Gender.",
     "word_type": "n",
-    "audio_url": null,
+
     "display_order": 17,
     "meaning_vi": null
   },
@@ -6757,7 +6757,7 @@
     "example_pinyin": "xìng gé shì hěn zhòngyào de.",
     "example_meaning": "Nature rất là quan trọng.",
     "word_type": "n",
-    "audio_url": null,
+
     "display_order": 18,
     "meaning_vi": null
   },
@@ -6771,7 +6771,7 @@
     "example_pinyin": "Nǐ zhīdào xìng fú shì shénme ma?",
     "example_meaning": "Bạn biết Hạnh phúc là gì không?",
     "word_type": "n",
-    "audio_url": null,
+
     "display_order": 19,
     "meaning_vi": "hạnh phúc"
   },
@@ -6785,7 +6785,7 @@
     "example_pinyin": "Wǒ yǐjīng xiū le.",
     "example_meaning": "Tôi đã Decorate rồi.",
     "word_type": "v",
-    "audio_url": null,
+
     "display_order": 20,
     "meaning_vi": null
   },
@@ -6799,7 +6799,7 @@
     "example_pinyin": "Tā gěi le wǒ yī gè xǔ duō.",
     "example_meaning": "Anh ấy cho tôi một Many.",
     "word_type": "n",
-    "audio_url": null,
+
     "display_order": 21,
     "meaning_vi": null
   },
@@ -6813,7 +6813,7 @@
     "example_pinyin": "xuè duì xuéxí hěn yǒu bāngzhù.",
     "example_meaning": "Blood rất hữu ích cho việc học.",
     "word_type": "n",
-    "audio_url": null,
+
     "display_order": 22,
     "meaning_vi": null
   },
@@ -6827,7 +6827,7 @@
     "example_pinyin": "Wǒmen tǎolùn le yā lì de wèntí.",
     "example_meaning": "Chúng tôi đã thảo luận về vấn đề Pressure.",
     "word_type": "n",
-    "audio_url": null,
+
     "display_order": 23,
     "meaning_vi": null
   },
@@ -6841,7 +6841,7 @@
     "example_pinyin": "Zhège yá gāo fēicháng yǒuyòng.",
     "example_meaning": "Toothpaste này rất hữu ích.",
     "word_type": "n",
-    "audio_url": null,
+
     "display_order": 24,
     "meaning_vi": null
   },
@@ -6855,7 +6855,7 @@
     "example_pinyin": "Tā de Yà zhōu hěn hǎo.",
     "example_meaning": "Asia của cô ấy rất tốt.",
     "word_type": "n",
-    "audio_url": null,
+
     "display_order": 25,
     "meaning_vi": null
   },
@@ -6869,7 +6869,7 @@
     "example_pinyin": "\"ya\" zài Hànyǔ zhōng hěn chángjiàn.",
     "example_meaning": "\"(particle equivalent to 啊 after a vowel, expressing surprise or doubt)\" rất phổ biến trong tiếng Trung.",
     "word_type": "u",
-    "audio_url": null,
+
     "display_order": 26,
     "meaning_vi": null
   },
@@ -6883,7 +6883,7 @@
     "example_pinyin": "Xiànzài de yán yuèláiyuè hǎo le.",
     "example_meaning": "Salt bây giờ ngày càng tốt hơn.",
     "word_type": "n",
-    "audio_url": null,
+
     "display_order": 27,
     "meaning_vi": null
   },
@@ -6897,7 +6897,7 @@
     "example_pinyin": "Jīntiān tiānqì hěn yán gé.",
     "example_meaning": "Hôm nay thời tiết rất Strict.",
     "word_type": "a",
-    "audio_url": null,
+
     "display_order": 28,
     "meaning_vi": null
   },
@@ -6911,7 +6911,7 @@
     "example_pinyin": "Wǒ duì yán zhòng hěn gǎn xìngqù.",
     "example_meaning": "Tôi rất quan tâm đến Grave.",
     "word_type": "n",
-    "audio_url": null,
+
     "display_order": 29,
     "meaning_vi": null
   },
@@ -6925,7 +6925,7 @@
     "example_pinyin": "yán jiū shēng shì hěn zhòngyào de.",
     "example_meaning": "Graduate student rất là quan trọng.",
     "word_type": "n",
-    "audio_url": null,
+
     "display_order": 30,
     "meaning_vi": null
   },
@@ -6939,7 +6939,7 @@
     "example_pinyin": "Tā hěn xǐhuan yǎn chū.",
     "example_meaning": "Cô ấy rất thích Act (in a play).",
     "word_type": "v",
-    "audio_url": null,
+
     "display_order": 31,
     "meaning_vi": null
   },
@@ -6953,7 +6953,7 @@
     "example_pinyin": "Wǒ xūyào yī gè hǎo de yǎn yuán.",
     "example_meaning": "Tôi cần một Actor or actress tốt.",
     "word_type": "n",
-    "audio_url": null,
+
     "display_order": 1,
     "meaning_vi": null
   },
@@ -6967,7 +6967,7 @@
     "example_pinyin": "Tā gěi le wǒ yī gè yáng guāng.",
     "example_meaning": "Anh ấy cho tôi một Sunshine.",
     "word_type": "n",
-    "audio_url": null,
+
     "display_order": 2,
     "meaning_vi": null
   },
@@ -6981,7 +6981,7 @@
     "example_pinyin": "Nǐ xiǎng yǎng chéng ma?",
     "example_meaning": "Bạn muốn Cultivate không?",
     "word_type": "v",
-    "audio_url": null,
+
     "display_order": 3,
     "meaning_vi": null
   },
@@ -6995,7 +6995,7 @@
     "example_pinyin": "Wǒmen tǎolùn le yàng zi de wèntí.",
     "example_meaning": "Chúng tôi đã thảo luận về vấn đề Appearance.",
     "word_type": "n",
-    "audio_url": null,
+
     "display_order": 4,
     "meaning_vi": null
   },
@@ -7009,7 +7009,7 @@
     "example_pinyin": "Wǒmen yīnggāi yāo qǐng.",
     "example_meaning": "Chúng ta nên Mời.",
     "word_type": "v",
-    "audio_url": null,
+
     "display_order": 5,
     "meaning_vi": "mời"
   },
@@ -7023,7 +7023,7 @@
     "example_pinyin": "Tā de yào shi hěn hǎo.",
     "example_meaning": "Key của cô ấy rất tốt.",
     "word_type": "n",
-    "audio_url": null,
+
     "display_order": 6,
     "meaning_vi": null
   },
@@ -7037,7 +7037,7 @@
     "example_pinyin": "Tā yě xǔ shì gè hǎo xuéshēng.",
     "example_meaning": "Anh ấy Perhaps là học sinh giỏi.",
     "word_type": "d",
-    "audio_url": null,
+
     "display_order": 7,
     "meaning_vi": null
   },
@@ -7051,7 +7051,7 @@
     "example_pinyin": "Xiànzài de yè yuèláiyuè hǎo le.",
     "example_meaning": "Page bây giờ ngày càng tốt hơn.",
     "word_type": "n",
-    "audio_url": null,
+
     "display_order": 8,
     "meaning_vi": null
   },
@@ -7065,7 +7065,7 @@
     "example_pinyin": "Zhège yè zi hěn zhòngyào.",
     "example_meaning": "Foliage này rất quan trọng.",
     "word_type": "n",
-    "audio_url": null,
+
     "display_order": 9,
     "meaning_vi": null
   },
@@ -7079,7 +7079,7 @@
     "example_pinyin": "Qǐng yòng \"yī qiè\" zào gè jùzi.",
     "example_meaning": "Hãy đặt một câu với \"Everything\".",
     "word_type": "r",
-    "audio_url": null,
+
     "display_order": 10,
     "meaning_vi": null
   },
@@ -7093,7 +7093,7 @@
     "example_pinyin": "\"yǐ\" zài Hànyǔ zhōng hěn chángjiàn.",
     "example_meaning": "\"Dùng\" rất phổ biến trong tiếng Trung.",
     "word_type": "p",
-    "audio_url": null,
+
     "display_order": 11,
     "meaning_vi": "dùng"
   },
@@ -7107,7 +7107,7 @@
     "example_pinyin": "Wǒmen jīntiān xué \"yì\".",
     "example_meaning": "Hôm nay chúng ta học \"100 million\".",
     "word_type": "m",
-    "audio_url": null,
+
     "display_order": 12,
     "meaning_vi": null
   },
@@ -7121,7 +7121,7 @@
     "example_pinyin": "Wǒ xūyào yī gè hǎo de yì jiàn.",
     "example_meaning": "Tôi cần một Ý tưởng tốt.",
     "word_type": "n",
-    "audio_url": null,
+
     "display_order": 13,
     "meaning_vi": "ý tưởng"
   },
@@ -7135,7 +7135,7 @@
     "example_pinyin": "Tā gěi le wǒ yī gè yì shù.",
     "example_meaning": "Anh ấy cho tôi một Nghệ thuật.",
     "word_type": "n",
-    "audio_url": null,
+
     "display_order": 14,
     "meaning_vi": "nghệ thuật"
   },
@@ -7149,7 +7149,7 @@
     "example_pinyin": "yīn cǐ duì xuéxí hěn yǒu bāngzhù.",
     "example_meaning": "Thus rất hữu ích cho việc học.",
     "word_type": "n",
-    "audio_url": null,
+
     "display_order": 15,
     "meaning_vi": null
   },
@@ -7163,7 +7163,7 @@
     "example_pinyin": "Qǐng nǐ yǐn qǐ yīxià.",
     "example_meaning": "Xin bạn Give rise to một chút.",
     "word_type": "v",
-    "audio_url": null,
+
     "display_order": 16,
     "meaning_vi": null
   },
@@ -7177,7 +7177,7 @@
     "example_pinyin": "Zhège yǐn liào fēicháng yǒuyòng.",
     "example_meaning": "Drink này rất hữu ích.",
     "word_type": "n",
-    "audio_url": null,
+
     "display_order": 17,
     "meaning_vi": null
   },
@@ -7191,7 +7191,7 @@
     "example_pinyin": "Tā de yìn xiàng hěn hǎo.",
     "example_meaning": "Impression của cô ấy rất tốt.",
     "word_type": "n",
-    "audio_url": null,
+
     "display_order": 18,
     "meaning_vi": null
   },
@@ -7205,7 +7205,7 @@
     "example_pinyin": "Nǐ xūyào yíng.",
     "example_meaning": "Bạn cần Beat.",
     "word_type": "v",
-    "audio_url": null,
+
     "display_order": 19,
     "meaning_vi": null
   },
@@ -7219,7 +7219,7 @@
     "example_pinyin": "Dàjiā dōu juédé hěn yìng.",
     "example_meaning": "Mọi người đều thấy rất Khó.",
     "word_type": "a",
-    "audio_url": null,
+
     "display_order": 20,
     "meaning_vi": "khó"
   },
@@ -7233,7 +7233,7 @@
     "example_pinyin": "Jīntiān tiānqì hěn yǒng gǎn.",
     "example_meaning": "Hôm nay thời tiết rất Brave.",
     "word_type": "a",
-    "audio_url": null,
+
     "display_order": 21,
     "meaning_vi": null
   },
@@ -7247,7 +7247,7 @@
     "example_pinyin": "Wǒ yǒng yuǎn xiǎng gàosu nǐ yī jiàn shì.",
     "example_meaning": "Tôi Mãi mãi muốn nói với bạn một chuyện.",
     "word_type": "d",
-    "audio_url": null,
+
     "display_order": 22,
     "meaning_vi": "mãi mãi"
   },
@@ -7261,7 +7261,7 @@
     "example_pinyin": "yōu diǎn shì hěn zhòngyào de.",
     "example_meaning": "Merit rất là quan trọng.",
     "word_type": "n",
-    "audio_url": null,
+
     "display_order": 23,
     "meaning_vi": null
   },
@@ -7275,7 +7275,7 @@
     "example_pinyin": "Zhè běn shū hěn yōu xiù.",
     "example_meaning": "Quyển sách này rất Outstanding.",
     "word_type": "a",
-    "audio_url": null,
+
     "display_order": 24,
     "meaning_vi": null
   },
@@ -7289,7 +7289,7 @@
     "example_pinyin": "Wǒ xūyào yī gè hǎo de yōu mò.",
     "example_meaning": "Tôi cần một (loanword) humor tốt.",
     "word_type": "n",
-    "audio_url": null,
+
     "display_order": 25,
     "meaning_vi": null
   },
@@ -7303,7 +7303,7 @@
     "example_pinyin": "Qǐng yòng \"yóu\" zào gè jùzi.",
     "example_meaning": "Hãy đặt một câu với \"Theo\".",
     "word_type": "p",
-    "audio_url": null,
+
     "display_order": 26,
     "meaning_vi": "theo"
   },
@@ -7317,7 +7317,7 @@
     "example_pinyin": "\"yóu yú\" zài Hànyǔ zhōng hěn chángjiàn.",
     "example_meaning": "\"Due to\" rất phổ biến trong tiếng Trung.",
     "word_type": "c",
-    "audio_url": null,
+
     "display_order": 27,
     "meaning_vi": null
   },
@@ -7331,7 +7331,7 @@
     "example_pinyin": "Wǒmen yóu qí zhèyàng zuò.",
     "example_meaning": "Chúng tôi Đặc biệt làm như vậy.",
     "word_type": "d",
-    "audio_url": null,
+
     "display_order": 28,
     "meaning_vi": "đặc biệt"
   },
@@ -7345,7 +7345,7 @@
     "example_pinyin": "Jiéguǒ fēicháng yǒu qù.",
     "example_meaning": "Kết quả rất Thú vị.",
     "word_type": "a",
-    "audio_url": null,
+
     "display_order": 29,
     "meaning_vi": "thú vị"
   },
@@ -7359,7 +7359,7 @@
     "example_pinyin": "Wǒ yǒu hǎo xiǎng gàosu nǐ yī jiàn shì.",
     "example_meaning": "Tôi Friendly muốn nói với bạn một chuyện.",
     "word_type": "d",
-    "audio_url": null,
+
     "display_order": 30,
     "meaning_vi": null
   },
@@ -7373,7 +7373,7 @@
     "example_pinyin": "Guānyú yǒu yì nǐ liǎojiě duōshǎo?",
     "example_meaning": "Về Companionship, bạn biết bao nhiêu?",
     "word_type": "n",
-    "audio_url": null,
+
     "display_order": 31,
     "meaning_vi": null
   },
@@ -7387,7 +7387,7 @@
     "example_pinyin": "Xiànzài de yú kuài yuèláiyuè hǎo le.",
     "example_meaning": "Cheerful bây giờ ngày càng tốt hơn.",
     "word_type": "n",
-    "audio_url": null,
+
     "display_order": 1,
     "meaning_vi": null
   },
@@ -7401,7 +7401,7 @@
     "example_pinyin": "Wǒ zhèngzài xuéxí \"yú shì\" zhège cí.",
     "example_meaning": "Tôi đang học từ \"Thereupon\".",
     "word_type": "c",
-    "audio_url": null,
+
     "display_order": 2,
     "meaning_vi": null
   },
@@ -7415,7 +7415,7 @@
     "example_pinyin": "Qǐng yòng \"yǔ\" zào gè jùzi.",
     "example_meaning": "Hãy đặt một câu với \"And\".",
     "word_type": "c",
-    "audio_url": null,
+
     "display_order": 3,
     "meaning_vi": null
   },
@@ -7429,7 +7429,7 @@
     "example_pinyin": "yǔ fǎ shì hěn zhòngyào de.",
     "example_meaning": "Grammar rất là quan trọng.",
     "word_type": "n",
-    "audio_url": null,
+
     "display_order": 4,
     "meaning_vi": null
   },
@@ -7443,7 +7443,7 @@
     "example_pinyin": "Nǐ zhīdào yǔ yán shì shénme ma?",
     "example_meaning": "Bạn biết Ngôn ngữ là gì không?",
     "word_type": "n",
-    "audio_url": null,
+
     "display_order": 5,
     "meaning_vi": "ngôn ngữ"
   },
@@ -7457,7 +7457,7 @@
     "example_pinyin": "Wǒ xūyào yī gè hǎo de yǔ máo qiú.",
     "example_meaning": "Tôi cần một Shuttlecock tốt.",
     "word_type": "n",
-    "audio_url": null,
+
     "display_order": 6,
     "meaning_vi": null
   },
@@ -7471,7 +7471,7 @@
     "example_pinyin": "Dàjiā yīqǐ yù xí ba.",
     "example_meaning": "Mọi người cùng Prepare a lesson nhé.",
     "word_type": "v",
-    "audio_url": null,
+
     "display_order": 7,
     "meaning_vi": null
   },
@@ -7485,7 +7485,7 @@
     "example_pinyin": "yuán duì xuéxí hěn yǒu bāngzhù.",
     "example_meaning": "Circle rất hữu ích cho việc học.",
     "word_type": "n",
-    "audio_url": null,
+
     "display_order": 8,
     "meaning_vi": null
   },
@@ -7499,7 +7499,7 @@
     "example_pinyin": "Wǒ yuán lái tóngyì nǐ de kànfǎ.",
     "example_meaning": "Tôi Original đồng ý quan điểm của bạn.",
     "word_type": "d",
-    "audio_url": null,
+
     "display_order": 9,
     "meaning_vi": null
   },
@@ -7513,7 +7513,7 @@
     "example_pinyin": "Wǒmen yīnggāi yuán liàng.",
     "example_meaning": "Chúng ta nên Excuse.",
     "word_type": "v",
-    "audio_url": null,
+
     "display_order": 10,
     "meaning_vi": null
   },
@@ -7527,7 +7527,7 @@
     "example_pinyin": "Tā bù xiǎng yuán yīn.",
     "example_meaning": "Anh ấy không muốn Nguyên nhân.",
     "word_type": "v",
-    "audio_url": null,
+
     "display_order": 11,
     "meaning_vi": "nguyên nhân"
   },
@@ -7541,7 +7541,7 @@
     "example_pinyin": "Guānyú yuē huì nǐ liǎojiě duōshǎo?",
     "example_meaning": "Về Appointment, bạn biết bao nhiêu?",
     "word_type": "n",
-    "audio_url": null,
+
     "display_order": 12,
     "meaning_vi": null
   },
@@ -7555,7 +7555,7 @@
     "example_pinyin": "Wǒ gāng yuè dú wán.",
     "example_meaning": "Tôi vừa Đọc xong.",
     "word_type": "v",
-    "audio_url": null,
+
     "display_order": 13,
     "meaning_vi": "đọc"
   },
@@ -7569,7 +7569,7 @@
     "example_pinyin": "Wǒ měitiān dōu yǔn xǔ.",
     "example_meaning": "Tôi Permit mỗi ngày.",
     "word_type": "v",
-    "audio_url": null,
+
     "display_order": 14,
     "meaning_vi": null
   },
@@ -7583,7 +7583,7 @@
     "example_pinyin": "Wǒ duì zá zhì hěn gǎn xìngqù.",
     "example_meaning": "Tôi rất quan tâm đến Magazine.",
     "word_type": "n",
-    "audio_url": null,
+
     "display_order": 15,
     "meaning_vi": null
   },
@@ -7597,7 +7597,7 @@
     "example_pinyin": "\"zán men\" zài Hànyǔ zhōng hěn chángjiàn.",
     "example_meaning": "\"We or us (including both the speaker and the person(s) spoken to)\" rất phổ biến trong tiếng Trung.",
     "word_type": "r",
-    "audio_url": null,
+
     "display_order": 16,
     "meaning_vi": null
   },
@@ -7611,7 +7611,7 @@
     "example_pinyin": "Wǒ zàn shí tóngyì nǐ de kànfǎ.",
     "example_meaning": "Tôi Temporary đồng ý quan điểm của bạn.",
     "word_type": "d",
-    "audio_url": null,
+
     "display_order": 17,
     "meaning_vi": null
   },
@@ -7625,7 +7625,7 @@
     "example_pinyin": "Tā kàn qǐlái hěn zāng.",
     "example_meaning": "Cô ấy trông rất Bẩn.",
     "word_type": "a",
-    "audio_url": null,
+
     "display_order": 18,
     "meaning_vi": "bẩn"
   },
@@ -7639,7 +7639,7 @@
     "example_pinyin": "Tā gěi le wǒ yī gè zé rèn.",
     "example_meaning": "Anh ấy cho tôi một Trách nhiệm.",
     "word_type": "n",
-    "audio_url": null,
+
     "display_order": 19,
     "meaning_vi": "trách nhiệm"
   },
@@ -7653,7 +7653,7 @@
     "example_pinyin": "Nǐ xiǎng zēng jiā ma?",
     "example_meaning": "Bạn muốn Raise không?",
     "word_type": "v",
-    "audio_url": null,
+
     "display_order": 20,
     "meaning_vi": null
   },
@@ -7667,7 +7667,7 @@
     "example_pinyin": "Qǐng nǐ zēng zhǎng yīxià.",
     "example_meaning": "Xin bạn Lớn lên một chút.",
     "word_type": "v",
-    "audio_url": null,
+
     "display_order": 21,
     "meaning_vi": "lớn lên"
   },
@@ -7681,7 +7681,7 @@
     "example_pinyin": "Jiéguǒ fēicháng zhǎi.",
     "example_meaning": "Kết quả rất Hẹp.",
     "word_type": "a",
-    "audio_url": null,
+
     "display_order": 22,
     "meaning_vi": "hẹp"
   },
@@ -7695,7 +7695,7 @@
     "example_pinyin": "Tā bù xiǎng zhāo pìn.",
     "example_meaning": "Anh ấy không muốn Recruitment.",
     "word_type": "v",
-    "audio_url": null,
+
     "display_order": 23,
     "meaning_vi": null
   },
@@ -7709,7 +7709,7 @@
     "example_pinyin": "Guānyú zhēn zhèng nǐ liǎojiě duōshǎo?",
     "example_meaning": "Về Genuine, bạn biết bao nhiêu?",
     "word_type": "n",
-    "audio_url": null,
+
     "display_order": 24,
     "meaning_vi": null
   },
@@ -7723,7 +7723,7 @@
     "example_pinyin": "Wǒ gāng zhěng lǐ wán.",
     "example_meaning": "Tôi vừa Sắp xếp xong.",
     "word_type": "v",
-    "audio_url": null,
+
     "display_order": 25,
     "meaning_vi": "sắp xếp"
   },
@@ -7737,7 +7737,7 @@
     "example_pinyin": "Tā zhěng qí lái shàngkè.",
     "example_meaning": "Anh ấy Orderly đến lớp.",
     "word_type": "d",
-    "audio_url": null,
+
     "display_order": 26,
     "meaning_vi": null
   },
@@ -7751,7 +7751,7 @@
     "example_pinyin": "Wǒ duì zhèng cháng hěn gǎn xìngqù.",
     "example_meaning": "Tôi rất quan tâm đến Regular.",
     "word_type": "a",
-    "audio_url": null,
+
     "display_order": 27,
     "meaning_vi": null
   },
@@ -7765,7 +7765,7 @@
     "example_pinyin": "zhèng hǎo shì hěn zhòngyào de.",
     "example_meaning": "Just (in time) rất là quan trọng.",
     "word_type": "n",
-    "audio_url": null,
+
     "display_order": 28,
     "meaning_vi": null
   },
@@ -7779,7 +7779,7 @@
     "example_pinyin": "Zhè běn shū hěn zhèng què.",
     "example_meaning": "Quyển sách này rất Đúng.",
     "word_type": "a",
-    "audio_url": null,
+
     "display_order": 29,
     "meaning_vi": "đúng"
   },
@@ -7793,7 +7793,7 @@
     "example_pinyin": "Tā kàn qǐlái hěn zhèng shì.",
     "example_meaning": "Cô ấy trông rất Formal.",
     "word_type": "a",
-    "audio_url": null,
+
     "display_order": 30,
     "meaning_vi": null
   },
@@ -7807,7 +7807,7 @@
     "example_pinyin": "Tā gěi le wǒ yī gè zhèng míng.",
     "example_meaning": "Anh ấy cho tôi một Proof.",
     "word_type": "n",
-    "audio_url": null,
+
     "display_order": 31,
     "meaning_vi": null
   },
@@ -7821,7 +7821,7 @@
     "example_pinyin": "\"zhī\" zài Hànyǔ zhōng hěn chángjiàn.",
     "example_meaning": "\"(possessive particle, literary equivalent of 的)\" rất phổ biến trong tiếng Trung.",
     "word_type": "u",
-    "audio_url": null,
+
     "display_order": 1,
     "meaning_vi": null
   },
@@ -7835,7 +7835,7 @@
     "example_pinyin": "Qǐng nǐ zhī chí yīxià.",
     "example_meaning": "Xin bạn Be in favor of một chút.",
     "word_type": "v",
-    "audio_url": null,
+
     "display_order": 2,
     "meaning_vi": null
   },
@@ -7849,7 +7849,7 @@
     "example_pinyin": "Jiéguǒ fēicháng zhī shi.",
     "example_meaning": "Kết quả rất Intellectual.",
     "word_type": "a",
-    "audio_url": null,
+
     "display_order": 3,
     "meaning_vi": null
   },
@@ -7863,7 +7863,7 @@
     "example_pinyin": "Tā bù xiǎng zhí jiē.",
     "example_meaning": "Anh ấy không muốn Direct.",
     "word_type": "v",
-    "audio_url": null,
+
     "display_order": 4,
     "meaning_vi": null
   },
@@ -7877,7 +7877,7 @@
     "example_pinyin": "Nǐ xūyào zhí de.",
     "example_meaning": "Bạn cần Be worth.",
     "word_type": "v",
-    "audio_url": null,
+
     "display_order": 5,
     "meaning_vi": null
   },
@@ -7891,7 +7891,7 @@
     "example_pinyin": "Xiànzài de zhí yè yuèláiyuè hǎo le.",
     "example_meaning": "Occupation bây giờ ngày càng tốt hơn.",
     "word_type": "n",
-    "audio_url": null,
+
     "display_order": 6,
     "meaning_vi": null
   },
@@ -7905,7 +7905,7 @@
     "example_pinyin": "Zhège zhí wù hěn zhòngyào.",
     "example_meaning": "Botanical này rất quan trọng.",
     "word_type": "n",
-    "audio_url": null,
+
     "display_order": 7,
     "meaning_vi": null
   },
@@ -7919,7 +7919,7 @@
     "example_pinyin": "Tā zhèngzài zhǐ.",
     "example_meaning": "Anh ấy đang Finger.",
     "word_type": "v",
-    "audio_url": null,
+
     "display_order": 8,
     "meaning_vi": null
   },
@@ -7933,7 +7933,7 @@
     "example_pinyin": "Tā zhǐ hǎo shì gè hǎo xuéshēng.",
     "example_meaning": "Anh ấy Without any better option là học sinh giỏi.",
     "word_type": "d",
-    "audio_url": null,
+
     "display_order": 9,
     "meaning_vi": null
   },
@@ -7947,7 +7947,7 @@
     "example_pinyin": "Wǒmen jīntiān xué \"zhǐ yào\".",
     "example_meaning": "Hôm nay chúng ta học \"If only\".",
     "word_type": "c",
-    "audio_url": null,
+
     "display_order": 10,
     "meaning_vi": null
   },
@@ -7961,7 +7961,7 @@
     "example_pinyin": "Wǒ yǐjīng zhì zào le.",
     "example_meaning": "Tôi đã Manufacture rồi.",
     "word_type": "v",
-    "audio_url": null,
+
     "display_order": 11,
     "meaning_vi": null
   },
@@ -7975,7 +7975,7 @@
     "example_pinyin": "Tā gěi le wǒ yī gè zhì shǎo.",
     "example_meaning": "Anh ấy cho tôi một At least.",
     "word_type": "n",
-    "audio_url": null,
+
     "display_order": 12,
     "meaning_vi": null
   },
@@ -7989,7 +7989,7 @@
     "example_pinyin": "zhì liàng duì xuéxí hěn yǒu bāngzhù.",
     "example_meaning": "Chất lượng rất hữu ích cho việc học.",
     "word_type": "n",
-    "audio_url": null,
+
     "display_order": 13,
     "meaning_vi": "chất lượng"
   },
@@ -8003,7 +8003,7 @@
     "example_pinyin": "Wǒmen tǎolùn le Zhōng wén de wèntí.",
     "example_meaning": "Chúng tôi đã thảo luận về vấn đề Chinese.",
     "word_type": "n",
-    "audio_url": null,
+
     "display_order": 14,
     "meaning_vi": null
   },
@@ -8017,7 +8017,7 @@
     "example_pinyin": "Zhège zhòng diǎn fēicháng yǒuyòng.",
     "example_meaning": "Important point này rất hữu ích.",
     "word_type": "n",
-    "audio_url": null,
+
     "display_order": 15,
     "meaning_vi": null
   },
@@ -8031,7 +8031,7 @@
     "example_pinyin": "Tā bù xiǎng zhòng shì.",
     "example_meaning": "Anh ấy không muốn Attach importance to sth.",
     "word_type": "v",
-    "audio_url": null,
+
     "display_order": 16,
     "meaning_vi": null
   },
@@ -8045,7 +8045,7 @@
     "example_pinyin": "Guānyú zhōu wéi nǐ liǎojiě duōshǎo?",
     "example_meaning": "Về Surroundings, bạn biết bao nhiêu?",
     "word_type": "n",
-    "audio_url": null,
+
     "display_order": 17,
     "meaning_vi": null
   },
@@ -8059,7 +8059,7 @@
     "example_pinyin": "Xiànzài de zhū yuèláiyuè hǎo le.",
     "example_meaning": "Hog bây giờ ngày càng tốt hơn.",
     "word_type": "n",
-    "audio_url": null,
+
     "display_order": 18,
     "meaning_vi": null
   },
@@ -8073,7 +8073,7 @@
     "example_pinyin": "Tā zhú jiàn lái shàngkè.",
     "example_meaning": "Anh ấy Dần dần đến lớp.",
     "word_type": "d",
-    "audio_url": null,
+
     "display_order": 19,
     "meaning_vi": "dần dần"
   },
@@ -8087,7 +8087,7 @@
     "example_pinyin": "Tā zhèngzài zhǔ dòng.",
     "example_meaning": "Anh ấy đang Take the initiative.",
     "word_type": "v",
-    "audio_url": null,
+
     "display_order": 20,
     "meaning_vi": null
   },
@@ -8101,7 +8101,7 @@
     "example_pinyin": "Nǐ kěyǐ zhǔ yi ma?",
     "example_meaning": "Bạn có thể Plan không?",
     "word_type": "v",
-    "audio_url": null,
+
     "display_order": 21,
     "meaning_vi": null
   },
@@ -8115,7 +8115,7 @@
     "example_pinyin": "Tā hěn xǐhuan zhù hè.",
     "example_meaning": "Cô ấy rất thích Congratulate.",
     "word_type": "v",
-    "audio_url": null,
+
     "display_order": 22,
     "meaning_vi": null
   },
@@ -8129,7 +8129,7 @@
     "example_pinyin": "Tā kàn qǐlái hěn zhù míng.",
     "example_meaning": "Cô ấy trông rất Nổi tiếng.",
     "word_type": "a",
-    "audio_url": null,
+
     "display_order": 23,
     "meaning_vi": "nổi tiếng"
   },
@@ -8143,7 +8143,7 @@
     "example_pinyin": "Tā gěi le wǒ yī gè zhuān mén.",
     "example_meaning": "Anh ấy cho tôi một Specialist.",
     "word_type": "n",
-    "audio_url": null,
+
     "display_order": 24,
     "meaning_vi": null
   },
@@ -8157,7 +8157,7 @@
     "example_pinyin": "zhuān yè duì xuéxí hěn yǒu bāngzhù.",
     "example_meaning": "Specialty rất hữu ích cho việc học.",
     "word_type": "n",
-    "audio_url": null,
+
     "display_order": 25,
     "meaning_vi": null
   },
@@ -8171,7 +8171,7 @@
     "example_pinyin": "Qǐng nǐ zhuàn yīxià.",
     "example_meaning": "Xin bạn Kiếm một chút.",
     "word_type": "v",
-    "audio_url": null,
+
     "display_order": 26,
     "meaning_vi": "kiếm"
   },
@@ -8185,7 +8185,7 @@
     "example_pinyin": "Wǒmen yīnggāi zhuàng.",
     "example_meaning": "Chúng ta nên Hit.",
     "word_type": "v",
-    "audio_url": null,
+
     "display_order": 27,
     "meaning_vi": null
   },
@@ -8199,7 +8199,7 @@
     "example_pinyin": "Zhè jiàn shì hěn zhǔn què.",
     "example_meaning": "Việc này rất Accurate.",
     "word_type": "a",
-    "audio_url": null,
+
     "display_order": 28,
     "meaning_vi": null
   },
@@ -8213,7 +8213,7 @@
     "example_pinyin": "Guānyú zhǔn shí nǐ liǎojiě duōshǎo?",
     "example_meaning": "Về On time, bạn biết bao nhiêu?",
     "word_type": "n",
-    "audio_url": null,
+
     "display_order": 29,
     "meaning_vi": null
   },
@@ -8227,7 +8227,7 @@
     "example_pinyin": "Dàjiā dōu juédé hěn zǐ xì.",
     "example_meaning": "Mọi người đều thấy rất Careful.",
     "word_type": "a",
-    "audio_url": null,
+
     "display_order": 30,
     "meaning_vi": null
   },
@@ -8241,7 +8241,7 @@
     "example_pinyin": "Zhège zì rán hěn zhòngyào.",
     "example_meaning": "Nature này rất quan trọng.",
     "word_type": "n",
-    "audio_url": null,
+
     "display_order": 31,
     "meaning_vi": null
   },
@@ -8255,7 +8255,7 @@
     "example_pinyin": "Tā zhèngzài zǒng jié.",
     "example_meaning": "Anh ấy đang Sum up.",
     "word_type": "v",
-    "audio_url": null,
+
     "display_order": 1,
     "meaning_vi": null
   },
@@ -8269,7 +8269,7 @@
     "example_pinyin": "Nǐ kěyǐ zū ma?",
     "example_meaning": "Bạn có thể Hire không?",
     "word_type": "v",
-    "audio_url": null,
+
     "display_order": 2,
     "meaning_vi": null
   },
@@ -8283,7 +8283,7 @@
     "example_pinyin": "Tā hěn xǐhuan zǔ chéng.",
     "example_meaning": "Cô ấy rất thích Form.",
     "word_type": "v",
-    "audio_url": null,
+
     "display_order": 3,
     "meaning_vi": null
   },
@@ -8297,7 +8297,7 @@
     "example_pinyin": "Wǒ yǐjīng zǔ zhī le.",
     "example_meaning": "Tôi đã Tổ chức rồi.",
     "word_type": "v",
-    "audio_url": null,
+
     "display_order": 4,
     "meaning_vi": "tổ chức"
   },
@@ -8311,7 +8311,7 @@
     "example_pinyin": "Tā gěi le wǒ yī gè zuǐ.",
     "example_meaning": "Anh ấy cho tôi một Miệng.",
     "word_type": "n",
-    "audio_url": null,
+
     "display_order": 5,
     "meaning_vi": "miệng"
   },
@@ -8325,7 +8325,7 @@
     "example_pinyin": "zuì hǎo duì xuéxí hěn yǒu bāngzhù.",
     "example_meaning": "Best rất hữu ích cho việc học.",
     "word_type": "n",
-    "audio_url": null,
+
     "display_order": 6,
     "meaning_vi": null
   },
@@ -8339,7 +8339,7 @@
     "example_pinyin": "Shēnghuó biàn de yuèláiyuè zuì hòu.",
     "example_meaning": "Cuộc sống trở nên ngày càng Final.",
     "word_type": "a",
-    "audio_url": null,
+
     "display_order": 7,
     "meaning_vi": null
   },
@@ -8353,7 +8353,7 @@
     "example_pinyin": "Wǒmen yīnggāi zūn zhòng.",
     "example_meaning": "Chúng ta nên Esteem.",
     "word_type": "v",
-    "audio_url": null,
+
     "display_order": 8,
     "meaning_vi": null
   },
@@ -8367,7 +8367,7 @@
     "example_pinyin": "Tā bù xiǎng zuò shēng yì.",
     "example_meaning": "Anh ấy không muốn Do business.",
     "word_type": "v",
-    "audio_url": null,
+
     "display_order": 9,
     "meaning_vi": null
   },
@@ -8381,7 +8381,7 @@
     "example_pinyin": "\"zuò\" zài Hànyǔ zhōng hěn chángjiàn.",
     "example_meaning": "\"Seat\" rất phổ biến trong tiếng Trung.",
     "word_type": "q",
-    "audio_url": null,
+
     "display_order": 10,
     "meaning_vi": null
   },
@@ -8395,7 +8395,7 @@
     "example_pinyin": "Xiànzài de zuò wèi yuèláiyuè hǎo le.",
     "example_meaning": "Seat bây giờ ngày càng tốt hơn.",
     "word_type": "n",
-    "audio_url": null,
+
     "display_order": 11,
     "meaning_vi": null
   },
@@ -8409,7 +8409,7 @@
     "example_pinyin": "Zhège zuò zhě hěn zhòngyào.",
     "example_meaning": "Author này rất quan trọng.",
     "word_type": "n",
-    "audio_url": null,
+
     "display_order": 12,
     "meaning_vi": null
   }

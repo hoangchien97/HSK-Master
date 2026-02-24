@@ -1,4 +1,10 @@
-'use server';
+/**
+ * Notification Service — data layer for portal notifications
+ *
+ * NOTE: This is NOT a server action module. It's a regular data layer
+ * imported by server actions (actions/*.actions.ts) and server components.
+ * Do not add 'use server' here.
+ */
 
 import { prisma } from '@/lib/prisma';
 import { Prisma } from '@prisma/client';

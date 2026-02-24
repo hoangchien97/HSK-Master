@@ -155,11 +155,7 @@ export default function WriteTab({ vocabularies, lessonId, onProgressUpdate }: P
         totalQuestions={totalItems}
         elapsedSec={elapsedSec}
         onRestart={handleRestart}
-        titles={{
-          excellent: "Viết đẹp lắm! 🎉",
-          good: "Khá tốt! 👍",
-          needWork: "Luyện viết thêm nhé 💪",
-        }}
+        mode={PracticeMode.WRITE}
         wrongItemsLabel="Từ cần luyện"
       />
     )

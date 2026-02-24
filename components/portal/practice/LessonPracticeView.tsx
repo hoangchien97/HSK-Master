@@ -1,9 +1,19 @@
+/**
+ * LessonPracticeView — Client-side interactive component
+ *
+ * Receives SSR-serialized data as props (lesson, progress, siblings).
+ * All interactive features (tabs, audio, hanzi-writer) run purely on the client.
+ *
+ * Heavy tabs are lazy-loaded with `ssr: false` because they use
+ * browser-only APIs (Web Speech API, hanzi-writer canvas).
+ */
+
 "use client"
 
-import { useState, useCallback, useEffect, useRef } from "react"
+import { useState, useCallback, useEffect, useRef, useTransition } from "react"
 import dynamic from "next/dynamic"
 import { useRouter, useSearchParams, usePathname } from "next/navigation"
-import { Tabs, Tab, Chip, Button, Spinner } from "@heroui/react"
+import { Tabs, Tab, Chip, Button, Skeleton, Spinner } from "@heroui/react"
 import { Search, Layers, HelpCircle, Headphones, PenTool } from "lucide-react"
 import { refreshLessonProgress } from "@/actions/practice.actions"
 import { usePortalUI } from "@/providers/portal-ui-provider"
@@ -13,18 +23,41 @@ import ProgressCard from "./ProgressCard"
 import LookupTab from "./tabs/LookupTab"
 import type { IVocabularyItem, IStudentItemProgress } from "@/interfaces/portal/practice"
 
-/* ── Lazy-load heavy tabs (quiz/listen/write use hanzi-writer, TTS, etc.) ── */
+/* ── Lazy-load heavy tabs with ssr:false ─────────────────────────
+ *  These tabs use browser-only APIs:
+ *  - FlashcardTab / QuizTab / ListenTab → useSpeech (Web Speech API)
+ *  - WriteTab → hanzi-writer (canvas)
+ *  Setting ssr:false avoids hydration mismatches and keeps the
+ *  server bundle lean (no browser polyfill needed).
+ * ─────────────────────────────────────────────────────────────── */
+
+function TabSkeleton() {
+  return (
+    <div className="space-y-3 p-4">
+      <Skeleton className="w-full h-48 rounded-xl" />
+      <div className="flex gap-2">
+        <Skeleton className="w-24 h-10 rounded-lg" />
+        <Skeleton className="w-24 h-10 rounded-lg" />
+      </div>
+    </div>
+  )
+}
+
 const FlashcardTab = dynamic(() => import("./tabs/FlashcardTab"), {
-  loading: () => <div className="flex justify-center py-12"><Spinner size="lg" /></div>,
+  ssr: false,
+  loading: () => <TabSkeleton />,
 })
 const QuizTab = dynamic(() => import("./tabs/QuizTab"), {
-  loading: () => <div className="flex justify-center py-12"><Spinner size="lg" /></div>,
+  ssr: false,
+  loading: () => <TabSkeleton />,
 })
 const ListenTab = dynamic(() => import("./tabs/ListenTab"), {
-  loading: () => <div className="flex justify-center py-12"><Spinner size="lg" /></div>,
+  ssr: false,
+  loading: () => <TabSkeleton />,
 })
 const WriteTab = dynamic(() => import("./tabs/WriteTab"), {
-  loading: () => <div className="flex justify-center py-12"><Spinner size="lg" /></div>,
+  ssr: false,
+  loading: () => <TabSkeleton />,
 })
 
 interface LessonData {
@@ -83,6 +116,7 @@ export default function LessonPracticeView({
   const pathname = usePathname()
   const { setDynamicLabel } = usePortalUI()
   const siblingScrollRef = useRef<HTMLDivElement>(null)
+  const [isPending, startTransition] = useTransition()
 
   const tabParam = (searchParams.get("tab") || DEFAULT_TAB) as PracticeTabKey
   const activeTab = TAB_KEYS.includes(tabParam) ? tabParam : DEFAULT_TAB
@@ -121,11 +155,13 @@ export default function LessonPracticeView({
 
   const handleTabChange = useCallback(
     (key: string | number) => {
-      const newParams = new URLSearchParams(searchParams.toString())
-      newParams.set("tab", String(key))
-      router.replace(`${pathname}?${newParams.toString()}`, { scroll: false })
+      startTransition(() => {
+        const newParams = new URLSearchParams(searchParams.toString())
+        newParams.set("tab", String(key))
+        router.replace(`${pathname}?${newParams.toString()}`, { scroll: false })
+      })
     },
-    [searchParams, router, pathname],
+    [searchParams, router, pathname, startTransition],
   )
 
   const vocabs = lesson.vocabularies
@@ -189,8 +225,13 @@ export default function LessonPracticeView({
           ))}
         </Tabs>
 
-        {/* Tab content */}
-        <div className="mt-3 sm:mt-4">
+        {/* Tab content — spinner overlay during transitions */}
+        <div className="relative mt-3 sm:mt-4">
+          {isPending && (
+            <div className="absolute inset-0 z-10 flex items-center justify-center bg-background/60 backdrop-blur-[1px] rounded-xl min-h-48">
+              <Spinner size="lg" color="primary" label="Đang tải..." />
+            </div>
+          )}
           {activeTab === "lookup" && (
             <LookupTab
               vocabularies={vocabs}
@@ -249,7 +290,7 @@ export default function LessonPracticeView({
                   onPress={() => {
                     if (!isCurrent) {
                       // Always reset to lookup tab when switching lesson
-                      router.push(`/portal/student/practice/${s.slug || s.id}`)
+                      router.push(`/portal/student/practice/${s.slug}`)
                     }
                   }}
                 >

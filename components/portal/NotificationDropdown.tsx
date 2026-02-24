@@ -21,6 +21,16 @@ import {
   ExternalLink,
   BookOpen,
   Calendar,
+  Trash2,
+  UserCheck,
+  UserX,
+  CalendarX,
+  ClipboardCheck,
+  AlertCircle,
+  Trophy,
+  Flame,
+  Megaphone,
+  UserCog,
 } from "lucide-react"
 import dayjs from "dayjs"
 import relativeTime from "dayjs/plugin/relativeTime"
@@ -30,6 +40,7 @@ import {
   markNotificationReadAction,
   markAllNotificationsReadAction,
 } from "@/actions/notification.actions"
+import { NotificationType } from "@/enums/portal/common"
 
 dayjs.locale("vi")
 dayjs.extend(relativeTime)
@@ -47,14 +58,33 @@ interface NotificationItem {
 }
 
 const TYPE_ICON: Record<string, React.ReactNode> = {
-  ASSIGNMENT_PUBLISHED: <FileText className="w-4 h-4 text-primary" />,
-  SUBMISSION_SUBMITTED: <Upload className="w-4 h-4 text-warning" />,
-  SUBMISSION_RESUBMITTED: <Upload className="w-4 h-4 text-secondary" />,
-  SUBMISSION_GRADED: <Star className="w-4 h-4 text-success" />,
-  SUBMISSION_RETURNED: <FileText className="w-4 h-4 text-danger" />,
-  CLASS_ENROLLED: <BookOpen className="w-4 h-4 text-secondary" />,
-  SCHEDULE_CREATED: <Calendar className="w-4 h-4 text-primary" />,
-  SCHEDULE_UPDATED: <Calendar className="w-4 h-4 text-warning" />,
+  // Assignments
+  [NotificationType.ASSIGNMENT_PUBLISHED]: <FileText className="w-4 h-4 text-primary" />,
+  [NotificationType.ASSIGNMENT_DEADLINE]: <AlertCircle className="w-4 h-4 text-danger" />,
+  [NotificationType.ASSIGNMENT_DELETED]: <Trash2 className="w-4 h-4 text-danger" />,
+  // Submissions
+  [NotificationType.SUBMISSION_SUBMITTED]: <Upload className="w-4 h-4 text-warning" />,
+  [NotificationType.SUBMISSION_RESUBMITTED]: <Upload className="w-4 h-4 text-secondary" />,
+  [NotificationType.SUBMISSION_GRADED]: <Star className="w-4 h-4 text-success" />,
+  [NotificationType.SUBMISSION_RETURNED]: <FileText className="w-4 h-4 text-danger" />,
+  // Classes
+  [NotificationType.CLASS_ENROLLED]: <BookOpen className="w-4 h-4 text-secondary" />,
+  [NotificationType.CLASS_REMOVED]: <UserX className="w-4 h-4 text-danger" />,
+  [NotificationType.CLASS_COMPLETED]: <CheckCheck className="w-4 h-4 text-success" />,
+  // Schedule
+  [NotificationType.SCHEDULE_CREATED]: <Calendar className="w-4 h-4 text-primary" />,
+  [NotificationType.SCHEDULE_UPDATED]: <Calendar className="w-4 h-4 text-warning" />,
+  [NotificationType.SCHEDULE_CANCELLED]: <CalendarX className="w-4 h-4 text-danger" />,
+  [NotificationType.SCHEDULE_REMINDER]: <Calendar className="w-4 h-4 text-secondary" />,
+  // Attendance
+  [NotificationType.ATTENDANCE_RECORDED]: <ClipboardCheck className="w-4 h-4 text-success" />,
+  [NotificationType.ATTENDANCE_ABSENT]: <UserCheck className="w-4 h-4 text-danger" />,
+  // Practice milestones
+  [NotificationType.PRACTICE_LESSON_MASTERED]: <Trophy className="w-4 h-4 text-warning" />,
+  [NotificationType.PRACTICE_STREAK]: <Flame className="w-4 h-4 text-warning" />,
+  // System
+  [NotificationType.SYSTEM_ANNOUNCEMENT]: <Megaphone className="w-4 h-4 text-primary" />,
+  [NotificationType.PROFILE_UPDATED]: <UserCog className="w-4 h-4 text-secondary" />,
 }
 
 /* ─── Component ─── */

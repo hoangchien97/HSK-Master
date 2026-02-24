@@ -8,8 +8,8 @@ import {
   finishPracticeSessionAction,
   recordPracticeAttemptAction,
 } from "@/actions/practice.actions"
-import { useTTS } from "@/hooks/useTTS"
-import { getDisplayMeaning } from "@/enums/portal/common"
+import { useSpeech } from "@/hooks/useSpeech"
+import { getDisplayMeaning, QuestionType } from "@/enums/portal/common"
 import { PracticeMode } from "@/enums/portal"
 import { AUTO_NEXT_DELAY_MS, QUESTION_TYPE_LABELS } from "@/constants/portal/practice"
 import { generateQuizQuestions } from "@/utils/practice"
@@ -37,7 +37,7 @@ export default function QuizTab({ vocabularies, lessonId, onProgressUpdate }: Pr
   const questionStartRef = useRef(0)
   const autoNextTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null)
   const countdownIntervalRef = useRef<ReturnType<typeof setInterval> | null>(null)
-  const { speak } = useTTS()
+  const { speak } = useSpeech()
 
   // Initialize time refs
   useEffect(() => {
@@ -45,9 +45,12 @@ export default function QuizTab({ vocabularies, lessonId, onProgressUpdate }: Pr
     questionStartRef.current = Date.now()
   }, [])
 
-  // Generate questions
+  // Generate questions — also reset index so currentQ never goes out of bounds
   useEffect(() => {
     setQuestions(generateQuizQuestions(vocabularies))
+    setCurrentIdx(0)
+    setSelectedKey(null)
+    setShowResult(false)
   }, [vocabularies])
 
   // Start session
@@ -78,9 +81,9 @@ export default function QuizTab({ vocabularies, lessonId, onProgressUpdate }: Pr
   const handlePlayPromptAudio = useCallback(() => {
     if (!currentQ) return
     // For Chinese character prompts, speak the character
-    if (currentQ.type === "MCQ_MEANING" || currentQ.type === "MCQ_PINYIN") {
-      speak(currentQ.vocab.word, currentQ.vocab.audioUrl)
-    } else if (currentQ.type === "MCQ_EXAMPLE" && currentQ.vocab.exampleSentence) {
+    if (currentQ.type === QuestionType.MCQ_MEANING || currentQ.type === QuestionType.MCQ_PINYIN) {
+      speak(currentQ.vocab.word)
+    } else if (currentQ.type === QuestionType.MCQ_EXAMPLE && currentQ.vocab.exampleSentence) {
       speak(currentQ.vocab.exampleSentence)
     }
   }, [currentQ, speak])
@@ -195,13 +198,17 @@ export default function QuizTab({ vocabularies, lessonId, onProgressUpdate }: Pr
         totalQuestions={totalQ}
         elapsedSec={elapsedSec}
         onRestart={handleRestart}
+        mode={PracticeMode.QUIZ}
       />
     )
   }
 
-  const isCorrectAnswer = showResult ? selectedKey === currentQ?.correctKey : null
+  // Guard: questions may be regenerating (e.g. after onProgressUpdate triggers vocabularies re-fetch)
+  if (!currentQ) return null
+
+  const isCorrectAnswer = showResult ? selectedKey === currentQ.correctKey : null
   // Determine if prompt is Chinese text (for font size + TTS)
-  const isChinPrompt = currentQ.type === "MCQ_MEANING" || currentQ.type === "MCQ_PINYIN"
+  const isChinPrompt = currentQ.type === QuestionType.MCQ_MEANING || currentQ.type === QuestionType.MCQ_PINYIN
 
   // Quiz question
   return (
@@ -219,14 +226,14 @@ export default function QuizTab({ vocabularies, lessonId, onProgressUpdate }: Pr
       {/* Question card */}
       <Card className="mb-4">
         <CardBody className="p-6 sm:p-8 text-center">
-          <p className={`font-bold ${isChinPrompt ? "text-3xl sm:text-5xl text-red-600 dark:text-red-400" : currentQ.type === "MCQ_EXAMPLE" ? "text-lg sm:text-xl text-red-600 dark:text-red-400" : "text-xl sm:text-2xl"}`}>
+          <p className={`font-bold ${isChinPrompt ? "text-3xl sm:text-5xl text-red-600 dark:text-red-400" : currentQ.type === QuestionType.MCQ_EXAMPLE ? "text-lg sm:text-xl text-red-600 dark:text-red-400" : "text-xl sm:text-2xl"}`}>
             {currentQ.prompt}
           </p>
           {currentQ.promptSub && (
             <p className="text-sm text-default-400 mt-2">{currentQ.promptSub}</p>
           )}
           {/* Speaker button for Chinese prompts */}
-          {(isChinPrompt || currentQ.type === "MCQ_EXAMPLE") && (
+          {(isChinPrompt || currentQ.type === QuestionType.MCQ_EXAMPLE) && (
             <button
               onClick={handlePlayPromptAudio}
               className="mt-3 p-2 rounded-full bg-primary-100 dark:bg-primary-900/30 text-primary hover:bg-primary-200 transition mx-auto inline-flex"
@@ -246,7 +253,7 @@ export default function QuizTab({ vocabularies, lessonId, onProgressUpdate }: Pr
           selectedKey={selectedKey}
           showResult={showResult}
           onSelect={handleSelect}
-          largeFont={currentQ.type === "MCQ_HANZI"}
+          largeFont={currentQ.type === QuestionType.MCQ_HANZI}
         />
       </div>
 

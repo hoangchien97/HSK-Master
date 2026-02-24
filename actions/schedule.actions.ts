@@ -27,6 +27,7 @@ import { prisma } from '@/lib/prisma';
 import { createGoogleCalendarEvent, scheduleToGoogleEvent } from '@/lib/utils/google-calendar';
 import { createBulkNotifications } from '@/services/portal/notification.service';
 import { USER_ROLE } from '@/constants/portal/roles';
+import { NotificationType } from '@/enums/portal/common';
 
 /**
  * Fetch all schedules for current user (role-aware: teacher gets own, student gets enrolled)
@@ -142,7 +143,7 @@ export async function createSchedule(
       const studentIds = enrollments.map((e) => e.studentId);
       if (studentIds.length > 0) {
         await createBulkNotifications(studentIds, {
-          type: 'SCHEDULE_CREATED',
+          type: NotificationType.SCHEDULE_CREATED,
           title: 'L\u1ecbch h\u1ecdc m\u1edbi',
           message: `L\u1ecbch h\u1ecdc m\u1edbi: "${data.title}"`,
           link: '/portal/student/schedule',
@@ -190,7 +191,7 @@ export async function updateSchedule(
         const studentIds = enrollments.map((e) => e.studentId);
         if (studentIds.length > 0) {
           await createBulkNotifications(studentIds, {
-            type: 'SCHEDULE_UPDATED',
+            type: NotificationType.SCHEDULE_UPDATED,
             title: 'C\u1eadp nh\u1eadt l\u1ecbch h\u1ecdc',
             message: `L\u1ecbch h\u1ecdc "${schedule.title}" \u0111\u00e3 \u0111\u01b0\u1ee3c c\u1eadp nh\u1eadt`,
             link: '/portal/student/schedule',
@@ -223,7 +224,33 @@ export async function deleteSchedule(id: string): Promise<{
       return { success: false, error: 'Unauthorized' };
     }
 
+    // Get schedule info before deleting for notification
+    const scheduleInfo = await prisma.portalSchedule.findUnique({
+      where: { id },
+      select: { title: true, classId: true },
+    });
+
     await deleteScheduleService(id);
+
+    // Notify enrolled students
+    if (scheduleInfo?.classId) {
+      try {
+        const enrollments = await prisma.portalClassEnrollment.findMany({
+          where: { classId: scheduleInfo.classId, status: 'ENROLLED' },
+          select: { studentId: true },
+        });
+        const studentIds = enrollments.map((e) => e.studentId);
+        if (studentIds.length > 0) {
+          await createBulkNotifications(studentIds, {
+            type: NotificationType.SCHEDULE_CANCELLED,
+            title: 'L\u1ecbch h\u1ecdc b\u1ecb h\u1ee7y',
+            message: `L\u1ecbch h\u1ecdc "${scheduleInfo.title}" \u0111\u00e3 b\u1ecb h\u1ee7y`,
+            link: '/portal/student/schedule',
+          });
+        }
+      } catch (e) { console.error('Schedule cancel notification error:', e); }
+    }
+
     revalidatePath('/portal/teacher/schedule');
     return { success: true };
   } catch (error) {

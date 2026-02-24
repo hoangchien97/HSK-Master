@@ -29,7 +29,6 @@ interface VocabExportEntry {
   example_pinyin: string | null
   example_meaning: string | null
   word_type: string | null
-  audio_url: string | null
   display_order: number
 }
 
@@ -127,7 +126,6 @@ export async function seedVocabulary() {
           meaning: entry.meaning,
           meaningVi: entry.meaning_vi || null,
           wordType: entry.word_type,
-          audioUrl: entry.audio_url,
           displayOrder: entry.display_order,
           exampleSentence: entry.example_sentence,
           examplePinyin: entry.example_pinyin,

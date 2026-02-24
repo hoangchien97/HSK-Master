@@ -9,8 +9,8 @@ import {
   finishPracticeSessionAction,
   recordFlashcardActionServer,
 } from "@/actions/practice.actions"
-import { useTTS } from "@/hooks/useTTS"
-import { WORD_TYPE_COLORS, WORD_TYPE_LABELS, getDisplayMeaning } from "@/enums/portal/common"
+import { useSpeech } from "@/hooks/useSpeech"
+import { WORD_TYPE_COLORS, WORD_TYPE_LABELS, ItemProgressStatus, getDisplayMeaning } from "@/enums/portal/common"
 import { PracticeMode } from "@/enums/portal"
 import { FlashcardPhase, FlashcardAction } from "@/constants/portal/practice"
 import type { IVocabularyItem, IStudentItemProgress } from "@/interfaces/portal/practice"
@@ -34,7 +34,7 @@ export default function FlashcardTab({ vocabularies, lessonId, itemProgress, onP
   const [reviewItems, setReviewItems] = useState<IVocabularyItem[]>([])
   const [roundComplete, setRoundComplete] = useState(false)
   const startTimeRef = useRef(Date.now())
-  const { speak } = useTTS()
+  const { speak } = useSpeech()
 
   // Shuffle items for main phase
   const mainItems = useMemo(() => {
@@ -72,9 +72,9 @@ export default function FlashcardTab({ vocabularies, lessonId, itemProgress, onP
   }, [sessionId])
 
   const handlePlayAudio = useCallback(
-    (text: string, audioUrl?: string | null, e?: React.MouseEvent) => {
+    (text: string, e?: React.MouseEvent) => {
       e?.stopPropagation()
-      speak(text, audioUrl)
+      speak(text)
     },
     [speak],
   )
@@ -303,7 +303,7 @@ export default function FlashcardTab({ vocabularies, lessonId, itemProgress, onP
 
               {/* Speaker icon */}
               <button
-                onClick={(e) => handlePlayAudio(currentItem.word, currentItem.audioUrl, e)}
+                onClick={(e) => handlePlayAudio(currentItem.word, e)}
                 className="mt-3 p-2.5 rounded-full bg-primary-100 dark:bg-primary-900/30 text-primary hover:bg-primary-200 dark:hover:bg-primary-800/40 transition cursor-pointer"
                 aria-label="Nghe phát âm"
               >
@@ -315,7 +315,7 @@ export default function FlashcardTab({ vocabularies, lessonId, itemProgress, onP
                 <Chip
                   size="sm"
                   variant="dot"
-                  color={progress.status === "MASTERED" ? "success" : progress.status === "LEARNING" ? "warning" : "default"}
+                  color={progress.status === ItemProgressStatus.MASTERED ? "success" : progress.status === ItemProgressStatus.LEARNING ? "warning" : "default"}
                   className="mt-2"
                 >
                   {Math.round(progress.masteryScore * 100)}%
@@ -356,7 +356,7 @@ export default function FlashcardTab({ vocabularies, lessonId, itemProgress, onP
 
               {/* Audio button */}
               <button
-                onClick={(e) => handlePlayAudio(currentItem.word, currentItem.audioUrl, e)}
+                onClick={(e) => handlePlayAudio(currentItem.word, e)}
                 className="mt-2 p-2 rounded-full bg-primary-100 dark:bg-primary-900/30 text-primary hover:bg-primary-200 transition"
                 aria-label="Nghe phát âm"
               >
@@ -381,7 +381,7 @@ export default function FlashcardTab({ vocabularies, lessonId, itemProgress, onP
                   )}
                   {/* Speaker for example sentence */}
                   <button
-                    onClick={(e) => handlePlayAudio(currentItem.exampleSentence!, null, e)}
+                    onClick={(e) => handlePlayAudio(currentItem.exampleSentence!, e)}
                     className="mt-1.5 p-1.5 rounded-full bg-secondary-100 dark:bg-secondary-900/30 text-secondary hover:bg-secondary-200 transition mx-auto block"
                     aria-label="Nghe câu ví dụ"
                   >

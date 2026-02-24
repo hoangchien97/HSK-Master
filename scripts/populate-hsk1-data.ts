@@ -17,7 +17,6 @@ interface VocabEntry {
   example_pinyin: string | null
   example_meaning: string | null
   word_type: string | null
-  audio_url: string | null
   display_order: number
   meta: Record<string, unknown>
   meaning_vi: string | null

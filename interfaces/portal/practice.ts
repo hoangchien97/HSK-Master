@@ -10,7 +10,6 @@ export interface IVocabularyItem {
   meaning: string
   meaningVi: string | null
   wordType: string | null
-  audioUrl: string | null
   exampleSentence: string | null
   examplePinyin: string | null
   exampleMeaning: string | null

@@ -1,7 +1,9 @@
-'use server';
-
 /**
  * Practice Service — data layer for lesson practice feature
+ *
+ * NOTE: This is NOT a server action module. It's a regular data layer
+ * imported by both server components (SSR pages) and server actions
+ * (actions/practice.actions.ts). Do not add 'use server' here.
  */
 
 import { prisma } from '@/lib/prisma';
@@ -12,7 +14,9 @@ import {
   QuestionType,
   EnrollmentStatus,
   ClassStatus,
+  NotificationType,
 } from '@/enums/portal';
+import { createNotification } from '@/services/portal/notification.service';
 
 const MASTERY_THRESHOLD = 0.8;
 
@@ -35,7 +39,6 @@ export async function getLessonWithVocabularies(lessonIdOrSlug: string) {
           meaning: true,
           meaningVi: true,
           wordType: true,
-          audioUrl: true,
           exampleSentence: true,
           examplePinyin: true,
           exampleMeaning: true,
@@ -277,11 +280,37 @@ async function recomputeLessonProgress(studentId: string, lessonId: string) {
   });
   const totalTimeSec = sessions.reduce((acc, s) => acc + s.durationSec, 0);
 
+  // Check if we just crossed the mastery threshold (milestone notification)
+  const existingProgress = await prisma.portalLessonProgress.findUnique({
+    where: { studentId_lessonId: { studentId, lessonId } },
+    select: { masteryPercent: true },
+  });
+  const previousMastery = existingProgress?.masteryPercent ?? 0;
+
   await prisma.portalLessonProgress.upsert({
     where: { studentId_lessonId: { studentId, lessonId } },
     create: { studentId, lessonId, learnedCount, masteredCount, totalTimeSec, masteryPercent },
     update: { learnedCount, masteredCount, totalTimeSec, masteryPercent },
   });
+
+  // Fire notification when crossing 80% mastery for the first time
+  if (previousMastery < 80 && masteryPercent >= 80) {
+    try {
+      const lesson = await prisma.lesson.findUnique({
+        where: { id: lessonId },
+        select: { title: true, slug: true, order: true },
+      });
+      if (lesson) {
+        await createNotification({
+          userId: studentId,
+          type: NotificationType.PRACTICE_LESSON_MASTERED,
+          title: '🎉 Thành thạo bài học!',
+          message: `Bạn đã thành thạo bài ${lesson.order}: "${lesson.title}" (${Math.round(masteryPercent)}%)`,
+          link: `/portal/student/practice/${lesson.slug || lessonId}`,
+        });
+      }
+    } catch (e) { console.error('Practice milestone notification error:', e); }
+  }
 }
 
 /* ───────── Record flashcard action ───────── */

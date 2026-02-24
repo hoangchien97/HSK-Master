@@ -2,6 +2,7 @@
 
 import { Button, Card, CardBody } from "@heroui/react"
 import { RotateCcw, Trophy } from "lucide-react"
+import { PracticeMode } from "@/enums/portal"
 import type { IVocabularyItem } from "@/interfaces/portal/practice"
 
 interface ResultItem {
@@ -9,17 +10,42 @@ interface ResultItem {
   vocab: IVocabularyItem
 }
 
+/** Result title map — keyed by score tier + practice mode */
+const RESULT_TITLES: Record<PracticeMode, { excellent: string; good: string; needWork: string }> = {
+  [PracticeMode.QUIZ]: {
+    excellent: "Xuất sắc! 🎉",
+    good: "Khá tốt! 👍",
+    needWork: "Cần cố gắng thêm 💪",
+  },
+  [PracticeMode.LISTEN]: {
+    excellent: "Nghe giỏi lắm! 🎉",
+    good: "Khá tốt! 👍",
+    needWork: "Luyện nghe thêm nhé 💪",
+  },
+  [PracticeMode.WRITE]: {
+    excellent: "Viết đẹp lắm! 🎉",
+    good: "Khá tốt! 👍",
+    needWork: "Luyện viết thêm nhé 💪",
+  },
+  [PracticeMode.FLASHCARD]: {
+    excellent: "Hoàn thành Flashcard! 🎉",
+    good: "Khá tốt! 👍",
+    needWork: "Cần ôn thêm 💪",
+  },
+  [PracticeMode.LOOKUP]: {
+    excellent: "Xuất sắc! 🎉",
+    good: "Khá tốt! 👍",
+    needWork: "Cần cố gắng thêm 💪",
+  },
+}
+
 interface Props {
   results: ResultItem[]
   totalQuestions: number
   elapsedSec: number
   onRestart: () => void
-  /** Customise titles per mode */
-  titles?: {
-    excellent?: string
-    good?: string
-    needWork?: string
-  }
+  /** Practice tab mode — determines result titles */
+  mode: PracticeMode
   /** Label for the wrong items section */
   wrongItemsLabel?: string
   /** Accent color for the restart button */
@@ -31,7 +57,7 @@ export default function QuizResultScreen({
   totalQuestions,
   elapsedSec,
   onRestart,
-  titles,
+  mode,
   wrongItemsLabel = "Từ cần ôn lại",
   restartColor = "primary",
 }: Props) {
@@ -39,9 +65,7 @@ export default function QuizResultScreen({
   const score = totalQuestions > 0 ? Math.round((correctCount / totalQuestions) * 100) : 0
   const wrongItems = results.filter((r) => !r.correct)
 
-  const excellent = titles?.excellent ?? "Xuất sắc! 🎉"
-  const good = titles?.good ?? "Khá tốt! 👍"
-  const needWork = titles?.needWork ?? "Cần cố gắng thêm 💪"
+  const titles = RESULT_TITLES[mode]
 
   return (
     <div className="max-w-lg mx-auto">
@@ -62,7 +86,7 @@ export default function QuizResultScreen({
           </div>
 
           <h2 className="text-xl sm:text-2xl font-bold mb-1">
-            {score >= 80 ? excellent : score >= 50 ? good : needWork}
+            {score >= 80 ? titles.excellent : score >= 50 ? titles.good : titles.needWork}
           </h2>
           <p className="text-default-500 mb-4">
             Bạn trả lời đúng {correctCount}/{totalQuestions} câu

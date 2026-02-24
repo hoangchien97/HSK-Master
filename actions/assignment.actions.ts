@@ -17,6 +17,7 @@ import { createBulkNotifications } from '@/services/portal/notification.service'
 import { prisma } from '@/lib/prisma';
 import { auth } from '@/auth';
 import { ASSIGNMENT_STATUS } from '@/constants/portal/roles';
+import { NotificationType } from '@/enums/portal/common';
 
 /**
  * Fetch assignments — role-aware (teacher sees all, student sees PUBLISHED only)
@@ -88,7 +89,7 @@ export async function createAssignmentAction(
         const studentIds = enrollments.map((e) => e.studentId);
         if (studentIds.length > 0) {
           await createBulkNotifications(studentIds, {
-            type: 'ASSIGNMENT_PUBLISHED',
+            type: NotificationType.ASSIGNMENT_PUBLISHED,
             title: 'Bài tập mới',
             message: `Giáo viên vừa giao bài tập "${assignment.title}"`,
             link: `/portal/student/assignments/${assignment.slug || assignment.id}`,
@@ -155,7 +156,7 @@ export async function updateAssignmentAction(
         const studentIds = enrollments.map((e) => e.studentId);
         if (studentIds.length > 0) {
           await createBulkNotifications(studentIds, {
-            type: 'ASSIGNMENT_PUBLISHED',
+            type: NotificationType.ASSIGNMENT_PUBLISHED,
             title: 'Bài tập mới',
             message: `Giáo viên vừa giao bài tập "${assignment.title}"`,
             link: `/portal/student/assignments/${assignment.slug || assignment.id}`,
@@ -187,7 +188,33 @@ export async function deleteAssignmentAction(
     const session = await auth();
     if (!session?.user?.id) return { success: false, error: 'Unauthorized' };
 
+    // Get assignment info before deleting for notification
+    const assignment = await prisma.portalAssignment.findUnique({
+      where: { id: assignmentId },
+      select: { title: true, classId: true, status: true },
+    });
+
     await deleteAssignmentService(assignmentId, session.user.id);
+
+    // Notify students if it was a published assignment
+    if (assignment?.status === ASSIGNMENT_STATUS.PUBLISHED) {
+      try {
+        const enrollments = await prisma.portalClassEnrollment.findMany({
+          where: { classId: assignment.classId },
+          select: { studentId: true },
+        });
+        const studentIds = enrollments.map((e) => e.studentId);
+        if (studentIds.length > 0) {
+          await createBulkNotifications(studentIds, {
+            type: NotificationType.ASSIGNMENT_DELETED,
+            title: 'Bài tập đã bị xóa',
+            message: `Bài tập "${assignment.title}" đã bị hủy bởi giáo viên`,
+            link: '/portal/student/assignments',
+          });
+        }
+      } catch (e) { console.error('Assignment delete notification error:', e); }
+    }
+
     revalidatePath('/portal/teacher/assignments');
     return { success: true };
   } catch (error) {

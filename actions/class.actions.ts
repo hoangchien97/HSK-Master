@@ -18,6 +18,7 @@ import { prisma } from '@/lib/prisma';
 import type { IClass, ICreateClassDTO, IUpdateClassDTO, IGetClassResponse } from '@/interfaces/portal';
 import { auth } from '@/auth';
 import { USER_ROLE } from '@/constants/portal/roles';
+import { NotificationType } from '@/enums/portal/common';
 
 /**
  * Fetch classes with filtering & pagination (role-aware)
@@ -90,7 +91,7 @@ export async function createClassAction(
     if (data.studentIds && data.studentIds.length > 0) {
       try {
         await createBulkNotifications(data.studentIds, {
-          type: 'CLASS_ENROLLED',
+          type: NotificationType.CLASS_ENROLLED,
           title: 'Bạn được thêm vào lớp học',
           message: `Bạn đã được thêm vào lớp "${data.className}"`,
           link: `/portal/student/classes`,
@@ -137,7 +138,7 @@ export async function updateClassAction(
         try {
           const className = data.className || classData?.className || 'lớp học';
           await createBulkNotifications(newStudentIds, {
-            type: 'CLASS_ENROLLED',
+            type: NotificationType.CLASS_ENROLLED,
             title: 'Bạn được thêm vào lớp học',
             message: `Bạn đã được thêm vào lớp "${className}"`,
             link: `/portal/student/classes`,
@@ -167,7 +168,33 @@ export async function deleteClassAction(
     const session = await auth();
     if (!session?.user?.id) return { success: false, error: 'Unauthorized' };
 
+    // Get class info + enrolled students before deleting
+    const classInfo = await prisma.portalClass.findUnique({
+      where: { id: classId },
+      select: {
+        className: true,
+        enrollments: {
+          where: { status: 'ENROLLED' },
+          select: { studentId: true },
+        },
+      },
+    });
+
     await deleteClassService(classId, session.user.id);
+
+    // Notify enrolled students about class deletion
+    if (classInfo && classInfo.enrollments.length > 0) {
+      try {
+        const studentIds = classInfo.enrollments.map((e) => e.studentId);
+        await createBulkNotifications(studentIds, {
+          type: NotificationType.CLASS_REMOVED,
+          title: 'Lớp học đã bị xóa',
+          message: `Lớp "${classInfo.className}" đã được giáo viên xóa`,
+          link: '/portal/student/classes',
+        });
+      } catch (e) { console.error('Class delete notification error:', e); }
+    }
+
     revalidatePath('/portal/teacher/classes');
     return { success: true };
   } catch (error) {

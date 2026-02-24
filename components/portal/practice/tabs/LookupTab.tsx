@@ -11,7 +11,7 @@ import {
 import { Search, Volume2, BookOpen, Award } from "lucide-react"
 import { CDrawer } from "@/components/portal/common"
 import { recordVocabSeenAction } from "@/actions/practice.actions"
-import { useTTS } from "@/hooks/useTTS"
+import { useSpeech } from "@/hooks/useSpeech"
 import { WORD_TYPE_COLORS, WORD_TYPE_LABELS, STATUS_LABELS, getDisplayMeaning } from "@/enums/portal/common"
 import type { IVocabularyItem, IStudentItemProgress } from "@/interfaces/portal/practice"
 import { VocabItem } from "../shared"
@@ -27,7 +27,7 @@ export default function LookupTab({ vocabularies, lessonId, itemProgress, onProg
   const [search, setSearch] = useState("")
   const [selectedVocab, setSelectedVocab] = useState<IVocabularyItem | null>(null)
   const [isDrawerOpen, setIsDrawerOpen] = useState(false)
-  const { speak } = useTTS()
+  const { speak } = useSpeech()
 
   const filteredVocabs = useMemo(() => {
     if (!search.trim()) return vocabularies
@@ -53,9 +53,9 @@ export default function LookupTab({ vocabularies, lessonId, itemProgress, onProg
     [lessonId, onProgressUpdate],
   )
 
-  const playAudio = useCallback((word: string, audioUrl: string | null, e?: React.MouseEvent) => {
+  const playAudio = useCallback((word: string, e?: React.MouseEvent) => {
     e?.stopPropagation()
-    speak(word, audioUrl)
+    speak(word)
   }, [speak])
 
   const selectedProgress = selectedVocab ? itemProgress[selectedVocab.id] : undefined
@@ -125,7 +125,7 @@ export default function LookupTab({ vocabularies, lessonId, itemProgress, onProg
                 <p className="text-xs text-default-400 mt-0.5">EN: {selectedVocab.meaning}</p>
               )}
               <button
-                onClick={() => playAudio(selectedVocab.word, selectedVocab.audioUrl)}
+                onClick={() => playAudio(selectedVocab.word)}
                 className="mt-3 inline-flex items-center gap-1.5 px-4 py-2 rounded-full bg-primary-100 dark:bg-primary-900/30 text-primary hover:bg-primary-200 transition"
               >
                 <Volume2 className="w-4 h-4" />

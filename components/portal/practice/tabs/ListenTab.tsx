@@ -8,7 +8,7 @@ import {
   finishPracticeSessionAction,
   recordPracticeAttemptAction,
 } from "@/actions/practice.actions"
-import { useTTS } from "@/hooks/useTTS"
+import { useSpeech } from "@/hooks/useSpeech"
 import { getDisplayMeaning } from "@/enums/portal/common"
 import { PracticeMode, QuestionType } from "@/enums/portal"
 import { AUTO_NEXT_DELAY_MS } from "@/constants/portal/practice"
@@ -39,7 +39,7 @@ export default function ListenTab({ vocabularies, lessonId, onProgressUpdate }: 
   const questionStartRef = useRef(Date.now())
   const autoNextTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null)
   const countdownIntervalRef = useRef<ReturnType<typeof setInterval> | null>(null)
-  const { speak } = useTTS()
+  const { speak } = useSpeech()
 
   // Generate questions
   useEffect(() => {
@@ -73,17 +73,17 @@ export default function ListenTab({ vocabularies, lessonId, onProgressUpdate }: 
 
   const playAudio = useCallback(() => {
     if (!currentQ) return
-    // Use TTS hook which handles audioUrl OR TTS fallback
+    // Use Web Speech API for pronunciation
     setIsPlaying(true)
     setHasListened(true)
-    speak(currentQ.vocab.word, currentQ.vocab.audioUrl)
+    speak(currentQ.vocab.word)
       .then(() => setIsPlaying(false))
       .catch(() => setIsPlaying(false))
   }, [currentQ, speak])
 
   // Auto-play on new question
   useEffect(() => {
-    if (currentQ?.vocab.audioUrl && !finished) {
+    if (currentQ && !finished) {
       const timer = setTimeout(() => playAudio(), 300)
       return () => clearTimeout(timer)
     }
@@ -207,11 +207,7 @@ export default function ListenTab({ vocabularies, lessonId, onProgressUpdate }: 
         totalQuestions={totalQ}
         elapsedSec={timeSec}
         onRestart={handleRestart}
-        titles={{
-          excellent: "Nghe giỏi lắm! 🎉",
-          good: "Khá tốt! 👍",
-          needWork: "Luyện nghe thêm nhé 💪",
-        }}
+        mode={PracticeMode.LISTEN}
         wrongItemsLabel="Từ cần nghe lại"
         restartColor="primary"
       />

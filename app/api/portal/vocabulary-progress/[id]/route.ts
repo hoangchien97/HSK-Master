@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server"
 import { auth } from "@/auth"
 import { PrismaClient } from "@prisma/client"
+import { ItemProgressStatus } from "@/enums/portal/common"
 
 const prisma = new PrismaClient()
 
@@ -37,7 +38,7 @@ export async function DELETE(
   await prisma.portalItemProgress.update({
     where: { id },
     data: {
-      status: "NEW",
+      status: ItemProgressStatus.NEW,
       masteryScore: 0,
       seenCount: 0,
       correctCount: 0,

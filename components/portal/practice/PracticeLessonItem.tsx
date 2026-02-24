@@ -34,7 +34,7 @@ export default function PracticeLessonItem({ lesson, progress }: Props) {
 
   return (
     <button
-      onClick={() => router.push(`/portal/student/practice/${lesson.slug || lesson.id}`)}
+      onClick={() => router.push(`/portal/student/practice/${lesson.slug}`)}
       className={`w-full text-left p-3 rounded-lg border transition-all group ${
         isMastered
           ? "border-success-200 bg-success-50/30 dark:bg-success-950/10 hover:border-success-400"

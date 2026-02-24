@@ -9,6 +9,8 @@ import { auth } from '@/auth';
 import { prisma } from '@/lib/prisma';
 import { USER_ROLE } from '@/constants/portal/roles';
 import { revalidatePath } from 'next/cache';
+import { createBulkNotifications, createNotification } from '@/services/portal/notification.service';
+import { NotificationType } from '@/enums/portal/common';
 
 export interface AttendanceMatrixData {
   class: {
@@ -349,6 +351,50 @@ export async function saveAttendance(
     );
 
     revalidatePath('/portal/teacher/attendance');
+
+    // Notify students about their attendance
+    try {
+      const classInfo = await prisma.portalClass.findUnique({
+        where: { id: classId },
+        select: { className: true },
+      });
+      const className = classInfo?.className || 'l\u1edbp h\u1ecdc';
+
+      // Group by student, notify each with their status
+      const studentMap = new Map<string, string[]>();
+      for (const r of records) {
+        const dates = studentMap.get(r.studentId) || [];
+        dates.push(r.status);
+        studentMap.set(r.studentId, dates);
+      }
+
+      // Notify ABSENT students specifically
+      const absentStudentIds = records
+        .filter((r) => r.status.toUpperCase() === 'ABSENT')
+        .map((r) => r.studentId);
+      const uniqueAbsentIds = [...new Set(absentStudentIds)];
+
+      if (uniqueAbsentIds.length > 0) {
+        await createBulkNotifications(uniqueAbsentIds, {
+          type: NotificationType.ATTENDANCE_ABSENT,
+          title: 'V\u1eafng m\u1eb7t',
+          message: `B\u1ea1n \u0111\u01b0\u1ee3c ghi nh\u1eadn v\u1eafng m\u1eb7t t\u1ea1i l\u1edbp "${className}"`,
+          link: '/portal/student/attendance',
+        });
+      }
+
+      // Notify all recorded students (excluding absent, they got specific msg)
+      const allStudentIds = [...new Set(records.map((r) => r.studentId))];
+      const nonAbsentIds = allStudentIds.filter((id) => !uniqueAbsentIds.includes(id));
+      if (nonAbsentIds.length > 0) {
+        await createBulkNotifications(nonAbsentIds, {
+          type: NotificationType.ATTENDANCE_RECORDED,
+          title: '\u0110i\u1ec3m danh',
+          message: `\u0110i\u1ec3m danh l\u1edbp "${className}" \u0111\u00e3 \u0111\u01b0\u1ee3c c\u1eadp nh\u1eadt`,
+          link: '/portal/student/attendance',
+        });
+      }
+    } catch (e) { console.error('Attendance notification error:', e); }
 
     return { success: true, count: results.length };
   } catch (error) {

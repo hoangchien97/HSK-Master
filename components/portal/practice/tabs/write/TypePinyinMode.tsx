@@ -3,7 +3,7 @@
 import { useState, useCallback } from "react"
 import { Button, Card, CardBody, Input } from "@heroui/react"
 import { CheckCircle, XCircle, Lightbulb, Volume2 } from "lucide-react"
-import { useTTS } from "@/hooks/useTTS"
+import { useSpeech } from "@/hooks/useSpeech"
 import { getDisplayMeaning } from "@/enums/portal/common"
 import type { IVocabularyItem } from "@/interfaces/portal/practice"
 
@@ -21,7 +21,7 @@ export default function TypePinyinMode({ item, currentIdx, totalItems, onComplet
   const [isCorrect, setIsCorrect] = useState(false)
   const [hintsUsed, setHintsUsed] = useState(0)
   const [showHint, setShowHint] = useState(false)
-  const { speak } = useTTS()
+  const { speak } = useSpeech()
 
   // Reset when item changes
   const handleReset = useCallback(() => {
@@ -62,7 +62,7 @@ export default function TypePinyinMode({ item, currentIdx, totalItems, onComplet
           <p className="text-4xl sm:text-5xl font-bold text-red-600 dark:text-red-400 mb-1">{item.word}</p>
           <p className="text-default-500 text-sm">{getDisplayMeaning(item)}</p>
           <button
-            onClick={() => speak(item.word, item.audioUrl)}
+            onClick={() => speak(item.word)}
             className="mt-2 p-2 rounded-full bg-primary-100 dark:bg-primary-900/30 text-primary hover:bg-primary-200 transition mx-auto inline-flex"
             aria-label="Nghe phát âm"
           >

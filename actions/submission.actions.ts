@@ -10,6 +10,7 @@ import { prisma } from '@/lib/prisma';
 import { auth } from '@/auth';
 import { createNotification } from '@/services/portal/notification.service';
 import { SUBMISSION_STATUS } from '@/constants/portal/roles';
+import { NotificationType } from '@/enums/portal/common';
 
 /**
  * Submit or re-submit an assignment
@@ -122,7 +123,7 @@ export async function submitAssignmentAction(
         type: notificationType,
         title: notificationTitle,
         message: `${studentName} vừa ${action} bài "${assignment.title}"`,
-        link: `/portal/teacher/assignments/${assignment.id}`,
+        link: `/portal/teacher/assignments/${assignment.slug || assignment.id}`,
       });
     } catch (notifyError) {
       console.error('Error sending submission notification:', notifyError);
@@ -193,10 +194,10 @@ export async function gradeSubmissionAction(
       try {
         await createNotification({
           userId: submission.studentId,
-          type: 'SUBMISSION_GRADED',
+          type: NotificationType.SUBMISSION_GRADED,
           title: 'Bài tập đã được chấm điểm',
           message: `Bạn đạt ${data.score}/${submission.assignment.maxScore} điểm cho bài "${submission.assignment.title}"`,
-          link: `/portal/student/assignments/${submission.assignment.id}`,
+          link: `/portal/student/assignments/${submission.assignment.slug || submission.assignment.id}`,
         });
       } catch (notifyError) {
         console.error('Error sending grading notification:', notifyError);
@@ -215,10 +216,10 @@ export async function gradeSubmissionAction(
       try {
         await createNotification({
           userId: submission.studentId,
-          type: 'SUBMISSION_RETURNED',
+          type: NotificationType.SUBMISSION_RETURNED,
           title: 'Bài tập được trả lại',
           message: `Giáo viên đã trả lại bài "${submission.assignment.title}" để bạn sửa lại`,
-          link: `/portal/student/assignments/${submission.assignment.id}`,
+          link: `/portal/student/assignments/${submission.assignment.slug || submission.assignment.id}`,
         });
       } catch (notifyError) {
         console.error('Error sending return notification:', notifyError);

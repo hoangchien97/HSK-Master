@@ -1,11 +1,11 @@
 "use client"
 
 import { useState, useRef } from "react"
-import { Camera, Save, X, User } from "lucide-react"
+import { Camera, Save, X, User, Pencil } from "lucide-react"
 import Image from "next/image"
 import { toast } from "react-toastify"
 import type { PortalUser } from "@/interfaces/portal/profile"
-import { Form, Input, Button, Chip, Card, CardBody, Textarea } from "@heroui/react"
+import { Form, Input, Button, Chip, Card, CardBody, Textarea, Divider } from "@heroui/react"
 import { uploadAvatar } from "@/utils/upload"
 import { validateFile } from "@/utils/validation"
 import { updateProfileAction } from "@/actions/profile.actions"
@@ -20,7 +20,6 @@ export default function ProfileClient({ user }: ProfileClientProps) {
   const { startLoading, stopLoading } = usePortalUI()
 
   const [loading, setLoading] = useState(false)
-  const [message, setMessage] = useState<{ type: "success" | "error"; text: string } | null>(null)
   const [avatarPreview, setAvatarPreview] = useState<string | null>(user.image || null)
   const [avatarFile, setAvatarFile] = useState<File | null>(null)
   const [errors, setErrors] = useState<Record<string, string>>({})
@@ -35,23 +34,18 @@ export default function ProfileClient({ user }: ProfileClientProps) {
     const file = e.target.files?.[0]
     if (!file) return
 
-    // Validate file
     const validation = validateFile(file)
     if (!validation.valid) {
-      setMessage({ type: "error", text: validation.error! })
+      toast.error(validation.error!)
       return
     }
 
-    setMessage(null)
-
-    // Show preview only - don't upload yet
     const reader = new FileReader()
     reader.onloadend = () => {
       setAvatarPreview(reader.result as string)
     }
     reader.readAsDataURL(file)
 
-    // Store file for later upload
     setAvatarFile(file)
     setIsDirty(true)
   }
@@ -63,12 +57,10 @@ export default function ProfileClient({ user }: ProfileClientProps) {
     setErrors({})
     setLoading(true)
     startLoading()
-    setMessage(null)
 
     try {
       let avatarUrl = currentUser.image
 
-      // Upload avatar if new file selected
       if (avatarFile) {
         const uploadResult = await uploadAvatar(avatarFile)
         if (!uploadResult.success) {
@@ -86,30 +78,24 @@ export default function ProfileClient({ user }: ProfileClientProps) {
         image: avatarUrl || undefined,
       }
 
-      // Use server action instead of API call
       const result = await updateProfileAction(updateData)
 
       if (!result.success) {
         throw new Error(result.error || "Cập nhật thất bại")
       }
 
-      // Optimistic UI update
       if (result.user) {
         setCurrentUser(result.user)
         setAvatarPreview(result.user.image || null)
       }
 
+      // ✅ Only toast — no inline message to avoid duplicate notification
       toast.success("Cập nhật hồ sơ thành công")
-      setMessage({ type: "success", text: "Cập nhật hồ sơ thành công" })
       setAvatarFile(null)
       setIsDirty(false)
     } catch (error) {
       const errorMessage = error instanceof Error ? error.message : "Có lỗi xảy ra"
       toast.error(errorMessage)
-      setMessage({
-        type: "error",
-        text: errorMessage
-      })
     } finally {
       setLoading(false)
       stopLoading()
@@ -119,7 +105,6 @@ export default function ProfileClient({ user }: ProfileClientProps) {
   const handleCancel = () => {
     setAvatarPreview(currentUser.image || null)
     setAvatarFile(null)
-    setMessage(null)
     setIsDirty(false)
   }
 
@@ -132,59 +117,59 @@ export default function ProfileClient({ user }: ProfileClientProps) {
     return roleConfig[currentUser.role] ?? currentUser.role
   }
 
+  const getRoleColor = () => {
+    const colorMap: Record<string, "primary" | "success" | "warning"> = {
+      SYSTEM_ADMIN: "warning",
+      TEACHER: "success",
+      STUDENT: "primary",
+    }
+    return colorMap[currentUser.role] ?? "primary"
+  }
+
   return (
-    <div className="max-w-5xl mx-auto px-4 py-8">
+    <div className="max-w-3xl mx-auto px-4 py-8">
       {/* Header */}
-      <div className="mb-8">
+      <div className="mb-8 text-center">
         <h1 className="text-3xl font-bold text-gray-900">Hồ sơ cá nhân</h1>
         <p className="text-gray-500 mt-2">Quản lý thông tin cá nhân của bạn</p>
       </div>
 
-      {/* Message */}
-      {message && (
-        <div
-          className={`mb-6 p-4 rounded-xl text-sm font-medium ${
-            message.type === "success"
-              ? "bg-green-50 text-green-700 border border-green-200"
-              : "bg-red-50 text-red-700 border border-red-200"
-          }`}
-        >
-          {message.text}
-        </div>
-      )}
-
-      <Form validationErrors={errors} onSubmit={onSubmit} className="space-y-6">
-        {/* Avatar Section - Center */}
-        <Card>
-          <CardBody className="p-8">
+      <Form validationErrors={errors} onSubmit={onSubmit} className="space-y-6 w-full items-stretch">
+        {/* Avatar Section */}
+        <Card shadow="sm">
+          <CardBody className="py-10 px-6">
             <div className="flex flex-col items-center text-center">
-              {/* Avatar */}
-              <div className="relative group">
-                <div className="w-32 h-32 rounded-full overflow-hidden border-4 border-white shadow-xl">
+              {/* Avatar with edit badge */}
+              <div className="relative group cursor-pointer" onClick={handleAvatarClick}>
+                <div className="w-28 h-28 rounded-full overflow-hidden ring-4 ring-white shadow-lg">
                   {avatarPreview ? (
                     <Image
                       src={avatarPreview}
                       alt={currentUser.name}
-                      width={128}
-                      height={128}
+                      width={112}
+                      height={112}
                       className="w-full h-full object-cover"
                     />
                   ) : (
-                    <div className="w-full h-full bg-gradient-to-br from-red-400 to-red-600 flex items-center justify-center text-white text-4xl font-bold">
+                    <div className="w-full h-full bg-gradient-to-br from-primary-400 to-primary-600 flex items-center justify-center text-white text-3xl font-bold">
                       {currentUser.name[0] || "U"}
                     </div>
                   )}
                 </div>
 
-                {/* Upload overlay */}
+                {/* Camera badge */}
                 <button
                   type="button"
-                  onClick={handleAvatarClick}
                   disabled={loading}
-                  className="absolute inset-0 rounded-full bg-black/50 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center"
+                  className="absolute bottom-0 right-0 w-8 h-8 rounded-full bg-white shadow-md border-2 border-gray-100 flex items-center justify-center hover:bg-gray-50 transition-colors"
                 >
-                  <Camera className="w-8 h-8 text-white" />
+                  <Pencil className="w-3.5 h-3.5 text-gray-600" />
                 </button>
+
+                {/* Hover overlay */}
+                <div className="absolute inset-0 rounded-full bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center pointer-events-none">
+                  <Camera className="w-7 h-7 text-white" />
+                </div>
 
                 <input
                   ref={fileInputRef}
@@ -196,19 +181,21 @@ export default function ProfileClient({ user }: ProfileClientProps) {
               </div>
 
               {/* User Info */}
-              <h2 className="mt-6 text-2xl font-bold text-gray-900">
+              <h2 className="mt-5 text-xl font-bold text-gray-900">
                 {currentUser.name}
               </h2>
-              <p className="text-gray-500 mt-1">{currentUser.email}</p>
+              <p className="text-sm text-gray-500 mt-0.5">{currentUser.email}</p>
 
-              {/* Badges */}
-              <div className="flex items-center gap-3 mt-4 flex-wrap justify-center">
-                <Chip color="primary" variant="flat">
-                  {getRoleLabel()}
-                </Chip>
-              </div>
+              <Chip
+                color={getRoleColor()}
+                variant="flat"
+                size="sm"
+                className="mt-3"
+              >
+                {getRoleLabel()}
+              </Chip>
 
-              <p className="text-sm text-gray-400 mt-4">
+              <p className="text-xs text-gray-400 mt-3">
                 Nhấn vào ảnh đại diện để thay đổi
               </p>
             </div>
@@ -216,14 +203,15 @@ export default function ProfileClient({ user }: ProfileClientProps) {
         </Card>
 
         {/* Personal Information */}
-        <Card>
+        <Card shadow="sm">
           <CardBody className="p-6">
-            <h3 className="text-lg font-semibold text-gray-900 mb-6 flex items-center gap-2">
-              <User className="w-5 h-5" />
+            <h3 className="text-lg font-semibold text-gray-900 flex items-center gap-2">
+              <User className="w-5 h-5 text-gray-500" />
               Thông tin cá nhân
             </h3>
+            <Divider className="my-4" />
 
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
               {/* Full Name */}
               <div className="md:col-span-2">
                 <Input
@@ -231,6 +219,7 @@ export default function ProfileClient({ user }: ProfileClientProps) {
                   label="Họ và tên"
                   placeholder="Nguyễn Văn A"
                   labelPlacement="outside"
+                  variant="bordered"
                   defaultValue={currentUser.name || ""}
                   isRequired
                   onChange={() => setIsDirty(true)}
@@ -250,6 +239,7 @@ export default function ProfileClient({ user }: ProfileClientProps) {
                   type="tel"
                   placeholder="0901234567"
                   labelPlacement="outside"
+                  variant="bordered"
                   defaultValue={currentUser.phoneNumber || ""}
                   onChange={() => setIsDirty(true)}
                 />
@@ -262,6 +252,7 @@ export default function ProfileClient({ user }: ProfileClientProps) {
                   label="Ngày sinh"
                   type="date"
                   labelPlacement="outside"
+                  variant="bordered"
                   defaultValue={currentUser.dateOfBirth ? new Date(currentUser.dateOfBirth).toISOString().split('T')[0] : ""}
                   onChange={() => setIsDirty(true)}
                 />
@@ -274,6 +265,7 @@ export default function ProfileClient({ user }: ProfileClientProps) {
                   label="Địa chỉ"
                   placeholder="123 Đường ABC, Quận 1, TP.HCM"
                   labelPlacement="outside"
+                  variant="bordered"
                   defaultValue={currentUser.address || ""}
                   onChange={() => setIsDirty(true)}
                 />
@@ -286,6 +278,7 @@ export default function ProfileClient({ user }: ProfileClientProps) {
                   label="Giới thiệu bản thân"
                   placeholder="Viết một vài dòng giới thiệu về bản thân..."
                   labelPlacement="outside"
+                  variant="bordered"
                   defaultValue={currentUser.biography || ""}
                   minRows={4}
                   onChange={() => setIsDirty(true)}
@@ -295,11 +288,12 @@ export default function ProfileClient({ user }: ProfileClientProps) {
           </CardBody>
         </Card>
 
-        {/* Action Buttons */}
-        <div className="flex items-center justify-end gap-3 pb-8">
+        {/* Action Buttons — centered */}
+        <div className="flex items-center justify-center gap-3 pt-2 pb-8">
           <Button
             type="button"
             variant="bordered"
+            radius="full"
             onPress={handleCancel}
             isDisabled={loading || (!isDirty && !avatarFile)}
             startContent={<X className="w-4 h-4" />}
@@ -310,8 +304,10 @@ export default function ProfileClient({ user }: ProfileClientProps) {
             type="submit"
             isDisabled={loading || (!isDirty && !avatarFile)}
             color="danger"
+            radius="full"
             isLoading={loading}
             startContent={!loading ? <Save className="w-4 h-4" /> : undefined}
+            className="px-6"
           >
             {loading ? "Đang lưu..." : "Lưu thay đổi"}
           </Button>

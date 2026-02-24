@@ -1,5 +1,10 @@
 import { auth } from "@/auth"
 import { redirect, notFound } from "next/navigation"
+import {
+  getCoursesForPractice,
+  getStudentAllLessonProgress,
+  getStudentEnrolledHskLevels,
+} from "@/services/portal/practice.service"
 import PracticeListView from "@/components/portal/practice/PracticeListView"
 
 type Props = {
@@ -17,5 +22,17 @@ export default async function PracticePage({ params }: Props) {
   // Only students can access practice
   if (userRole !== "student") notFound()
 
-  return <PracticeListView />
+  // SSR: fetch data server-side for fast initial render
+  const enrolledLevels = await getStudentEnrolledHskLevels(session.user.id)
+  const [courses, progressMap] = await Promise.all([
+    getCoursesForPractice(enrolledLevels.length > 0 ? enrolledLevels : undefined),
+    getStudentAllLessonProgress(session.user.id),
+  ])
+
+  return (
+    <PracticeListView
+      initialCourses={JSON.parse(JSON.stringify(courses))}
+      initialProgressMap={JSON.parse(JSON.stringify(progressMap))}
+    />
+  )
 }

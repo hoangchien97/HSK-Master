@@ -2,29 +2,32 @@
 
 import { Chip } from "@heroui/react"
 import { Volume2 } from "lucide-react"
-import { WORD_TYPE_COLORS, WORD_TYPE_LABELS, STATUS_LABELS, getDisplayMeaning } from "@/enums/portal/common"
+import { WORD_TYPE_COLORS, WORD_TYPE_LABELS, STATUS_LABELS, ItemProgressStatus, getDisplayMeaning } from "@/enums/portal/common"
 import type { IVocabularyItem, IStudentItemProgress } from "@/interfaces/portal/practice"
 
 interface Props {
   vocab: IVocabularyItem
   progress?: IStudentItemProgress
   onSelect: (vocab: IVocabularyItem) => void
-  onPlayAudio: (word: string, audioUrl: string | null, e?: React.MouseEvent) => void
+  onPlayAudio: (word: string, e?: React.MouseEvent) => void
 }
 
 /** Single vocabulary row used in LookupTab list */
 export default function VocabItem({ vocab, progress, onSelect, onPlayAudio }: Props) {
-  const status = progress?.status || "NEW"
+  const status = progress?.status || ItemProgressStatus.NEW
   const wordTypeLabel = vocab.wordType ? (WORD_TYPE_LABELS[vocab.wordType] ?? vocab.wordType) : null
   const wordTypeColor = vocab.wordType ? (WORD_TYPE_COLORS[vocab.wordType] ?? "default") : "default"
 
   return (
-    <button
+    <div
+      role="button"
+      tabIndex={0}
       onClick={() => onSelect(vocab)}
-      className={`w-full text-left p-3 sm:p-4 rounded-lg border transition-all group ${
-        status === "MASTERED"
+      onKeyDown={(e) => { if (e.key === "Enter" || e.key === " ") onSelect(vocab) }}
+      className={`w-full text-left p-3 sm:p-4 rounded-lg border transition-all group cursor-pointer ${
+        status === ItemProgressStatus.MASTERED
           ? "border-success-200 bg-success-50/30 dark:bg-success-950/10 hover:border-success-400"
-          : status === "LEARNING"
+          : status === ItemProgressStatus.LEARNING
             ? "border-warning-200 bg-warning-50/20 dark:bg-warning-950/10 hover:border-warning-400"
             : "border-default-200 hover:border-primary-300 hover:bg-primary-50/30 dark:hover:bg-primary-950/20"
       }`}
@@ -39,7 +42,7 @@ export default function VocabItem({ vocab, progress, onSelect, onPlayAudio }: Pr
         <div className="flex-1 min-w-0">
           <div className="flex items-center gap-1.5">
             <span className="text-sm text-primary font-medium">{vocab.pinyin}</span>
-            {status !== "NEW" && (
+            {status !== ItemProgressStatus.NEW && (
               <Chip
                 size="sm"
                 variant="dot"
@@ -64,7 +67,7 @@ export default function VocabItem({ vocab, progress, onSelect, onPlayAudio }: Pr
             <div className="text-xs font-bold text-primary">{Math.round(progress.masteryScore * 100)}%</div>
           )}
           <button
-            onClick={(e) => onPlayAudio(vocab.word, vocab.audioUrl, e)}
+            onClick={(e) => onPlayAudio(vocab.word, e)}
             className="p-2 rounded-full transition hover:bg-primary-100 dark:hover:bg-primary-900/30 text-primary cursor-pointer"
             aria-label="Nghe phát âm"
           >
@@ -72,6 +75,6 @@ export default function VocabItem({ vocab, progress, onSelect, onPlayAudio }: Pr
           </button>
         </div>
       </div>
-    </button>
+    </div>
   )
 }

@@ -3,6 +3,8 @@ import { redirect } from "next/navigation"
 import { PrismaClient } from "@prisma/client"
 import BookmarksClient from "./BookmarksClient"
 
+import { ItemProgressStatus } from "@/enums/portal/common"
+
 const prisma = new PrismaClient()
 
 async function getStudentBookmarks(email: string) {
@@ -10,7 +12,7 @@ async function getStudentBookmarks(email: string) {
     where: { email },
     include: {
       itemProgress: {
-        where: { status: "MASTERED" },
+        where: { status: ItemProgressStatus.MASTERED },
         include: {
           vocabulary: {
             include: { lesson: { include: { course: true } } },
@@ -32,7 +34,7 @@ async function getStudentBookmarks(email: string) {
         ? { level: parseInt(ip.vocabulary.lesson.course.level?.replace("HSK", "") || "0"), name: ip.vocabulary.lesson.course.title }
         : null,
     },
-    mastered: ip.status === "MASTERED",
+    mastered: ip.status === ItemProgressStatus.MASTERED,
     reviewCount: ip.seenCount,
     lastReviewedAt: ip.lastSeenAt,
   })) || []
