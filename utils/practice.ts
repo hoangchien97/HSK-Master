@@ -125,3 +125,24 @@ export function generateListenQuestions(vocabs: IVocabularyItem[]): ListenQuesti
     return { vocab, options: allOptions, correctKey: "correct" }
   })
 }
+
+/* ───────── Level slug helper ───────── */
+
+/**
+ * Derive a URL-friendly level slug from a course level string.
+ * Examples: "HSK 1" → "hsk1", "HSK 3" → "hsk3", null → "other"
+ */
+export function deriveLevelSlug(level: string | null | undefined): string {
+  if (!level) return "other"
+  const match = level.match(/^HSK\s*(\d+)$/i)
+  return match ? `hsk${match[1]}` : level.toLowerCase().replace(/\s+/g, "-")
+}
+
+/**
+ * Derive a human-readable label from a level slug.
+ * Examples: "hsk1" → "HSK 1", "hsk3" → "HSK 3", "other" → "Khác"
+ */
+export function levelSlugToLabel(levelSlug: string): string {
+  const match = levelSlug.match(/^hsk(\d+)$/i)
+  return match ? `HSK ${match[1]}` : "Khác"
+}

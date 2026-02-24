@@ -39,6 +39,7 @@ export default function ListenTab({ vocabularies, lessonId, onProgressUpdate }: 
   const questionStartRef = useRef(Date.now())
   const autoNextTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null)
   const countdownIntervalRef = useRef<ReturnType<typeof setInterval> | null>(null)
+  const isAdvancingRef = useRef(false)
   const { speak } = useSpeech()
 
   // Generate questions
@@ -112,6 +113,9 @@ export default function ListenTab({ vocabularies, lessonId, onProgressUpdate }: 
   }, [])
 
   const handleNext = useCallback(async () => {
+    // Guard against double-advance (auto-timer + manual click race)
+    if (isAdvancingRef.current) return
+    isAdvancingRef.current = true
     clearAutoNext()
     if (currentIdx < totalQ - 1) {
       setCurrentIdx((i) => i + 1)
@@ -128,6 +132,8 @@ export default function ListenTab({ vocabularies, lessonId, onProgressUpdate }: 
       }
       onProgressUpdate()
     }
+    // Reset guard after React has flushed the state update
+    requestAnimationFrame(() => { isAdvancingRef.current = false })
   }, [currentIdx, totalQ, sessionId, onProgressUpdate, clearAutoNext])
 
   const handleSelect = useCallback(
@@ -331,7 +337,7 @@ export default function ListenTab({ vocabularies, lessonId, onProgressUpdate }: 
         </div>
       )}
 
-      {/* Prev/Next Navigation */}
+      {/* Prev/Next Navigation — forward requires answering */}
       {!showResult && (
         <div className="flex items-center justify-between">
           <Button
@@ -353,20 +359,11 @@ export default function ListenTab({ vocabularies, lessonId, onProgressUpdate }: 
             Trước
           </Button>
           <span className="text-xs text-default-400">{currentIdx + 1}/{totalQ}</span>
+          {/* Forward button disabled — must answer the question to proceed */}
           <Button
             variant="bordered"
             size="sm"
-            isDisabled={currentIdx >= totalQ - 1}
-            onPress={() => {
-              if (currentIdx < totalQ - 1) {
-                setCurrentIdx((i) => i + 1)
-                setSelectedKey(null)
-                setShowResult(false)
-                setShowTranscript(false)
-                setHasListened(false)
-                questionStartRef.current = Date.now()
-              }
-            }}
+            isDisabled
             endContent={<ChevronRight className="w-4 h-4" />}
           >
             Tiếp

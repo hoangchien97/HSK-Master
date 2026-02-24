@@ -30,74 +30,65 @@ export default function ProgressCard({
 
   return (
     <Card className="bg-linear-to-r from-primary-50 to-secondary-50 dark:from-primary-950/30 dark:to-secondary-950/30 border border-primary-100 dark:border-primary-900/30">
-      <CardBody className="p-4 sm:p-5">
-        <div className="flex flex-col sm:flex-row sm:items-center gap-4">
-          {/* Mastery circle */}
-          <div className="flex items-center gap-3 sm:min-w-50">
-            <div className="relative w-16 h-16 sm:w-20 sm:h-20 shrink-0">
-              <svg viewBox="0 0 36 36" className="w-full h-full -rotate-90">
-                <circle
-                  cx="18" cy="18" r="15.9155"
-                  fill="none"
-                  stroke="currentColor"
-                  className="text-default-200 dark:text-default-700"
-                  strokeWidth="3"
-                />
-                <circle
-                  cx="18" cy="18" r="15.9155"
-                  fill="none"
-                  stroke="currentColor"
-                  className="text-primary"
-                  strokeWidth="3"
-                  strokeDasharray={`${masteryPercent}, 100`}
-                  strokeLinecap="round"
-                />
-              </svg>
-              <div className="absolute inset-0 flex items-center justify-center">
-                <span className="text-sm sm:text-base font-bold text-primary">{Math.round(masteryPercent)}%</span>
-              </div>
-            </div>
-            <div>
-              <p className="text-sm font-semibold text-foreground">Độ thành thạo</p>
-              {remaining > 0 ? (
-                <p className="text-xs text-default-500">Còn {remaining} từ chưa học</p>
-              ) : totalItems > 0 ? (
-                <p className="text-xs text-success-600">Đã học hết!</p>
-              ) : (
-                <p className="text-xs text-default-400">Chưa có từ vựng</p>
-              )}
+      <CardBody className="p-3 sm:p-4">
+        <div className="flex items-center gap-3 sm:gap-4">
+          {/* Mastery circle — compact */}
+          <div className="relative w-12 h-12 sm:w-14 sm:h-14 shrink-0">
+            <svg viewBox="0 0 36 36" className="w-full h-full -rotate-90">
+              <circle
+                cx="18" cy="18" r="15.9155"
+                fill="none"
+                stroke="currentColor"
+                className="text-default-200 dark:text-default-700"
+                strokeWidth="3"
+              />
+              <circle
+                cx="18" cy="18" r="15.9155"
+                fill="none"
+                stroke="currentColor"
+                className="text-primary"
+                strokeWidth="3"
+                strokeDasharray={`${masteryPercent}, 100`}
+                strokeLinecap="round"
+              />
+            </svg>
+            <div className="absolute inset-0 flex items-center justify-center">
+              <span className="text-xs sm:text-sm font-bold text-primary">{Math.round(masteryPercent)}%</span>
             </div>
           </div>
 
-          {/* Stats row */}
-          <div className="grid grid-cols-3 gap-3 flex-1">
-            <div className="flex items-center gap-2">
-              <div className="p-1.5 sm:p-2 rounded-lg bg-primary-100 dark:bg-primary-900/30">
-                <BookOpen className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-primary" />
-              </div>
+          {/* Stats — single row */}
+          <div className="flex items-center gap-4 sm:gap-6 flex-1 min-w-0">
+            <div className="flex items-center gap-1.5">
+              <BookOpen className="w-3.5 h-3.5 text-primary shrink-0" />
               <div>
-                <p className="text-base sm:text-lg font-bold text-foreground">{learnedCount}</p>
-                <p className="text-[10px] sm:text-xs text-default-500">Đã học</p>
+                <p className="text-sm sm:text-base font-bold text-foreground leading-none">{learnedCount}</p>
+                <p className="text-[9px] sm:text-[10px] text-default-500">Đã học</p>
               </div>
             </div>
-            <div className="flex items-center gap-2">
-              <div className="p-1.5 sm:p-2 rounded-lg bg-success-100 dark:bg-success-900/30">
-                <Award className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-success" />
-              </div>
+            <div className="flex items-center gap-1.5">
+              <Award className="w-3.5 h-3.5 text-success shrink-0" />
               <div>
-                <p className="text-base sm:text-lg font-bold text-foreground">{masteredCount}</p>
-                <p className="text-[10px] sm:text-xs text-default-500">Thành thạo</p>
+                <p className="text-sm sm:text-base font-bold text-foreground leading-none">{masteredCount}</p>
+                <p className="text-[9px] sm:text-[10px] text-default-500">Thành thạo</p>
               </div>
             </div>
-            <div className="flex items-center gap-2">
-              <div className="p-1.5 sm:p-2 rounded-lg bg-warning-100 dark:bg-warning-900/30">
-                <Clock className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-warning" />
-              </div>
+            <div className="flex items-center gap-1.5">
+              <Clock className="w-3.5 h-3.5 text-warning shrink-0" />
               <div>
-                <p className="text-base sm:text-lg font-bold text-foreground">{formatTime(totalTimeSec)}</p>
-                <p className="text-[10px] sm:text-xs text-default-500">Thời gian</p>
+                <p className="text-sm sm:text-base font-bold text-foreground leading-none">{formatTime(totalTimeSec)}</p>
+                <p className="text-[9px] sm:text-[10px] text-default-500">Thời gian</p>
               </div>
             </div>
+          </div>
+
+          {/* Remaining indicator */}
+          <div className="text-right shrink-0 hidden sm:block">
+            {remaining > 0 ? (
+              <p className="text-[10px] text-default-500">Còn {remaining} từ</p>
+            ) : totalItems > 0 ? (
+              <p className="text-[10px] text-success-600 font-medium">✓ Đã học hết!</p>
+            ) : null}
           </div>
         </div>
 
@@ -107,7 +98,7 @@ export default function ProgressCard({
             value={masteryPercent}
             color="primary"
             size="sm"
-            className="mt-3"
+            className="mt-2"
             aria-label="Tiến độ học tập"
           />
         )}

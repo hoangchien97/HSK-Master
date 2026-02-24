@@ -27,6 +27,13 @@ export const routeMeta: Record<string, RouteMeta> = {
   assignments: { label: "Bài tập" },
   practice: { label: "Luyện tập" },
   vocabulary: { label: "Từ vựng" },
+  // HSK level segments under /practice/[level]/
+  hsk1: { label: "HSK 1" },
+  hsk2: { label: "HSK 2" },
+  hsk3: { label: "HSK 3" },
+  hsk4: { label: "HSK 4" },
+  hsk5: { label: "HSK 5" },
+  hsk6: { label: "HSK 6" },
   bookmarks: { label: "Đã lưu" },
   quizzes: { label: "Bài kiểm tra" },
   progress: { label: "Tiến độ học tập" },

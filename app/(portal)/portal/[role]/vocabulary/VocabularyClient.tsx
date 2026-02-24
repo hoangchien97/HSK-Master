@@ -163,7 +163,7 @@ export default function VocabularyClient({
           <Card
             isPressable
             onPress={() => setShowAnswer(!showAnswer)}
-            className="min-h-[300px] flex flex-col items-center justify-center relative"
+            className="min-h-75 flex flex-col items-center justify-center relative"
           >
             <CardBody className="flex flex-col items-center justify-center">
               <button
@@ -431,12 +431,12 @@ export default function VocabularyClient({
           return (
             <Link
               key={level.id}
-              href={`/vocabulary?level=${level.level}`}
+              href={`/portal/student/practice/hsk${level.level}`}
             >
               <Card className="h-full hover:shadow-md transition-shadow">
                 <CardBody>
                   <div className="flex items-center justify-between mb-4">
-                    <div className="w-14 h-14 bg-gradient-to-br from-red-500 to-red-600 rounded-xl flex items-center justify-center">
+                    <div className="w-14 h-14 bg-linear-to-br from-red-500 to-red-600 rounded-xl flex items-center justify-center">
                       <span className="text-white text-2xl font-bold">{level.level}</span>
                     </div>
                     {levelVocabs.length > 0 && (

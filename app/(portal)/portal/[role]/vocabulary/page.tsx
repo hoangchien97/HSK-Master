@@ -1,9 +1,7 @@
 import { auth } from "@/auth"
 import { redirect } from "next/navigation"
-import { PrismaClient } from "@prisma/client"
+import { prisma } from "@/lib/prisma"
 import VocabularyClient from "./VocabularyClient"
-
-const prisma = new PrismaClient()
 
 async function getVocabularyData(email: string) {
   // Get HSK levels

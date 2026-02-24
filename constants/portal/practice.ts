@@ -25,10 +25,19 @@ export enum WriteMode {
 
 /* ───────── Tab keys (shared by view + URL param) ───────── */
 
-export const TAB_KEYS = ["lookup", "flashcard", "quiz", "listen", "write"] as const
-export type PracticeTabKey = (typeof TAB_KEYS)[number]
+import { PracticeMode } from "@/enums/portal/common"
 
-export const DEFAULT_TAB: PracticeTabKey = "lookup"
+export const TAB_KEYS = [
+  PracticeMode.LOOKUP,
+  PracticeMode.FLASHCARD,
+  PracticeMode.QUIZ,
+  PracticeMode.LISTEN,
+  PracticeMode.WRITE,
+] as const
+
+export type PracticeTabKey = PracticeMode
+
+export const DEFAULT_TAB: PracticeTabKey = PracticeMode.LOOKUP
 
 /* ───────── Quiz / Listen ───────── */
 

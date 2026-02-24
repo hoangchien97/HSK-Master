@@ -22,9 +22,10 @@ interface ProgressItem {
 interface Props {
   lesson: LessonItem
   progress?: ProgressItem | null
+  levelSlug: string
 }
 
-export default function PracticeLessonItem({ lesson, progress }: Props) {
+export default function PracticeLessonItem({ lesson, progress, levelSlug }: Props) {
   const router = useRouter()
   const vocabCount = lesson._count.vocabularies
   const mastery = progress?.masteryPercent ?? 0
@@ -34,7 +35,7 @@ export default function PracticeLessonItem({ lesson, progress }: Props) {
 
   return (
     <button
-      onClick={() => router.push(`/portal/student/practice/${lesson.slug}`)}
+      onClick={() => router.push(`/portal/student/practice/${levelSlug}/${lesson.slug}`)}
       className={`w-full text-left p-3 rounded-lg border transition-all group ${
         isMastered
           ? "border-success-200 bg-success-50/30 dark:bg-success-950/10 hover:border-success-400"

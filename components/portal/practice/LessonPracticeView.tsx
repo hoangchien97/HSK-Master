@@ -19,6 +19,7 @@ import { refreshLessonProgress } from "@/actions/practice.actions"
 import { usePortalUI } from "@/providers/portal-ui-provider"
 import { TAB_KEYS, DEFAULT_TAB } from "@/constants/portal/practice"
 import type { PracticeTabKey } from "@/constants/portal/practice"
+import { PracticeMode } from "@/enums/portal/common"
 import ProgressCard from "./ProgressCard"
 import LookupTab from "./tabs/LookupTab"
 import type { IVocabularyItem, IStudentItemProgress } from "@/interfaces/portal/practice"
@@ -31,10 +32,12 @@ import type { IVocabularyItem, IStudentItemProgress } from "@/interfaces/portal/
  *  server bundle lean (no browser polyfill needed).
  * ─────────────────────────────────────────────────────────────── */
 
+
+
 function TabSkeleton() {
   return (
-    <div className="space-y-3 p-4">
-      <Skeleton className="w-full h-48 rounded-xl" />
+    <div className="space-y-3 p-4 flex flex-col items-center justify-center min-h-[50vh]">
+      <Skeleton className="w-full max-w-lg h-48 rounded-xl" />
       <div className="flex gap-2">
         <Skeleton className="w-24 h-10 rounded-lg" />
         <Skeleton className="w-24 h-10 rounded-lg" />
@@ -87,14 +90,16 @@ interface SiblingLesson {
 }
 
 const TAB_CONFIG: Record<PracticeTabKey, { label: string; icon: React.ReactNode }> = {
-  lookup: { label: "Tra cứu", icon: <Search className="w-4 h-4" /> },
-  flashcard: { label: "Flashcard", icon: <Layers className="w-4 h-4" /> },
-  quiz: { label: "Quiz", icon: <HelpCircle className="w-4 h-4" /> },
-  listen: { label: "Nghe", icon: <Headphones className="w-4 h-4" /> },
-  write: { label: "Viết", icon: <PenTool className="w-4 h-4" /> },
+  [PracticeMode.LOOKUP]: { label: "Tra cứu", icon: <Search className="w-4 h-4" /> },
+  [PracticeMode.FLASHCARD]: { label: "Flashcard", icon: <Layers className="w-4 h-4" /> },
+  [PracticeMode.QUIZ]: { label: "Quiz", icon: <HelpCircle className="w-4 h-4" /> },
+  [PracticeMode.LISTEN]: { label: "Nghe", icon: <Headphones className="w-4 h-4" /> },
+  [PracticeMode.WRITE]: { label: "Viết", icon: <PenTool className="w-4 h-4" /> },
 }
 
 interface Props {
+  /** Level slug from URL, e.g. 'hsk1' */
+  levelSlug: string
   /** Slug from URL, used for breadcrumbs & sibling nav comparison */
   lessonSlug: string
   /** Pre-fetched from server (SSR) */
@@ -105,6 +110,7 @@ interface Props {
 }
 
 export default function LessonPracticeView({
+  levelSlug,
   lessonSlug,
   initialLesson,
   initialProgress,
@@ -130,7 +136,8 @@ export default function LessonPracticeView({
   // Always use the resolved UUID for all DB operations
   const lessonId = lesson.id
 
-  // Set breadcrumb dynamic label
+  // Set breadcrumb label for the lesson slug segment only
+  // (level label is handled statically in breadcrumb routeMeta)
   useEffect(() => {
     setDynamicLabel(lessonSlug, `${lesson.order}. ${lesson.title}`)
   }, [lessonSlug, lesson.order, lesson.title, setDynamicLabel])
@@ -164,38 +171,40 @@ export default function LessonPracticeView({
     [searchParams, router, pathname, startTransition],
   )
 
+  // Practice base path (includes level)
+  const practiceBasePath = `/portal/student/practice/${levelSlug}`
+
   const vocabs = lesson.vocabularies
   const totalItems = vocabs.length
 
   return (
-    <div className="space-y-3 sm:space-y-6 pb-20 sm:pb-6">
+    <div className="space-y-3 sm:space-y-4">
       {/* Header — compact on mobile */}
-      <div>
-        <div className="flex flex-col sm:flex-row sm:items-center gap-0.5 sm:gap-3">
-          <h1 className="text-base sm:text-xl font-bold leading-tight">
+      <div className="flex flex-col sm:flex-row sm:items-center gap-0.5 sm:gap-3 pt-2 sm:pt-0">
+        <div className="flex items-center gap-2 min-w-0">
+          <h1 className="text-base sm:text-lg font-bold truncate">
             Buổi {lesson.order}: {lesson.title}
           </h1>
           {lesson.titleChinese && (
-            <span className="text-sm sm:text-lg text-default-400">{lesson.titleChinese}</span>
+            <span className="text-sm sm:text-base text-default-400 shrink-0">{lesson.titleChinese}</span>
           )}
         </div>
-        {lesson.description && (
-          <p className="text-xs sm:text-sm text-default-500 mt-0.5 sm:mt-1 line-clamp-2">{lesson.description}</p>
-        )}
-        <div className="flex items-center gap-1.5 sm:gap-2 mt-1.5 sm:mt-2">
+        <div className="flex items-center gap-1.5 sm:gap-2 sm:ml-auto shrink-0">
           <Chip size="sm" variant="flat" color="primary" className="text-[10px] sm:text-xs">{lesson.course.title}</Chip>
           <Chip size="sm" variant="flat" className="text-[10px] sm:text-xs">{totalItems} từ vựng</Chip>
         </div>
       </div>
 
-      {/* Progress Card */}
-      <ProgressCard
-        totalItems={totalItems}
-        learnedCount={progress?.learnedCount ?? 0}
-        masteredCount={progress?.masteredCount ?? 0}
-        totalTimeSec={progress?.totalTimeSec ?? 0}
-        masteryPercent={progress?.masteryPercent ?? 0}
-      />
+      {/* Progress Card — compact inline */}
+      <div>
+        <ProgressCard
+          totalItems={totalItems}
+          learnedCount={progress?.learnedCount ?? 0}
+          masteredCount={progress?.masteredCount ?? 0}
+          totalTimeSec={progress?.totalTimeSec ?? 0}
+          masteryPercent={progress?.masteryPercent ?? 0}
+        />
+      </div>
 
       {/* Practice Tabs — icon-only on mobile, icon+label on sm+ */}
       <div>
@@ -225,14 +234,14 @@ export default function LessonPracticeView({
           ))}
         </Tabs>
 
-        {/* Tab content — spinner overlay during transitions */}
-        <div className="relative mt-3 sm:mt-4">
+        {/* Tab content — fills remaining height, scrolls internally on desktop */}
+        <div className="relative mt-3">
           {isPending && (
-            <div className="absolute inset-0 z-10 flex items-center justify-center bg-background/60 backdrop-blur-[1px] rounded-xl min-h-48">
+            <div className="absolute inset-0 z-10 flex items-center justify-center bg-background/60 backdrop-blur-[1px] rounded-xl">
               <Spinner size="lg" color="primary" label="Đang tải..." />
             </div>
           )}
-          {activeTab === "lookup" && (
+          {activeTab === PracticeMode.LOOKUP && (
             <LookupTab
               vocabularies={vocabs}
               lessonId={lessonId}
@@ -240,7 +249,7 @@ export default function LessonPracticeView({
               onProgressUpdate={handleRefreshProgress}
             />
           )}
-          {activeTab === "flashcard" && (
+          {activeTab === PracticeMode.FLASHCARD && (
             <FlashcardTab
               vocabularies={vocabs}
               lessonId={lessonId}
@@ -248,21 +257,21 @@ export default function LessonPracticeView({
               onProgressUpdate={handleRefreshProgress}
             />
           )}
-          {activeTab === "quiz" && (
+          {activeTab === PracticeMode.QUIZ && (
             <QuizTab
               vocabularies={vocabs}
               lessonId={lessonId}
               onProgressUpdate={handleRefreshProgress}
             />
           )}
-          {activeTab === "listen" && (
+          {activeTab === PracticeMode.LISTEN && (
             <ListenTab
               vocabularies={vocabs}
               lessonId={lessonId}
               onProgressUpdate={handleRefreshProgress}
             />
           )}
-          {activeTab === "write" && (
+          {activeTab === PracticeMode.WRITE && (
             <WriteTab
               vocabularies={vocabs}
               lessonId={lessonId}
@@ -272,10 +281,9 @@ export default function LessonPracticeView({
         </div>
       </div>
 
-      {/* Sibling lessons nav — sticky bottom on mobile */}
+      {/* Sibling lessons nav — fixed footer */}
       {siblings.length > 1 && (
-        <div className="fixed bottom-0 left-0 right-0 sm:relative sm:bottom-auto bg-background/95 backdrop-blur border-t sm:border-t-0 sm:border border-divider sm:rounded-lg shadow-none p-2 sm:p-3 z-40">
-          <p className="text-xs text-default-400 mb-1.5 px-1 hidden sm:block">Các bài học khác</p>
+        <div className="border-t border-divider pt-3 mt-4">
           <div ref={siblingScrollRef} className="flex gap-1.5 overflow-x-auto scrollbar-hide pb-safe">
             {siblings.map((s) => {
               const isCurrent = s.id === lessonId
@@ -289,8 +297,7 @@ export default function LessonPracticeView({
                   {...(isCurrent ? { "data-active-lesson": true } : {})}
                   onPress={() => {
                     if (!isCurrent) {
-                      // Always reset to lookup tab when switching lesson
-                      router.push(`/portal/student/practice/${s.slug}`)
+                      router.push(`${practiceBasePath}/${s.slug}`)
                     }
                   }}
                 >

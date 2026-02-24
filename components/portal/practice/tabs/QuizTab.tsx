@@ -37,6 +37,7 @@ export default function QuizTab({ vocabularies, lessonId, onProgressUpdate }: Pr
   const questionStartRef = useRef(0)
   const autoNextTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null)
   const countdownIntervalRef = useRef<ReturnType<typeof setInterval> | null>(null)
+  const isAdvancingRef = useRef(false)
   const { speak } = useSpeech()
 
   // Initialize time refs
@@ -110,6 +111,9 @@ export default function QuizTab({ vocabularies, lessonId, onProgressUpdate }: Pr
   }, [])
 
   const handleNext = useCallback(async () => {
+    // Guard against double-advance (auto-timer + manual click race)
+    if (isAdvancingRef.current) return
+    isAdvancingRef.current = true
     clearAutoNext()
     if (currentIdx < totalQ - 1) {
       setCurrentIdx((i) => i + 1)
@@ -126,6 +130,8 @@ export default function QuizTab({ vocabularies, lessonId, onProgressUpdate }: Pr
       }
       onProgressUpdate()
     }
+    // Reset guard after React has flushed the state update
+    requestAnimationFrame(() => { isAdvancingRef.current = false })
   }, [currentIdx, totalQ, sessionId, onProgressUpdate, clearAutoNext])
 
   const handleSelect = useCallback(
@@ -290,7 +296,7 @@ export default function QuizTab({ vocabularies, lessonId, onProgressUpdate }: Pr
         </div>
       )}
 
-      {/* Prev/Next navigation (for reviewing previous questions) */}
+      {/* Prev/Next navigation — only go back to review, forward requires answering */}
       {!showResult && (
         <div className="flex items-center justify-between mt-4">
           <Button
@@ -311,17 +317,11 @@ export default function QuizTab({ vocabularies, lessonId, onProgressUpdate }: Pr
           <span className="text-xs text-default-400">
             {currentIdx + 1}/{totalQ}
           </span>
+          {/* Forward button disabled — must answer the question to proceed */}
           <Button
             variant="bordered"
             size="sm"
-            isDisabled={currentIdx >= totalQ - 1}
-            onPress={() => {
-              if (currentIdx < totalQ - 1) {
-                setCurrentIdx((i) => i + 1)
-                setSelectedKey(null)
-                setShowResult(false)
-              }
-            }}
+            isDisabled
             endContent={<ChevronRight className="w-4 h-4" />}
           >
             Tiếp

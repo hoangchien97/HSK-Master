@@ -298,15 +298,20 @@ async function recomputeLessonProgress(studentId: string, lessonId: string) {
     try {
       const lesson = await prisma.lesson.findUnique({
         where: { id: lessonId },
-        select: { title: true, slug: true, order: true },
+        select: {
+          title: true, slug: true, order: true,
+          course: { select: { level: true } },
+        },
       });
       if (lesson) {
+        const levelMatch = lesson.course.level?.match(/^HSK\s*(\d+)$/i);
+        const levelSlug = levelMatch ? `hsk${levelMatch[1]}` : 'other';
         await createNotification({
           userId: studentId,
           type: NotificationType.PRACTICE_LESSON_MASTERED,
           title: '🎉 Thành thạo bài học!',
           message: `Bạn đã thành thạo bài ${lesson.order}: "${lesson.title}" (${Math.round(masteryPercent)}%)`,
-          link: `/portal/student/practice/${lesson.slug || lessonId}`,
+          link: `/portal/student/practice/${levelSlug}/${lesson.slug || lessonId}`,
         });
       }
     } catch (e) { console.error('Practice milestone notification error:', e); }

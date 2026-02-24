@@ -79,7 +79,7 @@ export default function LookupTab({ vocabularies, lessonId, itemProgress, onProg
         <Chip size="sm" variant="flat" color="primary">{filteredVocabs.length} từ vựng</Chip>
       </div>
 
-      {/* Vocabulary list */}
+      {/* Vocabulary list — internal scroll on desktop, natural scroll on mobile */}
       {filteredVocabs.length === 0 ? (
         <Card>
           <CardBody className="py-12 text-center">
@@ -90,16 +90,18 @@ export default function LookupTab({ vocabularies, lessonId, itemProgress, onProg
           </CardBody>
         </Card>
       ) : (
-        <div className="grid gap-2">
-          {filteredVocabs.map((vocab) => (
-            <VocabItem
-              key={vocab.id}
-              vocab={vocab}
-              progress={itemProgress[vocab.id]}
-              onSelect={handleSelectVocab}
-              onPlayAudio={playAudio}
-            />
-          ))}
+        <div>
+          <div className="grid gap-2">
+            {filteredVocabs.map((vocab) => (
+              <VocabItem
+                key={vocab.id}
+                vocab={vocab}
+                progress={itemProgress[vocab.id]}
+                onSelect={handleSelectVocab}
+                onPlayAudio={playAudio}
+              />
+            ))}
+          </div>
         </div>
       )}
 

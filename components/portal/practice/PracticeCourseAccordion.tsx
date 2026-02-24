@@ -105,6 +105,7 @@ export default function PracticeCourseAccordion({ courses, progressMap }: Props)
                   key={lesson.id}
                   lesson={lesson}
                   progress={progressMap[lesson.id]}
+                  levelSlug={`hsk${hskLevel || 0}`}
                 />
               ))}
             </div>
