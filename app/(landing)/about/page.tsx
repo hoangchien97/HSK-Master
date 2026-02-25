@@ -20,13 +20,14 @@ export async function generateMetadata(): Promise<Metadata> {
       openGraph: {
         title: "Giới thiệu | Ruby HSK",
         description: "Tìm hiểu về HSK Master - Trung tâm tiếng Trung uy tín",
-        images: ["/api/og"],
+        url: "/about",
+        images: ["/preview/thumb.png"],
       },
       twitter: {
         card: "summary_large_image",
         title: "Giới thiệu | Ruby HSK",
         description: "Tìm hiểu về HSK Master - Trung tâm tiếng Trung uy tín",
-        images: ["/api/og"],
+        images: ["/preview/thumb.png"],
       },
     }
   );

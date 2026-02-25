@@ -1,8 +1,9 @@
 import { prisma } from "@/lib/prisma";
 import type { Metadata } from "next";
 
-/** Default OG image — always available, no external dependency */
-const DEFAULT_OG_IMAGE = "/api/og";
+/** Default OG image — static, always available */
+const DEFAULT_OG_IMAGE = "/preview/thumb.png";
+const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || "https://ruby-hsk.vercel.app";
 
 /**
  * Get page metadata from database
@@ -24,6 +25,7 @@ export async function getPageMetadata(pagePath: string): Promise<Metadata | null
     }
 
     const ogImage = pageMetadata.ogImage || DEFAULT_OG_IMAGE;
+    const pageUrl = pagePath === "/" ? SITE_URL : `${SITE_URL}${pagePath}`;
 
     return {
       title: pageMetadata.title,
@@ -33,6 +35,7 @@ export async function getPageMetadata(pagePath: string): Promise<Metadata | null
       openGraph: {
         title: pageMetadata.ogTitle || pageMetadata.title,
         description: pageMetadata.ogDescription || pageMetadata.description,
+        url: pageUrl,
         images: [ogImage],
         type: (pageMetadata.ogType as "website" | "article") || "website",
       },
@@ -62,6 +65,7 @@ export const DEFAULT_METADATA: Metadata = {
   openGraph: {
     title: "Ruby HSK - Trung tâm tiếng Trung uy tín",
     description: "Học tiếng Trung chất lượng cao với Ruby HSK",
+    url: SITE_URL,
     images: [DEFAULT_OG_IMAGE],
     type: "website",
   },

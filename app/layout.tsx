@@ -80,7 +80,7 @@ export const metadata: Metadata = {
     description: "Trung tâm tiếng Trung Ruby HSK - Đào tạo HSK 1-6, giao tiếp, thương mại. Cam kết đầu ra.",
     images: [
       {
-        url: "/api/og",
+        url: "/preview/thumb.png",
         width: 1200,
         height: 630,
         alt: "Ruby HSK - Trung tâm tiếng Trung uy tín tại Hà Nội",
@@ -96,7 +96,7 @@ export const metadata: Metadata = {
     creator: "@hskruby",
     title: "Ruby HSK - Trung tâm tiếng Trung uy tín",
     description: "Đào tạo HSK 1-6, giao tiếp, thương mại. Cam kết đầu ra.",
-    images: ["/api/og"],
+    images: ["/preview/thumb.png"],
   },
 
   // Robots - Enhanced

@@ -15,13 +15,14 @@ export async function generateMetadata(): Promise<Metadata> {
     openGraph: {
       title: "Liên hệ | Ruby HSK",
       description: "Liên hệ HSK Master để được tư vấn lộ trình học tiếng Trung và đăng ký khóa học. Hotline: 0965 322 136",
-      images: ["/api/og"],
+      url: "/contact",
+      images: ["/preview/thumb.png"],
     },
     twitter: {
       card: "summary_large_image",
       title: "Liên hệ | Ruby HSK",
       description: "Liên hệ HSK Master để được tư vấn lộ trình học tiếng Trung và đăng ký khóa học. Hotline: 0965 322 136",
-      images: ["/api/og"],
+      images: ["/preview/thumb.png"],
     },
   };
 }

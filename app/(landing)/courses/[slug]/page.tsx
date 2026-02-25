@@ -56,13 +56,13 @@ export async function generateMetadata({ params }: Props) {
     return {
       title: "Khóa học không tồn tại",
       description: "Khóa học bạn tìm kiếm không tồn tại hoặc đã bị xóa.",
-      openGraph: { images: ["/api/og"] },
-      twitter: { card: "summary_large_image", images: ["/api/og"] },
+      openGraph: { images: ["/preview/thumb.png"] },
+      twitter: { card: "summary_large_image", images: ["/preview/thumb.png"] },
     };
   }
 
   const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://hskmaster.edu.vn";
-  const ogImage = course.ogImage || course.image || "/api/og";
+  const ogImage = course.ogImage || course.image || "/preview/thumb.png";
 
   return {
     title: course.metaTitle || course.title || "Khóa học",
