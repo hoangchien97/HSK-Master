@@ -34,9 +34,9 @@ const CONTACTS: ContactItem[] = [
   },
 ];
 
-const springTransition = { type: "spring", stiffness: 260, damping: 20 } as const;
-const pulseAnimation = { scale: [1, 1.3, 1], opacity: [0.75, 0, 0.75] } as const;
-const badgeAnimation = { scale: [1, 1.2, 1] } as const;
+const springTransition = { type: "spring" as const, stiffness: 260, damping: 20 };
+const pulseAnimation = { scale: [1, 1.3, 1], opacity: [0.75, 0, 0.75] };
+const badgeAnimation = { scale: [1, 1.2, 1] };
 
 export default function ContactBubbles() {
   const [visible, setVisible] = useState<Record<string, boolean>>(
