@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
+import { Geist, Geist_Mono, Noto_Sans, Noto_Sans_SC } from "next/font/google";
 import "./globals.css";
 import { WebVitals } from "@/components/landing/shared";
 import * as TooltipPrimitive from '@radix-ui/react-tooltip';
@@ -8,6 +8,7 @@ import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { generateOrganizationSchema, generateWebsiteSchema } from '@/lib/structured-data';
 import { SessionProvider } from "next-auth/react";
+import { MaterialIconsLoader } from "@/components/landing/shared/MaterialIconsLoader";
 import { Suspense } from "react";
 import { HeroUIProvider } from "@/providers";
 
@@ -19,6 +20,20 @@ const geistSans = Geist({
 const geistMono = Geist_Mono({
   variable: "--font-geist-mono",
   subsets: ["latin"],
+});
+
+const notoSans = Noto_Sans({
+  variable: "--font-noto-sans",
+  subsets: ["latin", "vietnamese"],
+  weight: ["400", "500", "700"],
+  display: "swap",
+});
+
+const notoSansSC = Noto_Sans_SC({
+  variable: "--font-noto-sans-sc",
+  subsets: ["latin"],
+  weight: ["400", "500", "700"],
+  display: "swap",
 });
 
 const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://hskmaster.edu.vn";
@@ -65,11 +80,11 @@ export const metadata: Metadata = {
     description: "Trung tâm tiếng Trung Ruby HSK - Đào tạo HSK 1-6, giao tiếp, thương mại. Cam kết đầu ra.",
     images: [
       {
-        url: `${siteUrl}/og-image.jpg`,
+        url: "/api/og",
         width: 1200,
         height: 630,
-        alt: "Ruby HSK - Trung tâm tiếng Trung",
-        type: "image/jpeg",
+        alt: "Ruby HSK - Trung tâm tiếng Trung uy tín tại Hà Nội",
+        type: "image/png",
       },
     ],
   },
@@ -81,7 +96,7 @@ export const metadata: Metadata = {
     creator: "@hskruby",
     title: "Ruby HSK - Trung tâm tiếng Trung uy tín",
     description: "Đào tạo HSK 1-6, giao tiếp, thương mại. Cam kết đầu ra.",
-    images: [`${siteUrl}/og-image.jpg`],
+    images: ["/api/og"],
   },
 
   // Robots - Enhanced
@@ -139,10 +154,7 @@ export default function RootLayout({
   return (
     <html lang="vi" suppressHydrationWarning className="light">
       <head>
-        <link
-          href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&family=Noto+Sans+SC:wght@400;500;700&family=Noto+Sans:wght@400;500;700&display=swap"
-          rel="stylesheet"
-        />
+        <MaterialIconsLoader />
         <meta name="apple-mobile-web-app-title" content="Ruby HSK" />
         {/* Structured Data - Organization & Website Schema */}
         <script
@@ -159,7 +171,7 @@ export default function RootLayout({
         />
       </head>
       <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased min-h-screen bg-background-light dark:bg-background-dark text-text-main-light dark:text-text-main-dark flex flex-col`}
+        className={`${geistSans.variable} ${geistMono.variable} ${notoSans.variable} ${notoSansSC.variable} antialiased min-h-screen bg-background-light dark:bg-background-dark text-text-main-light dark:text-text-main-dark flex flex-col`}
         suppressHydrationWarning
       >
         <SessionProvider refetchInterval={300} refetchOnWindowFocus={false}>

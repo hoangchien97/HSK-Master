@@ -1,5 +1,5 @@
-import { Button } from "@heroui/react";
-import { Header, Footer, ScrollToTop, ContactBubbles } from "@/components/landing/shared";
+import { Header, Footer } from "@/components/landing/shared";
+import { LazyFloatingWidgets } from "@/components/landing/shared/LazyFloatingWidgets";
 
 export default function LandingLayout({
   children,
@@ -11,8 +11,7 @@ export default function LandingLayout({
       <Header />
       <main className="flex-1">{children}</main>
       <Footer />
-      <ScrollToTop />
-      <ContactBubbles />
+      <LazyFloatingWidgets />
     </>
   )
 }

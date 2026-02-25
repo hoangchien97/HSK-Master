@@ -12,6 +12,17 @@ export async function generateMetadata(): Promise<Metadata> {
     title: "Liên hệ - HSK Master | Tư vấn khóa học tiếng Trung",
     description:
       "Liên hệ HSK Master để được tư vấn lộ trình học tiếng Trung và đăng ký khóa học phù hợp. Hotline: 0965 322 136",
+    openGraph: {
+      title: "Liên hệ | Ruby HSK",
+      description: "Liên hệ HSK Master để được tư vấn lộ trình học tiếng Trung và đăng ký khóa học. Hotline: 0965 322 136",
+      images: ["/api/og"],
+    },
+    twitter: {
+      card: "summary_large_image",
+      title: "Liên hệ | Ruby HSK",
+      description: "Liên hệ HSK Master để được tư vấn lộ trình học tiếng Trung và đăng ký khóa học. Hotline: 0965 322 136",
+      images: ["/api/og"],
+    },
   };
 }
 
@@ -85,14 +96,14 @@ export default function ContactPage() {
             <ContactInfo />
             <div className="aspect-video w-full overflow-hidden rounded-2xl border border-border-light dark:border-border-dark shadow-sm relative bg-gray-100 dark:bg-gray-800">
               <iframe
-                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3723.0686896934486!2d105.71234267503273!3d21.08894998054054!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x313454b32ca0bb49%3A0x91f2fb14e5cc8e10!2zWMOzbSBD4bqndSBMw6JvLCDDlCBEacOqbiwgxJBhbiBQaMaw4bujbmcsIEjDoCBO4buZaSwgVmnhu4d0IE5hbQ!5e0!3m2!1svi!2s!4v1735650000000!5m2!1svi!2s"
+                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3722.0712!2d105.7239288!3d21.1044112!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x313455006ecd7a71%3A0x8fbbefa206eecfc2!2zQ-G7rWEgaMOgbmcgc8OhY2ggQ2hp4bq_biBOZ-G7jWM!5e0!3m2!1svi!2svn!4v1740537600000!5m2!1svi!2svn"
                 width="100%"
                 height="100%"
                 style={{ border: 0 }}
                 allowFullScreen
                 loading="lazy"
                 referrerPolicy="no-referrer-when-downgrade"
-                className="absolute inset-0 grayscale hover:grayscale-0 transition-all duration-500"
+                className="absolute inset-0"
               />
             </div>
           </AnimatedSection>

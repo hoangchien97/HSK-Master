@@ -16,6 +16,17 @@ export async function generateMetadata(): Promise<Metadata> {
     title: "Danh sách khóa học tiếng Trung | HSK 1–6",
     description:
       "Chinh phục HSK từ 1 đến 6 với lộ trình hợp lý, tập trung vào giao tiếp và kỹ năng làm bài thi.",
+    openGraph: {
+      title: "Khóa học tiếng Trung | Ruby HSK",
+      description: "Chinh phục HSK từ 1 đến 6 với lộ trình hợp lý, tập trung vào giao tiếp và kỹ năng làm bài thi.",
+      images: ["/api/og"],
+    },
+    twitter: {
+      card: "summary_large_image",
+      title: "Khóa học tiếng Trung | Ruby HSK",
+      description: "Chinh phục HSK từ 1 đến 6 với lộ trình hợp lý, tập trung vào giao tiếp và kỹ năng làm bài thi.",
+      images: ["/api/og"],
+    },
   };
 }
 

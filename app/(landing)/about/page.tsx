@@ -17,6 +17,17 @@ export async function generateMetadata(): Promise<Metadata> {
     metadata || {
       title: "Giới thiệu",
       description: "Tìm hiểu về HSK Master - Trung tâm tiếng Trung uy tín",
+      openGraph: {
+        title: "Giới thiệu | Ruby HSK",
+        description: "Tìm hiểu về HSK Master - Trung tâm tiếng Trung uy tín",
+        images: ["/api/og"],
+      },
+      twitter: {
+        card: "summary_large_image",
+        title: "Giới thiệu | Ruby HSK",
+        description: "Tìm hiểu về HSK Master - Trung tâm tiếng Trung uy tín",
+        images: ["/api/og"],
+      },
     }
   );
 }

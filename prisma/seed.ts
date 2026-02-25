@@ -156,7 +156,7 @@ async function main() {
       description: "Khóa học HSK 1 dành cho người mới bắt đầu. Làm quen với tiếng Trung từ con số 0, học cách chào hỏi và giao tiếp cơ bản.",
       image: "https://images.unsplash.com/photo-1516979187457-637abb4f9353?w=800&h=450&fit=crop&q=80",
       instructor: "Cô Trần Hồng Ngọc",
-      instructorAvatar: "https://i.pravatar.cc/150?img=5",
+      instructorAvatar: "https://ukbeoggejnqgdxqoqkvj.supabase.co/storage/v1/object/public/avatars/cmlzc6puk00065ivu2okymziv/teacher.jpg",
       level: "HSK 1",
       badgeText: "Mới bắt đầu",
       badgeColor: "bg-orange-100 text-orange-800 dark:bg-orange-900/30 dark:text-orange-200",
@@ -698,8 +698,8 @@ async function main() {
     { url: "https://images.unsplash.com/photo-1582192730841-2a682d7375f9?w=1200&h=800&fit=crop&q=80", title: "Ẩm thực Trung Hoa", description: "Thưởng thức các món ăn truyền thống" },
     { url: "https://images.unsplash.com/photo-1513673054901-2b5f51551112?w=1200&h=800&fit=crop&q=80", title: "Đèn lồng đỏ", description: "Trang trí lễ hội Tết Nguyên Đán" },
     { url: "https://images.unsplash.com/photo-1604928141064-207cea6f571f?w=1200&h=800&fit=crop&q=80", title: "Trà đạo", description: "Tìm hiểu nghệ thuật pha trà Trung Quốc" },
-    { url: "https://images.unsplash.com/photo-1590736969955-71cc94901144?w=1200&h=800&fit=crop&q=80", title: "Cắt giấy nghệ thuật", description: "Học nghệ thuật cắt giấy truyền thống" },
-    { url: "https://images.unsplash.com/photo-1517325003633-93e8e9750e70?w=1200&h=800&fit=crop&q=80", title: "Trung thu", description: "Lễ hội Trung thu cùng học viên" },
+    { url: "https://images.unsplash.com/photo-1611329695518-1763fc1cc4ef?w=1200&h=800&fit=crop&q=80", title: "Cắt giấy nghệ thuật", description: "Học nghệ thuật cắt giấy truyền thống" },
+    { url: "https://images.unsplash.com/photo-1508739773434-c26b3d09e071?w=1200&h=800&fit=crop&q=80", title: "Trung thu", description: "Lễ hội Trung thu cùng học viên" },
   ].map((p, i) => ({ albumId: albums[1].id, ...p, order: i + 1 }))
 
   // Album 3: Lễ tốt nghiệp — real Unsplash photos of graduation/celebration

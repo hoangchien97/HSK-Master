@@ -67,10 +67,10 @@ export default function CourseCard({ course }: CourseCardProps) {
           {course.instructorAvatar ? (
             <Image
               src={course.instructorAvatar}
-              alt={"Instructor"}
+              alt={course.instructor || "Instructor"}
               width={36}
               height={36}
-              className="rounded-full ring-2 ring-gray-200 dark:ring-gray-700"
+              className="rounded-full ring-2 ring-gray-200 dark:ring-gray-700 object-cover aspect-square"
             />
           ) : (
             <div className="size-9 rounded-full bg-gradient-to-br from-orange-400 to-red-600 flex items-center justify-center text-white text-sm font-bold shadow-md">

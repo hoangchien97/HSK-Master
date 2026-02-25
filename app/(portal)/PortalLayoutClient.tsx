@@ -25,7 +25,7 @@ function PortalLayoutInner({ user, children }: PortalLayoutClientProps) {
   const [sidebarOpen, setSidebarOpen] = useState(false)
 
   return (
-    <div className="h-screen flex bg-gray-50 overflow-hidden" style={{ fontFamily: "'Noto Sans SC', 'Noto Sans', sans-serif" }}>
+    <div className="h-screen flex bg-gray-50 overflow-hidden font-[family-name:var(--font-noto-sans-sc),var(--font-noto-sans),sans-serif]">
       {/* Toast Notifications */}
       <ToastContainer
         position="top-right"

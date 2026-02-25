@@ -56,10 +56,13 @@ export async function generateMetadata({ params }: Props) {
     return {
       title: "Khóa học không tồn tại",
       description: "Khóa học bạn tìm kiếm không tồn tại hoặc đã bị xóa.",
+      openGraph: { images: ["/api/og"] },
+      twitter: { card: "summary_large_image", images: ["/api/og"] },
     };
   }
 
   const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://hskmaster.edu.vn";
+  const ogImage = course.ogImage || course.image || "/api/og";
 
   return {
     title: course.metaTitle || course.title || "Khóa học",
@@ -68,7 +71,7 @@ export async function generateMetadata({ params }: Props) {
     openGraph: {
       title: course.metaTitle || course.title,
       description: course.metaDescription || course.description || "",
-      images: course.ogImage || course.image ? [course.ogImage || course.image!] : undefined,
+      images: [ogImage],
       type: "website",
       url: `${siteUrl}/courses/${slug}`,
     },
@@ -76,7 +79,7 @@ export async function generateMetadata({ params }: Props) {
       card: "summary_large_image",
       title: course.metaTitle || course.title,
       description: course.metaDescription || course.description || "",
-      images: course.ogImage || course.image ? [course.ogImage || course.image!] : undefined,
+      images: [ogImage],
     },
   };
 }

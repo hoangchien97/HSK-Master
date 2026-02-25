@@ -1,4 +1,4 @@
-import { Home, GraduationCap, Info, Mail, Book, type LucideIcon } from "lucide-react";
+import { Home, GraduationCap, Info, Mail, type LucideIcon } from "lucide-react";
 
 export interface LandingNavItem {
   name: string;
@@ -15,5 +15,4 @@ export const LANDING_NAV_ITEMS: LandingNavItem[] = [
   { name: "Khóa học", icon: GraduationCap, path: "/courses" },
   { name: "Giới thiệu", icon: Info, path: "/about" },
   { name: "Liên hệ", icon: Mail, path: "/contact" },
-  // { name: "Tài liệu", icon: Book, path: "/vocabulary" },
 ];

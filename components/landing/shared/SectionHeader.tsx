@@ -26,7 +26,7 @@ export default function SectionHeader({
       </div>
 
       {/* Title with Gradient Animation */}
-      <h2 className="text-xl sm:text-2xl md:text-3xl lg:text-4xl font-bold mb-2 md:mb-3 lg:mb-4 gradient-text animate-gradient px-2">
+      <h2 className="text-xl sm:text-2xl md:text-3xl lg:text-4xl font-bold mb-2 md:mb-3 lg:mb-4 gradient-text animate-gradient px-2 !leading-normal">
         {title}
       </h2>
 

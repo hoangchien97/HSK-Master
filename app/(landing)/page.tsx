@@ -18,6 +18,17 @@ export async function generateMetadata(): Promise<Metadata> {
     title: "Trung tâm tiếng Trung uy tín | Lộ trình HSK bài bản",
     description:
       "Trung tâm tiếng Trung chuyên đào tạo HSK từ cơ bản đến nâng cao. Đăng ký học thử miễn phí.",
+    openGraph: {
+      title: "Ruby HSK - Trung tâm tiếng Trung uy tín tại Hà Nội",
+      description: "Trung tâm tiếng Trung chuyên đào tạo HSK từ cơ bản đến nâng cao. Đăng ký học thử miễn phí.",
+      images: ["/api/og"],
+    },
+    twitter: {
+      card: "summary_large_image",
+      title: "Ruby HSK - Trung tâm tiếng Trung uy tín tại Hà Nội",
+      description: "Trung tâm tiếng Trung chuyên đào tạo HSK từ cơ bản đến nâng cao. Đăng ký học thử miễn phí.",
+      images: ["/api/og"],
+    },
   };
 }
 

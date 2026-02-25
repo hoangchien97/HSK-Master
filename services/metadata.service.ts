@@ -1,6 +1,9 @@
 import { prisma } from "@/lib/prisma";
 import type { Metadata } from "next";
 
+/** Default OG image — always available, no external dependency */
+const DEFAULT_OG_IMAGE = "/api/og";
+
 /**
  * Get page metadata from database
  * @param pagePath - The page path (e.g., "/", "/about", "/contact")
@@ -20,6 +23,8 @@ export async function getPageMetadata(pagePath: string): Promise<Metadata | null
       return null;
     }
 
+    const ogImage = pageMetadata.ogImage || DEFAULT_OG_IMAGE;
+
     return {
       title: pageMetadata.title,
       description: pageMetadata.description,
@@ -28,14 +33,14 @@ export async function getPageMetadata(pagePath: string): Promise<Metadata | null
       openGraph: {
         title: pageMetadata.ogTitle || pageMetadata.title,
         description: pageMetadata.ogDescription || pageMetadata.description,
-        images: pageMetadata.ogImage ? [pageMetadata.ogImage] : undefined,
+        images: [ogImage],
         type: (pageMetadata.ogType as "website" | "article") || "website",
       },
       twitter: {
         card: (pageMetadata.twitterCard as "summary" | "summary_large_image") || "summary_large_image",
         title: pageMetadata.twitterTitle || pageMetadata.ogTitle || pageMetadata.title,
         description: pageMetadata.twitterDescription || pageMetadata.ogDescription || pageMetadata.description,
-        images: pageMetadata.twitterImage || pageMetadata.ogImage ? [pageMetadata.twitterImage || pageMetadata.ogImage!] : undefined,
+        images: [pageMetadata.twitterImage || ogImage],
       },
       alternates: pageMetadata.canonicalUrl ? {
         canonical: pageMetadata.canonicalUrl,
@@ -57,9 +62,11 @@ export const DEFAULT_METADATA: Metadata = {
   openGraph: {
     title: "Ruby HSK - Trung tâm tiếng Trung uy tín",
     description: "Học tiếng Trung chất lượng cao với Ruby HSK",
+    images: [DEFAULT_OG_IMAGE],
     type: "website",
   },
   twitter: {
     card: "summary_large_image",
+    images: [DEFAULT_OG_IMAGE],
   },
 };

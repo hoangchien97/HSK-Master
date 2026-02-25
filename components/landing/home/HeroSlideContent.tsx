@@ -1,6 +1,7 @@
 'use client';
 
 import { motion } from 'framer-motion';
+import Image from 'next/image';
 import { Button, Badge } from '@/components/landing/common';
 import TypingText from './TypingText';
 import type { HeroSlide } from '@/services';
@@ -18,16 +19,23 @@ export default function HeroSlideContent({
 }: HeroSlideContentProps) {
   return (
     <div className="relative flex items-center h-full overflow-hidden bg-gray-900">
-      {/* Background Image with Ken Burns Effect */}
-      <motion.img
-        alt={slide.title}
-        className="absolute inset-0 w-full h-full object-cover"
-        src={slide.image}
-        initial={animated ? { scale: 1.05 } : { scale: 1 }}
-        animate={animated && isActive ? { scale: 1 } : { scale: 1.05 }}
-        transition={{ duration: 8, ease: 'linear' }}
+      {/* Background Image with Ken Burns Effect — Next.js Image for LCP */}
+      <div
+        className={`absolute inset-0 transition-transform duration-[8000ms] ease-linear ${
+          animated && isActive ? 'scale-100' : 'scale-105'
+        }`}
         style={{ opacity: 0.85 }}
-      />
+      >
+        <Image
+          alt={slide.title}
+          src={slide.image}
+          fill
+          priority
+          sizes="100vw"
+          className="object-cover"
+          quality={75}
+        />
+      </div>
 
       {/* Enhanced Overlay Gradient - Only on Background */}
       <div className={`absolute inset-0 bg-gradient-to-r ${slide.overlayGradient}`} style={{ opacity: 0.7 }} />
