@@ -1,6 +1,6 @@
 "use client"
 
-import { useState, useEffect, useCallback, useRef } from "react"
+import { useState, useEffect, useCallback, useRef, useMemo } from "react"
 import { Button, Card, CardBody, Chip, Progress } from "@heroui/react"
 import { Volume2, ChevronLeft, ChevronRight } from "lucide-react"
 import {
@@ -24,7 +24,7 @@ interface Props {
 }
 
 export default function QuizTab({ vocabularies, lessonId, onProgressUpdate }: Props) {
-  const [questions, setQuestions] = useState<QuizQuestion[]>([])
+  const [generationKey, setGenerationKey] = useState(0)
   const [currentIdx, setCurrentIdx] = useState(0)
   const [selectedKey, setSelectedKey] = useState<string | null>(null)
   const [showResult, setShowResult] = useState(false)
@@ -40,19 +40,27 @@ export default function QuizTab({ vocabularies, lessonId, onProgressUpdate }: Pr
   const isAdvancingRef = useRef(false)
   const { speak } = useSpeech()
 
+  // Derive questions from vocabularies + generationKey (avoids setState-in-effect)
+  const questions = useMemo(
+    () => generateQuizQuestions(vocabularies),
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [vocabularies, generationKey]
+  )
+
+  // Reset quiz state when vocabularies change (React 19 "adjust state during render" pattern)
+  const [prevVocabularies, setPrevVocabularies] = useState(vocabularies)
+  if (vocabularies !== prevVocabularies) {
+    setPrevVocabularies(vocabularies)
+    setCurrentIdx(0)
+    setSelectedKey(null)
+    setShowResult(false)
+  }
+
   // Initialize time refs
   useEffect(() => {
     startTimeRef.current = Date.now()
     questionStartRef.current = Date.now()
   }, [])
-
-  // Generate questions — also reset index so currentQ never goes out of bounds
-  useEffect(() => {
-    setQuestions(generateQuizQuestions(vocabularies))
-    setCurrentIdx(0)
-    setSelectedKey(null)
-    setShowResult(false)
-  }, [vocabularies])
 
   // Start session
   useEffect(() => {
@@ -177,7 +185,7 @@ export default function QuizTab({ vocabularies, lessonId, onProgressUpdate }: Pr
 
   const handleRestart = useCallback(() => {
     clearAutoNext()
-    setQuestions(generateQuizQuestions(vocabularies))
+    setGenerationKey(k => k + 1) // triggers useMemo recalculation
     setCurrentIdx(0)
     setSelectedKey(null)
     setShowResult(false)
@@ -188,7 +196,7 @@ export default function QuizTab({ vocabularies, lessonId, onProgressUpdate }: Pr
     startPracticeSessionAction(lessonId, PracticeMode.QUIZ).then((res) => {
       if (res.success && res.data) setSessionId(res.data.sessionId)
     })
-  }, [vocabularies, lessonId, clearAutoNext])
+  }, [lessonId, clearAutoNext])
 
   if (totalQ === 0) {
     return (

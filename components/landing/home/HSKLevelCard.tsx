@@ -11,6 +11,8 @@ import {
   Brain,
   BookOpen,
   Users,
+  Clock,
+  LayoutList,
 } from "lucide-react";
 
 export interface HSKLevel {
@@ -20,6 +22,8 @@ export interface HSKLevel {
   badgeColor: string;
   description: string;
   vocabularyCount: string;
+  lessonCount: number;
+  duration: string;
   targetAudience: string;
   targetIcon: string;
   accentColor: string;
@@ -74,15 +78,23 @@ export default function HSKLevelCard({ level, isLeft }: HSKLevelCardProps) {
             </span>
           </div>
 
-          {/* Stats */}
-          <div className={`flex flex-col sm:flex-row gap-1.5 sm:gap-2 md:gap-3 text-[10px] sm:text-xs ${isLeft ? "items-end sm:justify-end" : "items-start sm:justify-start"}`}>
-            <div className="flex items-center gap-1 sm:gap-1.5 bg-gray-100 dark:bg-gray-700 rounded-full px-2 py-1 sm:px-3 sm:py-1.5">
-              <BookOpen className="w-2.5 h-2.5 sm:w-3 sm:h-3 md:w-3.5 md:h-3.5 text-red-600 dark:text-red-400" />
-              <span className="font-medium text-gray-700 dark:text-gray-200">{level.vocabularyCount}</span>
+          {/* Stats — 2×2 grid on mobile, row on sm+ */}
+          <div className={`grid grid-cols-2 sm:flex sm:flex-wrap gap-1 sm:gap-1.5 text-[10px] sm:text-xs ${isLeft ? "sm:justify-end" : "sm:justify-start"}`}>
+            <div className="flex items-center gap-1 sm:gap-1.5 bg-gray-100 dark:bg-gray-700 rounded-full px-2 py-1 sm:px-2.5 sm:py-1">
+              <BookOpen className="w-2.5 h-2.5 sm:w-3 sm:h-3 text-red-600 dark:text-red-400 shrink-0" />
+              <span className="font-medium text-gray-700 dark:text-gray-200 truncate">{level.vocabularyCount}</span>
             </div>
-            <div className="flex items-center gap-1 sm:gap-1.5 bg-gray-100 dark:bg-gray-700 rounded-full px-2 py-1 sm:px-3 sm:py-1.5">
-              <Users className="w-2.5 h-2.5 sm:w-3 sm:h-3 md:w-3.5 md:h-3.5 text-red-600 dark:text-red-400" />
-              <span className="font-medium text-gray-700 dark:text-gray-200">{level.targetAudience}</span>
+            <div className="flex items-center gap-1 sm:gap-1.5 bg-gray-100 dark:bg-gray-700 rounded-full px-2 py-1 sm:px-2.5 sm:py-1">
+              <LayoutList className="w-2.5 h-2.5 sm:w-3 sm:h-3 text-red-600 dark:text-red-400 shrink-0" />
+              <span className="font-medium text-gray-700 dark:text-gray-200">{level.lessonCount} bài</span>
+            </div>
+            <div className="flex items-center gap-1 sm:gap-1.5 bg-gray-100 dark:bg-gray-700 rounded-full px-2 py-1 sm:px-2.5 sm:py-1">
+              <Clock className="w-2.5 h-2.5 sm:w-3 sm:h-3 text-red-600 dark:text-red-400 shrink-0" />
+              <span className="font-medium text-gray-700 dark:text-gray-200">{level.duration}</span>
+            </div>
+            <div className="flex items-center gap-1 sm:gap-1.5 bg-gray-100 dark:bg-gray-700 rounded-full px-2 py-1 sm:px-2.5 sm:py-1">
+              <Users className="w-2.5 h-2.5 sm:w-3 sm:h-3 text-red-600 dark:text-red-400 shrink-0" />
+              <span className="font-medium text-gray-700 dark:text-gray-200 truncate">{level.targetAudience}</span>
             </div>
           </div>
 

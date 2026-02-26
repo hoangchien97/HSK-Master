@@ -43,7 +43,7 @@ CREATE TABLE "Lesson" (
 );
 
 -- CreateTable
-CREATE TABLE "Vocabulary" (
+CREATE TABLE "portal_vocabulary" (
     "id" TEXT NOT NULL,
     "lessonId" TEXT NOT NULL,
     "word" TEXT NOT NULL,
@@ -52,7 +52,7 @@ CREATE TABLE "Vocabulary" (
     "audioUrl" TEXT,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
 
-    CONSTRAINT "Vocabulary_pkey" PRIMARY KEY ("id")
+    CONSTRAINT "portal_vocabulary_pkey" PRIMARY KEY ("id")
 );
 
 -- CreateTable
@@ -156,7 +156,7 @@ ALTER TABLE "Course" ADD CONSTRAINT "Course_categoryId_fkey" FOREIGN KEY ("categ
 ALTER TABLE "Lesson" ADD CONSTRAINT "Lesson_courseId_fkey" FOREIGN KEY ("courseId") REFERENCES "Course"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "Vocabulary" ADD CONSTRAINT "Vocabulary_lessonId_fkey" FOREIGN KEY ("lessonId") REFERENCES "Lesson"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE "portal_vocabulary" ADD CONSTRAINT "portal_vocabulary_lessonId_fkey" FOREIGN KEY ("lessonId") REFERENCES "Lesson"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "Registration" ADD CONSTRAINT "Registration_courseId_fkey" FOREIGN KEY ("courseId") REFERENCES "Course"("id") ON DELETE SET NULL ON UPDATE CASCADE;

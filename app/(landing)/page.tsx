@@ -1,5 +1,7 @@
 import {
   HeroSlideShow,
+  PainPointsSection,
+  SolutionSection,
   HSKLevelsSection,
   WhyChooseUsSection,
   GallerySection,
@@ -8,6 +10,8 @@ import {
 } from "@/components/landing";
 import { AnimatedSection } from "@/components/landing/shared/AnimatedSection";
 import { getPageMetadata } from "@/services/metadata.service";
+import { generateFAQSchema } from "@/lib/structured-data";
+import { FAQ_DATA } from "@/components/landing/contact/ContactFAQ";
 import { Suspense } from "react";
 import type { Metadata } from "next";
 
@@ -18,53 +22,74 @@ export async function generateMetadata(): Promise<Metadata> {
   const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://hskmaster.edu.vn";
   const ogImageUrl = `${siteUrl}/preview/thumb.png`;
   return metadata || {
-    title: "Trung tâm tiếng Trung uy tín | Lộ trình HSK bài bản",
+    title: "Học HSK Online Bài Bản – Đậu Thật, Không Học Vẹt | Ruby HSK",
     description:
-      "Trung tâm tiếng Trung chuyên đào tạo HSK từ cơ bản đến nâng cao. Đăng ký học thử miễn phí.",
+      "Lộ trình học HSK1→HSK6 rõ ràng, 500+ học viên, tỉ lệ đậu 92%. Đăng ký tư vấn miễn phí ngay hôm nay.",
     openGraph: {
-      title: "Ruby HSK - Trung tâm tiếng Trung uy tín tại Hà Nội",
-      description: "Trung tâm tiếng Trung chuyên đào tạo HSK từ cơ bản đến nâng cao. Đăng ký học thử miễn phí.",
+      title: "Học HSK Online Bài Bản – Đậu Thật, Không Học Vẹt | Ruby HSK",
+      description: "Lộ trình học HSK1→HSK6 rõ ràng, 500+ học viên, tỉ lệ đậu 92%. Đăng ký tư vấn miễn phí.",
       url: "/",
-      images: [{ url: ogImageUrl, width: 1200, height: 630, alt: "Ruby HSK - Học HSK Dễ Dàng & Hiệu Quả" }],
+      images: [{ url: ogImageUrl, width: 1200, height: 630, alt: "Ruby HSK – Học HSK Dễ Dàng & Hiệu Quả" }],
     },
     twitter: {
       card: "summary_large_image",
-      title: "Ruby HSK - Trung tâm tiếng Trung uy tín tại Hà Nội",
-      description: "Trung tâm tiếng Trung chuyên đào tạo HSK từ cơ bản đến nâng cao. Đăng ký học thử miễn phí.",
+      title: "Học HSK Online Bài Bản – Đậu Thật, Không Học Vẹt | Ruby HSK",
+      description: "Lộ trình học HSK1→HSK6 rõ ràng, 500+ học viên, tỉ lệ đậu 92%. Đăng ký tư vấn miễn phí.",
       images: [ogImageUrl],
     },
   };
 }
 
+/** FAQ structured data for SEO (Google rich results) */
+const faqSchema = generateFAQSchema(
+  FAQ_DATA.map(({ question, answer }) => ({ question, answer }))
+);
+
 export default async function Home() {
   return (
     <>
-      {/* Hero Slideshow Section - Above the fold, no animation wrapper for faster LCP */}
+      {/* FAQ JSON-LD structured data */}
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }}
+      />
+
+      {/* 1. Hero Slideshow – Above the fold, no animation wrapper for faster LCP */}
       <HeroSlideShow />
 
-      {/* HSK Levels Section */}
+      {/* 2. Pain Points – "Bạn có đang gặp phải những điều này?" */}
+      <AnimatedSection variant="fadeInUp">
+        <PainPointsSection />
+      </AnimatedSection>
+
+      {/* 3. Solution – "Giải pháp từ Ruby HSK" */}
+      <AnimatedSection variant="fadeInUp">
+        <SolutionSection />
+      </AnimatedSection>
+
+      {/* 4. HSK Levels – Lộ trình học rõ ràng */}
       <AnimatedSection variant="fadeInUp">
         <HSKLevelsSection />
       </AnimatedSection>
 
-      {/* Why Choose Us Section */}
+      {/* 5. Why Choose Us */}
       <AnimatedSection variant="fadeInUp">
         <WhyChooseUsSection />
       </AnimatedSection>
 
       {/* Below-fold sections wrapped in Suspense for streaming */}
       <Suspense fallback={null}>
-        {/* Gallery Section */}
+        {/* 6. Gallery */}
         <AnimatedSection variant="fadeInUp">
           <GallerySection />
         </AnimatedSection>
 
-        {/* Reviews Section */}
+        {/* 7. Reviews / Social Proof */}
         <AnimatedSection variant="fadeInUp">
           <ReviewsSection />
         </AnimatedSection>
 
-        {/* CTA Section (Before Footer) */}
+        {/* 8. CTA cuối trang */}
         <AnimatedSection variant="fadeInUp">
           <CTASection />
         </AnimatedSection>

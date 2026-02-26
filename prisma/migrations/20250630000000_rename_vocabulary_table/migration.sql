@@ -1,2 +1,4 @@
--- RenameTable
-ALTER TABLE "Vocabulary" RENAME TO "portal_vocabulary";
+-- This migration was created with an incorrect timestamp (2025-06-30) which caused
+-- it to run before the Vocabulary table was created in 20260103053453_init_v2.
+-- The actual rename is handled by 20260103053454_rename_vocabulary_to_portal.
+-- This file is kept as a no-op to preserve the migration history in production.

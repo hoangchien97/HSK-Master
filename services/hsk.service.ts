@@ -7,6 +7,8 @@ export interface HSKLevel {
   badgeColor: string
   description: string
   vocabularyCount: string
+  lessonCount: number
+  duration: string
   targetAudience: string
   targetIcon: string
   accentColor: string
@@ -28,6 +30,8 @@ export async function getHSKLevels(): Promise<HSKLevel[]> {
       badgeColor: level.badgeColor,
       description: level.description,
       vocabularyCount: level.vocabularyCount,
+      lessonCount: level.lessonCount,
+      duration: level.duration,
       targetAudience: level.targetAudience,
       targetIcon: level.targetIcon,
       accentColor: level.accentColor,
@@ -58,6 +62,8 @@ export async function getHSKLevelByLevel(level: number): Promise<HSKLevel | null
       badgeColor: hskLevel.badgeColor,
       description: hskLevel.description,
       vocabularyCount: hskLevel.vocabularyCount,
+      lessonCount: hskLevel.lessonCount,
+      duration: hskLevel.duration,
       targetAudience: hskLevel.targetAudience,
       targetIcon: hskLevel.targetIcon,
       accentColor: hskLevel.accentColor,

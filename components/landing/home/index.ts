@@ -3,6 +3,8 @@ export { default as HeroSlideShow } from './HeroSlideShow';
 export { default as HeroSlideShowClient } from './HeroSlideShowClient';
 export { default as HeroSlideContent } from './HeroSlideContent';
 export { default as TypingText } from './TypingText';
+export { default as PainPointsSection } from './PainPointsSection';
+export { default as SolutionSection } from './SolutionSection';
 export { default as HSKLevelsSection } from './HSKLevelsSection';
 export { default as HSKLevelCard } from './HSKLevelCard';
 export { default as WhyChooseUsSection } from './WhyChooseUsSection';

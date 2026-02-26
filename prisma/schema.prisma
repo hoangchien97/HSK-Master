@@ -228,6 +228,8 @@ model HSKLevel {
   badgeColor      String
   description     String
   vocabularyCount String
+  lessonCount     Int      @default(0)
+  duration        String   @default("")
   targetAudience  String
   targetIcon      String
   accentColor     String

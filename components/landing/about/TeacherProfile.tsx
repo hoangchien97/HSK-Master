@@ -93,7 +93,7 @@ export default function TeacherProfile() {
             {/* Image */}
             <div className="relative w-32 h-32 md:w-40 md:h-40 rounded-full p-1.5 bg-gradient-to-br from-yellow-400 via-orange-500 to-red-600 shadow-2xl">
               <Image
-                src="https://images.unsplash.com/photo-1551836022-d5d88e9218df?w=400&h=400&fit=crop"
+                src="https://ukbeoggejnqgdxqoqkvj.supabase.co/storage/v1/object/public/avatars/cmlzc6puk00065ivu2okymziv/teacher.jpg"
                 alt="Cô Ngọc"
                 width={160}
                 height={160}
