@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { getPageMetadata } from "@/services/metadata.service";
+import { DEFAULT_IMAGE_PREVIEW } from "@/constants/brand";
 import {
   AboutHero,
   TeacherProfile,
@@ -21,13 +22,13 @@ export async function generateMetadata(): Promise<Metadata> {
         title: "Giới thiệu | Ruby HSK",
         description: "Tìm hiểu về HSK Master - Trung tâm tiếng Trung uy tín",
         url: "/about",
-        images: ["/preview/thumb.png"],
+        images: [DEFAULT_IMAGE_PREVIEW],
       },
       twitter: {
         card: "summary_large_image",
         title: "Giới thiệu | Ruby HSK",
         description: "Tìm hiểu về HSK Master - Trung tâm tiếng Trung uy tín",
-        images: ["/preview/thumb.png"],
+        images: [DEFAULT_IMAGE_PREVIEW],
       },
     }
   );

@@ -1,13 +1,13 @@
 import { prisma } from "@/lib/prisma";
 import type { Metadata } from "next";
+import { DEFAULT_IMAGE_PREVIEW } from "@/constants/brand";
 
-/** Default OG image — static, always available */
-const DEFAULT_OG_IMAGE = "/preview/thumb.png";
+const DEFAULT_OG_IMAGE = DEFAULT_IMAGE_PREVIEW;
 const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || "https://hskmaster.edu.vn";
 
 /**
  * Ensure OG image is an absolute URL so social-media crawlers can resolve it.
- * Relative paths like `/preview/thumb.png` are prefixed with SITE_URL.
+ * Relative paths are prefixed with SITE_URL; absolute URLs pass through unchanged.
  */
 function toAbsoluteImageUrl(img: string): string {
   if (img.startsWith("http")) return img;
@@ -75,11 +75,11 @@ export const DEFAULT_METADATA: Metadata = {
     title: "Ruby HSK - Trung tâm tiếng Trung uy tín",
     description: "Học tiếng Trung chất lượng cao với Ruby HSK",
     url: SITE_URL,
-    images: [{ url: `${SITE_URL}/preview/thumb.png`, width: 1200, height: 630, alt: "Ruby HSK - Trung tâm tiếng Trung uy tín tại Hà Nội" }],
+    images: [{ url: DEFAULT_IMAGE_PREVIEW, width: 1200, height: 630, alt: "Ruby HSK - Trung tâm tiếng Trung uy tín tại Hà Nội" }],
     type: "website",
   },
   twitter: {
     card: "summary_large_image",
-    images: [`${SITE_URL}/preview/thumb.png`],
+    images: [DEFAULT_IMAGE_PREVIEW],
   },
 };

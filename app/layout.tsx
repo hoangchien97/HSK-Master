@@ -3,6 +3,7 @@ import { Geist, Noto_Sans, Noto_Sans_SC } from "next/font/google";
 import "./globals.css";
 import { WebVitals } from "@/components/landing/shared";
 import * as TooltipPrimitive from '@radix-ui/react-tooltip';
+import { DEFAULT_IMAGE_PREVIEW } from "@/constants/brand";
 import NextTopLoader from 'nextjs-toploader';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
@@ -75,7 +76,7 @@ export const metadata: Metadata = {
     description: "Trung tâm tiếng Trung Ruby HSK - Đào tạo HSK 1-6, giao tiếp, thương mại. Cam kết đầu ra.",
     images: [
       {
-        url: "/preview/thumb.png",
+        url: DEFAULT_IMAGE_PREVIEW,
         width: 1200,
         height: 630,
         alt: "Ruby HSK - Trung tâm tiếng Trung uy tín tại Hà Nội",
@@ -91,7 +92,7 @@ export const metadata: Metadata = {
     creator: "@hskruby",
     title: "Ruby HSK - Trung tâm tiếng Trung uy tín",
     description: "Đào tạo HSK 1-6, giao tiếp, thương mại. Cam kết đầu ra.",
-    images: ["/preview/thumb.png"],
+    images: [DEFAULT_IMAGE_PREVIEW],
   },
 
   // Robots - Enhanced

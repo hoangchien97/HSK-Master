@@ -6,6 +6,10 @@ import { generateSlug } from '@/utils/slug'
 
 const prisma = new PrismaClient()
 
+/** Supabase-hosted share-preview image */
+const DEFAULT_IMAGE_PREVIEW =
+  'https://ukbeoggejnqgdxqoqkvj.supabase.co/storage/v1/object/sign/metadata/share-preview.png?token=eyJraWQiOiJzdG9yYWdlLXVybC1zaWduaW5nLWtleV8zMjI2MTBhZi03OGEzLTQ4MTAtYTM1NC1lNWViNjg2YmVjMmYiLCJhbGciOiJIUzI1NiJ9.eyJ1cmwiOiJtZXRhZGF0YS9zaGFyZS1wcmV2aWV3LnBuZyIsImlhdCI6MTc3MjA4ODE4OSwiZXhwIjoxODAzNjI0MTg5fQ.8IjHHwzUywcAFvuNmo9nn-02NbcSRDJd0km6V09iL4Q';
+
 async function main() {
   console.log("🌱 Seeding database...")
 
@@ -799,10 +803,10 @@ async function main() {
         keywords: "học tiếng Trung, HSK, trung tâm tiếng Trung Hà Nội, luyện thi HSK, học tiếng Trung online",
         ogTitle: "Ruby HSK - Trung tâm tiếng Trung uy tín #1 Hà Nội",
         ogDescription: "Học tiếng Trung chất lượng cao với Ruby HSK. Lộ trình cá nhân hóa, giáo viên giàu kinh nghiệm, cam kết đầu ra.",
-        ogImage: "/preview/thumb.png",
+        ogImage: DEFAULT_IMAGE_PREVIEW,
         twitterTitle: "Ruby HSK - Học tiếng Trung chuyên nghiệp",
         twitterDescription: "Trung tâm tiếng Trung hàng đầu Hà Nội. Đào tạo HSK 1-6, cam kết đầu ra.",
-        twitterImage: "/preview/thumb.png",
+        twitterImage: DEFAULT_IMAGE_PREVIEW,
       },
       {
         pagePath: "/about",
@@ -812,7 +816,7 @@ async function main() {
         keywords: "giới thiệu Ruby HSK, trung tâm tiếng Trung uy tín, giáo viên tiếng Trung giỏi, học tiếng Trung Hà Nội",
         ogTitle: "Về Ruby HSK - Đào tạo tiếng Trung chuyên nghiệp",
         ogDescription: "Giáo viên giàu kinh nghiệm, phương pháp giảng dạy hiện đại, môi trường học tập chuyên nghiệp.",
-        ogImage: "/preview/thumb.png",
+        ogImage: DEFAULT_IMAGE_PREVIEW,
       },
       {
         pagePath: "/contact",
@@ -822,7 +826,7 @@ async function main() {
         keywords: "liên hệ Ruby HSK, tư vấn học tiếng Trung, đăng ký học HSK, hotline tiếng Trung Hà Nội",
         ogTitle: "Liên hệ tư vấn khóa học tiếng Trung",
         ogDescription: "Đăng ký tư vấn miễn phí và học thử. Hotline: 0965322136",
-        ogImage: "/preview/thumb.png",
+        ogImage: DEFAULT_IMAGE_PREVIEW,
       },
       {
         pagePath: "/courses",
@@ -832,7 +836,7 @@ async function main() {
         keywords: "khóa học tiếng Trung, học HSK online, tiếng Trung giao tiếp, tiếng Trung thương mại, khóa học HSK",
         ogTitle: "Danh sách khóa học tiếng Trung chất lượng cao",
         ogDescription: "HSK 1-6, Giao tiếp, Thương mại. Giáo viên giàu kinh nghiệm, lộ trình rõ ràng.",
-        ogImage: "/preview/thumb.png",
+        ogImage: DEFAULT_IMAGE_PREVIEW,
       },
     ],
   })

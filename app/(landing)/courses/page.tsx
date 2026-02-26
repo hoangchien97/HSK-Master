@@ -3,6 +3,7 @@ import { Breadcrumb } from "@/components/landing/common";
 import { AnimatedSection } from "@/components/landing/shared/AnimatedSection";
 import { CoursesContainer } from "./CoursesClient";
 import { getFilteredCourses, getCategories } from "@/services/course.service";
+import { DEFAULT_IMAGE_PREVIEW } from "@/constants/brand";
 import { getPageMetadata } from "@/services/metadata.service";
 import type { Metadata } from "next";
 
@@ -20,13 +21,13 @@ export async function generateMetadata(): Promise<Metadata> {
       title: "Khóa học tiếng Trung | Ruby HSK",
       description: "Chinh phục HSK từ 1 đến 6 với lộ trình hợp lý, tập trung vào giao tiếp và kỹ năng làm bài thi.",
       url: "/courses",
-      images: ["/preview/thumb.png"],
+      images: [DEFAULT_IMAGE_PREVIEW],
     },
     twitter: {
       card: "summary_large_image",
       title: "Khóa học tiếng Trung | Ruby HSK",
       description: "Chinh phục HSK từ 1 đến 6 với lộ trình hợp lý, tập trung vào giao tiếp và kỹ năng làm bài thi.",
-      images: ["/preview/thumb.png"],
+      images: [DEFAULT_IMAGE_PREVIEW],
     },
   };
 }

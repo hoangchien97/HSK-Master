@@ -7,6 +7,7 @@ import LessonList from "./LessonList";
 import { CourseStatsGrid } from "./CourseStatsGrid";
 import { CourseResourceCards } from "./CourseResourceCards";
 import { generateCourseSchema, generateBreadcrumbSchema } from "@/lib/structured-data";
+import { DEFAULT_IMAGE_PREVIEW } from "@/constants/brand";
 
 // Animation variants
 
@@ -56,13 +57,13 @@ export async function generateMetadata({ params }: Props) {
     return {
       title: "Khóa học không tồn tại",
       description: "Khóa học bạn tìm kiếm không tồn tại hoặc đã bị xóa.",
-      openGraph: { images: ["/preview/thumb.png"] },
-      twitter: { card: "summary_large_image", images: ["/preview/thumb.png"] },
+      openGraph: { images: [DEFAULT_IMAGE_PREVIEW] },
+      twitter: { card: "summary_large_image", images: [DEFAULT_IMAGE_PREVIEW] },
     };
   }
 
   const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://hskmaster.edu.vn";
-  const ogImage = course.ogImage || course.image || "/preview/thumb.png";
+  const ogImage = course.ogImage || course.image || DEFAULT_IMAGE_PREVIEW;
 
   return {
     title: course.metaTitle || course.title || "Khóa học",

@@ -3,6 +3,7 @@ import { submitContact } from "./actions";
 import { ContactInfo, ContactForm, FAQ_DATA } from "@/components/landing/contact";
 import { Breadcrumb } from "@/components/landing/common";
 import { AnimatedSection } from "@/components/landing/shared";
+import { DEFAULT_IMAGE_PREVIEW } from "@/constants/brand";
 import { getPageMetadata } from "@/services/metadata.service";
 import { generateFAQSchema } from "@/lib/structured-data";
 
@@ -16,13 +17,13 @@ export async function generateMetadata(): Promise<Metadata> {
       title: "Liên hệ | Ruby HSK",
       description: "Liên hệ HSK Master để được tư vấn lộ trình học tiếng Trung và đăng ký khóa học. Hotline: 0965 322 136",
       url: "/contact",
-      images: ["/preview/thumb.png"],
+      images: [DEFAULT_IMAGE_PREVIEW],
     },
     twitter: {
       card: "summary_large_image",
       title: "Liên hệ | Ruby HSK",
       description: "Liên hệ HSK Master để được tư vấn lộ trình học tiếng Trung và đăng ký khóa học. Hotline: 0965 322 136",
-      images: ["/preview/thumb.png"],
+      images: [DEFAULT_IMAGE_PREVIEW],
     },
   };
 }

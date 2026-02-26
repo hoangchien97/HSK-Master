@@ -14,13 +14,13 @@ import { generateFAQSchema } from "@/lib/structured-data";
 import { FAQ_DATA } from "@/components/landing/contact/ContactFAQ";
 import { Suspense } from "react";
 import type { Metadata } from "next";
+import { DEFAULT_IMAGE_PREVIEW } from "@/constants/brand";
 
 export const revalidate = 3600;
 
 export async function generateMetadata(): Promise<Metadata> {
   const metadata = await getPageMetadata("/");
-  const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://hskmaster.edu.vn";
-  const ogImageUrl = `${siteUrl}/preview/thumb.png`;
+  const ogImageUrl = DEFAULT_IMAGE_PREVIEW;
   return metadata || {
     title: "Học HSK Online Bài Bản – Đậu Thật, Không Học Vẹt | Ruby HSK",
     description:
