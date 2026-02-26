@@ -1,12 +1,11 @@
 "use client";
-import React, { useEffect, useState, useRef } from 'react';
-import { useMotionValue, useSpring, useInView } from 'framer-motion';
+import React, { useEffect, useState, useRef, useCallback } from 'react';
 
 type Props = {
   value: number | string;
   // optional: symbol or text to append (e.g. '+', '%', ' năm')
   suffix?: string;
-  // optional: how snappy the spring feels
+  // kept for API compat but no longer used (was for framer-motion spring)
   stiffness?: number;
   damping?: number;
 };
@@ -35,38 +34,56 @@ function parseNumeric(input: number | string) {
   return { num, suffix: plus ? '+' : '' };
 }
 
-export default function CountUp({ value, suffix, stiffness = 100, damping = 20 }: Props) {
+/**
+ * Lightweight CountUp using requestAnimationFrame instead of framer-motion spring.
+ * Saves importing useMotionValue, useSpring, useInView from framer-motion.
+ */
+export default function CountUp({ value, suffix }: Props) {
   const ref = useRef<HTMLDivElement>(null);
-  const isInView = useInView(ref, { once: true, margin: "-100px" });
-  const motionVal = useMotionValue(0);
-  const spring = useSpring(motionVal, {
-    stiffness,
-    damping,
-    restDelta: 0.001
-  });
   const [display, setDisplay] = useState<string>('0');
+  const hasAnimated = useRef(false);
 
-  useEffect(() => {
-    if (!isInView) return;
+  const animate = useCallback(() => {
+    if (hasAnimated.current) return;
+    hasAnimated.current = true;
 
-    // prefer explicit suffix prop; otherwise parse from string
     const parsed = parseNumeric(value);
     const target = parsed.num;
     const useSuffix = suffix ?? parsed.suffix;
+    const duration = 1200; // ms
+    const start = performance.now();
 
-    const unsubscribe = spring.on("change", (latest) => {
-      const rounded = Math.round(latest);
-      // format with grouping
-      setDisplay(rounded.toLocaleString() + (useSuffix ?? ''));
-    });
+    function step(now: number) {
+      const elapsed = now - start;
+      const progress = Math.min(elapsed / duration, 1);
+      // Ease-out cubic
+      const eased = 1 - Math.pow(1 - progress, 3);
+      const current = Math.round(eased * target);
+      setDisplay(current.toLocaleString() + (useSuffix ?? ''));
+      if (progress < 1) {
+        requestAnimationFrame(step);
+      }
+    }
+    requestAnimationFrame(step);
+  }, [value, suffix]);
 
-    // animate to target
-    motionVal.set(target);
+  useEffect(() => {
+    const el = ref.current;
+    if (!el) return;
 
-    return () => {
-      unsubscribe();
-    };
-  }, [isInView, value, suffix, motionVal, spring]);
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          animate();
+          observer.disconnect();
+        }
+      },
+      { rootMargin: "-100px" }
+    );
+
+    observer.observe(el);
+    return () => observer.disconnect();
+  }, [animate]);
 
   return (
     <div

@@ -56,7 +56,19 @@ const nextConfig: NextConfig = {
   },
   // Performance optimizations
   experimental: {
-    optimizePackageImports: ['@radix-ui/react-icons', 'lucide-react', 'framer-motion', 'embla-carousel-react'],
+    optimizePackageImports: [
+      '@radix-ui/react-icons',
+      '@radix-ui/react-tooltip',
+      '@radix-ui/react-dialog',
+      'lucide-react',
+      'framer-motion',
+      'embla-carousel-react',
+      'react-toastify',
+      'recharts',
+      'date-fns',
+      '@heroui/react',
+      'zod',
+    ],
   },
   // Headers for caching & SEO
   async headers() {
@@ -76,6 +88,26 @@ const nextConfig: NextConfig = {
           {
             key: 'Cache-Control',
             value: 'public, max-age=86400, s-maxage=86400, stale-while-revalidate=604800',
+          },
+        ],
+      },
+      {
+        // Cache static preview images aggressively
+        source: '/preview/:path*',
+        headers: [
+          {
+            key: 'Cache-Control',
+            value: 'public, max-age=31536000, immutable',
+          },
+        ],
+      },
+      {
+        // Cache font files
+        source: '/:path*.woff2',
+        headers: [
+          {
+            key: 'Cache-Control',
+            value: 'public, max-age=31536000, immutable',
           },
         ],
       },

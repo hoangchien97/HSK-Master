@@ -1,6 +1,11 @@
 import SectionHeader from '@/components/landing/shared/SectionHeader';
 import { getFeatures } from '@/services';
-import * as LucideIcons from 'lucide-react';
+import { GraduationCap, BookOpen, Users, Award, Star, Brain, Target, Lightbulb, Heart, Trophy, Zap, Shield, type LucideIcon } from 'lucide-react';
+
+/** Map of icon names used by features in DB → actual components */
+const ICON_MAP: Record<string, LucideIcon> = {
+  GraduationCap, BookOpen, Users, Award, Star, Brain, Target, Lightbulb, Heart, Trophy, Zap, Shield,
+};
 
 export default async function WhyChooseUsSection() {
   const features = await getFeatures();
@@ -20,7 +25,7 @@ export default async function WhyChooseUsSection() {
         {/* Features Grid */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6 lg:gap-8 stagger-children">
           {features.map((feature, index) => {
-            const IconComponent = LucideIcons[feature.iconName as keyof typeof LucideIcons] as React.ComponentType<{ className?: string }>;
+            const IconComponent = ICON_MAP[feature.iconName] ?? BookOpen;
 
             return (
               <div

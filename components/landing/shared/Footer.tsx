@@ -1,19 +1,11 @@
-"use client";
 import Link from "next/link";
 import { HSK_LEVEL_GROUPS } from "@/types/filters";
-import { Phone, Mail, MapPin, Linkedin, Instagram, Facebook, ChevronDown } from "lucide-react";
-import { useState } from "react";
+import { Phone, Mail, MapPin, Linkedin, Instagram, Facebook } from "lucide-react";
 import Image from "next/image";
-import { FAQ_DATA } from "../contact/ContactFAQ";
 import { BRAND_NAME } from "@/constants/brand";
+import FooterFAQ from "./FooterFAQ";
 
 export default function Footer() {
-  const [expandedFAQ, setExpandedFAQ] = useState<string | null>(null);
-
-  const toggleFAQ = (faqId: string) => {
-    setExpandedFAQ(expandedFAQ === faqId ? null : faqId);
-  };
-
   return (
     <footer className="bg-gradient-to-r from-yellow-500 to-red-600 text-white mt-auto">
       <div className="mx-auto max-w-[1400px] px-4 py-10 md:py-12 sm:px-6 lg:px-8">
@@ -114,36 +106,8 @@ export default function Footer() {
             </ul>
           </div>
 
-          {/* FAQ Section */}
-          <div>
-            <h3 className="text-sm font-bold uppercase tracking-wider text-white mb-3">Câu hỏi thường gặp</h3>
-            <div className="space-y-2">
-              {FAQ_DATA.map((faq) => (
-                <div key={faq.id} className="border border-white/20 rounded-lg overflow-hidden bg-white/5 backdrop-blur-sm">
-                  <button
-                    onClick={() => toggleFAQ(faq.id)}
-                    className="w-full px-3 py-2.5 flex items-center justify-between text-left hover:bg-white/10 transition-colors cursor-pointer"
-                  >
-                    <span className="text-sm font-semibold text-white pr-2">{faq.question}</span>
-                    <ChevronDown
-                      className={`w-4 h-4 text-white transition-transform shrink-0 ${
-                        expandedFAQ === faq.id ? 'rotate-180' : ''
-                      }`}
-                    />
-                  </button>
-                  <div
-                    className={`overflow-hidden transition-all duration-300 ${
-                      expandedFAQ === faq.id ? 'max-h-96' : 'max-h-0'
-                    }`}
-                  >
-                    <div className="px-3 pb-3">
-                      <p className="text-[12px] text-white/75 leading-relaxed">{faq.answer}</p>
-                    </div>
-                  </div>
-                </div>
-              ))}
-            </div>
-          </div>
+          {/* FAQ Section - Client component for interactivity */}
+          <FooterFAQ />
         </div>
 
         {/* Bottom Section */}

@@ -1,6 +1,5 @@
 'use client';
 
-import { motion } from 'framer-motion';
 import Image from 'next/image';
 import { Button, Badge } from '@/components/landing/common';
 import TypingText from './TypingText';
@@ -17,6 +16,8 @@ export default function HeroSlideContent({
   isActive = false,
   animated = true
 }: HeroSlideContentProps) {
+  const animClass = animated && isActive ? 'animate-heroFadeInUp' : '';
+
   return (
     <div className="relative flex items-center h-full overflow-hidden bg-gray-900">
       {/* Background Image with Ken Burns Effect — Next.js Image for LCP */}
@@ -40,20 +41,16 @@ export default function HeroSlideContent({
       {/* Enhanced Overlay Gradient - Only on Background */}
       <div className={`absolute inset-0 bg-gradient-to-r ${slide.overlayGradient}`} style={{ opacity: 0.7 }} />
 
-      {/* Content with Animations */}
+      {/* Content with CSS Animations (replaced framer-motion) */}
       <div className="relative z-10 px-4 py-6 sm:px-8 sm:py-10 md:px-16 lg:px-24 xl:px-32 max-w-5xl w-full">
-        {/* Badge with Animation */}
-        <motion.div
-          initial={animated ? { opacity: 0, y: -20 } : false}
-          animate={animated ? { opacity: 1, y: 0 } : { opacity: 1, y: 0 }}
-          transition={{ delay: 0.2, duration: 0.5 }}
-        >
+        {/* Badge */}
+        <div className={animClass} style={{ animationDelay: '0.2s' }}>
           <Badge variant="gradient" size="md" className="mb-3 md:mb-5 lg:mb-7">
             {slide.badge}
           </Badge>
-        </motion.div>
+        </div>
 
-        {/* Title with Typing Effect - Gradient Text with Strong Shadow for Contrast */}
+        {/* Title with Typing Effect */}
         {animated && isActive ? (
           <TypingText
             text={slide.title}
@@ -66,12 +63,8 @@ export default function HeroSlideContent({
           </h2>
         )}
 
-        {/* Description with Typing Effect - Clean White Text */}
-        <motion.div
-          initial={animated ? { opacity: 0, y: 20 } : false}
-          animate={animated ? { opacity: 1, y: 0 } : { opacity: 1, y: 0 }}
-          transition={{ delay: 0.5, duration: 0.5 }}
-        >
+        {/* Description */}
+        <div className={animClass} style={{ animationDelay: '0.5s' }}>
           {animated && isActive ? (
             <TypingText
               text={slide.description}
@@ -83,14 +76,12 @@ export default function HeroSlideContent({
               {slide.description}
             </p>
           )}
-        </motion.div>
+        </div>
 
-        {/* CTA Buttons with Staggered Animation - Responsive */}
-        <motion.div
-          className="flex flex-wrap gap-2 sm:gap-3 md:gap-4"
-          initial={animated ? { opacity: 0, y: 20 } : false}
-          animate={animated ? { opacity: 1, y: 0 } : { opacity: 1, y: 0 }}
-          transition={{ delay: 0.8, duration: 0.5 }}
+        {/* CTA Buttons */}
+        <div
+          className={`flex flex-wrap gap-2 sm:gap-3 md:gap-4 ${animClass}`}
+          style={{ animationDelay: '0.8s' }}
         >
           <a href={slide.primaryCTA.href}>
             <Button
@@ -114,8 +105,24 @@ export default function HeroSlideContent({
               </Button>
             </a>
           )}
-        </motion.div>
+        </div>
       </div>
+
+      <style jsx>{`
+        @keyframes heroFadeInUp {
+          from {
+            opacity: 0;
+            transform: translateY(20px);
+          }
+          to {
+            opacity: 1;
+            transform: translateY(0);
+          }
+        }
+        .animate-heroFadeInUp {
+          animation: heroFadeInUp 0.5s ease both;
+        }
+      `}</style>
     </div>
   );
 }

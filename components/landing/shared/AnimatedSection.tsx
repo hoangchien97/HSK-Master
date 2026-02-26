@@ -1,6 +1,6 @@
 "use client";
 
-import { useRef, useEffect, useState, ReactNode } from "react";
+import { useRef, useEffect, useState, ReactNode, memo } from "react";
 
 interface AnimatedSectionProps {
   children: ReactNode;
@@ -9,17 +9,15 @@ interface AnimatedSectionProps {
   className?: string;
 }
 
-const hiddenStyles: Record<string, React.CSSProperties> = {
-  fadeInUp: { opacity: 0, transform: "translateY(40px)" },
-  slideInLeft: { opacity: 0, transform: "translateX(-50px)" },
-  slideInRight: { opacity: 0, transform: "translateX(50px)" },
-  scaleIn: { opacity: 0, transform: "scale(0.9)" },
-  stagger: { opacity: 0 },
+const variantClasses: Record<string, string> = {
+  fadeInUp: "translate-y-10 opacity-0",
+  slideInLeft: "-translate-x-12 opacity-0",
+  slideInRight: "translate-x-12 opacity-0",
+  scaleIn: "scale-95 opacity-0",
+  stagger: "opacity-0",
 };
 
-const visibleStyle: React.CSSProperties = { opacity: 1, transform: "none" };
-
-export function AnimatedSection({
+export const AnimatedSection = memo(function AnimatedSection({
   children,
   variant = "fadeInUp",
   delay = 0,
@@ -39,22 +37,22 @@ export function AnimatedSection({
           observer.disconnect();
         }
       },
-      { rootMargin: "-80px" }
+      { rootMargin: "-60px" }
     );
 
     observer.observe(el);
     return () => observer.disconnect();
   }, []);
 
-  const style: React.CSSProperties = {
-    transition: `opacity 0.6s ease ${delay}s, transform 0.6s ease ${delay}s`,
-    willChange: isVisible ? "auto" : "opacity, transform",
-    ...(isVisible ? visibleStyle : hiddenStyles[variant] || hiddenStyles.fadeInUp),
-  };
-
   return (
-    <div ref={ref} style={style} className={className}>
+    <div
+      ref={ref}
+      className={`transition-all duration-500 ease-out ${
+        isVisible ? "translate-y-0 translate-x-0 scale-100 opacity-100" : variantClasses[variant] || variantClasses.fadeInUp
+      } ${className}`}
+      style={delay > 0 ? { transitionDelay: `${delay}s` } : undefined}
+    >
       {children}
     </div>
   );
-}
+});

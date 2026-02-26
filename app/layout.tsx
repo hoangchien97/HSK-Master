@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Geist, Geist_Mono, Noto_Sans, Noto_Sans_SC } from "next/font/google";
+import { Geist, Noto_Sans, Noto_Sans_SC } from "next/font/google";
 import "./globals.css";
 import { WebVitals } from "@/components/landing/shared";
 import * as TooltipPrimitive from '@radix-ui/react-tooltip';
@@ -14,11 +14,6 @@ import { HeroUIProvider } from "@/providers";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
-  subsets: ["latin"],
-});
-
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
   subsets: ["latin"],
 });
 
@@ -171,7 +166,7 @@ export default function RootLayout({
         />
       </head>
       <body
-        className={`${geistSans.variable} ${geistMono.variable} ${notoSans.variable} ${notoSansSC.variable} antialiased min-h-screen bg-background-light dark:bg-background-dark text-text-main-light dark:text-text-main-dark flex flex-col`}
+        className={`${geistSans.variable} ${notoSans.variable} ${notoSansSC.variable} antialiased min-h-screen bg-background-light dark:bg-background-dark text-text-main-light dark:text-text-main-dark flex flex-col`}
         suppressHydrationWarning
       >
         <SessionProvider refetchInterval={300} refetchOnWindowFocus={false}>

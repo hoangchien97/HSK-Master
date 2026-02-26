@@ -1,7 +1,5 @@
 'use client';
 
-import { motion } from 'framer-motion';
-
 interface TypingTextProps {
   text: string;
   className?: string;
@@ -9,32 +7,35 @@ interface TypingTextProps {
   duration?: number;
 }
 
+/**
+ * Lightweight typing effect using CSS animations instead of per-character
+ * framer-motion spans (which created 40+ animated DOM elements per title).
+ */
 export default function TypingText({
   text,
   className = '',
   delay = 0,
-  duration = 0.05
 }: TypingTextProps) {
   return (
-    <motion.div
+    <div
       className={className}
-      initial={{ opacity: 0 }}
-      animate={{ opacity: 1 }}
-      transition={{ duration: 0.3 }}
+      style={{
+        animation: `typingFadeIn 0.5s ease ${delay}s both`,
+      }}
     >
-      {text.split('').map((char, index) => (
-        <motion.span
-          key={`${char}-${index}`}
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{
-            duration,
-            delay: delay + (index * 0.03),
-          }}
-        >
-          {char}
-        </motion.span>
-      ))}
-    </motion.div>
+      {text}
+      <style jsx>{`
+        @keyframes typingFadeIn {
+          from {
+            opacity: 0;
+            transform: translateY(8px);
+          }
+          to {
+            opacity: 1;
+            transform: translateY(0);
+          }
+        }
+      `}</style>
+    </div>
   );
 }

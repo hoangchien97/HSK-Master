@@ -3,7 +3,6 @@
 import { useCallback, useEffect, useState } from 'react';
 import useEmblaCarousel from 'embla-carousel-react';
 import Autoplay from 'embla-carousel-autoplay';
-import { motion, AnimatePresence } from 'framer-motion';
 import HeroSlideContent from './HeroSlideContent';
 import type { HeroSlide } from '@/services';
 
@@ -59,37 +58,33 @@ export default function HeroSlideShowClient({ slides }: HeroSlideShowClientProps
             <>
               <div className="overflow-hidden h-full" ref={emblaRef}>
                 <div className="flex h-full">
-                  <AnimatePresence mode="wait">
-                    {slides.map((slide, slideIndex) => (
-                      <div
-                        key={slide.id}
-                        className="flex-[0_0_100%] min-w-0"
-                      >
-                        <HeroSlideContent
-                          slide={slide}
-                          isActive={slideIndex === selectedIndex}
-                          animated={true}
-                        />
-                      </div>
-                    ))}
-                  </AnimatePresence>
+                  {slides.map((slide, slideIndex) => (
+                    <div
+                      key={slide.id}
+                      className="flex-[0_0_100%] min-w-0"
+                    >
+                      <HeroSlideContent
+                        slide={slide}
+                        isActive={slideIndex === selectedIndex}
+                        animated={true}
+                      />
+                    </div>
+                  ))}
                 </div>
               </div>
 
-              {/* Enhanced Navigation Dots - Clean Minimal Style */}
+              {/* Navigation Dots - Pure CSS, no framer-motion */}
               <div className="absolute bottom-3 sm:bottom-4 md:bottom-6 lg:bottom-8 left-1/2 -translate-x-1/2 flex items-center gap-1.5 sm:gap-2 md:gap-2.5 z-20">
                 {slides.map((_, index) => (
-                  <motion.button
+                  <button
                     key={index}
-                    className={`rounded-full transition-all duration-300 ${
+                    className={`rounded-full transition-all duration-300 hover:scale-110 active:scale-90 ${
                       index === selectedIndex
                         ? 'bg-gradient-to-r from-yellow-400 via-orange-500 to-red-500 shadow-lg shadow-orange-500/40 w-7 sm:w-9 md:w-11 lg:w-14 h-2 sm:h-2.5 md:h-3'
                         : 'bg-white/50 hover:bg-white/80 w-2 sm:w-2.5 md:w-3 h-2 sm:h-2.5 md:h-3 cursor-pointer'
                     }`}
                     onClick={() => scrollTo(index)}
                     aria-label={`Go to slide ${index + 1}`}
-                    whileHover={{ scale: 1.15 }}
-                    whileTap={{ scale: 0.85 }}
                   />
                 ))}
               </div>

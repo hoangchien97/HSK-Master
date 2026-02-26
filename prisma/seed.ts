@@ -769,10 +769,10 @@ async function main() {
         keywords: "học tiếng Trung, HSK, trung tâm tiếng Trung Hà Nội, luyện thi HSK, học tiếng Trung online",
         ogTitle: "Ruby HSK - Trung tâm tiếng Trung uy tín #1 Hà Nội",
         ogDescription: "Học tiếng Trung chất lượng cao với Ruby HSK. Lộ trình cá nhân hóa, giáo viên giàu kinh nghiệm, cam kết đầu ra.",
-        ogImage: "https://ukbeoggejnqgdxqoqkvj.supabase.co/storage/v1/object/sign/metadata/share-preview.png?token=eyJraWQiOiJzdG9yYWdlLXVybC1zaWduaW5nLWtleV8zMjI2MTBhZi03OGEzLTQ4MTAtYTM1NC1lNWViNjg2YmVjMmYiLCJhbGciOiJIUzI1NiJ9.eyJ1cmwiOiJtZXRhZGF0YS9zaGFyZS1wcmV2aWV3LnBuZyIsImlhdCI6MTc3MjA0NzY2NCwiZXhwIjoxODAzNTgzNjY0fQ.dFuhrdZ1xh_BETqYo4JsPjBdWPBXO-qkA5bLOcxLqTo",
+        ogImage: "/preview/thumb.png",
         twitterTitle: "Ruby HSK - Học tiếng Trung chuyên nghiệp",
         twitterDescription: "Trung tâm tiếng Trung hàng đầu Hà Nội. Đào tạo HSK 1-6, cam kết đầu ra.",
-        twitterImage: "https://ukbeoggejnqgdxqoqkvj.supabase.co/storage/v1/object/sign/metadata/share-preview.png?token=eyJraWQiOiJzdG9yYWdlLXVybC1zaWduaW5nLWtleV8zMjI2MTBhZi03OGEzLTQ4MTAtYTM1NC1lNWViNjg2YmVjMmYiLCJhbGciOiJIUzI1NiJ9.eyJ1cmwiOiJtZXRhZGF0YS9zaGFyZS1wcmV2aWV3LnBuZyIsImlhdCI6MTc3MjA0NzY2NCwiZXhwIjoxODAzNTgzNjY0fQ.dFuhrdZ1xh_BETqYo4JsPjBdWPBXO-qkA5bLOcxLqTo",
+        twitterImage: "/preview/thumb.png",
       },
       {
         pagePath: "/about",
