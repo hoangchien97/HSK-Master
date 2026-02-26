@@ -7,7 +7,7 @@ import LessonList from "./LessonList";
 import { CourseStatsGrid } from "./CourseStatsGrid";
 import { CourseResourceCards } from "./CourseResourceCards";
 import { generateCourseSchema, generateBreadcrumbSchema } from "@/lib/structured-data";
-import { DEFAULT_IMAGE_PREVIEW } from "@/constants/brand";
+import { DEFAULT_IMAGE_PREVIEW, OG_IMAGE } from "@/constants/brand";
 
 // Animation variants
 
@@ -57,13 +57,21 @@ export async function generateMetadata({ params }: Props) {
     return {
       title: "Khóa học không tồn tại",
       description: "Khóa học bạn tìm kiếm không tồn tại hoặc đã bị xóa.",
-      openGraph: { images: [DEFAULT_IMAGE_PREVIEW] },
-      twitter: { card: "summary_large_image", images: [DEFAULT_IMAGE_PREVIEW] },
+      openGraph: { images: [OG_IMAGE] },
+      twitter: { card: "summary_large_image", images: [OG_IMAGE] },
     };
   }
 
   const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://hskmaster.edu.vn";
-  const ogImage = course.ogImage || course.image || DEFAULT_IMAGE_PREVIEW;
+  const courseImgUrl = course.ogImage || course.image || DEFAULT_IMAGE_PREVIEW;
+  const ogImg = {
+    url: courseImgUrl,
+    secureUrl: courseImgUrl,
+    width: 1200,
+    height: 630,
+    type: courseImgUrl.endsWith(".jpg") || courseImgUrl.endsWith(".jpeg") ? "image/jpeg" : "image/png",
+    alt: course.metaTitle || course.title || "Khóa học tiếng Trung",
+  };
 
   return {
     title: course.metaTitle || course.title || "Khóa học",
@@ -72,15 +80,17 @@ export async function generateMetadata({ params }: Props) {
     openGraph: {
       title: course.metaTitle || course.title,
       description: course.metaDescription || course.description || "",
-      images: [ogImage],
+      images: [ogImg],
       type: "website",
       url: `${siteUrl}/courses/${slug}`,
+      siteName: "Ruby HSK",
+      locale: "vi_VN",
     },
     twitter: {
       card: "summary_large_image",
       title: course.metaTitle || course.title,
       description: course.metaDescription || course.description || "",
-      images: [ogImage],
+      images: [ogImg],
     },
   };
 }

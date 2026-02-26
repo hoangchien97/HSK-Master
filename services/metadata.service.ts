@@ -1,17 +1,26 @@
 import { prisma } from "@/lib/prisma";
 import type { Metadata } from "next";
-import { DEFAULT_IMAGE_PREVIEW } from "@/constants/brand";
-
-const DEFAULT_OG_IMAGE = DEFAULT_IMAGE_PREVIEW;
-const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || "https://hskmaster.edu.vn";
+import { DEFAULT_IMAGE_PREVIEW, OG_IMAGE, SITE_URL } from "@/constants/brand";
 
 /**
- * Ensure OG image is an absolute URL so social-media crawlers can resolve it.
- * Relative paths are prefixed with SITE_URL; absolute URLs pass through unchanged.
+ * Build a fully-qualified OG image **object** that every social platform can
+ * parse without fetching the image first.
+ *
+ * - Facebook / Messenger: need og:image + og:image:width + og:image:height
+ * - MS Teams: need og:image:type, falls back to page-scraping without it
+ * - Twitter: needs twitter:image (absolute URL)
+ * - Zalo / Telegram / LINE / LinkedIn: need og:image (absolute URL)
  */
-function toAbsoluteImageUrl(img: string): string {
-  if (img.startsWith("http")) return img;
-  return `${SITE_URL}${img.startsWith("/") ? "" : "/"}${img}`;
+function toOgImage(img?: string | null) {
+  const url = img && img.startsWith("http") ? img : DEFAULT_IMAGE_PREVIEW;
+  return {
+    url,
+    secureUrl: url,
+    width: 1200,
+    height: 630,
+    type: url.endsWith(".jpg") || url.endsWith(".jpeg") ? "image/jpeg" : "image/png",
+    alt: OG_IMAGE.alt,
+  };
 }
 
 /**
@@ -33,7 +42,8 @@ export async function getPageMetadata(pagePath: string): Promise<Metadata | null
       return null;
     }
 
-    const ogImage = toAbsoluteImageUrl(pageMetadata.ogImage || DEFAULT_OG_IMAGE);
+    const ogImg = toOgImage(pageMetadata.ogImage);
+    const twitterImg = toOgImage(pageMetadata.twitterImage || pageMetadata.ogImage);
     const pageUrl = pagePath === "/" ? SITE_URL : `${SITE_URL}${pagePath}`;
 
     return {
@@ -45,14 +55,16 @@ export async function getPageMetadata(pagePath: string): Promise<Metadata | null
         title: pageMetadata.ogTitle || pageMetadata.title,
         description: pageMetadata.ogDescription || pageMetadata.description,
         url: pageUrl,
-        images: [ogImage],
+        siteName: "Ruby HSK",
+        locale: "vi_VN",
+        images: [ogImg],
         type: (pageMetadata.ogType as "website" | "article") || "website",
       },
       twitter: {
         card: (pageMetadata.twitterCard as "summary" | "summary_large_image") || "summary_large_image",
         title: pageMetadata.twitterTitle || pageMetadata.ogTitle || pageMetadata.title,
         description: pageMetadata.twitterDescription || pageMetadata.ogDescription || pageMetadata.description,
-        images: [toAbsoluteImageUrl(pageMetadata.twitterImage || pageMetadata.ogImage || DEFAULT_OG_IMAGE)],
+        images: [twitterImg],
       },
       alternates: pageMetadata.canonicalUrl ? {
         canonical: pageMetadata.canonicalUrl,
@@ -75,11 +87,13 @@ export const DEFAULT_METADATA: Metadata = {
     title: "Ruby HSK - Trung tâm tiếng Trung uy tín",
     description: "Học tiếng Trung chất lượng cao với Ruby HSK",
     url: SITE_URL,
-    images: [{ url: DEFAULT_IMAGE_PREVIEW, width: 1200, height: 630, alt: "Ruby HSK - Trung tâm tiếng Trung uy tín tại Hà Nội" }],
+    siteName: "Ruby HSK",
+    locale: "vi_VN",
+    images: [OG_IMAGE],
     type: "website",
   },
   twitter: {
     card: "summary_large_image",
-    images: [DEFAULT_IMAGE_PREVIEW],
+    images: [OG_IMAGE],
   },
 };

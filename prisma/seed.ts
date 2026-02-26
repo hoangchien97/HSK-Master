@@ -209,7 +209,7 @@ async function main() {
       metaTitle: "Khóa học HSK 1 - Tiếng Trung cho người mới bắt đầu",
       metaDescription: "Học HSK 1 từ con số 0. 150 từ vựng, 45 điểm ngữ pháp, 18 bài học. Cam kết đầu ra. Giáo viên 8 năm kinh nghiệm.",
       keywords: "HSK 1, học tiếng Trung cơ bản, khóa học HSK 1, tiếng Trung sơ cấp, học tiếng Trung online",
-      ogImage: "https://images.unsplash.com/photo-1516979187457-637abb4f9353?w=1200&h=630&fit=crop&q=80",
+      ogImage: DEFAULT_IMAGE_PREVIEW,
     },
     {
       title: "HSK 2 – Giao tiếp tiếng Trung cơ bản",
@@ -236,7 +236,7 @@ async function main() {
       metaTitle: "Khóa học HSK 2 - Giao tiếp tiếng Trung cơ bản",
       metaDescription: "Học HSK 2 giao tiếp thực tế. 300 từ vựng, 60 điểm ngữ pháp, 16 bài học. Luyện nói, nghe, đọc, viết.",
       keywords: "HSK 2, giao tiếp tiếng Trung, học HSK 2 online, tiếng Trung cơ bản, khóa học HSK 2",
-      ogImage: "https://images.unsplash.com/photo-1434030216411-0b793f4b4173?w=1200&h=630&fit=crop&q=80",
+      ogImage: DEFAULT_IMAGE_PREVIEW,
     },
     {
       title: "HSK 3 – Tiếng Trung trung cấp",
@@ -263,7 +263,7 @@ async function main() {
       metaTitle: "Khóa học HSK 3 - Tiếng Trung trung cấp Hà Nội",
       metaDescription: "HSK 3 trung cấp với 600 từ vựng, 80 điểm ngữ pháp. Giao tiếp tự tin trong tình huống thực tế.",
       keywords: "HSK 3, tiếng Trung trung cấp, học HSK 3, khóa học HSK 3 Hà Nội, luyện thi HSK 3",
-      ogImage: "https://images.unsplash.com/photo-1522202176988-66273c2fd55f?w=1200&h=630&fit=crop&q=80",
+      ogImage: DEFAULT_IMAGE_PREVIEW,
     },
     {
       title: "HSK 4 – Sẵn sàng du học và làm việc",
@@ -290,7 +290,7 @@ async function main() {
       metaTitle: "Khóa học HSK 4 - Du học Trung Quốc & Làm việc",
       metaDescription: "HSK 4 cho du học sinh. 1200 từ vựng, 120 điểm ngữ pháp. Giao tiếp tự tin trong môi trường học tập, làm việc.",
       keywords: "HSK 4, du học Trung Quốc, học HSK 4, luyện thi HSK 4, tiếng Trung du học",
-      ogImage: "https://images.unsplash.com/photo-1485846234645-a62644f84728?w=1200&h=630&fit=crop&q=80",
+      ogImage: DEFAULT_IMAGE_PREVIEW,
     },
     {
       title: "HSK 5 – Tiếng Trung cao cấp",
@@ -317,7 +317,7 @@ async function main() {
       metaTitle: "Khóa học HSK 5 - Tiếng Trung cao cấp chuyên nghiệp",
       metaDescription: "HSK 5 cao cấp với 2500 từ vựng. Đọc báo, xem phim, giao tiếp chuyên nghiệp. Cam kết đầu ra.",
       keywords: "HSK 5, tiếng Trung cao cấp, học HSK 5, luyện thi HSK 5, tiếng Trung chuyên nghiệp",
-      ogImage: "https://images.unsplash.com/photo-1456513080510-7bf3a84b82f8?w=1200&h=630&fit=crop&q=80",
+      ogImage: DEFAULT_IMAGE_PREVIEW,
     },
     {
       title: "HSK 6 – Trình độ chuyên gia",
@@ -344,7 +344,7 @@ async function main() {
       metaTitle: "Khóa học HSK 6 - Trình độ chuyên gia gần như người bản ngữ",
       metaDescription: "HSK 6 đỉnh cao với 5000+ từ vựng. Đạt trình độ gần người bản ngữ. Giảng viên chuyên gia 8+ năm kinh nghiệm.",
       keywords: "HSK 6, tiếng Trung chuyên gia, học HSK 6, luyện thi HSK 6, trình độ cao nhất HSK",
-      ogImage: "https://images.unsplash.com/photo-1517842645767-c639042777db?w=1200&h=630&fit=crop&q=80",
+      ogImage: DEFAULT_IMAGE_PREVIEW,
     },
     // Communication Course
     {
@@ -371,7 +371,7 @@ async function main() {
       metaTitle: "Tiếng Trung Giao tiếp Thực tế - Du lịch & Cuộc sống",
       metaDescription: "Học giao tiếp tiếng Trung thực tế cho du lịch, mua sắm. 800 từ vựng, 60 tình huống thường gặp.",
       keywords: "tiếng Trung giao tiếp, học giao tiếp tiếng Trung, tiếng Trung du lịch, tiếng Trung thực tế",
-      ogImage: "https://images.unsplash.com/photo-1573167243872-43c6433b9d40?w=1200&h=630&fit=crop&q=80",
+      ogImage: DEFAULT_IMAGE_PREVIEW,
     },
     // Business Chinese Course
     {
@@ -398,7 +398,7 @@ async function main() {
       metaTitle: "Tiếng Trung Thương mại - Kinh doanh & Đàm phán",
       metaDescription: "Khóa học tiếng Trung thương mại chuyên nghiệp. 1500 từ vựng kinh doanh, email, đàm phán.",
       keywords: "tiếng Trung thương mại, tiếng Trung kinh doanh, học tiếng Trung văn phòng, tiếng Trung chuyên ngành",
-      ogImage: "https://images.unsplash.com/photo-1552664730-d307ca884978?w=1200&h=630&fit=crop&q=80",
+      ogImage: DEFAULT_IMAGE_PREVIEW,
     },
   ]
 

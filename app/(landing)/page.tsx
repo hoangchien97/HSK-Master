@@ -14,13 +14,12 @@ import { generateFAQSchema } from "@/lib/structured-data";
 import { FAQ_DATA } from "@/components/landing/contact/ContactFAQ";
 import { Suspense } from "react";
 import type { Metadata } from "next";
-import { DEFAULT_IMAGE_PREVIEW } from "@/constants/brand";
+import { OG_IMAGE } from "@/constants/brand";
 
 export const revalidate = 3600;
 
 export async function generateMetadata(): Promise<Metadata> {
   const metadata = await getPageMetadata("/");
-  const ogImageUrl = DEFAULT_IMAGE_PREVIEW;
   return metadata || {
     title: "Học HSK Online Bài Bản – Đậu Thật, Không Học Vẹt | Ruby HSK",
     description:
@@ -29,13 +28,13 @@ export async function generateMetadata(): Promise<Metadata> {
       title: "Học HSK Online Bài Bản – Đậu Thật, Không Học Vẹt | Ruby HSK",
       description: "Lộ trình học HSK1→HSK6 rõ ràng, 500+ học viên, tỉ lệ đậu 92%. Đăng ký tư vấn miễn phí.",
       url: "/",
-      images: [{ url: ogImageUrl, width: 1200, height: 630, alt: "Ruby HSK – Học HSK Dễ Dàng & Hiệu Quả" }],
+      images: [OG_IMAGE],
     },
     twitter: {
       card: "summary_large_image",
       title: "Học HSK Online Bài Bản – Đậu Thật, Không Học Vẹt | Ruby HSK",
       description: "Lộ trình học HSK1→HSK6 rõ ràng, 500+ học viên, tỉ lệ đậu 92%. Đăng ký tư vấn miễn phí.",
-      images: [ogImageUrl],
+      images: [OG_IMAGE],
     },
   };
 }

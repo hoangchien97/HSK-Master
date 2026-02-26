@@ -3,7 +3,7 @@ import { Geist, Noto_Sans, Noto_Sans_SC } from "next/font/google";
 import "./globals.css";
 import { WebVitals } from "@/components/landing/shared";
 import * as TooltipPrimitive from '@radix-ui/react-tooltip';
-import { DEFAULT_IMAGE_PREVIEW } from "@/constants/brand";
+import { DEFAULT_IMAGE_PREVIEW, OG_IMAGE, SITE_URL } from "@/constants/brand";
 import NextTopLoader from 'nextjs-toploader';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
@@ -32,7 +32,7 @@ const notoSansSC = Noto_Sans_SC({
   display: "swap",
 });
 
-const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://hskmaster.edu.vn";
+const siteUrl = SITE_URL;
 
 export const metadata: Metadata = {
   metadataBase: new URL(siteUrl),
@@ -66,7 +66,7 @@ export const metadata: Metadata = {
     ],
   },
   manifest: "/manifest.json",
-  // Open Graph - Enhanced
+  // Open Graph - Enhanced (Facebook, Zalo, Messenger, Teams, LinkedIn, Telegram…)
   openGraph: {
     type: "website",
     locale: "vi_VN",
@@ -74,15 +74,7 @@ export const metadata: Metadata = {
     siteName: "Ruby HSK",
     title: "Ruby HSK - Trung tâm tiếng Trung uy tín tại Hà Nội",
     description: "Trung tâm tiếng Trung Ruby HSK - Đào tạo HSK 1-6, giao tiếp, thương mại. Cam kết đầu ra.",
-    images: [
-      {
-        url: DEFAULT_IMAGE_PREVIEW,
-        width: 1200,
-        height: 630,
-        alt: "Ruby HSK - Trung tâm tiếng Trung uy tín tại Hà Nội",
-        type: "image/png",
-      },
-    ],
+    images: [OG_IMAGE],
   },
 
   // Twitter Card - Enhanced
@@ -92,7 +84,7 @@ export const metadata: Metadata = {
     creator: "@hskruby",
     title: "Ruby HSK - Trung tâm tiếng Trung uy tín",
     description: "Đào tạo HSK 1-6, giao tiếp, thương mại. Cam kết đầu ra.",
-    images: [DEFAULT_IMAGE_PREVIEW],
+    images: [OG_IMAGE],
   },
 
   // Robots - Enhanced
@@ -129,13 +121,19 @@ export const metadata: Metadata = {
     title: "Ruby HSK",
   },
 
-  // Other metadata
+  // Other metadata — extra coverage for platforms that read non-standard tags
   other: {
     "mobile-web-app-capable": "yes",
     "apple-mobile-web-app-capable": "yes",
     "theme-color": "#ec131e",
     "msapplication-TileColor": "#ec131e",
     "msapplication-config": "/browserconfig.xml",
+    // Explicit image hints for crawlers that don't parse structured OG objects
+    "og:image:secure_url": DEFAULT_IMAGE_PREVIEW,
+    "og:image:width": "1200",
+    "og:image:height": "630",
+    "og:image:type": "image/png",
+    "og:image:alt": OG_IMAGE.alt,
   },
 };
 

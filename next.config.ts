@@ -1,7 +1,6 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
-  reactStrictMode: false,
   images: {
     remotePatterns: [
       {
@@ -79,25 +78,6 @@ const nextConfig: NextConfig = {
           {
             key: 'X-Robots-Tag',
             value: 'index, follow',
-          },
-        ],
-      },
-      {
-        source: '/api/og',
-        headers: [
-          {
-            key: 'Cache-Control',
-            value: 'public, max-age=86400, s-maxage=86400, stale-while-revalidate=604800',
-          },
-        ],
-      },
-      {
-        // Cache static preview images aggressively
-        source: '/preview/:path*',
-        headers: [
-          {
-            key: 'Cache-Control',
-            value: 'public, max-age=31536000, immutable',
           },
         ],
       },
