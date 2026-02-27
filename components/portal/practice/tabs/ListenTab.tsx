@@ -6,24 +6,34 @@ import { Volume2, Eye, EyeOff, Lock, ChevronLeft, ChevronRight } from "lucide-re
 import {
   startPracticeSessionAction,
   finishPracticeSessionAction,
-  recordPracticeAttemptAction,
 } from "@/actions/practice.actions"
+import { recordSkillAttemptAction } from "@/actions/practice-skill.actions"
 import { useSpeech } from "@/hooks/useSpeech"
 import { getDisplayMeaning } from "@/enums/portal/common"
-import { PracticeMode, QuestionType } from "@/enums/portal"
+import { PracticeMode } from "@/enums/portal"
 import { AUTO_NEXT_DELAY_MS } from "@/constants/portal/practice"
 import { generateListenQuestions } from "@/utils/practice"
 import type { ListenQuestion } from "@/utils/practice"
-import type { IVocabularyItem } from "@/interfaces/portal/practice"
+import type { IVocabularyItem, IQueueVocabItem, ISkillProgressRecord } from "@/interfaces/portal/practice"
 import { QuizResultScreen, McqOptions } from "../shared"
 
 interface Props {
   vocabularies: IVocabularyItem[]
   lessonId: string
   onProgressUpdate: () => void
+  /** Per-mode queue (with interleaved prev-lesson vocab) */
+  queue?: IQueueVocabItem[]
+  /** Per-mode skill progress map keyed by vocabularyId */
+  skillProgressMap?: Record<string, ISkillProgressRecord>
+  /** Resume pointer from server */
+  initialPointer?: number
+  /** Whether this mode is fully completed */
+  isCompleted?: boolean
+  /** Callback to reset session & refetch queue */
+  onResetSession?: () => void
 }
 
-export default function ListenTab({ vocabularies, lessonId, onProgressUpdate }: Props) {
+export default function ListenTab({ vocabularies, lessonId, onProgressUpdate, queue: modeQueue, skillProgressMap, initialPointer, isCompleted: modeCompleted, onResetSession }: Props) {
   const [questions, setQuestions] = useState<ListenQuestion[]>([])
   const [currentIdx, setCurrentIdx] = useState(0)
   const [selectedKey, setSelectedKey] = useState<string | null>(null)
@@ -47,8 +57,9 @@ export default function ListenTab({ vocabularies, lessonId, onProgressUpdate }: 
     setQuestions(generateListenQuestions(vocabularies))
   }, [vocabularies])
 
-  // Start session
+  // Start session (skip if mode already completed)
   useEffect(() => {
+    if (modeCompleted) return
     let active = true
     startPracticeSessionAction(lessonId, PracticeMode.LISTEN).then((res) => {
       if (active && res.success && res.data) {
@@ -57,7 +68,7 @@ export default function ListenTab({ vocabularies, lessonId, onProgressUpdate }: 
       }
     })
     return () => { active = false }
-  }, [lessonId])
+  }, [lessonId, modeCompleted])
 
   // Finish on unmount
   useEffect(() => {
@@ -150,17 +161,15 @@ export default function ListenTab({ vocabularies, lessonId, onProgressUpdate }: 
 
       setResults((prev) => [...prev, { correct: isCorrect, vocab: currentQ.vocab }])
 
-      if (sessionId) {
-        await recordPracticeAttemptAction({
-          sessionId,
-          vocabularyId: currentQ.vocab.id,
-          questionType: QuestionType.LISTEN_MCQ,
-          userAnswer: selectedOption?.label || null,
-          correctAnswer: correctOption?.label || "",
-          isCorrect,
-          timeSpentSec: timeSec,
-        })
-      }
+      // Record per-mode skill progress (handles legacy sync internally)
+      recordSkillAttemptAction({
+        lessonId,
+        mode: PracticeMode.LISTEN,
+        vocabularyId: currentQ.vocab.id,
+        isCorrect,
+        currentIndex: currentIdx,
+        queueLength: totalQ,
+      })
 
       // Auto-advance after 3s on correct answer
       if (isCorrect) {
@@ -176,8 +185,12 @@ export default function ListenTab({ vocabularies, lessonId, onProgressUpdate }: 
     [hasListened, showResult, currentQ, sessionId, handleNext],
   )
 
+  // State for "retry wrong words only" mode
+  const [retryWrongVocabs, setRetryWrongVocabs] = useState<IVocabularyItem[] | null>(null)
+
   const handleRestart = useCallback(() => {
     clearAutoNext()
+    setRetryWrongVocabs(null)
     setQuestions(generateListenQuestions(vocabularies))
     setCurrentIdx(0)
     setSelectedKey(null)
@@ -192,6 +205,24 @@ export default function ListenTab({ vocabularies, lessonId, onProgressUpdate }: 
       if (res.success && res.data) setSessionId(res.data.sessionId)
     })
   }, [vocabularies, lessonId, clearAutoNext])
+
+  const handleRetryWrong = useCallback((wrongVocabs: IVocabularyItem[]) => {
+    clearAutoNext()
+    setRetryWrongVocabs(wrongVocabs)
+    setQuestions(generateListenQuestions(wrongVocabs))
+    setCurrentIdx(0)
+    setSelectedKey(null)
+    setShowResult(false)
+    setShowTranscript(false)
+    setHasListened(false)
+    setResults([])
+    setFinished(false)
+    questionStartRef.current = Date.now()
+    startTimeRef.current = Date.now()
+    startPracticeSessionAction(lessonId, PracticeMode.LISTEN).then((res) => {
+      if (res.success && res.data) setSessionId(res.data.sessionId)
+    })
+  }, [lessonId, clearAutoNext])
 
   // Empty state: not enough vocab
   if (totalQ === 0) {
@@ -213,6 +244,7 @@ export default function ListenTab({ vocabularies, lessonId, onProgressUpdate }: 
         totalQuestions={totalQ}
         elapsedSec={timeSec}
         onRestart={handleRestart}
+        onRetryWrong={handleRetryWrong}
         mode={PracticeMode.LISTEN}
         wrongItemsLabel="Từ cần nghe lại"
         restartColor="primary"
@@ -223,6 +255,15 @@ export default function ListenTab({ vocabularies, lessonId, onProgressUpdate }: 
   // Question
   return (
     <div className="max-w-lg mx-auto">
+      {/* Retry wrong words indicator */}
+      {retryWrongVocabs && (
+        <div className="mb-3 p-2 rounded-lg bg-warning-50 dark:bg-warning-950/20 text-center">
+          <p className="text-sm text-warning-700 dark:text-warning-300 font-medium">
+            🎧 Ôn lại {retryWrongVocabs.length} từ sai
+          </p>
+        </div>
+      )}
+
       {/* Header */}
       <div className="flex items-center justify-between mb-3">
         <span className="text-sm text-default-500">

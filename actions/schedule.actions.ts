@@ -124,6 +124,7 @@ export async function createSchedule(
   success: boolean;
   count?: number;
   schedules?: ISchedule[];
+  syncError?: string;
   error?: string;
 }> {
   try {
@@ -134,7 +135,7 @@ export async function createSchedule(
 
     const result = await createSchedulesService(data, session.user.id);
 
-    // Notify enrolled students about new schedule
+    // Notify enrolled students about new schedule (fire-and-forget)
     try {
       const enrollments = await prisma.portalClassEnrollment.findMany({
         where: { classId: data.classId, status: 'ENROLLED' },
@@ -151,8 +152,26 @@ export async function createSchedule(
       }
     } catch (e) { console.error('Schedule notification error:', e); }
 
+    // Auto-sync to Google Calendar if requested
+    let syncError: string | undefined;
+    if (data.syncToGoogle && result.schedules?.length) {
+      try {
+        // Sync each created schedule to Google Calendar
+        for (const schedule of result.schedules) {
+          const syncResult = await syncScheduleToGoogleCalendar(schedule.id);
+          if (!syncResult.success) {
+            syncError = syncResult.error;
+            break; // Stop on first sync failure
+          }
+        }
+      } catch (e) {
+        syncError = e instanceof Error ? e.message : 'Google Calendar sync failed';
+        console.error('Google Calendar auto-sync error:', e);
+      }
+    }
+
     revalidatePath('/portal/teacher/schedule');
-    return { success: true, ...result };
+    return { success: true, ...result, syncError };
   } catch (error) {
     console.error('Error creating schedule:', error);
     return {

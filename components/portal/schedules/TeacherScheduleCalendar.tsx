@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { toast } from 'react-toastify';
 import {
   BigCalendarView,
@@ -32,8 +32,11 @@ export default function TeacherScheduleCalendar() {
   const [scheduleToEdit, setScheduleToEdit] = useState<ISchedule | null>(null);
   const [slotInitialTime, setSlotInitialTime] = useState<{ start: Date; end: Date } | null>(null);
   const { startLoading, stopLoading } = usePortalUI();
+  const hasFetchedRef = useRef(false);
 
   useEffect(() => {
+    if (hasFetchedRef.current) return;
+    hasFetchedRef.current = true;
     loadData();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
@@ -75,6 +78,16 @@ export default function TeacherScheduleCalendar() {
 
       const count = result.count || 1;
       toast.success(`Đã tạo ${count} buổi học thành công!`);
+
+      // Show sync warning if sync was requested but failed
+      if (data.syncToGoogle && result.syncError) {
+        const isNotConnected = result.syncError.includes("chưa được kết nối") || result.syncError.includes("hết hạn")
+        if (isNotConnected) {
+          toast.warning("Lịch đã được tạo nhưng chưa đồng bộ Google Calendar. Bạn cần đăng xuất rồi đăng nhập lại bằng Google để kích hoạt đồng bộ.", { autoClose: 8000 })
+        } else {
+          toast.warning(`Đồng bộ Google Calendar thất bại: ${result.syncError}`)
+        }
+      }
 
       // Optimistically add new schedules to state
       if (result.schedules && Array.isArray(result.schedules)) {

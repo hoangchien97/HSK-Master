@@ -12,6 +12,7 @@ export enum FlashcardPhase {
 
 export enum FlashcardAction {
   HARD = "HARD",
+  GOOD = "GOOD",
   EASY = "EASY",
 }
 

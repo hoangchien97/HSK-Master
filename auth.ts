@@ -131,6 +131,44 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
             user.role = existingUser.role
             user.status = existingUser.status
           }
+
+          // Save/update Google OAuth tokens to Account table for Calendar sync
+          const portalUserId = user.id as string
+          if (portalUserId && account.providerAccountId) {
+            try {
+              await prisma.account.upsert({
+                where: {
+                  provider_providerAccountId: {
+                    provider: 'google',
+                    providerAccountId: account.providerAccountId,
+                  },
+                },
+                update: {
+                  access_token: account.access_token ?? undefined,
+                  refresh_token: account.refresh_token ?? undefined,
+                  expires_at: account.expires_at ?? undefined,
+                  token_type: account.token_type ?? undefined,
+                  scope: account.scope ?? undefined,
+                  id_token: account.id_token as string | undefined,
+                },
+                create: {
+                  userId: portalUserId,
+                  type: account.type || 'oauth',
+                  provider: 'google',
+                  providerAccountId: account.providerAccountId,
+                  access_token: account.access_token ?? undefined,
+                  refresh_token: account.refresh_token ?? undefined,
+                  expires_at: account.expires_at ?? undefined,
+                  token_type: account.token_type ?? undefined,
+                  scope: account.scope ?? undefined,
+                  id_token: account.id_token as string | undefined,
+                },
+              })
+            } catch (tokenError) {
+              console.error("Error saving Google tokens:", tokenError)
+              // Don't block sign-in if token save fails
+            }
+          }
         } catch (error) {
           console.error("Error in signIn callback:", error)
           return false

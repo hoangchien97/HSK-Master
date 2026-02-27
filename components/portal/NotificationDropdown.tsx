@@ -1,6 +1,5 @@
 "use client"
 
-import { useState, useEffect, useCallback } from "react"
 import { useRouter } from "next/navigation"
 import {
   Dropdown,
@@ -35,27 +34,14 @@ import {
 import dayjs from "dayjs"
 import relativeTime from "dayjs/plugin/relativeTime"
 import "dayjs/locale/vi"
-import {
-  fetchNotifications,
-  markNotificationReadAction,
-  markAllNotificationsReadAction,
-} from "@/actions/notification.actions"
+import { useNotifications, type NotificationItem } from "@/providers/notification-provider"
 import { NotificationType } from "@/enums/portal/common"
+import { NOTIFICATION_MAX_BADGE } from "@/constants/portal/notification"
 
 dayjs.locale("vi")
 dayjs.extend(relativeTime)
 
-/* ─── Types ─── */
-
-interface NotificationItem {
-  id: string
-  type: string
-  title: string
-  message: string
-  link?: string | null
-  isRead: boolean
-  createdAt: string
-}
+/* ─── Icon map ─── */
 
 const TYPE_ICON: Record<string, React.ReactNode> = {
   // Assignments
@@ -87,61 +73,35 @@ const TYPE_ICON: Record<string, React.ReactNode> = {
   [NotificationType.PROFILE_UPDATED]: <UserCog className="w-4 h-4 text-secondary" />,
 }
 
+/* ─── Badge formatter ─── */
+
+function formatBadge(count: number): string {
+  if (count <= 0) return ""
+  if (count > NOTIFICATION_MAX_BADGE) return `${NOTIFICATION_MAX_BADGE}+`
+  return String(count)
+}
+
 /* ─── Component ─── */
 
 export default function NotificationDropdown() {
   const router = useRouter()
-  const [items, setItems] = useState<NotificationItem[]>([])
-  const [unreadCount, setUnreadCount] = useState(0)
-  const [loading, setLoading] = useState(false)
-
-  const loadNotifications = useCallback(async () => {
-    setLoading(true)
-    try {
-      const result = await fetchNotifications({ limit: 15 })
-      if (result.success && result.data) {
-        setItems(result.data.items as NotificationItem[])
-        setUnreadCount(result.data.unreadCount)
-      }
-    } catch {
-      // Silently fail
-    } finally {
-      setLoading(false)
-    }
-  }, [])
-
-  // Load on mount and periodically
-  useEffect(() => {
-    loadNotifications()
-    const interval = setInterval(loadNotifications, 30000) // Poll every 30s
-    return () => clearInterval(interval)
-  }, [loadNotifications])
+  const { items, unreadCount, loading, markRead, markAllRead, refresh } = useNotifications()
 
   const handleClick = async (notification: NotificationItem) => {
     if (!notification.isRead) {
-      await markNotificationReadAction(notification.id)
-      setItems((prev) =>
-        prev.map((n) => (n.id === notification.id ? { ...n, isRead: true } : n))
-      )
-      setUnreadCount((prev) => Math.max(0, prev - 1))
+      await markRead(notification.id)
     }
     if (notification.link) {
       router.push(notification.link)
     }
   }
 
-  const handleMarkAllRead = async () => {
-    await markAllNotificationsReadAction()
-    setItems((prev) => prev.map((n) => ({ ...n, isRead: true })))
-    setUnreadCount(0)
-  }
-
   return (
-    <Dropdown placement="bottom-end" onOpenChange={(open) => open && loadNotifications()}>
+    <Dropdown placement="bottom-end" onOpenChange={(open) => open && refresh()}>
       <DropdownTrigger>
         <button className="relative p-2 text-gray-500 hover:text-gray-700 rounded-lg hover:bg-gray-100 transition-colors">
           <Badge
-            content={unreadCount > 0 ? (unreadCount > 9 ? "9+" : unreadCount) : ""}
+            content={formatBadge(unreadCount)}
             color="danger"
             shape="circle"
             size="sm"
@@ -172,7 +132,7 @@ export default function NotificationDropdown() {
                   variant="light"
                   color="primary"
                   startContent={<CheckCheck className="w-3.5 h-3.5" />}
-                  onPress={handleMarkAllRead}
+                  onPress={markAllRead}
                   className="text-xs -mr-2"
                 >
                   Đọc tất cả

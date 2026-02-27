@@ -1,7 +1,14 @@
 "use client"
 
-import { Card, CardBody, Progress } from "@heroui/react"
-import { BookOpen, Award, Clock } from "lucide-react"
+import { Card, CardBody, Progress, Tooltip } from "@heroui/react"
+import { BookOpen, Award, Clock, Layers, HelpCircle, Headphones, PenTool } from "lucide-react"
+import { PracticeMode } from "@/enums/portal/common"
+
+interface SkillInfo {
+  masteryPercent: number
+  masteredCount: number
+  totalCount: number
+}
 
 interface ProgressCardProps {
   totalItems: number
@@ -9,6 +16,22 @@ interface ProgressCardProps {
   masteredCount: number
   totalTimeSec: number
   masteryPercent: number
+  /** Per-mode skill progress (optional — shown when available) */
+  skillProgress?: Partial<Record<string, SkillInfo>>
+}
+
+const SKILL_CONFIG: { mode: string; label: string; icon: React.ReactNode; color: string }[] = [
+  { mode: PracticeMode.FLASHCARD, label: "Flashcard", icon: <Layers className="w-3 h-3" />, color: "text-primary" },
+  { mode: PracticeMode.QUIZ, label: "Quiz", icon: <HelpCircle className="w-3 h-3" />, color: "text-warning" },
+  { mode: PracticeMode.LISTEN, label: "Nghe", icon: <Headphones className="w-3 h-3" />, color: "text-secondary" },
+  { mode: PracticeMode.WRITE, label: "Viết", icon: <PenTool className="w-3 h-3" />, color: "text-success" },
+]
+
+function getProgressColor(pct: number): "success" | "warning" | "primary" | "default" {
+  if (pct >= 80) return "success"
+  if (pct >= 40) return "warning"
+  if (pct > 0) return "primary"
+  return "default"
 }
 
 function formatTime(sec: number): string {
@@ -25,8 +48,10 @@ export default function ProgressCard({
   masteredCount,
   totalTimeSec,
   masteryPercent,
+  skillProgress,
 }: ProgressCardProps) {
   const remaining = totalItems - learnedCount
+  const hasSkillData = skillProgress && Object.keys(skillProgress).length > 0
 
   return (
     <Card className="bg-linear-to-r from-primary-50 to-secondary-50 dark:from-primary-950/30 dark:to-secondary-950/30 border border-primary-100 dark:border-primary-900/30">
@@ -101,6 +126,44 @@ export default function ProgressCard({
             className="mt-2"
             aria-label="Tiến độ học tập"
           />
+        )}
+
+        {/* Per-mode skill progress badges */}
+        {hasSkillData && (
+          <div className="flex items-center gap-2 sm:gap-3 mt-2.5 pt-2 border-t border-primary-100/50 dark:border-primary-900/20">
+            <span className="text-[9px] sm:text-[10px] text-default-400 shrink-0">Kỹ năng:</span>
+            <div className="flex items-center gap-1.5 sm:gap-2 flex-wrap">
+              {SKILL_CONFIG.map(({ mode, label, icon, color }) => {
+                const info = skillProgress?.[mode]
+                const pct = info?.masteryPercent ?? 0
+                const progressColor = getProgressColor(pct)
+
+                return (
+                  <Tooltip
+                    key={mode}
+                    content={`${label}: ${Math.round(pct)}% (${info?.masteredCount ?? 0}/${info?.totalCount ?? totalItems})`}
+                    placement="bottom"
+                  >
+                    <div className="flex items-center gap-1 px-1.5 py-0.5 rounded-md bg-white/60 dark:bg-default-800/40 cursor-default">
+                      <span className={color}>{icon}</span>
+                      <div className="w-8 sm:w-10">
+                        <Progress
+                          value={pct}
+                          size="sm"
+                          color={progressColor}
+                          className="h-1"
+                          aria-label={`${label} progress`}
+                        />
+                      </div>
+                      <span className={`text-[9px] font-medium ${pct >= 80 ? "text-success" : pct > 0 ? "text-default-600" : "text-default-400"}`}>
+                        {Math.round(pct)}%
+                      </span>
+                    </div>
+                  </Tooltip>
+                )
+              })}
+            </div>
+          </div>
         )}
       </CardBody>
     </Card>

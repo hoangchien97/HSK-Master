@@ -1,8 +1,8 @@
 "use client"
 
 import { useRouter } from "next/navigation"
-import { Chip, Progress } from "@heroui/react"
-import { ChevronRight, CheckCircle2, BookOpen } from "lucide-react"
+import { Chip, Progress, Tooltip } from "@heroui/react"
+import { ChevronRight, CheckCircle2, BookOpen, Layers, HelpCircle, Headphones, PenLine } from "lucide-react"
 
 interface LessonItem {
   id: string
@@ -19,13 +19,28 @@ interface ProgressItem {
   masteredCount?: number
 }
 
+interface SkillModeInfo {
+  masteryPercent: number
+  masteredCount: number
+  totalCount: number
+}
+
 interface Props {
   lesson: LessonItem
   progress?: ProgressItem | null
   levelSlug: string
+  /** Per-mode skill progress keyed by mode string (FLASHCARD, QUIZ, LISTEN, WRITE) */
+  skillProgress?: Record<string, SkillModeInfo>
 }
 
-export default function PracticeLessonItem({ lesson, progress, levelSlug }: Props) {
+const MODE_ICONS: Record<string, { icon: React.ReactNode; label: string; color: string }> = {
+  FLASHCARD: { icon: <Layers className="w-3 h-3" />, label: "Flashcard", color: "text-primary" },
+  QUIZ: { icon: <HelpCircle className="w-3 h-3" />, label: "Quiz", color: "text-secondary" },
+  LISTEN: { icon: <Headphones className="w-3 h-3" />, label: "Nghe", color: "text-warning" },
+  WRITE: { icon: <PenLine className="w-3 h-3" />, label: "Viết", color: "text-danger" },
+}
+
+export default function PracticeLessonItem({ lesson, progress, levelSlug, skillProgress }: Props) {
   const router = useRouter()
   const vocabCount = lesson._count.vocabularies
   const mastery = progress?.masteryPercent ?? 0
@@ -105,6 +120,23 @@ export default function PracticeLessonItem({ lesson, progress, levelSlug }: Prop
               </>
             )}
           </div>
+          {/* Per-mode skill badges */}
+          {skillProgress && Object.keys(skillProgress).length > 0 && (
+            <div className="flex items-center gap-1.5 mt-1">
+              {Object.entries(MODE_ICONS).map(([mode, { icon, label, color }]) => {
+                const sp = skillProgress[mode]
+                if (!sp) return null
+                return (
+                  <Tooltip key={mode} content={`${label}: ${sp.masteredCount}/${sp.totalCount} thành thạo`} size="sm">
+                    <span className={`inline-flex items-center gap-0.5 text-[10px] ${color}`}>
+                      {icon}
+                      <span className="font-medium">{sp.masteryPercent}%</span>
+                    </span>
+                  </Tooltip>
+                )
+              })}
+            </div>
+          )}
         </div>
 
         <ChevronRight className="w-4 h-4 text-default-300 group-hover:text-primary shrink-0 transition-colors" />

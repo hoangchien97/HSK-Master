@@ -14,6 +14,7 @@ import {
   getStudentLessonProgress,
   getStudentItemProgressForLesson,
 } from "@/services/portal/practice.service"
+import { getLessonAllModeSkillProgress } from "@/services/portal/practice-skill.service"
 import { levelSlugToLabel } from "@/utils/practice"
 import LessonPracticeView from "@/components/portal/practice/LessonPracticeView"
 
@@ -50,10 +51,11 @@ export default async function PracticeDetailPage({ params }: Props) {
   const lesson = await getLessonWithVocabularies(lessonSlug)
   if (!lesson) notFound()
 
-  const [progress, itemProgress, siblings] = await Promise.all([
+  const [progress, itemProgress, siblings, skillProgress] = await Promise.all([
     getStudentLessonProgress(session.user.id, lesson.id),
     getStudentItemProgressForLesson(session.user.id, lesson.id),
     getSiblingLessons(lesson.courseId),
+    getLessonAllModeSkillProgress(session.user.id, lesson.id),
   ])
 
   return (
@@ -64,6 +66,7 @@ export default async function PracticeDetailPage({ params }: Props) {
       initialProgress={JSON.parse(JSON.stringify(progress))}
       initialItemProgress={JSON.parse(JSON.stringify(itemProgress))}
       initialSiblings={siblings.map((s) => ({ id: s.id, slug: s.slug, title: s.title, order: s.order }))}
+      initialSkillProgress={JSON.parse(JSON.stringify(skillProgress))}
     />
   )
 }

@@ -5,6 +5,7 @@ import {
   getStudentAllLessonProgress,
   getStudentEnrolledHskLevels,
 } from "@/services/portal/practice.service"
+import { getAllLessonSkillProgress } from "@/services/portal/practice-skill.service"
 import PracticeListView from "@/components/portal/practice/PracticeListView"
 
 type Props = {
@@ -24,15 +25,17 @@ export default async function PracticePage({ params }: Props) {
 
   // SSR: fetch data server-side for fast initial render
   const enrolledLevels = await getStudentEnrolledHskLevels(session.user.id)
-  const [courses, progressMap] = await Promise.all([
+  const [courses, progressMap, skillProgressMap] = await Promise.all([
     getCoursesForPractice(enrolledLevels.length > 0 ? enrolledLevels : undefined),
     getStudentAllLessonProgress(session.user.id),
+    getAllLessonSkillProgress(session.user.id),
   ])
 
   return (
     <PracticeListView
       initialCourses={JSON.parse(JSON.stringify(courses))}
       initialProgressMap={JSON.parse(JSON.stringify(progressMap))}
+      initialSkillProgressMap={JSON.parse(JSON.stringify(skillProgressMap))}
     />
   )
 }

@@ -6,24 +6,37 @@ import { Volume2, ChevronLeft, ChevronRight } from "lucide-react"
 import {
   startPracticeSessionAction,
   finishPracticeSessionAction,
-  recordPracticeAttemptAction,
 } from "@/actions/practice.actions"
+import { recordSkillAttemptAction } from "@/actions/practice-skill.actions"
 import { useSpeech } from "@/hooks/useSpeech"
 import { getDisplayMeaning, QuestionType } from "@/enums/portal/common"
 import { PracticeMode } from "@/enums/portal"
 import { AUTO_NEXT_DELAY_MS, QUESTION_TYPE_LABELS } from "@/constants/portal/practice"
 import { generateQuizQuestions } from "@/utils/practice"
 import type { QuizQuestion } from "@/utils/practice"
-import type { IVocabularyItem } from "@/interfaces/portal/practice"
+import type { IVocabularyItem, IQueueVocabItem, ISkillProgressRecord } from "@/interfaces/portal/practice"
 import { QuizResultScreen, McqOptions } from "../shared"
 
 interface Props {
   vocabularies: IVocabularyItem[]
   lessonId: string
   onProgressUpdate: () => void
+  /** Per-mode queue (with interleaved prev-lesson vocab) */
+  queue?: IQueueVocabItem[]
+  /** Per-mode skill progress map keyed by vocabularyId */
+  skillProgressMap?: Record<string, ISkillProgressRecord>
+  /** Resume pointer from server */
+  initialPointer?: number
+  /** Whether all vocab are MASTERED for this mode */
+  isCompleted?: boolean
+  /** Reset session handler */
+  onResetSession?: () => void
 }
 
-export default function QuizTab({ vocabularies, lessonId, onProgressUpdate }: Props) {
+export default function QuizTab({
+  vocabularies, lessonId, onProgressUpdate,
+  queue: modeQueue, skillProgressMap, initialPointer, isCompleted: modeCompleted, onResetSession,
+}: Props) {
   const [generationKey, setGenerationKey] = useState(0)
   const [currentIdx, setCurrentIdx] = useState(0)
   const [selectedKey, setSelectedKey] = useState<string | null>(null)
@@ -40,11 +53,16 @@ export default function QuizTab({ vocabularies, lessonId, onProgressUpdate }: Pr
   const isAdvancingRef = useRef(false)
   const { speak } = useSpeech()
 
+  // State for "retry wrong words only" mode (must be before useMemo that depends on it)
+  const [retryWrongVocabs, setRetryWrongVocabs] = useState<IVocabularyItem[] | null>(null)
+
   // Derive questions from vocabularies + generationKey (avoids setState-in-effect)
+  // When retryWrongVocabs is set, generate questions from only the wrong words
+  const activeVocabs = retryWrongVocabs ?? vocabularies
   const questions = useMemo(
-    () => generateQuizQuestions(vocabularies),
+    () => generateQuizQuestions(activeVocabs),
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    [vocabularies, generationKey]
+    [activeVocabs, generationKey]
   )
 
   // Reset quiz state when vocabularies change (React 19 "adjust state during render" pattern)
@@ -62,8 +80,9 @@ export default function QuizTab({ vocabularies, lessonId, onProgressUpdate }: Pr
     questionStartRef.current = Date.now()
   }, [])
 
-  // Start session
+  // Start session (skip if mode already completed)
   useEffect(() => {
+    if (modeCompleted) return
     let active = true
     startPracticeSessionAction(lessonId, PracticeMode.QUIZ).then((res) => {
       if (active && res.success && res.data) {
@@ -72,7 +91,7 @@ export default function QuizTab({ vocabularies, lessonId, onProgressUpdate }: Pr
       }
     })
     return () => { active = false }
-  }, [lessonId])
+  }, [lessonId, modeCompleted])
 
   // Finish on unmount
   useEffect(() => {
@@ -156,18 +175,15 @@ export default function QuizTab({ vocabularies, lessonId, onProgressUpdate }: Pr
 
       setResults((prev) => [...prev, { correct: isCorrect, vocab: currentQ.vocab }])
 
-      // Record attempt
-      if (sessionId) {
-        await recordPracticeAttemptAction({
-          sessionId,
-          vocabularyId: currentQ.vocab.id,
-          questionType: currentQ.type,
-          userAnswer: selectedOption?.label || null,
-          correctAnswer: correctOption?.label || "",
-          isCorrect,
-          timeSpentSec: timeSec,
-        })
-      }
+      // Record per-mode skill progress (handles legacy sync internally)
+      recordSkillAttemptAction({
+        lessonId,
+        mode: PracticeMode.QUIZ,
+        vocabularyId: currentQ.vocab.id,
+        isCorrect,
+        currentIndex: currentIdx,
+        queueLength: totalQ,
+      })
 
       // Auto-advance after 3s on correct answer
       if (isCorrect) {
@@ -185,7 +201,24 @@ export default function QuizTab({ vocabularies, lessonId, onProgressUpdate }: Pr
 
   const handleRestart = useCallback(() => {
     clearAutoNext()
+    setRetryWrongVocabs(null)
     setGenerationKey(k => k + 1) // triggers useMemo recalculation
+    setCurrentIdx(0)
+    setSelectedKey(null)
+    setShowResult(false)
+    setResults([])
+    setFinished(false)
+    questionStartRef.current = Date.now()
+    startTimeRef.current = Date.now()
+    startPracticeSessionAction(lessonId, PracticeMode.QUIZ).then((res) => {
+      if (res.success && res.data) setSessionId(res.data.sessionId)
+    })
+  }, [lessonId, clearAutoNext])
+
+  const handleRetryWrong = useCallback((wrongVocabs: IVocabularyItem[]) => {
+    clearAutoNext()
+    setRetryWrongVocabs(wrongVocabs)
+    setGenerationKey(k => k + 1)
     setCurrentIdx(0)
     setSelectedKey(null)
     setShowResult(false)
@@ -212,6 +245,7 @@ export default function QuizTab({ vocabularies, lessonId, onProgressUpdate }: Pr
         totalQuestions={totalQ}
         elapsedSec={elapsedSec}
         onRestart={handleRestart}
+        onRetryWrong={handleRetryWrong}
         mode={PracticeMode.QUIZ}
       />
     )
@@ -227,6 +261,15 @@ export default function QuizTab({ vocabularies, lessonId, onProgressUpdate }: Pr
   // Quiz question
   return (
     <div className="max-w-lg mx-auto">
+      {/* Retry wrong words indicator */}
+      {retryWrongVocabs && (
+        <div className="mb-3 p-2 rounded-lg bg-warning-50 dark:bg-warning-950/20 text-center">
+          <p className="text-sm text-warning-700 dark:text-warning-300 font-medium">
+            📝 Ôn lại {retryWrongVocabs.length} từ sai
+          </p>
+        </div>
+      )}
+
       {/* Header */}
       <div className="flex items-center justify-between mb-3">
         <span className="text-sm text-default-500">

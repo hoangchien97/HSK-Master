@@ -6,12 +6,12 @@ import { ChevronLeft, ChevronRight } from "lucide-react"
 import {
   startPracticeSessionAction,
   finishPracticeSessionAction,
-  recordPracticeAttemptAction,
 } from "@/actions/practice.actions"
-import { PracticeMode, QuestionType } from "@/enums/portal"
+import { recordSkillAttemptAction } from "@/actions/practice-skill.actions"
+import { PracticeMode } from "@/enums/portal"
 import { WriteMode } from "@/constants/portal/practice"
 import { shuffleArray } from "@/utils/practice"
-import type { IVocabularyItem } from "@/interfaces/portal/practice"
+import type { IVocabularyItem, IQueueVocabItem, ISkillProgressRecord } from "@/interfaces/portal/practice"
 import { QuizResultScreen } from "../shared"
 import { AnimationMode, PracticeStrokeMode, TypePinyinMode } from "./write"
 
@@ -19,9 +19,19 @@ interface Props {
   vocabularies: IVocabularyItem[]
   lessonId: string
   onProgressUpdate: () => void
+  /** Per-mode queue (with interleaved prev-lesson vocab) */
+  queue?: IQueueVocabItem[]
+  /** Per-mode skill progress map keyed by vocabularyId */
+  skillProgressMap?: Record<string, ISkillProgressRecord>
+  /** Resume pointer from server */
+  initialPointer?: number
+  /** Whether this mode is fully completed */
+  isCompleted?: boolean
+  /** Callback to reset session & refetch queue */
+  onResetSession?: () => void
 }
 
-export default function WriteTab({ vocabularies, lessonId, onProgressUpdate }: Props) {
+export default function WriteTab({ vocabularies, lessonId, onProgressUpdate, queue: modeQueue, skillProgressMap, initialPointer, isCompleted: modeCompleted, onResetSession }: Props) {
   const [items, setItems] = useState<IVocabularyItem[]>([])
   const [currentIdx, setCurrentIdx] = useState(0)
   const [mode, setMode] = useState<WriteMode>(WriteMode.ANIMATION)
@@ -40,8 +50,9 @@ export default function WriteTab({ vocabularies, lessonId, onProgressUpdate }: P
     setItems(shuffleArray(vocabularies))
   }, [vocabularies])
 
-  // Start session
+  // Start session (skip if mode already completed)
   useEffect(() => {
+    if (modeCompleted) return
     let active = true
     startTimeRef.current = Date.now()
     questionStartRef.current = Date.now()
@@ -52,7 +63,7 @@ export default function WriteTab({ vocabularies, lessonId, onProgressUpdate }: P
       }
     })
     return () => { active = false }
-  }, [lessonId])
+  }, [lessonId, modeCompleted])
 
   // Finish on unmount
   useEffect(() => {
@@ -65,20 +76,20 @@ export default function WriteTab({ vocabularies, lessonId, onProgressUpdate }: P
   }, [sessionId])
 
   const recordAttempt = useCallback(
-    async (isCorrect: boolean, userAnswer: string, questionType: string) => {
-      if (!sessionId || !currentItem) return
-      const timeSec = Math.round((Date.now() - questionStartRef.current) / 1000)
-      await recordPracticeAttemptAction({
-        sessionId,
+    async (isCorrect: boolean) => {
+      if (!currentItem) return
+
+      // Record per-mode skill progress (handles legacy sync internally)
+      recordSkillAttemptAction({
+        lessonId,
+        mode: PracticeMode.WRITE,
         vocabularyId: currentItem.id,
-        questionType,
-        userAnswer,
-        correctAnswer: questionType === QuestionType.TYPE_PINYIN ? (currentItem.pinyin || "") : currentItem.word.charAt(0),
         isCorrect,
-        timeSpentSec: timeSec,
+        currentIndex: currentIdx,
+        queueLength: totalItems,
       })
     },
-    [sessionId, currentItem],
+    [currentItem, lessonId, currentIdx, totalItems],
   )
 
   const goNext = useCallback(async () => {
@@ -107,7 +118,7 @@ export default function WriteTab({ vocabularies, lessonId, onProgressUpdate }: P
     (isCorrect: boolean, mistakes: number) => {
       if (!currentItem) return
       setResults((prev) => [...prev, { correct: isCorrect, vocab: currentItem }])
-      recordAttempt(isCorrect, `stroke_mistakes:${mistakes}`, QuestionType.TYPE_HANZI)
+      recordAttempt(isCorrect)
       goNext()
     },
     [currentItem, recordAttempt, goNext],
@@ -116,7 +127,7 @@ export default function WriteTab({ vocabularies, lessonId, onProgressUpdate }: P
   const handleStrokeSkip = useCallback(() => {
     if (!currentItem) return
     setResults((prev) => [...prev, { correct: false, vocab: currentItem }])
-    recordAttempt(false, "skipped", QuestionType.TYPE_HANZI)
+    recordAttempt(false)
     goNext()
   }, [currentItem, recordAttempt, goNext])
 
@@ -124,12 +135,16 @@ export default function WriteTab({ vocabularies, lessonId, onProgressUpdate }: P
     (isCorrect: boolean, answer: string) => {
       if (!currentItem) return
       setResults((prev) => [...prev, { correct: isCorrect, vocab: currentItem }])
-      recordAttempt(isCorrect, answer, QuestionType.TYPE_PINYIN)
+      recordAttempt(isCorrect)
     },
     [currentItem, recordAttempt],
   )
 
+  // State for "retry wrong words only" mode
+  const [retryWrongVocabs, setRetryWrongVocabs] = useState<IVocabularyItem[] | null>(null)
+
   const handleRestart = useCallback(() => {
+    setRetryWrongVocabs(null)
     setItems(shuffleArray(vocabularies))
     setCurrentIdx(0)
     setFinished(false)
@@ -140,6 +155,19 @@ export default function WriteTab({ vocabularies, lessonId, onProgressUpdate }: P
       if (res.success && res.data) setSessionId(res.data.sessionId)
     })
   }, [vocabularies, lessonId])
+
+  const handleRetryWrong = useCallback((wrongVocabs: IVocabularyItem[]) => {
+    setRetryWrongVocabs(wrongVocabs)
+    setItems(shuffleArray(wrongVocabs))
+    setCurrentIdx(0)
+    setFinished(false)
+    setResults([])
+    questionStartRef.current = Date.now()
+    startTimeRef.current = Date.now()
+    startPracticeSessionAction(lessonId, PracticeMode.WRITE).then((res) => {
+      if (res.success && res.data) setSessionId(res.data.sessionId)
+    })
+  }, [lessonId])
 
   if (totalItems === 0) {
     return (
@@ -155,6 +183,7 @@ export default function WriteTab({ vocabularies, lessonId, onProgressUpdate }: P
         totalQuestions={totalItems}
         elapsedSec={elapsedSec}
         onRestart={handleRestart}
+        onRetryWrong={handleRetryWrong}
         mode={PracticeMode.WRITE}
         wrongItemsLabel="Từ cần luyện"
       />
@@ -163,6 +192,15 @@ export default function WriteTab({ vocabularies, lessonId, onProgressUpdate }: P
 
   return (
     <div className="max-w-lg mx-auto">
+      {/* Retry wrong words indicator */}
+      {retryWrongVocabs && (
+        <div className="mb-3 p-2 rounded-lg bg-warning-50 dark:bg-warning-950/20 text-center">
+          <p className="text-sm text-warning-700 dark:text-warning-300 font-medium">
+            ✍️ Ôn lại {retryWrongVocabs.length} từ sai
+          </p>
+        </div>
+      )}
+
       {/* Header */}
       <div className="flex items-center justify-between mb-3">
         <span className="text-sm text-default-500">

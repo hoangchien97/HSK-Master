@@ -116,7 +116,13 @@ export default function EventDetailDrawer({
         // Update event state to reflect sync
         setEvent(prev => prev ? { ...prev, syncedToGoogle: true, googleEventId: result.googleEventId || undefined } : null)
       } else {
-        toast.error(result.error || "Không thể đồng bộ với Google Calendar")
+        // Show more helpful message for Google not connected
+        const isNotConnected = result.error?.includes("chưa được kết nối") || result.error?.includes("hết hạn")
+        if (isNotConnected) {
+          toast.error("Bạn cần đăng xuất rồi đăng nhập lại bằng Google để kích hoạt đồng bộ Calendar.", { autoClose: 8000 })
+        } else {
+          toast.error(result.error || "Không thể đồng bộ với Google Calendar")
+        }
       }
     } catch (error) {
       console.error("Error syncing to Google:", error)

@@ -7,23 +7,36 @@ import { toast } from "react-toastify"
 import {
   startPracticeSessionAction,
   finishPracticeSessionAction,
-  recordFlashcardActionServer,
 } from "@/actions/practice.actions"
+import { recordFlashcardSkillAction } from "@/actions/practice-skill.actions"
 import { useSpeech } from "@/hooks/useSpeech"
 import { WORD_TYPE_COLORS, WORD_TYPE_LABELS, ItemProgressStatus, getDisplayMeaning } from "@/enums/portal/common"
 import { PracticeMode } from "@/enums/portal"
 import { FlashcardPhase, FlashcardAction } from "@/constants/portal/practice"
-import type { IVocabularyItem, IStudentItemProgress } from "@/interfaces/portal/practice"
+import type { IVocabularyItem, IStudentItemProgress, IQueueVocabItem, ISkillProgressRecord } from "@/interfaces/portal/practice"
 
 interface Props {
   vocabularies: IVocabularyItem[]
   lessonId: string
   itemProgress: Record<string, IStudentItemProgress>
   onProgressUpdate: () => void
+  /** Per-mode queue (with interleaved prev-lesson vocab) */
+  queue?: IQueueVocabItem[]
+  /** Per-mode skill progress map keyed by vocabularyId */
+  skillProgressMap?: Record<string, ISkillProgressRecord>
+  /** Resume pointer from server */
+  initialPointer?: number
+  /** Whether all vocab are MASTERED for this mode */
+  isCompleted?: boolean
+  /** Reset session handler */
+  onResetSession?: () => void
 }
 
-export default function FlashcardTab({ vocabularies, lessonId, itemProgress, onProgressUpdate }: Props) {
-  const [currentIndex, setCurrentIndex] = useState(0)
+export default function FlashcardTab({
+  vocabularies, lessonId, itemProgress, onProgressUpdate,
+  queue: modeQueue, skillProgressMap, initialPointer, isCompleted: modeCompleted, onResetSession,
+}: Props) {
+  const [currentIndex, setCurrentIndex] = useState(initialPointer ?? 0)
   const [isFlipped, setIsFlipped] = useState(false)
   const [shuffled, setShuffled] = useState(false)
   const [sessionId, setSessionId] = useState<string | null>(null)
@@ -47,8 +60,9 @@ export default function FlashcardTab({ vocabularies, lessonId, itemProgress, onP
   const currentItem = items[currentIndex]
   const total = items.length
 
-  // Start session
+  // Start session (skip if mode already completed)
   useEffect(() => {
+    if (modeCompleted) return
     let active = true
     startPracticeSessionAction(lessonId, PracticeMode.FLASHCARD).then((res) => {
       if (active && res.success && res.data) {
@@ -59,7 +73,7 @@ export default function FlashcardTab({ vocabularies, lessonId, itemProgress, onP
     return () => {
       active = false
     }
-  }, [lessonId])
+  }, [lessonId, modeCompleted])
 
   // Cleanup: finish session on unmount
   useEffect(() => {
@@ -84,19 +98,20 @@ export default function FlashcardTab({ vocabularies, lessonId, itemProgress, onP
       if (!currentItem) return
 
       // Visual swipe animation
-      setSwipeDir(action === FlashcardAction.EASY ? "right" : "left")
+      setSwipeDir(action === FlashcardAction.HARD ? "left" : "right")
 
       // Track known/unknown
-      if (action === FlashcardAction.EASY) {
-        setKnownSet((prev) => new Set(prev).add(currentItem.id))
-        setUnknownSet((prev) => {
+      if (action === FlashcardAction.HARD) {
+        setUnknownSet((prev) => new Set(prev).add(currentItem.id))
+        setKnownSet((prev) => {
           const next = new Set(prev)
           next.delete(currentItem.id)
           return next
         })
       } else {
-        setUnknownSet((prev) => new Set(prev).add(currentItem.id))
-        setKnownSet((prev) => {
+        // GOOD or EASY → mark as known
+        setKnownSet((prev) => new Set(prev).add(currentItem.id))
+        setUnknownSet((prev) => {
           const next = new Set(prev)
           next.delete(currentItem.id)
           return next
@@ -104,15 +119,18 @@ export default function FlashcardTab({ vocabularies, lessonId, itemProgress, onP
       }
 
       if (sessionId) {
-        await recordFlashcardActionServer({
-          vocabularyId: currentItem.id,
+        // Record per-mode skill progress (handles legacy sync internally)
+        recordFlashcardSkillAction({
           lessonId,
-          action: action === FlashcardAction.EASY ? FlashcardAction.EASY : FlashcardAction.HARD,
+          vocabularyId: currentItem.id,
+          action,
+          currentIndex,
+          queueLength: total,
           sessionId,
         })
       }
 
-      onProgressUpdate()
+      // NOTE: onProgressUpdate is called once at round completion, not per card.
 
       // Auto-advance after animation
       setTimeout(() => {
@@ -126,10 +144,13 @@ export default function FlashcardTab({ vocabularies, lessonId, itemProgress, onP
       }, 300)
     },
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    [currentItem, sessionId, lessonId, onProgressUpdate, currentIndex, total],
+    [currentItem, sessionId, lessonId, currentIndex, total],
   )
 
   const handleRoundComplete = useCallback(() => {
+    // Refresh progress once per round (not per card)
+    onProgressUpdate()
+
     if (phase === FlashcardPhase.MAIN) {
       // After main round, check for unknown words
       const unknowns = mainItems.filter((v) => unknownSet.has(v.id))
@@ -156,7 +177,7 @@ export default function FlashcardTab({ vocabularies, lessonId, itemProgress, onP
         toast.success("Hoàn thành tất cả! 🎉")
       }
     }
-  }, [phase, mainItems, reviewItems, unknownSet])
+  }, [phase, mainItems, reviewItems, unknownSet, onProgressUpdate])
 
   const goTo = useCallback(
     (dir: "prev" | "next") => {
@@ -223,7 +244,9 @@ export default function FlashcardTab({ vocabularies, lessonId, itemProgress, onP
   }
 
   const progress = currentItem ? itemProgress[currentItem.id] : undefined
+  const skillProg = currentItem && skillProgressMap ? skillProgressMap[currentItem.id] : undefined
   const meaningText = getDisplayMeaning(currentItem)
+  const isFromPrev = modeQueue?.find(q => q.id === currentItem?.id)?.isFromPrevLesson ?? false
 
   return (
     <div className="max-w-lg mx-auto">
@@ -310,15 +333,26 @@ export default function FlashcardTab({ vocabularies, lessonId, itemProgress, onP
                 <Volume2 className="w-5 h-5" />
               </button>
 
-              {/* Mastery chip */}
-              {progress && (
+              {/* Mastery chip — prefer skill progress over legacy */}
+              {(skillProg || progress) && (
                 <Chip
                   size="sm"
                   variant="dot"
-                  color={progress.status === ItemProgressStatus.MASTERED ? "success" : progress.status === ItemProgressStatus.LEARNING ? "warning" : "default"}
+                  color={
+                    (skillProg?.status ?? progress?.status) === ItemProgressStatus.MASTERED ? "success"
+                    : (skillProg?.status ?? progress?.status) === ItemProgressStatus.LEARNING ? "warning"
+                    : "default"
+                  }
                   className="mt-2"
                 >
-                  {Math.round(progress.masteryScore * 100)}%
+                  {Math.round((skillProg?.masteryScore ?? progress?.masteryScore ?? 0) * 100)}%
+                </Chip>
+              )}
+
+              {/* Interleaved vocab indicator */}
+              {isFromPrev && (
+                <Chip size="sm" variant="flat" color="secondary" className="mt-1.5">
+                  📖 Ôn bài trước
                 </Chip>
               )}
 
@@ -396,23 +430,32 @@ export default function FlashcardTab({ vocabularies, lessonId, itemProgress, onP
         </div>
       </div>
 
-      {/* Action buttons: Chưa thuộc / Đã thuộc — always visible */}
+      {/* Action buttons: Chưa thuộc / Tạm ổn / Đã thuộc — always visible */}
       {!swipeDir && (
-        <div className="grid grid-cols-2 gap-3 mb-4">
+        <div className="grid grid-cols-3 gap-2 mb-4">
           <Button
             color="danger"
             variant="flat"
             size="lg"
-            className="font-medium"
+            className="font-medium text-sm"
             onPress={() => handleAction(FlashcardAction.HARD)}
           >
             ✗ Chưa thuộc
           </Button>
           <Button
+            color="warning"
+            variant="flat"
+            size="lg"
+            className="font-medium text-sm"
+            onPress={() => handleAction(FlashcardAction.GOOD)}
+          >
+            ○ Tạm ổn
+          </Button>
+          <Button
             color="success"
             variant="flat"
             size="lg"
-            className="font-medium"
+            className="font-medium text-sm"
             onPress={() => handleAction(FlashcardAction.EASY)}
           >
             ✓ Đã thuộc

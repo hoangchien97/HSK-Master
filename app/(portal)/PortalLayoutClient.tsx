@@ -6,9 +6,11 @@ import PortalSidebar from "@/components/portal/PortalSidebar"
 import PortalHeader from "@/components/portal/PortalHeader"
 import PortalContent from "@/components/portal/PortalContent"
 import { PortalUIProvider } from "@/providers/portal-ui-provider"
+import { NotificationProvider } from "@/providers/notification-provider"
 import "react-toastify/dist/ReactToastify.css"
 
 interface User {
+  id: string
   name: string
   email: string
   role: string
@@ -68,9 +70,11 @@ function PortalLayoutInner({ user, children }: PortalLayoutClientProps) {
 export default function PortalLayoutClient({ user, children }: PortalLayoutClientProps) {
   return (
     <PortalUIProvider>
-      <PortalLayoutInner user={user}>
-        {children}
-      </PortalLayoutInner>
+      <NotificationProvider userId={user.id}>
+        <PortalLayoutInner user={user}>
+          {children}
+        </PortalLayoutInner>
+      </NotificationProvider>
     </PortalUIProvider>
   )
 }

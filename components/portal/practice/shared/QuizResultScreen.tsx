@@ -44,6 +44,8 @@ interface Props {
   totalQuestions: number
   elapsedSec: number
   onRestart: () => void
+  /** Retry only the wrong items */
+  onRetryWrong?: (wrongVocabs: IVocabularyItem[]) => void
   /** Practice tab mode — determines result titles */
   mode: PracticeMode
   /** Label for the wrong items section */
@@ -57,6 +59,7 @@ export default function QuizResultScreen({
   totalQuestions,
   elapsedSec,
   onRestart,
+  onRetryWrong,
   mode,
   wrongItemsLabel = "Từ cần ôn lại",
   restartColor = "primary",
@@ -123,14 +126,25 @@ export default function QuizResultScreen({
             </div>
           )}
 
-          <Button
-            color={restartColor}
-            className="mt-6"
-            onPress={onRestart}
-            startContent={<RotateCcw className="w-4 h-4" />}
-          >
-            Làm lại
-          </Button>
+          <div className="flex gap-3 justify-center mt-6 flex-wrap">
+            {wrongItems.length > 0 && onRetryWrong && (
+              <Button
+                color="warning"
+                variant="flat"
+                onPress={() => onRetryWrong(wrongItems.map((r) => r.vocab))}
+                startContent={<RotateCcw className="w-4 h-4" />}
+              >
+                Ôn lại {wrongItems.length} từ sai
+              </Button>
+            )}
+            <Button
+              color={restartColor}
+              onPress={onRestart}
+              startContent={<RotateCcw className="w-4 h-4" />}
+            >
+              Làm lại tất cả
+            </Button>
+          </div>
         </CardBody>
       </Card>
     </div>

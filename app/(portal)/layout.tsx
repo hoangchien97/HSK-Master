@@ -17,6 +17,7 @@ export default async function PortalLayout({
   return (
     <PortalLayoutClient
       user={{
+        id: session.user.id!,
         name: session.user.name || "User",
         email: session.user.email || "",
         role: session.user.role || "STUDENT",

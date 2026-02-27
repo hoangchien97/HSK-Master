@@ -34,6 +34,8 @@ interface ProgressItem {
 interface Props {
   courses: CourseItem[]
   progressMap: Record<string, ProgressItem>
+  /** Per-lesson per-mode skill progress: { [lessonId]: { [mode]: { masteredCount, totalCount } } } */
+  skillProgressMap?: Record<string, Record<string, { masteredCount: number; totalCount: number }>>
 }
 
 function getLevelColor(level: number): "warning" | "danger" | "secondary" {
@@ -42,7 +44,7 @@ function getLevelColor(level: number): "warning" | "danger" | "secondary" {
   return "secondary"
 }
 
-export default function PracticeCourseAccordion({ courses, progressMap }: Props) {
+export default function PracticeCourseAccordion({ courses, progressMap, skillProgressMap }: Props) {
   // Compute per-course progress
   const courseProgress = useMemo(() => {
     const map: Record<string, { avgMastery: number; started: number; total: number }> = {}
@@ -100,14 +102,31 @@ export default function PracticeCourseAccordion({ courses, progressMap }: Props)
             }
           >
             <div className="grid gap-2 pb-2">
-              {course.lessons.map((lesson) => (
-                <PracticeLessonItem
-                  key={lesson.id}
-                  lesson={lesson}
-                  progress={progressMap[lesson.id]}
-                  levelSlug={`hsk${hskLevel || 0}`}
-                />
-              ))}
+              {course.lessons.map((lesson) => {
+                // Build per-mode skill progress for this lesson
+                const rawSkill = skillProgressMap?.[lesson.id]
+                const lessonSkill = rawSkill
+                  ? Object.fromEntries(
+                      Object.entries(rawSkill).map(([mode, v]) => [
+                        mode,
+                        {
+                          masteryPercent: v.totalCount > 0 ? Math.round((v.masteredCount / v.totalCount) * 100) : 0,
+                          masteredCount: v.masteredCount,
+                          totalCount: v.totalCount,
+                        },
+                      ]),
+                    )
+                  : undefined
+                return (
+                  <PracticeLessonItem
+                    key={lesson.id}
+                    lesson={lesson}
+                    progress={progressMap[lesson.id]}
+                    levelSlug={`hsk${hskLevel || 0}`}
+                    skillProgress={lessonSkill}
+                  />
+                )
+              })}
             </div>
           </AccordionItem>
         )

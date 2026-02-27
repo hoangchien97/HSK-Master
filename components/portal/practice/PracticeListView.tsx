@@ -36,9 +36,11 @@ interface ProgressItem {
 interface Props {
   initialCourses: CourseItem[]
   initialProgressMap: Record<string, ProgressItem>
+  /** Per-lesson per-mode skill progress: { [lessonId]: { [mode]: PortalLessonSkillProgress } } */
+  initialSkillProgressMap?: Record<string, Record<string, { masteredCount: number; totalCount: number }>>
 }
 
-export default function PracticeListView({ initialCourses, initialProgressMap }: Props) {
+export default function PracticeListView({ initialCourses, initialProgressMap, initialSkillProgressMap }: Props) {
   const courses = initialCourses
   const progressMap = initialProgressMap
 
@@ -149,7 +151,7 @@ export default function PracticeListView({ initialCourses, initialProgressMap }:
           )}
 
           {/* Course Accordion */}
-          <PracticeCourseAccordion courses={courses} progressMap={progressMap} />
+          <PracticeCourseAccordion courses={courses} progressMap={progressMap} skillProgressMap={initialSkillProgressMap} />
         </>
       )}
     </div>

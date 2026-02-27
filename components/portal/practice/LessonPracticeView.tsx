@@ -6,6 +6,10 @@
  *
  * Heavy tabs are lazy-loaded with `ssr: false` because they use
  * browser-only APIs (Web Speech API, hanzi-writer canvas).
+ *
+ * Per-mode skill progress: When a tab is selected, the component fetches
+ * a per-mode queue (with interleaving from previous lesson) and skill
+ * progress data. Resume pointer is computed server-side.
  */
 
 "use client"
@@ -14,15 +18,22 @@ import { useState, useCallback, useEffect, useRef, useTransition } from "react"
 import dynamic from "next/dynamic"
 import { useRouter, useSearchParams, usePathname } from "next/navigation"
 import { Tabs, Tab, Chip, Button, Skeleton, Spinner } from "@heroui/react"
-import { Search, Layers, HelpCircle, Headphones, PenTool } from "lucide-react"
+import { Search, Layers, HelpCircle, Headphones, PenTool, RotateCcw, CheckCircle2 } from "lucide-react"
+import { toast } from "react-toastify"
 import { refreshLessonProgress } from "@/actions/practice.actions"
+import {
+  fetchPracticeQueue,
+  resetPracticeSessionAction,
+  refreshSkillProgress,
+  refreshAllModeSkillProgress,
+} from "@/actions/practice-skill.actions"
 import { usePortalUI } from "@/providers/portal-ui-provider"
 import { TAB_KEYS, DEFAULT_TAB } from "@/constants/portal/practice"
 import type { PracticeTabKey } from "@/constants/portal/practice"
 import { PracticeMode } from "@/enums/portal/common"
 import ProgressCard from "./ProgressCard"
 import LookupTab from "./tabs/LookupTab"
-import type { IVocabularyItem, IStudentItemProgress } from "@/interfaces/portal/practice"
+import type { IVocabularyItem, IStudentItemProgress, IQueueVocabItem, ISkillProgressRecord } from "@/interfaces/portal/practice"
 
 /* ── Lazy-load heavy tabs with ssr:false ─────────────────────────
  *  These tabs use browser-only APIs:
@@ -107,6 +118,8 @@ interface Props {
   initialProgress: ProgressData | null
   initialItemProgress: Record<string, IStudentItemProgress>
   initialSiblings: SiblingLesson[]
+  /** Per-mode skill progress summary (SSR) */
+  initialSkillProgress?: Partial<Record<string, { masteryPercent: number; masteredCount: number; totalCount: number }>>
 }
 
 export default function LessonPracticeView({
@@ -116,6 +129,7 @@ export default function LessonPracticeView({
   initialProgress,
   initialItemProgress,
   initialSiblings,
+  initialSkillProgress,
 }: Props) {
   const router = useRouter()
   const searchParams = useSearchParams()
@@ -131,7 +145,16 @@ export default function LessonPracticeView({
   const lesson = initialLesson
   const [progress, setProgress] = useState<ProgressData | null>(initialProgress)
   const [itemProgress, setItemProgress] = useState<Record<string, IStudentItemProgress>>(initialItemProgress)
+  const [skillProgressSummary, setSkillProgressSummary] = useState(initialSkillProgress ?? {})
   const siblings = initialSiblings
+
+  // Per-mode queue state
+  const [modeQueue, setModeQueue] = useState<IQueueVocabItem[]>([])
+  const [modePointer, setModePointer] = useState(0)
+  const [modeCompleted, setModeCompleted] = useState(false)
+  const [modeSkillMap, setModeSkillMap] = useState<Record<string, ISkillProgressRecord>>({})
+  const [modeLoading, setModeLoading] = useState(false)
+  const lastFetchedMode = useRef<string | null>(null)
 
   // Always use the resolved UUID for all DB operations
   const lessonId = lesson.id
@@ -153,12 +176,100 @@ export default function LessonPracticeView({
   }, [lessonId])
 
   const handleRefreshProgress = useCallback(async () => {
-    const result = await refreshLessonProgress(lessonId)
-    if (result.success && result.data) {
-      setProgress(result.data.progress as ProgressData | null)
-      setItemProgress((result.data.itemProgress || {}) as Record<string, IStudentItemProgress>)
+    // NOTE: Do NOT invalidate lastFetchedMode here.
+    // Queue cache is only invalidated on explicit reset (handleResetSession).
+    // This prevents redundant re-fetches when switching tabs after progress update.
+
+    // Fire all refreshes in parallel for performance
+    const promises: Promise<unknown>[] = [
+      refreshLessonProgress(lessonId),
+      refreshAllModeSkillProgress(lessonId),
+    ]
+    // Also refresh per-item skill map for the active mode tab
+    if (activeTab !== PracticeMode.LOOKUP) {
+      promises.push(refreshSkillProgress(lessonId, activeTab))
     }
-  }, [lessonId])
+
+    const [legacyResult, allModeResult, skillResult] = await Promise.all(promises) as [
+      Awaited<ReturnType<typeof refreshLessonProgress>>,
+      Awaited<ReturnType<typeof refreshAllModeSkillProgress>>,
+      Awaited<ReturnType<typeof refreshSkillProgress>> | undefined,
+    ]
+
+    // Update legacy progress (for the overall mastery circle)
+    if (legacyResult.success && legacyResult.data) {
+      setProgress(legacyResult.data.progress as ProgressData | null)
+      setItemProgress((legacyResult.data.itemProgress || {}) as Record<string, IStudentItemProgress>)
+    }
+
+    // Update ALL mode skill progress at once (for ProgressCard badges)
+    if (allModeResult.success && allModeResult.data) {
+      setSkillProgressSummary(allModeResult.data as Partial<Record<string, { masteryPercent: number; masteredCount: number; totalCount: number }>>)
+    }
+
+    // Update per-item skill map for the current tab
+    if (skillResult?.success && skillResult.data) {
+      if (skillResult.data.skillProgress) {
+        setModeSkillMap(skillResult.data.skillProgress as Record<string, ISkillProgressRecord>)
+      }
+    }
+  }, [lessonId, activeTab])
+
+  // Fetch per-mode queue when active tab changes to a practice mode
+  const fetchModeQueue = useCallback(async (mode: string) => {
+    if (mode === PracticeMode.LOOKUP) return
+    if (lastFetchedMode.current === mode) return
+    setModeLoading(true)
+    try {
+      const result = await fetchPracticeQueue(lessonSlug, mode)
+      if (result.success && result.data) {
+        setModeQueue(result.data.queue as IQueueVocabItem[])
+        setModePointer(result.data.pointer)
+        setModeCompleted(result.data.isCompleted)
+        setModeSkillMap(result.data.skillProgressMap as Record<string, ISkillProgressRecord>)
+        lastFetchedMode.current = mode
+      }
+    } catch (e) {
+      console.error("Error fetching mode queue:", e)
+    } finally {
+      setModeLoading(false)
+    }
+  }, [lessonSlug])
+
+  // Fetch queue when active tab changes
+  useEffect(() => {
+    if (activeTab !== PracticeMode.LOOKUP) {
+      fetchModeQueue(activeTab)
+    }
+  }, [activeTab, fetchModeQueue])
+
+  // Handle reset session pointer (ôn lại từ đầu)
+  const handleResetSession = useCallback(async () => {
+    if (activeTab === PracticeMode.LOOKUP) return
+    await resetPracticeSessionAction(lessonId, activeTab)
+    lastFetchedMode.current = null // force refetch
+    await fetchModeQueue(activeTab)
+    toast.success("Đã reset, bắt đầu ôn lại từ đầu!")
+  }, [lessonId, activeTab, fetchModeQueue])
+
+  // Get queue vocabularies for the current mode (for tabs that use queue)
+  const vocabs = lesson.vocabularies
+  const totalItems = vocabs.length
+
+  const modeVocabularies: IVocabularyItem[] = modeQueue.length > 0
+    ? modeQueue.map(q => ({
+        id: q.id,
+        lessonId: q.lessonId,
+        word: q.word,
+        pinyin: q.pinyin,
+        meaning: q.meaning,
+        meaningVi: q.meaningVi,
+        wordType: q.wordType,
+        exampleSentence: q.exampleSentence,
+        examplePinyin: q.examplePinyin,
+        exampleMeaning: q.exampleMeaning,
+      }))
+    : vocabs
 
   const handleTabChange = useCallback(
     (key: string | number) => {
@@ -173,9 +284,6 @@ export default function LessonPracticeView({
 
   // Practice base path (includes level)
   const practiceBasePath = `/portal/student/practice/${levelSlug}`
-
-  const vocabs = lesson.vocabularies
-  const totalItems = vocabs.length
 
   return (
     <div className="space-y-3 sm:space-y-4">
@@ -203,6 +311,7 @@ export default function LessonPracticeView({
           masteredCount={progress?.masteredCount ?? 0}
           totalTimeSec={progress?.totalTimeSec ?? 0}
           masteryPercent={progress?.masteryPercent ?? 0}
+          skillProgress={skillProgressSummary}
         />
       </div>
 
@@ -236,11 +345,33 @@ export default function LessonPracticeView({
 
         {/* Tab content — fills remaining height, scrolls internally on desktop */}
         <div className="relative mt-3">
-          {isPending && (
+          {(isPending || modeLoading) && (
             <div className="absolute inset-0 z-10 flex items-center justify-center bg-background/60 backdrop-blur-[1px] rounded-xl">
               <Spinner size="lg" color="primary" label="Đang tải..." />
             </div>
           )}
+
+          {/* Completed overlay for practice modes */}
+          {activeTab !== PracticeMode.LOOKUP && modeCompleted && !modeLoading && modeQueue.length > 0 && (
+            <div className="mb-4 p-4 rounded-xl bg-success-50 dark:bg-success-950/20 border border-success-200 dark:border-success-800/30 text-center">
+              <CheckCircle2 className="w-10 h-10 text-success mx-auto mb-2" />
+              <h3 className="text-lg font-bold text-success-700 dark:text-success-300">
+                Bạn đã hoàn thành bài này! 🎉
+              </h3>
+              <p className="text-sm text-default-500 mt-1 mb-3">
+                Tất cả từ vựng đã đạt mức thành thạo cho chế độ {TAB_CONFIG[activeTab]?.label}
+              </p>
+              <Button
+                color="primary"
+                variant="flat"
+                onPress={handleResetSession}
+                startContent={<RotateCcw className="w-4 h-4" />}
+              >
+                Ôn lại từ đầu
+              </Button>
+            </div>
+          )}
+
           {activeTab === PracticeMode.LOOKUP && (
             <LookupTab
               vocabularies={vocabs}
@@ -251,31 +382,51 @@ export default function LessonPracticeView({
           )}
           {activeTab === PracticeMode.FLASHCARD && (
             <FlashcardTab
-              vocabularies={vocabs}
+              vocabularies={modeVocabularies}
               lessonId={lessonId}
               itemProgress={itemProgress}
               onProgressUpdate={handleRefreshProgress}
+              queue={modeQueue}
+              skillProgressMap={modeSkillMap}
+              initialPointer={modePointer}
+              isCompleted={modeCompleted}
+              onResetSession={handleResetSession}
             />
           )}
           {activeTab === PracticeMode.QUIZ && (
             <QuizTab
-              vocabularies={vocabs}
+              vocabularies={modeVocabularies}
               lessonId={lessonId}
               onProgressUpdate={handleRefreshProgress}
+              queue={modeQueue}
+              skillProgressMap={modeSkillMap}
+              initialPointer={modePointer}
+              isCompleted={modeCompleted}
+              onResetSession={handleResetSession}
             />
           )}
           {activeTab === PracticeMode.LISTEN && (
             <ListenTab
-              vocabularies={vocabs}
+              vocabularies={modeVocabularies}
               lessonId={lessonId}
               onProgressUpdate={handleRefreshProgress}
+              queue={modeQueue}
+              skillProgressMap={modeSkillMap}
+              initialPointer={modePointer}
+              isCompleted={modeCompleted}
+              onResetSession={handleResetSession}
             />
           )}
           {activeTab === PracticeMode.WRITE && (
             <WriteTab
-              vocabularies={vocabs}
+              vocabularies={modeVocabularies}
               lessonId={lessonId}
               onProgressUpdate={handleRefreshProgress}
+              queue={modeQueue}
+              skillProgressMap={modeSkillMap}
+              initialPointer={modePointer}
+              isCompleted={modeCompleted}
+              onResetSession={handleResetSession}
             />
           )}
         </div>
