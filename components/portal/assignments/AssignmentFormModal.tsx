@@ -229,36 +229,47 @@ export default function AssignmentFormModal({
 
         {/* ── Tags / Hashtags ── */}
         <div>
-          <Input
-            label="Hashtag"
-            labelPlacement="outside"
-            placeholder={tags.length === 0 ? "Nhập tag rồi nhấn Tab hoặc Enter..." : ""}
-            size="sm"
-            value={tagInput}
-            onValueChange={setTagInput}
-            onKeyDown={handleTagKeyDown}
-            onBlur={addTag}
-            startContent={
-              <div className="flex items-center gap-1 flex-wrap">
-                {tags.map((tag) => (
-                  <Chip
-                    key={tag}
-                    size="sm"
-                    variant="flat"
-                    color="primary"
-                    onClose={() => removeTag(tag)}
-                  >
-                    #{tag}
-                  </Chip>
-                ))}
-                <Hash className="w-4 h-4 text-default-400 shrink-0" />
-              </div>
-            }
-            classNames={{
-              input: "ml-1",
-              innerWrapper: "flex-wrap gap-1",
+          <label className="text-sm font-medium text-foreground mb-1.5 block">
+            Hashtag
+          </label>
+          <div
+            className="flex flex-wrap items-center gap-1.5 min-h-10 w-full rounded-xl border border-default-200 bg-default-100 px-3 py-2 transition-colors focus-within:border-primary focus-within:ring-1 focus-within:ring-primary cursor-text"
+            onClick={() => {
+              const inp = document.getElementById("tag-input")
+              inp?.focus()
             }}
-          />
+          >
+            {tags.map((tag) => (
+              <Chip
+                key={tag}
+                size="sm"
+                variant="flat"
+                color="primary"
+                onClose={() => removeTag(tag)}
+                classNames={{ base: "h-6", content: "text-xs px-1" }}
+              >
+                #{tag}
+              </Chip>
+            ))}
+            <div className="flex items-center gap-1 flex-1 min-w-30">
+              <Hash className="w-3.5 h-3.5 text-default-400 shrink-0" />
+              <input
+                id="tag-input"
+                type="text"
+                className="flex-1 bg-transparent text-sm outline-none placeholder:text-default-400"
+                placeholder={tags.length === 0 ? "Nhập tag rồi nhấn Tab hoặc Enter" : "Thêm tag..."}
+                value={tagInput}
+                onChange={(e) => setTagInput(e.target.value)}
+                onKeyDown={handleTagKeyDown}
+                onBlur={addTag}
+              />
+            </div>
+          </div>
+          {tags.length > 0 && (
+            <p className="text-xs text-default-400 mt-1">
+              {tags.length} tag · Nhấn Backspace để xoá tag cuối
+            </p>
+          )}
         </div>
 
         {/* ── File Attachments ── */}

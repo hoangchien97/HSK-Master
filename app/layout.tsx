@@ -3,7 +3,7 @@ import { Geist, Noto_Sans, Noto_Sans_SC } from "next/font/google";
 import "./globals.css";
 import { WebVitals } from "@/components/landing/shared";
 import * as TooltipPrimitive from '@radix-ui/react-tooltip';
-import { DEFAULT_IMAGE_PREVIEW, OG_IMAGE, SITE_URL } from "@/constants/brand";
+import { OG_IMAGE, SITE_URL } from "@/constants/brand";
 import NextTopLoader from 'nextjs-toploader';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
@@ -128,12 +128,7 @@ export const metadata: Metadata = {
     "theme-color": "#ec131e",
     "msapplication-TileColor": "#ec131e",
     "msapplication-config": "/browserconfig.xml",
-    // Explicit image hints for crawlers that don't parse structured OG objects
-    "og:image:secure_url": DEFAULT_IMAGE_PREVIEW,
-    "og:image:width": "1200",
-    "og:image:height": "630",
-    "og:image:type": "image/png",
-    "og:image:alt": OG_IMAGE.alt,
+
   },
 };
 
