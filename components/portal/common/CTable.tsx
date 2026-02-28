@@ -80,6 +80,12 @@ export interface CTableProps<T extends Record<string, unknown>> {
     description?: string
   }
 
+  /* ── Layout ── */
+  /** Table layout algorithm: "auto" sizes columns by content, "fixed" respects explicit widths (enables horizontal scroll). Defaults to "fixed" */
+  layout?: "auto" | "fixed"
+  /** When true, the header stays visible while scrolling vertically */
+  isHeaderSticky?: boolean
+
   /* ── Styling ── */
   className?: string
   isStriped?: boolean
@@ -113,6 +119,9 @@ export function CTable<T extends Record<string, unknown>>({
   actions,
   // empty
   emptyContent,
+  // layout
+  layout = "fixed",
+  isHeaderSticky = true,
   // styling
   className,
   isStriped = true,
@@ -142,7 +151,7 @@ export function CTable<T extends Record<string, unknown>>({
   const tableClassNames = useMemo(
     () => ({
       base: "h-full",
-      wrapper: ["h-full", "shadow-none"],
+      wrapper: ["h-full", "shadow-none", "overflow-x-auto"],
       // th: ["bg-default-100", "text-default-500", "border-b", "border-divider"],
       tr: isHoverable
         ? ["hover:bg-default-100", "transition-colors", "cursor-pointer"]
@@ -211,8 +220,9 @@ export function CTable<T extends Record<string, unknown>>({
       {/* ── Table (flex-1, header sticky, body scrolls) ── */}
       <div className="flex-1 min-h-0">
         <Table
-          isHeaderSticky
+          isHeaderSticky={isHeaderSticky}
           aria-label={ariaLabel}
+          layout={layout}
           sortDescriptor={sortDescriptor}
           onSortChange={onSortChange}
           selectionMode={selectionMode}

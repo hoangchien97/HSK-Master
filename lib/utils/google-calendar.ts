@@ -1,216 +1,244 @@
 /**
- * Google Calendar Integration
- * Sync schedules to Google Calendar using Google Calendar API
+ * Google Calendar API Client (V2)
+ *
+ * Reusable server module for Google Calendar operations.
+ * All methods use the teacher's access token obtained via refresh_token.
+ *
+ * Key design:
+ * - sendUpdates="all" on every mutation → attendees get invite/update/cancel emails
+ * - Recurring events use a single RRULE → students accept once for all occurrences
+ * - conferenceDataVersion=1 → auto-create Google Meet if no meeting link
  */
+
+import type { EventDateTime } from '@/lib/utils/rrule';
+
+const CALENDAR_API = 'https://www.googleapis.com/calendar/v3';
+
+// ── Types ──
 
 export interface GoogleCalendarEvent {
-  summary: string
-  description?: string
-  location?: string
-  start: {
-    dateTime: string
-    timeZone: string
-  }
-  end: {
-    dateTime: string
-    timeZone: string
-  }
-  attendees?: Array<{
-    email: string
-  }>
+  summary: string;
+  description?: string;
+  location?: string;
+  start: EventDateTime;
+  end: EventDateTime;
+  attendees?: Array<{ email: string }>;
+  recurrence?: string[]; // ["RRULE:FREQ=WEEKLY;BYDAY=MO,WE;UNTIL=..."]
   reminders?: {
-    useDefault: boolean
-    overrides?: Array<{
-      method: 'email' | 'popup'
-      minutes: number
-    }>
-  }
+    useDefault: boolean;
+    overrides?: Array<{ method: 'email' | 'popup'; minutes: number }>;
+  };
   conferenceData?: {
     createRequest: {
-      requestId: string
-      conferenceSolutionKey: {
-        type: 'hangoutsMeet'
-      }
+      requestId: string;
+      conferenceSolutionKey: { type: 'hangoutsMeet' };
+    };
+  };
+}
+
+interface ApiResult<T = unknown> {
+  success: boolean;
+  data?: T;
+  error?: string;
+}
+
+// ── Token Refresh ──
+
+/**
+ * Get a fresh access_token using a refresh_token.
+ */
+export async function getAccessTokenFromRefreshToken(
+  refreshToken: string
+): Promise<{ accessToken: string; expiresIn: number } | { error: string }> {
+  try {
+    const res = await fetch('https://oauth2.googleapis.com/token', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+      body: new URLSearchParams({
+        client_id: process.env.GOOGLE_CLIENT_ID!,
+        client_secret: process.env.GOOGLE_CLIENT_SECRET!,
+        refresh_token: refreshToken,
+        grant_type: 'refresh_token',
+      }),
+    });
+
+    if (!res.ok) {
+      const errBody = await res.json().catch(() => ({}));
+      return { error: errBody.error_description || errBody.error || 'Token refresh failed' };
     }
+
+    const data = await res.json();
+    return {
+      accessToken: data.access_token,
+      expiresIn: data.expires_in || 3600,
+    };
+  } catch (err: unknown) {
+    return { error: err instanceof Error ? err.message : 'Network error' };
   }
 }
 
-/**
- * Create Google Calendar event
- * Requires Google OAuth2 token
- */
-export async function createGoogleCalendarEvent(
-  accessToken: string,
-  event: GoogleCalendarEvent
-): Promise<{ success: boolean; eventId?: string; error?: string }> {
-  try {
-    const response = await fetch(
-      'https://www.googleapis.com/calendar/v3/calendars/primary/events?conferenceDataVersion=1',
-      {
-        method: 'POST',
-        headers: {
-          'Authorization': `Bearer ${accessToken}`,
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(event),
-      }
-    )
+// ── CRUD Operations ──
 
-    if (!response.ok) {
-      const error = await response.json()
-      return {
-        success: false,
-        error: error.error?.message || 'Failed to create calendar event',
-      }
+/**
+ * Insert a new calendar event (single or recurring).
+ * Returns the created event ID.
+ */
+export async function insertCalendarEvent(
+  accessToken: string,
+  event: GoogleCalendarEvent,
+  calendarId = 'primary'
+): Promise<ApiResult<{ eventId: string; htmlLink?: string }>> {
+  try {
+    const url = `${CALENDAR_API}/calendars/${encodeURIComponent(calendarId)}/events?conferenceDataVersion=1&sendUpdates=all`;
+
+    const res = await fetch(url, {
+      method: 'POST',
+      headers: {
+        'Authorization': `Bearer ${accessToken}`,
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(event),
+    });
+
+    if (!res.ok) {
+      const errBody = await res.json().catch(() => ({}));
+      const errMsg = errBody.error?.message || `HTTP ${res.status}`;
+      console.error('[GoogleCalendar] Insert failed:', errMsg);
+      return { success: false, error: errMsg };
     }
 
-    const data = await response.json()
+    const data = await res.json();
     return {
       success: true,
-      eventId: data.id,
-    }
-  } catch (error: any) {
-    return {
-      success: false,
-      error: error.message || 'Network error',
-    }
+      data: { eventId: data.id, htmlLink: data.htmlLink },
+    };
+  } catch (err: unknown) {
+    const msg = err instanceof Error ? err.message : 'Network error';
+    return { success: false, error: msg };
   }
 }
 
 /**
- * Update Google Calendar event
+ * Update (PATCH) an existing calendar event.
  */
-export async function updateGoogleCalendarEvent(
+export async function patchCalendarEvent(
   accessToken: string,
   eventId: string,
-  event: GoogleCalendarEvent
-): Promise<{ success: boolean; error?: string }> {
+  patch: Partial<GoogleCalendarEvent>,
+  calendarId = 'primary'
+): Promise<ApiResult> {
   try {
-    const response = await fetch(
-      `https://www.googleapis.com/calendar/v3/calendars/primary/events/${eventId}`,
-      {
-        method: 'PATCH',
-        headers: {
-          'Authorization': `Bearer ${accessToken}`,
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(event),
-      }
-    )
+    const url = `${CALENDAR_API}/calendars/${encodeURIComponent(calendarId)}/events/${encodeURIComponent(eventId)}?sendUpdates=all`;
 
-    if (!response.ok) {
-      const error = await response.json()
-      return {
-        success: false,
-        error: error.error?.message || 'Failed to update calendar event',
-      }
+    const res = await fetch(url, {
+      method: 'PATCH',
+      headers: {
+        'Authorization': `Bearer ${accessToken}`,
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(patch),
+    });
+
+    if (!res.ok) {
+      const errBody = await res.json().catch(() => ({}));
+      const errMsg = errBody.error?.message || `HTTP ${res.status}`;
+      console.error('[GoogleCalendar] Patch failed:', errMsg);
+      return { success: false, error: errMsg };
     }
 
-    return { success: true }
-  } catch (error: any) {
-    return {
-      success: false,
-      error: error.message || 'Network error',
-    }
+    return { success: true };
+  } catch (err: unknown) {
+    const msg = err instanceof Error ? err.message : 'Network error';
+    return { success: false, error: msg };
   }
 }
 
 /**
- * Delete Google Calendar event
+ * Delete a calendar event (sends cancellation to all attendees).
  */
-export async function deleteGoogleCalendarEvent(
+export async function deleteCalendarEvent(
   accessToken: string,
-  eventId: string
-): Promise<{ success: boolean; error?: string }> {
+  eventId: string,
+  calendarId = 'primary'
+): Promise<ApiResult> {
   try {
-    const response = await fetch(
-      `https://www.googleapis.com/calendar/v3/calendars/primary/events/${eventId}`,
-      {
-        method: 'DELETE',
-        headers: {
-          'Authorization': `Bearer ${accessToken}`,
-        },
-      }
-    )
+    const url = `${CALENDAR_API}/calendars/${encodeURIComponent(calendarId)}/events/${encodeURIComponent(eventId)}?sendUpdates=all`;
 
-    if (!response.ok && response.status !== 204) {
-      const error = await response.json()
-      return {
-        success: false,
-        error: error.error?.message || 'Failed to delete calendar event',
-      }
+    const res = await fetch(url, {
+      method: 'DELETE',
+      headers: { 'Authorization': `Bearer ${accessToken}` },
+    });
+
+    // 204 No Content = success
+    if (!res.ok && res.status !== 204) {
+      const errBody = await res.json().catch(() => ({}));
+      const errMsg = errBody.error?.message || `HTTP ${res.status}`;
+      console.error('[GoogleCalendar] Delete failed:', errMsg);
+      return { success: false, error: errMsg };
     }
 
-    return { success: true }
-  } catch (error: any) {
-    return {
-      success: false,
-      error: error.message || 'Network error',
-    }
+    return { success: true };
+  } catch (err: unknown) {
+    const msg = err instanceof Error ? err.message : 'Network error';
+    return { success: false, error: msg };
   }
 }
 
+// ── Event Builder ──
+
 /**
- * Convert schedule to Google Calendar event format
+ * Build a GoogleCalendarEvent from schedule data.
  */
-export function scheduleToGoogleEvent(schedule: {
-  title: string
-  description?: string
-  startTime: Date
-  endTime: Date
-  location?: string
-  meetingLink?: string
-  attendees?: string[]
+export function buildCalendarEvent(params: {
+  summary: string;
+  description?: string;
+  location?: string;
+  meetingLink?: string;
+  start: EventDateTime;
+  end: EventDateTime;
+  attendeeEmails: string[];
+  rrule?: string; // "RRULE:FREQ=WEEKLY;..."
 }): GoogleCalendarEvent {
   const event: GoogleCalendarEvent = {
-    summary: schedule.title,
-    description: schedule.description,
-    location: schedule.location,
-    start: {
-      dateTime: schedule.startTime.toISOString(),
-      timeZone: 'Asia/Ho_Chi_Minh',
-    },
-    end: {
-      dateTime: schedule.endTime.toISOString(),
-      timeZone: 'Asia/Ho_Chi_Minh',
-    },
+    summary: params.summary,
+    description: params.description,
+    location: params.location,
+    start: params.start,
+    end: params.end,
     reminders: {
       useDefault: false,
       overrides: [
-        { method: 'email', minutes: 24 * 60 }, // 1 day before
-        { method: 'popup', minutes: 30 }, // 30 minutes before
+        { method: 'email', minutes: 24 * 60 },
+        { method: 'popup', minutes: 30 },
       ],
     },
+  };
+
+  if (params.attendeeEmails.length > 0) {
+    event.attendees = params.attendeeEmails.map(email => ({ email }));
   }
 
-  // Add attendees if provided
-  if (schedule.attendees && schedule.attendees.length > 0) {
-    event.attendees = schedule.attendees.map(email => ({ email }))
+  if (params.rrule) {
+    event.recurrence = [params.rrule];
   }
 
-  // Add Google Meet conference if meeting link not provided
-  if (!schedule.meetingLink) {
+  // Auto-create Google Meet if no custom meeting link
+  if (!params.meetingLink) {
     event.conferenceData = {
       createRequest: {
-        requestId: `meet-${Date.now()}`,
-        conferenceSolutionKey: {
-          type: 'hangoutsMeet',
-        },
+        requestId: `meet-${Date.now()}-${Math.random().toString(36).slice(2, 8)}`,
+        conferenceSolutionKey: { type: 'hangoutsMeet' },
       },
-    }
+    };
   }
 
-  return event
+  return event;
 }
 
-/**
- * Get Google OAuth2 URL for calendar access
- */
-export function getGoogleCalendarAuthUrl(clientId: string, redirectUri: string): string {
-  const scopes = [
-    'https://www.googleapis.com/auth/calendar.events',
-  ].join(' ')
+// ── OAuth helpers (kept for calendar connect flow) ──
 
+export function getGoogleCalendarAuthUrl(clientId: string, redirectUri: string): string {
+  const scopes = ['https://www.googleapis.com/auth/calendar.events'].join(' ');
   const params = new URLSearchParams({
     client_id: clientId,
     redirect_uri: redirectUri,
@@ -218,26 +246,20 @@ export function getGoogleCalendarAuthUrl(clientId: string, redirectUri: string):
     scope: scopes,
     access_type: 'offline',
     prompt: 'consent',
-  })
-
-  return `https://accounts.google.com/o/oauth2/v2/auth?${params.toString()}`
+  });
+  return `https://accounts.google.com/o/oauth2/v2/auth?${params.toString()}`;
 }
 
-/**
- * Exchange authorization code for access token
- */
 export async function exchangeCodeForToken(
   code: string,
   clientId: string,
   clientSecret: string,
   redirectUri: string
-): Promise<{ accessToken?: string; refreshToken?: string; error?: string }> {
+): Promise<{ accessToken?: string; refreshToken?: string; expiresIn?: number; error?: string }> {
   try {
-    const response = await fetch('https://oauth2.googleapis.com/token', {
+    const res = await fetch('https://oauth2.googleapis.com/token', {
       method: 'POST',
-      headers: {
-        'Content-Type': 'application/x-www-form-urlencoded',
-      },
+      headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
       body: new URLSearchParams({
         code,
         client_id: clientId,
@@ -245,23 +267,20 @@ export async function exchangeCodeForToken(
         redirect_uri: redirectUri,
         grant_type: 'authorization_code',
       }),
-    })
+    });
 
-    if (!response.ok) {
-      const error = await response.json()
-      return {
-        error: error.error_description || 'Failed to exchange code for token',
-      }
+    if (!res.ok) {
+      const err = await res.json().catch(() => ({}));
+      return { error: err.error_description || 'Failed to exchange code' };
     }
 
-    const data = await response.json()
+    const data = await res.json();
     return {
       accessToken: data.access_token,
       refreshToken: data.refresh_token,
-    }
-  } catch (error: any) {
-    return {
-      error: error.message || 'Network error',
-    }
+      expiresIn: data.expires_in,
+    };
+  } catch (err: unknown) {
+    return { error: err instanceof Error ? err.message : 'Network error' };
   }
 }

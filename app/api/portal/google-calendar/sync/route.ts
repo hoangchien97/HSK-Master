@@ -1,11 +1,13 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { auth } from '@/auth';
 import { prisma } from '@/lib/prisma';
-import { createGoogleCalendarEvent, scheduleToGoogleEvent } from '@/lib/utils/google-calendar';
+import { syncScheduleCreate } from '@/lib/portal/calendar-sync.service';
+import { getCalendarConnection } from '@/lib/portal/calendar-token.service';
+import type { RepeatRule } from '@/lib/utils/rrule';
 
 /**
  * POST /api/portal/google-calendar/sync
- * Sync a schedule to Google Calendar
+ * Sync a schedule series to Google Calendar (V2 — schedule-series-based)
  */
 export async function POST(request: NextRequest) {
   try {
@@ -16,104 +18,65 @@ export async function POST(request: NextRequest) {
     }
 
     const body = await request.json();
-    const { scheduleId } = body;
+    const { seriesId } = body;
 
-    if (!scheduleId) {
-      return NextResponse.json({ error: 'Schedule ID is required' }, { status: 400 });
+    if (!seriesId) {
+      return NextResponse.json({ error: 'Schedule series ID is required' }, { status: 400 });
     }
 
-    // Fetch the schedule
-    const schedule = await prisma.portalSchedule.findUnique({
-      where: { id: scheduleId },
-      include: {
-        class: {
-          include: {
-            enrollments: {
-              where: { status: 'ENROLLED' },
-              include: {
-                student: {
-                  select: {
-                    email: true,
-                  },
-                },
-              },
-            },
-          },
-        },
-      },
+    const scheduleSeries = await prisma.portalScheduleSeries.findUnique({
+      where: { id: seriesId },
     });
 
-    if (!schedule) {
-      return NextResponse.json({ error: 'Schedule not found' }, { status: 404 });
+    if (!scheduleSeries) {
+      return NextResponse.json({ error: 'Schedule series not found' }, { status: 404 });
     }
 
-    // Verify user owns this schedule
-    if (schedule.teacherId !== session.user.id) {
+    if (scheduleSeries.teacherId !== session.user.id) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 403 });
     }
 
-    // Check if already synced
-    if (schedule.syncedToGoogle && schedule.googleEventId) {
+    if (scheduleSeries.isGoogleSynced && scheduleSeries.googleEventId) {
       return NextResponse.json({
         success: true,
         message: 'Already synced',
-        googleEventId: schedule.googleEventId,
-        googleEventLink: `https://calendar.google.com/calendar/event?eid=${schedule.googleEventId}`,
+        googleEventId: scheduleSeries.googleEventId,
       });
     }
 
-    // Get user's Google access token from session or account
-    // Note: NextAuth doesn't expose access tokens by default, so we need to fetch from Account table
-    const account = await prisma.account.findFirst({
-      where: {
-        userId: session.user.id,
-        provider: 'google',
-      },
-    });
-
-    if (!account?.access_token) {
+    const connection = await getCalendarConnection(session.user.id);
+    if (!connection || !connection.isValid) {
       return NextResponse.json({
-        error: 'Google Calendar not connected. Please sign in with Google to enable sync.',
+        error: 'Google Calendar chưa được kết nối.',
       }, { status: 400 });
     }
 
-    // Prepare attendees (students in the class)
-    const attendees = schedule.class.enrollments.map(e => e.student.email);
-
-    // Convert schedule to Google Calendar event
-    const googleEvent = scheduleToGoogleEvent({
-      title: schedule.title,
-      description: schedule.description || undefined,
-      startTime: schedule.startTime,
-      endTime: schedule.endTime,
-      location: schedule.location || undefined,
-      meetingLink: schedule.meetingLink || undefined,
-      attendees,
+    const syncResult = await syncScheduleCreate({
+      id: seriesId,
+      classId: scheduleSeries.classId,
+      teacherId: scheduleSeries.teacherId,
+      title: scheduleSeries.title,
+      description: scheduleSeries.description,
+      location: scheduleSeries.location,
+      meetingLink: scheduleSeries.meetingLink,
+      startDateLocal: scheduleSeries.startDateLocal,
+      startTimeLocal: scheduleSeries.startTimeLocal,
+      endTimeLocal: scheduleSeries.endTimeLocal,
+      isRecurring: scheduleSeries.isRecurring,
+      repeatRule: scheduleSeries.repeatRule as RepeatRule | null,
     });
 
-    // Create event in Google Calendar
-    const result = await createGoogleCalendarEvent(account.access_token, googleEvent);
-
-    if (!result.success) {
+    if (syncResult.googleEventId) {
       return NextResponse.json({
-        error: result.error || 'Failed to sync with Google Calendar',
-      }, { status: 500 });
+        success: true,
+        message: 'Đã đồng bộ với Google Calendar',
+        googleEventId: syncResult.googleEventId,
+      });
     }
 
-    // Update schedule with Google event ID
-    await prisma.portalSchedule.update({
-      where: { id: scheduleId },
-      data: {
-        googleEventId: result.eventId,
-        syncedToGoogle: true,
-      },
-    });
-
     return NextResponse.json({
-      success: true,
-      message: 'Synced to Google Calendar successfully',
-      googleEventId: result.eventId,
-      googleEventLink: `https://calendar.google.com/calendar/event?eid=${result.eventId}`,
+      success: syncResult.success,
+      error: syncResult.error,
     });
   } catch (error) {
     console.error('Error syncing to Google Calendar:', error);

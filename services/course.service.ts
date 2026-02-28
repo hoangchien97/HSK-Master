@@ -52,12 +52,23 @@ export async function getCourses(): Promise<Course[]> {
   try {
     const courses = await prisma.course.findMany({
       where: { isPublished: true },
+      include: {
+        hskLevel: {
+          select: { level: true },
+        },
+      },
       orderBy: { createdAt: "desc" },
     });
 
+    // Sort: HSK 1-6 first (by level asc), then others by createdAt desc
+    const hskCourses = courses
+      .filter((c) => c.hskLevel)
+      .sort((a, b) => (a.hskLevel!.level) - (b.hskLevel!.level));
+    const otherCourses = courses.filter((c) => !c.hskLevel);
+
     console.log("Fetched courses:", courses.length);
 
-    return courses;
+    return [...hskCourses, ...otherCourses];
   } catch (error) {
     console.error("Failed to fetch courses:", error);
     return [];
@@ -133,7 +144,13 @@ export async function getFilteredCourses(
       take,
     });
 
-    return courses;
+    // Sort: HSK 1-6 first (by level asc), then others
+    const hskCourses = courses
+      .filter((c) => c.hskLevel)
+      .sort((a, b) => (a.hskLevel!.level) - (b.hskLevel!.level));
+    const otherCourses = courses.filter((c) => !c.hskLevel);
+
+    return [...hskCourses, ...otherCourses];
   } catch (error) {
     console.error("Failed to fetch filtered courses:", error);
     return [];

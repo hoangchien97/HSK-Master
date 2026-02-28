@@ -24,6 +24,7 @@ import { toast } from "react-toastify";
 import dayjs from "dayjs";
 import { useRouter } from "next/navigation";
 import type { IClass, IEnrollment } from "@/interfaces/portal";
+import { ENROLLMENT_STATUS_COLOR_MAP, ENROLLMENT_STATUS_LABEL_MAP } from "@/constants/portal";
 import { usePortalUI } from "@/providers/portal-ui-provider";
 import api from "@/lib/http/client";
 
@@ -257,20 +258,10 @@ export default function ClassDetailView({ classId, role }: ClassDetailViewProps)
                   <TableCell>
                     <Chip
                       size="sm"
-                      color={
-                        enrollment.status === "ENROLLED"
-                          ? "success"
-                          : enrollment.status === "DROPPED"
-                          ? "danger"
-                          : "default"
-                      }
+                      color={ENROLLMENT_STATUS_COLOR_MAP[enrollment.status] || "default"}
                       variant="flat"
                     >
-                      {enrollment.status === "ENROLLED"
-                        ? "Đang học"
-                        : enrollment.status === "DROPPED"
-                        ? "Đã nghỉ"
-                        : "Hoàn thành"}
+                      {ENROLLMENT_STATUS_LABEL_MAP[enrollment.status] || enrollment.status}
                     </Chip>
                   </TableCell>
                   <TableCell>

@@ -25,6 +25,8 @@ import { toast } from "react-toastify"
 import { CDrawer } from "@/components/portal/common";
 import api from "@/lib/http/client";
 import { syncScheduleToGoogleCalendar } from "@/actions/schedule.actions";
+import { SCHEDULE_STATUS } from "@/constants/portal/roles";
+import { SCHEDULE_STATUS_COLOR_MAP, SCHEDULE_STATUS_LABEL_MAP } from "@/constants/portal";
 
 interface EventDetailDrawerProps {
   open: boolean
@@ -44,7 +46,7 @@ export default function EventDetailDrawer({
   onDelete,
   readOnly = false,
 }: EventDetailDrawerProps) {
-  const [event, setEvent] = useState<ScheduleEvent | null>(null)
+  const [event, setEvent] = useState<(ScheduleEvent & { seriesId?: string | null; isRecurring?: boolean }) | null>(null)
   const [isLoading, setIsLoading] = useState(false)
   const [isSyncing, setIsSyncing] = useState(false)
 
@@ -210,27 +212,25 @@ export default function EventDetailDrawer({
             <span
               className={cn(
                 "px-3 py-1.5 rounded-lg text-xs font-medium flex items-center gap-1.5",
-                event.status === "COMPLETED" && "bg-green-100 text-green-700",
-                event.status === "CANCELLED" && "bg-red-100 text-red-700",
-                event.status === "SCHEDULED" && "bg-blue-100 text-blue-700"
+                SCHEDULE_STATUS_COLOR_MAP[event.status]
               )}
             >
-              {event.status === "COMPLETED" && (
+              {event.status === SCHEDULE_STATUS.COMPLETED && (
                 <>
                   <CheckCircle2 className="h-3.5 w-3.5" />
-                  Đã hoàn thành
+                  {SCHEDULE_STATUS_LABEL_MAP[event.status]}
                 </>
               )}
-              {event.status === "CANCELLED" && (
+              {event.status === SCHEDULE_STATUS.CANCELLED && (
                 <>
                   <XCircle className="h-3.5 w-3.5" />
-                  Đã hủy
+                  {SCHEDULE_STATUS_LABEL_MAP[event.status]}
                 </>
               )}
-              {event.status === "SCHEDULED" && (
+              {event.status === SCHEDULE_STATUS.SCHEDULED && (
                 <>
                   <Circle className="h-3.5 w-3.5" />
-                  Đã lên lịch
+                  {SCHEDULE_STATUS_LABEL_MAP[event.status]}
                 </>
               )}
             </span>
@@ -238,11 +238,15 @@ export default function EventDetailDrawer({
             {/* Google Sync */}
             {event.syncedToGoogle && (
               <span className="px-3 py-1.5 bg-blue-50 text-blue-700 rounded-lg text-xs font-medium flex items-center gap-1.5">
-                <svg className="h-3.5 w-3.5" viewBox="0 0 24 24">
-                  <path
-                    fill="currentColor"
-                    d="M22.46 12c0-.77-.07-1.52-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"
-                  />
+                <svg className="h-3.5 w-3.5" viewBox="0 0 24 24" fill="none">
+                  <path d="M18.5 3.5h-13A2 2 0 003.5 5.5v13a2 2 0 002 2h13a2 2 0 002-2v-13a2 2 0 00-2-2z" fill="#fff" />
+                  <path d="M18.5 3.5h-13A2 2 0 003.5 5.5V8h17V5.5a2 2 0 00-2-2z" fill="#4285F4" />
+                  <rect x="6" y="11" width="3" height="2.5" rx=".5" fill="#EA4335" />
+                  <rect x="10.5" y="11" width="3" height="2.5" rx=".5" fill="#FBBC04" />
+                  <rect x="15" y="11" width="3" height="2.5" rx=".5" fill="#34A853" />
+                  <rect x="6" y="15" width="3" height="2.5" rx=".5" fill="#4285F4" />
+                  <rect x="10.5" y="15" width="3" height="2.5" rx=".5" fill="#EA4335" />
+                  <rect x="15" y="15" width="3" height="2.5" rx=".5" fill="#34A853" />
                 </svg>
                 Google Calendar
               </span>

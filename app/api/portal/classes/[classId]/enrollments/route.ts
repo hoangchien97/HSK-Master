@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server"
 import { auth } from "@/auth"
 import { prisma } from "@/lib/prisma"
+import { ENROLLMENT_STATUS } from "@/constants/portal/roles"
 
 // POST - Enroll a student to a class (by email search)
 export async function POST(
@@ -87,7 +88,7 @@ export async function POST(
     })
 
     if (existingEnrollment) {
-      if (existingEnrollment.status === "ENROLLED") {
+      if (existingEnrollment.status === ENROLLMENT_STATUS.ENROLLED) {
         return NextResponse.json(
           { error: "Student is already enrolled in this class" },
           { status: 400 }
@@ -97,7 +98,7 @@ export async function POST(
         const updatedEnrollment = await prisma.portalClassEnrollment.update({
           where: { id: existingEnrollment.id },
           data: {
-            status: "ENROLLED",
+            status: ENROLLMENT_STATUS.ENROLLED,
             enrolledAt: new Date(),
           },
           include: {
@@ -120,7 +121,7 @@ export async function POST(
       data: {
         studentId: student.id,
         classId: classId,
-        status: "ENROLLED",
+        status: ENROLLMENT_STATUS.ENROLLED,
       },
       include: {
         student: {

@@ -1,7 +1,10 @@
+import { ScheduleStatus } from "@/enums/portal"
+
 // Calendar & Schedule Types
 export interface ScheduleEvent {
   id: string
   classId: string
+  seriesId?: string | null
   teacherId: string
   title: string
   description?: string
@@ -9,9 +12,10 @@ export interface ScheduleEvent {
   endTime: Date
   location?: string
   meetingLink?: string
-  status: ScheduleStatus
+  status: ScheduleStatus | string
   googleEventId?: string
   syncedToGoogle: boolean
+  isRecurring?: boolean
   createdAt: Date
   updatedAt: Date
 
@@ -32,78 +36,10 @@ export interface ScheduleEvent {
   }
 }
 
-export type ScheduleStatus = "SCHEDULED" | "COMPLETED" | "CANCELLED"
-
 export enum EventState {
   PAST = "PAST",
   UPCOMING = "UPCOMING",
   FUTURE = "FUTURE"
-}
-
-export interface CreateScheduleInput {
-  classId: string
-  title: string
-  description?: string
-  startTime: Date
-  endTime: Date
-  location?: string
-  meetingLink?: string
-  syncToGoogle?: boolean
-
-  // Recurrence fields
-  isRecurring?: boolean
-  recurrenceDays?: number[] // 0=Sunday, 1=Monday, ... 6=Saturday
-  recurrenceEndDate?: Date
-}
-
-export interface UpdateScheduleInput {
-  title?: string
-  description?: string
-  startTime?: Date
-  endTime?: Date
-  location?: string
-  meetingLink?: string
-  status?: ScheduleStatus
-  syncToGoogle?: boolean
-}
-
-export interface DayDetail {
-  date: Date
-  events: ScheduleEvent[]
-  pastCount: number
-  upcomingCount: number
-  futureCount: number
-}
-
-export interface CalendarView {
-  mode: "day" | "week" | "month"
-  currentDate: Date
-}
-
-// react-big-calendar event format
-export interface BigCalendarEvent {
-  id: string
-  title: string
-  start: Date
-  end: Date
-  resource?: {
-    scheduleId: string
-    status: ScheduleStatus
-    state: EventState
-    classId: string
-    className?: string
-    level?: string
-    description?: string
-    location?: string
-    meetingLink?: string
-    syncedToGoogle: boolean
-  }
-}
-
-// Recurrence helper types
-export interface RecurrenceRule {
-  days: number[]
-  endDate: Date
 }
 
 export interface RecurrenceDescription {

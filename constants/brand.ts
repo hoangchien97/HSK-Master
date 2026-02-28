@@ -2,7 +2,10 @@
  * Brand constants — single source of truth
  */
 export const BRAND_NAME = 'Ruby HSK';
-export const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || 'https://hskmaster.edu.vn';
+export const SITE_URL =
+  process.env.NEXT_PUBLIC_SITE_URL ||
+  process.env.NEXTAUTH_URL ||
+  'https://hskmaster.edu.vn';
 
 /** Supabase-hosted share-preview image — always reachable by social crawlers */
 export const DEFAULT_IMAGE_PREVIEW =

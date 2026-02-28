@@ -29,6 +29,7 @@ export default function TeacherScheduleCalendar() {
   const [showModal, setShowModal] = useState(false);
   const [selectedSchedule, setSelectedSchedule] = useState<ISchedule | null>(null);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
+  const [scheduleToDelete, setScheduleToDelete] = useState<ISchedule | null>(null);
   const [scheduleToEdit, setScheduleToEdit] = useState<ISchedule | null>(null);
   const [slotInitialTime, setSlotInitialTime] = useState<{ start: Date; end: Date } | null>(null);
   const { startLoading, stopLoading } = usePortalUI();
@@ -92,18 +93,10 @@ export default function TeacherScheduleCalendar() {
   };
 
   const handleUpdateSchedule = async (data: IScheduleFormData) => {
-    if (!scheduleToEdit) return;
+    if (!scheduleToEdit?.seriesId) return;
 
     try {
-      const result = await updateSchedule(scheduleToEdit.id, {
-        title: data.title,
-        description: data.description,
-        classId: data.classId,
-        startTime: data.startTime,
-        endTime: data.endTime,
-        location: data.location,
-        meetingLink: data.meetingLink,
-      });
+      const result = await updateSchedule(scheduleToEdit.seriesId, data);
 
       if (!result.success) {
         throw new Error(result.error || 'Không thể cập nhật buổi học');
@@ -111,19 +104,12 @@ export default function TeacherScheduleCalendar() {
 
       toast.success('Đã cập nhật buổi học thành công!');
 
-      // Optimistically update schedule in state
-      if (result.schedule) {
-        setSchedules(prev => prev.map(s => s.id === scheduleToEdit.id ? result.schedule! : s));
-        if (selectedSchedule?.id === scheduleToEdit.id) {
-          setSelectedSchedule(result.schedule);
-        }
-      } else {
-        // Fallback: reload data
-        await loadData();
-      }
+      // Reload data since series update may affect multiple sessions
+      await loadData();
 
       setShowModal(false);
       setScheduleToEdit(null);
+      setSelectedSchedule(null);
     } catch (error) {
       console.error('Error updating schedule:', error);
       const errorMessage = error instanceof Error ? error.message : 'Không thể cập nhật buổi học';
@@ -144,7 +130,7 @@ export default function TeacherScheduleCalendar() {
       // Optimistically remove schedule from state
       setSchedules(prev => prev.filter(s => s.id !== scheduleId));
       setShowDeleteModal(false);
-      setSelectedSchedule(null);
+      setScheduleToDelete(null);
     } catch (error) {
       console.error('Error deleting schedule:', error);
       const errorMessage = error instanceof Error ? error.message : 'Không thể xóa buổi học';
@@ -152,9 +138,9 @@ export default function TeacherScheduleCalendar() {
     }
   };
 
-  const handleDeleteScheduleGroup = async (recurrenceGroupId: string) => {
+  const handleDeleteScheduleGroup = async (seriesId: string) => {
     try {
-      const result = await deleteScheduleGroup(recurrenceGroupId);
+      const result = await deleteScheduleGroup(seriesId);
 
       if (!result.success) {
         throw new Error(result.error || 'Không thể xóa nhóm lịch lặp lại');
@@ -172,7 +158,7 @@ export default function TeacherScheduleCalendar() {
         await loadData();
       }
       setShowDeleteModal(false);
-      setSelectedSchedule(null);
+      setScheduleToDelete(null);
     } catch (error) {
       console.error('Error deleting schedule group:', error);
       const errorMessage = error instanceof Error ? error.message : 'Không thể xóa nhóm lịch';
@@ -195,7 +181,8 @@ export default function TeacherScheduleCalendar() {
   };
 
   const handleDelete = (schedule: ISchedule) => {
-    setSelectedSchedule(schedule);
+    setScheduleToDelete(schedule);
+    setSelectedSchedule(null);
     setShowDeleteModal(true);
   };
 
@@ -256,8 +243,8 @@ export default function TeacherScheduleCalendar() {
       {/* Delete Modal */}
       <DeleteScheduleModal
         isOpen={showDeleteModal}
-        schedule={selectedSchedule}
-        onClose={() => setShowDeleteModal(false)}
+        schedule={scheduleToDelete}
+        onClose={() => { setShowDeleteModal(false); setScheduleToDelete(null); }}
         onConfirm={handleDeleteSchedule}
         onConfirmGroup={handleDeleteScheduleGroup}
       />

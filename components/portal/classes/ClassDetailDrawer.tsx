@@ -21,7 +21,7 @@ import dayjs from "dayjs"
 import "dayjs/locale/vi"
 import { toast } from "react-toastify"
 import { CDrawer } from "@/components/portal/common"
-import { CLASS_STATUS_COLOR_MAP, CLASS_STATUS_LABEL_MAP } from "@/constants/portal"
+import { CLASS_STATUS_COLOR_MAP, CLASS_STATUS_LABEL_MAP, ENROLLMENT_STATUS_COLOR_MAP, ENROLLMENT_STATUS_LABEL_MAP } from "@/constants/portal"
 import type { IClass } from "@/interfaces/portal"
 import api from "@/lib/http/client"
 
@@ -216,9 +216,9 @@ export default function ClassDetailDrawer({
                   <Chip
                     size="sm"
                     variant="flat"
-                    color={enrollment.status === "ENROLLED" ? "success" : "default"}
+                    color={ENROLLMENT_STATUS_COLOR_MAP[enrollment.status] || "default"}
                   >
-                    {enrollment.status === "ENROLLED" ? "Đang học" : enrollment.status}
+                    {ENROLLMENT_STATUS_LABEL_MAP[enrollment.status] || enrollment.status}
                   </Chip>
                 </div>
               ))}

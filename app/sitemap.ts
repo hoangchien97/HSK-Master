@@ -1,10 +1,11 @@
 import { MetadataRoute } from 'next';
 import { prisma } from '@/lib/prisma';
+import { SITE_URL } from '@/constants/brand';
 
 export const revalidate = 3600; // Revalidate every hour
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
-  const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://hskmaster.edu.vn';
+  const baseUrl = SITE_URL;
 
   // Static pages
   const staticPages: MetadataRoute.Sitemap = [

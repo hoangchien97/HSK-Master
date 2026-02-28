@@ -1,116 +1,132 @@
 /**
- * Schedule Service
- * Server-side service for schedule operations using Prisma
+ * Schedule Service V2
+ *
+ * CRUD for ScheduleSeries + Schedule.
+ * ScheduleSeries = template/rule; Schedules = individual calendar instances.
  */
 
-import { randomUUID } from 'crypto';
 import { prisma } from '@/lib/prisma';
+import { ENROLLMENT_STATUS } from '@/constants/portal/roles';
 import type {
   ISchedule,
-  IClass,
+  IScheduleSeries,
   ICreateScheduleData,
   IUpdateScheduleData,
+  IClass,
 } from '@/interfaces/portal';
 import { SCHEDULE_STATUS } from '@/constants/portal/roles';
-import dayjs from 'dayjs';
+import {
+  generateSessionDates,
+  localToDate,
+} from '@/lib/utils/rrule';
+
+// ── Prisma Include ──
+
+const SCHEDULE_INCLUDE = {
+  class: {
+    select: { id: true, className: true, classCode: true, level: true },
+  },
+  series: {
+    select: {
+      id: true,
+      teacherId: true,
+      isGoogleSynced: true,
+      googleEventId: true,
+      isRecurring: true,
+    },
+  },
+} as const;
+
+// ── Mapper: Schedule → ISchedule ──
+
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+function mapToSchedule(session: any): ISchedule {
+  const synced = session.series?.isGoogleSynced ?? false;
+  return {
+    id: session.id,
+    classId: session.classId,
+    seriesId: session.seriesId,
+    teacherId: session.series?.teacherId,
+    title: session.title,
+    description: session.description,
+    startTime: session.startAt instanceof Date
+      ? session.startAt.toISOString()
+      : session.startAt,
+    endTime: session.endAt instanceof Date
+      ? session.endAt.toISOString()
+      : session.endAt,
+    status: session.status,
+    location: session.location,
+    meetingLink: session.meetingLink,
+    isOverride: session.isOverride,
+    overrideType: session.overrideType,
+    isGoogleSynced: synced,
+    syncedToGoogle: synced,
+    googleEventId: session.series?.googleEventId ?? null,
+    isRecurring: session.series?.isRecurring ?? false,
+    createdAt: session.createdAt?.toISOString?.() ?? session.createdAt,
+    updatedAt: session.updatedAt?.toISOString?.() ?? session.updatedAt,
+    class: session.class
+      ? {
+          id: session.class.id,
+          className: session.class.className,
+          classCode: session.class.classCode,
+          level: session.class.level || '',
+        }
+      : undefined,
+  };
+}
+
+// ══════════════════════════════════════════════════════════════════
+// READ
+// ══════════════════════════════════════════════════════════════════
 
 /**
- * Fetch all schedules for a user
+ * Fetch all schedules for a teacher.
  */
 export async function getSchedules(userId?: string): Promise<ISchedule[]> {
-  const schedules = await prisma.portalSchedule.findMany({
-    where: userId ? { teacherId: userId } : {},
-    include: {
-      class: {
-        select: {
-          id: true,
-          className: true,
-          classCode: true,
-          level: true,
-        },
-      },
-    },
-    orderBy: {
-      startTime: 'asc',
-    },
+  const sessions = await prisma.portalSchedule.findMany({
+    where: userId
+      ? { series: { teacherId: userId, isDeleted: false } }
+      : { series: { isDeleted: false } },
+    include: SCHEDULE_INCLUDE,
+    orderBy: { startAt: 'asc' },
   });
 
-  return schedules.map((schedule) => ({
-    id: schedule.id,
-    classId: schedule.classId,
-    title: schedule.title,
-    description: schedule.description || undefined,
-    startTime: schedule.startTime.toISOString(),
-    endTime: schedule.endTime.toISOString(),
-    status: schedule.status,
-    recurrenceGroupId: schedule.recurrenceGroupId || undefined,
-    class: {
-      id: schedule.class.id,
-      className: schedule.class.className,
-      classCode: schedule.class.classCode,
-      level: schedule.class.level || '',
-    },
-  }));
+  return sessions.map(mapToSchedule);
 }
 
 /**
- * Fetch schedules for classes a student is enrolled in
+ * Fetch sessions for classes a student is enrolled in.
  */
 export async function getStudentSchedules(studentId: string): Promise<ISchedule[]> {
-  // Find class IDs student is enrolled in
   const enrollments = await prisma.portalClassEnrollment.findMany({
-    where: { studentId, status: 'ENROLLED' },
+    where: { studentId, status: ENROLLMENT_STATUS.ENROLLED },
     select: { classId: true },
   });
 
-  const classIds = enrollments.map((e) => e.classId);
+  const classIds = enrollments.map(e => e.classId);
   if (classIds.length === 0) return [];
 
-  const schedules = await prisma.portalSchedule.findMany({
+  const sessions = await prisma.portalSchedule.findMany({
     where: { classId: { in: classIds } },
-    include: {
-      class: {
-        select: {
-          id: true,
-          className: true,
-          classCode: true,
-          level: true,
-        },
-      },
-    },
-    orderBy: { startTime: 'asc' },
+    include: SCHEDULE_INCLUDE,
+    orderBy: { startAt: 'asc' },
   });
 
-  return schedules.map((schedule) => ({
-    id: schedule.id,
-    classId: schedule.classId,
-    title: schedule.title,
-    description: schedule.description || undefined,
-    startTime: schedule.startTime.toISOString(),
-    endTime: schedule.endTime.toISOString(),
-    status: schedule.status,
-    recurrenceGroupId: schedule.recurrenceGroupId || undefined,
-    class: {
-      id: schedule.class.id,
-      className: schedule.class.className,
-      classCode: schedule.class.classCode,
-      level: schedule.class.level || '',
-    },
-  }));
+  return sessions.map(mapToSchedule);
 }
 
 /**
- * Fetch all classes for dropdown (used by schedule module)
+ * Get classes for schedule dropdown.
  */
 export async function getClassesForSchedule(userId?: string): Promise<IClass[]> {
   const classes = await prisma.portalClass.findMany({
     where: userId ? { teacherId: userId } : {},
-    orderBy: {
-      className: 'asc',
-    },
+    orderBy: { className: 'asc' },
   });
 
-  return classes.map((cls) => ({
+  return classes.map(cls => ({
     id: cls.id,
     className: cls.className,
     classCode: cls.classCode,
@@ -122,255 +138,360 @@ export async function getClassesForSchedule(userId?: string): Promise<IClass[]> 
 }
 
 /**
- * Get schedule by ID
+ * Get a single schedule by ID with full class/enrollment info.
  */
 export async function getScheduleById(id: string): Promise<ISchedule | null> {
-  const schedule = await prisma.portalSchedule.findUnique({
+  const session = await prisma.portalSchedule.findUnique({
     where: { id },
     include: {
-      class: {
+      series: {
         select: {
           id: true,
-          className: true,
-          classCode: true,
-          level: true,
+          teacherId: true,
+          isGoogleSynced: true,
+          googleEventId: true,
+          isRecurring: true,
         },
       },
-    },
-  });
-
-  if (!schedule) return null;
-
-  return {
-    id: schedule.id,
-    classId: schedule.classId,
-    title: schedule.title,
-    description: schedule.description || undefined,
-    startTime: schedule.startTime.toISOString(),
-    endTime: schedule.endTime.toISOString(),
-    status: schedule.status,
-    recurrenceGroupId: schedule.recurrenceGroupId || undefined,
-    location: schedule.location || undefined,
-    meetingLink: schedule.meetingLink || undefined,
-    googleEventId: schedule.googleEventId || undefined,
-    syncedToGoogle: schedule.syncedToGoogle,
-    class: {
-      id: schedule.class.id,
-      className: schedule.class.className,
-      classCode: schedule.class.classCode,
-      level: schedule.class.level || '',
-    },
-  };
-}
-
-/**
- * Create schedule(s) - handles both single and recurring schedules
- */
-export async function createSchedules(
-  data: ICreateScheduleData,
-  teacherId: string
-): Promise<{ count: number; schedules: ISchedule[] }> {
-  const { recurrence, ...baseData } = data;
-
-  // Handle recurring schedules
-  if (recurrence && recurrence.weekdays.length > 0) {
-    const groupId = randomUUID();
-    const sessions: Array<{
-      title: string;
-      description: string | null;
-      classId: string;
-      teacherId: string;
-      startTime: Date;
-      endTime: Date;
-      status: string;
-      recurrenceGroupId: string;
-    }> = [];
-
-    let currentDate = dayjs(baseData.startTime);
-    const endDate = dayjs(recurrence.endDate);
-    const duration = dayjs(baseData.endTime).diff(dayjs(baseData.startTime), 'minute');
-
-    while (currentDate.isBefore(endDate) || currentDate.isSame(endDate, 'day')) {
-      if (recurrence.weekdays.includes(currentDate.day())) {
-        const sessionStart = currentDate.toDate();
-        const sessionEnd = currentDate.add(duration, 'minute').toDate();
-
-        sessions.push({
-          title: baseData.title,
-          description: baseData.description || null,
-          classId: baseData.classId,
-          teacherId,
-          startTime: sessionStart,
-          endTime: sessionEnd,
-          status: SCHEDULE_STATUS.SCHEDULED,
-          recurrenceGroupId: groupId,
-        });
-      }
-      currentDate = currentDate.add(1, 'day');
-    }
-
-    // Create all sessions
-    const created = await Promise.all(
-      sessions.map((session) =>
-        prisma.portalSchedule.create({
-          data: session,
-          include: {
-            class: {
-              select: {
-                id: true,
-                className: true,
-                classCode: true,
-                level: true,
-              },
+      class: {
+        include: {
+          teacher: {
+            select: { id: true, name: true, email: true },
+          },
+          enrollments: {
+            where: { status: ENROLLMENT_STATUS.ENROLLED },
+            include: {
+              student: { select: { id: true, name: true, image: true } },
             },
           },
-        })
-      )
-    );
-
-    return {
-      count: created.length,
-      schedules: created.map((s) => ({
-        id: s.id,
-        classId: s.classId,
-        title: s.title,
-        description: s.description || undefined,
-        startTime: s.startTime.toISOString(),
-        endTime: s.endTime.toISOString(),
-        status: s.status,
-        recurrenceGroupId: s.recurrenceGroupId || undefined,
-        class: {
-          id: s.class.id,
-          className: s.class.className,
-          classCode: s.class.classCode,
-          level: s.class.level || '',
-        },
-      })),
-    };
-  }
-
-  // Single schedule
-  const created = await prisma.portalSchedule.create({
-    data: {
-      title: baseData.title,
-      description: baseData.description || null,
-      classId: baseData.classId,
-      teacherId,
-      startTime: baseData.startTime,
-      endTime: baseData.endTime,
-      status: SCHEDULE_STATUS.SCHEDULED,
-    },
-    include: {
-      class: {
-        select: {
-          id: true,
-          className: true,
-          classCode: true,
-          level: true,
         },
       },
     },
   });
 
+  if (!session) return null;
+
+  const synced = session.series?.isGoogleSynced ?? false;
+
   return {
-    count: 1,
-    schedules: [
-      {
-        id: created.id,
-        classId: created.classId,
-        title: created.title,
-        description: created.description || undefined,
-        startTime: created.startTime.toISOString(),
-        endTime: created.endTime.toISOString(),
-        status: created.status,
-        recurrenceGroupId: created.recurrenceGroupId || undefined,
-        class: {
-          id: created.class.id,
-          className: created.class.className,
-          classCode: created.class.classCode,
-          level: created.class.level || '',
-        },
-      },
-    ],
+    id: session.id,
+    classId: session.classId,
+    seriesId: session.seriesId,
+    teacherId: session.series?.teacherId,
+    title: session.title,
+    description: session.description,
+    startTime: session.startAt.toISOString(),
+    endTime: session.endAt.toISOString(),
+    status: session.status,
+    location: session.location,
+    meetingLink: session.meetingLink,
+    isOverride: session.isOverride,
+    overrideType: session.overrideType,
+    isGoogleSynced: synced,
+    syncedToGoogle: synced,
+    googleEventId: session.series?.googleEventId ?? null,
+    isRecurring: session.series?.isRecurring ?? false,
+    createdAt: session.createdAt.toISOString(),
+    updatedAt: session.updatedAt.toISOString(),
+    class: {
+      id: session.class.id,
+      className: session.class.className,
+      classCode: session.class.classCode,
+      level: session.class.level || '',
+      enrollments: session.class.enrollments?.map((e: { id: string; student: { id: string; name: string; image: string | null } }) => ({
+        id: e.id,
+        student: e.student,
+      })),
+    },
   };
 }
 
 /**
- * Update schedule
+ * Get a schedule series by ID.
  */
-export async function updateSchedule(
-  id: string,
+export async function getScheduleSeriesById(seriesId: string): Promise<IScheduleSeries | null> {
+  const scheduleSeries = await prisma.portalScheduleSeries.findUnique({
+    where: { id: seriesId },
+    include: {
+      class: {
+        select: { id: true, className: true, classCode: true, level: true },
+      },
+    },
+  });
+
+  if (!scheduleSeries) return null;
+
+  return {
+    id: scheduleSeries.id,
+    classId: scheduleSeries.classId,
+    teacherId: scheduleSeries.teacherId,
+    title: scheduleSeries.title,
+    description: scheduleSeries.description,
+    location: scheduleSeries.location,
+    meetingLink: scheduleSeries.meetingLink,
+    timezone: scheduleSeries.timezone,
+    startTimeLocal: scheduleSeries.startTimeLocal,
+    endTimeLocal: scheduleSeries.endTimeLocal,
+    startDateLocal: scheduleSeries.startDateLocal,
+    isRecurring: scheduleSeries.isRecurring,
+    repeatRule: scheduleSeries.repeatRule as IScheduleSeries['repeatRule'],
+    isGoogleSynced: scheduleSeries.isGoogleSynced,
+    googleCalendarId: scheduleSeries.googleCalendarId,
+    googleEventId: scheduleSeries.googleEventId,
+    lastSyncError: scheduleSeries.lastSyncError,
+    syncedAt: scheduleSeries.syncedAt?.toISOString() ?? null,
+    isDeleted: scheduleSeries.isDeleted,
+    createdAt: scheduleSeries.createdAt.toISOString(),
+    updatedAt: scheduleSeries.updatedAt.toISOString(),
+    class: scheduleSeries.class
+      ? {
+          id: scheduleSeries.class.id,
+          className: scheduleSeries.class.className,
+          classCode: scheduleSeries.class.classCode,
+          level: scheduleSeries.class.level,
+        }
+      : undefined,
+  };
+}
+
+// ══════════════════════════════════════════════════════════════════
+// CREATE
+// ══════════════════════════════════════════════════════════════════
+
+/**
+ * Create a schedule series + all its schedules in one transaction.
+ */
+export async function createScheduleSeries(
+  data: ICreateScheduleData,
+  teacherId: string
+): Promise<{ series: IScheduleSeries; sessions: ISchedule[] }> {
+  // 1) Create the ScheduleSeries
+  const scheduleSeries = await prisma.portalScheduleSeries.create({
+    data: {
+      classId: data.classId,
+      teacherId,
+      title: data.title,
+      description: data.description || null,
+      location: data.location || null,
+      meetingLink: data.meetingLink || null,
+      startTimeLocal: data.startTimeLocal,
+      endTimeLocal: data.endTimeLocal,
+      startDateLocal: data.startDateLocal,
+      isRecurring: data.isRecurring,
+      repeatRule: data.repeatRule
+        ? JSON.parse(JSON.stringify(data.repeatRule))
+        : undefined,
+    },
+    include: {
+      class: {
+        select: { id: true, className: true, classCode: true, level: true },
+      },
+    },
+  });
+
+  // 2) Generate session dates
+  let sessionDates: string[];
+  if (data.isRecurring && data.repeatRule) {
+    sessionDates = generateSessionDates(
+      data.startDateLocal,
+      data.repeatRule.byWeekDays,
+      data.repeatRule.untilDateLocal
+    );
+  } else {
+    sessionDates = [data.startDateLocal];
+  }
+
+  // 3) Batch-create sessions
+  const sessions = await Promise.all(
+    sessionDates.map(dateLocal =>
+      prisma.portalSchedule.create({
+        data: {
+          classId: data.classId,
+          seriesId: scheduleSeries.id,
+          title: data.title,
+          description: data.description || null,
+          startAt: localToDate(dateLocal, data.startTimeLocal),
+          endAt: localToDate(dateLocal, data.endTimeLocal),
+          status: SCHEDULE_STATUS.SCHEDULED,
+          location: data.location || null,
+          meetingLink: data.meetingLink || null,
+        },
+        include: SCHEDULE_INCLUDE,
+      })
+    )
+  );
+
+  return {
+    series: {
+      id: scheduleSeries.id,
+      classId: scheduleSeries.classId,
+      teacherId: scheduleSeries.teacherId,
+      title: scheduleSeries.title,
+      description: scheduleSeries.description,
+      location: scheduleSeries.location,
+      meetingLink: scheduleSeries.meetingLink,
+      timezone: scheduleSeries.timezone,
+      startTimeLocal: scheduleSeries.startTimeLocal,
+      endTimeLocal: scheduleSeries.endTimeLocal,
+      startDateLocal: scheduleSeries.startDateLocal,
+      isRecurring: scheduleSeries.isRecurring,
+      repeatRule: scheduleSeries.repeatRule as IScheduleSeries['repeatRule'],
+      isGoogleSynced: scheduleSeries.isGoogleSynced,
+      googleEventId: scheduleSeries.googleEventId,
+      isDeleted: scheduleSeries.isDeleted,
+      createdAt: scheduleSeries.createdAt.toISOString(),
+      updatedAt: scheduleSeries.updatedAt.toISOString(),
+      class: scheduleSeries.class
+        ? {
+            id: scheduleSeries.class.id,
+            className: scheduleSeries.class.className,
+            classCode: scheduleSeries.class.classCode,
+            level: scheduleSeries.class.level,
+          }
+        : undefined,
+    },
+    sessions: sessions.map(mapToSchedule),
+  };
+}
+
+// ════════════════════════════════════════════════════════════════
+// UPDATE
+// ════════════════════════════════════════════════════════════════
+
+/**
+ * Update a schedule series and propagate changes to future non-override sessions.
+ */
+export async function updateScheduleSeries(
+  seriesId: string,
   data: IUpdateScheduleData
-): Promise<ISchedule> {
-  const updated = await prisma.portalSchedule.update({
-    where: { id },
+): Promise<{ series: IScheduleSeries; sessions: ISchedule[] }> {
+  // 1) Update the schedule series record
+  const scheduleSeries = await prisma.portalScheduleSeries.update({
+    where: { id: seriesId },
     data: {
       ...(data.title && { title: data.title }),
       ...(data.description !== undefined && { description: data.description || null }),
-      ...(data.classId && { classId: data.classId }),
-      ...(data.startTime && { startTime: data.startTime }),
-      ...(data.endTime && { endTime: data.endTime }),
       ...(data.location !== undefined && { location: data.location || null }),
       ...(data.meetingLink !== undefined && { meetingLink: data.meetingLink || null }),
+      ...(data.startTimeLocal && { startTimeLocal: data.startTimeLocal }),
+      ...(data.endTimeLocal && { endTimeLocal: data.endTimeLocal }),
+      ...(data.startDateLocal && { startDateLocal: data.startDateLocal }),
     },
-    include: {
-      class: {
-        select: {
-          id: true,
-          className: true,
-          classCode: true,
-          level: true,
-        },
-      },
-    },
+  });
+
+  // 2) Propagate to future, non-override sessions
+  const now = new Date();
+  const sessionUpdate: Record<string, unknown> = {};
+  if (data.title) sessionUpdate.title = data.title;
+  if (data.description !== undefined) sessionUpdate.description = data.description || null;
+  if (data.location !== undefined) sessionUpdate.location = data.location || null;
+  if (data.meetingLink !== undefined) sessionUpdate.meetingLink = data.meetingLink || null;
+
+  if (Object.keys(sessionUpdate).length > 0) {
+    await prisma.portalSchedule.updateMany({
+      where: { seriesId, startAt: { gte: now }, isOverride: false },
+      data: sessionUpdate,
+    });
+  }
+
+  // 3) If time changed, update startAt/endAt of future sessions
+  if (data.startTimeLocal || data.endTimeLocal) {
+    const startTime = data.startTimeLocal || scheduleSeries.startTimeLocal;
+    const endTime = data.endTimeLocal || scheduleSeries.endTimeLocal;
+
+    const futureSessions = await prisma.portalSchedule.findMany({
+      where: { seriesId, startAt: { gte: now }, isOverride: false },
+    });
+
+    await Promise.all(
+      futureSessions.map((session: { id: string; startAt: Date }) => {
+        // Extract local date from existing startAt (UTC+7)
+        const localDate = utcToLocalDateStr(session.startAt);
+        return prisma.portalSchedule.update({
+          where: { id: session.id },
+          data: {
+            startAt: localToDate(localDate, startTime),
+            endAt: localToDate(localDate, endTime),
+          },
+        });
+      })
+    );
+  }
+
+  // 4) Fetch updated sessions
+  const sessions = await prisma.portalSchedule.findMany({
+    where: { seriesId },
+    include: SCHEDULE_INCLUDE,
+    orderBy: { startAt: 'asc' },
   });
 
   return {
-    id: updated.id,
-    classId: updated.classId,
-    title: updated.title,
-    description: updated.description || undefined,
-    startTime: updated.startTime.toISOString(),
-    endTime: updated.endTime.toISOString(),
-    status: updated.status,
-    recurrenceGroupId: updated.recurrenceGroupId || undefined,
-    location: updated.location || undefined,
-    meetingLink: updated.meetingLink || undefined,
-    class: {
-      id: updated.class.id,
-      className: updated.class.className,
-      classCode: updated.class.classCode,
-      level: updated.class.level || '',
+    series: {
+      id: scheduleSeries.id,
+      classId: scheduleSeries.classId,
+      teacherId: scheduleSeries.teacherId,
+      title: scheduleSeries.title,
+      description: scheduleSeries.description,
+      location: scheduleSeries.location,
+      meetingLink: scheduleSeries.meetingLink,
+      timezone: scheduleSeries.timezone,
+      startTimeLocal: scheduleSeries.startTimeLocal,
+      endTimeLocal: scheduleSeries.endTimeLocal,
+      startDateLocal: scheduleSeries.startDateLocal,
+      isRecurring: scheduleSeries.isRecurring,
+      repeatRule: scheduleSeries.repeatRule as IScheduleSeries['repeatRule'],
+      isGoogleSynced: scheduleSeries.isGoogleSynced,
+      googleEventId: scheduleSeries.googleEventId,
+      isDeleted: scheduleSeries.isDeleted,
+      createdAt: scheduleSeries.createdAt.toISOString(),
+      updatedAt: scheduleSeries.updatedAt.toISOString(),
     },
+    sessions: sessions.map(mapToSchedule),
   };
 }
 
+// ══════════════════════════════════════════════════════════════════
+// DELETE
+// ══════════════════════════════════════════════════════════════════
+
 /**
- * Delete schedule
+ * Soft-delete a schedule series and hard-delete all its sessions.
+ * Returns deleted schedule IDs for optimistic UI update.
  */
-export async function deleteSchedule(id: string): Promise<void> {
-  await prisma.portalSchedule.delete({
-    where: { id },
+export async function deleteScheduleSeries(seriesId: string): Promise<string[]> {
+  const sessions = await prisma.portalSchedule.findMany({
+    where: { seriesId },
+    select: { id: true },
   });
+  const sessionIds = sessions.map((s: { id: string }) => s.id);
+
+  await prisma.$transaction([
+    prisma.portalScheduleSeries.update({
+      where: { id: seriesId },
+      data: { isDeleted: true, deletedAt: new Date() },
+    }),
+    prisma.portalSchedule.deleteMany({ where: { seriesId } }),
+  ]);
+
+  return sessionIds;
 }
 
 /**
- * Delete all schedules in a recurrence group
- * Returns the IDs of deleted schedules for optimistic UI update
+ * Delete a single schedule.
  */
-export async function deleteScheduleGroup(recurrenceGroupId: string): Promise<string[]> {
-  // First get all IDs in the group
-  const schedulesInGroup = await prisma.portalSchedule.findMany({
-    where: { recurrenceGroupId },
-    select: { id: true },
-  });
+export async function deleteSchedule(sessionId: string): Promise<void> {
+  await prisma.portalSchedule.delete({ where: { id: sessionId } });
+}
 
-  const ids = schedulesInGroup.map((s) => s.id);
+// ── Helpers ──
 
-  // Delete all in the group
-  await prisma.portalSchedule.deleteMany({
-    where: { recurrenceGroupId },
-  });
-
-  return ids;
+/**
+ * Convert UTC Date → local "YYYY-MM-DD" string (Asia/Ho_Chi_Minh = UTC+7)
+ */
+function utcToLocalDateStr(date: Date): string {
+  const local = new Date(date.getTime() + 7 * 60 * 60 * 1000);
+  const y = local.getUTCFullYear();
+  const m = String(local.getUTCMonth() + 1).padStart(2, '0');
+  const d = String(local.getUTCDate()).padStart(2, '0');
+  return `${y}-${m}-${d}`;
 }

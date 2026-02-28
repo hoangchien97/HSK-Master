@@ -33,7 +33,6 @@ interface ClassOption {
 export default function StudentAttendanceView() {
   const [classes, setClasses] = useState<ClassOption[]>([])
   const [selectedClassId, setSelectedClassId] = useState<string>("")
-  const [currentMonth, setCurrentMonth] = useState(dayjs().format("YYYY-MM"))
   const [matrixData, setMatrixData] = useState<AttendanceMatrixData | null>(null)
   const [searchQuery, setSearchQuery] = useState("")
   const { startLoading, stopLoading } = usePortalUI()
@@ -44,11 +43,11 @@ export default function StudentAttendanceView() {
   }, [])
 
   useEffect(() => {
-    if (selectedClassId && currentMonth) {
+    if (selectedClassId) {
       loadMatrix()
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [selectedClassId, currentMonth])
+  }, [selectedClassId])
 
   const loadClasses = async () => {
     try {
@@ -70,10 +69,10 @@ export default function StudentAttendanceView() {
   }
 
   const loadMatrix = async () => {
-    if (!selectedClassId || !currentMonth) return
+    if (!selectedClassId) return
     try {
       startLoading()
-      const result = await fetchAttendanceMatrix(selectedClassId, currentMonth)
+      const result = await fetchAttendanceMatrix(selectedClassId)
       if (result.success && result.data) {
         setMatrixData(result.data)
       } else {
@@ -154,18 +153,17 @@ export default function StudentAttendanceView() {
   }
 
   return (
-    <div className="flex flex-col h-full">
-      {/* Header: Filters (no online/pending indicators) */}
+    <div className="flex flex-col h-full gap-4">
+      {/* Header: Filters */}
       <AttendanceHeader
         classes={classes}
         selectedClassId={selectedClassId}
         onClassChange={handleClassChange}
-        currentMonth={currentMonth}
-        onMonthChange={setCurrentMonth}
         searchQuery={searchQuery}
         onSearchChange={setSearchQuery}
-        isOnline={true}
         pendingCount={0}
+        scheduleDates={scheduleDates}
+        matrixData={matrixData}
       />
 
       {/* Matrix Table — read-only */}

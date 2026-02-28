@@ -55,10 +55,10 @@ export default function CourseCard({ course }: CourseCardProps) {
               <span>{course.lectures || 0} bài giảng</span>
             </div>
           </Tooltip>
-          <Tooltip content="Tổng thời lượng khóa học">
+          <Tooltip content="Số buổi học">
             <div className="flex items-center gap-1.5 cursor-help">
               <Clock className="w-[18px] h-[18px] text-orange-500" />
-              <span>{course.durationHours || 0} giờ</span>
+              <span>{course.durationHours || 0} buổi</span>
             </div>
           </Tooltip>
         </div>

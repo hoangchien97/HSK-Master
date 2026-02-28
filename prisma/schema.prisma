@@ -449,12 +449,15 @@ model PortalUser {
 
   // Teacher relations (when role=TEACHER or SYSTEM_ADMIN)
   classes          PortalClass[]
-  schedules        PortalSchedule[]
+  scheduleSeries   PortalScheduleSeries[] @relation("TeacherSeries")
   assignments      PortalAssignment[]
   teacherAttendances PortalAttendance[] @relation("TeacherAttendance")
 
   // Notifications
   notifications    PortalNotification[]
+
+  // Google Calendar token
+  calendarToken    GoogleCalendarToken?
 
   @@map("portal_users")
 }
@@ -475,6 +478,7 @@ model PortalClass {
 
   teacher          PortalUser                @relation(fields: [teacherId], references: [id])
   enrollments      PortalClassEnrollment[]
+  scheduleSeries   PortalScheduleSeries[]
   schedules        PortalSchedule[]
   assignments      PortalAssignment[]
   attendances      PortalAttendance[]
@@ -500,33 +504,80 @@ model PortalClassEnrollment {
   @@map("portal_class_enrollments")
 }
 
-// Portal Schedule (Class schedule/calendar)
-model PortalSchedule {
+// ============================================
+// SCHEDULE V2: Series + Sessions
+// ============================================
+
+// Schedule Series — The template/recurring rule
+// DB: stores the recurring rule. Google: creates 1 recurring event.
+model PortalScheduleSeries {
   id               String   @id @default(cuid())
   classId          String
   teacherId        String
   title            String   // e.g., "Bài 5: Ngữ pháp"
   description      String?  @db.Text
-  startTime        DateTime
-  endTime          DateTime
-  location         String?  // e.g., "Phòng 301" or "Google Meet"
+  location         String?  // e.g., "Phòng 301"
   meetingLink      String?  // Online meeting link
-  status           String   @default("SCHEDULED") // SCHEDULED, COMPLETED, CANCELLED
+  timezone         String   @default("Asia/Ho_Chi_Minh")
 
-  // Recurrence group — all schedules created from the same recurring rule share this ID
-  recurrenceGroupId String?
+  // Time template (local time)
+  startTimeLocal   String   // "HH:mm" e.g., "19:00"
+  endTimeLocal     String   // "HH:mm" e.g., "20:30"
+  startDateLocal   String   // "YYYY-MM-DD" first occurrence date
+
+  // Recurrence
+  isRecurring      Boolean  @default(false)
+  repeatRule       Json?    // { freq:"WEEKLY", byWeekDays:["MO","TU"...], untilDateLocal:"YYYY-MM-DD" }
 
   // Google Calendar Sync
-  googleEventId    String?  // Google Calendar event ID for synced events
-  syncedToGoogle   Boolean  @default(false) // Whether this event is synced to Google Calendar
+  isGoogleSynced   Boolean  @default(false)
+  googleCalendarId String?  @default("primary")
+  googleEventId    String?  // Google Calendar event/series ID
+  lastSyncError    String?  @db.Text
+  syncedAt         DateTime?
+
+  // Soft delete
+  isDeleted        Boolean  @default(false)
+  deletedAt        DateTime?
 
   createdAt        DateTime @default(now())
   updatedAt        DateTime @updatedAt
 
   class            PortalClass   @relation(fields: [classId], references: [id], onDelete: Cascade)
-  teacher          PortalUser @relation(fields: [teacherId], references: [id])
+  teacher          PortalUser    @relation("TeacherSeries", fields: [teacherId], references: [id])
+  sessions         PortalSchedule[]
 
-  @@map("portal_schedules")
+  @@map("schedule_series")
+}
+
+// PortalSchedule — Individual instances for UI/attendance/homework
+model PortalSchedule {
+  id               String   @id @default(cuid())
+  classId          String
+  seriesId         String?  // nullable for standalone sessions
+  title            String
+  description      String?  @db.Text
+  startAt          DateTime // timestamptz — actual scheduled start
+  endAt            DateTime // timestamptz — actual scheduled end
+  status           String   @default("SCHEDULED") // SCHEDULED, COMPLETED, CANCELLED
+
+  // Override tracking (for individual session modifications)
+  isOverride       Boolean  @default(false)
+  overrideType     String?  // "moved", "cancelled", "extra"
+  overrideReason   String?
+
+  location         String?
+  meetingLink      String?
+
+  createdAt        DateTime @default(now())
+  updatedAt        DateTime @updatedAt
+
+  class            PortalClass    @relation(fields: [classId], references: [id], onDelete: Cascade)
+  series           PortalScheduleSeries? @relation(fields: [seriesId], references: [id], onDelete: SetNull)
+
+  @@index([classId, startAt])
+  @@index([seriesId])
+  @@map("class_sessions")
 }
 
 // Portal Attendance (Student attendance tracking)
@@ -618,4 +669,23 @@ model PortalNotification {
   @@index([userId, isRead])
   @@index([userId, createdAt])
   @@map("portal_notifications")
+}
+
+// ============================================
+// GOOGLE CALENDAR TOKEN (encrypted at rest)
+// ============================================
+model GoogleCalendarToken {
+  id                String   @id @default(cuid())
+  userId            String   @unique
+  encryptedRefresh  String   @db.Text // AES-256-GCM encrypted refresh_token
+  encryptedAccess   String?  @db.Text // AES-256-GCM encrypted access_token (cache)
+  accessExpiresAt   DateTime? // When the cached access_token expires
+  scope             String?   // Granted scopes
+  isValid           Boolean  @default(true) // false when token is revoked/expired
+  connectedAt       DateTime @default(now())
+  updatedAt         DateTime @updatedAt
+
+  user              PortalUser @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@map("google_calendar_tokens")
 }

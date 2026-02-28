@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from "next/server"
 import { auth } from "@/auth"
 import { prisma } from "@/lib/prisma"
-import { CLASS_STATUS, USER_ROLE } from "@/constants/portal/roles"
+import { CLASS_STATUS, USER_ROLE, ENROLLMENT_STATUS } from "@/constants/portal/roles"
 import type { Prisma } from "@prisma/client"
 
 // GET - Fetch classes with server-side filtering & pagination
@@ -34,7 +34,7 @@ export async function GET(request: NextRequest) {
     if (user.role === USER_ROLE.STUDENT) {
       // Students see their enrolled classes
       const enrollments = await prisma.portalClassEnrollment.findMany({
-        where: { studentId: user.id, status: "ENROLLED" },
+        where: { studentId: user.id, status: ENROLLMENT_STATUS.ENROLLED },
         select: { classId: true },
       })
       const classIds = enrollments.map((e) => e.classId)

@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from "next/server"
 import { prisma } from "@/lib/prisma"
 import { auth } from "@/auth"
-import { USER_ROLE } from "@/constants/portal/roles"
+import { USER_ROLE, ENROLLMENT_STATUS } from "@/constants/portal/roles"
 
 // GET - Fetch attendance matrix for a class in a month
 export async function GET(request: NextRequest) {
@@ -42,7 +42,7 @@ export async function GET(request: NextRequest) {
       where: { id: classId },
       include: {
         enrollments: {
-          where: { status: "ENROLLED" },
+          where: { status: ENROLLMENT_STATUS.ENROLLED },
           include: {
             student: {
               select: {
@@ -82,13 +82,13 @@ export async function GET(request: NextRequest) {
     const schedules = await prisma.portalSchedule.findMany({
       where: {
         classId,
-        startTime: { gte: startDate, lte: endDate },
+        startAt: { gte: startDate, lte: endDate },
       },
-      orderBy: { startTime: "asc" },
+      orderBy: { startAt: "asc" },
       select: {
         id: true,
-        startTime: true,
-        endTime: true,
+        startAt: true,
+        endAt: true,
         title: true,
         status: true,
       },
@@ -138,9 +138,9 @@ export async function GET(request: NextRequest) {
       })),
       schedules: schedules.map((s) => ({
         id: s.id,
-        date: s.startTime.toISOString().split("T")[0],
-        startTime: s.startTime.toISOString(),
-        endTime: s.endTime.toISOString(),
+        date: s.startAt.toISOString().split("T")[0],
+        startTime: s.startAt.toISOString(),
+        endTime: s.endAt.toISOString(),
         title: s.title,
         status: s.status,
       })),

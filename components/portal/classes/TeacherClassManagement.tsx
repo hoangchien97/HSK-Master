@@ -7,6 +7,7 @@ import { toast } from "react-toastify"
 // PageHeader removed - using inline heading
 import { PageHeader } from "@/components/portal/common/PageHeader"
 import CreateClassModal from "./CreateClassModal"
+import { CLASS_STATUS_LABEL_MAP } from "@/constants/portal"
 import api from "@/lib/http/client"
 
 interface Class {
@@ -167,7 +168,7 @@ export default function TeacherClassManagement() {
                     ? 'bg-gray-100 text-gray-700'
                     : 'bg-yellow-100 text-yellow-700'
                 }`}>
-                  {cls.status === 'ACTIVE' ? 'Đang hoạt động' : cls.status === 'COMPLETED' ? 'Đã kết thúc' : 'Sắp diễn ra'}
+                  {CLASS_STATUS_LABEL_MAP[cls.status] || cls.status}
                 </span>
               </div>
             </Link>

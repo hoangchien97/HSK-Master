@@ -42,40 +42,26 @@ export default function AttendanceMatrixView() {
   // State
   const [classes, setClasses] = useState<ClassOption[]>([])
   const [selectedClassId, setSelectedClassId] = useState<string>("")
-  const [currentMonth, setCurrentMonth] = useState(dayjs().format("YYYY-MM"))
   const [matrixData, setMatrixData] = useState<AttendanceMatrixData | null>(null)
   const [pendingChanges, setPendingChanges] = useState<Map<string, PendingChange>>(new Map())
   const [searchQuery, setSearchQuery] = useState("")
   const [isSaving, setIsSaving] = useState(false)
-  const [isOnline, setIsOnline] = useState(true)
   const [notePopover, setNotePopover] = useState<{ studentId: string; date: string } | null>(null)
   const [noteText, setNoteText] = useState("")
   const { startLoading, stopLoading } = usePortalUI()
-
-  // Online/offline detection
-  useEffect(() => {
-    const updateOnline = () => setIsOnline(navigator.onLine)
-    window.addEventListener("online", updateOnline)
-    window.addEventListener("offline", updateOnline)
-    setIsOnline(navigator.onLine)
-    return () => {
-      window.removeEventListener("online", updateOnline)
-      window.removeEventListener("offline", updateOnline)
-    }
-  }, [])
 
   useEffect(() => {
     loadClasses()
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
-  // Load matrix data when class or month changes
+  // Load matrix data when class changes
   useEffect(() => {
-    if (selectedClassId && currentMonth) {
+    if (selectedClassId) {
       loadMatrix()
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [selectedClassId, currentMonth])
+  }, [selectedClassId])
 
   const loadClasses = async () => {
     try {
@@ -97,10 +83,10 @@ export default function AttendanceMatrixView() {
   }
 
   const loadMatrix = async () => {
-    if (!selectedClassId || !currentMonth) return
+    if (!selectedClassId) return
     try {
       startLoading()
-      const result = await fetchAttendanceMatrix(selectedClassId, currentMonth)
+      const result = await fetchAttendanceMatrix(selectedClassId)
       if (result.success && result.data) {
         setMatrixData(result.data)
         setPendingChanges(new Map())
@@ -242,11 +228,6 @@ export default function AttendanceMatrixView() {
       })
 
       setPendingChanges(newPending)
-      toast.success(
-        allPresent
-          ? `Đã bỏ chọn tất cả (${dayjs(date).format("DD/MM")})`
-          : `Đã đánh dấu tất cả có mặt (${dayjs(date).format("DD/MM")})`
-      )
     },
     [pendingChanges, matrixData, today, getCellStatus]
   )
@@ -378,18 +359,17 @@ export default function AttendanceMatrixView() {
   }
 
   return (
-    <div className="flex flex-col h-full">
+    <div className="flex flex-col h-full gap-4">
       {/* Header: Filters */}
       <AttendanceHeader
         classes={classes}
         selectedClassId={selectedClassId}
         onClassChange={handleClassChange}
-        currentMonth={currentMonth}
-        onMonthChange={setCurrentMonth}
         searchQuery={searchQuery}
         onSearchChange={setSearchQuery}
-        isOnline={isOnline}
         pendingCount={pendingChanges.size}
+        scheduleDates={scheduleDates}
+        matrixData={matrixData}
       />
 
       {/* Matrix Table */}

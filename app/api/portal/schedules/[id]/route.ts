@@ -1,9 +1,12 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { auth } from '@/auth';
-import prisma from '@/lib/prisma';
-import { USER_ROLE, SCHEDULE_STATUS } from '@/constants/portal/roles';
+import { prisma } from '@/lib/prisma';
+import { USER_ROLE, ENROLLMENT_STATUS } from '@/constants/portal/roles';
 
-// GET - Get single schedule
+/**
+ * GET - Get single session by ID.
+ * Returns data mapped to ScheduleEvent shape for EventDetailDrawer.
+ */
 export async function GET(
   request: NextRequest,
   { params }: { params: Promise<{ id: string }> }
@@ -18,23 +21,62 @@ export async function GET(
     const schedule = await prisma.portalSchedule.findUnique({
       where: { id },
       include: {
-        class: true,
-        teacher: true,
+        series: {
+          select: {
+            id: true,
+            teacherId: true,
+            isGoogleSynced: true,
+            googleEventId: true,
+            isRecurring: true,
+          },
+        },
+        class: {
+          include: {
+            teacher: { select: { id: true, name: true, email: true } },
+            enrollments: {
+              where: { status: ENROLLMENT_STATUS.ENROLLED },
+              include: {
+                student: { select: { id: true, name: true, image: true } },
+              },
+            },
+          },
+        },
       },
     });
 
     if (!schedule) {
-      return NextResponse.json({ error: 'Schedule not found' }, { status: 404 });
+      return NextResponse.json({ error: 'Session not found' }, { status: 404 });
     }
 
-    return NextResponse.json(schedule);
+    // Map to ScheduleEvent shape for backward compat with EventDetailDrawer
+    return NextResponse.json({
+      id: schedule.id,
+      classId: schedule.classId,
+      seriesId: schedule.seriesId,
+      teacherId: schedule.series?.teacherId,
+      title: schedule.title,
+      description: schedule.description,
+      startTime: schedule.startAt,
+      endTime: schedule.endAt,
+      location: schedule.location,
+      meetingLink: schedule.meetingLink,
+      status: schedule.status,
+      googleEventId: schedule.series?.googleEventId ?? null,
+      syncedToGoogle: schedule.series?.isGoogleSynced ?? false,
+      isRecurring: schedule.series?.isRecurring ?? false,
+      createdAt: schedule.createdAt,
+      updatedAt: schedule.updatedAt,
+      class: schedule.class,
+    });
   } catch (error) {
-    console.error('Error fetching schedule:', error);
-    return NextResponse.json({ error: 'Failed to fetch schedule' }, { status: 500 });
+    console.error('Error fetching session:', error);
+    return NextResponse.json({ error: 'Failed to fetch session' }, { status: 500 });
   }
 }
 
-// PATCH - Update schedule
+/**
+ * PATCH - Update a series (via session ID lookup).
+ */
 export async function PATCH(
   request: NextRequest,
   { params }: { params: Promise<{ id: string }> }
@@ -54,77 +96,47 @@ export async function PATCH(
       return NextResponse.json({ error: 'Chỉ giáo viên mới có thể sửa lịch' }, { status: 403 });
     }
 
-    // Get existing schedule
-    const existingSchedule = await prisma.portalSchedule.findUnique({
+    // Find the session → its series
+    const schedule = await prisma.portalSchedule.findUnique({
       where: { id },
+      select: { seriesId: true, series: { select: { teacherId: true } } },
     });
 
-    if (!existingSchedule) {
-      return NextResponse.json({ error: 'Schedule not found' }, { status: 404 });
+    if (!schedule?.seriesId) {
+      return NextResponse.json({ error: 'Session not found' }, { status: 404 });
     }
 
-    // Check if teacher owns this schedule
-    if (user.role === USER_ROLE.TEACHER && existingSchedule.teacherId !== user.id) {
+    if (user.role === USER_ROLE.TEACHER && schedule.series?.teacherId !== user.id) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 403 });
     }
 
     const body = await request.json();
-    const { title, description, startTime, endTime, location, meetingLink, status } = body;
+    const { title, description, location, meetingLink, startTimeLocal, endTimeLocal } = body;
 
-    // Update schedule
-    const updatedSchedule = await prisma.portalSchedule.update({
-      where: { id },
+    // Update the series
+    const updatedSeries = await prisma.portalScheduleSeries.update({
+      where: { id: schedule.seriesId },
       data: {
         ...(title && { title }),
         ...(description !== undefined && { description }),
-        ...(startTime && { startTime: new Date(startTime) }),
-        ...(endTime && { endTime: new Date(endTime) }),
         ...(location !== undefined && { location }),
         ...(meetingLink !== undefined && { meetingLink }),
-        ...(status && { status }),
+        ...(startTimeLocal && { startTimeLocal }),
+        ...(endTimeLocal && { endTimeLocal }),
       },
-      include: {
-        class: true,
-        teacher: true,
-      },
+      include: { class: true },
     });
 
-    // TODO: Re-enable Google sync after migration
-    // If synced to Google, update the event
-    // if (existingSchedule.googleEventId && existingSchedule.syncedToGoogle) {
-    //   try {
-    //     const syncResponse = await fetch(
-    //       `${request.nextUrl.origin}/api/portal/google-calendar/sync`,
-    //       {
-    //         method: 'PATCH',
-    //         headers: { 'Content-Type': 'application/json' },
-    //         body: JSON.stringify({ scheduleId: id }),
-    //       }
-    //     );
-
-    //     if (syncResponse.ok) {
-    //       return NextResponse.json({
-    //         ...updatedSchedule,
-    //         message: 'Đã cập nhật buổi học và đồng bộ với Google Calendar',
-    //       });
-    //     }
-    //   } catch (error) {
-    //     console.error('Failed to sync with Google Calendar:', error);
-    //     return NextResponse.json({
-    //       ...updatedSchedule,
-    //       warning: 'Đã cập nhật buổi học nhưng không thể đồng bộ với Google Calendar',
-    //     });
-    //   }
-    // }
-
-    return NextResponse.json(updatedSchedule);
+    return NextResponse.json(updatedSeries);
   } catch (error) {
-    console.error('Error updating schedule:', error);
+    console.error('Error updating session:', error);
     return NextResponse.json({ error: 'Cập nhật lịch thất bại' }, { status: 500 });
   }
 }
 
-// DELETE - Delete schedule
+/**
+ * DELETE - Delete a single session.
+ */
 export async function DELETE(
   request: NextRequest,
   { params }: { params: Promise<{ id: string }> }
@@ -144,47 +156,24 @@ export async function DELETE(
       return NextResponse.json({ error: 'Chỉ giáo viên mới có thể xóa lịch' }, { status: 403 });
     }
 
-    // Get existing schedule
-    const existingSchedule = await prisma.portalSchedule.findUnique({
+    const schedule = await prisma.portalSchedule.findUnique({
       where: { id },
+      select: { series: { select: { teacherId: true } } },
     });
 
-    if (!existingSchedule) {
-      return NextResponse.json({ error: 'Schedule not found' }, { status: 404 });
+    if (!schedule) {
+      return NextResponse.json({ error: 'Session not found' }, { status: 404 });
     }
 
-    // Check if teacher owns this schedule
-    if (user.role === USER_ROLE.TEACHER && existingSchedule.teacherId !== user.id) {
+    if (user.role === USER_ROLE.TEACHER && schedule.series?.teacherId !== user.id) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 403 });
     }
 
-    // TODO: Re-enable Google sync after migration
-    // If synced to Google, delete from Google Calendar first
-    // if (existingSchedule.googleEventId && existingSchedule.syncedToGoogle) {
-    //   try {
-    //     await fetch(
-    //       `${request.nextUrl.origin}/api/portal/google-calendar/sync?scheduleId=${id}`,
-    //       {
-    //         method: 'DELETE',
-    //       }
-    //     );
-    //   } catch (error) {
-    //     console.error('Failed to delete from Google Calendar:', error);
-    //     // Continue with deletion even if Google sync fails
-    //   }
-    // }
+    await prisma.portalSchedule.delete({ where: { id } });
 
-    // Delete schedule
-    await prisma.portalSchedule.delete({
-      where: { id },
-    });
-
-    return NextResponse.json({
-      success: true,
-      message: 'Đã xóa buổi học thành công',
-    });
+    return NextResponse.json({ success: true, message: 'Đã xóa buổi học thành công' });
   } catch (error) {
-    console.error('Error deleting schedule:', error);
+    console.error('Error deleting session:', error);
     return NextResponse.json({ error: 'Xóa lịch thất bại' }, { status: 500 });
   }
 }
