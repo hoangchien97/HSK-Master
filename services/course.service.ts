@@ -1,4 +1,5 @@
 import { prisma } from "@/lib/prisma";
+import { unstable_cache } from "next/cache";
 
 export interface Course {
   id: string;
@@ -48,32 +49,34 @@ export interface CourseFilters {
   limit?: number;
 }
 
-export async function getCourses(): Promise<Course[]> {
-  try {
-    const courses = await prisma.course.findMany({
-      where: { isPublished: true },
-      include: {
-        hskLevel: {
-          select: { level: true },
+export const getCourses = unstable_cache(
+  async (): Promise<Course[]> => {
+    try {
+      const courses = await prisma.course.findMany({
+        where: { isPublished: true },
+        include: {
+          hskLevel: {
+            select: { level: true },
+          },
         },
-      },
-      orderBy: { createdAt: "desc" },
-    });
+        orderBy: { createdAt: "desc" },
+      });
 
-    // Sort: HSK 1-6 first (by level asc), then others by createdAt desc
-    const hskCourses = courses
-      .filter((c) => c.hskLevel)
-      .sort((a, b) => (a.hskLevel!.level) - (b.hskLevel!.level));
-    const otherCourses = courses.filter((c) => !c.hskLevel);
+      // Sort: HSK 1-6 first (by level asc), then others by createdAt desc
+      const hskCourses = courses
+        .filter((c) => c.hskLevel)
+        .sort((a, b) => (a.hskLevel!.level) - (b.hskLevel!.level));
+      const otherCourses = courses.filter((c) => !c.hskLevel);
 
-    console.log("Fetched courses:", courses.length);
-
-    return [...hskCourses, ...otherCourses];
-  } catch (error) {
-    console.error("Failed to fetch courses:", error);
-    return [];
-  }
-}
+      return [...hskCourses, ...otherCourses];
+    } catch (error) {
+      console.error("Failed to fetch courses:", error);
+      return [];
+    }
+  },
+  ["courses-list"],
+  { revalidate: 3600, tags: ["courses"] }
+);
 
 export async function getFilteredCourses(
   filters: CourseFilters = {}
@@ -82,25 +85,21 @@ export async function getFilteredCourses(
     const { categoryId, hskLevelGroup, search, sortBy, page, limit } = filters;
 
     // Build where clause
-    const where: any = { isPublished: true };
+    const where: Record<string, unknown> = { isPublished: true };
 
     if (categoryId) {
       where.categoryId = categoryId;
     }
 
+    // Use nested relation filter instead of separate query
     if (hskLevelGroup) {
-      const hskLevels = await prisma.hSKLevel.findMany({
-        where: {
-          level:
-            hskLevelGroup === "beginner"
-              ? { in: [1, 2] }
-              : hskLevelGroup === "intermediate"
-                ? { in: [3, 4] }
-                : { in: [5, 6] },
-        },
-        select: { id: true },
-      });
-      where.hskLevelId = { in: hskLevels.map((l) => l.id) };
+      const levelRange =
+        hskLevelGroup === "beginner"
+          ? [1, 2]
+          : hskLevelGroup === "intermediate"
+            ? [3, 4]
+            : [5, 6];
+      where.hskLevel = { level: { in: levelRange } };
     }
 
     if (search) {
@@ -111,7 +110,7 @@ export async function getFilteredCourses(
     }
 
     // Build orderBy
-    const orderBy: any[] = [];
+    const orderBy: Record<string, string>[] = [];
     if (sortBy === "featured") {
       orderBy.push({ isFeatured: "desc" });
     }
@@ -174,75 +173,85 @@ export async function getCoursesByLevel(level: string): Promise<Course[]> {
   }
 }
 
-export async function getCourseBySlug(
-  slug: string
-): Promise<CourseWithCategory | null> {
-  try {
-    const course = await prisma.course.findUnique({
-      where: { slug },
-      include: {
-        category: {
-          select: {
-            id: true,
-            name: true,
-            slug: true,
+export const getCourseBySlug = unstable_cache(
+  async (slug: string): Promise<CourseWithCategory | null> => {
+    try {
+      const course = await prisma.course.findUnique({
+        where: { slug },
+        include: {
+          category: {
+            select: {
+              id: true,
+              name: true,
+              slug: true,
+            },
+          },
+          hskLevel: {
+            select: {
+              id: true,
+              level: true,
+              title: true,
+            },
           },
         },
-        hskLevel: {
-          select: {
-            id: true,
-            level: true,
-            title: true,
+      });
+
+      return course;
+    } catch (error) {
+      console.error(`Failed to fetch course with slug ${slug}:`, error);
+      return null;
+    }
+  },
+  ["course-by-slug"],
+  { revalidate: 3600, tags: ["courses"] }
+);
+
+export const getCoursesWithCategory = unstable_cache(
+  async (): Promise<CourseWithCategory[]> => {
+    try {
+      const courses = await prisma.course.findMany({
+        where: { isPublished: true },
+        include: {
+          category: {
+            select: {
+              id: true,
+              name: true,
+              slug: true,
+            },
+          },
+          hskLevel: {
+            select: {
+              id: true,
+              level: true,
+              title: true,
+            },
           },
         },
-      },
-    });
+        orderBy: { createdAt: "desc" },
+      });
 
-    return course;
-  } catch (error) {
-    console.error(`Failed to fetch course with slug ${slug}:`, error);
-    return null;
-  }
-}
+      return courses;
+    } catch (error) {
+      console.error("Failed to fetch courses with category:", error);
+      return [];
+    }
+  },
+  ["courses-with-category"],
+  { revalidate: 3600, tags: ["courses"] }
+);
 
-export async function getCoursesWithCategory(): Promise<CourseWithCategory[]> {
-  try {
-    const courses = await prisma.course.findMany({
-      where: { isPublished: true },
-      include: {
-        category: {
-          select: {
-            id: true,
-            name: true,
-            slug: true,
-          },
-        },
-        hskLevel: {
-          select: {
-            id: true,
-            level: true,
-            title: true,
-          },
-        },
-      },
-      orderBy: { createdAt: "desc" },
-    });
-
-    return courses;
-  } catch (error) {
-    console.error("Failed to fetch courses with category:", error);
-    return [];
-  }
-}
-
-export async function getCategories() {
-  try {
-    const categories = await prisma.category.findMany({
-      orderBy: { name: "asc" },
-    });
-    return categories;
-  } catch (error) {
-    console.error("Failed to fetch categories:", error);
-    return [];
-  }
-}
+export const getCategories = unstable_cache(
+  async () => {
+    try {
+      const categories = await prisma.category.findMany({
+        orderBy: { name: "asc" },
+      });
+      return categories;
+    } catch (error) {
+      console.error("Failed to fetch categories:", error);
+      return [];
+    }
+  },
+  ["categories"],
+  { revalidate: 3600, tags: ["categories"] }
+);

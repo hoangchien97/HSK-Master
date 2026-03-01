@@ -1,6 +1,7 @@
 "use server";
 
 import prisma from "@/lib/prisma";
+import { unstable_cache } from "next/cache";
 
 export interface ReviewData {
   studentName: string;
@@ -28,23 +29,27 @@ export async function createReview(data: ReviewData) {
   }
 }
 
-export async function getApprovedReviews() {
-  try {
-    const reviews = await prisma.review.findMany({
-      where: {
-        isApproved: true,
-      },
-      orderBy: {
-        createdAt: "desc",
-      },
-    });
+export const getApprovedReviews = unstable_cache(
+  async () => {
+    try {
+      const reviews = await prisma.review.findMany({
+        where: {
+          isApproved: true,
+        },
+        orderBy: {
+          createdAt: "desc",
+        },
+      });
 
-    return reviews;
-  } catch (error) {
-    console.error("Error fetching reviews:", error);
-    return [];
-  }
-}
+      return reviews;
+    } catch (error) {
+      console.error("Error fetching reviews:", error);
+      return [];
+    }
+  },
+  ["approved-reviews"],
+  { revalidate: 3600, tags: ["reviews"] }
+);
 
 export async function getAllReviews() {
   try {

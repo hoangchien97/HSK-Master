@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server"
 import { auth } from "@/auth"
 import { prisma } from "@/lib/prisma"
+import type { Prisma } from "@prisma/client"
 
 // GET /api/portal/users/search - Search users by email or name
 export async function GET(request: NextRequest) {
@@ -32,20 +33,20 @@ export async function GET(request: NextRequest) {
     const pageSize = Math.min(100, Math.max(1, parseInt(searchParams.get("pageSize") || "20")))
 
     // Build where clause
-    const where: any = {
+    const where: Prisma.PortalUserWhereInput = {
       AND: [
         ...(query.length >= 1
           ? [
               {
                 OR: [
-                  { email: { contains: query, mode: "insensitive" } },
-                  { name: { contains: query, mode: "insensitive" } },
-                  { username: { contains: query, mode: "insensitive" } },
+                  { email: { contains: query, mode: "insensitive" as const } },
+                  { name: { contains: query, mode: "insensitive" as const } },
+                  { username: { contains: query, mode: "insensitive" as const } },
                 ],
               },
             ]
           : []),
-        ...(role ? [{ role: role as any }] : []),
+        ...(role ? [{ role: role as Prisma.EnumUserRoleFilter<"PortalUser"> }] : []),
       ],
     }
 

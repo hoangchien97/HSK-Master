@@ -247,7 +247,7 @@ export default function AttendanceTable({
                         {student.name}
                       </p>
                       <p className="text-[11px] text-gray-400 truncate">
-                        MSHV: {student.name.toUpperCase().slice(0, 8)}
+                        {student.email || '—'}
                       </p>
                     </div>
                   </div>

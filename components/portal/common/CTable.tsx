@@ -151,8 +151,8 @@ export function CTable<T extends Record<string, unknown>>({
   const tableClassNames = useMemo(
     () => ({
       base: "h-full",
-      wrapper: ["h-full", "shadow-none", "overflow-x-auto"],
-      // th: ["bg-default-100", "text-default-500", "border-b", "border-divider"],
+      wrapper: ["h-full", "shadow-none", "overflow-x-auto", "-webkit-overflow-scrolling-touch"],
+      table: "min-w-[700px]",
       tr: isHoverable
         ? ["hover:bg-default-100", "transition-colors", "cursor-pointer"]
         : [],
@@ -218,7 +218,7 @@ export function CTable<T extends Record<string, unknown>>({
       )}
 
       {/* ── Table (flex-1, header sticky, body scrolls) ── */}
-      <div className="flex-1 min-h-0">
+      <div className="flex-1 min-h-0 overflow-hidden">
         <Table
           isHeaderSticky={isHeaderSticky}
           aria-label={ariaLabel}

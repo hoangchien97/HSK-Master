@@ -68,6 +68,9 @@ model Course {
   lessons          Lesson[]
   grammarPoints    GrammarPoint[]
   registrations    Registration[]
+
+  @@index([isPublished, categoryId])
+  @@index([isPublished, hskLevelId])
 }
 
 model Lesson {
@@ -86,6 +89,9 @@ model Lesson {
 
   lessonProgress   PortalLessonProgress[]
   practiceSessions PortalPracticeSession[]
+
+  @@index([courseId, order])
+  @@index([slug])
 }
 
 model Vocabulary {
@@ -106,6 +112,7 @@ model Vocabulary {
   itemProgress PortalItemProgress[]
   attempts     PortalPracticeAttempt[]
 
+  @@index([lessonId])
   @@map("portal_vocabulary")
 }
 
@@ -149,6 +156,7 @@ model PortalItemProgress {
   vocabulary      Vocabulary @relation(fields: [vocabularyId], references: [id], onDelete: Cascade)
 
   @@unique([studentId, vocabularyId])
+  @@index([studentId, status])
   @@map("portal_item_progress")
 }
 
@@ -168,6 +176,7 @@ model PortalPracticeSession {
   lesson          Lesson                @relation(fields: [lessonId], references: [id], onDelete: Cascade)
   attempts        PortalPracticeAttempt[]
 
+  @@index([studentId, lessonId])
   @@map("portal_practice_sessions")
 }
 
@@ -186,6 +195,7 @@ model PortalPracticeAttempt {
   session         PortalPracticeSession @relation(fields: [sessionId], references: [id], onDelete: Cascade)
   vocabulary      Vocabulary            @relation(fields: [vocabularyId], references: [id], onDelete: Cascade)
 
+  @@index([sessionId])
   @@map("portal_practice_attempts")
 }
 
@@ -597,6 +607,7 @@ model PortalAttendance {
   teacher          PortalUser @relation("TeacherAttendance", fields: [teacherId], references: [id])
 
   @@unique([studentId, classId, date])
+  @@index([classId, date])
   @@map("portal_attendances")
 }
 
@@ -623,6 +634,7 @@ model PortalAssignment {
   teacher          PortalUser              @relation(fields: [teacherId], references: [id])
   submissions      PortalAssignmentSubmission[]
 
+  @@index([classId, status])
   @@map("portal_assignments")
 }
 

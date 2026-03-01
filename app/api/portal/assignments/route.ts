@@ -1,10 +1,8 @@
 import { NextRequest, NextResponse } from "next/server"
-import { PrismaClient } from "@prisma/client"
+import { prisma } from "@/lib/prisma"
 import { auth } from "@/auth"
 import { ASSIGNMENT_STATUS } from "@/constants/portal/roles"
 import type { Prisma } from "@prisma/client"
-
-const prisma = new PrismaClient()
 
 // GET - Fetch assignments with server-side filtering & pagination
 export async function GET(request: NextRequest) {

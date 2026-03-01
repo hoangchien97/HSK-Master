@@ -48,7 +48,8 @@ export default function Tooltip({
   }
 
   return (
-    <TooltipPrimitive.Root delayDuration={delayMs}>
+    <TooltipPrimitive.Provider delayDuration={delayMs}>
+    <TooltipPrimitive.Root>
       <TooltipPrimitive.Trigger asChild>
         {children}
       </TooltipPrimitive.Trigger>
@@ -80,5 +81,6 @@ export default function Tooltip({
         </TooltipPrimitive.Content>
       </TooltipPrimitive.Portal>
     </TooltipPrimitive.Root>
+    </TooltipPrimitive.Provider>
   );
 }
