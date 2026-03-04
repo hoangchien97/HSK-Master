@@ -14,6 +14,7 @@ import {
   DropdownMenu,
   DropdownItem,
   useDisclosure,
+  Progress,
 } from "@heroui/react"
 import {
   Plus,
@@ -24,13 +25,14 @@ import {
   FileText,
   Users,
   CheckCircle,
-  Paperclip,
+  Lock,
+  Eye,
 } from "lucide-react"
 import { toast } from "react-toastify"
-import { PAGINATION } from "@/constants/portal"
+import { PAGINATION, ASSIGNMENT_STATUS } from "@/constants/portal"
 import { CTable, type CTableColumn } from "@/components/portal/common"
 import AssignmentFormModal from "./AssignmentFormModal"
-import { fetchAssignments, deleteAssignmentAction } from "@/actions/assignment.actions"
+import { fetchAssignments, deleteAssignmentAction, closeAssignmentAction } from "@/actions/assignment.actions"
 import { useDebouncedValue } from "@/hooks/useTableParams"
 import { usePortalUI } from "@/providers/portal-ui-provider"
 import dayjs from "dayjs"
@@ -58,7 +60,6 @@ interface AssignmentData {
   title: string
   slug?: string | null
   description?: string | null
-  assignmentType: string
   dueDate?: Date | null
   maxScore: number
   attachments?: string[]
@@ -66,9 +67,15 @@ interface AssignmentData {
   externalLink?: string | null
   status: string
   publishedAt?: Date | null
-  class: ClassInfo
+  class: ClassInfo & { enrollments?: { studentId: string }[] }
   submissions: StudentSubmission[]
   createdAt: Date
+  _meta?: {
+    totalStudents: number
+    submittedCount: number
+    completedCount: number
+    pendingReview: number
+  }
 }
 
 interface AssignmentsTableProps {
@@ -77,18 +84,36 @@ interface AssignmentsTableProps {
 
 /* ──────────────────── config ──────────────────────────── */
 
-const STATUS_CONFIG: Record<string, { label: string; color: "success" | "default" | "warning" }> = {
-  PUBLISHED: { label: "Đã công bố", color: "success" },
-  DRAFT: { label: "Nháp", color: "default" },
-  ARCHIVED: { label: "Lưu trữ", color: "warning" },
+const STATUS_CONFIG: Record<string, { label: string; color: "success" | "default" | "warning" | "danger" }> = {
+  [ASSIGNMENT_STATUS.PUBLISHED]: { label: "Đã công bố", color: "success" },
+  [ASSIGNMENT_STATUS.DRAFT]: { label: "Nháp", color: "default" },
+  [ASSIGNMENT_STATUS.CLOSED]: { label: "Đã đóng", color: "warning" },
 }
 
 const STATUS_OPTIONS = [
   { key: "ALL", label: "Tất cả trạng thái" },
-  { key: "PUBLISHED", label: "Đã công bố" },
-  { key: "DRAFT", label: "Nháp" },
-  { key: "ARCHIVED", label: "Lưu trữ" },
+  { key: ASSIGNMENT_STATUS.PUBLISHED, label: "Đã công bố" },
+  { key: ASSIGNMENT_STATUS.DRAFT, label: "Nháp" },
+  { key: ASSIGNMENT_STATUS.CLOSED, label: "Đã đóng" },
+  { key: "NEEDS_GRADING", label: "Cần chấm bài" },
+  { key: "OVERDUE", label: "Quá hạn" },
 ]
+
+/* ──────────────── helpers ──────────────────────────── */
+
+/** Compute progress meta from submissions (backward-compat with v1 statuses) */
+function computeMeta(row: AssignmentData) {
+  if (row._meta) return row._meta
+  const totalStudents = row.class.enrollments?.length ?? 0
+  const submittedCount = row.submissions.length
+  const completedCount = row.submissions.filter(
+    (s) => s.status === "COMPLETED" || s.status === "GRADED",
+  ).length
+  const pendingReview = row.submissions.filter(
+    (s) => s.status === "SUBMITTED" || s.status === "RESUBMITTED",
+  ).length
+  return { totalStudents, submittedCount, completedCount, pendingReview }
+}
 
 /* ──────────────────── component ──────────────────────── */
 
@@ -187,7 +212,6 @@ export default function AssignmentsTable({
   const handleDelete = useCallback(
     async (id: string) => {
       if (!confirm("Bạn có chắc muốn xóa bài tập này?")) return
-      // Optimistic remove
       const prevItems = items
       const prevTotal = total
       setItems((prev) => prev.filter((a) => a.id !== id))
@@ -195,7 +219,6 @@ export default function AssignmentsTable({
 
       const result = await deleteAssignmentAction(id)
       if (!result.success) {
-        // Rollback
         setItems(prevItems)
         setTotal(prevTotal)
         toast.error(result.error || "Có lỗi xảy ra")
@@ -206,7 +229,25 @@ export default function AssignmentsTable({
     [items, total],
   )
 
-  /* ─── Columns ─── */
+  /* ─── Close handler (v2: PUBLISHED → CLOSED) ─── */
+  const handleClose = useCallback(
+    async (id: string) => {
+      if (!confirm("Đóng bài tập? Học viên sẽ không thể nộp bài thêm.")) return
+
+      const result = await closeAssignmentAction(id)
+      if (!result.success) {
+        toast.error(result.error || "Có lỗi xảy ra")
+      } else {
+        toast.success("Đã đóng bài tập")
+        setItems((prev) =>
+          prev.map((a) => (a.id === id ? { ...a, status: ASSIGNMENT_STATUS.CLOSED } : a)),
+        )
+      }
+    },
+    [],
+  )
+
+  /* ─── Columns (v2: progress + pending review + completed) ─── */
   const columns: CTableColumn<AssignmentData & Record<string, unknown>>[] = useMemo(() => [
     {
       key: "stt",
@@ -228,16 +269,21 @@ export default function AssignmentsTable({
           >
             {row.title}
           </Link>
+          {row.tags && row.tags.length > 0 && (
+            <div className="flex flex-wrap gap-1 mt-1">
+              {row.tags.slice(0, 2).map((tag) => (
+                <Chip key={tag} size="sm" variant="flat" color="secondary" className="text-[11px]">
+                  #{tag}
+                </Chip>
+              ))}
+              {row.tags.length > 2 && (
+                <Chip size="sm" variant="flat" className="text-[11px]">
+                  +{row.tags.length - 2}
+                </Chip>
+              )}
+            </div>
+          )}
         </div>
-      ),
-    },
-    {
-      key: "description",
-      label: "Mô tả",
-      render: (_v, row) => (
-        row.description
-          ? <p className="text-sm text-default-500 line-clamp-2 max-w-62.5">{row.description}</p>
-          : <span className="text-default-300">—</span>
       ),
     },
     {
@@ -246,62 +292,79 @@ export default function AssignmentsTable({
       render: (_v, row) => <span className="text-sm">{row.class.className}</span>,
     },
     {
-      key: "tags",
-      label: "Hashtag",
-      render: (_v, row) => {
-        if (!row.tags?.length) return <span className="text-default-300">—</span>
-        return (
-          <div className="flex flex-wrap gap-1 max-w-50">
-            {row.tags.slice(0, 3).map((tag) => (
-              <Chip key={tag} size="sm" variant="flat" color="secondary" className="text-[11px]">
-                #{tag}
-              </Chip>
-            ))}
-            {row.tags.length > 3 && (
-              <Chip size="sm" variant="flat" className="text-[11px]">
-                +{row.tags.length - 3}
-              </Chip>
-            )}
-          </div>
-        )
-      },
-    },
-    {
       key: "dueDate",
       label: "Hạn nộp",
-      render: (_v, row) => row.dueDate
-        ? <span className="text-sm">{dayjs(row.dueDate).format("DD/MM/YYYY HH:mm")}</span>
-        : <span className="text-default-400 text-sm">—</span>,
-    },
-    {
-      key: "attachments",
-      label: "Đính kèm",
-      align: "center" as const,
       render: (_v, row) => {
-        const count = row.attachments?.length || 0
-        if (!count) return <span className="text-default-300">—</span>
+        if (!row.dueDate) return <span className="text-default-400 text-sm">—</span>
+        const isOverdue = new Date(row.dueDate) < new Date() && row.status === ASSIGNMENT_STATUS.PUBLISHED
         return (
-          <span className="flex items-center justify-center gap-1 text-sm text-default-500">
-            <Paperclip className="w-3.5 h-3.5" />{count}
+          <span className={`text-sm ${isOverdue ? "text-danger font-medium" : ""}`}>
+            {dayjs(row.dueDate).format("DD/MM/YYYY HH:mm")}
+            {isOverdue && (
+              <span className="block text-[11px] text-danger">Quá hạn</span>
+            )}
           </span>
         )
       },
     },
     {
-      key: "submissions",
-      label: "Nộp bài",
+      key: "progress",
+      label: "Tiến độ nộp bài",
       render: (_v, row) => {
-        const submitted = row.submissions.length
-        const graded = row.submissions.filter((s) => s.status === "GRADED").length
+        const meta = computeMeta(row as AssignmentData)
+        if (meta.totalStudents === 0) {
+          return <span className="text-default-300 text-sm">—</span>
+        }
+        const pct = Math.round((meta.submittedCount / meta.totalStudents) * 100)
         return (
-          <div className="flex items-center gap-2 text-sm">
-            <span className="flex items-center gap-1">
-              <Users className="w-3.5 h-3.5 text-default-400" />{submitted}
-            </span>
-            <span className="flex items-center gap-1">
-              <CheckCircle className="w-3.5 h-3.5 text-success" />{graded}
-            </span>
+          <div className="min-w-28">
+            <div className="flex items-center justify-between text-xs mb-1">
+              <span className="flex items-center gap-1 text-default-600">
+                <Users className="w-3 h-3" />
+                {meta.submittedCount} / {meta.totalStudents}
+              </span>
+              <span className="text-default-400">{pct}%</span>
+            </div>
+            <Progress
+              size="sm"
+              value={pct}
+              color={pct === 100 ? "success" : pct >= 50 ? "primary" : "warning"}
+              className="max-w-full"
+            />
           </div>
+        )
+      },
+    },
+    {
+      key: "pendingReview",
+      label: "Chờ chấm",
+      align: "center" as const,
+      render: (_v, row) => {
+        const meta = computeMeta(row as AssignmentData)
+        if (meta.pendingReview === 0) {
+          return <span className="text-default-300 text-sm">0</span>
+        }
+        return (
+          <Chip size="sm" color="warning" variant="flat" className="font-medium">
+            {meta.pendingReview}
+          </Chip>
+        )
+      },
+    },
+    {
+      key: "completed",
+      label: "Hoàn thành",
+      align: "center" as const,
+      render: (_v, row) => {
+        const meta = computeMeta(row as AssignmentData)
+        if (meta.completedCount === 0) {
+          return <span className="text-default-300 text-sm">0</span>
+        }
+        return (
+          <span className="flex items-center justify-center gap-1 text-sm text-success font-medium">
+            <CheckCircle className="w-3.5 h-3.5" />
+            {meta.completedCount}
+          </span>
         )
       },
     },
@@ -309,25 +372,40 @@ export default function AssignmentsTable({
       key: "status",
       label: "Trạng thái",
       render: (_v, row) => (
-        <Chip size="sm" color={STATUS_CONFIG[row.status]?.color ?? "default"} variant="flat" className="min-w-22.5 text-center">
+        <Chip
+          size="sm"
+          color={STATUS_CONFIG[row.status]?.color ?? "default"}
+          variant="flat"
+          className="min-w-20 text-center"
+        >
           {STATUS_CONFIG[row.status]?.label ?? row.status}
         </Chip>
       ),
     },
     {
       key: "actions",
-      label: "Hành động",
+      label: "",
       align: "center" as const,
       render: (_v, row) => (
         <div className="flex justify-end">
           <Dropdown>
             <DropdownTrigger>
-              <Button isIconOnly size="sm" variant="light"><MoreVertical className="w-4 h-4" /></Button>
+              <Button isIconOnly size="sm" variant="light">
+                <MoreVertical className="w-4 h-4" />
+              </Button>
             </DropdownTrigger>
             <DropdownMenu aria-label="Thao tác">
               <DropdownItem
+                key="view"
+                startContent={<Eye className="w-4 h-4" />}
+                href={`/portal/${role}/assignments/${row.slug || row.id}`}
+              >
+                Xem chi tiết
+              </DropdownItem>
+              <DropdownItem
                 key="edit"
                 startContent={<Edit2 className="w-4 h-4" />}
+                isDisabled={row.status === ASSIGNMENT_STATUS.CLOSED}
                 onPress={() => {
                   setEditData(row as AssignmentData)
                   editModal.onOpen()
@@ -335,7 +413,23 @@ export default function AssignmentsTable({
               >
                 Chỉnh sửa
               </DropdownItem>
-              <DropdownItem key="delete" color="danger" className="text-danger" startContent={<Trash2 className="w-4 h-4" />} onPress={() => handleDelete(row.id)}>
+              <DropdownItem
+                key="close"
+                startContent={<Lock className="w-4 h-4" />}
+                className="text-warning"
+                color="warning"
+                isDisabled={row.status !== ASSIGNMENT_STATUS.PUBLISHED}
+                onPress={() => handleClose(row.id)}
+              >
+                Đóng bài tập
+              </DropdownItem>
+              <DropdownItem
+                key="delete"
+                color="danger"
+                className="text-danger"
+                startContent={<Trash2 className="w-4 h-4" />}
+                onPress={() => handleDelete(row.id)}
+              >
                 Xóa
               </DropdownItem>
             </DropdownMenu>
@@ -343,7 +437,7 @@ export default function AssignmentsTable({
         </div>
       ),
     },
-  ], [urlPage, urlPageSize, role, handleDelete, editModal])
+  ], [urlPage, urlPageSize, role, handleDelete, handleClose, editModal])
 
   /* ─── Toolbar ─── */
   const toolbarContent = useMemo(() => (
@@ -384,7 +478,7 @@ export default function AssignmentsTable({
             const val = Array.from(keys)[0] as string
             updateUrl({ status: val || "ALL" })
           }}
-          className="w-full sm:w-40"
+          className="w-full sm:w-48"
         >
           {STATUS_OPTIONS.map((opt) => (
             <SelectItem key={opt.key}>{opt.label}</SelectItem>

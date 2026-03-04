@@ -625,7 +625,7 @@ model PortalAssignment {
   attachments      String[] // Array of file URLs
   tags             String[] // Hashtags / labels
   externalLink     String?  // Optional external resource link
-  status           String   @default("DRAFT") // DRAFT, PUBLISHED, ARCHIVED
+  status           String   @default("DRAFT") // DRAFT, PUBLISHED, CLOSED
   publishedAt      DateTime?
   createdAt        DateTime @default(now())
   updatedAt        DateTime @updatedAt
@@ -648,7 +648,7 @@ model PortalAssignmentSubmission {
   submittedAt      DateTime @default(now())
   score            Float?
   feedback         String?  @db.Text
-  status           String   @default("NOT_SUBMITTED") // NOT_SUBMITTED, SUBMITTED, RESUBMITTED, GRADED, RETURNED
+  status           String   @default("NOT_SUBMITTED") // NOT_SUBMITTED, SUBMITTED, REVIEWED, COMPLETED, REVISION_REQUIRED
   createdAt        DateTime @default(now())
   updatedAt        DateTime @updatedAt
 

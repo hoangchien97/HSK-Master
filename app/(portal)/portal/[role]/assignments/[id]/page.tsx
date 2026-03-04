@@ -2,6 +2,7 @@ import { auth } from "@/auth"
 import { redirect, notFound } from "next/navigation"
 import { prisma } from "@/lib/prisma"
 import AssignmentDetailView from "@/components/portal/assignments/AssignmentDetailView"
+import { ASSIGNMENT_STATUS } from "@/constants/portal/roles"
 
 type Props = { params: Promise<{ role: string; id: string }> }
 
@@ -55,8 +56,8 @@ export default async function AssignmentDetailPage({ params }: Props) {
   }
 
   if (userRole === "student") {
-    // Students can only see PUBLISHED assignments
-    if (assignment.status !== "PUBLISHED") notFound()
+    // Students can see PUBLISHED or CLOSED assignments (read-only for CLOSED)
+    if (assignment.status !== ASSIGNMENT_STATUS.PUBLISHED && assignment.status !== ASSIGNMENT_STATUS.CLOSED) notFound()
 
     const isEnrolled = assignment.class.enrollments.some(
       (e) => e.studentId === session.user!.id

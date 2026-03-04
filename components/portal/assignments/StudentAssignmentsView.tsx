@@ -16,11 +16,14 @@ import {
   Paperclip,
   ExternalLink,
   Eye,
+  Clock,
+  CheckCircle,
+  AlertCircle,
 } from "lucide-react"
 import { toast } from "react-toastify"
 import dayjs from "dayjs"
 import "dayjs/locale/vi"
-import { PAGINATION } from "@/constants/portal"
+import { PAGINATION, SUBMISSION_STATUS } from "@/constants/portal"
 import { CTable, type CTableColumn } from "@/components/portal/common"
 import { fetchAssignments } from "@/actions/assignment.actions"
 import { useDebouncedValue } from "@/hooks/useTableParams"
@@ -48,7 +51,6 @@ interface AssignmentData {
   slug?: string | null
   title: string
   description?: string | null
-  assignmentType: string
   dueDate?: Date | null
   maxScore: number
   attachments?: string[]
@@ -63,29 +65,22 @@ interface AssignmentData {
 
 /* ──────────────────── config ──────────────────────────── */
 
-const TYPE_CONFIG: Record<string, { label: string; color: "primary" | "secondary" | "success" | "warning" | "danger" | "default" }> = {
-  HOMEWORK: { label: "Bài tập về nhà", color: "primary" },
-  QUIZ: { label: "Kiểm tra", color: "secondary" },
-  PROJECT: { label: "Dự án", color: "success" },
-  READING: { label: "Đọc hiểu", color: "warning" },
-  WRITING: { label: "Viết", color: "warning" },
-  SPEAKING: { label: "Nói", color: "danger" },
-  LISTENING: { label: "Nghe", color: "default" },
-}
-
-const SUBMISSION_STATUS_CONFIG: Record<string, { label: string; color: "primary" | "success" | "warning" | "danger" | "secondary" }> = {
-  NOT_SUBMITTED: { label: "Chưa nộp", color: "warning" },
-  SUBMITTED: { label: "Đã nộp", color: "primary" },
-  RESUBMITTED: { label: "Đã nộp lại", color: "secondary" },
-  GRADED: { label: "Đã chấm", color: "success" },
-  RETURNED: { label: "Trả lại", color: "danger" },
+/** v2 submission statuses + backward compat */
+const SUBMISSION_STATUS_CONFIG: Record<string, { label: string; color: "primary" | "success" | "warning" | "danger" | "secondary" | "default"; icon?: React.ReactNode }> = {
+  [SUBMISSION_STATUS.NOT_SUBMITTED]: { label: "Chưa nộp", color: "warning", icon: <AlertCircle className="w-3 h-3" /> },
+  [SUBMISSION_STATUS.SUBMITTED]: { label: "Đã nộp", color: "primary", icon: <Clock className="w-3 h-3" /> },
+  [SUBMISSION_STATUS.REVIEWED]: { label: "Đã xem xét", color: "secondary", icon: <Eye className="w-3 h-3" /> },
+  [SUBMISSION_STATUS.COMPLETED]: { label: "Hoàn thành", color: "success", icon: <CheckCircle className="w-3 h-3" /> },
+  [SUBMISSION_STATUS.REVISION_REQUIRED]: { label: "Cần sửa lại", color: "danger", icon: <AlertCircle className="w-3 h-3" /> },
+  [SUBMISSION_STATUS.OVERDUE]: { label: "Quá hạn", color: "danger" },
 }
 
 const STATUS_OPTIONS = [
   { key: "ALL", label: "Tất cả" },
-  { key: "NOT_SUBMITTED", label: "Chưa nộp" },
-  { key: "SUBMITTED", label: "Đã nộp" },
-  { key: "GRADED", label: "Đã chấm" },
+  { key: SUBMISSION_STATUS.NOT_SUBMITTED, label: "Chưa nộp" },
+  { key: SUBMISSION_STATUS.SUBMITTED, label: "Đã nộp" },
+  { key: SUBMISSION_STATUS.COMPLETED, label: "Hoàn thành" },
+  { key: SUBMISSION_STATUS.REVISION_REQUIRED, label: "Cần sửa lại" },
 ]
 
 /* ──────────────────── component ──────────────────────── */
@@ -168,11 +163,11 @@ export default function StudentAssignmentsView() {
   /* ─── Submission status helper ─── */
   const getSubmissionStatus = useCallback((row: AssignmentData) => {
     const sub = row.submissions?.[0]
-    if (!sub) return "NOT_SUBMITTED"
+    if (!sub) return SUBMISSION_STATUS.NOT_SUBMITTED
     return sub.status
   }, [])
 
-  /* ─── Columns ─── */
+  /* ─── Columns (v2: cleaner layout, status with icons) ─── */
   const columns: CTableColumn<AssignmentData & Record<string, unknown>>[] = useMemo(() => [
     {
       key: "stt",
@@ -194,21 +189,21 @@ export default function StudentAssignmentsView() {
           >
             {row.title}
           </Link>
-          <div className="flex items-center gap-1.5 mt-1 flex-wrap">
-            <Chip size="sm" color={TYPE_CONFIG[row.assignmentType]?.color ?? "default"} variant="flat">
-              {TYPE_CONFIG[row.assignmentType]?.label ?? row.assignmentType}
-            </Chip>
-          </div>
+          {row.tags && row.tags.length > 0 && (
+            <div className="flex flex-wrap gap-1 mt-1">
+              {row.tags.slice(0, 2).map((tag) => (
+                <Chip key={tag} size="sm" variant="flat" color="secondary" className="text-[11px]">
+                  #{tag}
+                </Chip>
+              ))}
+              {row.tags.length > 2 && (
+                <Chip size="sm" variant="flat" className="text-[11px]">
+                  +{row.tags.length - 2}
+                </Chip>
+              )}
+            </div>
+          )}
         </div>
-      ),
-    },
-    {
-      key: "description",
-      label: "Mô tả",
-      render: (_v, row) => (
-        row.description
-          ? <p className="text-sm text-default-500 line-clamp-2 max-w-62.5">{row.description}</p>
-          : <span className="text-default-300">—</span>
       ),
     },
     {
@@ -217,32 +212,22 @@ export default function StudentAssignmentsView() {
       render: (_v, row) => <span className="text-sm">{row.class.className}</span>,
     },
     {
-      key: "tags",
-      label: "Hashtag",
-      render: (_v, row) => {
-        if (!row.tags?.length) return <span className="text-default-300">—</span>
-        return (
-          <div className="flex flex-wrap gap-1 max-w-45">
-            {row.tags.slice(0, 2).map((tag) => (
-              <Chip key={tag} size="sm" variant="flat" color="secondary" className="text-[11px]">
-                #{tag}
-              </Chip>
-            ))}
-            {row.tags.length > 2 && (
-              <Chip size="sm" variant="flat" className="text-[11px]">
-                +{row.tags.length - 2}
-              </Chip>
-            )}
-          </div>
-        )
-      },
-    },
-    {
       key: "dueDate",
       label: "Hạn nộp",
-      render: (_v, row) => row.dueDate
-        ? <span className="text-sm">{dayjs(row.dueDate).format("DD/MM/YYYY HH:mm")}</span>
-        : <span className="text-default-400 text-sm">—</span>,
+      render: (_v, row) => {
+        if (!row.dueDate) return <span className="text-default-400 text-sm">—</span>
+        const isOverdue = new Date(row.dueDate) < new Date()
+        const subStatus = getSubmissionStatus(row)
+        const showWarning = isOverdue && subStatus === SUBMISSION_STATUS.NOT_SUBMITTED
+        return (
+          <span className={`text-sm ${showWarning ? "text-danger font-medium" : ""}`}>
+            {dayjs(row.dueDate).format("DD/MM/YYYY HH:mm")}
+            {showWarning && (
+              <span className="block text-[11px] text-danger">Quá hạn</span>
+            )}
+          </span>
+        )
+      },
     },
     {
       key: "attachments",
@@ -270,10 +255,10 @@ export default function StudentAssignmentsView() {
 
         return (
           <div className="flex flex-col gap-1">
-            <Chip size="sm" color={config?.color ?? "default"} variant="flat" className="min-w-22.5 text-center">
+            <Chip size="sm" color={config?.color ?? "default"} variant="flat" className="min-w-24 text-center">
               {config?.label ?? subStatus}
             </Chip>
-            {subStatus === "GRADED" && sub?.score != null && (
+            {subStatus === SUBMISSION_STATUS.COMPLETED && sub?.score != null && (
               <span className="text-xs text-success-600 font-medium">
                 {sub.score}/{row.maxScore}
               </span>
@@ -284,7 +269,7 @@ export default function StudentAssignmentsView() {
     },
     {
       key: "actions",
-      label: "Hành động",
+      label: "",
       align: "center" as const,
       render: (_v, row) => (
         <Button
@@ -341,7 +326,7 @@ export default function StudentAssignmentsView() {
             const val = Array.from(keys)[0] as string
             updateUrl({ status: val || "ALL" })
           }}
-          className="w-full sm:w-40"
+          className="w-full sm:w-44"
         >
           {STATUS_OPTIONS.map((opt) => (
             <SelectItem key={opt.key}>{opt.label}</SelectItem>

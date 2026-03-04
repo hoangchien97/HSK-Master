@@ -1,7 +1,7 @@
 'use server';
 
 import { prisma } from '@/lib/prisma';
-import { ASSIGNMENT_STATUS } from '@/constants/portal/roles';
+import { ASSIGNMENT_STATUS, SUBMISSION_STATUS, CLASS_STATUS } from '@/constants/portal/roles';
 import type { Prisma } from '@prisma/client';
 import { generateUniqueSlug } from '@/utils/slug';
 
@@ -62,14 +62,31 @@ export async function getAssignments(
     teacherId,
     ...(search && { title: { contains: search, mode: 'insensitive' as const } }),
     ...(classId && { classId }),
-    ...(status && { status }),
   };
+
+  // v2 filters: NEEDS_GRADING, OVERDUE, or standard status
+  if (status === 'NEEDS_GRADING') {
+    where.submissions = { some: { status: SUBMISSION_STATUS.SUBMITTED } };
+    where.status = ASSIGNMENT_STATUS.PUBLISHED;
+  } else if (status === 'OVERDUE') {
+    where.dueDate = { lt: new Date() };
+    where.status = ASSIGNMENT_STATUS.PUBLISHED;
+  } else if (status) {
+    where.status = status;
+  }
 
   const [items, total, classes] = await Promise.all([
     prisma.portalAssignment.findMany({
       where,
       include: {
-        class: { select: { id: true, className: true, classCode: true } },
+        class: {
+          select: {
+            id: true,
+            className: true,
+            classCode: true,
+            enrollments: { select: { studentId: true } },
+          },
+        },
         submissions: {
           include: { student: { select: { id: true, name: true } } },
         },
@@ -80,7 +97,7 @@ export async function getAssignments(
     }),
     prisma.portalAssignment.count({ where }),
     prisma.portalClass.findMany({
-      where: { teacherId, status: 'ACTIVE' },
+      where: { teacherId, status: CLASS_STATUS.ACTIVE },
       select: { id: true, className: true, classCode: true },
       orderBy: { className: 'asc' },
     }),
@@ -118,13 +135,15 @@ export async function getStudentAssignments(
     ...(search && { title: { contains: search, mode: 'insensitive' as const } }),
   };
 
-  // Optional: filter by submission status
+  // Optional: filter by submission status (v2 statuses + backward compat)
   if (status === 'SUBMITTED') {
     where.submissions = { some: { studentId } };
   } else if (status === 'NOT_SUBMITTED') {
     where.submissions = { none: { studentId } };
-  } else if (status === 'GRADED') {
-    where.submissions = { some: { studentId, status: 'GRADED' } };
+  } else if (status === 'COMPLETED') {
+    where.submissions = { some: { studentId, status: SUBMISSION_STATUS.COMPLETED } };
+  } else if (status === 'REVISION_REQUIRED') {
+    where.submissions = { some: { studentId, status: SUBMISSION_STATUS.REVISION_REQUIRED } };
   }
 
   const [items, total, classes] = await Promise.all([
@@ -143,7 +162,7 @@ export async function getStudentAssignments(
     }),
     prisma.portalAssignment.count({ where }),
     prisma.portalClass.findMany({
-      where: { id: { in: enrolledClassIds }, status: 'ACTIVE' },
+      where: { id: { in: enrolledClassIds }, status: CLASS_STATUS.ACTIVE },
       select: { id: true, className: true, classCode: true },
       orderBy: { className: 'asc' },
     }),
@@ -266,4 +285,26 @@ export async function deleteAssignment(assignmentId: string, teacherId: string):
   if (existing.teacherId !== teacherId) throw new Error('Bạn không có quyền xóa bài tập này');
 
   await prisma.portalAssignment.delete({ where: { id: assignmentId } });
+}
+
+/* ───────── Close assignment (v2: PUBLISHED → CLOSED) ───────── */
+
+export async function closeAssignment(
+  assignmentId: string,
+  teacherId: string,
+): Promise<{ id: string; title: string; classId: string; slug: string | null }> {
+  const existing = await prisma.portalAssignment.findUnique({ where: { id: assignmentId } });
+  if (!existing) throw new Error('Không tìm thấy bài tập');
+  if (existing.teacherId !== teacherId) throw new Error('Bạn không có quyền đóng bài tập này');
+  if (existing.status !== ASSIGNMENT_STATUS.PUBLISHED) {
+    throw new Error('Chỉ có thể đóng bài tập đã công bố');
+  }
+
+  const updated = await prisma.portalAssignment.update({
+    where: { id: assignmentId },
+    data: { status: ASSIGNMENT_STATUS.CLOSED },
+    select: { id: true, title: true, classId: true, slug: true },
+  });
+
+  return updated;
 }

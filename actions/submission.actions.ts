@@ -9,7 +9,7 @@ import { revalidatePath } from 'next/cache';
 import { prisma } from '@/lib/prisma';
 import { auth } from '@/auth';
 import { createNotification } from '@/services/portal/notification.service';
-import { SUBMISSION_STATUS } from '@/constants/portal/roles';
+import { SUBMISSION_STATUS, ASSIGNMENT_STATUS } from '@/constants/portal/roles';
 import { NotificationType } from '@/enums/portal/common';
 
 /**
@@ -57,8 +57,11 @@ export async function submitAssignmentAction(
       return { success: false, error: 'Bài tập không tồn tại' };
     }
 
-    if (assignment.status !== 'PUBLISHED') {
-      return { success: false, error: 'Bài tập chưa được công bố' };
+    if (assignment.status !== ASSIGNMENT_STATUS.PUBLISHED) {
+      return { success: false, error: assignment.status === ASSIGNMENT_STATUS.CLOSED
+        ? 'Bài tập đã đóng, không thể nộp bài'
+        : 'Bài tập chưa được công bố'
+      };
     }
 
     if (assignment.class.enrollments.length === 0) {
@@ -82,7 +85,7 @@ export async function submitAssignmentAction(
           content: content || null,
           attachments: attachments || [],
           submittedAt: new Date(),
-          status: SUBMISSION_STATUS.RESUBMITTED,
+          status: SUBMISSION_STATUS.SUBMITTED,
           // Reset score & feedback on resubmit
           score: null,
           feedback: null,
@@ -186,7 +189,7 @@ export async function gradeSubmissionAction(
         data: {
           score: data.score,
           feedback: data.feedback || null,
-          status: SUBMISSION_STATUS.GRADED,
+          status: SUBMISSION_STATUS.COMPLETED,
         },
       });
 
@@ -208,7 +211,7 @@ export async function gradeSubmissionAction(
         where: { id: submissionId },
         data: {
           feedback: data.feedback || null,
-          status: SUBMISSION_STATUS.RETURNED,
+          status: SUBMISSION_STATUS.REVISION_REQUIRED,
         },
       });
 

@@ -23,11 +23,11 @@ export const CLASS_STATUS = {
   CANCELLED: 'CANCELLED',
 } as const
 
-// Assignment Status
+// Assignment Status (v2: DRAFT → PUBLISHED → CLOSED)
 export const ASSIGNMENT_STATUS = {
   DRAFT: 'DRAFT',
   PUBLISHED: 'PUBLISHED',
-  ARCHIVED: 'ARCHIVED',
+  CLOSED: 'CLOSED',
 } as const
 
 // Schedule Status
@@ -52,11 +52,12 @@ export const ATTENDANCE_STATUS = {
   EXCUSED: 'EXCUSED',
 } as const
 
-// Submission Status
+// Submission Status (v2 lifecycle)
 export const SUBMISSION_STATUS = {
   NOT_SUBMITTED: 'NOT_SUBMITTED',
   SUBMITTED: 'SUBMITTED',
-  RESUBMITTED: 'RESUBMITTED',
-  GRADED: 'GRADED',
-  RETURNED: 'RETURNED',
+  REVIEWED: 'REVIEWED',
+  COMPLETED: 'COMPLETED',
+  REVISION_REQUIRED: 'REVISION_REQUIRED',
+  OVERDUE: 'OVERDUE',
 } as const

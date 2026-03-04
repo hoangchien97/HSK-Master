@@ -12,6 +12,7 @@ import {
   createAssignment as createAssignmentService,
   updateAssignment as updateAssignmentService,
   deleteAssignment as deleteAssignmentService,
+  closeAssignment as closeAssignmentService,
 } from '@/services/portal/assignment.service';
 import { createBulkNotifications } from '@/services/portal/notification.service';
 import { prisma } from '@/lib/prisma';
@@ -220,5 +221,49 @@ export async function deleteAssignmentAction(
   } catch (error) {
     console.error('Error deleting assignment:', error);
     return { success: false, error: error instanceof Error ? error.message : 'Xóa bài tập thất bại' };
+  }
+}
+
+/**
+ * Close assignment (v2: PUBLISHED → CLOSED)
+ * Disables further submissions, notifies students
+ */
+export async function closeAssignmentAction(
+  assignmentId: string
+): Promise<{
+  success: boolean;
+  error?: string;
+}> {
+  try {
+    const session = await auth();
+    if (!session?.user?.id) return { success: false, error: 'Unauthorized' };
+
+    const assignment = await closeAssignmentService(assignmentId, session.user.id);
+
+    // Notify students
+    try {
+      const enrollments = await prisma.portalClassEnrollment.findMany({
+        where: { classId: assignment.classId },
+        select: { studentId: true },
+      });
+      const studentIds = enrollments.map((e) => e.studentId);
+      if (studentIds.length > 0) {
+        await createBulkNotifications(studentIds, {
+          type: NotificationType.ASSIGNMENT_DEADLINE,
+          title: 'Bài tập đã đóng',
+          message: `Bài tập "${assignment.title}" đã được đóng bởi giáo viên. Không thể nộp bài thêm.`,
+          link: `/portal/student/assignments/${assignment.slug || assignment.id}`,
+        });
+      }
+    } catch (notifyError) {
+      console.error('Error sending close assignment notifications:', notifyError);
+    }
+
+    revalidatePath('/portal/teacher/assignments');
+    revalidatePath('/portal/student/assignments');
+    return { success: true };
+  } catch (error) {
+    console.error('Error closing assignment:', error);
+    return { success: false, error: error instanceof Error ? error.message : 'Đóng bài tập thất bại' };
   }
 }

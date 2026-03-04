@@ -16,6 +16,7 @@ import { toast } from "react-toastify"
 import { createAssignmentAction, updateAssignmentAction } from "@/actions/assignment.actions"
 import { FileUploadZone } from "@/components/portal/common"
 import { CModal } from "@/components/portal/common/CModal"
+import { ASSIGNMENT_STATUS } from "@/constants/portal"
 
 interface ClassInfo {
   id: string
@@ -54,7 +55,7 @@ export default function AssignmentFormModal({
   const [errors, setErrors] = useState<Record<string, string>>({})
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [classId, setClassId] = useState(editData?.classId || classes[0]?.id || "")
-  const [isPublished, setIsPublished] = useState(editData?.status === "PUBLISHED")
+  const [isPublished, setIsPublished] = useState(editData?.status === ASSIGNMENT_STATUS.PUBLISHED)
   const [attachments, setAttachments] = useState<string[]>(editData?.attachments || [])
   const [tags, setTags] = useState<string[]>(editData?.tags || [])
   const [tagInput, setTagInput] = useState("")
@@ -63,7 +64,7 @@ export default function AssignmentFormModal({
   useEffect(() => {
     if (isOpen) {
       setClassId(editData?.classId || classes[0]?.id || "")
-      setIsPublished(editData?.status === "PUBLISHED")
+      setIsPublished(editData?.status === ASSIGNMENT_STATUS.PUBLISHED)
       setAttachments(editData?.attachments || [])
       setTags(editData?.tags || [])
       setTagInput("")
@@ -106,7 +107,7 @@ export default function AssignmentFormModal({
     setIsSubmitting(true)
 
     try {
-      const status = isPublished ? "PUBLISHED" : "DRAFT"
+      const status = isPublished ? ASSIGNMENT_STATUS.PUBLISHED : ASSIGNMENT_STATUS.DRAFT
 
       const values = {
         classId,
