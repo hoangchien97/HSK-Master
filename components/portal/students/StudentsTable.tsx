@@ -15,13 +15,11 @@ import StudentsToolbar from "./StudentsToolbar"
 import { fetchStudents, fetchClassesForFilter } from "@/actions/student.actions"
 import type { IStudent, IGetStudentResponse } from "@/interfaces/portal"
 import { useDebouncedValue, useSyncSearchToUrl } from "@/hooks/useTableParams"
-import { usePortalUI } from "@/providers/portal-ui-provider"
 
 export default function StudentsTable() {
   const searchParams = useSearchParams()
   const router = useRouter()
   const pathname = usePathname()
-  const { startLoading, stopLoading } = usePortalUI()
 
   const urlSearch = searchParams.get("search") || ""
   const urlLevel = searchParams.get("level") || "ALL"
@@ -33,7 +31,8 @@ export default function StudentsTable() {
   const debouncedSearch = useDebouncedValue(search, 350)
 
   const [data, setData] = useState<IGetStudentResponse>({ items: [], total: 0 })
-  const [isTableLoading, setIsTableLoading] = useState(true)
+  const [isFetching, setIsFetching] = useState(false)
+  const [isLoaded, setIsLoaded] = useState(false)
   const [classes, setClasses] = useState<{ id: string; className: string; classCode: string }[]>([])
 
   const updateUrl = useCallback(
@@ -73,8 +72,7 @@ export default function StudentsTable() {
 
   /* ─── Load students via server action ─── */
   const loadData = useCallback(async () => {
-    setIsTableLoading(true)
-    startLoading()
+    setIsFetching(true)
     try {
       const result = await fetchStudents({
         search: debouncedSearch || undefined,
@@ -92,10 +90,10 @@ export default function StudentsTable() {
       console.error('Error loading students:', error)
       toast.error("Không thể tải danh sách học viên")
     } finally {
-      setIsTableLoading(false)
-      stopLoading()
+      setIsFetching(false)
+      setIsLoaded(true)
     }
-  }, [debouncedSearch, urlLevel, urlClassId, urlPage, urlPageSize, startLoading, stopLoading])
+  }, [debouncedSearch, urlLevel, urlClassId, urlPage, urlPageSize])
 
   useEffect(() => {
     loadData()
@@ -195,7 +193,8 @@ export default function StudentsTable() {
       page={urlPage}
       pageSize={urlPageSize}
       total={data.total}
-      isLoading={isTableLoading}
+      isFetching={isFetching}
+      isLoading={!isLoaded}
       onPageChange={(p) => updateUrl({ page: String(p) })}
       onPageSizeChange={(s) => updateUrl({ pageSize: String(s) })}
       ariaLabel="Bảng học viên"

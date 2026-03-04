@@ -34,7 +34,6 @@ import { CTable, type CTableColumn } from "@/components/portal/common"
 import AssignmentFormModal from "./AssignmentFormModal"
 import { fetchAssignments, deleteAssignmentAction, closeAssignmentAction } from "@/actions/assignment.actions"
 import { useDebouncedValue, useSyncSearchToUrl } from "@/hooks/useTableParams"
-import { usePortalUI } from "@/providers/portal-ui-provider"
 import dayjs from "dayjs"
 import "dayjs/locale/vi"
 
@@ -123,7 +122,6 @@ export default function AssignmentsTable({
   const router = useRouter()
   const searchParams = useSearchParams()
   const pathname = usePathname()
-  const { startLoading, stopLoading } = usePortalUI()
   const createModal = useDisclosure()
   const editModal = useDisclosure()
 
@@ -141,7 +139,8 @@ export default function AssignmentsTable({
   const [total, setTotal] = useState(0)
   const [classes, setClasses] = useState<ClassInfo[]>([])
   const [editData, setEditData] = useState<AssignmentData | null>(null)
-  const [isTableLoading, setIsTableLoading] = useState(true)
+  const [isFetching, setIsFetching] = useState(false)
+  const [isLoaded, setIsLoaded] = useState(false)
 
   /* ─── URL updater ─── */
   const updateUrl = useCallback(
@@ -170,8 +169,7 @@ export default function AssignmentsTable({
 
   /* ─── Load data via server action ─── */
   const loadData = useCallback(async () => {
-    setIsTableLoading(true)
-    startLoading()
+    setIsFetching(true)
     try {
       const result = await fetchAssignments({
         search: debouncedSearch || undefined,
@@ -191,10 +189,10 @@ export default function AssignmentsTable({
       console.error('Error loading assignments:', error)
       toast.error("Không thể tải danh sách bài tập")
     } finally {
-      setIsTableLoading(false)
-      stopLoading()
+      setIsFetching(false)
+      setIsLoaded(true)
     }
-  }, [debouncedSearch, urlClassFilter, urlStatusFilter, urlPage, urlPageSize, startLoading, stopLoading])
+  }, [debouncedSearch, urlClassFilter, urlStatusFilter, urlPage, urlPageSize])
 
   useEffect(() => {
     loadData()
@@ -504,6 +502,8 @@ export default function AssignmentsTable({
         page={urlPage}
         pageSize={urlPageSize}
         total={total}
+        isFetching={isFetching}
+        isLoading={!isLoaded}
         onPageChange={(p) => updateUrl({ page: String(p) })}
         onPageSizeChange={(s) => updateUrl({ pageSize: String(s) })}
         ariaLabel="Bảng bài tập"

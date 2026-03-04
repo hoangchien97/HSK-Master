@@ -16,7 +16,7 @@ import {
   deleteSchedule,
   deleteScheduleGroup,
 } from '@/actions/schedule.actions';
-import { usePortalUI } from '@/providers/portal-ui-provider';
+import { Spinner } from '@heroui/react';
 import type {
   ISchedule,
   IClass,
@@ -32,7 +32,7 @@ export default function TeacherScheduleCalendar() {
   const [scheduleToDelete, setScheduleToDelete] = useState<ISchedule | null>(null);
   const [scheduleToEdit, setScheduleToEdit] = useState<ISchedule | null>(null);
   const [slotInitialTime, setSlotInitialTime] = useState<{ start: Date; end: Date } | null>(null);
-  const { startLoading, stopLoading } = usePortalUI();
+  const [isPageLoading, setIsPageLoading] = useState(false);
   const hasFetchedRef = useRef(false);
 
   useEffect(() => {
@@ -44,7 +44,7 @@ export default function TeacherScheduleCalendar() {
 
   const loadData = async () => {
     try {
-      startLoading();
+      setIsPageLoading(true);
       const [classesResult, schedulesResult] = await Promise.all([
         fetchClasses(),
         fetchSchedules(),
@@ -65,7 +65,7 @@ export default function TeacherScheduleCalendar() {
       const errorMessage = error instanceof Error ? error.message : 'Không thể tải dữ liệu';
       toast.error(errorMessage);
     } finally {
-      stopLoading();
+      setIsPageLoading(false);
     }
   };
 
@@ -213,19 +213,30 @@ export default function TeacherScheduleCalendar() {
 
   return (
     <div className="h-full flex flex-col gap-4">
-      {/* Calendar - Full Width */}
-      <BigCalendarView
-        schedules={schedules}
-        onEventClick={handleEventClick}
-        onEventDoubleClick={handleEventDoubleClick}
-        onEditEvent={handleEdit}
-        onCreateSchedule={() => {
-          setScheduleToEdit(null);
-          setSlotInitialTime(null);
-          setShowModal(true);
-        }}
-        onSlotSelect={handleSlotSelect}
-      />
+      {/* Calendar — wrapped in relative container for loading overlay */}
+      <div className="relative flex-1 min-h-[400px]">
+        {/* Inline pill loading — same style as CTable refetch pill */}
+        {isPageLoading && (
+          <div className="absolute inset-0 z-20 flex items-center justify-center pointer-events-none">
+            <div className="flex items-center gap-2 bg-white/80 backdrop-blur-sm rounded-xl px-4 py-2 shadow-sm border border-default-200">
+              <Spinner size="sm" color="primary" classNames={{ wrapper: "w-4 h-4" }} />
+              <span className="text-xs text-default-500 font-medium">Đang tải lịch học...</span>
+            </div>
+          </div>
+        )}
+        <BigCalendarView
+          schedules={schedules}
+          onEventClick={handleEventClick}
+          onEventDoubleClick={handleEventDoubleClick}
+          onEditEvent={handleEdit}
+          onCreateSchedule={() => {
+            setScheduleToEdit(null);
+            setSlotInitialTime(null);
+            setShowModal(true);
+          }}
+          onSlotSelect={handleSlotSelect}
+        />
+      </div>
 
       {/* Event Detail Drawer */}
       <EventDetailDrawer

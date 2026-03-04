@@ -2,18 +2,18 @@
 
 import { useState, useEffect } from "react"
 import { toast } from "react-toastify"
+import { Spinner } from "@heroui/react"
 import {
   BigCalendarView,
   EventDetailDrawer,
 } from "@/components/portal/calendar"
 import { fetchSchedules } from "@/actions/schedule.actions"
-import { usePortalUI } from "@/providers/portal-ui-provider"
 import type { ISchedule } from "@/interfaces/portal"
 
 export default function StudentScheduleView() {
   const [schedules, setSchedules] = useState<ISchedule[]>([])
   const [selectedSchedule, setSelectedSchedule] = useState<ISchedule | null>(null)
-  const { startLoading, stopLoading } = usePortalUI()
+  const [isPageLoading, setIsPageLoading] = useState(false)
 
   useEffect(() => {
     loadData()
@@ -22,7 +22,7 @@ export default function StudentScheduleView() {
 
   const loadData = async () => {
     try {
-      startLoading()
+      setIsPageLoading(true)
       const result = await fetchSchedules()
 
       if (!result.success) {
@@ -35,7 +35,7 @@ export default function StudentScheduleView() {
       const errorMessage = error instanceof Error ? error.message : "Không thể tải dữ liệu"
       toast.error(errorMessage)
     } finally {
-      stopLoading()
+      setIsPageLoading(false)
     }
   }
 
@@ -45,15 +45,26 @@ export default function StudentScheduleView() {
 
   return (
     <div className="h-full flex flex-col gap-4">
-      {/* Calendar — read-only (no create/edit/slot handlers) */}
-      <BigCalendarView
-        schedules={schedules}
-        onEventClick={handleEventClick}
-        onEventDoubleClick={handleEventClick}
-        onEditEvent={handleEventClick}
-        onCreateSchedule={() => {}}
-        readOnly
-      />
+      {/* Calendar — wrapped in relative container for loading overlay */}
+      <div className="relative flex-1 min-h-[400px]">
+        {/* Inline pill loading — same style as CTable refetch pill */}
+        {isPageLoading && (
+          <div className="absolute inset-0 z-20 flex items-center justify-center pointer-events-none">
+            <div className="flex items-center gap-2 bg-white/80 backdrop-blur-sm rounded-xl px-4 py-2 shadow-sm border border-default-200">
+              <Spinner size="sm" color="primary" classNames={{ wrapper: "w-4 h-4" }} />
+              <span className="text-xs text-default-500 font-medium">Đang tải lịch học...</span>
+            </div>
+          </div>
+        )}
+        <BigCalendarView
+          schedules={schedules}
+          onEventClick={handleEventClick}
+          onEventDoubleClick={handleEventClick}
+          onEditEvent={handleEventClick}
+          onCreateSchedule={() => {}}
+          readOnly
+        />
+      </div>
 
       {/* Event Detail Drawer — view only (no edit/delete buttons) */}
       <EventDetailDrawer
@@ -67,3 +78,4 @@ export default function StudentScheduleView() {
     </div>
   )
 }
+

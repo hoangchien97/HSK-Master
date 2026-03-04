@@ -9,7 +9,6 @@ import { Form, Input, Button, Chip, Card, CardBody, Textarea, Divider } from "@h
 import { uploadAvatar } from "@/utils/upload"
 import { validateFile } from "@/utils/validation"
 import { updateProfileAction } from "@/actions/profile.actions"
-import { usePortalUI } from "@/providers/portal-ui-provider"
 
 interface ProfileClientProps {
   user: PortalUser
@@ -17,7 +16,6 @@ interface ProfileClientProps {
 
 export default function ProfileClient({ user }: ProfileClientProps) {
   const fileInputRef = useRef<HTMLInputElement>(null)
-  const { startLoading, stopLoading } = usePortalUI()
 
   const [loading, setLoading] = useState(false)
   const [avatarPreview, setAvatarPreview] = useState<string | null>(user.image || null)
@@ -56,7 +54,6 @@ export default function ProfileClient({ user }: ProfileClientProps) {
 
     setErrors({})
     setLoading(true)
-    startLoading()
 
     try {
       let avatarUrl = currentUser.image
@@ -98,7 +95,6 @@ export default function ProfileClient({ user }: ProfileClientProps) {
       toast.error(errorMessage)
     } finally {
       setLoading(false)
-      stopLoading()
     }
   }
 

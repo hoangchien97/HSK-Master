@@ -11,7 +11,7 @@ import {
   saveAttendance,
   type AttendanceMatrixData,
 } from "@/actions/attendance.actions"
-import { usePortalUI } from "@/providers/portal-ui-provider"
+import { Spinner } from "@heroui/react"
 import AttendanceHeader from "./AttendanceHeader"
 import AttendanceTable from "./AttendanceTable"
 
@@ -48,7 +48,7 @@ export default function AttendanceMatrixView() {
   const [isSaving, setIsSaving] = useState(false)
   const [notePopover, setNotePopover] = useState<{ studentId: string; date: string } | null>(null)
   const [noteText, setNoteText] = useState("")
-  const { startLoading, stopLoading } = usePortalUI()
+  const [isPageLoading, setIsPageLoading] = useState(false)
 
   useEffect(() => {
     loadClasses()
@@ -65,7 +65,7 @@ export default function AttendanceMatrixView() {
 
   const loadClasses = async () => {
     try {
-      startLoading()
+      setIsPageLoading(true)
       const result = await fetchTeacherClasses()
       if (result.success && result.classes) {
         setClasses(result.classes)
@@ -78,14 +78,14 @@ export default function AttendanceMatrixView() {
     } catch {
       toast.error("Có lỗi xảy ra")
     } finally {
-      stopLoading()
+      setIsPageLoading(false)
     }
   }
 
   const loadMatrix = async () => {
     if (!selectedClassId) return
     try {
-      startLoading()
+      setIsPageLoading(true)
       const result = await fetchAttendanceMatrix(selectedClassId)
       if (result.success && result.data) {
         setMatrixData(result.data)
@@ -96,7 +96,7 @@ export default function AttendanceMatrixView() {
     } catch {
       toast.error("Có lỗi xảy ra")
     } finally {
-      stopLoading()
+      setIsPageLoading(false)
     }
   }
 
@@ -348,7 +348,7 @@ export default function AttendanceMatrixView() {
   }, [])
 
   /* ───── Main render ───── */
-  if (classes.length === 0 && !matrixData) {
+  if (classes.length === 0 && !matrixData && !isPageLoading) {
     return (
       <div className="flex flex-col items-center justify-center py-20 gap-4">
         <Users className="w-16 h-16 text-default-300" />
@@ -360,7 +360,7 @@ export default function AttendanceMatrixView() {
 
   return (
     <div className="flex flex-col h-full gap-4">
-      {/* Header: Filters */}
+      {/* Header: Class selector + search — always visible */}
       <AttendanceHeader
         classes={classes}
         selectedClassId={selectedClassId}
@@ -372,30 +372,48 @@ export default function AttendanceMatrixView() {
         matrixData={matrixData}
       />
 
-      {/* Matrix Table */}
-      {matrixData ? (
-        <AttendanceTable
-          matrixData={matrixData}
-          scheduleDates={scheduleDates}
-          filteredStudents={filteredStudents}
-          today={today}
-          pendingChanges={pendingChanges}
-          getCellStatus={getCellStatus}
-          getCellNote={getCellNote}
-          isCellPending={isCellPending}
-          notePopover={notePopover}
-          noteText={noteText}
-          onStatusChange={handleStatusChange}
-          onToggleAll={handleToggleAll}
-          onNotePopoverOpen={handleNotePopoverOpen}
-          onNotePopoverClose={handleNotePopoverClose}
-          onNoteTextChange={handleNoteTextChange}
-          onNoteSave={handleSaveNote}
-          onSave={handleSave}
-          isSaving={isSaving}
-          totalStudents={matrixData.students.length}
-        />
-      ) : null}
+      {/* Matrix content area — loading overlay sits inside this zone */}
+      <div className="relative flex-1 min-h-[300px]">
+        {/* Inline pill loading — same style as CTable refetch pill */}
+        {isPageLoading && (
+          <div className="absolute inset-0 z-20 flex items-center justify-center pointer-events-none">
+            <div className="flex items-center gap-2 bg-white/80 backdrop-blur-sm rounded-xl px-4 py-2 shadow-sm border border-default-200">
+              <Spinner size="sm" color="primary" classNames={{ wrapper: "w-4 h-4" }} />
+              <span className="text-xs text-default-500 font-medium">Đang tải dữ liệu...</span>
+            </div>
+          </div>
+        )}
+
+        {matrixData ? (
+          <AttendanceTable
+            matrixData={matrixData}
+            scheduleDates={scheduleDates}
+            filteredStudents={filteredStudents}
+            today={today}
+            pendingChanges={pendingChanges}
+            getCellStatus={getCellStatus}
+            getCellNote={getCellNote}
+            isCellPending={isCellPending}
+            notePopover={notePopover}
+            noteText={noteText}
+            onStatusChange={handleStatusChange}
+            onToggleAll={handleToggleAll}
+            onNotePopoverOpen={handleNotePopoverOpen}
+            onNotePopoverClose={handleNotePopoverClose}
+            onNoteTextChange={handleNoteTextChange}
+            onNoteSave={handleSaveNote}
+            onSave={handleSave}
+            isSaving={isSaving}
+            totalStudents={matrixData.students.length}
+          />
+        ) : !isPageLoading ? (
+          <div className="flex flex-col items-center justify-center py-20 gap-4">
+            <Users className="w-16 h-16 text-default-300" />
+            <p className="text-lg font-semibold text-default-500">Chưa có dữ liệu điểm danh</p>
+            <p className="text-sm text-default-400">Chọn lớp học để xem điểm danh</p>
+          </div>
+        ) : null}
+      </div>
     </div>
   )
 }
