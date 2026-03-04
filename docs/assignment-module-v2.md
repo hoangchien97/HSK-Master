@@ -1,7 +1,7 @@
 # Assignment Module — v2 Implementation Guide
 
-> **Phiên bản**: v2  
-> **Cập nhật**: March 2026  
+> **Phiên bản**: v2
+> **Cập nhật**: March 2026
 > **Tác giả**: Senior FE — HSK Master Portal
 
 ---
