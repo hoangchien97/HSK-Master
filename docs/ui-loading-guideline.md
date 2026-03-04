@@ -74,7 +74,7 @@ Quản lý lớp học
 | HSK 1 - Lớp Sáng           |
 | HSK 1 - Lớp Tối            |
 --------------------------------
-( table hơi mờ + icon loading nhỏ )
+( table hơi mờ + icon loading nhỏ - như hiện tại )
 
 Cảm giác:
 👉 “Đang cập nhật”
