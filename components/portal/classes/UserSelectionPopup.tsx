@@ -5,6 +5,7 @@ import { Avatar, Button, Input, Spinner } from "@heroui/react";
 import { Check, Search, Users } from "lucide-react";
 import { CModal } from "@/components/portal/common/CModal";
 import api from "@/lib/http/client";
+import { USER_ROLE } from "@/constants/portal/roles";
 
 export interface UserItem {
   id: string;
@@ -27,7 +28,7 @@ export default function UserSelectionPopup({
   onClose,
   selectedUsers,
   onSelectionChange,
-  role = "STUDENT",
+  role = USER_ROLE.STUDENT,
 }: UserSelectionPopupProps) {
   const [search, setSearch] = useState("");
   const [users, setUsers] = useState<UserItem[]>([]);

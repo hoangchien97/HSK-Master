@@ -45,6 +45,7 @@ export default function StudentsToolbar({
         <Select
           placeholder="Tất cả trình độ"
           size="sm"
+          aria-label="Lọc theo trình độ"
           selectedKeys={[levelFilter]}
           onSelectionChange={(keys) => {
             const val = Array.from(keys)[0] as string
@@ -60,6 +61,7 @@ export default function StudentsToolbar({
           <Select
             placeholder="Tất cả lớp"
             size="sm"
+            aria-label="Lọc theo lớp học"
             selectedKeys={[classFilter]}
             onSelectionChange={(keys) => {
               const val = Array.from(keys)[0] as string

@@ -142,6 +142,7 @@ export async function createSchedule(
   success: boolean;
   count?: number;
   schedules?: ISchedule[];
+  syncError?: string;
   error?: string;
 }> {
   try {
@@ -199,6 +200,7 @@ export async function createSchedule(
     }
 
     // ── Google Calendar sync (non-blocking) ──
+    let syncError: string | undefined;
     try {
       if (data.syncToGoogle) {
         await syncScheduleCreate({
@@ -218,6 +220,7 @@ export async function createSchedule(
         console.log(`[ScheduleAction] Calendar sync completed for schedule series ${result.series.id}`);
       }
     } catch (syncErr) {
+      syncError = syncErr instanceof Error ? syncErr.message : 'Google Calendar sync failed';
       console.error('[ScheduleAction] Calendar sync error (non-blocking):', syncErr);
     }
 
@@ -226,6 +229,7 @@ export async function createSchedule(
       success: true,
       count: result.sessions.length,
       schedules: result.sessions,
+      syncError,
     };
   } catch (error) {
     console.error('Error creating schedule:', error);

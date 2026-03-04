@@ -1,3 +1,5 @@
+import { UserRole, UserStatus } from '@/enums/portal/role'
+
 // Portal User Types
 export interface PortalUser {
   id: string
@@ -17,18 +19,6 @@ export interface PortalUser {
 
   createdAt: Date | string
   updatedAt?: Date | string
-}
-
-export enum UserRole {
-  SYSTEM_ADMIN = "SYSTEM_ADMIN",
-  TEACHER = "TEACHER",
-  STUDENT = "STUDENT",
-}
-
-export enum UserStatus {
-  ACTIVE = "ACTIVE",
-  INACTIVE = "INACTIVE",
-  LOCKED = "LOCKED",
 }
 
 // Profile Update DTOs

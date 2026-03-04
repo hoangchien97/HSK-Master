@@ -18,6 +18,7 @@ import { CModal } from "@/components/portal/common";
 import { FileEdit, PlusCircle, Users } from "lucide-react";
 import { createClassAction, updateClassAction } from "@/actions/class.actions";
 import { FORMAT_DATE_INPUT } from "@/constants/portal/date";
+import { USER_ROLE } from "@/constants/portal/roles";
 import UserSelectionPopup, { type UserItem } from "./UserSelectionPopup";
 
 interface ClassFormModalProps {
@@ -262,7 +263,7 @@ export default function ClassFormModal({
         onClose={() => setShowUserPopup(false)}
         selectedUsers={selectedStudents}
         onSelectionChange={setSelectedStudents}
-        role="STUDENT"
+        role={USER_ROLE.STUDENT}
       />
     </>
   );

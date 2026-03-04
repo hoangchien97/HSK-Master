@@ -11,6 +11,7 @@ import {
   Pagination,
   Select,
   SelectItem,
+  Spinner,
 } from "@heroui/react"
 import { EmptyState } from "./EmptyState"
 import { PAGINATION } from "@/constants/portal/pagination"
@@ -91,6 +92,8 @@ export interface CTableProps<T extends Record<string, unknown>> {
   isStriped?: boolean
   isHoverable?: boolean
   ariaLabel?: string
+  /** Show loading spinner inside the table (inline, not overlay) */
+  isLoading?: boolean
 }
 
 // ─── Component ───────────────────────────────────────────────────────
@@ -127,6 +130,7 @@ export function CTable<T extends Record<string, unknown>>({
   isStriped = true,
   isHoverable = true,
   ariaLabel = "Data table",
+  isLoading = false,
 }: CTableProps<T>) {
   /* ─── Derived ─── */
   const totalPages = useMemo(
@@ -150,8 +154,8 @@ export function CTable<T extends Record<string, unknown>>({
   /* ─── Table classNames ─── */
   const tableClassNames = useMemo(
     () => ({
-      base: "h-full",
-      wrapper: ["h-full", "shadow-none", "overflow-x-auto", "-webkit-overflow-scrolling-touch"],
+      base: "",
+      wrapper: ["shadow-none", "overflow-x-auto", "-webkit-overflow-scrolling-touch"],
       table: "min-w-[700px]",
       tr: isHoverable
         ? ["hover:bg-default-100", "transition-colors", "cursor-pointer"]
@@ -172,7 +176,7 @@ export function CTable<T extends Record<string, unknown>>({
     if (!isShowPagination || total === 0) return null
 
     return (
-      <div className="shrink-0 flex items-center justify-center gap-4 px-2 py-2 relative">
+      <div className="shrink-0 flex flex-col sm:flex-row items-center justify-center gap-2 sm:gap-4 px-2 py-2 sm:relative">
         {totalPages > 1 && (
           <Pagination
             isCompact
@@ -181,9 +185,10 @@ export function CTable<T extends Record<string, unknown>>({
             page={page}
             total={totalPages}
             onChange={handlePageChange}
+            size="sm"
           />
         )}
-        <div className="absolute right-2 flex items-center gap-2">
+        <div className="sm:absolute sm:right-2 flex items-center gap-2">
           <Select
             size="sm"
             selectedKeys={[String(pageSize)]}
@@ -203,13 +208,13 @@ export function CTable<T extends Record<string, unknown>>({
   }, [isShowPagination, total, totalPages, page, pageSize, pageSizeOptions, handlePageChange, handlePageSizeChange])
 
   return (
-    <div className={`h-full flex flex-col gap-3 ${className ?? ""}`}>
+    <div className={`flex flex-col gap-3 ${className ?? ""}`}>
       {/* ── Toolbar (search / filters) ── */}
       {toolbar && <div className="shrink-0">{toolbar}</div>}
 
       {/* ── Total (left) + Actions (right) ── */}
       {(total > 0 || totalLabel || actions) && (
-        <div className="shrink-0 flex items-center justify-between">
+        <div className="shrink-0 flex items-center justify-between flex-wrap gap-2">
           <span className="text-sm text-default-400">
             {totalLabel ?? `Tổng ${total}`}
           </span>
@@ -217,8 +222,8 @@ export function CTable<T extends Record<string, unknown>>({
         </div>
       )}
 
-      {/* ── Table (flex-1, header sticky, body scrolls) ── */}
-      <div className="flex-1 min-h-0 overflow-hidden">
+      {/* ── Table (scrolls horizontally on mobile, scrolls with body) ── */}
+      <div className="overflow-x-auto -mx-4 px-4 sm:mx-0 sm:px-0" style={{ WebkitOverflowScrolling: 'touch' }}>
         <Table
           isHeaderSticky={isHeaderSticky}
           aria-label={ariaLabel}
@@ -247,6 +252,8 @@ export function CTable<T extends Record<string, unknown>>({
         </TableHeader>
         <TableBody
           items={data}
+          isLoading={isLoading}
+          loadingContent={<Spinner color="primary" label="Đang tải..." />}
           emptyContent={
             <EmptyState
               title={emptyContent?.title || "Không có dữ liệu"}

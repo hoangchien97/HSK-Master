@@ -26,7 +26,7 @@ import "dayjs/locale/vi"
 import { PAGINATION, SUBMISSION_STATUS } from "@/constants/portal"
 import { CTable, type CTableColumn } from "@/components/portal/common"
 import { fetchAssignments } from "@/actions/assignment.actions"
-import { useDebouncedValue } from "@/hooks/useTableParams"
+import { useDebouncedValue, useSyncSearchToUrl } from "@/hooks/useTableParams"
 import { usePortalUI } from "@/providers/portal-ui-provider"
 
 dayjs.locale("vi")
@@ -104,6 +104,7 @@ export default function StudentAssignmentsView() {
   const [items, setItems] = useState<AssignmentData[]>([])
   const [total, setTotal] = useState(0)
   const [classes, setClasses] = useState<ClassInfo[]>([])
+  const [isTableLoading, setIsTableLoading] = useState(true)
 
   /* ─── URL updater ─── */
   const updateUrl = useCallback(
@@ -132,33 +133,37 @@ export default function StudentAssignmentsView() {
 
   /* ─── Load data via server action (role-aware) ─── */
   const loadData = useCallback(async () => {
+    setIsTableLoading(true)
     startLoading()
-    const result = await fetchAssignments({
-      search: debouncedSearch || undefined,
-      classId: urlClassFilter !== "ALL" ? urlClassFilter : undefined,
-      status: urlStatusFilter !== "ALL" ? urlStatusFilter : undefined,
-      page: urlPage,
-      pageSize: urlPageSize,
-    })
-    if (result.success && result.data) {
-      setItems(result.data.items as AssignmentData[])
-      setTotal(result.data.total)
-      setClasses(result.data.classes as ClassInfo[])
-    } else {
-      toast.error(result.error || "Không thể tải danh sách bài tập")
+    try {
+      const result = await fetchAssignments({
+        search: debouncedSearch || undefined,
+        classId: urlClassFilter !== "ALL" ? urlClassFilter : undefined,
+        status: urlStatusFilter !== "ALL" ? urlStatusFilter : undefined,
+        page: urlPage,
+        pageSize: urlPageSize,
+      })
+      if (result.success && result.data) {
+        setItems(result.data.items as AssignmentData[])
+        setTotal(result.data.total)
+        setClasses(result.data.classes as ClassInfo[])
+      } else {
+        toast.error(result.error || "Không thể tải danh sách bài tập")
+      }
+    } catch (error) {
+      console.error('Error loading assignments:', error)
+      toast.error("Không thể tải danh sách bài tập")
+    } finally {
+      setIsTableLoading(false)
+      stopLoading()
     }
-    stopLoading()
   }, [debouncedSearch, urlClassFilter, urlStatusFilter, urlPage, urlPageSize, startLoading, stopLoading])
 
   useEffect(() => {
     loadData()
   }, [loadData])
 
-  /* ─── Sync search → URL ─── */
-  useEffect(() => {
-    updateUrl({ search: debouncedSearch })
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [debouncedSearch])
+  useSyncSearchToUrl(debouncedSearch, updateUrl)
 
   /* ─── Submission status helper ─── */
   const getSubmissionStatus = useCallback((row: AssignmentData) => {
@@ -304,6 +309,7 @@ export default function StudentAssignmentsView() {
         <Select
           placeholder="Tất cả lớp"
           size="sm"
+          aria-label="Lọc theo lớp học"
           selectedKeys={[urlClassFilter]}
           onSelectionChange={(keys) => {
             const val = Array.from(keys)[0] as string
@@ -321,6 +327,7 @@ export default function StudentAssignmentsView() {
         <Select
           placeholder="Trạng thái"
           size="sm"
+          aria-label="Lọc theo trạng thái"
           selectedKeys={[urlStatusFilter]}
           onSelectionChange={(keys) => {
             const val = Array.from(keys)[0] as string

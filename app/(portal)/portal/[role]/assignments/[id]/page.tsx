@@ -3,6 +3,7 @@ import { redirect, notFound } from "next/navigation"
 import { prisma } from "@/lib/prisma"
 import AssignmentDetailView from "@/components/portal/assignments/AssignmentDetailView"
 import { ASSIGNMENT_STATUS } from "@/constants/portal/roles"
+import { ROLE_ROUTES } from "@/lib/utils/auth"
 
 type Props = { params: Promise<{ role: string; id: string }> }
 
@@ -51,11 +52,11 @@ export default async function AssignmentDetailPage({ params }: Props) {
   if (!assignment) notFound()
 
   // Authorization: teacher must own, student must be enrolled
-  if (userRole === "teacher" && assignment.teacherId !== session.user.id) {
+  if (userRole === ROLE_ROUTES.TEACHER && assignment.teacherId !== session.user.id) {
     notFound()
   }
 
-  if (userRole === "student") {
+  if (userRole === ROLE_ROUTES.STUDENT) {
     // Students can see PUBLISHED or CLOSED assignments (read-only for CLOSED)
     if (assignment.status !== ASSIGNMENT_STATUS.PUBLISHED && assignment.status !== ASSIGNMENT_STATUS.CLOSED) notFound()
 

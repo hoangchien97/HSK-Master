@@ -58,7 +58,7 @@ export default function PortalSidebar({ userRole, isOpen = true, onClose }: Port
         {/* Logo - Fixed at top */}
         <div className="flex items-center h-[64px] justify-between px-5 py-4 border-b border-gray-100 shrink-0">
           <Link href="/portal" className="flex items-center">
-            <Image src="/logo.svg" alt={BRAND_NAME} width={160} height={40} />
+            <Image src="/logo.svg" alt={BRAND_NAME} width={160} height={40} priority />
           </Link>
           {/* Mobile close button */}
           <Button

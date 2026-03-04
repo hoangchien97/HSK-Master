@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from "next/server"
 import { auth } from "@/auth"
 import { prisma } from "@/lib/prisma"
 import type { Prisma } from "@prisma/client"
+import { USER_ROLE } from "@/constants/portal/roles"
 
 // GET /api/portal/users/search - Search users by email or name
 export async function GET(request: NextRequest) {
@@ -22,7 +23,7 @@ export async function GET(request: NextRequest) {
     }
 
     // Only teachers and admins can search users
-    if (user.role !== "TEACHER" && user.role !== "SYSTEM_ADMIN") {
+    if (user.role !== USER_ROLE.TEACHER && user.role !== USER_ROLE.SYSTEM_ADMIN) {
       return NextResponse.json({ error: "Forbidden" }, { status: 403 })
     }
 

@@ -5,8 +5,10 @@ import PortalSidebar from "@/components/portal/PortalSidebar"
 import PortalHeader from "@/components/portal/PortalHeader"
 import PortalContent from "@/components/portal/PortalContent"
 import { PortalUIProvider } from "@/providers/portal-ui-provider"
+import { NotificationProvider } from "@/providers/notification-provider"
 
 interface User {
+  id: string
   name: string
   email: string
   role: string
@@ -23,7 +25,7 @@ function PortalLayoutInner({ user, children }: PortalLayoutClientProps) {
   const [sidebarOpen, setSidebarOpen] = useState(false)
 
   return (
-    <div className="h-screen flex bg-gray-50 overflow-hidden font-[family-name:var(--font-noto-sans-sc),var(--font-noto-sans),sans-serif]">
+    <div className="min-h-screen lg:h-screen flex flex-col lg:flex-row bg-gray-50 lg:overflow-hidden font-[family-name:var(--font-noto-sans-sc),var(--font-noto-sans),sans-serif]">
       {/* Sidebar - Fixed left, full height */}
       <PortalSidebar
         userRole={user.role}
@@ -52,9 +54,11 @@ function PortalLayoutInner({ user, children }: PortalLayoutClientProps) {
 export default function PortalLayoutClient({ user, children }: PortalLayoutClientProps) {
   return (
     <PortalUIProvider>
-      <PortalLayoutInner user={user}>
-        {children}
-      </PortalLayoutInner>
+      <NotificationProvider userId={user.id}>
+        <PortalLayoutInner user={user}>
+          {children}
+        </PortalLayoutInner>
+      </NotificationProvider>
     </PortalUIProvider>
   )
 }

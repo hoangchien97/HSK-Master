@@ -1,18 +1,19 @@
+import { UserRole } from '@/enums/portal/role';
+
 // Role to route segment mapping
-export const ROLE_ROUTES = {
-  SYSTEM_ADMIN: "admin",
-  TEACHER: "teacher",
-  STUDENT: "student",
+export const ROLE_ROUTES: Record<UserRole, string> = {
+  [UserRole.SYSTEM_ADMIN]: "admin",
+  [UserRole.TEACHER]: "teacher",
+  [UserRole.STUDENT]: "student",
 } as const;
 
-export type UserRole = keyof typeof ROLE_ROUTES;
 export type RoleRoute = typeof ROLE_ROUTES[UserRole];
 
 /**
  * Convert role to route segment
  */
 export function roleToRoute(role: string): RoleRoute {
-  return ROLE_ROUTES[role as UserRole] || "student";
+  return ROLE_ROUTES[role as UserRole] || ROLE_ROUTES[UserRole.STUDENT];
 }
 
 /**
@@ -20,7 +21,7 @@ export function roleToRoute(role: string): RoleRoute {
  */
 export function routeToRole(route: string): UserRole {
   const entry = Object.entries(ROLE_ROUTES).find(([, value]) => value === route);
-  return (entry?.[0] as UserRole) || "STUDENT";
+  return (entry?.[0] as UserRole) || UserRole.STUDENT;
 }
 
 /**

@@ -9,6 +9,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { auth } from '@/auth';
 import { saveCalendarToken } from '@/lib/portal/calendar-token.service';
+import { roleToRoute } from '@/lib/utils/auth';
 
 export async function GET(request: NextRequest) {
   const { searchParams } = request.nextUrl;
@@ -90,7 +91,7 @@ export async function GET(request: NextRequest) {
     });
 
     // Determine redirect based on role
-    const role = session.user.role?.toLowerCase() || 'teacher';
+    const role = roleToRoute(session.user.role || '');
     const redirectTo = `${baseUrl}/portal/${role}/schedule?calendar_connected=true`;
     console.log(`[CalendarCallback] Success! Redirecting to ${redirectTo}`);
 

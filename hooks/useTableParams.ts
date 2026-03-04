@@ -100,3 +100,30 @@ export function useDebouncedValue(value: string, delay = 350): string {
 
   return debounced
 }
+
+/**
+ * Sync debounced search value to URL — skips initial mount to prevent
+ * double API calls.
+ *
+ * Problem: raw `useEffect([debouncedSearch])` fires on mount → triggers
+ * `updateUrl` → causes `router.replace` → re-renders → `loadData` fires
+ * a SECOND time. This hook skips mount and only syncs on actual user input.
+ *
+ * @example
+ * useSyncSearchToUrl(debouncedSearch, updateUrl)
+ */
+export function useSyncSearchToUrl(
+  debouncedSearch: string,
+  updateUrl: (updates: Record<string, string>) => void,
+) {
+  const isMount = useRef(true)
+
+  useEffect(() => {
+    if (isMount.current) {
+      isMount.current = false
+      return
+    }
+    updateUrl({ search: debouncedSearch })
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [debouncedSearch])
+}

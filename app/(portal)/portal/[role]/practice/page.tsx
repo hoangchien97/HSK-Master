@@ -7,6 +7,7 @@ import {
 } from "@/services/portal/practice.service"
 import { getAllLessonSkillProgress } from "@/services/portal/practice-skill.service"
 import PracticeListView from "@/components/portal/practice/PracticeListView"
+import { ROLE_ROUTES } from "@/lib/utils/auth"
 
 type Props = {
   params: Promise<{ role: string }>
@@ -21,7 +22,7 @@ export default async function PracticePage({ params }: Props) {
   if (urlRole !== userRole) notFound()
 
   // Only students can access practice
-  if (userRole !== "student") notFound()
+  if (userRole !== ROLE_ROUTES.STUDENT) notFound()
 
   // SSR: fetch data server-side for fast initial render
   const enrolledLevels = await getStudentEnrolledHskLevels(session.user.id)

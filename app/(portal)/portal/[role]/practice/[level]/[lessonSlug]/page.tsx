@@ -17,6 +17,7 @@ import {
 import { getLessonAllModeSkillProgress } from "@/services/portal/practice-skill.service"
 import { levelSlugToLabel } from "@/utils/practice"
 import LessonPracticeView from "@/components/portal/practice/LessonPracticeView"
+import { ROLE_ROUTES } from "@/lib/utils/auth"
 
 type Props = {
   params: Promise<{ role: string; level: string; lessonSlug: string }>
@@ -46,7 +47,7 @@ export default async function PracticeDetailPage({ params }: Props) {
 
   const { role: urlRole, level, lessonSlug } = await params
   const userRole = session.user.role.toLowerCase()
-  if (urlRole !== userRole || userRole !== "student") notFound()
+  if (urlRole !== userRole || userRole !== ROLE_ROUTES.STUDENT) notFound()
 
   const lesson = await getLessonWithVocabularies(lessonSlug)
   if (!lesson) notFound()

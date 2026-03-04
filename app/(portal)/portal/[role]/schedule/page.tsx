@@ -2,6 +2,7 @@ import { auth } from "@/auth"
 import { redirect, notFound } from "next/navigation"
 import StudentScheduleView from "@/components/portal/schedules/StudentScheduleView"
 import TeacherScheduleCalendar from "@/components/portal/schedules/TeacherScheduleCalendar"
+import { ROLE_ROUTES } from "@/lib/utils/auth"
 
 type Props = {
   params: Promise<{ role: string }>
@@ -23,11 +24,11 @@ export default async function SchedulePage({ params }: Props) {
   }
 
   // Render based on role
-  if (userRole === "student") {
+  if (userRole === ROLE_ROUTES.STUDENT) {
     return <StudentScheduleView />
   }
 
-  if (userRole === "teacher") {
+  if (userRole === ROLE_ROUTES.TEACHER) {
     return <TeacherScheduleCalendar />
   }
 

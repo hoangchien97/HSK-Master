@@ -14,7 +14,7 @@ import { CTable, type CTableColumn } from "@/components/portal/common"
 import StudentsToolbar from "./StudentsToolbar"
 import { fetchStudents, fetchClassesForFilter } from "@/actions/student.actions"
 import type { IStudent, IGetStudentResponse } from "@/interfaces/portal"
-import { useDebouncedValue } from "@/hooks/useTableParams"
+import { useDebouncedValue, useSyncSearchToUrl } from "@/hooks/useTableParams"
 import { usePortalUI } from "@/providers/portal-ui-provider"
 
 export default function StudentsTable() {
@@ -33,6 +33,7 @@ export default function StudentsTable() {
   const debouncedSearch = useDebouncedValue(search, 350)
 
   const [data, setData] = useState<IGetStudentResponse>({ items: [], total: 0 })
+  const [isTableLoading, setIsTableLoading] = useState(true)
   const [classes, setClasses] = useState<{ id: string; className: string; classCode: string }[]>([])
 
   const updateUrl = useCallback(
@@ -72,30 +73,35 @@ export default function StudentsTable() {
 
   /* ─── Load students via server action ─── */
   const loadData = useCallback(async () => {
+    setIsTableLoading(true)
     startLoading()
-    const result = await fetchStudents({
-      search: debouncedSearch || undefined,
-      level: urlLevel !== "ALL" ? urlLevel : undefined,
-      classId: urlClassId !== "ALL" ? urlClassId : undefined,
-      page: urlPage,
-      pageSize: urlPageSize,
-    })
-    if (result.success && result.data) {
-      setData(result.data)
-    } else {
-      toast.error(result.error || "Không thể tải danh sách học viên")
+    try {
+      const result = await fetchStudents({
+        search: debouncedSearch || undefined,
+        level: urlLevel !== "ALL" ? urlLevel : undefined,
+        classId: urlClassId !== "ALL" ? urlClassId : undefined,
+        page: urlPage,
+        pageSize: urlPageSize,
+      })
+      if (result.success && result.data) {
+        setData(result.data)
+      } else {
+        toast.error(result.error || "Không thể tải danh sách học viên")
+      }
+    } catch (error) {
+      console.error('Error loading students:', error)
+      toast.error("Không thể tải danh sách học viên")
+    } finally {
+      setIsTableLoading(false)
+      stopLoading()
     }
-    stopLoading()
   }, [debouncedSearch, urlLevel, urlClassId, urlPage, urlPageSize, startLoading, stopLoading])
 
   useEffect(() => {
     loadData()
   }, [loadData])
 
-  useEffect(() => {
-    updateUrl({ search: debouncedSearch })
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [debouncedSearch])
+  useSyncSearchToUrl(debouncedSearch, updateUrl)
 
   const columns: CTableColumn<IStudent & Record<string, unknown>>[] = useMemo(() => [
     {
@@ -189,6 +195,7 @@ export default function StudentsTable() {
       page={urlPage}
       pageSize={urlPageSize}
       total={data.total}
+      isLoading={isTableLoading}
       onPageChange={(p) => updateUrl({ page: String(p) })}
       onPageSizeChange={(s) => updateUrl({ pageSize: String(s) })}
       ariaLabel="Bảng học viên"

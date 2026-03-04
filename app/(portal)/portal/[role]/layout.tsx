@@ -1,6 +1,6 @@
 import { auth } from "@/auth"
 import { redirect, notFound } from "next/navigation"
-import { roleToRoute, isRouteAllowedForRole } from "@/lib/utils/auth"
+import { roleToRoute, isRouteAllowedForRole, ROLE_ROUTES } from "@/lib/utils/auth"
 import { STATUS } from "@/constants/portal/roles"
 
 type Props = {
@@ -8,8 +8,8 @@ type Props = {
   params: Promise<{ role: string }>
 }
 
-// Valid URL roles
-const VALID_URL_ROLES = ["admin", "teacher", "student"]
+// Valid URL roles derived from ROLE_ROUTES constant
+const VALID_URL_ROLES = Object.values(ROLE_ROUTES)
 
 export default async function RoleLayout({ children, params }: Props) {
   const session = await auth()

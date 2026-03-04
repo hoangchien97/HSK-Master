@@ -27,6 +27,7 @@ export async function fetchStudents(
     if (!session?.user?.id) return { success: false, error: 'Unauthorized' };
 
     const data = await getStudentsService(session.user.id, params);
+    console.log('Fetched students:', data);
     return { success: true, data };
   } catch (error) {
     console.error('Error fetching students:', error);

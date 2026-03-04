@@ -8,6 +8,7 @@ import 'react-toastify/dist/ReactToastify.css'
 import { Suspense } from "react"
 import { WebVitals } from "@/components/landing/shared"
 import PortalLayoutClient from "./PortalLayoutClient"
+import { UserRole } from "@/enums/portal/role"
 
 export default async function PortalLayout({
   children,
@@ -30,9 +31,10 @@ export default async function PortalLayout({
           </Suspense>
           <PortalLayoutClient
             user={{
+              id: session.user.id || "",
               name: session.user.name || "User",
               email: session.user.email || "",
-              role: session.user.role || "STUDENT",
+              role: session.user.role || UserRole.STUDENT,
               image: session.user.image,
             }}
           >

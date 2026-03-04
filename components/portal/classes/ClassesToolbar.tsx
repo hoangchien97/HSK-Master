@@ -33,6 +33,7 @@ export default function ClassesToolbar({
         <Select
           placeholder="Trạng thái"
           size="sm"
+          aria-label="Lọc theo trạng thái"
           selectedKeys={[statusFilter]}
           onSelectionChange={(keys) => {
             const val = Array.from(keys)[0] as string

@@ -13,7 +13,7 @@ import { CTable, type CTableColumn } from "@/components/portal/common"
 import ClassesToolbar from "./ClassesToolbar"
 import ClassDetailDrawer from "./ClassDetailDrawer"
 import { fetchClasses } from "@/actions/class.actions"
-import { useDebouncedValue } from "@/hooks/useTableParams"
+import { useDebouncedValue, useSyncSearchToUrl } from "@/hooks/useTableParams"
 import { usePortalUI } from "@/providers/portal-ui-provider"
 
 dayjs.locale("vi")
@@ -32,6 +32,7 @@ export default function StudentClassesView() {
   const [search, setSearch] = useState(urlSearch)
   const debouncedSearch = useDebouncedValue(search, 350)
   const [data, setData] = useState<IGetClassResponse>({ items: [], total: 0 })
+  const [isTableLoading, setIsTableLoading] = useState(true)
 
   const detailDrawer = useDisclosure()
   const [selectedClass, setSelectedClass] = useState<IClass | null>(null)
@@ -62,29 +63,34 @@ export default function StudentClassesView() {
 
   /* ─── Load data via server action (role-aware) ─── */
   const loadData = useCallback(async () => {
+    setIsTableLoading(true)
     startLoading()
-    const result = await fetchClasses({
-      search: debouncedSearch || undefined,
-      status: urlStatus !== "ALL" ? urlStatus : undefined,
-      page: urlPage,
-      pageSize: urlPageSize,
-    })
-    if (result.success && result.data) {
-      setData(result.data)
-    } else {
-      toast.error(result.error || "Không thể tải danh sách lớp")
+    try {
+      const result = await fetchClasses({
+        search: debouncedSearch || undefined,
+        status: urlStatus !== "ALL" ? urlStatus : undefined,
+        page: urlPage,
+        pageSize: urlPageSize,
+      })
+      if (result.success && result.data) {
+        setData(result.data)
+      } else {
+        toast.error(result.error || "Không thể tải danh sách lớp")
+      }
+    } catch (error) {
+      console.error('Error loading classes:', error)
+      toast.error("Không thể tải danh sách lớp")
+    } finally {
+      setIsTableLoading(false)
+      stopLoading()
     }
-    stopLoading()
   }, [debouncedSearch, urlStatus, urlPage, urlPageSize, startLoading, stopLoading])
 
   useEffect(() => {
     loadData()
   }, [loadData])
 
-  useEffect(() => {
-    updateUrl({ search: debouncedSearch })
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [debouncedSearch])
+  useSyncSearchToUrl(debouncedSearch, updateUrl)
 
   /* ─── Handlers ─── */
   const handleViewDetail = useCallback(

@@ -52,6 +52,7 @@ import {
 } from "@/actions/submission.actions"
 import { closeAssignmentAction } from "@/actions/assignment.actions"
 import { ASSIGNMENT_STATUS, SUBMISSION_STATUS } from "@/constants/portal"
+import { ROLE_ROUTES } from "@/lib/utils/auth"
 
 dayjs.locale("vi")
 dayjs.extend(relativeTime)
@@ -140,8 +141,8 @@ export default function AssignmentDetailView({
   currentUserId,
   userRole,
 }: AssignmentDetailViewProps) {
-  const isTeacher = userRole === "teacher"
-  const isStudent = userRole === "student"
+  const isTeacher = userRole === ROLE_ROUTES.TEACHER
+  const isStudent = userRole === ROLE_ROUTES.STUDENT
 
   const dueDate = assignment.dueDate ? new Date(assignment.dueDate) : null
   const isOverdue = dueDate ? dueDate < new Date() : false

@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from "next/server"
 import { auth } from "@/auth"
 import { prisma } from "@/lib/prisma"
-import { ENROLLMENT_STATUS } from "@/constants/portal/roles"
+import { ENROLLMENT_STATUS, USER_ROLE } from "@/constants/portal/roles"
 
 // POST - Enroll a student to a class (by email search)
 export async function POST(
@@ -53,7 +53,7 @@ export async function POST(
 
     // Only teacher of the class or admin can enroll students
     if (
-      user.role !== "SYSTEM_ADMIN" &&
+      user.role !== USER_ROLE.SYSTEM_ADMIN &&
       classData.teacherId !== user.id
     ) {
       return NextResponse.json({ error: "Forbidden" }, { status: 403 })
@@ -70,7 +70,7 @@ export async function POST(
     }
 
     // Check if user is a student
-    if (student.role !== "STUDENT") {
+    if (student.role !== USER_ROLE.STUDENT) {
       return NextResponse.json(
         { error: "User is not a student" },
         { status: 400 }
@@ -188,7 +188,7 @@ export async function DELETE(
 
     // Only teacher of the class or admin can remove students
     if (
-      user.role !== "SYSTEM_ADMIN" &&
+      user.role !== USER_ROLE.SYSTEM_ADMIN &&
       classData.teacherId !== user.id
     ) {
       return NextResponse.json({ error: "Forbidden" }, { status: 403 })

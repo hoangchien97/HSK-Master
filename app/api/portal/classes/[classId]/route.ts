@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from "next/server"
 import { auth } from "@/auth"
 import { prisma } from "@/lib/prisma"
-import { ENROLLMENT_STATUS } from "@/constants/portal/roles"
+import { ENROLLMENT_STATUS, USER_ROLE } from "@/constants/portal/roles"
 
 // GET - Fetch class detail with enrollments
 export async function GET(
@@ -70,14 +70,14 @@ export async function GET(
 
     // Check if user has access to this class
     if (
-      user.role === "TEACHER" &&
+      user.role === USER_ROLE.TEACHER &&
       classData.teacherId !== user.id
     ) {
       return NextResponse.json({ error: "Forbidden" }, { status: 403 })
     }
 
     // If student, check if enrolled
-    if (user.role === "STUDENT") {
+    if (user.role === USER_ROLE.STUDENT) {
       const isEnrolled = classData.enrollments.some(
         (e) => e.studentId === user.id
       )
@@ -131,7 +131,7 @@ export async function PUT(
 
     // Only teacher of the class or admin can update
     if (
-      user.role !== "SYSTEM_ADMIN" &&
+      user.role !== USER_ROLE.SYSTEM_ADMIN &&
       existingClass.teacherId !== user.id
     ) {
       return NextResponse.json({ error: "Forbidden" }, { status: 403 })
@@ -218,7 +218,7 @@ export async function DELETE(
     }
 
     // Only admin can delete classes
-    if (user.role !== "SYSTEM_ADMIN") {
+    if (user.role !== USER_ROLE.SYSTEM_ADMIN) {
       return NextResponse.json({ error: "Forbidden" }, { status: 403 })
     }
 

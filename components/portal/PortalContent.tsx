@@ -35,8 +35,8 @@ export default function PortalContent({ children }: PortalContentProps) {
         <PortalBreadcrumb />
       </div>
 
-      {/* Page content – scrollable, fills remaining height */}
-      <div className="flex-1 min-h-0 overflow-y-auto px-4 pb-4 lg:px-6 lg:pb-6">
+      {/* Page content – scrollable on desktop, natural flow on mobile */}
+      <div className="flex-1 min-h-0 lg:overflow-y-auto px-4 pb-4 lg:px-6 lg:pb-6">
         {children}
       </div>
     </main>
