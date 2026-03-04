@@ -1,13 +1,13 @@
 import { prisma } from "@/lib/prisma";
 import { notFound } from "next/navigation";
+import Link from "next/link";
 import Button from "@/components/landing/common/Button";
 import { Breadcrumb } from "@/components/landing/common";
 import { AnimatedSection } from "@/components/landing/shared/AnimatedSection";
 import LessonList from "./LessonList";
 import { CourseStatsGrid } from "./CourseStatsGrid";
-import { CourseResourceCards } from "./CourseResourceCards";
 import { generateCourseSchema, generateBreadcrumbSchema } from "@/lib/structured-data";
-import { DEFAULT_IMAGE_PREVIEW, OG_IMAGE } from "@/constants/brand";
+import { DEFAULT_IMAGE_PREVIEW, OG_IMAGE, SITE_URL } from "@/constants/brand";
 
 // Animation variants
 
@@ -62,7 +62,7 @@ export async function generateMetadata({ params }: Props) {
     };
   }
 
-  const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://hskmaster.edu.vn";
+  const siteUrl = SITE_URL;
   const courseImgUrl = course.ogImage || course.image || DEFAULT_IMAGE_PREVIEW;
   const ogImg = {
     url: courseImgUrl,
@@ -185,21 +185,12 @@ export default async function CourseDetail({ params }: Props) {
         {/* Statistics */}
         <CourseStatsGrid stats={{
           vocabularyCount: course.vocabularyCount,
-          grammarCount: course.grammarCount,
           lessonCount: course.lessonCount,
-          durationHours: course.durationHours
+          sessionCount: course.durationHours
         }} />
 
         {/* Main Learning Path Section */}
         <LessonList lessons={course.lessons} initialDisplayCount={3} />
-
-        {/* Resources Split Section */}
-        <CourseResourceCards course={{
-          vocabularyCount: course.vocabularyCount,
-          grammarCount: course.grammarCount,
-          level: course.level || "HSK",
-          grammarPoints: course.grammarPoints
-        }} />
 
         {/* Bottom CTA */}
         <AnimatedSection variant="scaleIn" className="mt-8 mb-8">
@@ -216,23 +207,27 @@ export default async function CourseDetail({ params }: Props) {
                 Đăng ký ngay để được tư vấn lộ trình học phù hợp và nhận buổi học thử miễn phí
               </p>
               <div className="flex flex-col sm:flex-row gap-3 w-full justify-center mt-2">
-                <Button
-                  variant="gradient"
-                  size="md"
-                  icon={<span className="text-[18px]">🎓</span>}
-                  iconPosition="left"
-                >
-                  Đăng ký học thử miễn phí
-                </Button>
-                <Button
-                  variant="secondary"
-                  size="md"
-                  className="bg-white dark:bg-white/10 border-2 border-orange-200 dark:border-orange-900/30 text-orange-700 dark:text-orange-400 hover:bg-orange-50 dark:hover:bg-orange-900/20 hover:border-orange-300 dark:hover:border-orange-800 shadow-md hover:shadow-lg transition-all duration-300"
-                  icon={<span className="text-[18px]">👩‍🏫</span>}
-                  iconPosition="left"
-                >
-                  Tìm hiểu về cô Ngọc
-                </Button>
+                <Link href="/contact">
+                  <Button
+                    variant="gradient"
+                    size="md"
+                    icon={<span className="text-[18px]">🎓</span>}
+                    iconPosition="left"
+                  >
+                    Đăng ký học thử miễn phí
+                  </Button>
+                </Link>
+                <Link href="/about">
+                  <Button
+                    variant="secondary"
+                    size="md"
+                    className="bg-white dark:bg-white/10 border-2 border-orange-200 dark:border-orange-900/30 text-orange-700 dark:text-orange-400 hover:bg-orange-50 dark:hover:bg-orange-900/20 hover:border-orange-300 dark:hover:border-orange-800 shadow-md hover:shadow-lg transition-all duration-300"
+                    icon={<span className="text-[18px]">👩‍🏫</span>}
+                    iconPosition="left"
+                  >
+                    Tìm hiểu về cô Ngọc
+                  </Button>
+                </Link>
               </div>
             </div>
           </div>

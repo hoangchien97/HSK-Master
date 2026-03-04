@@ -1,9 +1,5 @@
-"use client"
-
 import Link from "next/link"
 import Image from "next/image"
-import { ToastContainer } from "react-toastify"
-import "react-toastify/dist/ReactToastify.css"
 import { BRAND_NAME } from "@/constants/brand"
 import AuthBrandingPanel from "@/components/portal/auth/AuthBrandingPanel"
 
@@ -14,19 +10,6 @@ export default function PortalAuthLayout({
 }) {
   return (
       <div className="min-h-screen flex">
-      {/* Toast Notifications */}
-      <ToastContainer
-        position="top-right"
-        autoClose={3000}
-        hideProgressBar={false}
-        newestOnTop
-        closeOnClick
-        rtl={false}
-        pauseOnFocusLoss
-        draggable
-        pauseOnHover
-        theme="light"
-      />
 
       {/* Left side - Branding Panel (desktop only) */}
       <AuthBrandingPanel />

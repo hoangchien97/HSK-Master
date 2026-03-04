@@ -30,51 +30,53 @@ export default function StudentsToolbar({
   classes,
 }: StudentsToolbarProps) {
   return (
-    <div className="flex flex-col gap-2 sm:flex-row sm:items-center">
-      <Input
-        isClearable
-        placeholder="Tìm kiếm học viên..."
-        startContent={<Search className="w-4 h-4 text-default-400" />}
-        value={search}
-        onValueChange={onSearchChange}
-        onClear={() => onSearchChange("")}
-        className="w-full sm:max-w-xs"
-        size="sm"
-      />
-      <Select
-        placeholder="Tất cả trình độ"
-        size="sm"
-        selectedKeys={[levelFilter]}
-        onSelectionChange={(keys) => {
-          const val = Array.from(keys)[0] as string
-          onLevelChange(val || "ALL")
-        }}
-        className="w-full sm:w-44"
-      >
-        {HSK_LEVELS.map((l) => (
-          <SelectItem key={l.key}>{l.label}</SelectItem>
-        ))}
-      </Select>
-      {classes.length > 0 && (
-        <Select
-          placeholder="Tất cả lớp"
+    <div className="rounded-xl bg-white border border-gray-200 px-4 py-3 shadow-sm">
+      <div className="flex flex-col gap-3 sm:flex-row sm:items-center">
+        <Input
+          isClearable
+          placeholder="Tìm kiếm học viên..."
+          startContent={<Search className="w-4 h-4 text-default-400" />}
+          value={search}
+          onValueChange={onSearchChange}
+          onClear={() => onSearchChange("")}
+          className="w-full sm:max-w-xs"
           size="sm"
-          selectedKeys={[classFilter]}
+        />
+        <Select
+          placeholder="Tất cả trình độ"
+          size="sm"
+          selectedKeys={[levelFilter]}
           onSelectionChange={(keys) => {
             const val = Array.from(keys)[0] as string
-            onClassChange(val || "ALL")
+            onLevelChange(val || "ALL")
           }}
-          className="w-full sm:w-52"
+          className="w-full sm:w-44"
         >
-          {[{ id: "ALL", className: "Tất cả lớp", classCode: "" }, ...classes].map(
-            (c) => (
-              <SelectItem key={c.id}>
-                {c.id === "ALL" ? c.className : `${c.className} (${c.classCode})`}
-              </SelectItem>
-            ),
-          )}
+          {HSK_LEVELS.map((l) => (
+            <SelectItem key={l.key}>{l.label}</SelectItem>
+          ))}
         </Select>
-      )}
+        {classes.length > 0 && (
+          <Select
+            placeholder="Tất cả lớp"
+            size="sm"
+            selectedKeys={[classFilter]}
+            onSelectionChange={(keys) => {
+              const val = Array.from(keys)[0] as string
+              onClassChange(val || "ALL")
+            }}
+            className="w-full sm:w-52"
+          >
+            {[{ id: "ALL", className: "Tất cả lớp", classCode: "" }, ...classes].map(
+              (c) => (
+                <SelectItem key={c.id}>
+                  {c.id === "ALL" ? c.className : `${c.className} (${c.classCode})`}
+                </SelectItem>
+              ),
+            )}
+          </Select>
+        )}
+      </div>
     </div>
   )
 }

@@ -29,13 +29,13 @@ export default function DeleteScheduleModal({
 
   if (!schedule) return null;
 
-  const hasRecurrenceGroup = !!schedule.recurrenceGroupId;
+  const hasRecurringSeries = !!(schedule.isRecurring && schedule.seriesId);
 
   const handleDelete = async () => {
     setIsDeleting(true);
     try {
-      if (deleteMode === 'group' && hasRecurrenceGroup && onConfirmGroup) {
-        await onConfirmGroup(schedule.recurrenceGroupId!);
+      if (deleteMode === 'group' && hasRecurringSeries && onConfirmGroup) {
+        await onConfirmGroup(schedule.seriesId!);
       } else {
         await onConfirm(schedule.id);
       }
@@ -110,7 +110,7 @@ export default function DeleteScheduleModal({
         </div>
 
         {/* Batch delete option for recurring schedules */}
-        {hasRecurrenceGroup && onConfirmGroup && (
+        {hasRecurringSeries && onConfirmGroup && (
           <div className="p-4 bg-purple-50 border border-purple-200 rounded-lg">
             <div className="flex items-center gap-2 mb-3">
               <Repeat className="w-4 h-4 text-purple-600" />
@@ -136,7 +136,7 @@ export default function DeleteScheduleModal({
         )}
 
         {/* Google Calendar Warning */}
-        {schedule.syncedToGoogle && (
+        {(schedule.syncedToGoogle || schedule.isGoogleSynced) && (
           <div className="flex items-start gap-3 p-4 bg-blue-50 border border-blue-200 rounded-lg">
             <AlertTriangle className="w-5 h-5 text-blue-600 shrink-0 mt-0.5" />
             <div>

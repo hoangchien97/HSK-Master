@@ -253,38 +253,36 @@ async function updateItemProgress(
 /* ───────── Recompute lesson-level progress ───────── */
 
 async function recomputeLessonProgress(studentId: string, lessonId: string) {
-  // Get total vocab count for lesson
-  const totalCount = await prisma.vocabulary.count({ where: { lessonId } });
+  // Single query: Get vocab IDs + total count in one go (replaces separate count + findMany)
+  const vocabs = await prisma.vocabulary.findMany({
+    where: { lessonId },
+    select: { id: true },
+  });
+
+  const totalCount = vocabs.length;
   if (totalCount === 0) return;
 
-  // Get all item progress for this lesson's vocabularies
-  const vocabIds = (
-    await prisma.vocabulary.findMany({
-      where: { lessonId },
-      select: { id: true },
-    })
-  ).map((v) => v.id);
+  const vocabIds = vocabs.map((v) => v.id);
 
-  const itemProgressList = await prisma.portalItemProgress.findMany({
-    where: { studentId, vocabularyId: { in: vocabIds } },
-  });
+  // Parallel queries — 3 independent DB calls run concurrently instead of sequentially
+  const [itemProgressList, sessionsAgg, existingProgress] = await Promise.all([
+    prisma.portalItemProgress.findMany({
+      where: { studentId, vocabularyId: { in: vocabIds } },
+    }),
+    prisma.portalPracticeSession.aggregate({
+      where: { studentId, lessonId },
+      _sum: { durationSec: true },
+    }),
+    prisma.portalLessonProgress.findUnique({
+      where: { studentId_lessonId: { studentId, lessonId } },
+      select: { masteryPercent: true },
+    }),
+  ]);
 
   const learnedCount = itemProgressList.filter((ip) => ip.seenCount >= 1).length;
   const masteredCount = itemProgressList.filter((ip) => ip.masteryScore >= MASTERY_THRESHOLD).length;
-  const masteryPercent = totalCount > 0 ? (masteredCount / totalCount) * 100 : 0;
-
-  // Sum total time from sessions
-  const sessions = await prisma.portalPracticeSession.findMany({
-    where: { studentId, lessonId },
-    select: { durationSec: true },
-  });
-  const totalTimeSec = sessions.reduce((acc, s) => acc + s.durationSec, 0);
-
-  // Check if we just crossed the mastery threshold (milestone notification)
-  const existingProgress = await prisma.portalLessonProgress.findUnique({
-    where: { studentId_lessonId: { studentId, lessonId } },
-    select: { masteryPercent: true },
-  });
+  const masteryPercent = (masteredCount / totalCount) * 100;
+  const totalTimeSec = sessionsAgg._sum.durationSec ?? 0;
   const previousMastery = existingProgress?.masteryPercent ?? 0;
 
   await prisma.portalLessonProgress.upsert({
@@ -293,29 +291,32 @@ async function recomputeLessonProgress(studentId: string, lessonId: string) {
     update: { learnedCount, masteredCount, totalTimeSec, masteryPercent },
   });
 
-  // Fire notification when crossing 80% mastery for the first time
+  // Fire notification (non-blocking, fire-and-forget)
   if (previousMastery < 80 && masteryPercent >= 80) {
-    try {
-      const lesson = await prisma.lesson.findUnique({
-        where: { id: lessonId },
-        select: {
-          title: true, slug: true, order: true,
-          course: { select: { level: true } },
-        },
-      });
-      if (lesson) {
-        const levelMatch = lesson.course.level?.match(/^HSK\s*(\d+)$/i);
-        const levelSlug = levelMatch ? `hsk${levelMatch[1]}` : 'other';
-        await createNotification({
-          userId: studentId,
-          type: NotificationType.PRACTICE_LESSON_MASTERED,
-          title: '🎉 Thành thạo bài học!',
-          message: `Bạn đã thành thạo bài ${lesson.order}: "${lesson.title}" (${Math.round(masteryPercent)}%)`,
-          link: `/portal/student/practice/${levelSlug}/${lesson.slug || lessonId}`,
-        });
-      }
-    } catch (e) { console.error('Practice milestone notification error:', e); }
+    fireMasteryNotification(studentId, lessonId, masteryPercent).catch(console.error);
   }
+}
+
+/** Fire-and-forget notification when student crosses 80% mastery */
+async function fireMasteryNotification(studentId: string, lessonId: string, masteryPercent: number) {
+  const lesson = await prisma.lesson.findUnique({
+    where: { id: lessonId },
+    select: {
+      title: true, slug: true, order: true,
+      course: { select: { level: true } },
+    },
+  });
+  if (!lesson) return;
+
+  const levelMatch = lesson.course.level?.match(/^HSK\s*(\d+)$/i);
+  const levelSlug = levelMatch ? `hsk${levelMatch[1]}` : 'other';
+  await createNotification({
+    userId: studentId,
+    type: NotificationType.PRACTICE_LESSON_MASTERED,
+    title: '🎉 Thành thạo bài học!',
+    message: `Bạn đã thành thạo bài ${lesson.order}: "${lesson.title}" (${Math.round(masteryPercent)}%)`,
+    link: `/portal/student/practice/${levelSlug}/${lesson.slug || lessonId}`,
+  });
 }
 
 /* ───────── Record flashcard action ───────── */

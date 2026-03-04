@@ -1,8 +1,10 @@
 'use server';
 
 /**
- * Schedule Server Actions
- * Server-side actions for schedule management
+ * Schedule Server Actions V2
+ *
+ * Server actions for ScheduleSeries + Schedule operations.
+ * Handles Google Calendar sync, notifications, and auth.
  */
 
 import { revalidatePath } from 'next/cache';
@@ -11,26 +13,38 @@ import {
   getStudentSchedules as getStudentSchedulesService,
   getClassesForSchedule as getClassesService,
   getScheduleById as getScheduleByIdService,
-  createSchedules as createSchedulesService,
-  updateSchedule as updateScheduleService,
+  getScheduleSeriesById as getScheduleSeriesByIdService,
+  createScheduleSeries as createScheduleSeriesService,
+  updateScheduleSeries as updateScheduleSeriesService,
+  deleteScheduleSeries as deleteScheduleSeriesService,
   deleteSchedule as deleteScheduleService,
-  deleteScheduleGroup as deleteScheduleGroupService,
 } from '@/services/portal/schedule.service';
 import type {
   ISchedule,
-  IClass,
-  ICreateScheduleData,
+  IScheduleFormData,
   IUpdateScheduleData,
+  IClass,
 } from '@/interfaces/portal';
 import { auth } from '@/auth';
 import { prisma } from '@/lib/prisma';
-import { createGoogleCalendarEvent, scheduleToGoogleEvent } from '@/lib/utils/google-calendar';
 import { createBulkNotifications } from '@/services/portal/notification.service';
-import { USER_ROLE } from '@/constants/portal/roles';
+import {
+  syncScheduleCreate,
+  syncScheduleUpdate,
+  syncScheduleDelete,
+} from '@/lib/portal/calendar-sync.service';
+import { getCalendarConnection } from '@/lib/portal/calendar-token.service';
+import { USER_ROLE, ENROLLMENT_STATUS } from '@/constants/portal/roles';
 import { NotificationType } from '@/enums/portal/common';
+import { jsDaysToByDay } from '@/lib/utils/rrule';
+import type { RepeatRuleJson } from '@/interfaces/portal/schedule';
+
+// ══════════════════════════════════════════════════════════════════
+// READ
+// ══════════════════════════════════════════════════════════════════
 
 /**
- * Fetch all schedules for current user (role-aware: teacher gets own, student gets enrolled)
+ * Fetch all sessions for current user (role-aware).
  */
 export async function fetchSchedules(): Promise<{
   success: boolean;
@@ -66,7 +80,7 @@ export async function fetchSchedules(): Promise<{
 }
 
 /**
- * Fetch all classes for dropdown
+ * Fetch all classes for dropdown.
  */
 export async function fetchClasses(): Promise<{
   success: boolean;
@@ -91,7 +105,7 @@ export async function fetchClasses(): Promise<{
 }
 
 /**
- * Get schedule by ID
+ * Get session by ID.
  */
 export async function fetchScheduleById(id: string): Promise<{
   success: boolean;
@@ -115,16 +129,19 @@ export async function fetchScheduleById(id: string): Promise<{
   }
 }
 
+// ══════════════════════════════════════════════════════════════════
+// CREATE
+// ══════════════════════════════════════════════════════════════════
+
 /**
- * Create schedule(s)
+ * Create a schedule series + schedules from form data.
  */
 export async function createSchedule(
-  data: ICreateScheduleData
+  data: IScheduleFormData
 ): Promise<{
   success: boolean;
   count?: number;
   schedules?: ISchedule[];
-  syncError?: string;
   error?: string;
 }> {
   try {
@@ -133,45 +150,83 @@ export async function createSchedule(
       return { success: false, error: 'Unauthorized' };
     }
 
-    const result = await createSchedulesService(data, session.user.id);
+    // Convert form data → service DTO
+    const isRecurring = !!(data.isRecurring && data.weekdays && data.weekdays.length > 0 && data.endDate);
 
-    // Notify enrolled students about new schedule (fire-and-forget)
+    let repeatRule: RepeatRuleJson | undefined;
+    if (isRecurring && data.weekdays && data.endDate) {
+      repeatRule = {
+        freq: 'WEEKLY',
+        byWeekDays: jsDaysToByDay(data.weekdays),
+        untilDateLocal: data.endDate,
+      };
+    }
+
+    const result = await createScheduleSeriesService(
+      {
+        classId: data.classId,
+        title: data.title,
+        description: data.description,
+        startDateLocal: data.startDate,
+        startTimeLocal: data.startTime,
+        endTimeLocal: data.endTime,
+        location: data.location,
+        meetingLink: data.meetingLink,
+        isRecurring,
+        repeatRule,
+        syncToGoogle: data.syncToGoogle,
+      },
+      session.user.id
+    );
+
+    // ── Notifications ──
     try {
       const enrollments = await prisma.portalClassEnrollment.findMany({
-        where: { classId: data.classId, status: 'ENROLLED' },
+        where: { classId: data.classId, status: ENROLLMENT_STATUS.ENROLLED },
         select: { studentId: true },
       });
-      const studentIds = enrollments.map((e) => e.studentId);
+      const studentIds = enrollments.map(e => e.studentId);
       if (studentIds.length > 0) {
         await createBulkNotifications(studentIds, {
           type: NotificationType.SCHEDULE_CREATED,
-          title: 'L\u1ecbch h\u1ecdc m\u1edbi',
-          message: `L\u1ecbch h\u1ecdc m\u1edbi: "${data.title}"`,
+          title: 'Lịch học mới',
+          message: `Lịch học mới: "${data.title}"`,
           link: '/portal/student/schedule',
         });
       }
-    } catch (e) { console.error('Schedule notification error:', e); }
+    } catch (e) {
+      console.error('Schedule notification error:', e);
+    }
 
-    // Auto-sync to Google Calendar if requested
-    let syncError: string | undefined;
-    if (data.syncToGoogle && result.schedules?.length) {
-      try {
-        // Sync each created schedule to Google Calendar
-        for (const schedule of result.schedules) {
-          const syncResult = await syncScheduleToGoogleCalendar(schedule.id);
-          if (!syncResult.success) {
-            syncError = syncResult.error;
-            break; // Stop on first sync failure
-          }
-        }
-      } catch (e) {
-        syncError = e instanceof Error ? e.message : 'Google Calendar sync failed';
-        console.error('Google Calendar auto-sync error:', e);
+    // ── Google Calendar sync (non-blocking) ──
+    try {
+      if (data.syncToGoogle) {
+        await syncScheduleCreate({
+          id: result.series.id,
+          classId: data.classId,
+          teacherId: session.user.id,
+          title: data.title,
+          description: data.description || null,
+          location: data.location || null,
+          meetingLink: data.meetingLink || null,
+          startDateLocal: data.startDate,
+          startTimeLocal: data.startTime,
+          endTimeLocal: data.endTime,
+          isRecurring,
+          repeatRule: repeatRule || null,
+        });
+        console.log(`[ScheduleAction] Calendar sync completed for schedule series ${result.series.id}`);
       }
+    } catch (syncErr) {
+      console.error('[ScheduleAction] Calendar sync error (non-blocking):', syncErr);
     }
 
     revalidatePath('/portal/teacher/schedule');
-    return { success: true, ...result, syncError };
+    return {
+      success: true,
+      count: result.sessions.length,
+      schedules: result.sessions,
+    };
   } catch (error) {
     console.error('Error creating schedule:', error);
     return {
@@ -181,15 +236,20 @@ export async function createSchedule(
   }
 }
 
+// ══════════════════════════════════════════════════════════════════
+// UPDATE
+// ══════════════════════════════════════════════════════════════════
+
 /**
- * Update schedule
+ * Update a schedule series and propagate to future schedules.
+ * Accepts seriesId + form data.
  */
 export async function updateSchedule(
-  id: string,
-  data: IUpdateScheduleData
+  seriesId: string,
+  data: IScheduleFormData
 ): Promise<{
   success: boolean;
-  schedule?: ISchedule;
+  schedules?: ISchedule[];
   error?: string;
 }> {
   try {
@@ -198,29 +258,64 @@ export async function updateSchedule(
       return { success: false, error: 'Unauthorized' };
     }
 
-    const schedule = await updateScheduleService(id, data);
+    const updateData: IUpdateScheduleData = {
+      title: data.title,
+      description: data.description,
+      startDateLocal: data.startDate,
+      startTimeLocal: data.startTime,
+      endTimeLocal: data.endTime,
+      location: data.location,
+      meetingLink: data.meetingLink,
+    };
 
-    // Notify enrolled students about schedule change
+    const result = await updateScheduleSeriesService(seriesId, updateData);
+
+    // ── Notifications ──
     try {
-      if (schedule?.classId) {
+      if (result.series.classId) {
         const enrollments = await prisma.portalClassEnrollment.findMany({
-          where: { classId: schedule.classId, status: 'ENROLLED' },
+          where: { classId: result.series.classId, status: ENROLLMENT_STATUS.ENROLLED },
           select: { studentId: true },
         });
-        const studentIds = enrollments.map((e) => e.studentId);
+        const studentIds = enrollments.map(e => e.studentId);
         if (studentIds.length > 0) {
           await createBulkNotifications(studentIds, {
             type: NotificationType.SCHEDULE_UPDATED,
-            title: 'C\u1eadp nh\u1eadt l\u1ecbch h\u1ecdc',
-            message: `L\u1ecbch h\u1ecdc "${schedule.title}" \u0111\u00e3 \u0111\u01b0\u1ee3c c\u1eadp nh\u1eadt`,
+            title: 'Cập nhật lịch học',
+            message: `Lịch học "${data.title}" đã được cập nhật`,
             link: '/portal/student/schedule',
           });
         }
       }
-    } catch (e) { console.error('Schedule update notification error:', e); }
+    } catch (e) {
+      console.error('Schedule update notification error:', e);
+    }
+
+    // ── Google Calendar sync update ──
+    try {
+      if (result.series.isGoogleSynced && result.series.googleEventId) {
+        await syncScheduleUpdate({
+          id: seriesId,
+          classId: result.series.classId,
+          teacherId: result.series.teacherId,
+          title: data.title,
+          description: data.description || null,
+          location: data.location || null,
+          meetingLink: data.meetingLink || null,
+          startDateLocal: data.startDate,
+          startTimeLocal: data.startTime,
+          endTimeLocal: data.endTime,
+          isRecurring: result.series.isRecurring,
+          repeatRule: result.series.repeatRule as RepeatRuleJson | null,
+          googleEventId: result.series.googleEventId,
+        });
+      }
+    } catch (syncErr) {
+      console.error('[ScheduleAction] Calendar sync update error (non-blocking):', syncErr);
+    }
 
     revalidatePath('/portal/teacher/schedule');
-    return { success: true, schedule };
+    return { success: true, schedules: result.sessions };
   } catch (error) {
     console.error('Error updating schedule:', error);
     return {
@@ -230,10 +325,14 @@ export async function updateSchedule(
   }
 }
 
+// ══════════════════════════════════════════════════════════════════
+// DELETE
+// ══════════════════════════════════════════════════════════════════
+
 /**
- * Delete schedule
+ * Delete a single schedule.
  */
-export async function deleteSchedule(id: string): Promise<{
+export async function deleteSchedule(sessionId: string): Promise<{
   success: boolean;
   error?: string;
 }> {
@@ -243,31 +342,33 @@ export async function deleteSchedule(id: string): Promise<{
       return { success: false, error: 'Unauthorized' };
     }
 
-    // Get schedule info before deleting for notification
-    const scheduleInfo = await prisma.portalSchedule.findUnique({
-      where: { id },
-      select: { title: true, classId: true },
+    // Get session info before deleting for notification
+    const sessionInfo = await prisma.portalSchedule.findUnique({
+      where: { id: sessionId },
+      select: { title: true, classId: true, seriesId: true },
     });
 
-    await deleteScheduleService(id);
+    await deleteScheduleService(sessionId);
 
-    // Notify enrolled students
-    if (scheduleInfo?.classId) {
+    // Notify students
+    if (sessionInfo?.classId) {
       try {
         const enrollments = await prisma.portalClassEnrollment.findMany({
-          where: { classId: scheduleInfo.classId, status: 'ENROLLED' },
+          where: { classId: sessionInfo.classId, status: ENROLLMENT_STATUS.ENROLLED },
           select: { studentId: true },
         });
-        const studentIds = enrollments.map((e) => e.studentId);
+        const studentIds = enrollments.map(e => e.studentId);
         if (studentIds.length > 0) {
           await createBulkNotifications(studentIds, {
             type: NotificationType.SCHEDULE_CANCELLED,
-            title: 'L\u1ecbch h\u1ecdc b\u1ecb h\u1ee7y',
-            message: `L\u1ecbch h\u1ecdc "${scheduleInfo.title}" \u0111\u00e3 b\u1ecb h\u1ee7y`,
+            title: 'Lịch học bị hủy',
+            message: `Lịch học "${sessionInfo.title}" đã bị hủy`,
             link: '/portal/student/schedule',
           });
         }
-      } catch (e) { console.error('Schedule cancel notification error:', e); }
+      } catch (e) {
+        console.error('Schedule cancel notification error:', e);
+      }
     }
 
     revalidatePath('/portal/teacher/schedule');
@@ -282,9 +383,9 @@ export async function deleteSchedule(id: string): Promise<{
 }
 
 /**
- * Delete all schedules in a recurrence group (batch delete)
+ * Delete entire schedule series (all schedules + Google event).
  */
-export async function deleteScheduleGroup(recurrenceGroupId: string): Promise<{
+export async function deleteScheduleGroup(seriesId: string): Promise<{
   success: boolean;
   deletedIds?: string[];
   error?: string;
@@ -295,7 +396,45 @@ export async function deleteScheduleGroup(recurrenceGroupId: string): Promise<{
       return { success: false, error: 'Unauthorized' };
     }
 
-    const deletedIds = await deleteScheduleGroupService(recurrenceGroupId);
+    // Get schedule series info for Google sync + notifications
+    const scheduleSeries = await getScheduleSeriesByIdService(seriesId);
+
+    // Delete from Google Calendar first
+    if (scheduleSeries?.isGoogleSynced && scheduleSeries?.googleEventId) {
+      try {
+        await syncScheduleDelete({
+          id: seriesId,
+          teacherId: scheduleSeries.teacherId,
+          googleEventId: scheduleSeries.googleEventId,
+        });
+      } catch (syncErr) {
+        console.error('[ScheduleAction] Calendar sync delete error (non-blocking):', syncErr);
+      }
+    }
+
+    const deletedIds = await deleteScheduleSeriesService(seriesId);
+
+    // Notify students
+    if (scheduleSeries?.classId) {
+      try {
+        const enrollments = await prisma.portalClassEnrollment.findMany({
+          where: { classId: scheduleSeries.classId, status: ENROLLMENT_STATUS.ENROLLED },
+          select: { studentId: true },
+        });
+        const studentIds = enrollments.map(e => e.studentId);
+        if (studentIds.length > 0) {
+          await createBulkNotifications(studentIds, {
+            type: NotificationType.SCHEDULE_CANCELLED,
+            title: 'Lịch học bị hủy',
+            message: `Nhóm lịch học "${scheduleSeries.title}" đã bị hủy`,
+            link: '/portal/student/schedule',
+          });
+        }
+      } catch (e) {
+        console.error('Schedule group cancel notification error:', e);
+      }
+    }
+
     revalidatePath('/portal/teacher/schedule');
     return { success: true, deletedIds };
   } catch (error) {
@@ -307,14 +446,17 @@ export async function deleteScheduleGroup(recurrenceGroupId: string): Promise<{
   }
 }
 
+// ══════════════════════════════════════════════════════════════════
+// GOOGLE CALENDAR
+// ══════════════════════════════════════════════════════════════════
+
 /**
- * Sync schedule to Google Calendar
+ * Manually sync a schedule series to Google Calendar (from drawer button).
  */
-export async function syncScheduleToGoogleCalendar(scheduleId: string): Promise<{
+export async function syncScheduleToGoogleCalendar(sessionId: string): Promise<{
   success: boolean;
   message?: string;
   googleEventId?: string;
-  googleEventLink?: string;
   error?: string;
 }> {
   try {
@@ -323,142 +465,75 @@ export async function syncScheduleToGoogleCalendar(scheduleId: string): Promise<
       return { success: false, error: 'Unauthorized' };
     }
 
-    // Fetch the schedule
-    const schedule = await prisma.portalSchedule.findUnique({
-      where: { id: scheduleId },
-      include: {
-        class: {
-          include: {
-            enrollments: {
-              where: { status: 'ENROLLED' },
-              include: {
-                student: {
-                  select: { email: true },
-                },
-              },
-            },
-          },
-        },
-      },
+    // Get the schedule to find the schedule series
+    const sessionInfo = await prisma.portalSchedule.findUnique({
+      where: { id: sessionId },
+      select: { seriesId: true },
     });
 
-    if (!schedule) {
-      return { success: false, error: 'Schedule not found' };
+    if (!sessionInfo?.seriesId) {
+      return { success: false, error: 'Không tìm thấy lịch học' };
     }
 
-    // Verify user owns this schedule
-    if (schedule.teacherId !== session.user.id) {
+    const scheduleSeries = await getScheduleSeriesByIdService(sessionInfo.seriesId);
+    if (!scheduleSeries) {
+      return { success: false, error: 'Không tìm thấy nhóm lịch học' };
+    }
+
+    if (scheduleSeries.teacherId !== session.user.id) {
       return { success: false, error: 'Unauthorized' };
     }
 
-    // Check if already synced
-    if (schedule.syncedToGoogle && schedule.googleEventId) {
+    // Check teacher connection
+    const connection = await getCalendarConnection(session.user.id);
+    if (!connection || !connection.isValid) {
+      return {
+        success: false,
+        error: 'Google Calendar chưa được kết nối. Vui lòng kết nối trong phần Cài đặt.',
+      };
+    }
+
+    // Already synced?
+    if (scheduleSeries.isGoogleSynced && scheduleSeries.googleEventId) {
       return {
         success: true,
-        message: 'Already synced',
-        googleEventId: schedule.googleEventId,
-        googleEventLink: `https://calendar.google.com/calendar/event?eid=${schedule.googleEventId}`,
+        message: 'Đã đồng bộ trước đó',
+        googleEventId: scheduleSeries.googleEventId,
       };
     }
 
-    // Get user's Google access token from Account table
-    const account = await prisma.account.findFirst({
-      where: {
-        userId: session.user.id,
-        provider: 'google',
-      },
-    });
-
-    if (!account?.access_token) {
-      return {
-        success: false,
-        error: 'Google Calendar chưa được kết nối. Vui lòng đăng nhập bằng Google để đồng bộ.',
-      };
-    }
-
-    // Check if token is expired and try to refresh
-    let accessToken = account.access_token;
-    if (account.expires_at && account.expires_at * 1000 < Date.now()) {
-      if (!account.refresh_token) {
-        return {
-          success: false,
-          error: 'Phiên Google đã hết hạn. Vui lòng đăng xuất và đăng nhập lại bằng Google.',
-        };
-      }
-
-      // Refresh the token
-      const tokenResponse = await fetch('https://oauth2.googleapis.com/token', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-        body: new URLSearchParams({
-          client_id: process.env.GOOGLE_CLIENT_ID!,
-          client_secret: process.env.GOOGLE_CLIENT_SECRET!,
-          refresh_token: account.refresh_token,
-          grant_type: 'refresh_token',
-        }),
-      });
-
-      if (!tokenResponse.ok) {
-        return {
-          success: false,
-          error: 'Không thể làm mới token Google. Vui lòng đăng nhập lại.',
-        };
-      }
-
-      const tokenData = await tokenResponse.json();
-      accessToken = tokenData.access_token;
-
-      // Update the stored token
-      await prisma.account.update({
-        where: { id: account.id },
-        data: {
-          access_token: tokenData.access_token,
-          expires_at: tokenData.expires_in
-            ? Math.floor(Date.now() / 1000) + tokenData.expires_in
-            : account.expires_at,
-        },
-      });
-    }
-
-    // Prepare attendees (students in the class)
-    const attendees = schedule.class.enrollments.map((e) => e.student.email);
-
-    // Convert schedule to Google Calendar event
-    const googleEvent = scheduleToGoogleEvent({
-      title: schedule.title,
-      description: schedule.description || undefined,
-      startTime: schedule.startTime,
-      endTime: schedule.endTime,
-      location: schedule.location || undefined,
-      meetingLink: schedule.meetingLink || undefined,
-      attendees,
-    });
-
-    // Create event in Google Calendar
-    const result = await createGoogleCalendarEvent(accessToken, googleEvent);
-
-    if (!result.success) {
-      return {
-        success: false,
-        error: result.error || 'Failed to sync with Google Calendar',
-      };
-    }
-
-    // Update schedule with Google event ID
-    await prisma.portalSchedule.update({
-      where: { id: scheduleId },
-      data: {
-        googleEventId: result.eventId,
-        syncedToGoogle: true,
-      },
+    // Sync
+    const syncResult = await syncScheduleCreate({
+      id: scheduleSeries.id,
+      classId: scheduleSeries.classId,
+      teacherId: scheduleSeries.teacherId,
+      title: scheduleSeries.title,
+      description: scheduleSeries.description || null,
+      location: scheduleSeries.location || null,
+      meetingLink: scheduleSeries.meetingLink || null,
+      startDateLocal: scheduleSeries.startDateLocal,
+      startTimeLocal: scheduleSeries.startTimeLocal,
+      endTimeLocal: scheduleSeries.endTimeLocal,
+      isRecurring: scheduleSeries.isRecurring,
+      repeatRule: scheduleSeries.repeatRule as RepeatRuleJson | null,
     });
 
     revalidatePath('/portal/teacher/schedule');
+
+    if (syncResult.googleEventId) {
+      return {
+        success: true,
+        message: `Đã đồng bộ ${scheduleSeries.isRecurring ? 'chuỗi lịch' : 'buổi học'} với Google Calendar`,
+        googleEventId: syncResult.googleEventId,
+      };
+    }
+
     return {
-      success: true,
-      message: 'Đã đồng bộ với Google Calendar thành công',
-      googleEventId: result.eventId,
-      googleEventLink: `https://calendar.google.com/calendar/event?eid=${result.eventId}`,
+      success: syncResult.success,
+      message: syncResult.success
+        ? 'Đồng bộ hoàn tất (GV chưa kết nối Google Calendar)'
+        : undefined,
+      error: syncResult.error,
     };
   } catch (error) {
     console.error('Error syncing to Google Calendar:', error);
@@ -466,5 +541,36 @@ export async function syncScheduleToGoogleCalendar(scheduleId: string): Promise<
       success: false,
       error: error instanceof Error ? error.message : 'Failed to sync with Google Calendar',
     };
+  }
+}
+
+/**
+ * Get calendar connection status for current user.
+ */
+export async function getCalendarStatus(): Promise<{
+  connected: boolean;
+  isValid: boolean;
+  message: string;
+}> {
+  try {
+    const session = await auth();
+    if (!session?.user?.id) {
+      return { connected: false, isValid: false, message: 'Chưa đăng nhập' };
+    }
+
+    const connection = await getCalendarConnection(session.user.id);
+    if (!connection) {
+      return { connected: false, isValid: false, message: 'Chưa kết nối Google Calendar' };
+    }
+
+    return {
+      connected: true,
+      isValid: connection.isValid,
+      message: connection.isValid
+        ? 'Google Calendar đã kết nối'
+        : 'Kết nối không hợp lệ — vui lòng kết nối lại',
+    };
+  } catch {
+    return { connected: false, isValid: false, message: 'Lỗi kiểm tra kết nối' };
   }
 }

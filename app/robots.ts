@@ -1,7 +1,8 @@
 import { MetadataRoute } from 'next';
+import { SITE_URL } from '@/constants/brand';
 
 export default function robots(): MetadataRoute.Robots {
-  const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://hskmaster.edu.vn';
+  const baseUrl = SITE_URL;
 
   return {
     rules: [

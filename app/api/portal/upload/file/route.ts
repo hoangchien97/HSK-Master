@@ -16,6 +16,28 @@ import {
  */
 export async function POST(req: NextRequest) {
   try {
+    // ── Pre-flight: check Supabase env vars ──
+    const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL
+    const supabaseKey =
+      process.env.SUPABASE_SERVICE_ROLE_KEY ||
+      process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY
+
+    if (!supabaseUrl || !supabaseKey) {
+      console.error(
+        "⚠️  Missing Supabase Storage env vars. Required:\n" +
+        "  NEXT_PUBLIC_SUPABASE_URL\n" +
+        "  NEXT_PUBLIC_SUPABASE_ANON_KEY (or SUPABASE_SERVICE_ROLE_KEY)\n" +
+        "Get them from Supabase Dashboard > Settings > API"
+      )
+      return NextResponse.json(
+        {
+          error:
+            "Chưa cấu hình Supabase Storage. Vui lòng thêm NEXT_PUBLIC_SUPABASE_ANON_KEY vào file .env",
+        },
+        { status: 503 },
+      )
+    }
+
     const session = await auth()
     if (!session?.user?.id) {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 })

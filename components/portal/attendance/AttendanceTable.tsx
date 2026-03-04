@@ -143,7 +143,7 @@ export default function AttendanceTable({
         <CardBody>
           <div className="flex flex-col items-center py-12 gap-3">
             <Calendar className="w-12 h-12 text-default-300" />
-            <p className="text-default-500 font-medium">Không có buổi học nào trong tháng này</p>
+            <p className="text-default-500 font-medium">Chưa có buổi học nào</p>
             <p className="text-sm text-default-400">
               Hãy tạo lịch học cho lớp trước khi điểm danh
             </p>
@@ -155,44 +155,6 @@ export default function AttendanceTable({
 
   return (
     <div className="flex-1 flex flex-col min-h-0 gap-2">
-      {/* Student count + Today summary — OUTSIDE the table card */}
-      <div className="shrink-0 flex flex-wrap items-center justify-between px-1 py-1">
-        <div className="flex items-center gap-3">
-          <span className="text-sm text-default-500">
-            Hiển thị <strong>{filteredStudents.length}</strong> / {totalStudents} học viên
-          </span>
-        </div>
-        {todaySummary && (
-          <div className="flex items-center gap-3">
-            <Chip
-              size="sm"
-              variant="flat"
-              color="success"
-              startContent={<span className="w-2 h-2 rounded-full bg-emerald-500 ml-1" />}
-            >
-              Có mặt: {todaySummary.present}
-            </Chip>
-            <Chip
-              size="sm"
-              variant="flat"
-              color="danger"
-              startContent={<span className="w-2 h-2 rounded-full bg-red-500 ml-1" />}
-            >
-              Vắng: {todaySummary.absent}
-            </Chip>
-            {todaySummary.unmarked > 0 && (
-              <Chip
-                size="sm"
-                variant="flat"
-                startContent={<span className="w-2 h-2 rounded-full bg-gray-300 ml-1" />}
-              >
-                Chưa điểm danh: {todaySummary.unmarked}
-              </Chip>
-            )}
-          </div>
-        )}
-      </div>
-
       {/* Table card with mobile scroll */}
       <Card shadow="sm" className="flex-1 overflow-hidden flex flex-col min-h-0">
         {/* Scrollable table — horizontal scroll for mobile */}
@@ -285,7 +247,7 @@ export default function AttendanceTable({
                         {student.name}
                       </p>
                       <p className="text-[11px] text-gray-400 truncate">
-                        MSHV: {student.name.toUpperCase().slice(0, 8)}
+                        {student.email || '—'}
                       </p>
                     </div>
                   </div>

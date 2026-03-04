@@ -14,7 +14,8 @@ import {
 import { Calendar, Repeat } from "lucide-react";
 import { CModal } from "../common";
 import dayjs from "dayjs";
-import type { IClass, IScheduleFormData, ISchedule } from "@/interfaces/portal";
+import type { IClass, IScheduleFormData } from "@/interfaces/portal";
+import type { ISchedule } from "@/interfaces/portal/schedule";
 import {
   getDefaultRecurrenceEndDate,
   previewRecurrenceCount,
@@ -149,10 +150,7 @@ export default function ScheduleModal({
     setIsSubmitting(true);
 
     try {
-      const startDateTime = dayjs(`${formData.startDate} ${formData.startTime}`).toDate();
-      const endDateTime = dayjs(`${formData.startDate} ${formData.endTime}`).toDate();
-
-      if (endDateTime <= startDateTime) {
+      if ((formData.endTime as string) <= (formData.startTime as string)) {
         setErrors({ endTime: "Giờ kết thúc phải sau giờ bắt đầu" });
         return;
       }
@@ -161,20 +159,16 @@ export default function ScheduleModal({
         classId,
         title: formData.title as string,
         description: formData.description as string,
-        startTime: startDateTime,
-        endTime: endDateTime,
+        startDate: formData.startDate as string,
+        startTime: formData.startTime as string,
+        endTime: formData.endTime as string,
         location: formData.location as string || undefined,
         meetingLink: formData.meetingLink as string || undefined,
         syncToGoogle,
+        isRecurring: !editMode && enableRecurrence && selectedWeekdays.length > 0,
+        weekdays: enableRecurrence ? selectedWeekdays : undefined,
+        endDate: enableRecurrence ? endDate : undefined,
       };
-
-      if (!editMode && enableRecurrence && selectedWeekdays.length > 0 && endDate) {
-        payload.recurrence = {
-          interval: 1,
-          weekdays: selectedWeekdays,
-          endDate,
-        };
-      }
 
       await onSubmit(payload);
     } catch (error) {

@@ -7,7 +7,7 @@
 
 import { auth } from '@/auth';
 import { prisma } from '@/lib/prisma';
-import { USER_ROLE } from '@/constants/portal/roles';
+import { USER_ROLE, ENROLLMENT_STATUS } from '@/constants/portal/roles';
 import { revalidatePath } from 'next/cache';
 import { createBulkNotifications, createNotification } from '@/services/portal/notification.service';
 import { NotificationType } from '@/enums/portal/common';
@@ -34,7 +34,7 @@ export interface AttendanceMatrixData {
     status: string;
   }>;
   attendanceMap: Record<string, Record<string, { id: string; status: string; notes: string | null }>>;
-  month: string;
+  month?: string;
 }
 
 /**
@@ -102,7 +102,7 @@ export async function fetchStudentAttendanceClasses(): Promise<{
     }
 
     const enrollments = await prisma.portalClassEnrollment.findMany({
-      where: { studentId: session.user.id, status: 'ENROLLED' },
+      where: { studentId: session.user.id, status: ENROLLMENT_STATUS.ENROLLED },
       include: {
         class: {
           select: {
@@ -135,11 +135,13 @@ export async function fetchStudentAttendanceClasses(): Promise<{
 }
 
 /**
- * Fetch attendance matrix data for a class and month
+ * Fetch attendance matrix data for a class.
+ * When `month` is provided (YYYY-MM), limits schedules & attendance to that month.
+ * When omitted, returns **all** sessions from the class startDate → endDate (or now).
  */
 export async function fetchAttendanceMatrix(
   classId: string,
-  month: string // YYYY-MM
+  month?: string // YYYY-MM — optional
 ): Promise<{
   success: boolean;
   data?: AttendanceMatrixData;
@@ -169,7 +171,7 @@ export async function fetchAttendanceMatrix(
       }
     } else if (user.role === USER_ROLE.STUDENT) {
       const enrollment = await prisma.portalClassEnrollment.findFirst({
-        where: { classId, studentId: user.id, status: 'ENROLLED' },
+        where: { classId, studentId: user.id, status: ENROLLMENT_STATUS.ENROLLED },
       });
       if (!enrollment) {
         return { success: false, error: 'Bạn không thuộc lớp học này' };
@@ -181,7 +183,7 @@ export async function fetchAttendanceMatrix(
       where: { id: classId },
       include: {
         enrollments: {
-          where: { status: 'ENROLLED' },
+          where: { status: ENROLLMENT_STATUS.ENROLLED },
           include: {
             student: {
               select: {
@@ -203,22 +205,43 @@ export async function fetchAttendanceMatrix(
       return { success: false, error: 'Lớp học không tồn tại' };
     }
 
-    // Parse month
-    const [year, mon] = month.split('-').map(Number);
-    const startDate = new Date(year, mon - 1, 1);
-    const endDate = new Date(year, mon, 0, 23, 59, 59, 999);
+    // Determine date range: month-based or full class range
+    let startDate: Date;
+    let endDate: Date;
 
-    // Get schedules for this class in the month
+    if (month) {
+      const [year, mon] = month.split('-').map(Number);
+      startDate = new Date(year, mon - 1, 1);
+      endDate = new Date(year, mon, 0, 23, 59, 59, 999);
+    } else {
+      startDate = classData.startDate;
+
+      if (classData.endDate) {
+        endDate = new Date(classData.endDate.getTime());
+      } else {
+        // Fallback: find the last schedule date for this class
+        const lastSchedule = await prisma.portalSchedule.findFirst({
+          where: { classId },
+          orderBy: { startAt: 'desc' },
+          select: { startAt: true },
+        });
+        endDate = lastSchedule ? new Date(lastSchedule.startAt.getTime()) : new Date();
+      }
+
+      endDate.setHours(23, 59, 59, 999);
+    }
+
+    // Get schedules for this class in the date range
     const schedules = await prisma.portalSchedule.findMany({
       where: {
         classId,
-        startTime: { gte: startDate, lte: endDate },
+        startAt: { gte: startDate, lte: endDate },
       },
-      orderBy: { startTime: 'asc' },
+      orderBy: { startAt: 'asc' },
       select: {
         id: true,
-        startTime: true,
-        endTime: true,
+        startAt: true,
+        endAt: true,
         title: true,
         status: true,
       },
@@ -270,9 +293,9 @@ export async function fetchAttendanceMatrix(
         })),
         schedules: schedules.map((s) => ({
           id: s.id,
-          date: s.startTime.toISOString().split('T')[0],
-          startTime: s.startTime.toISOString(),
-          endTime: s.endTime.toISOString(),
+          date: s.startAt.toISOString().split('T')[0],
+          startTime: s.startAt.toISOString(),
+          endTime: s.endAt.toISOString(),
           title: s.title,
           status: s.status,
         })),
@@ -403,62 +426,4 @@ export async function saveAttendance(
   }
 }
 
-/**
- * Fetch attendance records for the current student in a specific class and month
- */
-export async function fetchStudentAttendance(
-  classId: string,
-  month: string // YYYY-MM
-): Promise<{
-  success: boolean;
-  data?: Array<{ date: string; status: string; notes: string | null }>;
-  error?: string;
-}> {
-  try {
-    const session = await auth();
-    if (!session?.user?.id) {
-      return { success: false, error: 'Unauthorized' };
-    }
 
-    // Verify student is enrolled in this class
-    const enrollment = await prisma.portalClassEnrollment.findFirst({
-      where: { classId, studentId: session.user.id, status: 'ENROLLED' },
-    });
-
-    if (!enrollment) {
-      return { success: false, error: 'Bạn không thuộc lớp học này' };
-    }
-
-    // Parse month
-    const [year, mon] = month.split('-').map(Number);
-    const startDate = new Date(year, mon - 1, 1);
-    const endDate = new Date(year, mon, 0, 23, 59, 59, 999);
-
-    // Get attendance records for this student
-    const records = await prisma.portalAttendance.findMany({
-      where: {
-        classId,
-        studentId: session.user.id,
-        date: { gte: startDate, lte: endDate },
-      },
-      select: {
-        date: true,
-        status: true,
-        notes: true,
-      },
-      orderBy: { date: 'asc' },
-    });
-
-    return {
-      success: true,
-      data: records.map((r) => ({
-        date: r.date.toISOString().split('T')[0],
-        status: r.status,
-        notes: r.notes,
-      })),
-    };
-  } catch (error) {
-    console.error('Error fetching student attendance:', error);
-    return { success: false, error: 'Không thể tải dữ liệu điểm danh' };
-  }
-}

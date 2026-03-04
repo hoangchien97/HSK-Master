@@ -40,11 +40,12 @@ export function CModal({
       scrollBehavior={scrollBehavior}
       placement="center"
       classNames={{
-        wrapper: "items-center justify-center",
+        wrapper: "flex items-center justify-center min-h-screen",
+        base: "mx-auto",
         header: "py-4 px-6 md:py-6 md:px-6 border-b border-default-200",
         footer: "py-4 px-6 md:py-6 md:px-6 border-t border-default-200",
         closeButton: "top-[14px] right-4",
-        body: "max-h-[90vh] overflow-y-auto px-4 py-4 md:px-6 md:py-6 scrollbar-thin scrollbar-thumb-gray-300 scrollbar-track-transparent hover:scrollbar-thumb-gray-400",
+        body: "max-h-[70vh] overflow-y-auto px-4 py-4 md:px-6 md:py-6 scrollbar-thin scrollbar-thumb-gray-300 scrollbar-track-transparent hover:scrollbar-thumb-gray-400",
       }}
     >
       <ModalContent>

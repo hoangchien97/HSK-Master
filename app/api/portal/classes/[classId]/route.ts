@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server"
 import { auth } from "@/auth"
 import { prisma } from "@/lib/prisma"
+import { ENROLLMENT_STATUS } from "@/constants/portal/roles"
 
 // GET - Fetch class detail with enrollments
 export async function GET(
@@ -38,7 +39,7 @@ export async function GET(
         },
         enrollments: {
           where: {
-            status: "ENROLLED",
+            status: ENROLLMENT_STATUS.ENROLLED,
           },
           include: {
             student: {

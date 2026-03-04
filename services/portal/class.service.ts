@@ -2,7 +2,7 @@
 
 import { prisma } from '@/lib/prisma';
 import type { IClass, ICreateClassDTO, IUpdateClassDTO, IGetClassResponse } from '@/interfaces/portal';
-import { CLASS_STATUS } from '@/constants/portal/roles';
+import { CLASS_STATUS, ENROLLMENT_STATUS } from '@/constants/portal/roles';
 import type { Prisma } from '@prisma/client';
 
 /* ───────── Fetch classes with filtering & pagination ───────── */
@@ -31,7 +31,7 @@ export async function getClasses(
       include: {
         teacher: { select: { id: true, name: true, email: true, image: true } },
         enrollments: {
-          where: { status: 'ENROLLED' },
+          where: { status: ENROLLMENT_STATUS.ENROLLED },
           select: {
             studentId: true,
             student: { select: { id: true, name: true, username: true, email: true, image: true } },
@@ -77,7 +77,7 @@ export async function createClass(
         enrollments: {
           create: data.studentIds.map((studentId) => ({
             studentId,
-            status: 'ENROLLED',
+            status: ENROLLMENT_STATUS.ENROLLED,
           })),
         },
       }),
@@ -85,7 +85,7 @@ export async function createClass(
     include: {
       teacher: { select: { id: true, name: true, email: true, image: true } },
       enrollments: {
-        where: { status: 'ENROLLED' },
+        where: { status: ENROLLMENT_STATUS.ENROLLED },
         select: {
           studentId: true,
           student: { select: { id: true, name: true, username: true, email: true, image: true } },
@@ -113,7 +113,7 @@ export async function updateClass(
   if (data.studentIds !== undefined) {
     // Get current enrolled student IDs
     const currentEnrollments = await prisma.portalClassEnrollment.findMany({
-      where: { classId, status: 'ENROLLED' },
+      where: { classId, status: ENROLLMENT_STATUS.ENROLLED },
       select: { studentId: true },
     });
     const currentIds = new Set(currentEnrollments.map((e) => e.studentId));
@@ -129,7 +129,7 @@ export async function updateClass(
         data: toAdd.map((studentId) => ({
           classId,
           studentId,
-          status: 'ENROLLED',
+          status: ENROLLMENT_STATUS.ENROLLED,
         })),
         skipDuplicates: true,
       });
@@ -157,7 +157,7 @@ export async function updateClass(
     include: {
       teacher: { select: { id: true, name: true, email: true, image: true } },
       enrollments: {
-        where: { status: 'ENROLLED' },
+        where: { status: ENROLLMENT_STATUS.ENROLLED },
         select: {
           studentId: true,
           student: { select: { id: true, name: true, username: true, email: true, image: true } },
@@ -193,7 +193,7 @@ export async function getStudentClasses(
 
   // Find enrolled class IDs
   const enrollments = await prisma.portalClassEnrollment.findMany({
-    where: { studentId, status: 'ENROLLED' },
+    where: { studentId, status: ENROLLMENT_STATUS.ENROLLED },
     select: { classId: true },
   });
   const classIds = enrollments.map((e) => e.classId);
@@ -220,7 +220,7 @@ export async function getStudentClasses(
       include: {
         teacher: { select: { id: true, name: true, email: true, image: true } },
         enrollments: {
-          where: { status: 'ENROLLED' },
+          where: { status: ENROLLMENT_STATUS.ENROLLED },
           select: {
             studentId: true,
             student: { select: { id: true, name: true, username: true, email: true, image: true } },

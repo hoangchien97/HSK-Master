@@ -60,7 +60,7 @@ export default function MobileMenu({ isOpen, onClose }: MobileMenuProps) {
 
       {/* Sidebar Menu with slide animation */}
       <div
-        className={`fixed inset-y-0 left-0 w-[85%] max-w-[320px] bg-surface-light dark:bg-surface-dark shadow-2xl flex flex-col h-screen transition-all duration-300 ease-out ${isOpen ? 'translate-x-0' : '-translate-x-full'}`}
+        className={`fixed inset-y-0 left-0 w-[85%] max-w-[320px] bg-surface-light dark:bg-surface-dark shadow-2xl flex flex-col h-dvh max-h-dvh transition-all duration-300 ease-out ${isOpen ? 'translate-x-0' : '-translate-x-full'}`}
         role="dialog"
         aria-modal="true"
         aria-label="Mobile navigation menu"
@@ -104,7 +104,7 @@ export default function MobileMenu({ isOpen, onClose }: MobileMenuProps) {
         </nav>
 
         {/* CTA Button */}
-        <div className="p-4 border-t border-gray-200 dark:border-gray-700 flex-shrink-0">
+        <div className="p-4 pb-[max(1rem,env(safe-area-inset-bottom))] border-t border-gray-200 dark:border-gray-700 flex-shrink-0">
           <Link
             href="/courses"
             onClick={onClose}

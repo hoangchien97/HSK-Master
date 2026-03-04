@@ -1,7 +1,8 @@
 // Structured Data / Schema.org JSON-LD generators
+import { SITE_URL } from '@/constants/brand';
 
 export function generateOrganizationSchema() {
-  const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://hskmaster.edu.vn';
+  const baseUrl = SITE_URL;
 
   return {
     '@context': 'https://schema.org',
@@ -44,7 +45,7 @@ export function generateOrganizationSchema() {
 }
 
 export function generateWebsiteSchema() {
-  const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://hskmaster.edu.vn';
+  const baseUrl = SITE_URL;
 
   return {
     '@context': 'https://schema.org',
@@ -74,7 +75,7 @@ export function generateCourseSchema(course: {
   viewCount: number;
   slug: string;
 }) {
-  const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://hskmaster.edu.vn';
+  const baseUrl = SITE_URL;
 
   return {
     '@context': 'https://schema.org',
@@ -124,7 +125,7 @@ export function generateCourseSchema(course: {
 }
 
 export function generateBreadcrumbSchema(items: Array<{ name: string; url: string }>) {
-  const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://hskmaster.edu.vn';
+  const baseUrl = SITE_URL;
 
   return {
     '@context': 'https://schema.org',
@@ -159,7 +160,7 @@ export function generateReviewSchema(reviews: Array<{
   rating: number;
   createdAt: Date;
 }>) {
-  const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://hskmaster.edu.vn';
+  const baseUrl = SITE_URL;
 
   return reviews.map((review) => ({
     '@context': 'https://schema.org',

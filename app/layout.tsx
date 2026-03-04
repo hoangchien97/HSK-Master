@@ -1,17 +1,10 @@
 import type { Metadata } from "next";
 import { Geist, Noto_Sans, Noto_Sans_SC } from "next/font/google";
 import "./globals.css";
-import { WebVitals } from "@/components/landing/shared";
-import * as TooltipPrimitive from '@radix-ui/react-tooltip';
-import { DEFAULT_IMAGE_PREVIEW, OG_IMAGE, SITE_URL } from "@/constants/brand";
+import { OG_IMAGE, SITE_URL } from "@/constants/brand";
 import NextTopLoader from 'nextjs-toploader';
-import { ToastContainer } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
 import { generateOrganizationSchema, generateWebsiteSchema } from '@/lib/structured-data';
-import { SessionProvider } from "next-auth/react";
 import { MaterialIconsLoader } from "@/components/landing/shared/MaterialIconsLoader";
-import { Suspense } from "react";
-import { HeroUIProvider } from "@/providers";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -105,8 +98,6 @@ export const metadata: Metadata = {
   // Verification Codes
   verification: {
     google: process.env.NEXT_PUBLIC_GOOGLE_SITE_VERIFICATION || "",
-    // yandex: process.env.NEXT_PUBLIC_YANDEX_VERIFICATION || "",
-    // bing: process.env.NEXT_PUBLIC_BING_VERIFICATION || "",
   },
 
   // Thông tin bổ sung
@@ -128,12 +119,7 @@ export const metadata: Metadata = {
     "theme-color": "#ec131e",
     "msapplication-TileColor": "#ec131e",
     "msapplication-config": "/browserconfig.xml",
-    // Explicit image hints for crawlers that don't parse structured OG objects
-    "og:image:secure_url": DEFAULT_IMAGE_PREVIEW,
-    "og:image:width": "1200",
-    "og:image:height": "630",
-    "og:image:type": "image/png",
-    "og:image:alt": OG_IMAGE.alt,
+
   },
 };
 
@@ -168,41 +154,20 @@ export default function RootLayout({
         className={`${geistSans.variable} ${notoSans.variable} ${notoSansSC.variable} antialiased min-h-screen bg-background-light dark:bg-background-dark text-text-main-light dark:text-text-main-dark flex flex-col`}
         suppressHydrationWarning
       >
-        <SessionProvider refetchInterval={300} refetchOnWindowFocus={false}>
-          <NextTopLoader
-            color="#ec131e"
-            initialPosition={0.08}
-            crawlSpeed={200}
-            height={3}
-            crawl={true}
-            showSpinner={false}
-            easing="ease"
-            speed={200}
-            shadow="0 0 10px #ec131e,0 0 5px #ec131e"
-            zIndex={1600}
-            showAtBottom={false}
-          />
-          <TooltipPrimitive.Provider delayDuration={200} skipDelayDuration={100}>
-              <HeroUIProvider>
-                <Suspense fallback={null}>
-                  <WebVitals />
-                </Suspense>
-                {children}
-                <ToastContainer
-                  position="top-right"
-                  autoClose={3000}
-                  hideProgressBar={false}
-                  newestOnTop={false}
-                  closeOnClick
-                  rtl={false}
-                  pauseOnFocusLoss
-                  draggable
-                  pauseOnHover
-                  theme="colored"
-                />
-              </HeroUIProvider>
-          </TooltipPrimitive.Provider>
-        </SessionProvider>
+        <NextTopLoader
+          color="#ec131e"
+          initialPosition={0.08}
+          crawlSpeed={200}
+          height={3}
+          crawl={true}
+          showSpinner={false}
+          easing="ease"
+          speed={200}
+          shadow="0 0 10px #ec131e,0 0 5px #ec131e"
+          zIndex={1600}
+          showAtBottom={false}
+        />
+        {children}
       </body>
     </html>
   );

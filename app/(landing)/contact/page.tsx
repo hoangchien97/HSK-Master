@@ -3,7 +3,7 @@ import { submitContact } from "./actions";
 import { ContactInfo, ContactForm, FAQ_DATA } from "@/components/landing/contact";
 import { Breadcrumb } from "@/components/landing/common";
 import { AnimatedSection } from "@/components/landing/shared";
-import { OG_IMAGE } from "@/constants/brand";
+import { OG_IMAGE, SITE_URL } from "@/constants/brand";
 import { getPageMetadata } from "@/services/metadata.service";
 import { generateFAQSchema } from "@/lib/structured-data";
 
@@ -46,8 +46,8 @@ export default function ContactPage() {
             "@context": "https://schema.org",
             "@type": "EducationalOrganization",
             name: "HSK Master",
-            url: "https://hskmaster.edu.vn",
-            logo: "https://hskmaster.edu.vn/logo.png",
+            url: SITE_URL,
+            logo: `${SITE_URL}/logo.png`,
             address: {
               "@type": "PostalAddress",
               streetAddress:

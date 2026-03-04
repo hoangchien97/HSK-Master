@@ -47,7 +47,7 @@ export default function CTASectionClient({ stats }: Props) {
 
           {/* CTA Buttons */}
           <div className="flex flex-col sm:flex-row gap-2 md:gap-3 justify-center items-center mb-6 md:mb-8 lg:mb-10">
-            <Link href="/courses" className="w-full sm:w-auto">
+            <Link href="/contact" className="w-full sm:w-auto">
               <Button
                 variant="white"
                 size="md"
@@ -58,7 +58,7 @@ export default function CTASectionClient({ stats }: Props) {
               </Button>
             </Link>
 
-            <Link href="/contact" className="w-full sm:w-auto">
+            <Link href="/about" className="w-full sm:w-auto">
               <Button
                 variant="outline-white"
                 size="md"

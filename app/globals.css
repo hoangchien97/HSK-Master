@@ -367,12 +367,14 @@ body {
 }
 
 @layer utilities {
+
   /* Animation for SectionHeader */
   @keyframes fade-in {
     from {
       opacity: 0;
       transform: translateY(-10px);
     }
+
     to {
       opacity: 1;
       transform: translateY(0);
@@ -384,6 +386,7 @@ body {
       opacity: 0;
       transform: translateY(20px);
     }
+
     to {
       opacity: 1;
       transform: translateY(0);
@@ -391,27 +394,36 @@ body {
   }
 
   @keyframes bounce-slow {
-    0%, 100% {
+
+    0%,
+    100% {
       transform: translateY(0);
     }
+
     50% {
       transform: translateY(-5px);
     }
   }
 
   @keyframes gradient-shift {
-    0%, 100% {
+
+    0%,
+    100% {
       background-position: 0% 50%;
     }
+
     50% {
       background-position: 100% 50%;
     }
   }
 
   @keyframes float {
-    0%, 100% {
+
+    0%,
+    100% {
       transform: translateY(0px);
     }
+
     50% {
       transform: translateY(-8px);
     }
@@ -421,16 +433,20 @@ body {
     0% {
       background-position: -100% 0;
     }
+
     100% {
       background-position: 200% 0;
     }
   }
 
   @keyframes pulse-soft {
-    0%, 100% {
+
+    0%,
+    100% {
       opacity: 1;
       transform: scale(1);
     }
+
     50% {
       opacity: 0.85;
       transform: scale(1.02);
@@ -442,6 +458,7 @@ body {
       opacity: 0;
       transform: translateY(30px);
     }
+
     to {
       opacity: 1;
       transform: translateY(0);
@@ -449,12 +466,16 @@ body {
   }
 
   @keyframes wiggle {
-    0%, 100% {
+
+    0%,
+    100% {
       transform: rotate(0deg) scale(1.1);
     }
+
     25% {
       transform: rotate(-5deg) scale(1.15);
     }
+
     75% {
       transform: rotate(5deg) scale(1.15);
     }
@@ -465,6 +486,7 @@ body {
       opacity: 0;
       transform: scale(0.9);
     }
+
     to {
       opacity: 1;
       transform: scale(1);
@@ -518,19 +540,37 @@ body {
     animation: scale-in 0.6s ease-out forwards;
   }
 
-  /* Stagger animation delays - All same timing */
-  .stagger-children > *:nth-child(1),
-  .stagger-children > *:nth-child(2),
-  .stagger-children > *:nth-child(3),
-  .stagger-children > *:nth-child(4) {
+  /* Stagger animation delays */
+  .stagger-children>*:nth-child(1) {
+    animation-delay: 0.1s;
+  }
+
+  .stagger-children>*:nth-child(2) {
     animation-delay: 0.2s;
   }
 
-  .stagger-1,
-  .stagger-2,
-  .stagger-3,
-  .stagger-4 {
+  .stagger-children>*:nth-child(3) {
+    animation-delay: 0.3s;
+  }
+
+  .stagger-children>*:nth-child(4) {
+    animation-delay: 0.4s;
+  }
+
+  .stagger-1 {
+    animation-delay: 0.1s;
+  }
+
+  .stagger-2 {
     animation-delay: 0.2s;
+  }
+
+  .stagger-3 {
+    animation-delay: 0.3s;
+  }
+
+  .stagger-4 {
+    animation-delay: 0.4s;
   }
 
   /* Hover lift effect */
@@ -545,7 +585,7 @@ body {
   /* Hover glow effect */
   .hover-glow:hover {
     box-shadow: 0 0 30px rgba(148, 163, 184, 0.3),
-                0 20px 40px -15px rgba(148, 163, 184, 0.2);
+      0 20px 40px -15px rgba(148, 163, 184, 0.2);
   }
 
   /* GPU acceleration */
@@ -571,12 +611,10 @@ body {
     left: -100%;
     width: 100%;
     height: 100%;
-    background: linear-gradient(
-      90deg,
-      transparent,
-      rgba(255, 255, 255, 0.2),
-      transparent
-    );
+    background: linear-gradient(90deg,
+        transparent,
+        rgba(255, 255, 255, 0.2),
+        transparent);
     transition: left 0.6s;
   }
 
@@ -604,13 +642,23 @@ body {
 
   /* Custom Tooltip Animations */
   @keyframes tooltip-fadeIn {
-    from { opacity: 0; }
-    to { opacity: 1; }
+    from {
+      opacity: 0;
+    }
+
+    to {
+      opacity: 1;
+    }
   }
 
   @keyframes tooltip-fadeOut {
-    from { opacity: 1; }
-    to { opacity: 0; }
+    from {
+      opacity: 1;
+    }
+
+    to {
+      opacity: 0;
+    }
   }
 
   @keyframes tooltip-scaleIn {
@@ -618,6 +666,7 @@ body {
       opacity: 0;
       transform: scale(0.9);
     }
+
     to {
       opacity: 1;
       transform: scale(1);
@@ -629,6 +678,7 @@ body {
       opacity: 1;
       transform: scale(1);
     }
+
     to {
       opacity: 0;
       transform: scale(0.9);
@@ -640,6 +690,7 @@ body {
       opacity: 0;
       transform: translateY(8px);
     }
+
     to {
       opacity: 1;
       transform: translateY(0);
@@ -651,6 +702,7 @@ body {
       opacity: 1;
       transform: translateY(0);
     }
+
     to {
       opacity: 0;
       transform: translateY(8px);
@@ -662,6 +714,7 @@ body {
       opacity: 0;
       transform: perspective(600px) rotateX(-10deg);
     }
+
     to {
       opacity: 1;
       transform: perspective(600px) rotateX(0);
@@ -673,6 +726,7 @@ body {
       opacity: 1;
       transform: perspective(600px) rotateX(0);
     }
+
     to {
       opacity: 0;
       transform: perspective(600px) rotateX(-10deg);
@@ -716,12 +770,15 @@ body {
 .perspective-1000 {
   perspective: 1000px;
 }
+
 .preserve-3d {
   transform-style: preserve-3d;
 }
+
 .backface-hidden {
   backface-visibility: hidden;
 }
+
 .rotate-y-180 {
   transform: rotateY(180deg);
 }

@@ -6,6 +6,7 @@ import bcrypt from "bcryptjs"
 import { z } from "zod"
 import { USER_ROLE, STATUS } from "@/constants/portal/roles"
 import { authConfig } from "@/auth.config"
+import { saveCalendarToken } from "@/lib/portal/calendar-token.service"
 
 // Type for PortalUser with status field (for TypeScript compatibility)
 type PortalUserWithStatus = {
@@ -27,6 +28,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
       clientSecret: process.env.GOOGLE_CLIENT_SECRET,
       authorization: {
         params: {
+          // Include calendar scope directly at login — tokens saved to GoogleCalendarToken
           scope: 'openid email profile https://www.googleapis.com/auth/calendar.events',
           access_type: 'offline',
           prompt: 'consent',
@@ -188,6 +190,32 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
         } catch (error) {
           console.error("Error checking user status:", error)
           return false
+        }
+      }
+
+      // ── Auto-save Google Calendar tokens (encrypted) on Google sign-in ──
+      if (account?.provider === "google" && user?.id) {
+        try {
+          const refreshToken = account.refresh_token
+          const accessToken = account.access_token
+          const expiresAt = account.expires_at
+            ? new Date(account.expires_at * 1000)
+            : new Date(Date.now() + 3600 * 1000)
+
+          if (refreshToken) {
+            await saveCalendarToken(user.id as string, {
+              refreshToken,
+              accessToken: accessToken || undefined,
+              accessExpiresAt: expiresAt,
+              scope: 'https://www.googleapis.com/auth/calendar.events',
+            })
+            console.log(`[Auth] Calendar token saved for user ${user.id}`)
+          } else {
+            console.warn(`[Auth] No refresh_token from Google for user ${user.id} — calendar sync unavailable`)
+          }
+        } catch (tokenErr) {
+          console.error('[Auth] Failed to save calendar token (non-blocking):', tokenErr)
+          // Non-blocking — don't prevent sign-in
         }
       }
 

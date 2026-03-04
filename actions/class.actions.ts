@@ -17,7 +17,7 @@ import { createBulkNotifications } from '@/services/portal/notification.service'
 import { prisma } from '@/lib/prisma';
 import type { IClass, ICreateClassDTO, IUpdateClassDTO, IGetClassResponse } from '@/interfaces/portal';
 import { auth } from '@/auth';
-import { USER_ROLE } from '@/constants/portal/roles';
+import { USER_ROLE, ENROLLMENT_STATUS } from '@/constants/portal/roles';
 import { NotificationType } from '@/enums/portal/common';
 
 /**
@@ -124,7 +124,7 @@ export async function updateClassAction(
 
     // Get current enrolled students before update (to detect new additions)
     const currentEnrollments = await prisma.portalClassEnrollment.findMany({
-      where: { classId, status: 'ENROLLED' },
+      where: { classId, status: ENROLLMENT_STATUS.ENROLLED },
       select: { studentId: true },
     });
     const currentStudentIds = new Set(currentEnrollments.map((e) => e.studentId));
@@ -174,7 +174,7 @@ export async function deleteClassAction(
       select: {
         className: true,
         enrollments: {
-          where: { status: 'ENROLLED' },
+          where: { status: ENROLLMENT_STATUS.ENROLLED },
           select: { studentId: true },
         },
       },

@@ -112,10 +112,19 @@ export default function Footer() {
 
         {/* Bottom Section */}
         <div className="mt-8 border-t border-white/30 pt-6">
-          <div className="flex justify-center">
-            <p className="text-xs text-white/80 text-center">
+          <div className="flex flex-col sm:flex-row items-center justify-between gap-3">
+            <p className="text-xs text-white/80 text-center sm:text-left">
               © 2026 {BRAND_NAME}. All rights reserved.
             </p>
+            <div className="flex items-center gap-4">
+              <Link href="/privacy" className="text-xs text-white/70 hover:text-white hover:underline transition-all">
+                Chính sách Bảo mật
+              </Link>
+              <span className="text-white/40">|</span>
+              <Link href="/terms" className="text-xs text-white/70 hover:text-white hover:underline transition-all">
+                Điều khoản Sử dụng
+              </Link>
+            </div>
           </div>
         </div>
       </div>
