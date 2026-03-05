@@ -11,9 +11,10 @@ import {
   Pagination,
   Select,
   SelectItem,
-  Spinner,
 } from "@heroui/react"
+import { cn } from "@/lib/utils"
 import { EmptyState } from "./EmptyState"
+import { CSpinner } from "./CSpinner"
 import { PAGINATION } from "@/constants/portal/pagination"
 import type { SortDescriptor, Selection } from "@heroui/react"
 
@@ -164,12 +165,17 @@ export function CTable<T extends Record<string, unknown>>({
   /* Is this the first load? (no data yet + loading) */
   const isFirstLoad = isLoading && data.length === 0
 
-  /* ─── Table classNames ─── */
+  /* ─── Table classNames (HeroUI table slots) ─── */
   const tableClassNames = useMemo(
     () => ({
-      base: "",
-      wrapper: ["shadow-none", "overflow-x-auto", "-webkit-overflow-scrolling-touch"],
-      table: "min-w-[700px]",
+      base: "md:flex-1 md:min-h-0",
+      wrapper: cn(
+        "shadow-none p-0 overflow-x-auto",
+        // At md (768px+): wrapper fills its parent and scrolls internally
+        // so position:sticky on thead resolves correctly
+        "md:flex-1 md:min-h-0 md:max-h-none md:overflow-y-auto",
+      ),
+      table: "min-w-[640px]",
       tr: isHoverable
         ? ["hover:bg-default-100", "transition-colors", "cursor-pointer"]
         : [],
@@ -184,13 +190,38 @@ export function CTable<T extends Record<string, unknown>>({
     [isHoverable],
   )
 
-  /* ─── Bottom: Pagination (center) + Page size (right) ─── */
+  /* ─── topContent: toolbar + total/actions row ─── */
+  const topContent = useMemo(() => {
+    const hasToolbar = !!toolbar
+    const hasTotalRow = total > 0 || totalLabel || actions
+
+    if (!hasToolbar && !hasTotalRow) return null
+
+    return (
+      <div className="flex flex-col gap-3">
+        {toolbar}
+        {hasTotalRow && (
+          <div className="flex items-center justify-between flex-wrap gap-2">
+            <span className="text-sm text-default-400">
+              {totalLabel ?? `Tổng ${total}`}
+            </span>
+            {actions && <div className="flex items-center gap-2">{actions}</div>}
+          </div>
+        )}
+      </div>
+    )
+  }, [toolbar, total, totalLabel, actions])
+
+  /* ─── bottomContent: Pagination (center) + Page size (right) ─── */
   const bottomContent = useMemo(() => {
     if (!isShowPagination || total === 0) return null
 
     return (
-      <div className="shrink-0 flex flex-col sm:flex-row items-center justify-center gap-2 sm:gap-4 px-2 py-2 sm:relative">
-        {totalPages > 1 && (
+      <div className="flex items-center justify-center sm:justify-between gap-2 py-2">
+        {/* Spacer on sm+ so pagination centers */}
+        <div className="hidden sm:block w-20" />
+
+        {totalPages > 1 ? (
           <Pagination
             isCompact
             showControls
@@ -201,8 +232,9 @@ export function CTable<T extends Record<string, unknown>>({
             size="sm"
             isDisabled={isFetching}
           />
-        )}
-        <div className="sm:absolute sm:right-2 flex items-center gap-2">
+        ) : <div />}
+
+        <div className="flex items-center gap-2">
           <Select
             size="sm"
             selectedKeys={[String(pageSize)]}
@@ -222,113 +254,85 @@ export function CTable<T extends Record<string, unknown>>({
     )
   }, [isShowPagination, total, totalPages, page, pageSize, pageSizeOptions, handlePageChange, handlePageSizeChange, isFetching])
 
-  /* ── Shared pill spinner — consistent look for both first load and refetch ── */
-  const pillSpinner = (
-    <div className="absolute inset-0 z-10 flex items-center justify-center pointer-events-none">
-      <div className="flex items-center gap-2 bg-white/80 backdrop-blur-sm rounded-xl px-4 py-2 shadow-sm border border-default-200">
-        <Spinner size="sm" color="primary" classNames={{ wrapper: "w-4 h-4" }} />
-        <span className="text-xs text-default-500 font-medium">Đang tải...</span>
-      </div>
-    </div>
-  )
-
   return (
-    <div className={`flex flex-col gap-3 ${className ?? ""}`}>
-      {/*
-       * Single dim container wrapping toolbar + total + table together.
-       * When isFetching: the whole block dims as one unit (not toolbar separately).
-       * Spinner is overlaid in the CENTER of the table area.
-       */}
-      <div className={`relative transition-opacity duration-200 flex flex-col gap-3 ${
-        isFetching && !isFirstLoad ? "opacity-60 pointer-events-none" : ""
-      }`}>
+    <div
+      className={cn(
+        // Mobile: normal flow. Tablet+ (md/768px): fill remaining height
+        "relative flex flex-col md:flex-1 md:min-h-0",
+        // Dim when refetching (not first load)
+        isFetching && !isFirstLoad && "opacity-60 pointer-events-none",
+        className,
+      )}
+    >
+      {/* Refetch pill — floating above content when data already exists */}
+      {isFetching && !isFirstLoad && <CSpinner variant="pill" color="primary" />}
 
-        {/* Refetch pill — shown above the dimmed table when data already exists */}
-        {isFetching && !isFirstLoad && pillSpinner}
+      {/* First-load overlay — centered in the entire CTable area */}
+      {isFirstLoad && <CSpinner variant="overlay" message="Đang tải..." />}
 
-        {/* ── Toolbar (search / filters) ── */}
-        {toolbar && (
-          <div className="shrink-0">
-            {toolbar}
-          </div>
-        )}
-
-        {/* ── Total (left) + Actions (right) ── */}
-        {(total > 0 || totalLabel || actions) && (
-          <div className="shrink-0 flex items-center justify-between flex-wrap gap-2">
-            <span className="text-sm text-default-400">
-              {totalLabel ?? `Tổng ${total}`}
-            </span>
-            {actions && <div className="flex items-center gap-2">{actions}</div>}
-          </div>
-        )}
-
-        {/* ── Table — horizontal scroll on mobile ── */}
-        <div
-          className="overflow-x-auto -mx-4 px-4 sm:mx-0 sm:px-0 min-h-[200px]"
-          style={{ WebkitOverflowScrolling: "touch" }}
-        >
-          <Table
-            isHeaderSticky={isHeaderSticky}
-            aria-label={ariaLabel}
-            layout={layout}
-            sortDescriptor={sortDescriptor}
-            onSortChange={onSortChange}
-            selectionMode={selectionMode}
-            selectedKeys={selectedKeys}
-            onSelectionChange={onSelectionChange}
-            classNames={tableClassNames}
-            isStriped={isStriped}
-          >
-            <TableHeader columns={columns}>
-              {(column) => (
-                <TableColumn
-                  key={column.key}
-                  allowsSorting={column.sortable}
-                  width={column.width as number | undefined}
-                  align={column.align}
-                  className={column.headerClassName}
-                  minWidth={column.minWidth}
-                >
-                  {column.label}
-                </TableColumn>
-              )}
-            </TableHeader>
-            <TableBody
-              items={data}
-              isLoading={isFetching || isFirstLoad}
-              loadingContent={pillSpinner}
-              emptyContent={
-                <EmptyState
-                  title={emptyContent?.title || "Không có dữ liệu"}
-                  description={emptyContent?.description || "Chưa có dữ liệu để hiển thị"}
-                  icon={emptyContent?.icon}
-                />
-              }
+      <Table
+        isHeaderSticky={isHeaderSticky}
+        aria-label={ariaLabel}
+        layout={layout}
+        sortDescriptor={sortDescriptor}
+        onSortChange={onSortChange}
+        selectionMode={selectionMode}
+        selectedKeys={selectedKeys}
+        onSelectionChange={onSelectionChange}
+        classNames={tableClassNames}
+        isStriped={isStriped}
+        topContent={topContent}
+        topContentPlacement="outside"
+        bottomContent={bottomContent}
+        bottomContentPlacement="outside"
+      >
+        <TableHeader columns={columns}>
+          {(column) => (
+            <TableColumn
+              key={column.key}
+              allowsSorting={column.sortable}
+              width={column.width as number | undefined}
+              align={column.align}
+              className={column.headerClassName}
+              minWidth={column.minWidth}
             >
-              {(item) => (
-                <TableRow key={String(item[rowKey])}>
-                  {(columnKey) => {
-                    const col = columns.find((c) => c.key === String(columnKey))
-                    const value = item[String(columnKey)]
-                    const index = data.indexOf(item)
-                    return (
-                      <TableCell className={col?.cellClassName}>
-                        {col?.render
-                          ? col.render(value, item, index)
-                          : (value as React.ReactNode) ?? "—"}
-                      </TableCell>
-                    )
-                  }}
-                </TableRow>
-              )}
-            </TableBody>
-          </Table>
-        </div>
-      </div>
-
-      {/* ── Pagination (outside dim zone — always interactive) ── */}
-      {bottomContent}
+              {column.label}
+            </TableColumn>
+          )}
+        </TableHeader>
+        <TableBody
+          items={data}
+          isLoading={false}
+          emptyContent={
+            isFirstLoad ? (
+              <div className="h-32" />
+            ) : (
+              <EmptyState
+                title={emptyContent?.title || "Không có dữ liệu"}
+                description={emptyContent?.description || "Chưa có dữ liệu để hiển thị"}
+                icon={emptyContent?.icon}
+              />
+            )
+          }
+        >
+          {(item) => (
+            <TableRow key={String(item[rowKey])}>
+              {(columnKey) => {
+                const col = columns.find((c) => c.key === String(columnKey))
+                const value = item[String(columnKey)]
+                const index = data.indexOf(item)
+                return (
+                  <TableCell className={col?.cellClassName}>
+                    {col?.render
+                      ? col.render(value, item, index)
+                      : (value as React.ReactNode) ?? "—"}
+                  </TableCell>
+                )
+              }}
+            </TableRow>
+          )}
+        </TableBody>
+      </Table>
     </div>
   )
 }

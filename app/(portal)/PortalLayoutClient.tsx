@@ -25,7 +25,7 @@ function PortalLayoutInner({ user, children }: PortalLayoutClientProps) {
   const [sidebarOpen, setSidebarOpen] = useState(false)
 
   return (
-    <div className="min-h-screen lg:h-screen flex flex-col lg:flex-row bg-gray-50 lg:overflow-hidden font-[family-name:var(--font-noto-sans-sc),var(--font-noto-sans),sans-serif]">
+    <div className="min-h-screen md:h-screen flex flex-col lg:flex-row bg-gray-50 md:overflow-hidden font-[family-name:var(--font-noto-sans-sc),var(--font-noto-sans),sans-serif]">
       {/* Sidebar - Fixed left, full height */}
       <PortalSidebar
         userRole={user.role}
@@ -33,8 +33,8 @@ function PortalLayoutInner({ user, children }: PortalLayoutClientProps) {
         onClose={() => setSidebarOpen(false)}
       />
 
-      {/* Right area: Header (sticky) + Content (scrollable) */}
-      <div className="flex-1 flex flex-col min-h-0 lg:pl-64">
+      {/* Right area: Header (sticky) + Content (scrollable on mobile, flex on md+) */}
+      <div className="flex-1 flex flex-col min-h-0 lg:pl-64 overflow-y-auto md:overflow-hidden">
         {/* Header - Sticky top */}
         <PortalHeader
           userName={user.name}

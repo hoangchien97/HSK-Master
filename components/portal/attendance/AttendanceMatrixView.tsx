@@ -11,7 +11,7 @@ import {
   saveAttendance,
   type AttendanceMatrixData,
 } from "@/actions/attendance.actions"
-import { Spinner } from "@heroui/react"
+import { CSpinner } from "@/components/portal/common"
 import AttendanceHeader from "./AttendanceHeader"
 import AttendanceTable from "./AttendanceTable"
 
@@ -348,18 +348,9 @@ export default function AttendanceMatrixView() {
   }, [])
 
   /* ───── Main render ───── */
-  if (classes.length === 0 && !matrixData && !isPageLoading) {
-    return (
-      <div className="flex flex-col items-center justify-center py-20 gap-4">
-        <Users className="w-16 h-16 text-default-300" />
-        <p className="text-lg font-semibold text-default-500">Chưa có lớp học nào</p>
-        <p className="text-sm text-default-400">Tạo lớp học để bắt đầu điểm danh</p>
-      </div>
-    )
-  }
 
   return (
-    <div className="flex flex-col h-full gap-4">
+    <div className="md:flex-1 md:min-h-0 flex flex-col gap-4">
       {/* Header: Class selector + search — always visible */}
       <AttendanceHeader
         classes={classes}
@@ -373,15 +364,9 @@ export default function AttendanceMatrixView() {
       />
 
       {/* Matrix content area — loading overlay sits inside this zone */}
-      <div className="relative flex-1 min-h-[300px]">
-        {/* Inline pill loading — same style as CTable refetch pill */}
+      <div className="relative flex-1 min-h-0">
         {isPageLoading && (
-          <div className="absolute inset-0 z-20 flex items-center justify-center pointer-events-none">
-            <div className="flex items-center gap-2 bg-white/80 backdrop-blur-sm rounded-xl px-4 py-2 shadow-sm border border-default-200">
-              <Spinner size="sm" color="primary" classNames={{ wrapper: "w-4 h-4" }} />
-              <span className="text-xs text-default-500 font-medium">Đang tải dữ liệu...</span>
-            </div>
-          </div>
+          <CSpinner variant="overlay" />
         )}
 
         {matrixData ? (
@@ -409,8 +394,12 @@ export default function AttendanceMatrixView() {
         ) : !isPageLoading ? (
           <div className="flex flex-col items-center justify-center py-20 gap-4">
             <Users className="w-16 h-16 text-default-300" />
-            <p className="text-lg font-semibold text-default-500">Chưa có dữ liệu điểm danh</p>
-            <p className="text-sm text-default-400">Chọn lớp học để xem điểm danh</p>
+            <p className="text-lg font-semibold text-default-500">
+              {classes.length === 0 ? "Chưa có lớp học nào" : "Chưa có dữ liệu điểm danh"}
+            </p>
+            <p className="text-sm text-default-400">
+              {classes.length === 0 ? "Tạo lớp học để bắt đầu điểm danh" : "Chọn lớp học để xem điểm danh"}
+            </p>
           </div>
         ) : null}
       </div>

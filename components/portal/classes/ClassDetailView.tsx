@@ -14,7 +14,6 @@ import {
   Card,
   CardBody,
   CardHeader,
-  Spinner,
   User as UserAvatar,
   Divider,
   Pagination,
@@ -23,6 +22,7 @@ import { ArrowLeft, Users, Calendar, BookOpen, UserPlus, Trash2 } from "lucide-r
 import { toast } from "react-toastify";
 import dayjs from "dayjs";
 import { useRouter } from "next/navigation";
+import { CSpinner } from "@/components/portal/common";
 import type { IClass, IEnrollment } from "@/interfaces/portal";
 import { ENROLLMENT_STATUS_COLOR_MAP, ENROLLMENT_STATUS_LABEL_MAP } from "@/constants/portal";
 import { usePortalUI } from "@/providers/portal-ui-provider";
@@ -97,7 +97,7 @@ export default function ClassDetailView({ classId, role }: ClassDetailViewProps)
   if (isLoading) {
     return (
       <div className="flex justify-center items-center h-64">
-        <Spinner size="lg" label="Đang tải..." />
+        <CSpinner message="Đang tải..." />
       </div>
     );
   }

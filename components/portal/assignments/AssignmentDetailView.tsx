@@ -955,9 +955,9 @@ function SubmissionCard({
   const [score, setScore] = useState(String(submission.score ?? ""))
   const [feedback, setFeedback] = useState(submission.feedback || "")
   const [loading, setLoading] = useState(false)
-  const isCompleted = submission.status === "COMPLETED" || submission.status === "GRADED"
-  const isRevisionRequired = submission.status === "REVISION_REQUIRED" || submission.status === "RETURNED"
-  const isPending = submission.status === "SUBMITTED" || submission.status === "RESUBMITTED"
+  const isCompleted = submission.status === SUBMISSION_STATUS.COMPLETED || submission.status === SUBMISSION_STATUS.GRADED
+  const isRevisionRequired = submission.status === SUBMISSION_STATUS.REVISION_REQUIRED || submission.status === SUBMISSION_STATUS.RETURNED
+  const isPending = submission.status === SUBMISSION_STATUS.SUBMITTED || submission.status === SUBMISSION_STATUS.RESUBMITTED
 
   /** v2: Mark Completed (was GRADED) or Request Revision (was RETURNED) */
   const handleGrade = async (action: "COMPLETED" | "REVISION_REQUIRED") => {

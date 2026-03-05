@@ -196,37 +196,40 @@ export default function AssignmentFormModal({
           defaultValue={editData?.description || ""}
         />
 
-        <Select
-          label="Lớp học"
-          name="classId"
-          labelPlacement="outside"
-          isRequired
-          selectedKeys={classId ? [classId] : []}
-          onSelectionChange={(keys) => {
-            const val = Array.from(keys)[0] as string
-            setClassId(val)
-          }}
-          errorMessage={({ validationDetails }) => {
-            if (validationDetails.valueMissing) {
-              return "Vui lòng chọn lớp học"
-            }
-          }}
-        >
-          {classes.map((c) => (
-            <SelectItem key={c.id}>
-              {c.className}
-            </SelectItem>
-          ))}
-        </Select>
+        {/* ── Class & Due Date — side by side ── */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          <Select
+            label="Lớp học"
+            name="classId"
+            labelPlacement="outside"
+            isRequired
+            selectedKeys={classId ? [classId] : []}
+            onSelectionChange={(keys) => {
+              const val = Array.from(keys)[0] as string
+              setClassId(val)
+            }}
+            errorMessage={({ validationDetails }) => {
+              if (validationDetails.valueMissing) {
+                return "Vui lòng chọn lớp học"
+              }
+            }}
+          >
+            {classes.map((c) => (
+              <SelectItem key={c.id}>
+                {c.className}
+              </SelectItem>
+            ))}
+          </Select>
 
-        <Input
-          name="dueDate"
-          type="datetime-local"
-          label="Hạn nộp"
-          labelPlacement="outside"
-          placeholder=" "
-          defaultValue={editData?.dueDate ? new Date(editData.dueDate).toISOString().slice(0, 16) : ""}
-        />
+          <Input
+            name="dueDate"
+            type="datetime-local"
+            label="Hạn nộp"
+            labelPlacement="outside"
+            placeholder=" "
+            defaultValue={editData?.dueDate ? new Date(editData.dueDate).toISOString().slice(0, 16) : ""}
+          />
+        </div>
 
         {/* ── Tags / Hashtags ── */}
         <div>

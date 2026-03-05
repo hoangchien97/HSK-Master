@@ -9,7 +9,6 @@ import {
   DropdownSection,
   Badge,
   Button,
-  Spinner,
 } from "@heroui/react"
 import {
   Bell,
@@ -37,6 +36,7 @@ import "dayjs/locale/vi"
 import { useNotifications, type NotificationItem } from "@/providers/notification-provider"
 import { NotificationType } from "@/enums/portal/common"
 import { NOTIFICATION_MAX_BADGE } from "@/constants/portal/notification"
+import { CSpinner } from "@/components/portal/common"
 
 dayjs.locale("vi")
 dayjs.extend(relativeTime)
@@ -145,9 +145,7 @@ export default function NotificationDropdown() {
         <DropdownSection>
           {loading && items.length === 0 ? (
             <DropdownItem key="loading" isReadOnly className="opacity-100">
-              <div className="flex items-center justify-center py-4">
-                <Spinner size="sm" />
-              </div>
+              <CSpinner size="sm" className="py-4" />
             </DropdownItem>
           ) : items.length === 0 ? (
             <DropdownItem key="empty" isReadOnly className="opacity-100">

@@ -13,7 +13,7 @@ import { CTable, type CTableColumn } from "@/components/portal/common"
 import ClassesToolbar from "./ClassesToolbar"
 import ClassDetailDrawer from "./ClassDetailDrawer"
 import { fetchClasses } from "@/actions/class.actions"
-import { useDebouncedValue, useSyncSearchToUrl } from "@/hooks/useTableParams"
+import { useDebouncedValue, useSyncSearchToUrl, useTableSort } from "@/hooks/useTableParams"
 
 dayjs.locale("vi")
 
@@ -90,6 +90,8 @@ export default function StudentClassesView() {
 
   useSyncSearchToUrl(debouncedSearch, updateUrl)
 
+  const { sortDescriptor, onSortChange } = useTableSort(updateUrl, searchParams)
+
   /* ─── Handlers ─── */
   const handleViewDetail = useCallback(
     (cls: IClass) => {
@@ -113,6 +115,7 @@ export default function StudentClassesView() {
     {
       key: "className",
       label: "Tên lớp",
+      sortable: true,
       render: (_v, row) => (
         <button
           className="text-left hover:text-primary transition-colors"
@@ -150,6 +153,7 @@ export default function StudentClassesView() {
     {
       key: "startDate",
       label: "Ngày bắt đầu",
+      sortable: true,
       render: (_v, row) => (
         <div className="flex items-center gap-1.5">
           <Calendar className="w-4 h-4 text-default-400" />
@@ -177,6 +181,8 @@ export default function StudentClassesView() {
         page={urlPage}
         pageSize={urlPageSize}
         total={data.total}
+        sortDescriptor={sortDescriptor}
+        onSortChange={onSortChange}
         isFetching={isFetching}
         isLoading={!isLoaded}
         onPageChange={(p) => updateUrl({ page: String(p) })}

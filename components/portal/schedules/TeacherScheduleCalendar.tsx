@@ -16,7 +16,7 @@ import {
   deleteSchedule,
   deleteScheduleGroup,
 } from '@/actions/schedule.actions';
-import { Spinner } from '@heroui/react';
+import { CSpinner } from '@/components/portal/common';
 import type {
   ISchedule,
   IClass,
@@ -212,17 +212,11 @@ export default function TeacherScheduleCalendar() {
   };
 
   return (
-    <div className="h-full flex flex-col gap-4">
+    <div className="md:flex-1 md:min-h-0 flex flex-col gap-4">
       {/* Calendar — wrapped in relative container for loading overlay */}
-      <div className="relative flex-1 min-h-[400px]">
-        {/* Inline pill loading — same style as CTable refetch pill */}
+      <div className="relative flex-1 min-h-0">
         {isPageLoading && (
-          <div className="absolute inset-0 z-20 flex items-center justify-center pointer-events-none">
-            <div className="flex items-center gap-2 bg-white/80 backdrop-blur-sm rounded-xl px-4 py-2 shadow-sm border border-default-200">
-              <Spinner size="sm" color="primary" classNames={{ wrapper: "w-4 h-4" }} />
-              <span className="text-xs text-default-500 font-medium">Đang tải lịch học...</span>
-            </div>
-          </div>
+          <CSpinner variant="overlay" />
         )}
         <BigCalendarView
           schedules={schedules}

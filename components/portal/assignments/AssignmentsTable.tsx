@@ -15,6 +15,7 @@ import {
   DropdownItem,
   useDisclosure,
   Progress,
+  Tooltip,
 } from "@heroui/react"
 import {
   Plus,
@@ -22,18 +23,25 @@ import {
   MoreVertical,
   Edit2,
   Trash2,
-  FileText,
+  Hash,
   Users,
   CheckCircle,
   Lock,
   Eye,
 } from "lucide-react"
 import { toast } from "react-toastify"
-import { PAGINATION, ASSIGNMENT_STATUS } from "@/constants/portal"
+import {
+  PAGINATION,
+  ASSIGNMENT_STATUS,
+  SUBMISSION_STATUS,
+  DEADLINE_STATUS_LABEL,
+  DEADLINE_STATUS_COLOR,
+  getDeadlineStatus,
+} from "@/constants/portal"
 import { CTable, type CTableColumn } from "@/components/portal/common"
 import AssignmentFormModal from "./AssignmentFormModal"
 import { fetchAssignments, deleteAssignmentAction, closeAssignmentAction } from "@/actions/assignment.actions"
-import { useDebouncedValue, useSyncSearchToUrl } from "@/hooks/useTableParams"
+import { useDebouncedValue, useSyncSearchToUrl, useTableSort } from "@/hooks/useTableParams"
 import dayjs from "dayjs"
 import "dayjs/locale/vi"
 
@@ -106,10 +114,10 @@ function computeMeta(row: AssignmentData) {
   const totalStudents = row.class.enrollments?.length ?? 0
   const submittedCount = row.submissions.length
   const completedCount = row.submissions.filter(
-    (s) => s.status === "COMPLETED" || s.status === "GRADED",
+    (s) => s.status === SUBMISSION_STATUS.COMPLETED || s.status === SUBMISSION_STATUS.GRADED,
   ).length
   const pendingReview = row.submissions.filter(
-    (s) => s.status === "SUBMITTED" || s.status === "RESUBMITTED",
+    (s) => s.status === SUBMISSION_STATUS.SUBMITTED || s.status === SUBMISSION_STATUS.RESUBMITTED,
   ).length
   return { totalStudents, submittedCount, completedCount, pendingReview }
 }
@@ -200,6 +208,8 @@ export default function AssignmentsTable({
 
   useSyncSearchToUrl(debouncedSearch, updateUrl)
 
+  const { sortDescriptor, onSortChange } = useTableSort(updateUrl, searchParams)
+
   /* ─── Optimistic create ─── */
   const handleCreateSuccess = useCallback((newAssignment: AssignmentData) => {
     setItems((prev) => [newAssignment, ...prev])
@@ -264,30 +274,36 @@ export default function AssignmentsTable({
     {
       key: "title",
       label: "Bài tập",
+      sortable: true,
       render: (_v, row) => (
-        <div className="max-w-xs">
-          <Link
-            href={`/portal/${role}/assignments/${row.slug || row.id}`}
-            className="font-medium text-foreground hover:text-primary transition"
-          >
-            {row.title}
-          </Link>
-          {row.tags && row.tags.length > 0 && (
-            <div className="flex flex-wrap gap-1 mt-1">
-              {row.tags.slice(0, 2).map((tag) => (
-                <Chip key={tag} size="sm" variant="flat" color="secondary" className="text-[11px]">
-                  #{tag}
-                </Chip>
-              ))}
-              {row.tags.length > 2 && (
-                <Chip size="sm" variant="flat" className="text-[11px]">
-                  +{row.tags.length - 2}
-                </Chip>
-              )}
-            </div>
-          )}
-        </div>
+        <Link
+          href={`/portal/${role}/assignments/${row.slug || row.id}`}
+          className="font-medium text-foreground hover:text-primary transition truncate block max-w-50"
+        >
+          {row.title}
+        </Link>
       ),
+    },
+    {
+      key: "tags",
+      label: "Hashtag",
+      render: (_v, row) => {
+        if (!row.tags || row.tags.length === 0) return <span className="text-default-300">—</span>
+        return (
+          <div className="flex flex-wrap gap-1 max-w-40">
+            {row.tags.slice(0, 2).map((tag) => (
+              <Chip key={tag} size="sm" variant="flat" color="secondary" className="text-[11px]">
+                #{tag}
+              </Chip>
+            ))}
+            {row.tags.length > 2 && (
+              <Chip size="sm" variant="flat" className="text-[11px]">
+                +{row.tags.length - 2}
+              </Chip>
+            )}
+          </div>
+        )
+      },
     },
     {
       key: "class",
@@ -297,16 +313,24 @@ export default function AssignmentsTable({
     {
       key: "dueDate",
       label: "Hạn nộp",
+      sortable: true,
       render: (_v, row) => {
         if (!row.dueDate) return <span className="text-default-400 text-sm">—</span>
-        const isOverdue = new Date(row.dueDate) < new Date() && row.status === ASSIGNMENT_STATUS.PUBLISHED
+        const deadlineStatus = getDeadlineStatus(row.dueDate, row.status)
+        const formattedDate = dayjs(row.dueDate).format("DD/MM/YYYY HH:mm")
         return (
-          <span className={`text-sm ${isOverdue ? "text-danger font-medium" : ""}`}>
-            {dayjs(row.dueDate).format("DD/MM/YYYY HH:mm")}
-            {isOverdue && (
-              <span className="block text-[11px] text-danger">Quá hạn</span>
-            )}
-          </span>
+          <Tooltip content={formattedDate} placement="top" delay={300}>
+            <div className="cursor-default">
+              <Chip
+                size="sm"
+                color={DEADLINE_STATUS_COLOR[deadlineStatus]}
+                variant="flat"
+                className="min-w-20 text-center"
+              >
+                {DEADLINE_STATUS_LABEL[deadlineStatus]}
+              </Chip>
+            </div>
+          </Tooltip>
         )
       },
     },
@@ -374,6 +398,7 @@ export default function AssignmentsTable({
     {
       key: "status",
       label: "Trạng thái",
+      sortable: true,
       render: (_v, row) => (
         <Chip
           size="sm"
@@ -502,13 +527,15 @@ export default function AssignmentsTable({
         page={urlPage}
         pageSize={urlPageSize}
         total={total}
+        sortDescriptor={sortDescriptor}
+        onSortChange={onSortChange}
         isFetching={isFetching}
         isLoading={!isLoaded}
         onPageChange={(p) => updateUrl({ page: String(p) })}
         onPageSizeChange={(s) => updateUrl({ pageSize: String(s) })}
         ariaLabel="Bảng bài tập"
         emptyContent={{
-          icon: <FileText className="w-12 h-12" />,
+          icon: <Hash className="w-12 h-12" />,
           title: "Chưa có bài tập nào",
           description: "Tạo bài tập mới để bắt đầu",
         }}

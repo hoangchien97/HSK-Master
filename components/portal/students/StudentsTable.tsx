@@ -2,7 +2,7 @@
 
 import { useState, useEffect, useCallback, useMemo } from "react"
 import {
-  Chip, Avatar, Dropdown, DropdownTrigger, DropdownMenu, DropdownItem, Button,
+  Chip, Avatar, Dropdown, DropdownTrigger, DropdownMenu, DropdownItem, Button, Tooltip,
 } from "@heroui/react"
 import {
   MoreVertical, Eye, Mail, Phone, GraduationCap, Users, UserPlus,
@@ -14,7 +14,7 @@ import { CTable, type CTableColumn } from "@/components/portal/common"
 import StudentsToolbar from "./StudentsToolbar"
 import { fetchStudents, fetchClassesForFilter } from "@/actions/student.actions"
 import type { IStudent, IGetStudentResponse } from "@/interfaces/portal"
-import { useDebouncedValue, useSyncSearchToUrl } from "@/hooks/useTableParams"
+import { useDebouncedValue, useSyncSearchToUrl, useTableSort } from "@/hooks/useTableParams"
 
 export default function StudentsTable() {
   const searchParams = useSearchParams()
@@ -101,6 +101,8 @@ export default function StudentsTable() {
 
   useSyncSearchToUrl(debouncedSearch, updateUrl)
 
+  const { sortDescriptor, onSortChange } = useTableSort(updateUrl, searchParams)
+
   const columns: CTableColumn<IStudent & Record<string, unknown>>[] = useMemo(() => [
     {
       key: "stt", label: "STT", align: "center" as const, headerClassName: "w-12",
@@ -109,44 +111,44 @@ export default function StudentsTable() {
       ),
     },
     {
-      key: "student", label: "Học viên",
+      key: "student", label: "Học viên", sortable: true,
       render: (_v, row) => (
-        <div className="flex items-center gap-3">
-          <Avatar src={row.image || undefined} name={(row.name)?.charAt(0)} size="sm" />
-          <div>
-            <p className="font-medium">{row.name}</p>
-            <p className="text-xs text-default-400">@{row.username || row.email}</p>
+        <div className="flex items-center gap-3 max-w-50">
+          <Avatar src={row.image || undefined} name={(row.name)?.charAt(0)} size="sm" className="shrink-0" />
+          <div className="min-w-0">
+            <Tooltip content={row.name} placement="top" delay={500}>
+              <p className="font-medium text-sm truncate">{row.name}</p>
+            </Tooltip>
+            <p className="text-xs text-default-400 truncate">@{row.username || row.email}</p>
           </div>
         </div>
       ),
     },
     {
-      key: "level", label: "Trình độ",
+      key: "level", label: "Trình độ", sortable: true,
       render: (_v, row) =>
         row.level ? (
-          <Chip size="sm" color="primary" variant="flat" startContent={<GraduationCap className="w-3 h-3" />}>
+          <Chip size="sm" color="primary" variant="flat">
             {row.level}
           </Chip>
         ) : (<span className="text-default-400">—</span>),
     },
     {
       key: "classes", label: "Lớp học",
-      render: (_v, row) => (
-        <div className="flex flex-wrap gap-1">
-          {row.classes?.slice(0, 2).map((c) => (
-            <Chip key={c.id} size="sm" variant="flat">{c.classCode}</Chip>
-          ))}
-          {(row.classes?.length ?? 0) > 2 && (
-            <Chip size="sm" variant="flat">+{row.classes!.length - 2}</Chip>
-          )}
-          {(!row.classes || row.classes.length === 0) && (
-            <span className="text-default-400 text-sm">Chưa có lớp</span>
-          )}
-        </div>
-      ),
+      render: (_v, row) => {
+        if (!row.classes || row.classes.length === 0) {
+          return <span className="text-default-400 text-sm">Chưa có lớp</span>
+        }
+        const displayText = row.classes.map(c => c.classCode).join(", ")
+        return (
+          <Tooltip content={displayText} placement="top" delay={500}>
+            <span className="text-sm truncate block max-w-40">{displayText}</span>
+          </Tooltip>
+        )
+      },
     },
     {
-      key: "status", label: "Trạng thái",
+      key: "status", label: "Trạng thái", sortable: true,
       render: (_v, row) => (
         <Chip size="sm" color={STUDENT_STATUS_CONFIG[row.status]?.color ?? "default"} variant="flat">
           {STUDENT_STATUS_CONFIG[row.status]?.label ?? row.status}
@@ -193,6 +195,8 @@ export default function StudentsTable() {
       page={urlPage}
       pageSize={urlPageSize}
       total={data.total}
+      sortDescriptor={sortDescriptor}
+      onSortChange={onSortChange}
       isFetching={isFetching}
       isLoading={!isLoaded}
       onPageChange={(p) => updateUrl({ page: String(p) })}

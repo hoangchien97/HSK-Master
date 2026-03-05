@@ -3,6 +3,7 @@
 import { useCallback, useMemo, useRef, useEffect, useState } from "react"
 import { useSearchParams, useRouter, usePathname } from "next/navigation"
 import { PAGINATION } from "@/constants/portal/pagination"
+import type { SortDescriptor } from "@heroui/react"
 
 /**
  * Generic hook that syncs table filter/pagination state with URL search params.
@@ -126,4 +127,45 @@ export function useSyncSearchToUrl(
     updateUrl({ search: debouncedSearch })
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [debouncedSearch])
+}
+
+/**
+ * Reusable hook for table sorting synced with URL params.
+ *
+ * Reads `sortBy` and `sortOrder` from the URL.
+ * Returns a `SortDescriptor` compatible with HeroUI's Table and
+ * a handler that updates the URL when the user clicks a sortable column.
+ *
+ * @param updateUrl  Function that merges partial params into the URL
+ * @param searchParams  Current URLSearchParams instance
+ *
+ * @example
+ * const { sortDescriptor, onSortChange } = useTableSort(updateUrl, searchParams)
+ * <CTable sortDescriptor={sortDescriptor} onSortChange={onSortChange} ... />
+ */
+export function useTableSort(
+  updateUrl: (updates: Record<string, string>) => void,
+  searchParams: URLSearchParams,
+) {
+  const sortDescriptor: SortDescriptor = useMemo(() => {
+    const column = searchParams.get("sortBy") || ""
+    const direction = searchParams.get("sortOrder") === "descending" ? "descending" : "ascending"
+    if (!column) return {}
+    return { column, direction }
+  }, [searchParams])
+
+  const onSortChange = useCallback(
+    (descriptor: SortDescriptor) => {
+      const column = descriptor.column ? String(descriptor.column) : ""
+      const direction = descriptor.direction || "ascending"
+      updateUrl({
+        sortBy: column,
+        sortOrder: direction,
+        page: "1", // reset to first page on sort change
+      })
+    },
+    [updateUrl],
+  )
+
+  return { sortDescriptor, onSortChange }
 }
