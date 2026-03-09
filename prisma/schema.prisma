@@ -469,6 +469,9 @@ model PortalUser {
   // Google Calendar token
   calendarToken    GoogleCalendarToken?
 
+  // AI Chatbot
+  chatSessions     ChatSession[]
+
   @@map("portal_users")
 }
 
@@ -681,6 +684,37 @@ model PortalNotification {
   @@index([userId, isRead])
   @@index([userId, createdAt])
   @@map("portal_notifications")
+}
+
+// ============================================
+// AI CHATBOT
+// ============================================
+
+model ChatSession {
+  id        String        @id @default(cuid())
+  userId    String
+  title     String?       // Auto-generated from first message
+  createdAt DateTime      @default(now())
+  updatedAt DateTime      @updatedAt
+
+  user      PortalUser    @relation(fields: [userId], references: [id], onDelete: Cascade)
+  messages  ChatMessage[]
+
+  @@index([userId, createdAt])
+  @@map("chat_sessions")
+}
+
+model ChatMessage {
+  id        String      @id @default(cuid())
+  sessionId String
+  role      String      // "user" | "assistant"
+  content   String      @db.Text
+  createdAt DateTime    @default(now())
+
+  session   ChatSession @relation(fields: [sessionId], references: [id], onDelete: Cascade)
+
+  @@index([sessionId, createdAt])
+  @@map("chat_messages")
 }
 
 // ============================================

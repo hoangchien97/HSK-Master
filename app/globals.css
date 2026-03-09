@@ -493,6 +493,12 @@ body {
     }
   }
 
+  /* AI Chat blinking cursor */
+  @keyframes blink {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0; }
+  }
+
   .animate-fade-in {
     animation: fade-in 0.6s ease-out forwards;
   }

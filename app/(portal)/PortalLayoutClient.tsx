@@ -6,6 +6,7 @@ import PortalHeader from "@/components/portal/PortalHeader"
 import PortalContent from "@/components/portal/PortalContent"
 import { PortalUIProvider } from "@/providers/portal-ui-provider"
 import { NotificationProvider } from "@/providers/notification-provider"
+import { AIChatbot } from "@/components/portal/chat"
 
 interface User {
   id: string
@@ -47,6 +48,9 @@ function PortalLayoutInner({ user, children }: PortalLayoutClientProps) {
         {/* Page content - Only this area scrolls */}
         <PortalContent>{children}</PortalContent>
       </div>
+
+      {/* AI Chatbot Floating Bubble */}
+      <AIChatbot user={{ name: user.name, image: user.image }} />
     </div>
   )
 }
