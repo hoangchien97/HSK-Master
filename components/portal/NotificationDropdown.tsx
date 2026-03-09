@@ -36,6 +36,7 @@ import "dayjs/locale/vi"
 import { useNotifications, type NotificationItem } from "@/providers/notification-provider"
 import { NotificationType } from "@/enums/portal/common"
 import { NOTIFICATION_MAX_BADGE } from "@/constants/portal/notification"
+import { HEADER_LABELS } from "@/constants/portal/messages"
 import { CSpinner } from "@/components/portal/common"
 
 dayjs.locale("vi")
@@ -113,19 +114,19 @@ export default function NotificationDropdown() {
         </button>
       </DropdownTrigger>
       <DropdownMenu
-        aria-label="Thông báo"
-        className="w-96 max-h-96 overflow-y-auto"
+        aria-label={HEADER_LABELS.NOTIFICATIONS}
+        className="w-[calc(100vw-2rem)] sm:w-96 max-h-96 overflow-y-auto"
         emptyContent={
           <div className="py-6 text-center text-gray-500">
             <Bell className="w-10 h-10 mx-auto text-gray-300 mb-2" />
-            <p className="text-sm">Chưa có thông báo mới</p>
+            <p className="text-sm">{HEADER_LABELS.NO_NEW_NOTIFICATIONS}</p>
           </div>
         }
       >
         <DropdownSection showDivider>
           <DropdownItem key="header" isReadOnly className="opacity-100">
             <div className="flex items-center justify-between">
-              <h3 className="font-semibold text-gray-900">Thông báo</h3>
+              <h3 className="font-semibold text-gray-900">{HEADER_LABELS.NOTIFICATIONS}</h3>
               {unreadCount > 0 && (
                 <Button
                   size="sm"
@@ -135,7 +136,7 @@ export default function NotificationDropdown() {
                   onPress={markAllRead}
                   className="text-xs -mr-2"
                 >
-                  Đọc tất cả
+                  {HEADER_LABELS.MARK_ALL_READ}
                 </Button>
               )}
             </div>
@@ -151,7 +152,7 @@ export default function NotificationDropdown() {
             <DropdownItem key="empty" isReadOnly className="opacity-100">
               <div className="py-6 text-center text-gray-500">
                 <Bell className="w-10 h-10 mx-auto text-gray-300 mb-2" />
-                <p className="text-sm">Chưa có thông báo nào</p>
+                <p className="text-sm">{HEADER_LABELS.NO_NOTIFICATIONS}</p>
               </div>
             </DropdownItem>
           ) : (

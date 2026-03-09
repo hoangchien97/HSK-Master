@@ -1,7 +1,7 @@
 "use client"
 
 import { useState, useEffect, useMemo, useCallback } from "react"
-import { Users } from "lucide-react"
+import { Users, CalendarDays } from "lucide-react"
 import { toast } from "react-toastify"
 import dayjs from "dayjs"
 import "dayjs/locale/vi"
@@ -157,13 +157,13 @@ export default function StudentAttendanceView() {
       />
 
       {/* Matrix content area — loading overlay sits inside this zone */}
-      <div className="relative flex-1 min-h-0">
+      <div className="relative flex-1 min-h-0 flex flex-col">
         {isPageLoading && (
           <CSpinner variant="overlay" />
         )}
 
         {/* Matrix Table — read-only */}
-        {matrixData ? (
+        {matrixData && scheduleDates.length > 0 ? (
           <AttendanceTable
             matrixData={matrixData}
             scheduleDates={scheduleDates}
@@ -186,8 +186,18 @@ export default function StudentAttendanceView() {
             totalStudents={matrixData.students.length}
             readOnly
           />
+        ) : matrixData && scheduleDates.length === 0 ? (
+          <div className="flex-1 bg-white rounded-xl shadow-sm border border-gray-200 flex flex-col items-center justify-center min-h-[400px] gap-4">
+            <CalendarDays className="w-16 h-16 text-default-300" />
+            <p className="text-lg font-semibold text-default-500">
+              Chưa có buổi học nào
+            </p>
+            <p className="text-sm text-default-400">
+              Lớp học chưa có lịch dạy
+            </p>
+          </div>
         ) : !isPageLoading ? (
-          <div className="flex flex-col items-center justify-center py-20 gap-4">
+          <div className="flex-1 bg-white rounded-xl shadow-sm border border-gray-200 flex flex-col items-center justify-center min-h-[400px] gap-4">
             <Users className="w-16 h-16 text-default-300" />
             <p className="text-lg font-semibold text-default-500">
               {classes.length === 0 ? "Chưa tham gia lớp học nào" : "Chưa có dữ liệu điểm danh"}

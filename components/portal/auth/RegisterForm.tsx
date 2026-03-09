@@ -7,6 +7,8 @@ import Link from "next/link";
 import { toast } from "react-toastify";
 import { Eye, EyeOff } from "lucide-react";
 import { Form, Input, Button } from "@heroui/react";
+import { PORTAL_ROUTES, API_ROUTES } from "@/constants/portal/routes";
+import { MSG_AUTH, MSG } from "@/constants/portal/messages";
 
 export default function RegisterForm() {
   const router = useRouter();
@@ -51,7 +53,7 @@ export default function RegisterForm() {
 
     try {
       // Call register API
-      const response = await fetch("/api/auth/register", {
+      const response = await fetch(API_ROUTES.AUTH.REGISTER, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
@@ -64,30 +66,30 @@ export default function RegisterForm() {
       const result = await response.json();
 
       if (!response.ok) {
-        toast.error(result.message || "Có lỗi xảy ra khi đăng ký");
+        toast.error(result.message || MSG_AUTH.REGISTER_FAILED);
         setLoading(false);
         return;
       }
 
       // Success - auto login
-      toast.success("Đăng ký thành công!");
+      toast.success(MSG_AUTH.REGISTER_SUCCESS);
 
       const signInResult = await signIn("credentials", {
         email: data.email as string,
         password: data.password as string,
-        callbackUrl: "/portal",
+        callbackUrl: PORTAL_ROUTES.HOME,
         redirect: false,
       });
 
       if (signInResult?.error) {
         // Redirect to login page
-        router.push("/portal/login?registered=true");
+        router.push(`${PORTAL_ROUTES.LOGIN}?registered=true`);
       } else {
-        router.push("/portal");
+        router.push(PORTAL_ROUTES.HOME);
         router.refresh();
       }
     } catch {
-      toast.error("Có lỗi xảy ra. Vui lòng thử lại");
+      toast.error(MSG.ERROR_GENERIC);
       setLoading(false);
     }
   };
@@ -228,7 +230,7 @@ export default function RegisterForm() {
           <p className="text-sm text-gray-600">
             Đã có tài khoản?{" "}
             <Link
-              href="/portal/login"
+              href={PORTAL_ROUTES.LOGIN}
               className="font-semibold text-red-600 hover:text-red-700 transition-colors"
             >
               Đăng nhập ngay

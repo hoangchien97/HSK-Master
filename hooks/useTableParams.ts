@@ -150,7 +150,7 @@ export function useTableSort(
   const sortDescriptor: SortDescriptor = useMemo(() => {
     const column = searchParams.get("sortBy") || ""
     const direction = searchParams.get("sortOrder") === "descending" ? "descending" : "ascending"
-    if (!column) return {}
+    if (!column) return { column: "", direction }
     return { column, direction }
   }, [searchParams])
 

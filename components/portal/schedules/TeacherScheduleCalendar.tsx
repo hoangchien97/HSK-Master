@@ -17,6 +17,8 @@ import {
   deleteScheduleGroup,
 } from '@/actions/schedule.actions';
 import { CSpinner } from '@/components/portal/common';
+import { Button } from '@heroui/react';
+import { Plus } from 'lucide-react';
 import type {
   ISchedule,
   IClass,
@@ -213,8 +215,23 @@ export default function TeacherScheduleCalendar() {
 
   return (
     <div className="md:flex-1 md:min-h-0 flex flex-col gap-4">
+      {/* Action bar */}
+      <div className="flex justify-end">
+        <Button
+          color="primary"
+          startContent={<Plus size={18} />}
+          onPress={() => {
+            setScheduleToEdit(null);
+            setSlotInitialTime(null);
+            setShowModal(true);
+          }}
+        >
+          Thêm buổi học
+        </Button>
+      </div>
+
       {/* Calendar — wrapped in relative container for loading overlay */}
-      <div className="relative flex-1 min-h-0">
+      <div className="relative flex-1 min-h-0 flex flex-col">
         {isPageLoading && (
           <CSpinner variant="overlay" />
         )}
@@ -223,11 +240,6 @@ export default function TeacherScheduleCalendar() {
           onEventClick={handleEventClick}
           onEventDoubleClick={handleEventDoubleClick}
           onEditEvent={handleEdit}
-          onCreateSchedule={() => {
-            setScheduleToEdit(null);
-            setSlotInitialTime(null);
-            setShowModal(true);
-          }}
           onSlotSelect={handleSlotSelect}
         />
       </div>

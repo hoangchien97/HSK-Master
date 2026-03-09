@@ -11,7 +11,7 @@ import {
 import { LogOut, X } from "lucide-react"
 import { cn } from "@/lib/utils"
 import { getNavItemsByRole } from "@/constants/portal/navigation"
-import { ROLE_LABELS } from "@/constants/portal"
+import { PORTAL_ROUTES, portalRoleRoute, MSG_AUTH } from "@/constants/portal"
 import { type UserRole } from "@/constants/portal/roles"
 import Image from "next/image"
 import { BRAND_NAME } from "@/constants/brand"
@@ -27,11 +27,12 @@ export default function PortalSidebar({ userRole, isOpen = true, onClose }: Port
   const navItems = getNavItemsByRole(userRole)
 
   const handleSignOut = async () => {
-    await signOut({ callbackUrl: "/portal/login" })
+    await signOut({ callbackUrl: PORTAL_ROUTES.LOGIN })
   }
 
   const isActiveLink = (href: string) => {
-    if (href === "/portal/admin" || href === "/portal/teacher" || href === "/portal/student") {
+    const rolePaths = ["admin", "teacher", "student"].map((r) => portalRoleRoute(r))
+    if (rolePaths.includes(href)) {
       return pathname === href
     }
     return pathname?.startsWith(href)
@@ -57,7 +58,7 @@ export default function PortalSidebar({ userRole, isOpen = true, onClose }: Port
       >
         {/* Logo - Fixed at top */}
         <div className="flex items-center h-[64px] justify-between px-5 py-4 border-b border-gray-100 shrink-0">
-          <Link href="/portal" className="flex items-center">
+          <Link href={PORTAL_ROUTES.HOME} className="flex items-center">
             <Image src="/logo.svg" alt={BRAND_NAME} width={160} height={40} priority />
           </Link>
           {/* Mobile close button */}
@@ -117,7 +118,7 @@ export default function PortalSidebar({ userRole, isOpen = true, onClose }: Port
             onPress={handleSignOut}
             className="w-full justify-start hover:bg-red-50"
           >
-            Đăng xuất
+            {MSG_AUTH.LOGOUT}
           </Button>
         </div>
       </aside>

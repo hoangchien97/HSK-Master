@@ -6,11 +6,10 @@ import 'react-big-calendar/lib/css/react-big-calendar.css';
 import '@/styles/big-calendar-custom.css';
 import { format, parse, startOfWeek, getDay } from 'date-fns';
 import { vi } from 'date-fns/locale';
-import { Plus, ChevronLeft, ChevronRight, Pencil } from 'lucide-react';
-import { Button, Tabs, Tab, Tooltip, DatePicker } from '@heroui/react';
+import { ChevronLeft, ChevronRight, Pencil } from 'lucide-react';
+import { Button, Tabs, Tab, Tooltip } from '@heroui/react';
 import { CSpinner } from '@/components/portal/common';
 import { cn } from '@/lib/utils';
-import { CalendarDate } from '@internationalized/date';
 import type { ISchedule } from '@/interfaces/portal';
 import { EventState } from '@/interfaces/portal/calendar';
 import { getEventState } from '@/utils/calendar';
@@ -74,10 +73,9 @@ interface BigCalendarViewProps {
   onEventClick: (schedule: ISchedule) => void;
   onEventDoubleClick: (schedule: ISchedule) => void;
   onEditEvent: (schedule: ISchedule) => void;
-  onCreateSchedule: () => void;
   onSlotSelect?: (slotInfo: { start: Date; end: Date }) => void;
   isLoading?: boolean;
-  /** When true, hides create/edit buttons and disables slot selection */
+  /** When true, hides edit buttons and disables slot selection */
   readOnly?: boolean;
 }
 
@@ -92,7 +90,6 @@ export default function BigCalendarView({
   onEventClick,
   onEventDoubleClick,
   onEditEvent,
-  onCreateSchedule,
   onSlotSelect,
   isLoading = false,
   readOnly = false,
@@ -227,28 +224,13 @@ export default function BigCalendarView({
     });
   }, [currentView]);
 
-  // Calendar date for DatePicker
-  const calendarDateValue = useMemo(() => {
-    return new CalendarDate(
-      currentDate.getFullYear(),
-      currentDate.getMonth() + 1,
-      currentDate.getDate()
-    );
-  }, [currentDate]);
-
-  const handleDatePickerChange = useCallback((value: CalendarDate | null) => {
-    if (value) {
-      setCurrentDate(new Date(value.year, value.month - 1, value.day));
-    }
-  }, []);
-
   return (
     <div className="flex flex-col md:flex-1 md:min-h-0 bg-white rounded-xl shadow-sm border border-gray-200">
       {/* Custom Toolbar — responsive: stacks on mobile, compact on tablet */}
       <div className="shrink-0 flex flex-col gap-2 p-3 border-b border-gray-200 sm:flex-row sm:items-center sm:justify-between sm:p-4">
         {/* Row 1 — navigation + date */}
         <div className="flex items-center gap-1.5 sm:gap-3 flex-wrap">
-          <Button variant="bordered" size="sm" onPress={goToToday} className="shrink-0 h-8 min-w-0 px-2.5 sm:px-3">
+          <Button color="primary" variant="flat" size="sm" onPress={goToToday} className="shrink-0 h-8 min-w-0 px-2.5 sm:px-3 font-semibold">
             Hôm nay
           </Button>
           <div className="flex items-center">
@@ -262,18 +244,9 @@ export default function BigCalendarView({
           <h2 className="text-sm sm:text-lg font-semibold text-gray-900 capitalize">
             {dateDisplayText}
           </h2>
-          {/* Date Picker — hidden on mobile */}
-          <DatePicker
-            aria-label="Chọn ngày"
-            value={calendarDateValue}
-            onChange={handleDatePickerChange}
-            size="sm"
-            className="hidden md:block w-36"
-            showMonthAndYearPickers
-          />
         </div>
 
-        {/* Row 2 — view tabs + create button */}
+        {/* Row 2 — view tabs */}
         <div className="flex items-center gap-2 sm:gap-3">
           <Tabs
             aria-label="Chế độ xem"
@@ -286,17 +259,6 @@ export default function BigCalendarView({
             <Tab key="week" title="Tuần" />
             <Tab key="month" title="Tháng" />
           </Tabs>
-
-          <Button
-            color="danger"
-            size="sm"
-            startContent={<Plus className="w-4 h-4" />}
-            onPress={onCreateSchedule}
-            className={cn("h-8", readOnly && "hidden")}
-          >
-            <span className="hidden sm:inline">Thêm buổi học</span>
-            <span className="sm:hidden">Thêm</span>
-          </Button>
         </div>
       </div>
 

@@ -12,6 +12,7 @@ import {
   Select,
   SelectItem,
 } from "@heroui/react"
+import { SortIcon } from "@heroui/shared-icons"
 import { cn } from "@/lib/utils"
 import { EmptyState } from "./EmptyState"
 import { CSpinner } from "./CSpinner"
@@ -94,14 +95,12 @@ export interface CTableProps<T extends Record<string, unknown>> {
   isHoverable?: boolean
   ariaLabel?: string
 
-  /* ── Loading (Option A — Guideline) ── */
+  /* ── Loading ── */
   /**
-   * When true: dim table + show small indicator.
-   * Data rows are KEPT — never cleared.
-   * Follows Stripe/Linear "refreshing" pattern.
+   * Single loading flag.
+   * When true → HeroUI TableBody shows loadingContent (pill spinner) inside the table.
+   * When false → normal data / empty state.
    */
-  isFetching?: boolean
-  /** When true: show loading spinner (first load, no data yet) */
   isLoading?: boolean
 }
 
@@ -140,7 +139,6 @@ export function CTable<T extends Record<string, unknown>>({
   isHoverable = true,
   ariaLabel = "Data table",
   // loading
-  isFetching = false,
   isLoading = false,
 }: CTableProps<T>) {
   /* ─── Derived ─── */
@@ -162,8 +160,8 @@ export function CTable<T extends Record<string, unknown>>({
     [onPageSizeChange],
   )
 
-  /* Is this the first load? (no data yet + loading) */
-  const isFirstLoad = isLoading && data.length === 0
+  /* ─── Loading state for HeroUI TableBody ─── */
+  const loadingState = isLoading ? "loading" : "idle"
 
   /* ─── Table classNames (HeroUI table slots) ─── */
   const tableClassNames = useMemo(
@@ -171,8 +169,6 @@ export function CTable<T extends Record<string, unknown>>({
       base: "md:flex-1 md:min-h-0",
       wrapper: cn(
         "shadow-none p-0 overflow-x-auto",
-        // At md (768px+): wrapper fills its parent and scrolls internally
-        // so position:sticky on thead resolves correctly
         "md:flex-1 md:min-h-0 md:max-h-none md:overflow-y-auto",
       ),
       table: "min-w-[640px]",
@@ -186,6 +182,8 @@ export function CTable<T extends Record<string, unknown>>({
         "first:group-data-[last=true]/tr:before:rounded-none",
         "last:group-data-[last=true]/tr:before:rounded-none",
       ],
+      emptyWrapper: "min-h-[400px] h-[calc(100vh-320px)] align-middle",
+      loadingWrapper: "min-h-[400px] h-[calc(100vh-320px)] align-middle",
     }),
     [isHoverable],
   )
@@ -230,7 +228,7 @@ export function CTable<T extends Record<string, unknown>>({
             total={totalPages}
             onChange={handlePageChange}
             size="sm"
-            isDisabled={isFetching}
+            isDisabled={isLoading}
           />
         ) : <div />}
 
@@ -241,7 +239,7 @@ export function CTable<T extends Record<string, unknown>>({
             onChange={handlePageSizeChange}
             className="w-20"
             aria-label="Số dòng mỗi trang"
-            isDisabled={isFetching}
+            isDisabled={isLoading}
           >
             {pageSizeOptions.map((size) => (
               <SelectItem key={size} textValue={String(size)}>
@@ -252,24 +250,21 @@ export function CTable<T extends Record<string, unknown>>({
         </div>
       </div>
     )
-  }, [isShowPagination, total, totalPages, page, pageSize, pageSizeOptions, handlePageChange, handlePageSizeChange, isFetching])
+  }, [isShowPagination, total, totalPages, page, pageSize, pageSizeOptions, handlePageChange, handlePageSizeChange, isLoading])
+
+  /* ─── Loading content — reuse CSpinner pill (inline, no absolute) ─── */
+  const loadingContent = useMemo(
+    () => <CSpinner variant="pill-inline" color="primary" message="Đang tải..." />,
+    [],
+  )
 
   return (
     <div
       className={cn(
-        // Mobile: normal flow. Tablet+ (md/768px): fill remaining height
         "relative flex flex-col md:flex-1 md:min-h-0",
-        // Dim when refetching (not first load)
-        isFetching && !isFirstLoad && "opacity-60 pointer-events-none",
         className,
       )}
     >
-      {/* Refetch pill — floating above content when data already exists */}
-      {isFetching && !isFirstLoad && <CSpinner variant="pill" color="primary" />}
-
-      {/* First-load overlay — centered in the entire CTable area */}
-      {isFirstLoad && <CSpinner variant="overlay" message="Đang tải..." />}
-
       <Table
         isHeaderSticky={isHeaderSticky}
         aria-label={ariaLabel}
@@ -285,6 +280,7 @@ export function CTable<T extends Record<string, unknown>>({
         topContentPlacement="outside"
         bottomContent={bottomContent}
         bottomContentPlacement="outside"
+        sortIcon={<SortIcon />}
       >
         <TableHeader columns={columns}>
           {(column) => (
@@ -302,17 +298,14 @@ export function CTable<T extends Record<string, unknown>>({
         </TableHeader>
         <TableBody
           items={data}
-          isLoading={false}
+          loadingState={loadingState}
+          loadingContent={loadingContent}
           emptyContent={
-            isFirstLoad ? (
-              <div className="h-32" />
-            ) : (
-              <EmptyState
-                title={emptyContent?.title || "Không có dữ liệu"}
-                description={emptyContent?.description || "Chưa có dữ liệu để hiển thị"}
-                icon={emptyContent?.icon}
-              />
-            )
+            <EmptyState
+              title={emptyContent?.title || "Không có dữ liệu"}
+              description={emptyContent?.description || "Chưa có dữ liệu để hiển thị"}
+              icon={emptyContent?.icon}
+            />
           }
         >
           {(item) => (

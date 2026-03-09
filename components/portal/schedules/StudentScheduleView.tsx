@@ -46,7 +46,7 @@ export default function StudentScheduleView() {
   return (
     <div className="flex-1 min-h-0 flex flex-col gap-4">
       {/* Calendar — wrapped in relative container for loading overlay */}
-      <div className="relative flex-1 min-h-0">
+      <div className="relative flex-1 min-h-0 flex flex-col">
         {isPageLoading && (
           <CSpinner variant="overlay" />
         )}
@@ -55,7 +55,6 @@ export default function StudentScheduleView() {
           onEventClick={handleEventClick}
           onEventDoubleClick={handleEventClick}
           onEditEvent={handleEventClick}
-          onCreateSchedule={() => {}}
           readOnly
         />
       </div>

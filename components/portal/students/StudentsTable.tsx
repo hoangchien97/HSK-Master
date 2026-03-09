@@ -31,8 +31,7 @@ export default function StudentsTable() {
   const debouncedSearch = useDebouncedValue(search, 350)
 
   const [data, setData] = useState<IGetStudentResponse>({ items: [], total: 0 })
-  const [isFetching, setIsFetching] = useState(false)
-  const [isLoaded, setIsLoaded] = useState(false)
+  const [isLoading, setIsLoading] = useState(true)
   const [classes, setClasses] = useState<{ id: string; className: string; classCode: string }[]>([])
 
   const updateUrl = useCallback(
@@ -72,7 +71,7 @@ export default function StudentsTable() {
 
   /* ─── Load students via server action ─── */
   const loadData = useCallback(async () => {
-    setIsFetching(true)
+    setIsLoading(true)
     try {
       const result = await fetchStudents({
         search: debouncedSearch || undefined,
@@ -90,8 +89,7 @@ export default function StudentsTable() {
       console.error('Error loading students:', error)
       toast.error("Không thể tải danh sách học viên")
     } finally {
-      setIsFetching(false)
-      setIsLoaded(true)
+      setIsLoading(false)
     }
   }, [debouncedSearch, urlLevel, urlClassId, urlPage, urlPageSize])
 
@@ -105,7 +103,7 @@ export default function StudentsTable() {
 
   const columns: CTableColumn<IStudent & Record<string, unknown>>[] = useMemo(() => [
     {
-      key: "stt", label: "STT", align: "center" as const, headerClassName: "w-12",
+      key: "stt", label: "STT", align: "center" as const, headerClassName: "w-[50px]",
       render: (_v, _row, index) => (
         <span className="text-sm text-default-500">{(urlPage - 1) * urlPageSize + index + 1}</span>
       ),
@@ -125,7 +123,7 @@ export default function StudentsTable() {
       ),
     },
     {
-      key: "level", label: "Trình độ", sortable: true,
+      key: "level", label: "Trình độ", sortable: true, headerClassName: "w-[100px]",
       render: (_v, row) =>
         row.level ? (
           <Chip size="sm" color="primary" variant="flat">
@@ -134,7 +132,7 @@ export default function StudentsTable() {
         ) : (<span className="text-default-400">—</span>),
     },
     {
-      key: "classes", label: "Lớp học",
+      key: "classes", label: "Lớp học", headerClassName: "w-[160px]",
       render: (_v, row) => {
         if (!row.classes || row.classes.length === 0) {
           return <span className="text-default-400 text-sm">Chưa có lớp</span>
@@ -148,7 +146,7 @@ export default function StudentsTable() {
       },
     },
     {
-      key: "status", label: "Trạng thái", sortable: true,
+      key: "status", label: "Trạng thái", sortable: true, headerClassName: "w-[110px]",
       render: (_v, row) => (
         <Chip size="sm" color={STUDENT_STATUS_CONFIG[row.status]?.color ?? "default"} variant="flat">
           {STUDENT_STATUS_CONFIG[row.status]?.label ?? row.status}
@@ -156,7 +154,7 @@ export default function StudentsTable() {
       ),
     },
     {
-      key: "actions", label: "", align: "end" as const,
+      key: "actions", label: "", align: "end" as const, headerClassName: "w-[100px]",
       render: (_v, row) => (
         <div className="flex justify-end items-center gap-1">
           {row.email && (
@@ -197,8 +195,7 @@ export default function StudentsTable() {
       total={data.total}
       sortDescriptor={sortDescriptor}
       onSortChange={onSortChange}
-      isFetching={isFetching}
-      isLoading={!isLoaded}
+      isLoading={isLoading}
       onPageChange={(p) => updateUrl({ page: String(p) })}
       onPageSizeChange={(s) => updateUrl({ pageSize: String(s) })}
       ariaLabel="Bảng học viên"

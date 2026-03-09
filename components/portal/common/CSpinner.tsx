@@ -15,8 +15,9 @@ interface CSpinnerProps {
    * - "default" — vertically stacked spinner + message (inline)
    * - "overlay" — full backdrop overlay, centers spinner over parent (parent must be `relative`)
    * - "pill"    — small horizontal pill floating over parent (parent must be `relative`)
+   * - "pill-inline" — same pill style but inline (no absolute positioning), for use inside HeroUI loadingContent
    */
-  variant?: "default" | "overlay" | "pill"
+  variant?: "default" | "overlay" | "pill" | "pill-inline"
   /** @deprecated use variant="overlay" instead */
   overlay?: boolean
   /** Additional className for the container */
@@ -30,6 +31,7 @@ interface CSpinnerProps {
  * - `<CSpinner />`                         — inline, vertically stacked
  * - `<CSpinner variant="overlay" />`       — full backdrop overlay
  * - `<CSpinner variant="pill" />`          — floating pill (absolute, z-20)
+ * - `<CSpinner variant="pill-inline" />`   — pill style, inline (no positioning)
  * - `<CSpinner size="sm" message="" />`    — small spinner, no label
  *
  * Parents of "overlay" and "pill" variants must have `position: relative`.
@@ -55,6 +57,18 @@ export function CSpinner({
             <span className="text-xs text-default-500 font-medium">{message}</span>
           )}
         </div>
+      </div>
+    )
+  }
+
+  /* ── Pill-inline: same pill style but no absolute positioning ── */
+  if (resolvedVariant === "pill-inline") {
+    return (
+      <div className={cn("flex items-center gap-2 bg-white/90 backdrop-blur-sm rounded-xl px-4 py-2 shadow-sm border border-default-200", className)}>
+        <Spinner size="sm" color={color === "danger" ? "primary" : color} classNames={{ wrapper: "w-4 h-4" }} />
+        {message && (
+          <span className="text-xs text-default-500 font-medium">{message}</span>
+        )}
       </div>
     )
   }

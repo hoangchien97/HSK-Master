@@ -6,6 +6,7 @@ import PortalHeader from "@/components/portal/PortalHeader"
 import PortalContent from "@/components/portal/PortalContent"
 import { PortalUIProvider } from "@/providers/portal-ui-provider"
 import { NotificationProvider } from "@/providers/notification-provider"
+import { SIDEBAR } from "@/constants/portal/ui"
 
 interface User {
   id: string
@@ -34,7 +35,7 @@ function PortalLayoutInner({ user, children }: PortalLayoutClientProps) {
       />
 
       {/* Right area: Header (sticky) + Content (scrollable on mobile, flex on md+) */}
-      <div className="flex-1 flex flex-col min-h-0 lg:pl-64 overflow-y-auto md:overflow-hidden">
+      <div className={`flex-1 flex flex-col min-h-0 ${SIDEBAR.CONTENT_OFFSET_CLASS} overflow-y-auto md:overflow-hidden`}>
         {/* Header - Sticky top */}
         <PortalHeader
           userName={user.name}

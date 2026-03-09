@@ -19,6 +19,8 @@ import { FileEdit, PlusCircle, Users } from "lucide-react";
 import { createClassAction, updateClassAction } from "@/actions/class.actions";
 import { FORMAT_DATE_INPUT } from "@/constants/portal/date";
 import { USER_ROLE } from "@/constants/portal/roles";
+import { MSG_CLASS, MSG } from "@/constants/portal/messages";
+import { HSK_LEVELS } from "@/constants/portal/student";
 import UserSelectionPopup, { type UserItem } from "./UserSelectionPopup";
 
 interface ClassFormModalProps {
@@ -28,14 +30,10 @@ interface ClassFormModalProps {
   initialData?: IClass;
 }
 
-const LEVELS = [
-  { value: "HSK1", label: "HSK 1" },
-  { value: "HSK2", label: "HSK 2" },
-  { value: "HSK3", label: "HSK 3" },
-  { value: "HSK4", label: "HSK 4" },
-  { value: "HSK5", label: "HSK 5" },
-  { value: "HSK6", label: "HSK 6" },
-];
+/** Map HSK_LEVELS to Select-friendly format (skip the 'ALL' entry) */
+const LEVEL_OPTIONS = HSK_LEVELS
+  .filter((l) => l.key !== "ALL")
+  .map((l) => ({ value: l.key, label: l.label }));
 
 export default function ClassFormModal({
   isOpen,
@@ -96,19 +94,19 @@ export default function ClassFormModal({
       if (isEdit) {
         const result = await updateClassAction(initialData!.id, payload);
         if (!result.success) throw new Error(result.error);
-        toast.success("Cập nhật lớp thành công!");
+        toast.success(MSG_CLASS.UPDATED);
         onClose();
         if (result.classData) onSuccess(result.classData);
       } else {
         const result = await createClassAction(payload);
         if (!result.success) throw new Error(result.error);
-        toast.success("Tạo lớp thành công!");
+        toast.success(MSG_CLASS.CREATED);
         onClose();
         if (result.classData) onSuccess(result.classData);
       }
     } catch (error: unknown) {
       const err = error as { normalized?: { message?: string }; message?: string };
-      toast.error(err?.normalized?.message || err?.message || "Có lỗi xảy ra");
+      toast.error(err?.normalized?.message || err?.message || MSG.ERROR_GENERIC);
     } finally {
       setIsSubmitting(false);
     }
@@ -185,12 +183,12 @@ export default function ClassFormModal({
             labelPlacement="outside"
             defaultSelectedKeys={initialData?.level ? [initialData.level] : ["HSK1"]}
           >
-            {LEVELS.map((level) => (
+            {LEVEL_OPTIONS.map((level) => (
               <SelectItem key={level.value}>{level.label}</SelectItem>
             ))}
           </Select>
 
-          <div className="grid grid-cols-2 gap-4">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <Input
               isRequired
               type="date"

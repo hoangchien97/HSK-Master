@@ -102,8 +102,7 @@ export default function StudentAssignmentsView() {
   const [items, setItems] = useState<AssignmentData[]>([])
   const [total, setTotal] = useState(0)
   const [classes, setClasses] = useState<ClassInfo[]>([])
-  const [isFetching, setIsFetching] = useState(false)
-  const [isLoaded, setIsLoaded] = useState(false)
+  const [isLoading, setIsLoading] = useState(true)
 
   /* ─── URL updater ─── */
   const updateUrl = useCallback(
@@ -132,7 +131,7 @@ export default function StudentAssignmentsView() {
 
   /* ─── Load data via server action (role-aware) ─── */
   const loadData = useCallback(async () => {
-    setIsFetching(true)
+    setIsLoading(true)
     try {
       const result = await fetchAssignments({
         search: debouncedSearch || undefined,
@@ -152,8 +151,7 @@ export default function StudentAssignmentsView() {
       console.error('Error loading assignments:', error)
       toast.error("Không thể tải danh sách bài tập")
     } finally {
-      setIsFetching(false)
-      setIsLoaded(true)
+      setIsLoading(false)
     }
   }, [debouncedSearch, urlClassFilter, urlStatusFilter, urlPage, urlPageSize])
 
@@ -176,7 +174,7 @@ export default function StudentAssignmentsView() {
       key: "stt",
       label: "STT",
       align: "center" as const,
-      headerClassName: "w-12",
+      headerClassName: "w-[50px]",
       render: (_v, _row, index) => (
         <span className="text-sm text-default-500">{(urlPage - 1) * urlPageSize + index + 1}</span>
       ),
@@ -212,11 +210,13 @@ export default function StudentAssignmentsView() {
     {
       key: "class",
       label: "Lớp",
+      headerClassName: "w-[120px]",
       render: (_v, row) => <span className="text-sm">{row.class.className}</span>,
     },
     {
       key: "dueDate",
       label: "Hạn nộp",
+      headerClassName: "w-[140px]",
       render: (_v, row) => {
         if (!row.dueDate) return <span className="text-default-400 text-sm">—</span>
         const isOverdue = new Date(row.dueDate) < new Date()
@@ -236,6 +236,7 @@ export default function StudentAssignmentsView() {
       key: "attachments",
       label: "Đính kèm",
       align: "center" as const,
+      headerClassName: "w-[90px]",
       render: (_v, row) => {
         const count = row.attachments?.length || 0
         const hasLink = !!row.externalLink
@@ -251,6 +252,7 @@ export default function StudentAssignmentsView() {
     {
       key: "status",
       label: "Trạng thái",
+      headerClassName: "w-[110px]",
       render: (_v, row) => {
         const subStatus = getSubmissionStatus(row)
         const config = SUBMISSION_STATUS_CONFIG[subStatus]
@@ -274,6 +276,7 @@ export default function StudentAssignmentsView() {
       key: "actions",
       label: "",
       align: "center" as const,
+      headerClassName: "w-[60px]",
       render: (_v, row) => (
         <Button
           as={Link}
@@ -292,51 +295,53 @@ export default function StudentAssignmentsView() {
 
   /* ─── Toolbar ─── */
   const toolbarContent = useMemo(() => (
-    <div className="flex flex-col gap-2 sm:flex-row sm:items-center">
-      <Input
-        isClearable
-        placeholder="Tìm kiếm bài tập..."
-        startContent={<Search className="w-4 h-4 text-default-400" />}
-        value={search}
-        onValueChange={setSearch}
-        onClear={() => setSearch("")}
-        className="w-full sm:max-w-xs"
-        size="sm"
-      />
-      <div className="flex gap-2">
-        <Select
-          placeholder="Tất cả lớp"
+    <div className="rounded-xl bg-white border border-gray-200 px-4 py-3 shadow-sm">
+      <div className="flex flex-col gap-2 sm:flex-row sm:items-center">
+        <Input
+          isClearable
+          placeholder="Tìm kiếm bài tập..."
+          startContent={<Search className="w-4 h-4 text-default-400" />}
+          value={search}
+          onValueChange={setSearch}
+          onClear={() => setSearch("")}
+          className="w-full sm:max-w-xs"
           size="sm"
-          aria-label="Lọc theo lớp học"
-          selectedKeys={[urlClassFilter]}
-          onSelectionChange={(keys) => {
-            const val = Array.from(keys)[0] as string
-            updateUrl({ classId: val || "ALL" })
-          }}
-          className="w-full sm:w-40"
-        >
-          {[
-            <SelectItem key="ALL">Tất cả lớp</SelectItem>,
-            ...classes.map((c) => (
-              <SelectItem key={c.id}>{c.className}</SelectItem>
-            )),
-          ]}
-        </Select>
-        <Select
-          placeholder="Trạng thái"
-          size="sm"
-          aria-label="Lọc theo trạng thái"
-          selectedKeys={[urlStatusFilter]}
-          onSelectionChange={(keys) => {
-            const val = Array.from(keys)[0] as string
-            updateUrl({ status: val || "ALL" })
-          }}
-          className="w-full sm:w-44"
-        >
-          {STATUS_OPTIONS.map((opt) => (
-            <SelectItem key={opt.key}>{opt.label}</SelectItem>
-          ))}
-        </Select>
+        />
+        <div className="flex gap-2">
+          <Select
+            placeholder="Tất cả lớp"
+            size="sm"
+            aria-label="Lọc theo lớp học"
+            selectedKeys={[urlClassFilter]}
+            onSelectionChange={(keys) => {
+              const val = Array.from(keys)[0] as string
+              updateUrl({ classId: val || "ALL" })
+            }}
+            className="w-full sm:w-40"
+          >
+            {[
+              <SelectItem key="ALL">Tất cả lớp</SelectItem>,
+              ...classes.map((c) => (
+                <SelectItem key={c.id}>{c.className}</SelectItem>
+              )),
+            ]}
+          </Select>
+          <Select
+            placeholder="Trạng thái"
+            size="sm"
+            aria-label="Lọc theo trạng thái"
+            selectedKeys={[urlStatusFilter]}
+            onSelectionChange={(keys) => {
+              const val = Array.from(keys)[0] as string
+              updateUrl({ status: val || "ALL" })
+            }}
+            className="w-full sm:w-44"
+          >
+            {STATUS_OPTIONS.map((opt) => (
+              <SelectItem key={opt.key}>{opt.label}</SelectItem>
+            ))}
+          </Select>
+        </div>
       </div>
     </div>
   ), [search, urlClassFilter, urlStatusFilter, classes, updateUrl])
@@ -349,8 +354,7 @@ export default function StudentAssignmentsView() {
       page={urlPage}
       pageSize={urlPageSize}
       total={total}
-      isFetching={isFetching}
-      isLoading={!isLoaded}
+      isLoading={isLoading}
       onPageChange={(p) => updateUrl({ page: String(p) })}
       onPageSizeChange={(s) => updateUrl({ pageSize: String(s) })}
       ariaLabel="Danh sách bài tập"

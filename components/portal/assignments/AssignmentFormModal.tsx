@@ -17,6 +17,8 @@ import { createAssignmentAction, updateAssignmentAction } from "@/actions/assign
 import { FileUploadZone } from "@/components/portal/common"
 import { CModal } from "@/components/portal/common/CModal"
 import { ASSIGNMENT_STATUS } from "@/constants/portal"
+import { MSG_ASSIGNMENT, MSG } from "@/constants/portal/messages"
+import { ASSIGNMENT_DEFAULTS } from "@/constants/portal/ui"
 
 interface ClassInfo {
   id: string
@@ -114,7 +116,7 @@ export default function AssignmentFormModal({
         title: formData.title as string,
         description: formData.description as string,
         status,
-        maxScore: 100,
+        maxScore: ASSIGNMENT_DEFAULTS.MAX_SCORE,
         dueDate: (formData.dueDate as string) || undefined,
         attachments,
         tags,
@@ -124,7 +126,7 @@ export default function AssignmentFormModal({
       if (isEdit) {
         const result = await updateAssignmentAction(editData!.id, values)
         if (!result.success) throw new Error(result.error)
-        toast.success("Cập nhật bài tập thành công!")
+        toast.success(MSG_ASSIGNMENT.UPDATED)
         onClose()
         if (result.assignment) onSuccess(result.assignment)
       } else {
@@ -132,14 +134,14 @@ export default function AssignmentFormModal({
         if (!result.success) throw new Error(result.error)
         toast.success(
           isPublished
-            ? "Tạo và công bố bài tập thành công!"
-            : "Tạo bài tập nháp thành công!"
+            ? MSG_ASSIGNMENT.CREATED_PUBLISHED
+            : MSG_ASSIGNMENT.CREATED_DRAFT
         )
         onClose()
         if (result.assignment) onSuccess(result.assignment)
       }
     } catch (error) {
-      toast.error(error instanceof Error ? error.message : "Có lỗi xảy ra")
+      toast.error(error instanceof Error ? error.message : MSG.ERROR_GENERIC)
     } finally {
       setIsSubmitting(false)
     }
