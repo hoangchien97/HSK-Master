@@ -110,7 +110,7 @@ export default function LoginForm() {
         </div>
 
         {/* Login Form */}
-        <Form 
+        <Form
           validationErrors={errors}
           onSubmit={onSubmit}
           className="flex flex-col gap-4"

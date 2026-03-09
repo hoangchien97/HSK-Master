@@ -33,7 +33,7 @@ export default function RegisterForm() {
 
     // Custom validation
     const newErrors: Record<string, string> = {};
-    
+
     const passwordError = getPasswordError(data.password as string);
     if (passwordError) {
       newErrors.password = passwordError;
