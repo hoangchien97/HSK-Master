@@ -17,9 +17,10 @@
 import { useState, useCallback, useEffect, useRef, useTransition } from "react"
 import dynamic from "next/dynamic"
 import { useRouter, useSearchParams, usePathname } from "next/navigation"
-import { Tabs, Tab, Chip, Button, Skeleton, Spinner } from "@heroui/react"
+import { Tabs, Tab, Chip, Button, Skeleton } from "@heroui/react"
 import { Search, Layers, HelpCircle, Headphones, PenTool, RotateCcw, CheckCircle2 } from "lucide-react"
 import { toast } from "react-toastify"
+import { CSpinner } from "@/components/portal/common"
 import { refreshLessonProgress } from "@/actions/practice.actions"
 import {
   fetchPracticeQueue,
@@ -347,7 +348,7 @@ export default function LessonPracticeView({
         <div className="relative mt-3">
           {(isPending || modeLoading) && (
             <div className="absolute inset-0 z-10 flex items-center justify-center bg-background/60 backdrop-blur-[1px] rounded-xl">
-              <Spinner size="lg" color="primary" label="Đang tải..." />
+              <CSpinner message="Đang tải..." color="primary" />
             </div>
           )}
 

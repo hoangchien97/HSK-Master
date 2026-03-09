@@ -19,6 +19,7 @@ import { StatCard } from "@/components/portal/common/StatCard"
 import { EmptyState } from "@/components/portal/common/EmptyState"
 import { cn } from "@/lib/utils"
 import { ItemProgressStatus } from "@/enums/portal/common"
+import { CHART_COLORS } from "@/constants/portal/ui"
 
 interface HSKLevel {
   id: string
@@ -60,7 +61,7 @@ function ProgressCircle({ percentage, size = 56 }: { percentage: number; size?: 
           cy={size / 2}
           r={radius}
           fill="none"
-          stroke="#e5e7eb"
+          stroke={CHART_COLORS.TRACK}
           strokeWidth={strokeWidth}
         />
         <circle
@@ -68,7 +69,7 @@ function ProgressCircle({ percentage, size = 56 }: { percentage: number; size?: 
           cy={size / 2}
           r={radius}
           fill="none"
-          stroke="#ef4444"
+          stroke={CHART_COLORS.PRIMARY}
           strokeWidth={strokeWidth}
           strokeDasharray={circumference}
           strokeDashoffset={offset}

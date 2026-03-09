@@ -2,7 +2,6 @@
 
 import { signOut } from "next-auth/react"
 import {
-  Input,
   Dropdown,
   DropdownTrigger,
   DropdownMenu,
@@ -10,8 +9,8 @@ import {
   DropdownSection,
   Avatar,
 } from "@heroui/react"
-import { Menu, Search, User, Settings, HelpCircle, LogOut, ChevronDown } from "lucide-react"
-import { ROLE_LABELS } from "@/constants/portal"
+import { Menu, User, Settings, HelpCircle, LogOut, ChevronDown } from "lucide-react"
+import { ROLE_LABELS, PORTAL_ROUTES, HEADER_LABELS, MSG_AUTH } from "@/constants/portal"
 import { type UserRole } from "@/constants/portal/roles"
 import NotificationDropdown from "./NotificationDropdown"
 
@@ -31,7 +30,7 @@ export default function PortalHeader({
   onMenuClick
 }: PortalHeaderProps) {
   const handleSignOut = async () => {
-    await signOut({ callbackUrl: "/portal/login" })
+    await signOut({ callbackUrl: PORTAL_ROUTES.LOGIN })
   }
 
   const roleLabel = ROLE_LABELS[userRole as UserRole] || userRole
@@ -39,28 +38,14 @@ export default function PortalHeader({
   return (
     <header className="shrink-0 z-10 bg-white border-b border-gray-200">
       <div className="flex items-center justify-between h-16 px-4 lg:px-6">
-        {/* Left: Mobile menu button + Search */}
-        <div className="flex items-center gap-4 flex-1">
+        {/* Left: Mobile menu button */}
+        <div className="flex items-center gap-4">
           <button
             onClick={onMenuClick}
             className="lg:hidden text-gray-500 hover:text-gray-700 p-2 rounded-lg hover:bg-gray-100 transition-colors"
           >
             <Menu className="w-6 h-6" />
           </button>
-
-          {/* Search bar */}
-          <div className="hidden md:flex items-center flex-1 max-w-lg">
-            <Input
-              type="text"
-              placeholder="Tìm kiếm khóa học, học viên, từ vựng..."
-              variant="bordered"
-              size="sm"
-              startContent={<Search className="w-4 h-4 text-gray-400" />}
-              classNames={{
-                inputWrapper: "bg-gray-50 border-gray-200 rounded-xl",
-              }}
-            />
-          </div>
         </div>
 
         {/* Right: Notifications & User menu */}
@@ -89,28 +74,28 @@ export default function PortalHeader({
                 <ChevronDown className="hidden lg:block w-4 h-4 text-gray-400" />
               </button>
             </DropdownTrigger>
-            <DropdownMenu aria-label="Menu người dùng" className="w-64">
+            <DropdownMenu aria-label={HEADER_LABELS.USER_MENU} className="w-64">
               <DropdownSection showDivider>
                 <DropdownItem
                   key="profile"
-                  href="/portal/profile"
+                  href={PORTAL_ROUTES.PROFILE}
                   startContent={<User className="w-4 h-4 text-gray-400" />}
                 >
-                  Hồ sơ cá nhân
+                  {HEADER_LABELS.PROFILE}
                 </DropdownItem>
                 <DropdownItem
                   key="settings"
-                  href="/portal/settings"
+                  href={PORTAL_ROUTES.SETTINGS}
                   startContent={<Settings className="w-4 h-4 text-gray-400" />}
                 >
-                  Cài đặt
+                  {HEADER_LABELS.SETTINGS}
                 </DropdownItem>
                 <DropdownItem
                   key="help"
-                  href="/portal/help"
+                  href={PORTAL_ROUTES.HELP}
                   startContent={<HelpCircle className="w-4 h-4 text-gray-400" />}
                 >
-                  Trung tâm trợ giúp
+                  {HEADER_LABELS.HELP}
                 </DropdownItem>
               </DropdownSection>
               <DropdownSection>
@@ -121,7 +106,7 @@ export default function PortalHeader({
                   startContent={<LogOut className="w-4 h-4" />}
                   onPress={handleSignOut}
                 >
-                  Đăng xuất
+                  {MSG_AUTH.LOGOUT}
                 </DropdownItem>
               </DropdownSection>
             </DropdownMenu>

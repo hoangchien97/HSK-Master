@@ -1,9 +1,10 @@
 "use client";
 
 import { useState, useEffect, useCallback, useRef } from "react";
-import { Avatar, Button, Input, Spinner } from "@heroui/react";
+import { Avatar, Button, Input } from "@heroui/react";
 import { Check, Search, Users } from "lucide-react";
 import { CModal } from "@/components/portal/common/CModal";
+import { CSpinner } from "@/components/portal/common";
 import api from "@/lib/http/client";
 import { USER_ROLE } from "@/constants/portal/roles";
 
@@ -171,9 +172,7 @@ export default function UserSelectionPopup({
             );
           })}
           {isLoading && (
-            <div className="flex justify-center py-3">
-              <Spinner size="sm" />
-            </div>
+            <CSpinner size="sm" className="py-3" />
           )}
           {!isLoading && users.length === 0 && (
             <p className="text-center text-sm text-default-400 py-8">

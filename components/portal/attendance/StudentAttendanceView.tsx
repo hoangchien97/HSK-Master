@@ -1,7 +1,7 @@
 "use client"
 
 import { useState, useEffect, useMemo, useCallback } from "react"
-import { Users } from "lucide-react"
+import { Users, CalendarDays } from "lucide-react"
 import { toast } from "react-toastify"
 import dayjs from "dayjs"
 import "dayjs/locale/vi"
@@ -10,7 +10,7 @@ import {
   fetchAttendanceMatrix,
   type AttendanceMatrixData,
 } from "@/actions/attendance.actions"
-import { Spinner } from "@heroui/react"
+import { CSpinner } from "@/components/portal/common"
 import AttendanceHeader from "./AttendanceHeader"
 import AttendanceTable from "./AttendanceTable"
 
@@ -142,18 +142,8 @@ export default function StudentAttendanceView() {
 
   /* ───── Render ───── */
 
-  if (classes.length === 0 && !matrixData && !isPageLoading) {
-    return (
-      <div className="flex flex-col items-center justify-center py-20 gap-4">
-        <Users className="w-16 h-16 text-default-300" />
-        <p className="text-lg font-semibold text-default-500">Chưa tham gia lớp học nào</p>
-        <p className="text-sm text-default-400">Liên hệ giáo viên để được thêm vào lớp học</p>
-      </div>
-    )
-  }
-
   return (
-    <div className="flex flex-col h-full gap-4">
+    <div className="flex-1 min-h-0 flex flex-col gap-4">
       {/* Header: Class selector + search — always visible */}
       <AttendanceHeader
         classes={classes}
@@ -167,19 +157,13 @@ export default function StudentAttendanceView() {
       />
 
       {/* Matrix content area — loading overlay sits inside this zone */}
-      <div className="relative flex-1 min-h-[300px]">
-        {/* Inline pill loading — same style as CTable refetch pill */}
+      <div className="relative flex-1 min-h-0 flex flex-col">
         {isPageLoading && (
-          <div className="absolute inset-0 z-20 flex items-center justify-center pointer-events-none">
-            <div className="flex items-center gap-2 bg-white/80 backdrop-blur-sm rounded-xl px-4 py-2 shadow-sm border border-default-200">
-              <Spinner size="sm" color="primary" classNames={{ wrapper: "w-4 h-4" }} />
-              <span className="text-xs text-default-500 font-medium">Đang tải dữ liệu...</span>
-            </div>
-          </div>
+          <CSpinner variant="overlay" />
         )}
 
         {/* Matrix Table — read-only */}
-        {matrixData ? (
+        {matrixData && scheduleDates.length > 0 ? (
           <AttendanceTable
             matrixData={matrixData}
             scheduleDates={scheduleDates}
@@ -202,11 +186,25 @@ export default function StudentAttendanceView() {
             totalStudents={matrixData.students.length}
             readOnly
           />
+        ) : matrixData && scheduleDates.length === 0 ? (
+          <div className="flex-1 bg-white rounded-xl shadow-sm border border-gray-200 flex flex-col items-center justify-center min-h-[400px] gap-4">
+            <CalendarDays className="w-16 h-16 text-default-300" />
+            <p className="text-lg font-semibold text-default-500">
+              Chưa có buổi học nào
+            </p>
+            <p className="text-sm text-default-400">
+              Lớp học chưa có lịch dạy
+            </p>
+          </div>
         ) : !isPageLoading ? (
-          <div className="flex flex-col items-center justify-center py-20 gap-4">
+          <div className="flex-1 bg-white rounded-xl shadow-sm border border-gray-200 flex flex-col items-center justify-center min-h-[400px] gap-4">
             <Users className="w-16 h-16 text-default-300" />
-            <p className="text-lg font-semibold text-default-500">Chưa có dữ liệu điểm danh</p>
-            <p className="text-sm text-default-400">Chọn lớp học để xem điểm danh</p>
+            <p className="text-lg font-semibold text-default-500">
+              {classes.length === 0 ? "Chưa tham gia lớp học nào" : "Chưa có dữ liệu điểm danh"}
+            </p>
+            <p className="text-sm text-default-400">
+              {classes.length === 0 ? "Liên hệ giáo viên để được thêm vào lớp học" : "Chọn lớp học để xem điểm danh"}
+            </p>
           </div>
         ) : null}
       </div>

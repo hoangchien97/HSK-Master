@@ -36,6 +36,8 @@ import { toast } from "react-toastify"
 import api from "@/lib/http/client"
 import dayjs from "dayjs"
 import "dayjs/locale/vi"
+import { MSG_ATTENDANCE, MSG } from "@/constants/portal/messages"
+import { PAGINATION } from "@/constants/portal/pagination"
 
 dayjs.locale("vi")
 
@@ -112,7 +114,7 @@ export default function AttendanceView({
   const [attendance, setAttendance] = useState<Record<string, AttendanceStatus>>({})
   const [loading, setLoading] = useState(false)
   const [historyPage, setHistoryPage] = useState(1)
-  const historyRowsPerPage = 10
+  const historyRowsPerPage = PAGINATION.DEFAULT_PAGE_SIZE
 
   /* derived data */
   const selectedClass = useMemo(
@@ -182,10 +184,10 @@ export default function AttendanceView({
         attendance: attendanceData,
       }, { meta: { loading: false } })
 
-      toast.success("Điểm danh thành công!")
+      toast.success(MSG_ATTENDANCE.SAVED)
       router.refresh()
     } catch {
-      toast.error("Có lỗi xảy ra")
+      toast.error(MSG.ERROR_GENERIC)
     } finally {
       setLoading(false)
     }
@@ -202,7 +204,7 @@ export default function AttendanceView({
 
   if (classes.length === 0) {
     return (
-      <div className="flex flex-col items-center justify-center py-20 gap-4">
+      <div className="flex-1 bg-white rounded-xl shadow-sm border border-gray-200 flex flex-col items-center justify-center min-h-[400px] gap-4">
         <Users className="w-16 h-16 text-default-300" />
         <p className="text-lg font-semibold text-default-500">Chưa có lớp học nào</p>
         <p className="text-sm text-default-400">Tạo lớp học để bắt đầu điểm danh</p>
@@ -324,6 +326,7 @@ export default function AttendanceView({
             </div>
           </CardBody>
         ) : (
+          <div className="overflow-x-auto">
           <Table
             aria-label="Bảng điểm danh"
             removeWrapper
@@ -351,7 +354,8 @@ export default function AttendanceView({
                       </div>
                     </TableCell>
                     <TableCell>
-                      <ButtonGroup size="sm" className="justify-center">
+                      <div className="flex flex-wrap gap-1 justify-center sm:gap-0">
+                      <ButtonGroup size="sm" className="justify-center flex-wrap">
                         {(Object.keys(STATUS_CONFIG) as AttendanceStatus[]).map(
                           (status) => (
                             <Button
@@ -360,18 +364,21 @@ export default function AttendanceView({
                               variant={currentStatus === status ? "solid" : "bordered"}
                               onPress={() => handleStatusChange(student.id, status)}
                               size="sm"
+                              className="min-w-fit text-xs sm:text-sm"
                             >
                               {STATUS_CONFIG[status].label}
                             </Button>
                           ),
                         )}
                       </ButtonGroup>
+                      </div>
                     </TableCell>
                   </TableRow>
                 )
               })}
             </TableBody>
           </Table>
+          </div>
         )}
       </Card>
 

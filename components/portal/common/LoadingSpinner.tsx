@@ -1,6 +1,6 @@
 "use client"
 
-import { Spinner } from "@heroui/react"
+import { CSpinner } from "./CSpinner"
 import { cn } from "@/lib/utils"
 
 interface LoadingSpinnerProps {
@@ -9,10 +9,11 @@ interface LoadingSpinnerProps {
   color?: "primary" | "secondary" | "success" | "warning" | "danger" | "default"
 }
 
+/** @deprecated Use CSpinner instead */
 export function LoadingSpinner({ size = "md", className, color = "danger" }: LoadingSpinnerProps) {
   return (
     <div className={cn("flex items-center justify-center", className)}>
-      <Spinner size={size} color={color} />
+      <CSpinner size={size} color={color} message="" />
     </div>
   )
 }
@@ -21,10 +22,11 @@ interface PageLoadingProps {
   message?: string
 }
 
+/** @deprecated Use CSpinner instead */
 export function PageLoading({ message = "Đang tải..." }: PageLoadingProps) {
   return (
     <div className="flex flex-col items-center justify-center min-h-100 gap-4">
-      <Spinner size="lg" color="danger" label={message} />
+      <CSpinner size="lg" color="danger" message={message} />
     </div>
   )
 }

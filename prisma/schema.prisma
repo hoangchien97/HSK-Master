@@ -90,6 +90,10 @@ model Lesson {
   lessonProgress   PortalLessonProgress[]
   practiceSessions PortalPracticeSession[]
 
+  // Skill-based progress (per mode)
+  lessonSkillProgress  PortalLessonSkillProgress[]
+  lessonSessionStates  PortalLessonSessionState[]
+
   @@index([courseId, order])
   @@index([slug])
 }
@@ -109,8 +113,9 @@ model Vocabulary {
   createdAt    DateTime @default(now())
   lesson       Lesson   @relation(fields: [lessonId], references: [id])
 
-  itemProgress PortalItemProgress[]
-  attempts     PortalPracticeAttempt[]
+  itemProgress      PortalItemProgress[]
+  itemSkillProgress  PortalItemSkillProgress[]
+  attempts           PortalPracticeAttempt[]
 
   @@index([lessonId])
   @@map("portal_vocabulary")
@@ -158,6 +163,73 @@ model PortalItemProgress {
   @@unique([studentId, vocabularyId])
   @@index([studentId, status])
   @@map("portal_item_progress")
+}
+
+// Student's skill progress per vocabulary item per mode (FLASHCARD, QUIZ, etc.)
+model PortalItemSkillProgress {
+  id              String   @id @default(cuid())
+  studentId       String
+  vocabularyId    String
+  mode            String   // FLASHCARD, QUIZ, LISTEN, WRITE
+  seenCount       Int      @default(0)
+  correctCount    Int      @default(0)
+  wrongCount      Int      @default(0)
+  masteryScore    Float    @default(0) // 0..1
+  status          String   @default("NEW") // NEW, LEARNING, MASTERED
+  lastSeenAt      DateTime?
+  nextReviewAt    DateTime?
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+
+  student         PortalUser @relation(fields: [studentId], references: [id], onDelete: Cascade)
+  vocabulary      Vocabulary @relation(fields: [vocabularyId], references: [id], onDelete: Cascade)
+
+  @@unique([studentId, vocabularyId, mode], name: "studentId_vocabularyId_mode")
+  @@index([studentId, mode])
+  @@map("portal_item_skill_progress")
+}
+
+// Aggregated skill progress per lesson per mode
+model PortalLessonSkillProgress {
+  id              String   @id @default(cuid())
+  studentId       String
+  lessonId        String
+  mode            String   // FLASHCARD, QUIZ, LISTEN, WRITE
+  totalCount      Int      @default(0)
+  masteredCount   Int      @default(0)
+  learningCount   Int      @default(0)
+  newCount        Int      @default(0)
+  masteryPercent  Float    @default(0)
+  lastActivityAt  DateTime?
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+
+  student         PortalUser @relation(fields: [studentId], references: [id], onDelete: Cascade)
+  lesson          Lesson     @relation(fields: [lessonId], references: [id], onDelete: Cascade)
+
+  @@unique([studentId, lessonId, mode], name: "studentId_lessonId_mode")
+  @@index([studentId])
+  @@map("portal_lesson_skill_progress")
+}
+
+// Session state for resume/queue tracking per student × lesson × mode
+model PortalLessonSessionState {
+  id                    String   @id @default(cuid())
+  studentId             String
+  lessonId              String
+  mode                  String
+  lastIndex             Int      @default(0)
+  lastVocabularyId      String?
+  isCompleted           Boolean  @default(false)
+  includePrevLessonCount Int     @default(5)
+  createdAt             DateTime @default(now())
+  updatedAt             DateTime @updatedAt
+
+  student               PortalUser @relation(fields: [studentId], references: [id], onDelete: Cascade)
+  lesson                Lesson     @relation(fields: [lessonId], references: [id], onDelete: Cascade)
+
+  @@unique([studentId, lessonId, mode], name: "studentId_lessonId_mode")
+  @@map("portal_lesson_session_state")
 }
 
 // Practice session (one study session)
@@ -456,6 +528,11 @@ model PortalUser {
   lessonProgress     PortalLessonProgress[]
   itemProgress       PortalItemProgress[]
   practiceSessions   PortalPracticeSession[]
+
+  // Skill-based progress (per mode)
+  itemSkillProgress      PortalItemSkillProgress[]
+  lessonSkillProgress    PortalLessonSkillProgress[]
+  lessonSessionStates    PortalLessonSessionState[]
 
   // Teacher relations (when role=TEACHER or SYSTEM_ADMIN)
   classes          PortalClass[]

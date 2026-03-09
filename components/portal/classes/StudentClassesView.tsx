@@ -13,7 +13,7 @@ import { CTable, type CTableColumn } from "@/components/portal/common"
 import ClassesToolbar from "./ClassesToolbar"
 import ClassDetailDrawer from "./ClassDetailDrawer"
 import { fetchClasses } from "@/actions/class.actions"
-import { useDebouncedValue, useSyncSearchToUrl } from "@/hooks/useTableParams"
+import { useDebouncedValue, useSyncSearchToUrl, useTableSort } from "@/hooks/useTableParams"
 
 dayjs.locale("vi")
 
@@ -30,8 +30,7 @@ export default function StudentClassesView() {
   const [search, setSearch] = useState(urlSearch)
   const debouncedSearch = useDebouncedValue(search, 350)
   const [data, setData] = useState<IGetClassResponse>({ items: [], total: 0 })
-  const [isFetching, setIsFetching] = useState(false)
-  const [isLoaded, setIsLoaded] = useState(false)
+  const [isLoading, setIsLoading] = useState(true)
 
   const detailDrawer = useDisclosure()
   const [selectedClass, setSelectedClass] = useState<IClass | null>(null)
@@ -62,7 +61,7 @@ export default function StudentClassesView() {
 
   /* ─── Load data via server action (role-aware) ─── */
   const loadData = useCallback(async () => {
-    setIsFetching(true)
+    setIsLoading(true)
     try {
       const result = await fetchClasses({
         search: debouncedSearch || undefined,
@@ -79,8 +78,7 @@ export default function StudentClassesView() {
       console.error('Error loading classes:', error)
       toast.error("Không thể tải danh sách lớp")
     } finally {
-      setIsFetching(false)
-      setIsLoaded(true)
+      setIsLoading(false)
     }
   }, [debouncedSearch, urlStatus, urlPage, urlPageSize])
 
@@ -89,6 +87,8 @@ export default function StudentClassesView() {
   }, [loadData])
 
   useSyncSearchToUrl(debouncedSearch, updateUrl)
+
+  const { sortDescriptor, onSortChange } = useTableSort(updateUrl, searchParams)
 
   /* ─── Handlers ─── */
   const handleViewDetail = useCallback(
@@ -105,7 +105,7 @@ export default function StudentClassesView() {
       key: "stt",
       label: "STT",
       align: "center" as const,
-      headerClassName: "w-12",
+      headerClassName: "w-[50px]",
       render: (_v, _row, index) => (
         <span className="text-sm text-default-500">{(urlPage - 1) * urlPageSize + index + 1}</span>
       ),
@@ -113,6 +113,7 @@ export default function StudentClassesView() {
     {
       key: "className",
       label: "Tên lớp",
+      sortable: true,
       render: (_v, row) => (
         <button
           className="text-left hover:text-primary transition-colors"
@@ -128,11 +129,13 @@ export default function StudentClassesView() {
     {
       key: "classCode",
       label: "Mã lớp",
+      headerClassName: "w-[120px]",
       render: (_v, row) => <Chip size="sm" variant="flat">{row.classCode}</Chip>,
     },
     {
       key: "level",
       label: "Trình độ",
+      headerClassName: "w-[100px]",
       render: (_v, row) => row.level
         ? <Chip size="sm" color="primary" variant="flat">{row.level}</Chip>
         : <span className="text-default-300">—</span>,
@@ -140,6 +143,7 @@ export default function StudentClassesView() {
     {
       key: "students",
       label: "Học viên",
+      headerClassName: "w-[90px]",
       render: (_v, row) => (
         <div className="flex items-center gap-1.5">
           <Users className="w-4 h-4 text-default-400" />
@@ -150,6 +154,8 @@ export default function StudentClassesView() {
     {
       key: "startDate",
       label: "Ngày bắt đầu",
+      sortable: true,
+      headerClassName: "w-[140px]",
       render: (_v, row) => (
         <div className="flex items-center gap-1.5">
           <Calendar className="w-4 h-4 text-default-400" />
@@ -160,6 +166,7 @@ export default function StudentClassesView() {
     {
       key: "status",
       label: "Trạng thái",
+      headerClassName: "w-[110px]",
       render: (_v, row) => (
         <Chip size="sm" color={CLASS_STATUS_COLOR_MAP[row.status] || "default"} variant="flat">
           {CLASS_STATUS_LABEL_MAP[row.status] || row.status}
@@ -177,8 +184,9 @@ export default function StudentClassesView() {
         page={urlPage}
         pageSize={urlPageSize}
         total={data.total}
-        isFetching={isFetching}
-        isLoading={!isLoaded}
+        sortDescriptor={sortDescriptor}
+        onSortChange={onSortChange}
+        isLoading={isLoading}
         onPageChange={(p) => updateUrl({ page: String(p) })}
         onPageSizeChange={(s) => updateUrl({ pageSize: String(s) })}
         ariaLabel="Danh sách lớp học"

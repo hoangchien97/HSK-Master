@@ -198,7 +198,7 @@ export default function SystemDesignPage() {
       {/* Main Content */}
       <main className="flex-1 min-w-0 bg-white min-h-screen">
         {/* Top Navigation Bar */}
-        <div className="px-8 lg:px-12 py-6 border-b border-gray-50 flex items-center justify-between sticky top-0 bg-white/80 backdrop-blur-md z-50">
+        <div className="px-4 sm:px-8 lg:px-12 py-6 border-b border-gray-50 flex items-center justify-between sticky top-0 bg-white/80 backdrop-blur-md z-50">
           <nav className="flex items-center gap-2 text-xs font-medium text-gray-400">
             <span>Design System</span>
             <ChevronRight className="w-3 h-3" />
@@ -331,7 +331,7 @@ export default function SystemDesignPage() {
                     <h3 className="text-sm font-black text-success-600 uppercase tracking-widest mb-6">
                       Success - Green
                     </h3>
-                    <div className="grid grid-cols-5 gap-2">
+                    <div className="grid grid-cols-3 sm:grid-cols-5 gap-2">
                       <div className="h-12 rounded-lg bg-success-50"></div>
                       <div className="h-12 rounded-lg bg-success-200"></div>
                       <div className="h-12 rounded-lg bg-success-500"></div>
@@ -348,7 +348,7 @@ export default function SystemDesignPage() {
                     <h3 className="text-sm font-black text-warning-600 uppercase tracking-widest mb-6">
                       Warning - Amber
                     </h3>
-                    <div className="grid grid-cols-5 gap-2">
+                    <div className="grid grid-cols-3 sm:grid-cols-5 gap-2">
                       <div className="h-12 rounded-lg bg-warning-50"></div>
                       <div className="h-12 rounded-lg bg-warning-200"></div>
                       <div className="h-12 rounded-lg bg-warning-500"></div>
@@ -365,7 +365,7 @@ export default function SystemDesignPage() {
                     <h3 className="text-sm font-black text-error-600 uppercase tracking-widest mb-6">
                       Error - Red
                     </h3>
-                    <div className="grid grid-cols-5 gap-2">
+                    <div className="grid grid-cols-3 sm:grid-cols-5 gap-2">
                       <div className="h-12 rounded-lg bg-error-50"></div>
                       <div className="h-12 rounded-lg bg-error-200"></div>
                       <div className="h-12 rounded-lg bg-error-500"></div>
@@ -382,7 +382,7 @@ export default function SystemDesignPage() {
                     <h3 className="text-sm font-black text-info-600 uppercase tracking-widest mb-6">
                       Info - Blue
                     </h3>
-                    <div className="grid grid-cols-5 gap-2">
+                    <div className="grid grid-cols-3 sm:grid-cols-5 gap-2">
                       <div className="h-12 rounded-lg bg-info-50"></div>
                       <div className="h-12 rounded-lg bg-info-200"></div>
                       <div className="h-12 rounded-lg bg-info-500"></div>
@@ -458,11 +458,11 @@ export default function SystemDesignPage() {
                 <div className="space-y-8">
                   <div className="flex items-baseline gap-6 pb-6 border-b border-gray-50">
                     <span className="text-xs font-mono text-gray-400 w-20">Display</span>
-                    <h1 className="text-7xl font-black tracking-tighter">HSK Master</h1>
+                    <h1 className="text-4xl md:text-7xl font-black tracking-tighter">HSK Master</h1>
                   </div>
                   <div className="flex items-baseline gap-6 pb-6 border-b border-gray-50">
                     <span className="text-xs font-mono text-gray-400 w-20">H1</span>
-                    <h1 className="text-5xl font-bold">学习中文</h1>
+                    <h1 className="text-3xl md:text-5xl font-bold">学习中文</h1>
                   </div>
                   <div className="flex items-baseline gap-6 pb-6 border-b border-gray-50">
                     <span className="text-xs font-mono text-gray-400 w-20">H2</span>
@@ -1702,7 +1702,7 @@ export default function SystemDesignPage() {
                   </motion.div>
 
                   <div className="bg-yellow-50 border-2 border-yellow-200 rounded-2xl p-12 text-center">
-                    <div className="text-6xl mb-4">🚧</div>
+                    <div className="text-4xl md:text-6xl mb-4">🚧</div>
                     <h3 className="text-2xl font-black text-yellow-900 mb-2">TODO</h3>
                     <p className="text-yellow-700">
                       Component documentation will be added here

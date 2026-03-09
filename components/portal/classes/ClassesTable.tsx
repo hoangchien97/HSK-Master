@@ -9,6 +9,7 @@ import {
   DropdownTrigger,
   DropdownMenu,
   DropdownItem,
+  Tooltip,
 } from "@heroui/react";
 import { Plus, Edit2, Trash2, MoreVertical, Users, Calendar } from "lucide-react";
 import { toast } from "react-toastify";
@@ -21,7 +22,7 @@ import ClassesToolbar from "./ClassesToolbar";
 import ClassFormModal from "./ClassFormModal";
 import DeleteClassModal from "./DeleteClassModal";
 import { fetchClasses } from "@/actions/class.actions";
-import { useDebouncedValue, useSyncSearchToUrl } from "@/hooks/useTableParams";
+import { useDebouncedValue, useSyncSearchToUrl, useTableSort } from "@/hooks/useTableParams";
 
 export default function ClassesTable() {
   const router = useRouter();
@@ -36,8 +37,7 @@ export default function ClassesTable() {
   const [search, setSearch] = useState(urlSearch);
   const debouncedSearch = useDebouncedValue(search, 350);
   const [data, setData] = useState<IGetClassResponse>({ items: [], total: 0 });
-  const [isFetching, setIsFetching] = useState(false);
-  const [isLoaded, setIsLoaded] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
 
   const createModal = useDisclosure();
   const editModal = useDisclosure();
@@ -68,9 +68,11 @@ export default function ClassesTable() {
     [searchParams, router, pathname],
   );
 
+  const { sortDescriptor, onSortChange } = useTableSort(updateUrl, searchParams);
+
   /* ─── Load data via server action ─── */
   const loadData = useCallback(async () => {
-    setIsFetching(true);
+    setIsLoading(true);
     try {
       const result = await fetchClasses({
         search: debouncedSearch || undefined,
@@ -87,8 +89,7 @@ export default function ClassesTable() {
       console.error('Error loading classes:', error);
       toast.error("Không thể tải danh sách lớp");
     } finally {
-      setIsFetching(false);
-      setIsLoaded(true);
+      setIsLoading(false);
     }
   }, [debouncedSearch, urlStatus, urlPage, urlPageSize]);
 
@@ -137,7 +138,7 @@ export default function ClassesTable() {
       key: "stt",
       label: "STT",
       align: "center" as const,
-      headerClassName: "w-12",
+      headerClassName: "w-[50px]",
       render: (_v, _row, index) => (
         <span className="text-sm text-default-500">{(urlPage - 1) * urlPageSize + index + 1}</span>
       ),
@@ -145,26 +146,33 @@ export default function ClassesTable() {
     {
       key: "className",
       label: "Tên lớp",
+      sortable: true,
       render: (_v, row) => (
         <button
-          className="text-left hover:text-primary transition-colors"
+          className="text-left hover:text-primary transition-colors max-w-50"
           onClick={() => router.push(`/portal/teacher/classes/${row.id}`)}
         >
-          <p className="font-semibold text-sm">{row.className}</p>
-          {row.teacher && (
-            <p className="text-xs text-default-400">GV: {row.teacher.name || row.teacher.email}</p>
-          )}
+          <Tooltip content={row.className} placement="top" delay={500}>
+            <p className="font-semibold text-sm truncate">{row.className}</p>
+          </Tooltip>
         </button>
       ),
     },
     {
       key: "classCode",
       label: "Mã lớp",
-      render: (_v, row) => <Chip size="sm" variant="flat">{row.classCode}</Chip>,
+      headerClassName: "w-[120px]",
+      render: (_v, row) => (
+        <Tooltip content={row.classCode} placement="top" delay={500}>
+          <span className="text-sm text-default-600 truncate block max-w-30">{row.classCode}</span>
+        </Tooltip>
+      ),
     },
     {
       key: "level",
       label: "Trình độ",
+      sortable: true,
+      headerClassName: "w-[100px]",
       render: (_v, row) => row.level
         ? <Chip size="sm" color="primary" variant="flat">{row.level}</Chip>
         : <span className="text-default-300">—</span>,
@@ -172,8 +180,10 @@ export default function ClassesTable() {
     {
       key: "students",
       label: "Học viên",
+      align: "center" as const,
+      headerClassName: "w-[90px]",
       render: (_v, row) => (
-        <div className="flex items-center gap-1.5">
+        <div className="flex items-center gap-1.5 justify-center">
           <Users className="w-4 h-4 text-default-400" />
           <span className="text-sm">{row._count?.enrollments ?? 0}</span>
         </div>
@@ -182,16 +192,20 @@ export default function ClassesTable() {
     {
       key: "startDate",
       label: "Ngày bắt đầu",
+      sortable: true,
+      headerClassName: "w-[140px]",
       render: (_v, row) => (
         <div className="flex items-center gap-1.5">
-          <Calendar className="w-4 h-4 text-default-400" />
-          <span className="text-sm">{dayjs(row.startDate).format("DD/MM/YYYY")}</span>
+          <Calendar className="w-4 h-4 text-default-400 shrink-0" />
+          <span className="text-sm whitespace-nowrap">{dayjs(row.startDate).format("DD/MM/YYYY")}</span>
         </div>
       ),
     },
     {
       key: "status",
       label: "Trạng thái",
+      sortable: true,
+      headerClassName: "w-[110px]",
       render: (_v, row) => (
         <Chip size="sm" color={CLASS_STATUS_COLOR_MAP[row.status] || "default"} variant="flat">
           {CLASS_STATUS_LABEL_MAP[row.status] || row.status}
@@ -202,6 +216,7 @@ export default function ClassesTable() {
       key: "actions",
       label: "",
       align: "end" as const,
+      headerClassName: "w-[60px]",
       render: (_v, row) => (
         <div className="flex justify-end">
           <Dropdown>
@@ -231,8 +246,9 @@ export default function ClassesTable() {
         page={urlPage}
         pageSize={urlPageSize}
         total={data.total}
-        isFetching={isFetching}
-        isLoading={!isLoaded}
+        sortDescriptor={sortDescriptor}
+        onSortChange={onSortChange}
+        isLoading={isLoading}
         onPageChange={(p) => updateUrl({ page: String(p) })}
         onPageSizeChange={(s) => updateUrl({ pageSize: String(s) })}
         ariaLabel="Danh sách lớp học"

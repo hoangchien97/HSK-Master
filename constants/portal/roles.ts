@@ -52,12 +52,15 @@ export const ATTENDANCE_STATUS = {
   EXCUSED: 'EXCUSED',
 } as const
 
-// Submission Status (v2 lifecycle)
+// Submission Status (v2 lifecycle + backward compat)
 export const SUBMISSION_STATUS = {
   NOT_SUBMITTED: 'NOT_SUBMITTED',
   SUBMITTED: 'SUBMITTED',
+  RESUBMITTED: 'RESUBMITTED',
   REVIEWED: 'REVIEWED',
   COMPLETED: 'COMPLETED',
+  GRADED: 'GRADED',
+  RETURNED: 'RETURNED',
   REVISION_REQUIRED: 'REVISION_REQUIRED',
   OVERDUE: 'OVERDUE',
 } as const

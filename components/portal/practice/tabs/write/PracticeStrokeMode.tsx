@@ -5,6 +5,7 @@ import { Button, Card, CardBody } from "@heroui/react"
 import { CheckCircle, XCircle, SkipForward, RotateCcw, Volume2 } from "lucide-react"
 import { useSpeech } from "@/hooks/useSpeech"
 import { getDisplayMeaning } from "@/enums/portal/common"
+import { HANZI_WRITER } from "@/constants/portal/ui"
 import type { IVocabularyItem } from "@/interfaces/portal/practice"
 
 interface Props {
@@ -41,19 +42,19 @@ export default function PracticeStrokeMode({ item, currentIdx, totalItems, onCom
 
       try {
         const writer = HanziWriter.create(containerRef.current, char, {
-          width: 250,
-          height: 250,
-          padding: 10,
+          width: HANZI_WRITER.CANVAS_SIZE,
+          height: HANZI_WRITER.CANVAS_SIZE,
+          padding: HANZI_WRITER.PADDING,
           showOutline: true,
           strokeAnimationSpeed: 1,
           delayBetweenStrokes: 100,
           showCharacter: false,
-          showHintAfterMisses: 3,
+          showHintAfterMisses: HANZI_WRITER.HINT_AFTER_MISSES,
           highlightOnComplete: true,
-          drawingWidth: 20,
-          strokeColor: "#333",
-          outlineColor: "#ddd",
-          highlightColor: "#3b82f6",
+          drawingWidth: HANZI_WRITER.DRAWING_WIDTH,
+          strokeColor: HANZI_WRITER.STROKE_COLOR,
+          outlineColor: HANZI_WRITER.OUTLINE_COLOR,
+          highlightColor: HANZI_WRITER.HIGHLIGHT_COLOR,
         })
 
         let mistakes = 0
@@ -115,7 +116,7 @@ export default function PracticeStrokeMode({ item, currentIdx, totalItems, onCom
           <div
             ref={containerRef}
             className="border-2 border-dashed border-default-200 rounded-xl bg-default-50 mx-auto"
-            style={{ width: 250, maxWidth: "100%", height: 250, touchAction: "none" }}
+            style={{ width: HANZI_WRITER.CANVAS_SIZE, maxWidth: "100%", aspectRatio: "1/1", touchAction: "none" }}
           />
 
           {strokeComplete && (

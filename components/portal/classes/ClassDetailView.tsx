@@ -14,7 +14,6 @@ import {
   Card,
   CardBody,
   CardHeader,
-  Spinner,
   User as UserAvatar,
   Divider,
   Pagination,
@@ -23,8 +22,12 @@ import { ArrowLeft, Users, Calendar, BookOpen, UserPlus, Trash2 } from "lucide-r
 import { toast } from "react-toastify";
 import dayjs from "dayjs";
 import { useRouter } from "next/navigation";
+import { CSpinner } from "@/components/portal/common";
 import type { IClass, IEnrollment } from "@/interfaces/portal";
 import { ENROLLMENT_STATUS_COLOR_MAP, ENROLLMENT_STATUS_LABEL_MAP } from "@/constants/portal";
+import { MSG_CLASS, MSG } from "@/constants/portal/messages";
+import { USER_ROLE } from "@/constants/portal/roles";
+import { PAGINATION } from "@/constants/portal/pagination";
 import { usePortalUI } from "@/providers/portal-ui-provider";
 import api from "@/lib/http/client";
 
@@ -43,7 +46,7 @@ export default function ClassDetailView({ classId, role }: ClassDetailViewProps)
 
   // Pagination for enrollments
   const [page, setPage] = useState(1);
-  const rowsPerPage = 10;
+  const rowsPerPage = PAGINATION.DEFAULT_PAGE_SIZE;
 
   const fetchClass = useCallback(async () => {
     try {
@@ -55,7 +58,7 @@ export default function ClassDetailView({ classId, role }: ClassDetailViewProps)
         setDynamicLabel(classId, data.className);
       }
     } catch {
-      toast.error("Không tìm thấy lớp học");
+      toast.error(MSG_CLASS.ERROR_LOAD);
       router.back();
     } finally {
       setIsLoading(false);
@@ -71,11 +74,12 @@ export default function ClassDetailView({ classId, role }: ClassDetailViewProps)
     setIsEnrolling(true);
     try {
       await api.post(`/portal/classes/${classId}/enrollments`, { email: enrollEmail }, { meta: { loading: false } });
-      toast.success("Thêm học viên thành công!");
+      toast.success(MSG_CLASS.STUDENT_ADDED);
       setEnrollEmail("");
       fetchClass();
-    } catch (error: any) {
-      toast.error(error?.normalized?.message || "Thêm học viên thất bại");
+    } catch (error: unknown) {
+      const err = error as { normalized?: { message?: string }; message?: string };
+      toast.error(err?.normalized?.message || MSG_CLASS.STUDENT_ADDED);
     } finally {
       setIsEnrolling(false);
     }
@@ -87,17 +91,17 @@ export default function ClassDetailView({ classId, role }: ClassDetailViewProps)
         data: { enrollmentId },
         meta: { loading: false },
       });
-      toast.success("Đã xóa học viên!");
+      toast.success(MSG_CLASS.STUDENT_REMOVED);
       fetchClass();
     } catch {
-      toast.error("Không thể xóa học viên");
+      toast.error(MSG.ERROR_GENERIC);
     }
   };
 
   if (isLoading) {
     return (
       <div className="flex justify-center items-center h-64">
-        <Spinner size="lg" label="Đang tải..." />
+        <CSpinner message="Đang tải..." />
       </div>
     );
   }
@@ -187,14 +191,14 @@ export default function ClassDetailView({ classId, role }: ClassDetailViewProps)
       <Card>
         <CardHeader className="flex justify-between items-center">
           <h3 className="font-semibold">Danh sách học viên</h3>
-          {role === "teacher" && (
-            <div className="flex items-center gap-2">
+          {role === USER_ROLE.TEACHER.toLowerCase() && (
+            <div className="flex flex-col sm:flex-row items-start sm:items-center gap-2">
               <Input
                 size="sm"
                 placeholder="Email học viên..."
                 value={enrollEmail}
                 onValueChange={setEnrollEmail}
-                className="w-64"
+                className="w-full sm:w-64"
                 onKeyDown={(e) => e.key === "Enter" && handleEnroll()}
               />
               <Button
@@ -233,7 +237,7 @@ export default function ClassDetailView({ classId, role }: ClassDetailViewProps)
               <TableColumn>Học viên</TableColumn>
               <TableColumn>Trạng thái</TableColumn>
               <TableColumn>Ngày tham gia</TableColumn>
-              {role === "teacher" ? (
+              {role === USER_ROLE.TEACHER.toLowerCase() ? (
                 <TableColumn align="end">Thao tác</TableColumn>
               ) : (
                 <TableColumn className="hidden">_</TableColumn>
@@ -268,7 +272,7 @@ export default function ClassDetailView({ classId, role }: ClassDetailViewProps)
                     {dayjs(enrollment.enrolledAt).format("DD/MM/YYYY")}
                   </TableCell>
                   <TableCell>
-                    {role === "teacher" && (
+                    {role === USER_ROLE.TEACHER.toLowerCase() && (
                       <Button
                         isIconOnly
                         size="sm"

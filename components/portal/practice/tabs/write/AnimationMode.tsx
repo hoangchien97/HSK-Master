@@ -5,6 +5,7 @@ import { Button, Card, CardBody, Chip } from "@heroui/react"
 import { Play, Pause, SkipForward, PenLine, Volume2 } from "lucide-react"
 import { useSpeech } from "@/hooks/useSpeech"
 import { getDisplayMeaning } from "@/enums/portal/common"
+import { HANZI_WRITER } from "@/constants/portal/ui"
 import type { IVocabularyItem } from "@/interfaces/portal/practice"
 
 interface Props {
@@ -47,16 +48,16 @@ export default function AnimationMode({ item, currentIdx, totalItems, onNext, on
 
       try {
         const writer = HanziWriter.create(containerRef.current, char, {
-          width: 250,
-          height: 250,
-          padding: 10,
+          width: HANZI_WRITER.CANVAS_SIZE,
+          height: HANZI_WRITER.CANVAS_SIZE,
+          padding: HANZI_WRITER.PADDING,
           showOutline: true,
           strokeAnimationSpeed: 0.8,
-          delayBetweenStrokes: 300,
+          delayBetweenStrokes: HANZI_WRITER.STROKE_DELAY_PRACTICE,
           showCharacter: false,
-          strokeColor: "#333",
-          outlineColor: "#ddd",
-          highlightColor: "#3b82f6",
+          strokeColor: HANZI_WRITER.STROKE_COLOR,
+          outlineColor: HANZI_WRITER.OUTLINE_COLOR,
+          highlightColor: HANZI_WRITER.HIGHLIGHT_COLOR,
         })
         writerRef.current = writer
       } catch {
@@ -139,7 +140,7 @@ export default function AnimationMode({ item, currentIdx, totalItems, onNext, on
           <div
             ref={containerRef}
             className="border-2 border-dashed border-default-200 rounded-xl bg-default-50 mx-auto"
-            style={{ width: 250, maxWidth: "100%", height: 250 }}
+            style={{ width: HANZI_WRITER.CANVAS_SIZE, maxWidth: "100%", aspectRatio: "1/1" }}
           />
 
           <div className="flex items-center gap-2 mt-3 flex-wrap justify-center">

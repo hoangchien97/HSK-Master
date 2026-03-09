@@ -9,7 +9,7 @@ export default function PortalNotFound() {
   const router = useRouter()
 
   return (
-    <div className="flex-1 flex items-center justify-center min-h-[60vh] px-4">
+    <div className="flex-1 min-h-0 flex items-center justify-center px-4 py-16">
       <div className="text-center max-w-md">
         {/* 404 Illustration */}
         <div className="relative mb-6">

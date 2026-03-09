@@ -7,6 +7,8 @@ import Link from "next/link";
 import { toast } from "react-toastify";
 import { Eye, EyeOff } from "lucide-react";
 import { Form, Input, Button } from "@heroui/react";
+import { PORTAL_ROUTES, API_ROUTES } from "@/constants/portal/routes";
+import { MSG_AUTH, MSG } from "@/constants/portal/messages";
 
 export default function LoginForm() {
   const router = useRouter();
@@ -23,17 +25,17 @@ export default function LoginForm() {
   // Show error toast on mount if error exists
   useEffect(() => {
     if (error === "CredentialsSignin") {
-      toast.error("Email hoặc mật khẩu không đúng");
+      toast.error(MSG_AUTH.LOGIN_FAILED);
     } else if (error === "ACCOUNT_LOCKED") {
       toast.error("Tài khoản của bạn đã bị khóa");
     } else if (error === "OAuthAccountNotLinked") {
       toast.error("Email đã được sử dụng với phương thức đăng nhập khác");
     } else if (error) {
-      toast.error("Có lỗi xảy ra. Vui lòng thử lại");
+      toast.error(MSG.ERROR_GENERIC);
     }
 
     if (registered) {
-      toast.success("Đăng ký thành công! Vui lòng đăng nhập");
+      toast.success(MSG_AUTH.REGISTER_SUCCESS + " Vui lòng đăng nhập");
     }
   }, [error, registered]);
 
@@ -68,29 +70,29 @@ export default function LoginForm() {
       const result = await signIn("credentials", {
         email: data.email as string,
         password: data.password as string,
-        callbackUrl: "/portal",
+        callbackUrl: PORTAL_ROUTES.HOME,
         redirect: false,
       });
 
       if (result?.error) {
-        toast.error("Email hoặc mật khẩu không đúng");
+        toast.error(MSG_AUTH.LOGIN_FAILED);
         setLoading(false);
         return;
       }
 
       // Success - redirect to portal
-      toast.success("Đăng nhập thành công!");
-      router.push("/portal");
+      toast.success(MSG_AUTH.LOGIN_SUCCESS);
+      router.push(PORTAL_ROUTES.HOME);
       router.refresh();
     } catch {
-      toast.error("Có lỗi xảy ra. Vui lòng thử lại");
+      toast.error(MSG.ERROR_GENERIC);
       setLoading(false);
     }
   };
 
   const handleGoogleSignIn = async () => {
     setLoading(true);
-    await signIn("google", { callbackUrl: "/portal" });
+    await signIn("google", { callbackUrl: PORTAL_ROUTES.HOME });
   };
 
   return (
@@ -108,7 +110,7 @@ export default function LoginForm() {
         </div>
 
         {/* Login Form */}
-        <Form 
+        <Form
           validationErrors={errors}
           onSubmit={onSubmit}
           className="flex flex-col gap-4"
@@ -222,7 +224,7 @@ export default function LoginForm() {
           <p className="text-sm text-gray-600">
             Chưa có tài khoản?{" "}
             <Link
-              href="/portal/register"
+              href={PORTAL_ROUTES.REGISTER}
               className="font-semibold text-red-600 hover:text-red-700 transition-colors"
             >
               Đăng ký ngay

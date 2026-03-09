@@ -10,21 +10,27 @@ interface PortalContentProps {
 /**
  * Main content area of the portal layout.
  *
+ * Mobile-first strategy:
+ * - Mobile (< xl): natural document flow, everything scrolls together (breadcrumb, filter, table)
+ * - Desktop (≥ xl/1280px): breadcrumb fixed top, content fills remaining viewport height
+ *
  * Loading strategy (ui-loading-guideline):
  * - Route change → handled by Next.js loading.tsx (React Suspense)
- * - Data refetch → handled by CTable dim pattern (Option A)
+ * - Data refetch → handled by CTable dim pattern / CSpinner overlay
  * - No global overlay — each component manages its own loading
  */
 export default function PortalContent({ children }: PortalContentProps) {
   return (
     <main className="flex-1 flex flex-col relative min-h-0">
-      {/* Breadcrumb – always visible, never scrolled away */}
+      {/* Breadcrumb – scrolls with content on mobile, fixed on xl */}
       <div className="shrink-0 px-4 pt-4 lg:px-6 lg:pt-6">
         <PortalBreadcrumb />
       </div>
 
-      {/* Page content – scrollable on desktop, natural flow on mobile */}
-      <div className="flex-1 min-h-0 lg:overflow-y-auto px-4 pb-4 lg:px-6 lg:pb-6">
+      {/* Page content
+          Mobile: normal scroll flow — no overflow hidden
+          md: flex column so children (CTable, Calendar etc) can flex-1 to fill remaining height */}
+      <div className="flex-1 min-h-0 md:flex md:flex-col px-4 pb-4 lg:px-6 lg:pb-6">
         {children}
       </div>
     </main>

@@ -6,9 +6,10 @@ import 'react-big-calendar/lib/css/react-big-calendar.css';
 import '@/styles/big-calendar-custom.css';
 import { format, parse, startOfWeek, getDay } from 'date-fns';
 import { vi } from 'date-fns/locale';
-import { Plus, ChevronLeft, ChevronRight, Pencil } from 'lucide-react';
-import { Button, Spinner, Tabs, Tab, Tooltip, DatePicker } from '@heroui/react';
-import { CalendarDate } from '@internationalized/date';
+import { ChevronLeft, ChevronRight, Pencil } from 'lucide-react';
+import { Button, Tabs, Tab, Tooltip } from '@heroui/react';
+import { CSpinner } from '@/components/portal/common';
+import { cn } from '@/lib/utils';
 import type { ISchedule } from '@/interfaces/portal';
 import { EventState } from '@/interfaces/portal/calendar';
 import { getEventState } from '@/utils/calendar';
@@ -72,10 +73,9 @@ interface BigCalendarViewProps {
   onEventClick: (schedule: ISchedule) => void;
   onEventDoubleClick: (schedule: ISchedule) => void;
   onEditEvent: (schedule: ISchedule) => void;
-  onCreateSchedule: () => void;
   onSlotSelect?: (slotInfo: { start: Date; end: Date }) => void;
   isLoading?: boolean;
-  /** When true, hides create/edit buttons and disables slot selection */
+  /** When true, hides edit buttons and disables slot selection */
   readOnly?: boolean;
 }
 
@@ -90,7 +90,6 @@ export default function BigCalendarView({
   onEventClick,
   onEventDoubleClick,
   onEditEvent,
-  onCreateSchedule,
   onSlotSelect,
   isLoading = false,
   readOnly = false,
@@ -225,52 +224,30 @@ export default function BigCalendarView({
     });
   }, [currentView]);
 
-  // Calendar date for DatePicker
-  const calendarDateValue = useMemo(() => {
-    return new CalendarDate(
-      currentDate.getFullYear(),
-      currentDate.getMonth() + 1,
-      currentDate.getDate()
-    );
-  }, [currentDate]);
-
-  const handleDatePickerChange = useCallback((value: CalendarDate | null) => {
-    if (value) {
-      setCurrentDate(new Date(value.year, value.month - 1, value.day));
-    }
-  }, []);
-
   return (
-    <div className="bg-white rounded-xl shadow-sm border border-gray-200">
-      {/* Custom Toolbar */}
-      <div className="flex items-center justify-between p-4 border-b border-gray-200">
-        <div className="flex items-center gap-3">
-          <Button variant="bordered" size="sm" onPress={goToToday}>
+    <div className="flex flex-col md:flex-1 md:min-h-0 bg-white rounded-xl shadow-sm border border-gray-200">
+      {/* Custom Toolbar — responsive: stacks on mobile, compact on tablet */}
+      <div className="shrink-0 flex flex-col gap-2 p-3 border-b border-gray-200 sm:flex-row sm:items-center sm:justify-between sm:p-4">
+        {/* Row 1 — navigation + date */}
+        <div className="flex items-center gap-1.5 sm:gap-3 flex-wrap">
+          <Button color="primary" variant="flat" size="sm" onPress={goToToday} className="shrink-0 h-8 min-w-0 px-2.5 sm:px-3 font-semibold">
             Hôm nay
           </Button>
-          <div className="flex items-center gap-1">
-            <Button isIconOnly variant="light" size="sm" onPress={goBack}>
-              <ChevronLeft className="w-5 h-5" />
+          <div className="flex items-center">
+            <Button isIconOnly variant="light" size="sm" onPress={goBack} className="w-7 h-7 sm:w-8 sm:h-8">
+              <ChevronLeft className="w-4 h-4 sm:w-5 sm:h-5" />
             </Button>
-            <Button isIconOnly variant="light" size="sm" onPress={goNext}>
-              <ChevronRight className="w-5 h-5" />
+            <Button isIconOnly variant="light" size="sm" onPress={goNext} className="w-7 h-7 sm:w-8 sm:h-8">
+              <ChevronRight className="w-4 h-4 sm:w-5 sm:h-5" />
             </Button>
           </div>
-          <h2 className="text-lg font-semibold text-gray-900 capitalize">
+          <h2 className="text-sm sm:text-lg font-semibold text-gray-900 capitalize">
             {dateDisplayText}
           </h2>
-          {/* Date Picker for quick navigation */}
-          <DatePicker
-            aria-label="Chọn ngày"
-            value={calendarDateValue}
-            onChange={handleDatePickerChange}
-            size="sm"
-            className="w-40"
-            showMonthAndYearPickers
-          />
         </div>
 
-        <div className="flex items-center gap-3">
+        {/* Row 2 — view tabs */}
+        <div className="flex items-center gap-2 sm:gap-3">
           <Tabs
             aria-label="Chế độ xem"
             size="sm"
@@ -282,27 +259,16 @@ export default function BigCalendarView({
             <Tab key="week" title="Tuần" />
             <Tab key="month" title="Tháng" />
           </Tabs>
-
-          <Button
-            color="danger"
-            startContent={<Plus className="w-4 h-4" />}
-            onPress={onCreateSchedule}
-            className={readOnly ? "hidden" : ""}
-          >
-            Thêm buổi học
-          </Button>
         </div>
       </div>
 
-      {/* Calendar */}
-      <div className="p-4 relative" style={{ minHeight: 600 }}>
+      {/* Calendar — fills remaining height on md+, natural height on mobile */}
+      <div className={cn(
+        "relative p-2 sm:p-4",
+        "flex-1 min-h-125 md:min-h-0",
+      )}>
         {isLoading && (
-          <div className="absolute inset-0 flex items-center justify-center bg-white/80 backdrop-blur-sm z-10">
-            <div className="flex flex-col items-center gap-3">
-              <Spinner size="lg" color="danger" />
-              <p className="text-sm text-gray-600 font-medium">Đang tải lịch...</p>
-            </div>
-          </div>
+          <CSpinner variant="overlay" />
         )}
         <Calendar
           localizer={localizer}
@@ -324,7 +290,7 @@ export default function BigCalendarView({
           timeslots={2}
           min={new Date(1970, 0, 1, 7, 0, 0)}
           max={new Date(1970, 0, 1, 21, 0, 0)}
-          style={{ height: 650 }}
+          className="h-full"
           formats={{
             weekdayFormat: formatWeekdayShort,
             timeGutterFormat: (date: Date) => format(date, 'HH:mm'),
@@ -338,12 +304,12 @@ export default function BigCalendarView({
       </div>
 
       {/* Legend — below calendar */}
-      <div className="flex items-center gap-4 px-4 py-2.5 bg-gray-50 border-t border-gray-200 rounded-b-xl">
-        <span className="text-sm text-gray-500 font-medium">Chú thích:</span>
+      <div className="shrink-0 flex items-center gap-3 sm:gap-4 px-4 py-2.5 bg-gray-50 border-t border-gray-200 rounded-b-xl overflow-x-auto">
+        <span className="text-xs sm:text-sm text-gray-500 font-medium shrink-0">Chú thích:</span>
         {LEGEND_ITEMS.map((item) => (
           <span
             key={item.label}
-            className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md text-xs font-medium"
+            className="inline-flex items-center gap-1.5 px-2 sm:px-2.5 py-1 rounded-md text-xs font-medium shrink-0"
             style={{ backgroundColor: item.bgColor, color: item.textColor }}
           >
             <span

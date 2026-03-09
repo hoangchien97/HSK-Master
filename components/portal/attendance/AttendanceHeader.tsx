@@ -121,10 +121,10 @@ export default function AttendanceHeader({
   }, [canExport, matrixData, scheduleDates, selectedClassId])
 
   return (
-    <div className="shrink-0 rounded-xl bg-white border border-gray-200 px-4 py-3 shadow-sm">
-      <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
-        {/* Left: Filters */}
-        <div className="flex flex-col gap-3 sm:flex-row sm:items-center flex-1 min-w-0">
+    <div className="shrink-0 flex flex-col gap-3">
+      {/* Filter bar */}
+      <div className="rounded-xl bg-white border border-gray-200 px-4 py-3 shadow-sm">
+        <div className="flex flex-col gap-3 sm:flex-row sm:items-center">
           {/* Class selector */}
           <Select
             placeholder="Chọn lớp học"
@@ -165,11 +165,13 @@ export default function AttendanceHeader({
             </Chip>
           )}
         </div>
+      </div>
 
-        {/* Right: Export button */}
-        <div className="shrink-0">
+      {/* Actions row: Export button — sits between filter and table */}
+      {canExport && (
+        <div className="flex items-center justify-end">
           <Tooltip
-            content={!canExport ? "Chọn lớp học để export" : "Export điểm danh ra Excel"}
+            content="Export điểm danh ra Excel"
             placement="bottom"
           >
             <div>
@@ -177,7 +179,7 @@ export default function AttendanceHeader({
                 size="sm"
                 variant="flat"
                 color="success"
-                isDisabled={!canExport || isExporting}
+                isDisabled={isExporting}
                 onPress={handleExport}
                 startContent={
                   isExporting ? (
@@ -192,7 +194,7 @@ export default function AttendanceHeader({
             </div>
           </Tooltip>
         </div>
-      </div>
+      )}
     </div>
   )
 }

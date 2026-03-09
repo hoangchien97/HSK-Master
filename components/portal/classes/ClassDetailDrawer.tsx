@@ -5,7 +5,6 @@ import {
   Avatar,
   AvatarGroup,
   Chip,
-  Spinner,
   Divider,
 } from "@heroui/react"
 import {
@@ -21,6 +20,7 @@ import dayjs from "dayjs"
 import "dayjs/locale/vi"
 import { toast } from "react-toastify"
 import { CDrawer } from "@/components/portal/common"
+import { CSpinner } from "@/components/portal/common"
 import { CLASS_STATUS_COLOR_MAP, CLASS_STATUS_LABEL_MAP, ENROLLMENT_STATUS_COLOR_MAP, ENROLLMENT_STATUS_LABEL_MAP } from "@/constants/portal"
 import type { IClass } from "@/interfaces/portal"
 import api from "@/lib/http/client"
@@ -91,7 +91,7 @@ export default function ClassDetailDrawer({
       size="lg"
       title={
         <div className="flex items-center gap-3">
-          <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-red-500 to-red-600 flex items-center justify-center shrink-0">
+          <div className="w-10 h-10 rounded-xl bg-linear-to-br from-red-500 to-red-600 flex items-center justify-center shrink-0">
             <GraduationCap className="w-5 h-5 text-white" />
           </div>
           <div className="min-w-0">
@@ -237,9 +237,7 @@ export default function ClassDetailDrawer({
             Lịch học sắp tới
           </h4>
           {isLoadingSchedules ? (
-            <div className="flex justify-center py-4">
-              <Spinner size="sm" />
-            </div>
+            <CSpinner size="sm" className="py-4" />
           ) : upcomingSchedules.length > 0 ? (
             <div className="space-y-3">
               {upcomingSchedules.map((schedule) => {
