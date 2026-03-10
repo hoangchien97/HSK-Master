@@ -12,8 +12,11 @@ import { recordFlashcardSkillAction } from "@/actions/practice-skill.actions"
 import { useSpeech } from "@/hooks/useSpeech"
 import { WORD_TYPE_COLORS, WORD_TYPE_LABELS, ItemProgressStatus, getDisplayMeaning } from "@/enums/portal/common"
 import { PracticeMode } from "@/enums/portal"
-import { FlashcardPhase, FlashcardAction } from "@/constants/portal/practice"
+import { FlashcardPhase, FlashcardAction, PRACTICE_LABELS } from "@/constants/portal/practice"
+import { usePracticeKeyboard, KeyHint } from "@/hooks/usePracticeKeyboard"
 import type { IVocabularyItem, IStudentItemProgress, IQueueVocabItem, ISkillProgressRecord } from "@/interfaces/portal/practice"
+
+const L = PRACTICE_LABELS
 
 interface Props {
   vocabularies: IVocabularyItem[]
@@ -40,12 +43,29 @@ export default function FlashcardTab({
   const [isFlipped, setIsFlipped] = useState(false)
   const [shuffled, setShuffled] = useState(false)
   const [sessionId, setSessionId] = useState<string | null>(null)
-  const [knownSet, setKnownSet] = useState<Set<string>>(new Set())
-  const [unknownSet, setUnknownSet] = useState<Set<string>>(new Set())
+
+  // Init known/unknown from server skill data (P1-07 state sync)
+  const [knownSet, setKnownSet] = useState<Set<string>>(() => {
+    if (!skillProgressMap) return new Set()
+    return new Set(
+      Object.entries(skillProgressMap)
+        .filter(([, v]) => v.status === "MASTERED")
+        .map(([id]) => id),
+    )
+  })
+  const [unknownSet, setUnknownSet] = useState<Set<string>>(() => {
+    if (!skillProgressMap) return new Set()
+    return new Set(
+      Object.entries(skillProgressMap)
+        .filter(([, v]) => v.status === "LEARNING")
+        .map(([id]) => id),
+    )
+  })
+
   const [swipeDir, setSwipeDir] = useState<"left" | "right" | null>(null)
   const [phase, setPhase] = useState<FlashcardPhase>(FlashcardPhase.MAIN)
   const [reviewItems, setReviewItems] = useState<IVocabularyItem[]>([])
-  const [roundComplete, setRoundComplete] = useState(false)
+  const [roundComplete, setRoundComplete] = useState(modeCompleted ?? false)
   const startTimeRef = useRef(Date.now())
   const { speak } = useSpeech()
 
@@ -159,10 +179,10 @@ export default function FlashcardTab({
         setPhase(FlashcardPhase.REVIEW_UNKNOWN)
         setCurrentIndex(0)
         setIsFlipped(false)
-        toast.info(`Ôn lại ${unknowns.length} từ chưa thuộc 📖`)
+        toast.info(L.flashcard.toastReviewTpl(unknowns.length))
       } else {
         setRoundComplete(true)
-        toast.success(`Hoàn thành! Đã thuộc tất cả ${mainItems.length} từ 🎉`)
+        toast.success(L.flashcard.toastCompleteTpl(mainItems.length))
       }
     } else {
       // Review round finished
@@ -171,10 +191,10 @@ export default function FlashcardTab({
         setReviewItems(stillUnknown)
         setCurrentIndex(0)
         setIsFlipped(false)
-        toast.info(`Còn ${stillUnknown.length} từ chưa thuộc, tiếp tục ôn tập!`)
+        toast.info(L.flashcard.toastStillUnknownTpl(stillUnknown.length))
       } else {
         setRoundComplete(true)
-        toast.success("Hoàn thành tất cả! 🎉")
+        toast.success(L.flashcard.toastCompleteAll)
       }
     }
   }, [phase, mainItems, reviewItems, unknownSet, onProgressUpdate])
@@ -198,15 +218,29 @@ export default function FlashcardTab({
     setPhase(FlashcardPhase.MAIN)
     setReviewItems([])
     setRoundComplete(false)
+    // Reset server session pointer so queue re-fetches from start
+    onResetSession?.()
     if (shuffled) setShuffled(false)
     setTimeout(() => setShuffled(shuffled), 0)
-  }, [shuffled])
+  }, [shuffled, onResetSession])
+
+  // Keyboard shortcuts: Space=flip, Arrow keys=difficulty
+  // MUST be called before any early return to satisfy React hooks rules
+  usePracticeKeyboard(
+    {
+      " ": () => setIsFlipped((f) => !f),
+      "ArrowLeft": () => handleAction(FlashcardAction.HARD),
+      "ArrowDown": () => handleAction(FlashcardAction.GOOD),
+      "ArrowRight": () => handleAction(FlashcardAction.EASY),
+    },
+    { enabled: !roundComplete && !swipeDir && !!currentItem },
+  )
 
   if (total === 0) {
     return (
       <Card>
         <CardBody className="py-12 text-center">
-          <p className="text-default-500">Bài học này chưa có từ vựng</p>
+          <p className="text-default-500">{L.empty.noVocab}</p>
         </CardBody>
       </Card>
     )
@@ -219,13 +253,13 @@ export default function FlashcardTab({
         <Card>
           <CardBody className="text-center p-8">
             <div className="text-5xl mb-4">🎉</div>
-            <h2 className="text-xl font-bold mb-2">Hoàn thành Flashcard!</h2>
+            <h2 className="text-xl font-bold mb-2">{L.flashcard.completionTitle}</h2>
             <p className="text-default-500 mb-1">
-              Đã thuộc: <span className="text-success font-bold">{knownSet.size}</span>/{vocabularies.length}
+              {L.flashcard.knownLabel} <span className="text-success font-bold">{knownSet.size}</span>/{vocabularies.length}
             </p>
             {unknownSet.size > 0 && (
               <p className="text-default-500 mb-4">
-                Chưa thuộc: <span className="text-danger font-bold">{unknownSet.size}</span>
+                {L.flashcard.unknownLabel} <span className="text-danger font-bold">{unknownSet.size}</span>
               </p>
             )}
             <div className="flex gap-3 justify-center mt-4">
@@ -234,7 +268,7 @@ export default function FlashcardTab({
                 onPress={handleRestart}
                 startContent={<RotateCcw className="w-4 h-4" />}
               >
-                Làm lại
+                {L.nav.restart}
               </Button>
             </div>
           </CardBody>
@@ -254,7 +288,7 @@ export default function FlashcardTab({
       {phase === FlashcardPhase.REVIEW_UNKNOWN && (
         <div className="mb-3 p-2 rounded-lg bg-warning-50 dark:bg-warning-950/20 text-center">
           <p className="text-sm text-warning-700 dark:text-warning-300 font-medium">
-            📖 Ôn lại {reviewItems.length} từ chưa thuộc
+            {L.flashcard.phaseTpl(reviewItems.length)}
           </p>
         </div>
       )}
@@ -271,7 +305,7 @@ export default function FlashcardTab({
         <div className="flex items-center gap-3">
           {phase === FlashcardPhase.MAIN && (
             <div className="flex items-center gap-1.5">
-              <span className="text-xs text-default-400">Trộn</span>
+              <span className="text-xs text-default-400">{L.nav.shuffle}</span>
               <Switch
                 size="sm"
                 isSelected={shuffled}
@@ -352,11 +386,11 @@ export default function FlashcardTab({
               {/* Interleaved vocab indicator */}
               {isFromPrev && (
                 <Chip size="sm" variant="flat" color="secondary" className="mt-1.5">
-                  📖 Ôn bài trước
+                  {L.flashcard.reviewPrevLesson}
                 </Chip>
               )}
 
-              <p className="text-sm text-default-400 mt-4">Nhấn để xem nghĩa</p>
+              <p className="text-sm text-default-400 mt-4">{L.flashcard.flipHint}</p>
             </CardBody>
           </Card>
 
@@ -402,7 +436,7 @@ export default function FlashcardTab({
                 <div className="mt-3 p-3 rounded-lg bg-white/60 dark:bg-default-800/50 text-center max-w-xs w-full">
                   <div className="flex items-center justify-center gap-1.5 mb-1">
                     <BookOpen className="w-3.5 h-3.5 text-primary" />
-                    <span className="text-xs text-default-400">Ví dụ</span>
+                    <span className="text-xs text-default-400">{L.flashcard.exampleLabel}</span>
                   </div>
                   <p className="text-sm font-medium text-red-600 dark:text-red-400">
                     {currentItem.exampleSentence}
@@ -424,73 +458,76 @@ export default function FlashcardTab({
                 </div>
               )}
 
-              <p className="text-xs text-default-400 mt-3">Nhấn để lật lại</p>
+              <p className="text-xs text-default-400 mt-3">{L.flashcard.flipBackHint}</p>
             </CardBody>
           </Card>
         </div>
       </div>
 
-      {/* Action buttons: Chưa thuộc / Tạm ổn / Đã thuộc — always visible */}
-      {!swipeDir && (
-        <div className="grid grid-cols-3 gap-2 mb-4">
+      {/* Action buttons + Navigation — stable min-h prevents collapse during swipe animation */}
+      <div className="min-h-30">
+        {/* Action buttons: Chưa thuộc / Tạm ổn / Đã thuộc — hidden during swipe animation */}
+        {!swipeDir && (
+          <div className="grid grid-cols-3 gap-2 mb-4">
+            <Button
+              color="danger"
+              variant="flat"
+              size="lg"
+              className="font-medium text-sm"
+              onPress={() => handleAction(FlashcardAction.HARD)}
+            >
+              {L.flashcard.hardBtn}<KeyHint>(←)</KeyHint>
+            </Button>
+            <Button
+              color="warning"
+              variant="flat"
+              size="lg"
+              className="font-medium text-sm"
+              onPress={() => handleAction(FlashcardAction.GOOD)}
+            >
+              {L.flashcard.goodBtn}<KeyHint>(↓)</KeyHint>
+            </Button>
+            <Button
+              color="success"
+              variant="flat"
+              size="lg"
+              className="font-medium text-sm"
+              onPress={() => handleAction(FlashcardAction.EASY)}
+            >
+              {L.flashcard.easyBtn}<KeyHint>(→)</KeyHint>
+            </Button>
+          </div>
+        )}
+
+        {/* Navigation */}
+        <div className="flex items-center justify-between">
           <Button
-            color="danger"
-            variant="flat"
-            size="lg"
-            className="font-medium text-sm"
-            onPress={() => handleAction(FlashcardAction.HARD)}
+            variant="bordered"
+            size="sm"
+            isDisabled={currentIndex === 0}
+            onPress={() => goTo("prev")}
+            startContent={<ChevronLeft className="w-4 h-4" />}
           >
-            ✗ Chưa thuộc
+            {L.nav.prev}
           </Button>
           <Button
-            color="warning"
-            variant="flat"
-            size="lg"
-            className="font-medium text-sm"
-            onPress={() => handleAction(FlashcardAction.GOOD)}
+            variant="light"
+            size="sm"
+            onPress={handleRestart}
+            startContent={<RotateCcw className="w-4 h-4" />}
           >
-            ○ Tạm ổn
+            {L.nav.startOver}
           </Button>
           <Button
-            color="success"
-            variant="flat"
-            size="lg"
-            className="font-medium text-sm"
-            onPress={() => handleAction(FlashcardAction.EASY)}
+            variant="bordered"
+            size="sm"
+            isDisabled={currentIndex >= total - 1}
+            onPress={() => goTo("next")}
+            endContent={<ChevronRight className="w-4 h-4" />}
           >
-            ✓ Đã thuộc
+            {L.nav.next}
           </Button>
         </div>
-      )}
-
-      {/* Navigation */}
-      <div className="flex items-center justify-between">
-        <Button
-          variant="bordered"
-          size="sm"
-          isDisabled={currentIndex === 0}
-          onPress={() => goTo("prev")}
-          startContent={<ChevronLeft className="w-4 h-4" />}
-        >
-          Trước
-        </Button>
-        <Button
-          variant="light"
-          size="sm"
-          onPress={handleRestart}
-          startContent={<RotateCcw className="w-4 h-4" />}
-        >
-          Bắt đầu lại
-        </Button>
-        <Button
-          variant="bordered"
-          size="sm"
-          isDisabled={currentIndex >= total - 1}
-          onPress={() => goTo("next")}
-          endContent={<ChevronRight className="w-4 h-4" />}
-        >
-          Tiếp
-        </Button>
       </div>
     </div>
   )

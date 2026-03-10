@@ -11,11 +11,10 @@ import { redirect, notFound } from "next/navigation"
 import {
   getLessonWithVocabularies,
   getSiblingLessons,
-  getStudentLessonProgress,
-  getStudentItemProgressForLesson,
 } from "@/services/portal/practice.service"
-import { getLessonAllModeSkillProgress } from "@/services/portal/practice-skill.service"
+import { getLessonAllModeSkillProgress, getLessonProgressFromSkills } from "@/services/portal/practice-skill.service"
 import { levelSlugToLabel } from "@/utils/practice"
+import { serializeDates } from "@/utils/serialize"
 import LessonPracticeView from "@/components/portal/practice/LessonPracticeView"
 import { ROLE_ROUTES } from "@/lib/utils/auth"
 
@@ -52,9 +51,8 @@ export default async function PracticeDetailPage({ params }: Props) {
   const lesson = await getLessonWithVocabularies(lessonSlug)
   if (!lesson) notFound()
 
-  const [progress, itemProgress, siblings, skillProgress] = await Promise.all([
-    getStudentLessonProgress(session.user.id, lesson.id),
-    getStudentItemProgressForLesson(session.user.id, lesson.id),
+  const [progress, siblings, skillProgress] = await Promise.all([
+    getLessonProgressFromSkills(session.user.id, lesson.id),
     getSiblingLessons(lesson.courseId),
     getLessonAllModeSkillProgress(session.user.id, lesson.id),
   ])
@@ -63,11 +61,11 @@ export default async function PracticeDetailPage({ params }: Props) {
     <LessonPracticeView
       levelSlug={level}
       lessonSlug={lessonSlug}
-      initialLesson={JSON.parse(JSON.stringify(lesson))}
-      initialProgress={JSON.parse(JSON.stringify(progress))}
-      initialItemProgress={JSON.parse(JSON.stringify(itemProgress))}
+      initialLesson={serializeDates(lesson)}
+      initialProgress={serializeDates(progress)}
+      initialItemProgress={{}}
       initialSiblings={siblings.map((s) => ({ id: s.id, slug: s.slug, title: s.title, order: s.order }))}
-      initialSkillProgress={JSON.parse(JSON.stringify(skillProgress))}
+      initialSkillProgress={serializeDates(skillProgress)}
     />
   )
 }

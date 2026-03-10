@@ -415,30 +415,34 @@ export async function updateLessonSkillProgress(
   const totalMasteryScore = items.reduce((sum: number, i: { masteryScore: number }) => sum + i.masteryScore, 0);
   const masteryPercent = totalCount > 0 ? (totalMasteryScore / totalCount) * 100 : 0;
 
-  await prisma.portalLessonSkillProgress.upsert({
-    where: {
-      studentId_lessonId_mode: { studentId, lessonId, mode },
-    },
-    create: {
-      studentId,
-      lessonId,
-      mode,
-      totalCount,
-      masteredCount,
-      learningCount,
-      newCount,
-      masteryPercent,
-      lastActivityAt: new Date(),
-    },
-    update: {
-      totalCount,
-      masteredCount,
-      learningCount,
-      newCount,
-      masteryPercent,
-      lastActivityAt: new Date(),
-    },
-  });
+  try {
+    await prisma.portalLessonSkillProgress.upsert({
+      where: {
+        studentId_lessonId_mode: { studentId, lessonId, mode },
+      },
+      create: {
+        studentId,
+        lessonId,
+        mode,
+        totalCount,
+        masteredCount,
+        learningCount,
+        newCount,
+        masteryPercent,
+        lastActivityAt: new Date(),
+      },
+      update: {
+        totalCount,
+        masteredCount,
+        learningCount,
+        newCount,
+        masteryPercent,
+        lastActivityAt: new Date(),
+      },
+    });
+  } catch (error) {
+    console.warn('[updateLessonSkillProgress] Skipped – table may not exist:', (error as Error).message);
+  }
 }
 
 /* ═══════════════════════════════════════════════════════════════
@@ -547,11 +551,16 @@ export async function getLessonSkillProgress(
   lessonId: string,
   mode: string,
 ) {
-  return prisma.portalLessonSkillProgress.findUnique({
-    where: {
-      studentId_lessonId_mode: { studentId, lessonId, mode },
-    },
-  });
+  try {
+    return await prisma.portalLessonSkillProgress.findUnique({
+      where: {
+        studentId_lessonId_mode: { studentId, lessonId, mode },
+      },
+    });
+  } catch (error) {
+    console.warn('[getLessonSkillProgress] Skipped – table may not exist:', (error as Error).message);
+    return null;
+  }
 }
 
 /**
@@ -562,35 +571,136 @@ export async function getLessonAllModeSkillProgress(
   studentId: string,
   lessonId: string,
 ) {
-  const items = await prisma.portalLessonSkillProgress.findMany({
-    where: { studentId, lessonId },
-  });
+  try {
+    const items = await prisma.portalLessonSkillProgress.findMany({
+      where: { studentId, lessonId },
+    });
 
-  const map: Record<string, { masteryPercent: number; masteredCount: number; totalCount: number }> = {};
-  for (const item of items) {
-    map[item.mode] = {
-      masteryPercent: Math.round(item.masteryPercent),
-      masteredCount: item.masteredCount,
-      totalCount: item.totalCount,
+    const map: Record<string, { masteryPercent: number; masteredCount: number; totalCount: number }> = {};
+    for (const item of items) {
+      map[item.mode] = {
+        masteryPercent: Math.round(item.masteryPercent),
+        masteredCount: item.masteredCount,
+        totalCount: item.totalCount,
+      };
+    }
+    return map;
+  } catch (error) {
+    console.warn('[getLessonAllModeSkillProgress] Skipped – table may not exist:', (error as Error).message);
+    return {} as Record<string, { masteryPercent: number; masteredCount: number; totalCount: number }>;
+  }
+}
+
+/* ───────── Unified progress map (replaces legacy PortalLessonProgress reads) ───────── */
+
+/**
+ * Derive an overall per-lesson progress map from skill-based data.
+ * Shape matches the legacy ProgressItem interface expected by PracticeListView.
+ *
+ * Overall mastery = avg(per-mode masteryPercent).
+ * learnedCount   = max totalCount across modes (lesson has data → started).
+ * masteredCount  = min masteredCount across modes (mastered in ALL modes).
+ * totalTimeSec   = sum(durationSec) from PortalPracticeSession.
+ */
+export async function getAllLessonProgressFromSkills(studentId: string) {
+  const [skillItems, sessions] = await Promise.all([
+    prisma.portalLessonSkillProgress.findMany({ where: { studentId } }),
+    prisma.portalPracticeSession.groupBy({
+      by: ['lessonId'],
+      where: { studentId },
+      _sum: { durationSec: true },
+    }),
+  ]);
+
+  // Build time map
+  const timeMap = new Map<string, number>();
+  for (const s of sessions) {
+    timeMap.set(s.lessonId, s._sum.durationSec ?? 0);
+  }
+
+  // Group skill items by lesson
+  const grouped = new Map<string, typeof skillItems>();
+  for (const item of skillItems) {
+    const arr = grouped.get(item.lessonId) ?? [];
+    arr.push(item);
+    grouped.set(item.lessonId, arr);
+  }
+
+  const map: Record<string, {
+    lessonId: string;
+    masteryPercent: number;
+    learnedCount: number;
+    masteredCount: number;
+    totalTimeSec: number;
+  }> = {};
+
+  for (const [lessonId, modes] of grouped) {
+    const avgMastery = modes.reduce((sum, m) => sum + m.masteryPercent, 0) / modes.length;
+    const maxTotal = Math.max(...modes.map(m => m.totalCount));
+    const minMastered = Math.min(...modes.map(m => m.masteredCount));
+
+    map[lessonId] = {
+      lessonId,
+      masteryPercent: Math.round(avgMastery * 100) / 100,
+      learnedCount: maxTotal, // > 0 means "started"
+      masteredCount: minMastered,
+      totalTimeSec: timeMap.get(lessonId) ?? 0,
     };
   }
+
   return map;
+}
+
+/**
+ * Derive progress for a single lesson from skill-based data.
+ * Used by the practice detail page's ProgressCard.
+ */
+export async function getLessonProgressFromSkills(studentId: string, lessonId: string) {
+  const [modes, session] = await Promise.all([
+    prisma.portalLessonSkillProgress.findMany({
+      where: { studentId, lessonId },
+    }),
+    prisma.portalPracticeSession.aggregate({
+      where: { studentId, lessonId },
+      _sum: { durationSec: true },
+    }),
+  ]);
+
+  if (modes.length === 0) return null;
+
+  const avgMastery = modes.reduce((sum, m) => sum + m.masteryPercent, 0) / modes.length;
+  const maxTotal = Math.max(...modes.map(m => m.totalCount));
+  const minMastered = Math.min(...modes.map(m => m.masteredCount));
+
+  return {
+    lessonId,
+    masteryPercent: Math.round(avgMastery * 100) / 100,
+    learnedCount: maxTotal,
+    masteredCount: minMastered,
+    totalTimeSec: session._sum.durationSec ?? 0,
+  };
 }
 
 /* ───────── Get all lesson skill progress for a student (dashboard) ───────── */
 
 export async function getAllLessonSkillProgress(studentId: string) {
-  const items = await prisma.portalLessonSkillProgress.findMany({
-    where: { studentId },
-  });
+  try {
+    const items = await prisma.portalLessonSkillProgress.findMany({
+      where: { studentId },
+    });
 
-  // Group by lessonId → { [lessonId]: { FLASHCARD: ..., QUIZ: ..., ... } }
-  const map: Record<string, Record<string, (typeof items)[0]>> = {};
-  for (const item of items) {
-    if (!map[item.lessonId]) map[item.lessonId] = {};
-    map[item.lessonId][item.mode] = item;
+    // Group by lessonId → { [lessonId]: { FLASHCARD: ..., QUIZ: ..., ... } }
+    const map: Record<string, Record<string, (typeof items)[0]>> = {};
+    for (const item of items) {
+      if (!map[item.lessonId]) map[item.lessonId] = {};
+      map[item.lessonId][item.mode] = item;
+    }
+    return map;
+  } catch (error) {
+    // Table may not exist yet (pending migration) – return empty map gracefully
+    console.warn("[getAllLessonSkillProgress] Skipped – table may not exist:", (error as Error).message);
+    return {} as Record<string, Record<string, never>>;
   }
-  return map;
 }
 
 /* ═══════════════════════════════════════════════════════════════
@@ -623,9 +733,7 @@ export async function processSkillAttempt(params: {
   const writes: Promise<unknown>[] = [
     // 2. Update session state pointer
     updateSessionState(studentId, lessonId, mode, nextIndex, vocabularyId, isCompleted),
-    // 3. Sync legacy overall item progress
-    syncLegacyItemProgress(studentId, vocabularyId, isCorrect),
-    // 4. Always recompute lesson skill progress (uses avg masteryScore)
+    // 3. Always recompute lesson skill progress (uses avg masteryScore)
     updateLessonSkillProgress(studentId, lessonId, mode),
   ];
 
@@ -664,12 +772,10 @@ export async function processFlashcardSkillAttempt(params: {
   const writes: Promise<unknown>[] = [
     // Session state pointer
     updateSessionState(studentId, lessonId, PracticeMode.FLASHCARD, nextIndex, vocabularyId, isCompleted),
-    // Legacy attempt record
+    // Attempt record
     prisma.portalPracticeAttempt.create({
       data: { sessionId, vocabularyId, questionType: 'FLASHCARD', userAnswer: action, correctAnswer: action, isCorrect, timeSpentSec: 0 },
     }),
-    // Legacy item progress sync
-    syncLegacyItemProgress(studentId, vocabularyId, isCorrect),
     // Always recompute lesson skill progress (uses avg masteryScore)
     updateLessonSkillProgress(studentId, lessonId, PracticeMode.FLASHCARD),
   ];
@@ -805,6 +911,7 @@ function computeResumePointer(
 }
 
 /**
+ * @deprecated Legacy sync removed in P1-06. Kept for reference only.
  * Sync legacy PortalItemProgress (overall progress, no mode separation)
  * so existing lesson list mastery display stays correct.
  */
@@ -862,4 +969,72 @@ async function syncLegacyItemProgress(
       nextReviewAt,
     },
   });
+}
+
+/* ═══════════════════════════════════════════════════════════════
+ *  Guided Learning Path — "Tiếp tục học"
+ * ═══════════════════════════════════════════════════════════════ */
+
+/**
+ * Get the most recently practiced lesson for a student.
+ * Returns lesson info + the mode they were last using.
+ * Used for the "Continue learning" banner in PracticeListView.
+ */
+export async function getLastActiveLesson(studentId: string) {
+  const session = await prisma.portalLessonSessionState.findFirst({
+    where: { studentId, isCompleted: false },
+    orderBy: { updatedAt: 'desc' },
+    select: {
+      mode: true,
+      lastIndex: true,
+      lesson: {
+        select: {
+          id: true,
+          slug: true,
+          title: true,
+          titleChinese: true,
+          order: true,
+          course: {
+            select: {
+              slug: true,
+              level: true,
+              title: true,
+            },
+          },
+          _count: { select: { vocabularies: true } },
+        },
+      },
+    },
+  });
+
+  if (!session) return null;
+
+  // Get mastery info for this lesson+mode
+  const skillProgress = await prisma.portalLessonSkillProgress.findUnique({
+    where: {
+      studentId_lessonId_mode: {
+        studentId,
+        lessonId: session.lesson.id,
+        mode: session.mode,
+      },
+    },
+    select: { masteredCount: true, totalCount: true, masteryPercent: true },
+  });
+
+  const hskLevel = session.lesson.course.level?.replace(/\D/g, '') ?? '0';
+
+  return {
+    lessonId: session.lesson.id,
+    lessonSlug: session.lesson.slug,
+    lessonTitle: session.lesson.title,
+    lessonOrder: session.lesson.order,
+    courseTitle: session.lesson.course.title,
+    levelSlug: `hsk${hskLevel}`,
+    mode: session.mode,
+    lastIndex: session.lastIndex,
+    totalVocab: session.lesson._count.vocabularies,
+    masteredCount: skillProgress?.masteredCount ?? 0,
+    totalCount: skillProgress?.totalCount ?? session.lesson._count.vocabularies,
+    masteryPercent: skillProgress?.masteryPercent ?? 0,
+  };
 }

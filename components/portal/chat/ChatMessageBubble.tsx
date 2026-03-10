@@ -121,7 +121,7 @@ export default function ChatMessageBubble({
             {isUser && editable && onEdit && (
               <button
                 onClick={() => setIsEditing(true)}
-                className="mt-0.5 p-1 opacity-0 group-hover:opacity-100 text-gray-400 hover:text-gray-600 transition-all"
+                className="mt-0.5 p-1 opacity-0 group-hover:opacity-100 text-gray-400 hover:text-gray-600 transition-all cursor-pointer"
                 title="Chỉnh sửa"
               >
                 <Pencil className="w-3.5 h-3.5" />

@@ -1,6 +1,6 @@
 "use client"
 
-import { useMemo } from "react"
+import { useMemo, useState, useCallback } from "react"
 import { Accordion, AccordionItem, Chip, Progress } from "@heroui/react"
 import PracticeLessonItem from "./PracticeLessonItem"
 
@@ -60,8 +60,43 @@ export default function PracticeCourseAccordion({ courses, progressMap, skillPro
     return map
   }, [courses, progressMap])
 
+  // Smart default: expand the course with the most progress that isn't yet mastered.
+  // If none started, expand the first course.
+  const defaultExpanded = useMemo(() => {
+    let best: string | null = null
+    let bestScore = -1
+    for (const c of courses) {
+      const cp = courseProgress[c.id]
+      if (!cp || cp.started === 0) continue
+      // Prefer the course that is in-progress (not 100% mastered) with most lessons started
+      const score = cp.avgMastery < 80 ? cp.started * 1000 + cp.avgMastery : cp.started
+      if (score > bestScore) {
+        bestScore = score
+        best = c.id
+      }
+    }
+    return best ?? courses[0]?.id ?? ""
+  }, [courses, courseProgress])
+
+  // Controlled expanded keys
+  const [expandedKeys, setExpandedKeys] = useState<Set<string>>(new Set([defaultExpanded]))
+
+  const handleSelectionChange = useCallback((keys: "all" | Set<React.Key>) => {
+    if (keys === "all") {
+      setExpandedKeys(new Set(courses.map(c => c.id)))
+    } else {
+      setExpandedKeys(new Set(Array.from(keys).map(String)))
+    }
+  }, [courses])
+
   return (
-    <Accordion variant="splitted" defaultExpandedKeys={[courses[0]?.id]}>
+    <Accordion
+      variant="splitted"
+      selectedKeys={expandedKeys}
+      onSelectionChange={handleSelectionChange}
+      selectionMode="multiple"
+      className="gap-3"
+    >
       {courses.map((course) => {
         const hskLevel = course.hskLevel?.level ?? 0
         const cp = courseProgress[course.id]
@@ -70,6 +105,12 @@ export default function PracticeCourseAccordion({ courses, progressMap, skillPro
           <AccordionItem
             key={course.id}
             aria-label={course.title}
+            classNames={{
+              base: "shadow-sm border border-default-200 dark:border-default-700/50",
+              title: "text-sm",
+              trigger: "py-3 px-4",
+              content: "px-3 pb-3",
+            }}
             title={
               <div className="flex items-center gap-2 flex-wrap w-full">
                 <Chip
@@ -82,7 +123,7 @@ export default function PracticeCourseAccordion({ courses, progressMap, skillPro
                 </Chip>
                 <span className="font-semibold text-sm sm:text-base">{course.title}</span>
                 <span className="text-xs text-default-400 hidden sm:inline">
-                  ({course.lessons.length} bài · {course.vocabularyCount} từ vựng)
+                  {course.lessons.length} bài · {course.vocabularyCount} từ vựng
                 </span>
                 {cp && cp.started > 0 && (
                   <div className="flex items-center gap-2 ml-auto">
@@ -93,7 +134,7 @@ export default function PracticeCourseAccordion({ courses, progressMap, skillPro
                       className="w-20 hidden sm:block"
                       aria-label="Tiến độ khóa học"
                     />
-                    <span className="text-xs font-medium text-default-500">
+                    <span className="text-xs font-semibold tabular-nums text-default-500">
                       {Math.round(cp.avgMastery)}%
                     </span>
                   </div>

@@ -11,7 +11,8 @@ import { recordSkillAttemptAction } from "@/actions/practice-skill.actions"
 import { useSpeech } from "@/hooks/useSpeech"
 import { getDisplayMeaning } from "@/enums/portal/common"
 import { PracticeMode } from "@/enums/portal"
-import { AUTO_NEXT_DELAY_MS } from "@/constants/portal/practice"
+import { AUTO_NEXT_DELAY_MS, PRACTICE_LABELS } from "@/constants/portal/practice"
+import { usePracticeKeyboard } from "@/hooks/usePracticeKeyboard"
 import { generateListenQuestions } from "@/utils/practice"
 import type { ListenQuestion } from "@/utils/practice"
 import type { IVocabularyItem, IQueueVocabItem, ISkillProgressRecord } from "@/interfaces/portal/practice"
@@ -33,7 +34,9 @@ interface Props {
   onResetSession?: () => void
 }
 
-export default function ListenTab({ vocabularies, lessonId, onProgressUpdate, queue: modeQueue, skillProgressMap, initialPointer, isCompleted: modeCompleted, onResetSession }: Props) {
+const L = PRACTICE_LABELS
+
+export default function ListenTab({ vocabularies, lessonId, onProgressUpdate, isCompleted: modeCompleted }: Props) {
   const [questions, setQuestions] = useState<ListenQuestion[]>([])
   const [currentIdx, setCurrentIdx] = useState(0)
   const [selectedKey, setSelectedKey] = useState<string | null>(null)
@@ -155,9 +158,6 @@ export default function ListenTab({ vocabularies, lessonId, onProgressUpdate, qu
       setShowResult(true)
 
       const isCorrect = key === currentQ.correctKey
-      const correctOption = currentQ.options.find((o) => o.key === currentQ.correctKey)
-      const selectedOption = currentQ.options.find((o) => o.key === key)
-      const timeSec = Math.round((Date.now() - questionStartRef.current) / 1000)
 
       setResults((prev) => [...prev, { correct: isCorrect, vocab: currentQ.vocab }])
 
@@ -182,7 +182,7 @@ export default function ListenTab({ vocabularies, lessonId, onProgressUpdate, qu
         }, AUTO_NEXT_DELAY_MS)
       }
     },
-    [hasListened, showResult, currentQ, sessionId, handleNext],
+    [hasListened, showResult, currentQ, handleNext, currentIdx, lessonId, totalQ],
   )
 
   // State for "retry wrong words only" mode
@@ -224,12 +224,25 @@ export default function ListenTab({ vocabularies, lessonId, onProgressUpdate, qu
     })
   }, [lessonId, clearAutoNext])
 
+  // Keyboard shortcuts: Space=play audio, 1-4 select answer, Enter next
+  usePracticeKeyboard(
+    {
+      " ": () => playAudio(),
+      "1": () => { if (questions[currentIdx]?.options[0] && hasListened && !showResult) handleSelect(questions[currentIdx].options[0].key) },
+      "2": () => { if (questions[currentIdx]?.options[1] && hasListened && !showResult) handleSelect(questions[currentIdx].options[1].key) },
+      "3": () => { if (questions[currentIdx]?.options[2] && hasListened && !showResult) handleSelect(questions[currentIdx].options[2].key) },
+      "4": () => { if (questions[currentIdx]?.options[3] && hasListened && !showResult) handleSelect(questions[currentIdx].options[3].key) },
+      "Enter": () => { if (showResult) handleNext() },
+    },
+    { enabled: !finished && totalQ > 0 },
+  )
+
   // Empty state: not enough vocab
   if (totalQ === 0) {
     return (
       <Card>
         <CardBody className="py-12 text-center">
-          <p className="text-default-500">Cần ít nhất 2 từ vựng có audio để tạo bài nghe</p>
+          <p className="text-default-500">{L.empty.minVocabListen}</p>
         </CardBody>
       </Card>
     )
@@ -259,7 +272,7 @@ export default function ListenTab({ vocabularies, lessonId, onProgressUpdate, qu
       {retryWrongVocabs && (
         <div className="mb-3 p-2 rounded-lg bg-warning-50 dark:bg-warning-950/20 text-center">
           <p className="text-sm text-warning-700 dark:text-warning-300 font-medium">
-            🎧 Ôn lại {retryWrongVocabs.length} từ sai
+            {L.listen.retryTpl(retryWrongVocabs.length)}
           </p>
         </div>
       )}
@@ -267,10 +280,10 @@ export default function ListenTab({ vocabularies, lessonId, onProgressUpdate, qu
       {/* Header */}
       <div className="flex items-center justify-between mb-3">
         <span className="text-sm text-default-500">
-          Câu <span className="font-medium text-foreground">{currentIdx + 1}</span>/{totalQ}
+          {L.quiz.questionLabel} <span className="font-medium text-foreground">{currentIdx + 1}</span>/{totalQ}
         </span>
         <Chip size="sm" variant="flat" startContent={<Volume2 className="w-3 h-3" />}>
-          Nghe & chọn nghĩa
+          {L.listen.chipLabel}
         </Chip>
       </div>
 
@@ -293,8 +306,8 @@ export default function ListenTab({ vocabularies, lessonId, onProgressUpdate, qu
           </Button>
           <p className="text-sm text-default-400 mb-2">
             {hasListened
-              ? "Nhấn để phát lại — Chọn nghĩa đúng bên dưới"
-              : "Nhấn nút để nghe trước khi chọn đáp án"}
+              ? L.listen.instructionListened
+              : L.listen.instructionNotListened}
           </p>
 
           {/* Transcript toggle */}
@@ -305,7 +318,7 @@ export default function ListenTab({ vocabularies, lessonId, onProgressUpdate, qu
               onPress={() => setShowTranscript((v) => !v)}
               startContent={showTranscript ? <EyeOff className="w-3.5 h-3.5" /> : <Eye className="w-3.5 h-3.5" />}
             >
-              {showTranscript ? "Ẩn transcript" : "Xem transcript"}
+              {showTranscript ? L.listen.hideTranscript : L.listen.showTranscript}
             </Button>
           </div>
           {showTranscript && (
@@ -321,7 +334,7 @@ export default function ListenTab({ vocabularies, lessonId, onProgressUpdate, qu
       {!hasListened && !showResult && (
         <div className="flex items-center justify-center gap-2 mb-3 text-warning text-sm">
           <Lock className="w-4 h-4" />
-          <span>Hãy nghe audio trước khi chọn đáp án</span>
+          <span>{L.listen.lockNotice}</span>
         </div>
       )}
 
@@ -336,81 +349,82 @@ export default function ListenTab({ vocabularies, lessonId, onProgressUpdate, qu
         />
       </div>
 
-      {/* Reveal answer info on result */}
-      {showResult && (
-        <div className="mb-4">
-          {/* Correct/Wrong feedback banner */}
-          <div className={`w-full p-3 rounded-lg text-center mb-3 ${
-            selectedKey === currentQ.correctKey
-              ? "bg-success-50 dark:bg-success-950/20"
-              : "bg-danger-50 dark:bg-danger-950/20"
-          }`}>
-            {selectedKey === currentQ.correctKey ? (
-              <div>
-                <p className="text-success font-medium">✓ Chính xác!</p>
-                {autoNextCountdown !== null && (
-                  <p className="text-xs text-success-600/70 mt-1">Tự động chuyển sau {autoNextCountdown}s…</p>
+      {/* Bottom section — stable min-h prevents height jump on answer/advance */}
+      <div className="min-h-55">
+        {showResult ? (
+          <>
+            {/* Reveal answer info on result */}
+            <div className="mb-4">
+              {/* Correct/Wrong feedback banner */}
+              <div className={`w-full p-3 rounded-lg text-center mb-3 ${
+                selectedKey === currentQ.correctKey
+                  ? "bg-success-50 dark:bg-success-950/20"
+                  : "bg-danger-50 dark:bg-danger-950/20"
+              }`}>
+                {selectedKey === currentQ.correctKey ? (
+                  <div>
+                    <p className="text-success font-medium">{L.feedback.correct}</p>
+                    {autoNextCountdown !== null && (
+                      <p className="text-xs text-success-600/70 mt-1">{L.feedback.autoNextTpl(autoNextCountdown)}</p>
+                    )}
+                  </div>
+                ) : (
+                  <p className="text-danger font-medium">{L.feedback.wrong}</p>
                 )}
               </div>
-            ) : (
-              <p className="text-danger font-medium">✗ Sai rồi</p>
-            )}
-          </div>
-          {/* Always show answer details */}
-          <div className="p-3 rounded-lg bg-default-100 text-center">
-            <p className="text-2xl font-bold text-red-600 dark:text-red-400">{currentQ.vocab.word}</p>
-            <p className="text-primary text-sm">
-              {currentQ.vocab.pinyin} — {getDisplayMeaning(currentQ.vocab)}
-            </p>
-            {currentQ.vocab.meaningVi && currentQ.vocab.meaning !== currentQ.vocab.meaningVi && (
-              <p className="text-xs text-default-400 mt-1">{currentQ.vocab.meaning}</p>
-            )}
-          </div>
-        </div>
-      )}
+              {/* Always show answer details */}
+              <div className="p-3 rounded-lg bg-default-100 text-center">
+                <p className="text-2xl font-bold text-red-600 dark:text-red-400">{currentQ.vocab.word}</p>
+                <p className="text-primary text-sm">
+                  {currentQ.vocab.pinyin} — {getDisplayMeaning(currentQ.vocab)}
+                </p>
+                {currentQ.vocab.meaningVi && currentQ.vocab.meaning !== currentQ.vocab.meaningVi && (
+                  <p className="text-xs text-default-400 mt-1">{currentQ.vocab.meaning}</p>
+                )}
+              </div>
+            </div>
 
-      {/* Next */}
-      {showResult && (
-        <div className="flex justify-center mb-4">
-          <Button color="secondary" onPress={handleNext}>
-            {currentIdx < totalQ - 1 ? "Câu tiếp theo" : "Xem kết quả"}
-          </Button>
-        </div>
-      )}
-
-      {/* Prev/Next Navigation — forward requires answering */}
-      {!showResult && (
-        <div className="flex items-center justify-between">
-          <Button
-            variant="bordered"
-            size="sm"
-            isDisabled={currentIdx === 0}
-            onPress={() => {
-              if (currentIdx > 0) {
-                setCurrentIdx((i) => i - 1)
-                setSelectedKey(null)
-                setShowResult(false)
-                setShowTranscript(false)
-                setHasListened(false)
-                questionStartRef.current = Date.now()
-              }
-            }}
-            startContent={<ChevronLeft className="w-4 h-4" />}
-          >
-            Trước
-          </Button>
-          <span className="text-xs text-default-400">{currentIdx + 1}/{totalQ}</span>
-          {/* Forward button disabled — must answer the question to proceed */}
-          <Button
-            variant="bordered"
-            size="sm"
-            isDisabled
-            endContent={<ChevronRight className="w-4 h-4" />}
-          >
-            Tiếp
-          </Button>
-        </div>
-      )}
+            {/* Next */}
+            <div className="flex justify-center mb-4">
+              <Button color="secondary" onPress={handleNext}>
+                {currentIdx < totalQ - 1 ? L.nav.nextQuestion : L.nav.viewResult}
+              </Button>
+            </div>
+          </>
+        ) : (
+          /* Prev/Next Navigation — forward requires answering */
+          <div className="flex items-center justify-between">
+            <Button
+              variant="bordered"
+              size="sm"
+              isDisabled={currentIdx === 0}
+              onPress={() => {
+                if (currentIdx > 0) {
+                  setCurrentIdx((i) => i - 1)
+                  setSelectedKey(null)
+                  setShowResult(false)
+                  setShowTranscript(false)
+                  setHasListened(false)
+                  questionStartRef.current = Date.now()
+                }
+              }}
+              startContent={<ChevronLeft className="w-4 h-4" />}
+            >
+              {L.nav.prev}
+            </Button>
+            <span className="text-xs text-default-400">{currentIdx + 1}/{totalQ}</span>
+            {/* Forward button disabled — must answer the question to proceed */}
+            <Button
+              variant="bordered"
+              size="sm"
+              isDisabled
+              endContent={<ChevronRight className="w-4 h-4" />}
+            >
+              {L.nav.next}
+            </Button>
+          </div>
+        )}
+      </div>
     </div>
   )
 }

@@ -1,7 +1,7 @@
 "use client"
 
 import { useState, useRef, useEffect, useCallback } from "react"
-import { MessageSquare, X, Minus, RotateCcw, Bot, History, ChevronDown } from "lucide-react"
+import { BotMessageSquare, X, Minus, RotateCcw, Bot, History, ChevronDown } from "lucide-react"
 import { cn } from "@/lib/utils"
 import type { ChatMessageData, ChatSessionItem, ChatUserInfo } from "./types"
 import ChatMessageBubble from "./ChatMessageBubble"
@@ -233,13 +233,13 @@ export default function AIChatbot({ user }: AIChatbotProps) {
       {!isOpen && (
         <button
           onClick={() => setIsOpen(true)}
-          className="fixed bottom-6 right-6 z-50 w-14 h-14 rounded-full
-                     bg-linear-to-br from-red-500 to-red-600 text-white
+          className="fixed bottom-6 right-6 z-50 w-14 h-14 min-[426px]:w-14 min-[426px]:h-14
+                     rounded-full bg-linear-to-br from-red-500 to-red-600 text-white
                      shadow-lg hover:shadow-xl hover:scale-105 active:scale-95
-                     transition-all flex items-center justify-center group"
+                     transition-all flex items-center justify-center group cursor-pointer"
           aria-label="Mở trợ lý AI"
         >
-          <MessageSquare className="w-6 h-6 group-hover:scale-110 transition-transform" />
+          <BotMessageSquare className="w-6 h-6 group-hover:scale-110 transition-transform" />
           <span className="absolute -top-0.5 -right-0.5 w-3.5 h-3.5 bg-green-400 rounded-full border-2 border-white animate-pulse" />
         </button>
       )}
@@ -248,10 +248,16 @@ export default function AIChatbot({ user }: AIChatbotProps) {
       {isOpen && (
         <div
           className={cn(
-            "fixed bottom-6 right-6 z-50 flex flex-col bg-white rounded-2xl shadow-2xl border border-gray-200 overflow-hidden transition-all duration-300",
-            isMinimized ? "w-80 h-14" : "w-95 h-140 max-h-[80vh]"
+            // Base
+            "fixed z-50 flex flex-col bg-white shadow-2xl border border-gray-200 overflow-hidden transition-all duration-300",
+            // Mobile: full-screen overlay
+            "inset-0 rounded-none",
+            // Tablet (≥426px): positioned panel, bottom-right
+            "min-[426px]:inset-auto min-[426px]:bottom-6 min-[426px]:right-6 min-[426px]:rounded-2xl",
+            isMinimized
+              ? "min-[426px]:w-80 min-[426px]:h-14"
+              : "min-[426px]:w-85 min-[426px]:h-150 min-[426px]:max-h-[85vh] xl:w-95 xl:h-170"
           )}
-          style={{ maxWidth: "calc(100vw - 32px)" }}
         >
           {/* ── Header ── */}
           <div className="flex items-center justify-between px-4 py-3 bg-linear-to-r from-red-600 to-red-700 text-white shrink-0">
@@ -268,32 +274,33 @@ export default function AIChatbot({ user }: AIChatbotProps) {
               </div>
             </div>
 
-            {/* Actions */}
-            <div className="flex items-center gap-1">
+            {/* Actions — min 44×44 touch targets on mobile */}
+            <div className="flex items-center gap-0.5">
               <button
                 onClick={() => setShowHistory(!showHistory)}
-                className="p-1.5 hover:bg-white/20 rounded-lg transition-colors"
+                className="p-2.5 min-[426px]:p-1.5 hover:bg-white/20 rounded-lg transition-colors cursor-pointer min-w-11 min-h-11 min-[426px]:min-w-0 min-[426px]:min-h-0 flex items-center justify-center"
                 title="Lịch sử"
               >
                 <History className="w-4 h-4" />
               </button>
               <button
                 onClick={startNewSession}
-                className="p-1.5 hover:bg-white/20 rounded-lg transition-colors"
+                className="p-2.5 min-[426px]:p-1.5 hover:bg-white/20 rounded-lg transition-colors cursor-pointer min-w-11 min-h-11 min-[426px]:min-w-0 min-[426px]:min-h-0 flex items-center justify-center"
                 title="Cuộc trò chuyện mới"
               >
                 <RotateCcw className="w-4 h-4" />
               </button>
+              {/* Minimize — hidden on mobile (already full-screen) */}
               <button
                 onClick={() => setIsMinimized(!isMinimized)}
-                className="p-1.5 hover:bg-white/20 rounded-lg transition-colors"
+                className="hidden min-[426px]:flex p-1.5 hover:bg-white/20 rounded-lg transition-colors cursor-pointer items-center justify-center"
                 title={isMinimized ? "Mở rộng" : "Thu nhỏ"}
               >
                 <Minus className="w-4 h-4" />
               </button>
               <button
                 onClick={() => { setIsOpen(false); setIsMinimized(false) }}
-                className="p-1.5 hover:bg-white/20 rounded-lg transition-colors"
+                className="p-2.5 min-[426px]:p-1.5 hover:bg-white/20 rounded-lg transition-colors cursor-pointer min-w-11 min-h-11 min-[426px]:min-w-0 min-[426px]:min-h-0 flex items-center justify-center"
                 title="Đóng"
               >
                 <X className="w-4 h-4" />
@@ -322,7 +329,7 @@ export default function AIChatbot({ user }: AIChatbotProps) {
                 )}
 
                 {messages.length === 0 && !streamingContent ? (
-                  <WelcomeMessage onSuggestionClick={handleSend} />
+                  <WelcomeMessage userName={user?.name} onSuggestionClick={handleSend} />
                 ) : (
                   <>
                     {messages.map((msg) => (

@@ -3,6 +3,9 @@
 import { Card, CardBody, Progress, Tooltip } from "@heroui/react"
 import { BookOpen, Award, Clock, Layers, HelpCircle, Headphones, PenTool } from "lucide-react"
 import { PracticeMode } from "@/enums/portal/common"
+import { PRACTICE_LABELS } from "@/constants/portal/practice"
+
+const L = PRACTICE_LABELS
 
 interface SkillInfo {
   masteryPercent: number
@@ -20,19 +23,12 @@ interface ProgressCardProps {
   skillProgress?: Partial<Record<string, SkillInfo>>
 }
 
-const SKILL_CONFIG: { mode: string; label: string; icon: React.ReactNode; color: string }[] = [
-  { mode: PracticeMode.FLASHCARD, label: "Flashcard", icon: <Layers className="w-3 h-3" />, color: "text-primary" },
-  { mode: PracticeMode.QUIZ, label: "Quiz", icon: <HelpCircle className="w-3 h-3" />, color: "text-warning" },
-  { mode: PracticeMode.LISTEN, label: "Nghe", icon: <Headphones className="w-3 h-3" />, color: "text-secondary" },
-  { mode: PracticeMode.WRITE, label: "Viết", icon: <PenTool className="w-3 h-3" />, color: "text-success" },
+const SKILL_CONFIG: { mode: string; label: string; icon: React.ReactNode; color: string; progressColor: "primary" | "warning" | "secondary" | "success" }[] = [
+  { mode: PracticeMode.FLASHCARD, label: L.tabLabels[PracticeMode.FLASHCARD], icon: <Layers className="w-3.5 h-3.5" />, color: "text-primary", progressColor: "primary" },
+  { mode: PracticeMode.QUIZ, label: L.tabLabels[PracticeMode.QUIZ], icon: <HelpCircle className="w-3.5 h-3.5" />, color: "text-warning", progressColor: "warning" },
+  { mode: PracticeMode.LISTEN, label: L.tabLabels[PracticeMode.LISTEN], icon: <Headphones className="w-3.5 h-3.5" />, color: "text-secondary", progressColor: "secondary" },
+  { mode: PracticeMode.WRITE, label: L.tabLabels[PracticeMode.WRITE], icon: <PenTool className="w-3.5 h-3.5" />, color: "text-success", progressColor: "success" },
 ]
-
-function getProgressColor(pct: number): "success" | "warning" | "primary" | "default" {
-  if (pct >= 80) return "success"
-  if (pct >= 40) return "warning"
-  if (pct > 0) return "primary"
-  return "default"
-}
 
 function formatTime(sec: number): string {
   if (sec < 60) return `${sec}s`
@@ -54,115 +50,108 @@ export default function ProgressCard({
   const hasSkillData = skillProgress && Object.keys(skillProgress).length > 0
 
   return (
-    <Card className="bg-linear-to-r from-primary-50 to-secondary-50 dark:from-primary-950/30 dark:to-secondary-950/30 border border-primary-100 dark:border-primary-900/30">
-      <CardBody className="p-3 sm:p-4">
+    <Card className="border border-default-200 dark:border-default-700/50 shadow-sm">
+      <CardBody className="p-3 sm:p-4 space-y-3">
+        {/* Top row: mastery + stats */}
         <div className="flex items-center gap-3 sm:gap-4">
-          {/* Mastery circle — compact */}
-          <div className="relative w-12 h-12 sm:w-14 sm:h-14 shrink-0">
+          {/* Mastery circle */}
+          <div className="relative w-14 h-14 sm:w-16 sm:h-16 shrink-0">
             <svg viewBox="0 0 36 36" className="w-full h-full -rotate-90">
               <circle
-                cx="18" cy="18" r="15.9155"
-                fill="none"
-                stroke="currentColor"
-                className="text-default-200 dark:text-default-700"
-                strokeWidth="3"
+                cx="18" cy="18" r="15"
+                fill="none" stroke="currentColor"
+                className="text-default-100 dark:text-default-800"
+                strokeWidth="2.5"
               />
               <circle
-                cx="18" cy="18" r="15.9155"
-                fill="none"
-                stroke="currentColor"
-                className="text-primary"
-                strokeWidth="3"
-                strokeDasharray={`${masteryPercent}, 100`}
+                cx="18" cy="18" r="15"
+                fill="none" stroke="currentColor"
+                className={masteryPercent >= 80 ? "text-success" : masteryPercent >= 40 ? "text-warning" : "text-primary"}
+                strokeWidth="2.5"
+                strokeDasharray={`${(masteryPercent / 100) * 94.25}, 94.25`}
                 strokeLinecap="round"
               />
             </svg>
             <div className="absolute inset-0 flex items-center justify-center">
-              <span className="text-xs sm:text-sm font-bold text-primary">{Math.round(masteryPercent)}%</span>
+              <span className={`text-sm sm:text-base font-bold ${masteryPercent >= 80 ? "text-success" : masteryPercent >= 40 ? "text-warning" : "text-primary"}`}>
+                {Math.round(masteryPercent)}%
+              </span>
             </div>
           </div>
 
-          {/* Stats — single row */}
-          <div className="flex items-center gap-4 sm:gap-6 flex-1 min-w-0">
-            <div className="flex items-center gap-1.5">
-              <BookOpen className="w-3.5 h-3.5 text-primary shrink-0" />
-              <div>
-                <p className="text-sm sm:text-base font-bold text-foreground leading-none">{learnedCount}</p>
-                <p className="text-[9px] sm:text-[10px] text-default-500">Đã học</p>
+          {/* Stats grid */}
+          <div className="flex-1 grid grid-cols-3 gap-2 sm:gap-4">
+            <div className="text-center">
+              <div className="flex items-center justify-center gap-1 mb-0.5">
+                <BookOpen className="w-3.5 h-3.5 text-primary" />
               </div>
+              <p className="text-base sm:text-lg font-bold text-foreground leading-none">{learnedCount}<span className="text-xs font-normal text-default-400">/{totalItems}</span></p>
+              <p className="text-[9px] sm:text-[10px] text-default-400 mt-0.5">{L.progress.learnedLabel}</p>
             </div>
-            <div className="flex items-center gap-1.5">
-              <Award className="w-3.5 h-3.5 text-success shrink-0" />
-              <div>
-                <p className="text-sm sm:text-base font-bold text-foreground leading-none">{masteredCount}</p>
-                <p className="text-[9px] sm:text-[10px] text-default-500">Thành thạo</p>
+            <div className="text-center">
+              <div className="flex items-center justify-center gap-1 mb-0.5">
+                <Award className="w-3.5 h-3.5 text-success" />
               </div>
+              <p className="text-base sm:text-lg font-bold text-foreground leading-none">{masteredCount}</p>
+              <p className="text-[9px] sm:text-[10px] text-default-400 mt-0.5">{L.progress.masteredLabel}</p>
             </div>
-            <div className="flex items-center gap-1.5">
-              <Clock className="w-3.5 h-3.5 text-warning shrink-0" />
-              <div>
-                <p className="text-sm sm:text-base font-bold text-foreground leading-none">{formatTime(totalTimeSec)}</p>
-                <p className="text-[9px] sm:text-[10px] text-default-500">Thời gian</p>
+            <div className="text-center">
+              <div className="flex items-center justify-center gap-1 mb-0.5">
+                <Clock className="w-3.5 h-3.5 text-warning" />
               </div>
+              <p className="text-base sm:text-lg font-bold text-foreground leading-none">{formatTime(totalTimeSec)}</p>
+              <p className="text-[9px] sm:text-[10px] text-default-400 mt-0.5">{L.progress.timeLabel}</p>
             </div>
-          </div>
-
-          {/* Remaining indicator */}
-          <div className="text-right shrink-0 hidden sm:block">
-            {remaining > 0 ? (
-              <p className="text-[10px] text-default-500">Còn {remaining} từ</p>
-            ) : totalItems > 0 ? (
-              <p className="text-[10px] text-success-600 font-medium">✓ Đã học hết!</p>
-            ) : null}
           </div>
         </div>
 
-        {/* Progress bar */}
+        {/* Overall progress bar */}
         {totalItems > 0 && (
-          <Progress
-            value={masteryPercent}
-            color="primary"
-            size="sm"
-            className="mt-2"
-            aria-label="Tiến độ học tập"
-          />
+          <div className="flex items-center gap-2">
+            <Progress
+              value={masteryPercent}
+              color={masteryPercent >= 80 ? "success" : masteryPercent >= 40 ? "warning" : "primary"}
+              size="sm"
+              className="flex-1"
+              aria-label={L.progress.ariaLabel}
+            />
+            {remaining > 0 ? (
+              <span className="text-[10px] text-default-400 shrink-0 tabular-nums">{L.progress.remainingTpl(remaining)}</span>
+            ) : totalItems > 0 ? (
+              <span className="text-[10px] text-success-600 font-medium shrink-0">✓ {L.progress.allLearned}</span>
+            ) : null}
+          </div>
         )}
 
-        {/* Per-mode skill progress badges */}
+        {/* Per-mode skill progress */}
         {hasSkillData && (
-          <div className="flex items-center gap-2 sm:gap-3 mt-2.5 pt-2 border-t border-primary-100/50 dark:border-primary-900/20">
-            <span className="text-[9px] sm:text-[10px] text-default-400 shrink-0">Kỹ năng:</span>
-            <div className="flex items-center gap-1.5 sm:gap-2 flex-wrap">
-              {SKILL_CONFIG.map(({ mode, label, icon, color }) => {
-                const info = skillProgress?.[mode]
-                const pct = info?.masteryPercent ?? 0
-                const progressColor = getProgressColor(pct)
+          <div className="grid grid-cols-4 gap-2 pt-2 border-t border-default-100 dark:border-default-800">
+            {SKILL_CONFIG.map(({ mode, label, icon, color, progressColor }) => {
+              const info = skillProgress?.[mode]
+              const pct = info?.masteryPercent ?? 0
 
-                return (
-                  <Tooltip
-                    key={mode}
-                    content={`${label}: ${Math.round(pct)}% (${info?.masteredCount ?? 0}/${info?.totalCount ?? totalItems})`}
-                    placement="bottom"
-                  >
-                    <div className="flex items-center gap-1 px-1.5 py-0.5 rounded-md bg-white/60 dark:bg-default-800/40 cursor-default">
-                      <span className={color}>{icon}</span>
-                      <div className="w-8 sm:w-10">
-                        <Progress
-                          value={pct}
-                          size="sm"
-                          color={progressColor}
-                          className="h-1"
-                          aria-label={`${label} progress`}
-                        />
-                      </div>
-                      <span className={`text-[9px] font-medium ${pct >= 80 ? "text-success" : pct > 0 ? "text-default-600" : "text-default-400"}`}>
-                        {Math.round(pct)}%
-                      </span>
-                    </div>
-                  </Tooltip>
-                )
-              })}
-            </div>
+              return (
+                <Tooltip
+                  key={mode}
+                  content={`${label}: ${Math.round(pct)}% (${info?.masteredCount ?? 0}/${info?.totalCount ?? totalItems})`}
+                  placement="bottom"
+                >
+                  <div className="flex flex-col items-center gap-1 cursor-default">
+                    <span className={color}>{icon}</span>
+                    <Progress
+                      value={pct}
+                      size="sm"
+                      color={pct >= 80 ? "success" : progressColor}
+                      className="w-full"
+                      aria-label={`${label} progress`}
+                    />
+                    <span className={`text-[9px] font-medium tabular-nums ${pct >= 80 ? "text-success" : pct > 0 ? "text-default-600" : "text-default-300"}`}>
+                      {Math.round(pct)}%
+                    </span>
+                  </div>
+                </Tooltip>
+              )
+            })}
           </div>
         )}
       </CardBody>

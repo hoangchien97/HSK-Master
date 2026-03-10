@@ -2,12 +2,12 @@ import { auth } from "@/auth"
 import { redirect, notFound } from "next/navigation"
 import {
   getCoursesForPractice,
-  getStudentAllLessonProgress,
   getStudentEnrolledHskLevels,
 } from "@/services/portal/practice.service"
-import { getAllLessonSkillProgress } from "@/services/portal/practice-skill.service"
+import { getAllLessonSkillProgress, getAllLessonProgressFromSkills, getLastActiveLesson } from "@/services/portal/practice-skill.service"
 import PracticeListView from "@/components/portal/practice/PracticeListView"
 import { ROLE_ROUTES } from "@/lib/utils/auth"
+import { serializeDates } from "@/utils/serialize"
 
 type Props = {
   params: Promise<{ role: string }>
@@ -26,17 +26,19 @@ export default async function PracticePage({ params }: Props) {
 
   // SSR: fetch data server-side for fast initial render
   const enrolledLevels = await getStudentEnrolledHskLevels(session.user.id)
-  const [courses, progressMap, skillProgressMap] = await Promise.all([
+  const [courses, progressMap, skillProgressMap, lastActive] = await Promise.all([
     getCoursesForPractice(enrolledLevels.length > 0 ? enrolledLevels : undefined),
-    getStudentAllLessonProgress(session.user.id),
+    getAllLessonProgressFromSkills(session.user.id),
     getAllLessonSkillProgress(session.user.id),
+    getLastActiveLesson(session.user.id),
   ])
 
   return (
     <PracticeListView
-      initialCourses={JSON.parse(JSON.stringify(courses))}
-      initialProgressMap={JSON.parse(JSON.stringify(progressMap))}
-      initialSkillProgressMap={JSON.parse(JSON.stringify(skillProgressMap))}
+      initialCourses={serializeDates(courses)}
+      initialProgressMap={serializeDates(progressMap)}
+      initialSkillProgressMap={serializeDates(skillProgressMap)}
+      lastActiveLesson={lastActive ? serializeDates(lastActive) : null}
     />
   )
 }

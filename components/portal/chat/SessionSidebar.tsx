@@ -69,7 +69,7 @@ export default function SessionSidebar({
       {/* Header */}
       <div className="flex items-center justify-between p-3 border-b border-gray-200">
         <h3 className="text-sm font-semibold text-gray-700">Lịch sử trò chuyện</h3>
-        <button onClick={onClose} className="p-1 hover:bg-gray-100 rounded-lg transition-colors">
+        <button onClick={onClose} className="p-1 hover:bg-gray-100 rounded-lg transition-colors cursor-pointer">
           <X className="w-4 h-4 text-gray-500" />
         </button>
       </div>
@@ -78,7 +78,7 @@ export default function SessionSidebar({
       <div className="p-2">
         <button
           onClick={onNewSession}
-          className="w-full flex items-center gap-2 px-3 py-2 text-sm text-red-600 hover:bg-red-50 rounded-lg transition-colors"
+          className="w-full flex items-center gap-2 px-3 py-2 text-sm text-red-600 hover:bg-red-50 rounded-lg transition-colors cursor-pointer"
         >
           <Plus className="w-4 h-4" />
           Cuộc trò chuyện mới
@@ -125,7 +125,7 @@ export default function SessionSidebar({
                     e.stopPropagation()
                     onDeleteSession(s.id)
                   }}
-                  className="opacity-0 group-hover:opacity-100 p-1 hover:bg-red-50 rounded transition-all shrink-0"
+                  className="opacity-0 group-hover:opacity-100 p-1 hover:bg-red-50 rounded transition-all shrink-0 cursor-pointer"
                 >
                   <Trash2 className="w-3.5 h-3.5 text-red-400" />
                 </button>

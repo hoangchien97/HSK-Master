@@ -28,9 +28,10 @@ export default function PortalContent({ children }: PortalContentProps) {
       </div>
 
       {/* Page content
-          Mobile: normal scroll flow — no overflow hidden
-          md: flex column so children (CTable, Calendar etc) can flex-1 to fill remaining height */}
-      <div className="flex-1 min-h-0 md:flex md:flex-col px-4 pb-4 lg:px-6 lg:pb-6">
+          Mobile: natural scroll flow via outer wrapper (overflow-y-auto)
+          md: flex column so CTable/Calendar children can flex-1 to fill remaining height;
+              overflow-y-auto allows content-driven pages (practice, progress, etc.) to scroll */}
+      <div className="flex-1 min-h-0 md:overflow-y-auto md:flex md:flex-col px-4 pb-4 lg:px-6 lg:pb-6">
         {children}
       </div>
     </main>

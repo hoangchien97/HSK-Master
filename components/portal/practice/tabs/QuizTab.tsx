@@ -11,11 +11,13 @@ import { recordSkillAttemptAction } from "@/actions/practice-skill.actions"
 import { useSpeech } from "@/hooks/useSpeech"
 import { getDisplayMeaning, QuestionType } from "@/enums/portal/common"
 import { PracticeMode } from "@/enums/portal"
-import { AUTO_NEXT_DELAY_MS, QUESTION_TYPE_LABELS } from "@/constants/portal/practice"
+import { AUTO_NEXT_DELAY_MS, QUESTION_TYPE_LABELS, PRACTICE_LABELS } from "@/constants/portal/practice"
+import { usePracticeKeyboard } from "@/hooks/usePracticeKeyboard"
 import { generateQuizQuestions } from "@/utils/practice"
-import type { QuizQuestion } from "@/utils/practice"
 import type { IVocabularyItem, IQueueVocabItem, ISkillProgressRecord } from "@/interfaces/portal/practice"
 import { QuizResultScreen, McqOptions } from "../shared"
+
+const L = PRACTICE_LABELS
 
 interface Props {
   vocabularies: IVocabularyItem[]
@@ -35,7 +37,7 @@ interface Props {
 
 export default function QuizTab({
   vocabularies, lessonId, onProgressUpdate,
-  queue: modeQueue, skillProgressMap, initialPointer, isCompleted: modeCompleted, onResetSession,
+  isCompleted: modeCompleted,
 }: Props) {
   const [generationKey, setGenerationKey] = useState(0)
   const [currentIdx, setCurrentIdx] = useState(0)
@@ -169,9 +171,6 @@ export default function QuizTab({
       setShowResult(true)
 
       const isCorrect = key === currentQ.correctKey
-      const correctOption = currentQ.options.find((o) => o.key === currentQ.correctKey)
-      const selectedOption = currentQ.options.find((o) => o.key === key)
-      const timeSec = Math.round((Date.now() - questionStartRef.current) / 1000)
 
       setResults((prev) => [...prev, { correct: isCorrect, vocab: currentQ.vocab }])
 
@@ -196,7 +195,7 @@ export default function QuizTab({
         }, AUTO_NEXT_DELAY_MS)
       }
     },
-    [showResult, currentQ, sessionId, handleNext],
+    [showResult, currentQ, handleNext, currentIdx, lessonId, totalQ],
   )
 
   const handleRestart = useCallback(() => {
@@ -231,9 +230,21 @@ export default function QuizTab({
     })
   }, [lessonId, clearAutoNext])
 
+  // Keyboard shortcuts: 1-4 select answer, Enter next
+  usePracticeKeyboard(
+    {
+      "1": () => { if (questions[currentIdx]?.options[0] && !showResult) handleSelect(questions[currentIdx].options[0].key) },
+      "2": () => { if (questions[currentIdx]?.options[1] && !showResult) handleSelect(questions[currentIdx].options[1].key) },
+      "3": () => { if (questions[currentIdx]?.options[2] && !showResult) handleSelect(questions[currentIdx].options[2].key) },
+      "4": () => { if (questions[currentIdx]?.options[3] && !showResult) handleSelect(questions[currentIdx].options[3].key) },
+      "Enter": () => { if (showResult) handleNext() },
+    },
+    { enabled: !finished && totalQ > 0 },
+  )
+
   if (totalQ === 0) {
     return (
-      <Card><CardBody className="py-12 text-center"><p className="text-default-500">Bài học cần ít nhất 2 từ vựng để tạo Quiz</p></CardBody></Card>
+      <Card><CardBody className="py-12 text-center"><p className="text-default-500">{L.empty.minVocabQuiz}</p></CardBody></Card>
     )
   }
 
@@ -265,7 +276,7 @@ export default function QuizTab({
       {retryWrongVocabs && (
         <div className="mb-3 p-2 rounded-lg bg-warning-50 dark:bg-warning-950/20 text-center">
           <p className="text-sm text-warning-700 dark:text-warning-300 font-medium">
-            📝 Ôn lại {retryWrongVocabs.length} từ sai
+            {L.quiz.retryTpl(retryWrongVocabs.length)}
           </p>
         </div>
       )}
@@ -273,7 +284,7 @@ export default function QuizTab({
       {/* Header */}
       <div className="flex items-center justify-between mb-3">
         <span className="text-sm text-default-500">
-          Câu <span className="font-medium text-foreground">{currentIdx + 1}</span>/{totalQ}
+          {L.quiz.questionLabel} <span className="font-medium text-foreground">{currentIdx + 1}</span>/{totalQ}
         </span>
         <Chip size="sm" variant="flat">{QUESTION_TYPE_LABELS[currentQ.type]}</Chip>
       </div>
@@ -314,71 +325,71 @@ export default function QuizTab({
         />
       </div>
 
-      {/* Result info + Next button */}
-      {showResult && (
-        <div className="flex flex-col items-center gap-3">
-          {/* Correct/Wrong feedback */}
-          <div className={`w-full p-3 rounded-lg text-center ${isCorrectAnswer ? "bg-success-50 dark:bg-success-950/20" : "bg-danger-50 dark:bg-danger-950/20"}`}>
-            {isCorrectAnswer ? (
-              <div>
-                <p className="text-success font-medium">✓ Chính xác!</p>
-                {autoNextCountdown !== null && (
-                  <p className="text-xs text-success-600/70 mt-1">Tự động chuyển sau {autoNextCountdown}s…</p>
-                )}
-              </div>
-            ) : (
-              <div>
-                <p className="text-danger font-medium mb-1">✗ Sai rồi</p>
-                <p className="text-sm text-default-600">
-                  Đáp án: <span className="font-bold text-red-600 dark:text-red-400">{currentQ.vocab.word}</span>
-                  {" — "}
-                  <span className="text-primary">{currentQ.vocab.pinyin}</span>
-                  {" — "}
-                  <span>{getDisplayMeaning(currentQ.vocab)}</span>
-                </p>
-              </div>
-            )}
+      {/* Bottom section — stable min-h prevents height jump on answer/advance */}
+      <div className="min-h-35 mt-4">
+        {showResult ? (
+          <div className="flex flex-col items-center gap-3">
+            {/* Correct/Wrong feedback */}
+            <div className={`w-full p-3 rounded-lg text-center ${isCorrectAnswer ? "bg-success-50 dark:bg-success-950/20" : "bg-danger-50 dark:bg-danger-950/20"}`}>
+              {isCorrectAnswer ? (
+                <div>
+                  <p className="text-success font-medium">{L.feedback.correct}</p>
+                  {autoNextCountdown !== null && (
+                    <p className="text-xs text-success-600/70 mt-1">{L.feedback.autoNextTpl(autoNextCountdown)}</p>
+                  )}
+                </div>
+              ) : (
+                <div>
+                  <p className="text-danger font-medium mb-1">{L.feedback.wrong}</p>
+                  <p className="text-sm text-default-600">
+                    {L.feedback.answerIs} <span className="font-bold text-red-600 dark:text-red-400">{currentQ.vocab.word}</span>
+                    {" — "}
+                    <span className="text-primary">{currentQ.vocab.pinyin}</span>
+                    {" — "}
+                    <span>{getDisplayMeaning(currentQ.vocab)}</span>
+                  </p>
+                </div>
+              )}
+            </div>
+
+            {/* Next button — always visible, clicking cancels auto-next timer */}
+            <Button color="primary" onPress={handleNext} size="lg" className="font-medium">
+              {currentIdx < totalQ - 1 ? `${L.nav.nextQuestion} →` : L.nav.viewResult}
+            </Button>
           </div>
-
-          {/* Next button — always visible, clicking cancels auto-next timer */}
-          <Button color="primary" onPress={handleNext} size="lg" className="font-medium">
-            {currentIdx < totalQ - 1 ? "Câu tiếp theo →" : "Xem kết quả"}
-          </Button>
-        </div>
-      )}
-
-      {/* Prev/Next navigation — only go back to review, forward requires answering */}
-      {!showResult && (
-        <div className="flex items-center justify-between mt-4">
-          <Button
-            variant="bordered"
-            size="sm"
-            isDisabled={currentIdx === 0}
-            onPress={() => {
-              if (currentIdx > 0) {
-                setCurrentIdx((i) => i - 1)
-                setSelectedKey(null)
-                setShowResult(false)
-              }
-            }}
-            startContent={<ChevronLeft className="w-4 h-4" />}
-          >
-            Trước
-          </Button>
-          <span className="text-xs text-default-400">
-            {currentIdx + 1}/{totalQ}
-          </span>
-          {/* Forward button disabled — must answer the question to proceed */}
-          <Button
-            variant="bordered"
-            size="sm"
-            isDisabled
-            endContent={<ChevronRight className="w-4 h-4" />}
-          >
-            Tiếp
-          </Button>
-        </div>
-      )}
+        ) : (
+          /* Prev/Next navigation — only go back to review, forward requires answering */
+          <div className="flex items-center justify-between">
+            <Button
+              variant="bordered"
+              size="sm"
+              isDisabled={currentIdx === 0}
+              onPress={() => {
+                if (currentIdx > 0) {
+                  setCurrentIdx((i) => i - 1)
+                  setSelectedKey(null)
+                  setShowResult(false)
+                }
+              }}
+              startContent={<ChevronLeft className="w-4 h-4" />}
+            >
+              {L.nav.prev}
+            </Button>
+            <span className="text-xs text-default-400">
+              {currentIdx + 1}/{totalQ}
+            </span>
+            {/* Forward button disabled — must answer the question to proceed */}
+            <Button
+              variant="bordered"
+              size="sm"
+              isDisabled
+              endContent={<ChevronRight className="w-4 h-4" />}
+            >
+              {L.nav.next}
+            </Button>
+          </div>
+        )}
+      </div>
     </div>
   )
 }

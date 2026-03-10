@@ -254,7 +254,7 @@ export function CTable<T extends Record<string, unknown>>({
 
   /* ─── Loading content — reuse CSpinner pill (inline, no absolute) ─── */
   const loadingContent = useMemo(
-    () => <CSpinner variant="pill-inline" color="primary" message="Đang tải..." />,
+    () => <CSpinner message="Đang tải..." />,
     [],
   )
 

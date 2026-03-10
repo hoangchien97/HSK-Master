@@ -13,8 +13,11 @@ import { CDrawer } from "@/components/portal/common"
 import { recordVocabSeenAction } from "@/actions/practice.actions"
 import { useSpeech } from "@/hooks/useSpeech"
 import { WORD_TYPE_COLORS, WORD_TYPE_LABELS, STATUS_LABELS, getDisplayMeaning } from "@/enums/portal/common"
+import { PRACTICE_LABELS } from "@/constants/portal/practice"
 import type { IVocabularyItem, IStudentItemProgress } from "@/interfaces/portal/practice"
 import { VocabItem } from "../shared"
+
+const L = PRACTICE_LABELS
 
 interface Props {
   vocabularies: IVocabularyItem[]
@@ -65,7 +68,7 @@ export default function LookupTab({ vocabularies, lessonId, itemProgress, onProg
       {/* Search */}
       <Input
         isClearable
-        placeholder="Tìm kiếm từ vựng..."
+        placeholder={L.lookup.searchPlaceholder}
         startContent={<Search className="w-4 h-4 text-default-400" />}
         value={search}
         onValueChange={setSearch}
@@ -76,7 +79,7 @@ export default function LookupTab({ vocabularies, lessonId, itemProgress, onProg
 
       {/* Count */}
       <div className="flex items-center gap-2 mb-3">
-        <Chip size="sm" variant="flat" color="primary">{filteredVocabs.length} từ vựng</Chip>
+        <Chip size="sm" variant="flat" color="primary">{L.lookup.countTpl(filteredVocabs.length)}</Chip>
       </div>
 
       {/* Vocabulary list — internal scroll on desktop, natural scroll on mobile */}
@@ -85,7 +88,7 @@ export default function LookupTab({ vocabularies, lessonId, itemProgress, onProg
           <CardBody className="py-12 text-center">
             <BookOpen className="w-10 h-10 mx-auto text-default-300 mb-2" />
             <p className="text-default-500 text-sm">
-              {vocabularies.length === 0 ? "Bài học này chưa có từ vựng" : "Không tìm thấy từ vựng"}
+              {vocabularies.length === 0 ? L.empty.noVocab : L.empty.noVocabFound}
             </p>
           </CardBody>
         </Card>
@@ -112,7 +115,7 @@ export default function LookupTab({ vocabularies, lessonId, itemProgress, onProg
           setIsDrawerOpen(false)
           setSelectedVocab(null)
         }}
-        title="Chi tiết từ vựng"
+        title={L.lookup.drawerTitle}
         size="sm"
       >
         {selectedVocab && (
@@ -131,7 +134,7 @@ export default function LookupTab({ vocabularies, lessonId, itemProgress, onProg
                 className="mt-3 inline-flex items-center gap-1.5 px-4 py-2 rounded-full bg-primary-100 dark:bg-primary-900/30 text-primary hover:bg-primary-200 transition"
               >
                 <Volume2 className="w-4 h-4" />
-                <span className="text-sm">Phát âm</span>
+                <span className="text-sm">{L.lookup.playAudioBtn}</span>
               </button>
             </div>
 
@@ -140,7 +143,7 @@ export default function LookupTab({ vocabularies, lessonId, itemProgress, onProg
             {/* Word type */}
             {selectedVocab.wordType && (
               <div className="flex items-center gap-2">
-                <span className="text-sm text-default-500">Từ loại:</span>
+                <span className="text-sm text-default-500">{L.lookup.wordTypeLabel}:</span>
                 <Chip size="sm" variant="flat" color={WORD_TYPE_COLORS[selectedVocab.wordType] ?? "default"}>
                   {WORD_TYPE_LABELS[selectedVocab.wordType] ?? selectedVocab.wordType}
                 </Chip>
@@ -152,7 +155,7 @@ export default function LookupTab({ vocabularies, lessonId, itemProgress, onProg
               <div>
                 <p className="text-sm font-medium mb-1.5 flex items-center gap-1.5">
                   <BookOpen className="w-4 h-4 text-primary" />
-                  Câu ví dụ
+                  {L.lookup.exampleLabel}
                 </p>
                 <div className="p-3 rounded-lg bg-default-50 dark:bg-default-800/50 space-y-1">
                   <p className="text-base font-medium text-red-600 dark:text-red-400">{selectedVocab.exampleSentence}</p>
@@ -171,29 +174,29 @@ export default function LookupTab({ vocabularies, lessonId, itemProgress, onProg
               <div>
                 <p className="text-sm font-medium mb-2 flex items-center gap-1.5">
                   <Award className="w-4 h-4 text-primary" />
-                  Tiến độ học tập
+                  {L.lookup.progressLabel}
                 </p>
                 <div className="grid grid-cols-3 gap-3">
                   <div className="text-center p-2 rounded-lg bg-default-100 dark:bg-default-800">
                     <p className="text-lg font-bold">{selectedProgress.seenCount}</p>
-                    <p className="text-[10px] text-default-500">Lần xem</p>
+                    <p className="text-[10px] text-default-500">{L.lookup.seenLabel}</p>
                   </div>
                   <div className="text-center p-2 rounded-lg bg-success-50 dark:bg-success-900/20">
                     <p className="text-lg font-bold text-success">{selectedProgress.correctCount}</p>
-                    <p className="text-[10px] text-default-500">Đúng</p>
+                    <p className="text-[10px] text-default-500">{L.lookup.correctLabel}</p>
                   </div>
                   <div className="text-center p-2 rounded-lg bg-danger-50 dark:bg-danger-900/20">
                     <p className="text-lg font-bold text-danger">{selectedProgress.wrongCount}</p>
-                    <p className="text-[10px] text-default-500">Sai</p>
+                    <p className="text-[10px] text-default-500">{L.lookup.wrongLabel}</p>
                   </div>
                 </div>
                 <div className="flex items-center gap-2 mt-3">
-                  <span className="text-sm text-default-500">Trạng thái:</span>
+                  <span className="text-sm text-default-500">{L.lookup.statusLabel}:</span>
                   <Chip size="sm" variant="flat" color={STATUS_LABELS[selectedProgress.status]?.color ?? "default"}>
                     {STATUS_LABELS[selectedProgress.status]?.label ?? selectedProgress.status}
                   </Chip>
                   <span className="text-sm font-medium text-primary ml-auto">
-                    {Math.round(selectedProgress.masteryScore * 100)}% thành thạo
+                    {L.lookup.masteryTpl(Math.round(selectedProgress.masteryScore * 100))}
                   </span>
                 </div>
               </div>

@@ -4,6 +4,9 @@ import { Button, Card, CardBody } from "@heroui/react"
 import { RotateCcw, Trophy } from "lucide-react"
 import { PracticeMode } from "@/enums/portal"
 import type { IVocabularyItem } from "@/interfaces/portal/practice"
+import { PRACTICE_LABELS } from "@/constants/portal/practice"
+
+const L = PRACTICE_LABELS
 
 interface ResultItem {
   correct: boolean
@@ -92,17 +95,17 @@ export default function QuizResultScreen({
             {score >= 80 ? titles.excellent : score >= 50 ? titles.good : titles.needWork}
           </h2>
           <p className="text-default-500 mb-4">
-            Bạn trả lời đúng {correctCount}/{totalQuestions} câu
+            {L.result.scoreTpl(correctCount, totalQuestions)}
           </p>
 
           <div className="flex items-center justify-center gap-4 sm:gap-6 mb-4">
             <div className="text-center">
               <p className="text-2xl sm:text-3xl font-bold text-primary">{score}%</p>
-              <p className="text-xs text-default-400">Điểm số</p>
+              <p className="text-xs text-default-400">{L.result.scoreLabel}</p>
             </div>
             <div className="text-center">
               <p className="text-2xl sm:text-3xl font-bold text-default-600">{elapsedSec}s</p>
-              <p className="text-xs text-default-400">Thời gian</p>
+              <p className="text-xs text-default-400">{L.result.timeLabel}</p>
             </div>
           </div>
 
@@ -134,7 +137,7 @@ export default function QuizResultScreen({
                 onPress={() => onRetryWrong(wrongItems.map((r) => r.vocab))}
                 startContent={<RotateCcw className="w-4 h-4" />}
               >
-                Ôn lại {wrongItems.length} từ sai
+                {L.result.retryWrongTpl(wrongItems.length)}
               </Button>
             )}
             <Button
@@ -142,7 +145,7 @@ export default function QuizResultScreen({
               onPress={onRestart}
               startContent={<RotateCcw className="w-4 h-4" />}
             >
-              Làm lại tất cả
+              {L.result.retryAllBtn}
             </Button>
           </div>
         </CardBody>

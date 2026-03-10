@@ -20,6 +20,7 @@ import {
   getStudentAllLessonProgress,
   getStudentEnrolledHskLevels,
 } from '@/services/portal/practice.service';
+import { getLessonProgressFromSkills } from '@/services/portal/practice-skill.service';
 
 /* ───────── Fetch lesson practice data ───────── */
 
@@ -192,12 +193,10 @@ export async function refreshLessonProgress(lessonId: string) {
     const session = await auth();
     if (!session?.user?.id) return { success: false, error: 'Unauthorized' };
 
-    const [progress, itemProgress] = await Promise.all([
-      getStudentLessonProgress(session.user.id, lessonId),
-      getStudentItemProgressForLesson(session.user.id, lessonId),
-    ]);
+    // Use skill-based progress as primary source (P1-06 unification)
+    const progress = await getLessonProgressFromSkills(session.user.id, lessonId);
 
-    return { success: true, data: { progress, itemProgress } };
+    return { success: true, data: { progress, itemProgress: {} } };
   } catch (error) {
     console.error('Error refreshing progress:', error);
     return { success: false, error: 'Lỗi tải tiến độ' };

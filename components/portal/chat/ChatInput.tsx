@@ -48,7 +48,7 @@ export default function ChatInput({ onSend, disabled }: ChatInputProps) {
         value={value}
         onChange={(e) => setValue(e.target.value)}
         onKeyDown={handleKeyDown}
-        placeholder="Nhập tin nhắn..."
+        placeholder="Hỏi về từ vựng, ngữ pháp..."
         disabled={disabled}
         rows={1}
         className="flex-1 resize-none rounded-xl border border-gray-200 bg-gray-50 px-3 py-2 text-sm
@@ -60,7 +60,7 @@ export default function ChatInput({ onSend, disabled }: ChatInputProps) {
         onClick={handleSend}
         disabled={disabled || !value.trim()}
         className="shrink-0 w-9 h-9 rounded-full bg-red-600 text-white flex items-center justify-center
-                   hover:bg-red-700 disabled:opacity-40 disabled:cursor-not-allowed transition-colors"
+                   hover:bg-red-700 disabled:opacity-40 disabled:cursor-not-allowed transition-colors cursor-pointer"
       >
         {disabled ? (
           <Loader2 className="w-4 h-4 animate-spin" />
