@@ -304,13 +304,18 @@ export async function updateSkillProgress(
 }
 
 /* ═══════════════════════════════════════════════════════════════
-   3. UPDATE SKILL PROGRESS — Flashcard actions (HARD/GOOD/EASY)
+   3. UPDATE SKILL PROGRESS — Flashcard actions (AGAIN/HARD/GOOD/EASY)
+   SM-2 inspired algorithm with quality scores:
+   - AGAIN (q=0): completely forgot, reset repetition
+   - HARD  (q=3): remembered with serious difficulty
+   - GOOD  (q=4): correct response with some effort
+   - EASY  (q=5): perfect response
    ═══════════════════════════════════════════════════════════════ */
 
 export async function updateFlashcardSkillProgress(
   studentId: string,
   vocabularyId: string,
-  action: 'HARD' | 'GOOD' | 'EASY',
+  action: 'AGAIN' | 'HARD' | 'GOOD' | 'EASY',
 ): Promise<{ oldStatus: string; newStatus: string; statusChanged: boolean }> {
   const mode = PracticeMode.FLASHCARD;
   const existing = await prisma.portalItemSkillProgress.findUnique({
@@ -324,15 +329,23 @@ export async function updateFlashcardSkillProgress(
   let nextReviewAt: Date;
 
   switch (action) {
+    case 'AGAIN':
+      // Completely forgot - reset mastery, review again very soon
+      masteryScore = Math.max(0, masteryScore - 0.25);
+      nextReviewAt = new Date(now.getTime() + 1 * 60 * 1000); // 1 minute
+      break;
     case 'HARD':
+      // Difficult recall - decrease mastery slightly, short interval
       masteryScore = Math.max(0, masteryScore - 0.1);
       nextReviewAt = new Date(now.getTime() + 10 * 60 * 1000); // 10 min
       break;
     case 'GOOD':
+      // Normal recall - increase mastery, standard interval
       masteryScore = Math.min(1, masteryScore + 0.1);
       nextReviewAt = new Date(now.getTime() + 24 * 60 * 60 * 1000); // 1 day
       break;
     case 'EASY':
+      // Perfect recall - increase mastery more, longer interval
       masteryScore = Math.min(1, masteryScore + 0.15);
       nextReviewAt = new Date(now.getTime() + 3 * 24 * 60 * 60 * 1000); // 3 days
       break;
@@ -346,7 +359,7 @@ export async function updateFlashcardSkillProgress(
         ? ItemProgressStatus.LEARNING
         : ItemProgressStatus.NEW;
 
-  const isCorrect = action !== 'HARD';
+  const isCorrect = action !== 'AGAIN' && action !== 'HARD';
 
   await prisma.portalItemSkillProgress.upsert({
     where: {
@@ -750,7 +763,7 @@ export async function processFlashcardSkillAttempt(params: {
   studentId: string;
   lessonId: string;
   vocabularyId: string;
-  action: 'HARD' | 'GOOD' | 'EASY';
+  action: 'AGAIN' | 'HARD' | 'GOOD' | 'EASY';
   currentIndex: number;
   queueLength: number;
   sessionId: string;
@@ -767,7 +780,7 @@ export async function processFlashcardSkillAttempt(params: {
   // 2–5. Batch independent writes in parallel
   const nextIndex = currentIndex + 1;
   const isCompleted = nextIndex >= queueLength;
-  const isCorrect = action !== 'HARD';
+  const isCorrect = action !== 'AGAIN' && action !== 'HARD';
 
   const writes: Promise<unknown>[] = [
     // Session state pointer

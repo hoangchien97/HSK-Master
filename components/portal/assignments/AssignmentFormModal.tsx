@@ -199,7 +199,7 @@ export default function AssignmentFormModal({
         />
 
         {/* ── Class & Due Date — side by side ── */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 w-full">
           <Select
             label="Lớp học"
             name="classId"
@@ -234,7 +234,7 @@ export default function AssignmentFormModal({
         </div>
 
         {/* ── Tags / Hashtags ── */}
-        <div>
+        <div className="w-full">
           <label className="text-sm font-medium text-foreground mb-1.5 block">
             Hashtag
           </label>
@@ -279,7 +279,7 @@ export default function AssignmentFormModal({
         </div>
 
         {/* ── File Attachments ── */}
-        <div>
+        <div className="w-full">
           <p className="text-sm font-medium mb-2">Tài liệu đính kèm</p>
           <FileUploadZone
             value={attachments}
@@ -300,7 +300,7 @@ export default function AssignmentFormModal({
         />
 
         {/* ── Publish Toggle ── */}
-        <div className="flex items-center justify-between p-3 rounded-lg bg-default-50 border border-default-200">
+        <div className="flex items-center justify-between w-full p-3 rounded-lg bg-default-50 border border-default-200">
           <div>
             <p className="text-sm font-medium">
               {isPublished ? "Công bố bài tập" : "Lưu nháp"}

@@ -65,6 +65,15 @@ export interface LearningProgressItem {
  * Get dashboard stats for a student.
  */
 export async function getStudentDashboardStats(studentId: string): Promise<DashboardStats> {
+  const lessonSkillProgressModel = (prisma as unknown as {
+    portalLessonSkillProgress?: {
+      findMany: (args: {
+        where: { studentId: string }
+        select: { masteryPercent: true }
+      }) => Promise<Array<{ masteryPercent: number }>>
+    }
+  }).portalLessonSkillProgress
+
   const [wordsLearned, completedLessons, pendingAssignments, allSkillProgress] = await Promise.all([
     // Words with any progress (seen at least once)
     prisma.portalItemProgress.count({
@@ -88,10 +97,15 @@ export async function getStudentDashboardStats(studentId: string): Promise<Dashb
       },
     }),
     // Overall skill progress for computing average
-    prisma.portalLessonSkillProgress.findMany({
-      where: { studentId },
-      select: { masteryPercent: true },
-    }),
+    lessonSkillProgressModel?.findMany
+      ? lessonSkillProgressModel.findMany({
+        where: { studentId },
+        select: { masteryPercent: true },
+      })
+      : prisma.portalLessonProgress.findMany({
+        where: { studentId },
+        select: { masteryPercent: true },
+      }),
   ])
 
   // Compute streak: count consecutive days with practice sessions

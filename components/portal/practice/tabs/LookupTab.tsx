@@ -7,17 +7,28 @@ import {
   CardBody,
   Chip,
   Divider,
+  Tabs,
+  Tab,
 } from "@heroui/react"
-import { Search, Volume2, BookOpen, Award } from "lucide-react"
+import { Search, Volume2, BookOpen, Award, Filter } from "lucide-react"
 import { CDrawer } from "@/components/portal/common"
 import { recordVocabSeenAction } from "@/actions/practice.actions"
 import { useSpeech } from "@/hooks/useSpeech"
-import { WORD_TYPE_COLORS, WORD_TYPE_LABELS, STATUS_LABELS, getDisplayMeaning } from "@/enums/portal/common"
+import { WORD_TYPE_COLORS, WORD_TYPE_LABELS, STATUS_LABELS, getDisplayMeaning, ItemProgressStatus } from "@/enums/portal/common"
 import { PRACTICE_LABELS } from "@/constants/portal/practice"
 import type { IVocabularyItem, IStudentItemProgress } from "@/interfaces/portal/practice"
 import { VocabItem } from "../shared"
 
 const L = PRACTICE_LABELS
+
+type StatusFilter = "ALL" | "NEW" | "LEARNING" | "MASTERED"
+
+const STATUS_FILTER_CONFIG: { key: StatusFilter; label: string; color: "default" | "primary" | "warning" | "success" }[] = [
+  { key: "ALL", label: "Tất cả", color: "default" },
+  { key: "NEW", label: "Chưa học", color: "primary" },
+  { key: "LEARNING", label: "Đang học", color: "warning" },
+  { key: "MASTERED", label: "Thành thạo", color: "success" },
+]
 
 interface Props {
   vocabularies: IVocabularyItem[]
@@ -28,21 +39,53 @@ interface Props {
 
 export default function LookupTab({ vocabularies, lessonId, itemProgress, onProgressUpdate }: Props) {
   const [search, setSearch] = useState("")
+  const [statusFilter, setStatusFilter] = useState<StatusFilter>("ALL")
   const [selectedVocab, setSelectedVocab] = useState<IVocabularyItem | null>(null)
   const [isDrawerOpen, setIsDrawerOpen] = useState(false)
   const { speak } = useSpeech()
 
   const filteredVocabs = useMemo(() => {
-    if (!search.trim()) return vocabularies
-    const q = search.toLowerCase()
-    return vocabularies.filter(
-      (v) =>
-        v.word.toLowerCase().includes(q) ||
-        (v.pinyin && v.pinyin.toLowerCase().includes(q)) ||
-        v.meaning.toLowerCase().includes(q) ||
-        (v.meaningVi && v.meaningVi.toLowerCase().includes(q)),
-    )
-  }, [vocabularies, search])
+    let result = vocabularies
+
+    // Filter by search
+    if (search.trim()) {
+      const q = search.toLowerCase()
+      result = result.filter(
+        (v) =>
+          v.word.toLowerCase().includes(q) ||
+          (v.pinyin && v.pinyin.toLowerCase().includes(q)) ||
+          v.meaning.toLowerCase().includes(q) ||
+          (v.meaningVi && v.meaningVi.toLowerCase().includes(q)),
+      )
+    }
+
+    // Filter by status
+    if (statusFilter !== "ALL") {
+      result = result.filter((v) => {
+        const progress = itemProgress[v.id]
+        if (!progress) return statusFilter === "NEW"
+        return progress.status === statusFilter
+      })
+    }
+
+    return result
+  }, [vocabularies, search, statusFilter, itemProgress])
+
+  // Count by status for badges
+  const statusCounts = useMemo(() => {
+    const counts = { ALL: vocabularies.length, NEW: 0, LEARNING: 0, MASTERED: 0 }
+    for (const v of vocabularies) {
+      const progress = itemProgress[v.id]
+      if (!progress || progress.status === ItemProgressStatus.NEW) {
+        counts.NEW++
+      } else if (progress.status === ItemProgressStatus.LEARNING) {
+        counts.LEARNING++
+      } else if (progress.status === ItemProgressStatus.MASTERED) {
+        counts.MASTERED++
+      }
+    }
+    return counts
+  }, [vocabularies, itemProgress])
 
   const handleSelectVocab = useCallback(
     async (vocab: IVocabularyItem) => {
@@ -73,9 +116,39 @@ export default function LookupTab({ vocabularies, lessonId, itemProgress, onProg
         value={search}
         onValueChange={setSearch}
         onClear={() => setSearch("")}
-        className="mb-4"
+        className="mb-3"
         size="sm"
       />
+
+      {/* Status filter tabs */}
+      <div className="flex items-center gap-2 mb-3 overflow-x-auto scrollbar-hide pb-1">
+        <Filter className="w-4 h-4 text-default-400 shrink-0" />
+        <Tabs
+          selectedKey={statusFilter}
+          onSelectionChange={(key) => setStatusFilter(key as StatusFilter)}
+          variant="light"
+          size="sm"
+          classNames={{
+            tabList: "gap-1 p-0",
+            tab: "px-2.5 py-1.5 h-auto min-h-0",
+            cursor: "rounded-full",
+          }}
+        >
+          {STATUS_FILTER_CONFIG.map(({ key, label, color }) => (
+            <Tab
+              key={key}
+              title={
+                <div className="flex items-center gap-1.5">
+                  <span className="text-xs">{label}</span>
+                  <Chip size="sm" variant="flat" color={color} className="min-w-5 h-5 px-1.5 text-[10px]">
+                    {statusCounts[key]}
+                  </Chip>
+                </div>
+              }
+            />
+          ))}
+        </Tabs>
+      </div>
 
       {/* Count */}
       <div className="flex items-center gap-2 mb-3">

@@ -11,9 +11,10 @@ export enum FlashcardPhase {
 }
 
 export enum FlashcardAction {
-  HARD = "HARD",
-  GOOD = "GOOD",
-  EASY = "EASY",
+  AGAIN = "AGAIN", // quality=0 - completely forgot, reset repetition
+  HARD = "HARD",   // quality=3 - difficult, review soon
+  GOOD = "GOOD",   // quality=4 - correct with some effort
+  EASY = "EASY",   // quality=5 - perfect response
 }
 
 /* ───────── Write ───────── */
@@ -97,9 +98,10 @@ export const PRACTICE_LABELS = {
     flipHint: "Nhấn để xem nghĩa",
     flipBackHint: "Nhấn để xem chữ Hán",
     reviewPrevLesson: "📖 Ôn bài trước",
-    hardBtn: "✗ Chưa thuộc",
+    againBtn: "↺ Quên",
+    hardBtn: "✗ Khó",
     goodBtn: "○ Tạm ổn",
-    easyBtn: "✓ Đã thuộc",
+    easyBtn: "✓ Dễ",
     exampleLabel: "Ví dụ:",
     phaseTpl: (count: number) => `📖 Ôn lại ${count} từ chưa thuộc`,
     toastReviewTpl: (count: number) => `Ôn lại ${count} từ chưa thuộc 📖`,

@@ -102,7 +102,7 @@ export async function recordSkillAttemptAction(data: {
 export async function recordFlashcardSkillAction(data: {
   lessonId: string;
   vocabularyId: string;
-  action: 'HARD' | 'GOOD' | 'EASY';
+  action: 'AGAIN' | 'HARD' | 'GOOD' | 'EASY';
   currentIndex: number;
   queueLength: number;
   sessionId: string;

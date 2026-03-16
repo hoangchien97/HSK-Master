@@ -117,11 +117,11 @@ export default function FlashcardTab({
     async (action: FlashcardAction) => {
       if (!currentItem) return
 
-      // Visual swipe animation
-      setSwipeDir(action === FlashcardAction.HARD ? "left" : "right")
+      // Visual swipe animation - AGAIN and HARD swipe left, GOOD and EASY swipe right
+      setSwipeDir(action === FlashcardAction.AGAIN || action === FlashcardAction.HARD ? "left" : "right")
 
       // Track known/unknown
-      if (action === FlashcardAction.HARD) {
+      if (action === FlashcardAction.AGAIN || action === FlashcardAction.HARD) {
         setUnknownSet((prev) => new Set(prev).add(currentItem.id))
         setKnownSet((prev) => {
           const next = new Set(prev)
@@ -224,13 +224,18 @@ export default function FlashcardTab({
     setTimeout(() => setShuffled(shuffled), 0)
   }, [shuffled, onResetSession])
 
-  // Keyboard shortcuts: Space=flip, Arrow keys=difficulty
+  // Keyboard shortcuts: Space=flip, Arrow keys=difficulty (SM-2: 1=Again, 2=Hard, 3=Good, 4=Easy)
   // MUST be called before any early return to satisfy React hooks rules
   usePracticeKeyboard(
     {
       " ": () => setIsFlipped((f) => !f),
-      "ArrowLeft": () => handleAction(FlashcardAction.HARD),
-      "ArrowDown": () => handleAction(FlashcardAction.GOOD),
+      "1": () => handleAction(FlashcardAction.AGAIN),
+      "2": () => handleAction(FlashcardAction.HARD),
+      "3": () => handleAction(FlashcardAction.GOOD),
+      "4": () => handleAction(FlashcardAction.EASY),
+      "ArrowLeft": () => handleAction(FlashcardAction.AGAIN),
+      "ArrowDown": () => handleAction(FlashcardAction.HARD),
+      "ArrowUp": () => handleAction(FlashcardAction.GOOD),
       "ArrowRight": () => handleAction(FlashcardAction.EASY),
     },
     { enabled: !roundComplete && !swipeDir && !!currentItem },
@@ -466,35 +471,44 @@ export default function FlashcardTab({
 
       {/* Action buttons + Navigation — stable min-h prevents collapse during swipe animation */}
       <div className="min-h-30">
-        {/* Action buttons: Chưa thuộc / Tạm ổn / Đã thuộc — hidden during swipe animation */}
+        {/* Action buttons: Quên / Khó / Tạm ổn / Dễ — hidden during swipe animation */}
         {!swipeDir && (
-          <div className="grid grid-cols-3 gap-2 mb-4">
+          <div className="grid grid-cols-4 gap-1.5 mb-4">
+            <Button
+              color="default"
+              variant="flat"
+              size="lg"
+              className="font-medium text-xs sm:text-sm bg-default-200 dark:bg-default-700"
+              onPress={() => handleAction(FlashcardAction.AGAIN)}
+            >
+              {L.flashcard.againBtn}<KeyHint>(1)</KeyHint>
+            </Button>
             <Button
               color="danger"
               variant="flat"
               size="lg"
-              className="font-medium text-sm"
+              className="font-medium text-xs sm:text-sm"
               onPress={() => handleAction(FlashcardAction.HARD)}
             >
-              {L.flashcard.hardBtn}<KeyHint>(←)</KeyHint>
+              {L.flashcard.hardBtn}<KeyHint>(2)</KeyHint>
             </Button>
             <Button
               color="warning"
               variant="flat"
               size="lg"
-              className="font-medium text-sm"
+              className="font-medium text-xs sm:text-sm"
               onPress={() => handleAction(FlashcardAction.GOOD)}
             >
-              {L.flashcard.goodBtn}<KeyHint>(↓)</KeyHint>
+              {L.flashcard.goodBtn}<KeyHint>(3)</KeyHint>
             </Button>
             <Button
               color="success"
               variant="flat"
               size="lg"
-              className="font-medium text-sm"
+              className="font-medium text-xs sm:text-sm"
               onPress={() => handleAction(FlashcardAction.EASY)}
             >
-              {L.flashcard.easyBtn}<KeyHint>(→)</KeyHint>
+              {L.flashcard.easyBtn}<KeyHint>(4)</KeyHint>
             </Button>
           </div>
         )}

@@ -1,7 +1,7 @@
 "use client"
 
 import { useState, useEffect, useMemo, useCallback } from "react"
-import { Users, CalendarDays } from "lucide-react"
+import { Users } from "lucide-react"
 import { toast } from "react-toastify"
 import dayjs from "dayjs"
 import "dayjs/locale/vi"
@@ -39,7 +39,6 @@ export default function StudentAttendanceView() {
 
   useEffect(() => {
     loadClasses()
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
   useEffect(() => {
@@ -125,10 +124,7 @@ export default function StudentAttendanceView() {
     [matrixData]
   )
 
-  const isCellPending = useCallback(
-    (_studentId: string, _date: string): boolean => false,
-    []
-  )
+  const isCellPending = useCallback((): boolean => false, [])
 
   const handleClassChange = useCallback((classId: string) => {
     setSelectedClassId(classId)
@@ -136,9 +132,9 @@ export default function StudentAttendanceView() {
 
   /* No-op handlers for read-only mode */
   const noop = useCallback(() => {}, [])
-  const noopStatus = useCallback((_s: string, _d: string, _st: AttendanceStatus) => {}, [])
-  const noopNote = useCallback((_s: string, _d: string, _n: string) => {}, [])
-  const noopText = useCallback((_t: string) => {}, [])
+  const noopStatus = useCallback(() => {}, [])
+  const noopNote = useCallback(() => {}, [])
+  const noopText = useCallback(() => {}, [])
 
   /* ───── Render ───── */
 
@@ -186,24 +182,11 @@ export default function StudentAttendanceView() {
             totalStudents={matrixData.students.length}
             readOnly
           />
-        ) : matrixData && scheduleDates.length === 0 ? (
-          <div className="flex-1 bg-white rounded-xl shadow-sm border border-gray-200 flex flex-col items-center justify-center min-h-[400px] gap-4">
-            <CalendarDays className="w-16 h-16 text-default-300" />
-            <p className="text-lg font-semibold text-default-500">
-              Chưa có buổi học nào
-            </p>
-            <p className="text-sm text-default-400">
-              Lớp học chưa có lịch dạy
-            </p>
-          </div>
         ) : !isPageLoading ? (
-          <div className="flex-1 bg-white rounded-xl shadow-sm border border-gray-200 flex flex-col items-center justify-center min-h-[400px] gap-4">
+          <div className="flex-1 bg-white rounded-xl shadow-sm border border-gray-200 flex flex-col items-center justify-center min-h-100 gap-4">
             <Users className="w-16 h-16 text-default-300" />
-            <p className="text-lg font-semibold text-default-500">
-              {classes.length === 0 ? "Chưa tham gia lớp học nào" : "Chưa có dữ liệu điểm danh"}
-            </p>
             <p className="text-sm text-default-400">
-              {classes.length === 0 ? "Liên hệ giáo viên để được thêm vào lớp học" : "Chọn lớp học để xem điểm danh"}
+              {classes.length === 0 ? "Tạo lớp học để bắt đầu điểm danh" : "Chọn lớp học để xem điểm danh"}
             </p>
           </div>
         ) : null}
