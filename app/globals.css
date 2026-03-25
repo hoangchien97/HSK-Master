@@ -313,9 +313,9 @@
   --font-sans: var(--font-geist-sans), var(--font-noto-sans), system-ui, sans-serif;
   --font-mono: Menlo, Monaco, Consolas, monospace;
   --font-vietnamese: var(--font-noto-sans), -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-  --font-chinese: var(--font-noto-sans-sc), 'Microsoft YaHei', 'PingFang SC', SimHei, sans-serif;
-  --font-display: var(--font-noto-sans), var(--font-noto-sans-sc), sans-serif;
-  --font-body: var(--font-noto-sans), var(--font-noto-sans-sc), sans-serif;
+  --font-chinese: var(--font-noto-sans), 'Microsoft YaHei', 'PingFang SC', SimHei, sans-serif;
+  --font-display: var(--font-noto-sans), sans-serif;
+  --font-body: var(--font-noto-sans), sans-serif;
 
   /* Custom Font Sizes */
   --font-size-2xs: 0.625rem;

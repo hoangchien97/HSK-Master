@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect, useCallback } from "react";
+import { createPortal } from "react-dom";
 import { LightboxGalleryProps, ZOOM_STEP, ZOOM_MIN, ZOOM_MAX, ROTATION_STEP, SLIDESHOW_INTERVAL } from "./types";
 import { useControlsVisibility } from "./useControlsVisibility";
 import { useKeyboardControls } from "./useKeyboardControls";
@@ -16,6 +17,24 @@ export function LightboxGallery({
   slides,
   index,
 }: LightboxGalleryProps) {
+  const [mounted, setMounted] = useState(false);
+
+  // Ensure portal only renders on client
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
+  // Lock body scroll when lightbox is open
+  useEffect(() => {
+    if (open) {
+      document.body.style.overflow = "hidden";
+    } else {
+      document.body.style.overflow = "";
+    }
+    return () => {
+      document.body.style.overflow = "";
+    };
+  }, [open]);
   const [currentIndex, setCurrentIndex] = useState(index);
   const [zoom, setZoom] = useState(1);
   const [rotation, setRotation] = useState(0);
@@ -114,11 +133,11 @@ export function LightboxGallery({
     return () => clearInterval(interval);
   }, [isPlaying, open, goToNext]);
 
-  if (!open || !currentSlide) return null;
+  if (!open || !currentSlide || !mounted) return null;
 
-  return (
+  return createPortal(
     <div
-      className="fixed inset-0 z-50 bg-black/97 backdrop-blur-md flex items-center justify-center transition-opacity duration-300"
+      className="fixed inset-0 z-[9999] bg-black/97 backdrop-blur-md flex items-center justify-center transition-opacity duration-300"
       onMouseMove={resetHideTimer}
     >
       <HeaderControls
@@ -175,6 +194,7 @@ export function LightboxGallery({
         cancelHideTimer={cancelHideTimer}
         resetHideTimer={resetHideTimer}
       />
-    </div>
+    </div>,
+    document.body
   );
 }

@@ -1,5 +1,6 @@
 "use client"
 
+import { useState, useEffect, useCallback } from "react"
 import Link from "next/link"
 import {
   BookOpen,
@@ -11,74 +12,65 @@ import {
   FileText,
   Images,
   ImageIcon,
+  Sparkles,
+  FolderTree,
+  Globe,
 } from "lucide-react"
-import { Card, CardHeader, CardBody, Chip } from "@heroui/react"
+import { toast } from "react-toastify"
 import { PageHeader } from "@/components/portal/common/PageHeader"
 import { StatCard } from "@/components/portal/common/StatCard"
 import { DataCard } from "@/components/portal/common/DataCard"
+import { fetchAdminDashboardStats, fetchRecentActivities } from "@/actions/admin.actions"
+import type { IAdminDashboardStats, IRecentActivity } from "@/interfaces/portal"
 
-interface AdminDashboardProps {
-  stats?: {
-    totalCourses: number
-    totalHeroSlides: number
-    totalReviews: number
-    totalRegistrations: number
-    pendingReviews: number
-    totalUsers: number
-  }
+const ACTIVITY_TYPE_COLORS: Record<string, string> = {
+  registration: "bg-green-500",
+  review: "bg-yellow-500",
+  course: "bg-blue-500",
+  user: "bg-purple-500",
 }
 
-export default function AdminDashboard({ stats }: AdminDashboardProps) {
-  // Demo stats - replace with actual data
-  const dashboardStats = stats || {
-    totalCourses: 12,
-    totalHeroSlides: 5,
-    totalReviews: 48,
-    totalRegistrations: 156,
-    pendingReviews: 3,
-    totalUsers: 89,
-  }
+export default function AdminDashboard() {
+  const [stats, setStats] = useState<IAdminDashboardStats | null>(null)
+  const [activities, setActivities] = useState<IRecentActivity[]>([])
+  const [isLoading, setIsLoading] = useState(true)
+
+  const loadData = useCallback(async () => {
+    setIsLoading(true)
+    try {
+      const [statsResult, activitiesResult] = await Promise.all([
+        fetchAdminDashboardStats(),
+        fetchRecentActivities(),
+      ])
+      if (statsResult.success && statsResult.data) setStats(statsResult.data)
+      if (activitiesResult.success && activitiesResult.data) setActivities(activitiesResult.data)
+    } catch {
+      toast.error("Không thể tải dữ liệu dashboard")
+    } finally {
+      setIsLoading(false)
+    }
+  }, [])
+
+  useEffect(() => { loadData() }, [loadData])
 
   const quickActions = [
-    {
-      title: "Thêm khóa học mới",
-      description: "Tạo và quản lý các khóa học HSK",
-      icon: BookOpen,
-      href: "/portal/admin/courses/new",
-      color: "bg-blue-100 text-blue-600",
-    },
-    {
-      title: "Quản lý Hero Slides",
-      description: "Cập nhật banner trang chủ",
-      icon: ImageIcon,
-      href: "/portal/admin/hero-slides",
-      color: "bg-purple-100 text-purple-600",
-    },
-    {
-      title: "Duyệt đánh giá",
-      description: `${dashboardStats.pendingReviews} đánh giá chờ duyệt`,
-      icon: Star,
-      href: "/portal/admin/reviews",
-      color: "bg-yellow-100 text-yellow-600",
-    },
-    {
-      title: "Quản lý người dùng",
-      description: "Phân quyền và quản lý tài khoản",
-      icon: Users,
-      href: "/portal/admin/users",
-      color: "bg-green-100 text-green-600",
-    },
+    { title: "Quản lý Hero Slides", description: `${stats?.totalHeroSlides || 0} slides`, icon: ImageIcon, href: "/portal/admin/hero-slides", color: "bg-purple-100 text-purple-600" },
+    { title: "Duyệt đánh giá", description: `${stats?.pendingReviews || 0} đánh giá chờ duyệt`, icon: Star, href: "/portal/admin/reviews", color: "bg-yellow-100 text-yellow-600" },
+    { title: "Đăng ký khóa học", description: `${stats?.totalRegistrations || 0} đăng ký`, icon: FileText, href: "/portal/admin/registrations", color: "bg-green-100 text-green-600" },
+    { title: "Quản lý người dùng", description: `${stats?.totalUsers || 0} người dùng`, icon: Users, href: "/portal/admin/users", color: "bg-blue-100 text-blue-600" },
   ]
 
-  const recentActivities = [
-    { action: "Đăng ký mới", target: "Nguyễn Văn A đăng ký khóa HSK 3", time: "5 phút trước" },
-    { action: "Đánh giá mới", target: "Trần Thị B đánh giá 5 sao cho HSK 1", time: "30 phút trước" },
-    { action: "Cập nhật khóa học", target: "HSK 2 - Cập nhật bài giảng mới", time: "1 giờ trước" },
-    { action: "Người dùng mới", target: "Lê Văn C đăng ký tài khoản", time: "2 giờ trước" },
+  const quickStats = [
+    { label: "Khóa học", count: stats?.totalCourses || 0, icon: BookOpen, color: "bg-blue-100 text-blue-600", href: "/portal/admin/courses" },
+    { label: "Cấp độ HSK", count: stats?.totalHSKLevels || 0, icon: GraduationCap, color: "bg-indigo-100 text-indigo-600", href: "/portal/admin/hsk-levels" },
+    { label: "Danh mục", count: stats?.totalCategories || 0, icon: FolderTree, color: "bg-teal-100 text-teal-600", href: "/portal/admin/categories" },
+    { label: "Album ảnh", count: stats?.totalAlbums || 0, icon: Images, color: "bg-pink-100 text-pink-600", href: "/portal/admin/albums" },
+    { label: "Tính năng", count: stats?.totalFeatures || 0, icon: Sparkles, color: "bg-amber-100 text-amber-600", href: "/portal/admin/features" },
+    { label: "CTA Stats", count: stats?.totalCtaStats || 0, icon: BarChart3, color: "bg-orange-100 text-orange-600", href: "/portal/admin/cta-stats" },
   ]
 
   return (
-    <div className="space-y-6">
+    <div className={`space-y-6 transition-opacity duration-200 ${isLoading ? "opacity-60" : ""}`}>
       <PageHeader
         title="Bảng điều khiển Admin"
         description="Quản lý nội dung landing page và hệ thống"
@@ -88,35 +80,32 @@ export default function AdminDashboard({ stats }: AdminDashboardProps) {
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
         <StatCard
           title="Tổng khóa học"
-          value={dashboardStats.totalCourses}
+          value={stats?.totalCourses || 0}
           icon={<BookOpen className="w-6 h-6" />}
           iconBg="bg-blue-100"
           iconColor="text-blue-600"
-          trend={{ value: 12, label: "so với tháng trước" }}
         />
         <StatCard
           title="Đăng ký mới"
-          value={dashboardStats.totalRegistrations}
+          value={stats?.totalRegistrations || 0}
           icon={<FileText className="w-6 h-6" />}
           iconBg="bg-green-100"
           iconColor="text-green-600"
-          trend={{ value: 8, label: "so với tháng trước" }}
         />
         <StatCard
           title="Đánh giá"
-          value={dashboardStats.totalReviews}
-          description={`${dashboardStats.pendingReviews} chờ duyệt`}
+          value={stats?.totalReviews || 0}
+          description={`${stats?.pendingReviews || 0} chờ duyệt`}
           icon={<Star className="w-6 h-6" />}
           iconBg="bg-yellow-100"
           iconColor="text-yellow-600"
         />
         <StatCard
           title="Người dùng"
-          value={dashboardStats.totalUsers}
+          value={stats?.totalUsers || 0}
           icon={<Users className="w-6 h-6" />}
           iconBg="bg-purple-100"
           iconColor="text-purple-600"
-          trend={{ value: 5, label: "so với tuần trước" }}
         />
       </div>
 
@@ -147,90 +136,47 @@ export default function AdminDashboard({ stats }: AdminDashboardProps) {
       {/* Two Column Layout */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         {/* Recent Activities */}
-        <DataCard
-          title="Hoạt động gần đây"
-          action={
-            <Link href="/portal/admin/activities" className="text-sm text-red-600 hover:text-red-700 flex items-center gap-1">
-              Xem tất cả <ArrowRight className="w-4 h-4" />
-            </Link>
-          }
-        >
+        <DataCard title="Hoạt động gần đây">
           <div className="space-y-4">
-            {recentActivities.map((activity, index) => (
-              <div key={index} className="flex items-start gap-3 pb-3 border-b border-gray-100 last:border-0 last:pb-0">
-                <div className="w-2 h-2 mt-2 bg-red-500 rounded-full shrink-0" />
-                <div className="flex-1 min-w-0">
-                  <p className="text-sm font-medium text-gray-900">{activity.action}</p>
-                  <p className="text-sm text-gray-500 truncate">{activity.target}</p>
-                  <p className="text-xs text-gray-400 mt-1">{activity.time}</p>
+            {activities.length > 0 ? (
+              activities.map((activity) => (
+                <div key={activity.id} className="flex items-start gap-3 pb-3 border-b border-gray-100 last:border-0 last:pb-0">
+                  <div className={`w-2 h-2 mt-2 rounded-full shrink-0 ${ACTIVITY_TYPE_COLORS[activity.type] || "bg-gray-400"}`} />
+                  <div className="flex-1 min-w-0">
+                    <p className="text-sm font-medium text-gray-900">{activity.action}</p>
+                    <p className="text-sm text-gray-500 truncate">{activity.target}</p>
+                    <p className="text-xs text-gray-400 mt-1">{activity.time}</p>
+                  </div>
                 </div>
-              </div>
-            ))}
+              ))
+            ) : (
+              <p className="text-sm text-gray-400 text-center py-4">Chưa có hoạt động nào</p>
+            )}
           </div>
         </DataCard>
 
         {/* Quick Stats */}
-        <DataCard title="Thống kê nhanh">
-          <div className="space-y-4">
-            <div className="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
-              <div className="flex items-center gap-3">
-                <div className="w-10 h-10 bg-blue-100 rounded-lg flex items-center justify-center">
-                  <GraduationCap className="w-5 h-5 text-blue-600" />
+        <DataCard title="Quản lý nội dung">
+          <div className="space-y-3">
+            {quickStats.map((item) => {
+              const Icon = item.icon
+              return (
+                <div key={item.href} className="flex items-center justify-between p-3 bg-gray-50 rounded-lg hover:bg-gray-100 transition-colors">
+                  <div className="flex items-center gap-3">
+                    <div className={`w-10 h-10 rounded-lg flex items-center justify-center ${item.color}`}>
+                      <Icon className="w-5 h-5" />
+                    </div>
+                    <div>
+                      <p className="text-sm font-medium text-gray-900">{item.label}</p>
+                      <p className="text-xs text-gray-500">{item.count} mục</p>
+                    </div>
+                  </div>
+                  <Link href={item.href} className="text-red-600 hover:text-red-700">
+                    <ArrowRight className="w-5 h-5" />
+                  </Link>
                 </div>
-                <div>
-                  <p className="text-sm font-medium text-gray-900">Cấp độ HSK</p>
-                  <p className="text-xs text-gray-500">6 cấp độ</p>
-                </div>
-              </div>
-              <Link href="/portal/admin/hsk-levels" className="text-red-600 hover:text-red-700">
-                <ArrowRight className="w-5 h-5" />
-              </Link>
-            </div>
-
-            <div className="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
-              <div className="flex items-center gap-3">
-                <div className="w-10 h-10 bg-purple-100 rounded-lg flex items-center justify-center">
-                  <Images className="w-5 h-5 text-purple-600" />
-                </div>
-                <div>
-                  <p className="text-sm font-medium text-gray-900">Album ảnh</p>
-                  <p className="text-xs text-gray-500">4 albums</p>
-                </div>
-              </div>
-              <Link href="/portal/admin/albums" className="text-red-600 hover:text-red-700">
-                <ArrowRight className="w-5 h-5" />
-              </Link>
-            </div>
-
-            <div className="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
-              <div className="flex items-center gap-3">
-                <div className="w-10 h-10 bg-green-100 rounded-lg flex items-center justify-center">
-                  <ImageIcon className="w-5 h-5 text-green-600" />
-                </div>
-                <div>
-                  <p className="text-sm font-medium text-gray-900">Hero Slides</p>
-                  <p className="text-xs text-gray-500">{dashboardStats.totalHeroSlides} slides</p>
-                </div>
-              </div>
-              <Link href="/portal/admin/hero-slides" className="text-red-600 hover:text-red-700">
-                <ArrowRight className="w-5 h-5" />
-              </Link>
-            </div>
-
-            <div className="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
-              <div className="flex items-center gap-3">
-                <div className="w-10 h-10 bg-orange-100 rounded-lg flex items-center justify-center">
-                  <BarChart3 className="w-5 h-5 text-orange-600" />
-                </div>
-                <div>
-                  <p className="text-sm font-medium text-gray-900">CTA Stats</p>
-                  <p className="text-xs text-gray-500">4 thống kê</p>
-                </div>
-              </div>
-              <Link href="/portal/admin/cta-stats" className="text-red-600 hover:text-red-700">
-                <ArrowRight className="w-5 h-5" />
-              </Link>
-            </div>
+              )
+            })}
           </div>
         </DataCard>
       </div>

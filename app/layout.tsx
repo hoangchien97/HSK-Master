@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Geist, Noto_Sans, Noto_Sans_SC } from "next/font/google";
+import { Geist, Noto_Sans } from "next/font/google";
 import "./globals.css";
 import { OG_IMAGE, SITE_URL } from "@/constants/brand";
 import NextTopLoader from 'nextjs-toploader';
@@ -18,12 +18,7 @@ const notoSans = Noto_Sans({
   display: "swap",
 });
 
-const notoSansSC = Noto_Sans_SC({
-  variable: "--font-noto-sans-sc",
-  subsets: ["latin"],
-  weight: ["400", "500", "700"],
-  display: "swap",
-});
+
 
 const siteUrl = SITE_URL;
 
@@ -151,7 +146,7 @@ export default function RootLayout({
         />
       </head>
       <body
-        className={`${geistSans.variable} ${notoSans.variable} ${notoSansSC.variable} antialiased min-h-screen bg-background-light dark:bg-background-dark text-text-main-light dark:text-text-main-dark flex flex-col`}
+        className={`${geistSans.variable} ${notoSans.variable} antialiased min-h-screen bg-background-light dark:bg-background-dark text-text-main-light dark:text-text-main-dark flex flex-col`}
         suppressHydrationWarning
       >
         <NextTopLoader

@@ -8,3 +8,4 @@ export * from "./assignment";
 export * from "./api";
 export * from "./student";
 export * from "./practice";
+export * from "./admin";
