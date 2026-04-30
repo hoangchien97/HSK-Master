@@ -16,7 +16,7 @@ export default function SectionHeader({
   tagColor = "bg-gradient-to-r from-orange-500/20 to-yellow-500/20 text-orange-600 dark:text-orange-400",
 }: SectionHeaderProps) {
   return (
-    <div className="text-center mb-8 md:mb-12 lg:mb-16 animate-fade-in-up">
+    <div suppressHydrationWarning className="text-center mb-8 md:mb-12 lg:mb-16 animate-fade-in-up">
       {/* Animated Tag with Pulse Effect */}
       <div
         className={`inline-flex items-center gap-1.5 md:gap-2 px-3 py-1.5 md:px-4 md:py-2 lg:px-6 lg:py-3 rounded-full ${tagColor} font-semibold text-[10px] md:text-xs lg:text-sm uppercase tracking-wider mb-3 md:mb-4 lg:mb-6 animate-pulse-soft shadow-sm`}
