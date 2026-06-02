@@ -45,7 +45,7 @@ export default function ReviewItem({
       <div className="mb-4 md:mb-5 relative z-10">
         <div className="flex items-start gap-2 mb-2">
           <Quote className="text-red-500 w-5 h-5 md:w-6 md:h-6 flex-shrink-0 mt-0.5" />
-          <p className="text-sm md:text-base text-gray-700 dark:text-gray-300 leading-relaxed line-clamp-5 flex-1">
+          <p className="text-sm md:text-base text-gray-700 dark:text-gray-300 leading-relaxed line-clamp-3 h-[78px] max-h-[78px] flex-1">
             {content}
           </p>
         </div>

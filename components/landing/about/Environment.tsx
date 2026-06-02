@@ -22,7 +22,7 @@ export default function Environment() {
       color: "from-purple-500 to-violet-600",
     },
     {
-      src: "https://images.unsplash.com/photo-1523050854058-8df90110c9f1?w=400&h=400&fit=crop",
+      src: "https://thanhmaihsk.edu.vn/wp-content/uploads/2021/01/tieu-chi-danh-gia-va-lua-chon-trung-tam-tieng-trung-3.jpg",
       alt: "Hoạt động văn hóa",
       label: "Hoạt động văn hóa",
       color: "from-orange-500 to-red-600",
