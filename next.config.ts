@@ -39,6 +39,12 @@ const nextConfig: NextConfig = {
         port: '',
         pathname: '/**',
       },
+      {
+        protocol: 'https',
+        hostname: 'thanhmaihsk.edu.vn',
+        port: '',
+        pathname: '/**',
+      },
     ],
     qualities: [75, 85],
     formats: ['image/avif', 'image/webp'],
