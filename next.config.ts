@@ -69,7 +69,6 @@ const nextConfig: NextConfig = {
       'framer-motion',
       'embla-carousel-react',
       'react-toastify',
-      'recharts',
       'date-fns',
       '@heroui/react',
       'zod',
