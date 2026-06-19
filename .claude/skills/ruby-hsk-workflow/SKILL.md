@@ -49,7 +49,7 @@ If the plan touches >5 files or modifies a shared component, confirm with the us
 - Match existing file conventions exactly (naming, export style, `@/` alias)
 - Use `USER_ROLE` constants and `roleToRoute`/`routeToRole` — never hardcode role strings
 - Every new portal page needs a page-level role guard
-- Every new form must use React Hook Form + Zod (see Known project state below)
+- New forms require React Hook Form + Zod — **do not add new forms with manual `useState`** (existing forms use `useState`; do not refactor without user approval)
 
 ---
 
@@ -89,9 +89,10 @@ Format:
 - `Zod` is used only in `auth.ts` (Credentials input) and `app/api/auth/register/route.ts`
 - **Do NOT add new forms without React Hook Form + Zod** — this is the required path forward
 
-**Dead dependencies (do not use):**
-- `pg` — installed, zero imports in the entire codebase
-- `next-intl` — installed, not wired, no `i18n/` or `messages/` directory exists
+**Removed dependencies (do not re-add):**
+- `pg` — removed (had zero imports)
+- `next-intl` — removed (was never wired; no `i18n/` or `messages/` directory)
+- `recharts` — removed (had zero component imports)
 
 **UI — two component systems:**
 - Landing pages use **custom primitives** in `components/landing/common/` (Button, Input, Select, etc.) — these are NOT HeroUI
@@ -99,7 +100,7 @@ Format:
 - Do not mix systems; when adding to portal, use HeroUI
 
 **Other known issues:**
-- `LanguageSwitcher` renders in the header but `next-intl` is not wired — it does nothing
-- `framer-motion` is in deps and `optimizePackageImports` — landing `AnimatedSection.tsx` likely uses it; verify before assuming unavailable
-- `tailwind.config.js` content array is **incomplete** (missing `app/**`, `components/**`) — R11 risk for production builds
-- Two Supabase project URLs exist in `next.config.ts` — verify which is the active project
+- `LanguageSwitcher` component file remains but its export from `index.ts` and usage in Header is removed — do not re-add
+- `framer-motion` is in deps and `optimizePackageImports` — landing `AnimatedSection.tsx` uses it; verify before assuming unavailable
+- `tailwind.config.js` content array fixed — now covers `app/**`, `components/**`, `constants/**`, `enums/**`, `providers/**`
+- Two Supabase project URLs exist in `next.config.ts` — verify which is the active project (R07)

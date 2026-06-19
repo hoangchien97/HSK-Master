@@ -44,12 +44,12 @@ Every code change that touches Supabase must pass:
 
 ---
 
-## Tailwind content array (R11)
+## Tailwind content array (R11 — resolved)
 
-Before shipping new UI changes to production:
+Fixed: `tailwind.config.js` content array now covers `app/**`, `components/**`, `constants/**`, `enums/**`, `providers/**`.
 
-- [ ] Check that all className strings used in new files are covered by `tailwind.config.js` content array
-- [ ] If new files are outside HeroUI paths, verify classes are not being purged
+Before shipping new UI:
+- [ ] If new files are added **outside** the above directories, update the content array
 - [ ] Test production build locally: `npm run build` + `npm run start` and visually inspect new UI
 
 ---
@@ -102,7 +102,8 @@ Before adding a new npm package:
 - [ ] Check if a CSS keyframe animation in `globals.css` suffices
 - [ ] Confirm the package is not already installed (check `package.json`)
 
-Dead dependencies to avoid using: `pg`, `next-intl` (not wired), `react-hook-form` (not deployed).
+Removed packages — do not re-add: `pg`, `next-intl`, `recharts` (all removed as dead dependencies).
+Installed but not deployed: `react-hook-form` — new forms must use it, but do not refactor existing `useState` forms without approval.
 
 ---
 
@@ -146,7 +147,7 @@ Run before every pull request:
 | R08 | Low | Storage silently degrades with bad service key | Monitor upload API errors |
 | R09 | Low | Public document bucket for student submissions | Add signed URLs or RLS |
 | R10 | Medium | No client-side form validation | Add Zod error surfacing to forms |
-| R11 | High | Tailwind content array missing app/** paths | Fix tailwind.config.js before production |
+| R11 | ~~High~~ Resolved | Tailwind content array — fixed 2026-06-18 | Content array covers all source dirs |
 | R13 | Low | No prefers-reduced-motion support | Add to new animated components |
 | R14 | Low | Dark mode not switchable | Placeholder only — do not build dark UI |
 | R15 | Low | No per-module loading.tsx | Add to every new module page |

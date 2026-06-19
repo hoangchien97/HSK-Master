@@ -292,7 +292,7 @@ This gives landing pages the same visual foundation as the portal without rewrit
 ### Current config structure
 
 ```
-tailwind.config.js      → HeroUI plugin only (content array INCOMPLETE — R11)
+tailwind.config.js      → HeroUI plugin only + full content array (R11 resolved)
 hero.ts                 → HeroUI Tailwind v4 theme plugin (color overrides, component tokens)
 app/globals.css         → @theme inline {} — all CSS custom properties (tokens)
                         → @plugin "../hero.ts"
@@ -300,25 +300,21 @@ app/globals.css         → @theme inline {} — all CSS custom properties (toke
                         → @custom-variant dark
 ```
 
-### Critical fix (P0): content array
+### Content array (R11 — resolved 2026-06-18)
 
+`tailwind.config.js` now contains:
 ```js
-// tailwind.config.js — current (broken)
-content: [
-  "./node_modules/@heroui/theme/dist/**/*.{js,ts,jsx,tsx}"
-]
-
-// tailwind.config.js — required
 content: [
   "./app/**/*.{js,ts,jsx,tsx,mdx}",
   "./components/**/*.{js,ts,jsx,tsx}",
   "./constants/**/*.{js,ts,jsx,tsx}",
   "./enums/**/*.{js,ts,jsx,tsx}",
+  "./providers/**/*.{js,ts,jsx,tsx}",
   "./node_modules/@heroui/theme/dist/**/*.{js,ts,jsx,tsx}"
 ]
 ```
 
-Tailwind v4 has improved content detection but this explicit configuration is still required for correctness.
+Do not remove entries from this array.
 
 ### Token discipline
 
@@ -375,8 +371,8 @@ For `AnimatedSection.tsx` and any component using Framer Motion, check `useReduc
 ## 12. Recommended UI Implementation Phases
 
 ### Phase 0 — Stabilize (P0 — before any release)
-1. Fix `tailwind.config.js` content array
-2. Remove `LanguageSwitcher`
+1. ~~Fix `tailwind.config.js` content array~~ ✅ Done 2026-06-18
+2. ~~Remove `LanguageSwitcher`~~ ✅ Done 2026-06-18 (export removed, file kept)
 3. Add `prefers-reduced-motion` to `globals.css`
 4. Add per-module `loading.tsx` (HeroUI Skeleton) to all portal pages
 5. Add per-module `error.tsx` to all portal pages
@@ -410,14 +406,14 @@ For `AnimatedSection.tsx` and any component using Framer Motion, check `useReduc
 ## 13. Acceptance Criteria
 
 **Design system is considered stable when:**
-- [ ] `tailwind.config.js` content array includes all source paths — production build has zero missing classes
+- [x] `tailwind.config.js` content array includes all source paths — production build has zero missing classes (resolved 2026-06-18)
 - [ ] `prefers-reduced-motion` global guard is in `globals.css`
 - [ ] Every portal module has `loading.tsx` and `error.tsx`
 - [ ] All Chinese character elements have `lang="zh"`
 - [ ] Skip-to-content link is present in portal layout
 - [ ] All form validation errors appear inline below the input, not as toasts
 - [ ] `gradient-text` is used on ≤2 headings per page
-- [ ] `LanguageSwitcher` is completely absent from all pages
+- [x] `LanguageSwitcher` export removed from shared index (resolved 2026-06-18)
 - [ ] Landing section headings use a consistent type scale (Display / H1 / H2 hierarchy)
 - [ ] No hex colors are hardcoded in className strings — all from CSS token system
 - [ ] `components/ui/` exists with at least Button and Input as HeroUI wrappers
@@ -429,7 +425,7 @@ For `AnimatedSection.tsx` and any component using Framer Motion, check `useReduc
 | Question | Impact | How to resolve |
 |---|---|---|
 | Does `AnimatedSection.tsx` use Framer Motion or CSS only? | Determines whether `useReducedMotion()` hook is needed | `grep -r "framer-motion" components/landing/` |
-| Are `Recharts` components actually imported? | Phase 3 reports module planning | `grep -r "recharts" components/ app/` |
+| Are `Recharts` components actually imported? | Phase 3 reports — recharts removed from package.json (no imports found); re-add only if needed | Resolved — removed 2026-06-18 |
 | Does `React Big Calendar` render on schedule pages? | Dynamic import requirement | `grep -r "react-big-calendar" components/ app/` |
 | Does `CountUp.tsx` check `prefers-reduced-motion`? | Accessibility compliance | Read `components/landing/shared/CountUp.tsx` |
 | Does `BaseModal` in landing handle focus trapping? | Accessibility compliance | Read `components/landing/common/BaseModal.tsx` or `Modal.tsx` |

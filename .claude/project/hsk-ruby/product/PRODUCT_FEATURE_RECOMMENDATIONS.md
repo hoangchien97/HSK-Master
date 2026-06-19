@@ -14,7 +14,7 @@ Ruby HSK has a working full-stack product serving three roles (ADMIN, TEACHER, S
 **The product is not at risk of collapse. It needs stabilization, not a rebuild.**
 
 Priority order for investment:
-1. **P0 — Remove broken UI** (`LanguageSwitcher`) and fix CSS purge risk before any user sees the landing site fail
+1. **P0 ✅ Done** — `LanguageSwitcher` removed, CSS purge risk fixed, dead deps removed (2026-06-18)
 2. **P1 — Improve conversion** on the landing site (inline lead capture, trial lesson, FAQ)
 3. **P1 — Stabilize portal UX** (loading states, error states, form validation feedback)
 4. **P2 — Fill feature gaps** (admin dashboard activity feed, enrollment pipeline, teacher grade book, AI chatbot discoverability)
@@ -28,12 +28,11 @@ Priority order for investment:
 
 | Field | Value |
 |---|---|
-| **Current status** | Existing |
-| **Recommendation** | Improve |
-| **Priority** | P0 |
-| **Reason** | `LanguageSwitcher` renders with no i18n wiring — implies functionality that does not exist. Damages credibility immediately. |
-| **Dependencies** | None |
-| **Acceptance criteria** | `LanguageSwitcher` removed from `components/landing/shared/Header.tsx`. Language toggle absent from all viewport widths. `next-intl` removed from `package.json`. |
+| **Current status** | ✅ Resolved (2026-06-18) |
+| **Recommendation** | ~~Improve~~ Complete |
+| **Priority** | ~~P0~~ Done |
+| **Reason** | `LanguageSwitcher` export removed; `next-intl`, `pg`, `recharts` uninstalled. |
+| **Acceptance criteria** | ✅ LanguageSwitcher not exported from index.ts. ✅ next-intl removed from package.json. |
 
 ### 2.2 Hero with Slideshow
 
@@ -477,11 +476,12 @@ Priority order for investment:
 
 | Item | Action | Reason |
 |---|---|---|
-| `LanguageSwitcher` in header | **Remove immediately (P0)** | next-intl not wired; implies feature that doesn't exist; damages trust |
-| `/system-design` public page | **Move to portal or add noindex (P0)** | Internal architecture exposed to public indexing |
-| `pg` package in package.json | **Remove (P0)** | Zero imports; dead dependency |
-| `next-intl` package | **Remove (P0)** | Zero integration; dead dependency |
-| `dayjs` package | **Simplify — remove, keep date-fns** | Two date libraries; `date-fns` is preferred and in optimizePackageImports |
+| `LanguageSwitcher` in header | ✅ Done (2026-06-18) | next-intl not wired; export removed |
+| `/system-design` public page | ✅ Done (2026-06-18) — noindex layout.tsx added | Internal architecture; noindex added |
+| `pg` package in package.json | ✅ Done (2026-06-18) — removed | Zero imports; dead dependency |
+| `next-intl` package | ✅ Done (2026-06-18) — removed | Zero integration; dead dependency |
+| `recharts` package | ✅ Done (2026-06-18) — removed | Zero component imports; dead dependency |
+| `dayjs` package | **Simplify — remove, keep date-fns** (P2) | Two date libraries; `date-fns` is preferred and in optimizePackageImports |
 | Dual role definitions (`constants/roles.ts` + `enums/role.ts`) | **Simplify (P2)** | Two files must stay in sync manually; TypeScript enum alone is sufficient |
 
 ---
@@ -493,12 +493,12 @@ If starting from zero prioritization, the following represents the minimum inves
 **MVP = current app + P0 fixes + 3 P1 improvements**
 
 ### P0 (must have before any production release)
-1. Remove `LanguageSwitcher` from header
-2. Fix `tailwind.config.js` content array (CSS purge risk)
+1. ✅ Remove `LanguageSwitcher` from header (done 2026-06-18)
+2. ✅ Fix `tailwind.config.js` content array (done 2026-06-18)
 3. Add per-module `loading.tsx` and `error.tsx` to all portal modules
-4. Add noindex to `/system-design`
+4. ✅ Add noindex to `/system-design` (done 2026-06-18)
 5. Audit all portal pages for missing Layer 3 RBAC guards
-6. Remove dead dependencies (`pg`, `next-intl`)
+6. ✅ Remove dead dependencies `pg`, `next-intl`, `recharts` (done 2026-06-18)
 
 ### P1 (include in MVP release)
 7. Inline consultation form in or below hero section

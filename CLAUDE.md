@@ -58,11 +58,11 @@ providers/              NotificationProvider (Supabase Realtime)
 Role → URL: `SYSTEM_ADMIN→admin`, `TEACHER→teacher`, `STUDENT→student`
 Always use `roleToRoute` / `routeToRole` from `lib/utils/auth.ts` — never hardcode.
 
-## Known Issues (P0 — fix before new work)
-- **R11:** `tailwind.config.js` content array missing `app/**`, `components/**` — production CSS purge risk
-- **R17:** `LanguageSwitcher` in header but `next-intl` not wired — misleads users, remove
-- **R10:** Forms use manual `useState` — no React Hook Form / Zod standardization
-- **Dead deps:** `pg` (zero imports), `next-intl` (not wired) — remove both
+## Known Issues (P0)
+- **R11 ✅ Fixed:** `tailwind.config.js` content array now covers `app/**`, `components/**` and all source dirs
+- **R17 ✅ Fixed:** `LanguageSwitcher` export removed; `next-intl`, `pg`, `recharts` uninstalled
+- **R10:** Forms use manual `useState` — new forms must use React Hook Form + Zod; existing forms: do not refactor without approval
+- **Open:** Two Supabase project URLs in `next.config.ts` — verify which is active (R07)
 
 ## Workflow
 1. Read the target files before writing a single line
@@ -84,4 +84,4 @@ Always use `roleToRoute` / `routeToRole` from `lib/utils/auth.ts` — never hard
 | `ruby-hsk-homepage` | Landing pages, SEO, CMS content, conversion |
 | `ruby-hsk-portal` | Portal modules, dashboards, navigation, forms |
 | `ruby-hsk-qa-review` | Pre-commit review, security, test checklist |
-| `ui-ux-pro-max` | Significant UI design or visual redesign work |
+| `ui-ux-pro-max` | Significant UI design or visual redesign work — loads as `frontend-design:frontend-design` |

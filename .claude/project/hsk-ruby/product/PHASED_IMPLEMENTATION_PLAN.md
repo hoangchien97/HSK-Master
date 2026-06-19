@@ -10,11 +10,11 @@
 
 These must be done before any production deployment. Each item is a standalone file-level fix.
 
-### 0.1 Fix Tailwind content array (R11)
+### 0.1 Fix Tailwind content array (R11) — ✅ Done 2026-06-18
 
 **File:** `tailwind.config.js`
-**Change:** Add `app/**/*.{ts,tsx}`, `components/**/*.{ts,tsx}`, `constants/**/*.{ts,tsx}` to `content` array
-**Test:** `npm run build` — verify no visual regressions
+**Change:** Content array now covers `app/**`, `components/**`, `constants/**`, `enums/**`, `providers/**`
+**Status:** Complete — no action needed
 
 ### 0.2 Add error boundaries (R17)
 

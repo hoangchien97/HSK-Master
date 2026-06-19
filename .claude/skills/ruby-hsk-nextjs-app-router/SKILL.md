@@ -132,7 +132,7 @@ revalidatePath("/portal/admin/courses")
 
 ## next.config.ts notes
 
-- `optimizePackageImports`: framer-motion, recharts, @heroui/react, lucide-react, etc. — tree-shaking optimization
+- `optimizePackageImports`: framer-motion, @heroui/react, lucide-react, zod, date-fns, etc. — tree-shaking optimization (`recharts` removed)
 - `remotePatterns`: two Supabase URLs (`ukbeoggejnqgdxqoqkvj` + `alfbzgjpjvrcfaxxvijl`) — verify which is active
 - `compiler.removeConsole: true` in production
 - `dangerouslyAllowSVG: true` with sandbox CSP — do not serve user-uploaded SVGs through `next/image`

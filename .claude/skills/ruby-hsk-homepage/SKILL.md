@@ -80,7 +80,7 @@ export async function generateMetadata(): Promise<Metadata> {
 - CTA: "Đăng ký học" → registration/contact form
 - Mobile: hamburger menu
 
-**`LanguageSwitcher` component** — installed, defined in `components/landing/common/`, but the `next-intl` i18n package is NOT wired up (no `i18n.config.ts`, no `[locale]` route segment). Do not expose the LanguageSwitcher in UI. It will be a no-op or crash at runtime.
+**`LanguageSwitcher`** — removed. The `next-intl` package has been uninstalled. The `LanguageSwitcher.tsx` file remains on disk but its export from `components/landing/shared/index.ts` has been removed. Do not re-export or use it.
 
 ---
 
@@ -111,7 +111,7 @@ All reads via Prisma. No write operations on landing course pages.
 `components/landing/common/` (19 files — do NOT replace with HeroUI):
 `Button`, `Input`, `Select`, `Textarea`, `Checkbox`, `Radio`, `Label`, `Badge`, `Modal`, `Drawer`, `Tooltip`, `Loading`, `Skeleton`, `Alert`, `Card`, `Tabs`, `Accordion`, `Stepper`, `Pagination`
 
-`components/landing/shared/`: `Navbar`, `Footer`, `AnimatedSection`, `LanguageSwitcher`
+`components/landing/shared/`: `Navbar`, `Footer`, `AnimatedSection` (LanguageSwitcher file exists but is not exported)
 
 ---
 
@@ -119,7 +119,7 @@ All reads via Prisma. No write operations on landing course pages.
 
 1. No social proof near registration CTA (reviews are in a separate section)
 2. No price displayed on course cards — requires clicking through to detail
-3. `LanguageSwitcher` is unreachable UI (next-intl not wired)
+3. `LanguageSwitcher` — removed from exports (next-intl was never wired and has been uninstalled)
 4. Contact form success/error feedback — To verify if toast or inline
 
 ---

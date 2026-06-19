@@ -66,9 +66,19 @@ className="text-[#ec131e] bg-[#f8f6f6]"
 
 ---
 
-## Critical: tailwind.config.js content array (R11)
+## tailwind.config.js content array (R11 — resolved)
 
-The content array only lists HeroUI theme paths. `app/**`, `components/**`, `constants/**` are missing. In production builds, Tailwind may purge CSS classes used in app files. **Verify this before shipping new UI work.**
+The content array now covers all source directories:
+```
+./app/**/*.{js,ts,jsx,tsx,mdx}
+./components/**/*.{js,ts,jsx,tsx}
+./constants/**/*.{js,ts,jsx,tsx}
+./enums/**/*.{js,ts,jsx,tsx}
+./providers/**/*.{js,ts,jsx,tsx}
+./node_modules/@heroui/theme/dist/**/*.{js,ts,jsx,tsx}
+```
+
+Do not remove entries from this array.
 
 ---
 
