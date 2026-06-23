@@ -1,7 +1,6 @@
 import { auth } from "@/auth"
 import { redirect } from "next/navigation"
 import { SessionProvider } from "next-auth/react"
-import * as TooltipPrimitive from '@radix-ui/react-tooltip'
 import { HeroUIProvider } from "@/providers"
 import { ToastContainer } from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.css'
@@ -24,8 +23,7 @@ export default async function PortalLayout({
 
   return (
     <SessionProvider refetchInterval={300} refetchOnWindowFocus={false}>
-      <TooltipPrimitive.Provider delayDuration={200} skipDelayDuration={100}>
-        <HeroUIProvider>
+      <HeroUIProvider>
           <Suspense fallback={null}>
             <WebVitals />
           </Suspense>
@@ -52,8 +50,7 @@ export default async function PortalLayout({
             pauseOnHover
             theme="colored"
           />
-        </HeroUIProvider>
-      </TooltipPrimitive.Provider>
+      </HeroUIProvider>
     </SessionProvider>
   )
 }

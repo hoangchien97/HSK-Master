@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Geist, Noto_Sans } from "next/font/google";
+import { Geist, Noto_Sans, Noto_Serif } from "next/font/google";
 import "./globals.css";
 import { OG_IMAGE, SITE_URL } from "@/constants/brand";
 import NextTopLoader from 'nextjs-toploader';
@@ -15,6 +15,13 @@ const notoSans = Noto_Sans({
   variable: "--font-noto-sans",
   subsets: ["latin", "vietnamese"],
   weight: ["400", "500", "700"],
+  display: "swap",
+});
+
+const notoSerif = Noto_Serif({
+  variable: "--font-noto-serif",
+  subsets: ["latin", "vietnamese"],
+  weight: ["400", "500", "600", "700"],
   display: "swap",
 });
 
@@ -146,7 +153,7 @@ export default function RootLayout({
         />
       </head>
       <body
-        className={`${geistSans.variable} ${notoSans.variable} antialiased min-h-screen bg-background-light dark:bg-background-dark text-text-main-light dark:text-text-main-dark flex flex-col`}
+        className={`${geistSans.variable} ${notoSans.variable} ${notoSerif.variable} antialiased min-h-screen bg-background-light dark:bg-background-dark text-text-main-light dark:text-text-main-dark flex flex-col`}
         suppressHydrationWarning
       >
         <NextTopLoader

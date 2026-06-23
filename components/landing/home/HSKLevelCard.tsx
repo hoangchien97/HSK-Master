@@ -46,14 +46,14 @@ const levelIcons = {
   6: Brain,
 };
 
-// Color mapping for timeline dots
+// Color mapping for timeline dots — uses design-system HSK level tokens
 const levelColors = {
-  1: "bg-gradient-to-br from-orange-400 to-yellow-300 shadow-orange-400/50",
-  2: "bg-gradient-to-br from-orange-500 to-yellow-400 shadow-orange-500/50",
-  3: "bg-gradient-to-br from-red-400 to-orange-400 shadow-red-400/50",
-  4: "bg-gradient-to-br from-red-500 to-red-400 shadow-red-500/50",
-  5: "bg-gradient-to-br from-purple-500 to-indigo-500 shadow-purple-500/50",
-  6: "bg-gradient-to-br from-indigo-600 to-blue-600 shadow-indigo-600/50",
+  1: "bg-hsk-1",
+  2: "bg-hsk-2",
+  3: "bg-hsk-3",
+  4: "bg-hsk-4",
+  5: "bg-hsk-5",
+  6: "bg-hsk-6",
 };
 
 export default function HSKLevelCard({ level, isLeft }: HSKLevelCardProps) {

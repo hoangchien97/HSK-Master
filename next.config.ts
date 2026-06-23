@@ -62,9 +62,6 @@ const nextConfig: NextConfig = {
   // Performance optimizations
   experimental: {
     optimizePackageImports: [
-      '@radix-ui/react-icons',
-      '@radix-ui/react-tooltip',
-      '@radix-ui/react-dialog',
       'lucide-react',
       'framer-motion',
       'embla-carousel-react',

@@ -20,13 +20,13 @@ export function EmptyState({
   return (
     <div className={cn("flex flex-col items-center justify-center py-12 px-4 text-center", className)}>
       {icon && (
-        <div className="w-16 h-16 mb-4 rounded-full bg-gray-100 flex items-center justify-center text-gray-400">
+        <div className="w-16 h-16 mb-4 rounded-full bg-[var(--color-smoke)] flex items-center justify-center text-[var(--color-muted)]">
           {icon}
         </div>
       )}
-      <h3 className="text-lg font-semibold text-gray-900">{title}</h3>
+      <h3 className="text-lg font-semibold text-[var(--color-ink)]">{title}</h3>
       {description && (
-        <p className="mt-2 text-sm text-gray-500 max-w-sm">{description}</p>
+        <p className="mt-2 text-sm text-[var(--color-muted)] max-w-sm">{description}</p>
       )}
       {action && <div className="mt-4">{action}</div>}
     </div>

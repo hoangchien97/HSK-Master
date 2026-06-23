@@ -31,7 +31,7 @@ export default function CTASectionClient({ stats }: Props) {
           </div>
 
           {/* Heading */}
-          <h2 className="text-xl md:text-2xl lg:text-3xl xl:text-4xl font-bold text-white mb-2 md:mb-3 leading-tight">
+          <h2 className="font-serif text-xl md:text-2xl lg:text-3xl xl:text-4xl font-bold text-white mb-2 md:mb-3 leading-tight">
             Sẵn sàng bắt đầu{' '}
             <span className="bg-gradient-to-r from-yellow-200 via-yellow-100 to-white bg-clip-text text-transparent">
               hành trình học

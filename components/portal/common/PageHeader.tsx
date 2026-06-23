@@ -18,9 +18,9 @@ export function PageHeader({
   return (
     <div className={cn("mb-6 flex flex-col gap-4 md:flex-row md:items-center md:justify-between", className)}>
       <div>
-        <h1 className="text-2xl font-bold text-gray-900">{title}</h1>
+        <h1 className="text-2xl font-bold text-[var(--color-ink)]">{title}</h1>
         {description && (
-          <p className="mt-1 text-gray-500">{description}</p>
+          <p className="mt-1 text-[var(--color-muted)]">{description}</p>
         )}
       </div>
       {children && (

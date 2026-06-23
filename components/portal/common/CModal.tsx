@@ -1,9 +1,40 @@
 "use client";
 
-import { Modal, ModalContent, ModalHeader, ModalBody, ModalFooter } from "@heroui/react";
+import {
+  Dialog,
+  DialogContent,
+  DialogTitle,
+  DialogClose,
+} from "@/components/ui/overlays/Modal";
 import { X } from "lucide-react";
+import { cn } from "@/lib/utils";
 import type { ReactNode } from "react";
 import type { LucideIcon } from "lucide-react";
+
+type ModalSize =
+  | "xs"
+  | "sm"
+  | "md"
+  | "lg"
+  | "xl"
+  | "2xl"
+  | "3xl"
+  | "4xl"
+  | "5xl"
+  | "full";
+
+const SIZE_CLASSES: Record<ModalSize, string> = {
+  xs: "max-w-xs",
+  sm: "max-w-sm",
+  md: "max-w-md",
+  lg: "max-w-lg",
+  xl: "max-w-xl",
+  "2xl": "max-w-2xl",
+  "3xl": "max-w-3xl",
+  "4xl": "max-w-4xl",
+  "5xl": "max-w-5xl",
+  full: "max-w-full mx-4",
+};
 
 interface CModalProps {
   isOpen: boolean;
@@ -11,7 +42,7 @@ interface CModalProps {
   title: ReactNode;
   children: ReactNode;
   footer?: ReactNode;
-  size?: "xs" | "sm" | "md" | "lg" | "xl" | "2xl" | "3xl" | "4xl" | "5xl" | "full";
+  size?: ModalSize;
   closeIcon?: LucideIcon;
   isDismissable?: boolean;
   hideCloseButton?: boolean;
@@ -31,45 +62,62 @@ export function CModal({
   scrollBehavior = "inside",
 }: CModalProps) {
   return (
-    <Modal
-      isOpen={isOpen}
-      onClose={onClose}
-      size={size}
-      isDismissable={isDismissable}
-      hideCloseButton={hideCloseButton}
-      scrollBehavior={scrollBehavior}
-      placement="center"
-      classNames={{
-        wrapper: "flex items-center justify-center min-h-screen px-4 sm:px-6",
-        base: "mx-auto my-4 sm:my-8 max-h-[calc(100vh-2rem)] sm:max-h-[calc(100vh-4rem)]",
-        header: "py-3 px-4 sm:py-4 md:py-6 sm:px-6 md:px-6 border-b border-default-200",
-        footer: "py-3 px-4 sm:py-4 md:py-6 sm:px-6 md:px-6 border-t border-default-200",
-        closeButton: "top-3 right-3 sm:top-[14px] sm:right-4",
-        body: "max-h-[60vh] sm:max-h-[70vh] overflow-y-auto px-4 py-3 sm:py-4 md:px-6 md:py-6 scrollbar-thin scrollbar-thumb-gray-300 scrollbar-track-transparent hover:scrollbar-thumb-gray-400",
+    <Dialog
+      open={isOpen}
+      onOpenChange={(open) => {
+        if (!open && isDismissable) onClose();
       }}
     >
-      <ModalContent>
-        {!hideCloseButton && (
-          <button
-            onClick={onClose}
-            className="absolute top-[14px] right-4 z-50 p-1.5 rounded-lg hover:bg-default-100 transition-colors"
-            aria-label="Close"
-          >
-            <CloseIcon className="w-5 h-5 text-default-500" />
-          </button>
+      <DialogContent
+        onPointerDownOutside={
+          isDismissable ? undefined : (e) => e.preventDefault()
+        }
+        onEscapeKeyDown={
+          isDismissable ? undefined : (e) => e.preventDefault()
+        }
+        className={cn(
+          "p-0 gap-0 flex flex-col overflow-hidden",
+          "bg-(--color-surface) rounded-xl",
+          "max-h-[calc(100vh-2rem)] sm:max-h-[calc(100vh-4rem)]",
+          // hide shadcn's built-in close button — we render our own below
+          "[&>button:last-child]:hidden",
+          SIZE_CLASSES[size]
         )}
-        <ModalHeader className="flex items-center gap-2">
-          {title}
-        </ModalHeader>
-        <ModalBody>
+      >
+        {/* Header */}
+        <div className="flex items-center justify-between px-4 py-3 sm:px-6 sm:py-4 border-b border-(--color-smoke) shrink-0">
+          <DialogTitle className="text-base font-semibold text-(--color-ink) flex items-center gap-2">
+            {title}
+          </DialogTitle>
+          {!hideCloseButton && (
+            <DialogClose
+              onClick={onClose}
+              className="ml-4 p-1.5 rounded-md hover:bg-(--color-smoke) text-muted-foreground transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+              aria-label="Đóng"
+            >
+              <CloseIcon className="w-5 h-5" />
+            </DialogClose>
+          )}
+        </div>
+
+        {/* Body */}
+        <div
+          className={cn(
+            "px-4 py-3 sm:px-6 sm:py-5",
+            scrollBehavior === "inside" &&
+              "overflow-y-auto flex-1 scrollbar-thin scrollbar-thumb-gray-300 scrollbar-track-transparent hover:scrollbar-thumb-gray-400"
+          )}
+        >
           {children}
-        </ModalBody>
+        </div>
+
+        {/* Footer */}
         {footer && (
-          <ModalFooter>
+          <div className="flex justify-end gap-2 px-4 py-3 sm:px-6 sm:py-4 border-t border-(--color-smoke) shrink-0">
             {footer}
-          </ModalFooter>
+          </div>
         )}
-      </ModalContent>
-    </Modal>
+      </DialogContent>
+    </Dialog>
   );
 }
