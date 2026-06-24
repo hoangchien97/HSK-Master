@@ -7,7 +7,7 @@ import '@/styles/big-calendar-custom.css';
 import { format, parse, startOfWeek, getDay } from 'date-fns';
 import { vi } from 'date-fns/locale';
 import { ChevronLeft, ChevronRight, Pencil } from 'lucide-react';
-import { Button, Tabs, Tab, Tooltip } from '@heroui/react';
+import { Button, Tooltip } from '@/components/ui';
 import { CSpinner } from '@/components/portal/common';
 import { cn } from '@/lib/utils';
 import type { ISchedule } from '@/interfaces/portal';
@@ -169,7 +169,7 @@ export default function BigCalendarView({
         <div className="group relative w-full h-full flex items-center">
           <span className="truncate block flex-1">{event.title}</span>
           {!readOnly && (
-            <Tooltip content="Chỉnh sửa" placement="top" size="sm">
+            <Tooltip content="Chỉnh sửa" placement="top">
               <button
                 type="button"
                 className="absolute top-1/2 -translate-y-1/2 -right-1 w-6 h-6 rounded-full bg-white shadow-md border border-gray-200 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity z-10 hover:bg-gray-50"
@@ -230,16 +230,16 @@ export default function BigCalendarView({
       <div className="shrink-0 flex flex-col gap-2 p-3 border-b border-gray-200 sm:flex-row sm:items-center sm:justify-between sm:p-4">
         {/* Row 1 — navigation + date */}
         <div className="flex items-center gap-1.5 sm:gap-3 flex-wrap">
-          <Button color="primary" variant="flat" size="sm" onPress={goToToday} className="shrink-0 h-8 min-w-0 px-2.5 sm:px-3 font-semibold">
+          <Button variant="secondary" size="sm" onClick={goToToday} className="shrink-0 h-8 min-w-0 px-2.5 sm:px-3 font-semibold">
             Hôm nay
           </Button>
           <div className="flex items-center">
-            <Button isIconOnly variant="light" size="sm" onPress={goBack} className="w-7 h-7 sm:w-8 sm:h-8">
+            <button type="button" onClick={goBack} className="w-7 h-7 sm:w-8 sm:h-8 p-1.5 rounded-md hover:bg-(--color-smoke) text-(--color-ink) transition-colors flex items-center justify-center">
               <ChevronLeft className="w-4 h-4 sm:w-5 sm:h-5" />
-            </Button>
-            <Button isIconOnly variant="light" size="sm" onPress={goNext} className="w-7 h-7 sm:w-8 sm:h-8">
+            </button>
+            <button type="button" onClick={goNext} className="w-7 h-7 sm:w-8 sm:h-8 p-1.5 rounded-md hover:bg-(--color-smoke) text-(--color-ink) transition-colors flex items-center justify-center">
               <ChevronRight className="w-4 h-4 sm:w-5 sm:h-5" />
-            </Button>
+            </button>
           </div>
           <h2 className="text-sm sm:text-lg font-semibold text-gray-900 capitalize">
             {dateDisplayText}
@@ -248,17 +248,28 @@ export default function BigCalendarView({
 
         {/* Row 2 — view tabs */}
         <div className="flex items-center gap-2 sm:gap-3">
-          <Tabs
-            aria-label="Chế độ xem"
-            size="sm"
-            variant="bordered"
-            selectedKey={currentView}
-            onSelectionChange={(key: React.Key) => handleViewChange(VIEW_MAP[key as string] || Views.MONTH)}
-          >
-            <Tab key="day" title="Ngày" />
-            <Tab key="week" title="Tuần" />
-            <Tab key="month" title="Tháng" />
-          </Tabs>
+          <div className="inline-flex items-center rounded-md border border-(--color-smoke) overflow-hidden">
+            {(['day', 'week', 'month'] as const).map((key) => {
+              const label = key === 'day' ? 'Ngày' : key === 'week' ? 'Tuần' : 'Tháng';
+              const view = VIEW_MAP[key];
+              const isActive = currentView === view;
+              return (
+                <button
+                  key={key}
+                  type="button"
+                  onClick={() => handleViewChange(view)}
+                  className={cn(
+                    'px-3 h-8 text-xs font-medium transition-colors',
+                    isActive
+                      ? 'bg-(--color-vermillion) text-white'
+                      : 'bg-white text-(--color-ink) hover:bg-(--color-paper)'
+                  )}
+                >
+                  {label}
+                </button>
+              );
+            })}
+          </div>
         </div>
       </div>
 

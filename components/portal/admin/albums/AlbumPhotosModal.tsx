@@ -1,7 +1,9 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { Button, Input, Textarea, Spinner } from "@heroui/react";
+import { Button } from "@/components/ui";
+import { Input } from "@/components/ui";
+import { Textarea } from "@/components/ui";
 import { toast } from "react-toastify";
 import type { IAlbum, IAlbumPhoto } from "@/interfaces/portal";
 import { CModal } from "@/components/portal/common";
@@ -81,33 +83,33 @@ export default function AlbumPhotosModal({
       title={`Quản lý ảnh: ${album.title}`}
       footer={
         <>
-          <Button variant="flat" onPress={onClose}>Hủy</Button>
-          <Button color="primary" isLoading={isSubmitting} onPress={handleSubmit}>
+          <Button variant="secondary" onClick={onClose}>Hủy</Button>
+          <Button variant="primary" isLoading={isSubmitting} onClick={handleSubmit}>
             Lưu thay đổi
           </Button>
         </>
       }
     >
       <div className="space-y-4 max-h-[70vh] overflow-y-auto">
-        <div className="flex justify-between items-center bg-default-100 p-4 rounded-xl">
+        <div className="flex justify-between items-center bg-(--color-paper) p-4 rounded-xl">
           <div>
             <h3 className="text-sm font-semibold">Danh sách ảnh ({photos.length})</h3>
-            <p className="text-xs text-default-500">Tải lên file ảnh và điều chỉnh thứ tự hiển thị.</p>
+            <p className="text-xs text-(--color-muted)">Tải lên file ảnh và điều chỉnh thứ tự hiển thị.</p>
           </div>
-          <Button color="primary" variant="flat" size="sm" startContent={<Plus className="w-4 h-4" />} onPress={addPhoto}>
+          <Button variant="secondary" size="sm" leftIcon={<Plus className="w-4 h-4" />} onClick={addPhoto}>
             Thêm ảnh mới
           </Button>
         </div>
 
         {photos.length === 0 ? (
-          <div className="text-center py-10 text-default-400 text-sm">
+          <div className="text-center py-10 text-gray-400 text-sm">
             Tạm chưa có ảnh nào
           </div>
         ) : (
           <div className="space-y-4">
             {photos.map((photo, i) => (
-              <div key={photo.id || `new-${i}`} className="flex flex-col md:flex-row gap-4 p-4 border border-default-200 rounded-xl relative group bg-white">
-                <div className="shrink-0 pt-1 hidden md:block text-default-300">
+              <div key={photo.id || `new-${i}`} className="flex flex-col md:flex-row gap-4 p-4 border border-gray-200 rounded-xl relative group bg-white">
+                <div className="shrink-0 pt-1 hidden md:block text-gray-300">
                   <GripVertical className="w-5 h-5 cursor-move" />
                 </div>
 
@@ -124,32 +126,30 @@ export default function AlbumPhotosModal({
                     <div className="md:col-span-3">
                       <Input
                         label="Tiêu đề"
-                        size="sm"
                         placeholder="Tiêu đề ảnh (không rỗng nếu có mô tả)"
                         value={photo.title || ""}
-                        onValueChange={(v) => updatePhoto(i, "title", v)}
+                        onChange={(e) => updatePhoto(i, "title", e.target.value)}
                       />
                     </div>
                     <Input
                       label="Thứ tự"
                       type="number"
-                      size="sm"
                       value={String(photo.order)}
-                      onValueChange={(v) => updatePhoto(i, "order", Number(v) || 0)}
+                      onChange={(e) => updatePhoto(i, "order", Number(e.target.value) || 0)}
                     />
                   </div>
                   <Textarea
                     label="Mô tả"
-                    size="sm"
-                    minRows={2}
+                    rows={2}
                     placeholder="Mô tả ảnh..."
                     value={photo.description || ""}
-                    onValueChange={(v) => updatePhoto(i, "description", v)}
+                    onChange={(e) => updatePhoto(i, "description", e.target.value)}
                   />
                 </div>
 
                 <button
-                  className="absolute top-2 right-2 p-2 rounded-full hover:bg-danger-50 text-default-400 hover:text-danger bg-white"
+                  type="button"
+                  className="absolute top-2 right-2 p-2 rounded-full hover:bg-red-50 text-gray-400 hover:text-red-600 bg-white"
                   onClick={() => removePhoto(i)}
                   title="Xóa ảnh"
                 >

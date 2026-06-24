@@ -1,59 +1,15 @@
 "use client";
 
-import { useEffect } from "react";
-import { useForm } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { z } from "zod";
-import { Button } from "@heroui/react";
+import { useState } from "react";
+import { Button } from "@/components/ui";
+import { Input } from "@/components/ui/forms/Input";
+import { Textarea } from "@/components/ui/forms/Textarea";
+import { Switch } from "@/components/ui/forms/Switch";
 import { toast } from "react-toastify";
 import type { IPageMetadata, ICreatePageMetadataDTO } from "@/interfaces/portal";
 import { CModal } from "@/components/portal/common";
 import { createPageMetadataAction, updatePageMetadataAction } from "@/actions/admin.actions";
 import ImageUpload from "@/components/portal/admin/common/ImageUpload";
-import { Input } from "@/components/ui/forms/Input";
-import { Textarea } from "@/components/ui/forms/Textarea";
-import { Switch } from "@/components/ui/forms/Switch";
-import { FormField } from "@/components/ui/forms/FormField";
-
-const schema = z.object({
-  pagePath: z.string().min(1, "Nhập đường dẫn trang"),
-  pageName: z.string().default(""),
-  title: z.string().min(1, "Nhập tiêu đề SEO"),
-  description: z.string().min(1, "Nhập mô tả SEO"),
-  keywords: z.string().optional(),
-  ogTitle: z.string().optional(),
-  ogDescription: z.string().optional(),
-  ogImage: z.string().optional(),
-  ogType: z.string().optional(),
-  twitterCard: z.string().optional(),
-  twitterTitle: z.string().optional(),
-  twitterDescription: z.string().optional(),
-  twitterImage: z.string().optional(),
-  canonicalUrl: z.string().optional(),
-  robots: z.string().optional(),
-  isActive: z.boolean().default(true),
-});
-
-type FormData = z.infer<typeof schema>;
-
-const emptyDefaults: FormData = {
-  pagePath: "/",
-  pageName: "",
-  title: "",
-  description: "",
-  keywords: "",
-  ogTitle: "",
-  ogDescription: "",
-  ogImage: "",
-  ogType: "website",
-  twitterCard: "summary_large_image",
-  twitterTitle: "",
-  twitterDescription: "",
-  twitterImage: "",
-  canonicalUrl: "",
-  robots: "index, follow",
-  isActive: true,
-};
 
 interface PageMetadataFormModalProps {
   isOpen: boolean;
@@ -69,66 +25,54 @@ export default function PageMetadataFormModal({
   initialData,
 }: PageMetadataFormModalProps) {
   const isEdit = !!initialData;
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
-  const {
-    control,
-    register,
-    handleSubmit,
-    reset,
-    getValues,
-    setValue,
-    watch,
-    formState: { errors, isSubmitting },
-  } = useForm<z.input<typeof schema>, unknown, FormData>({
-    resolver: zodResolver(schema),
-    defaultValues: emptyDefaults,
+  const [form, setForm] = useState<ICreatePageMetadataDTO>({
+    pagePath: initialData?.pagePath || "/",
+    pageName: initialData?.pageName || "",
+    title: initialData?.title || "",
+    description: initialData?.description || "",
+    keywords: initialData?.keywords || "",
+    ogTitle: initialData?.ogTitle || "",
+    ogDescription: initialData?.ogDescription || "",
+    ogImage: initialData?.ogImage || "",
+    ogType: initialData?.ogType || "website",
+    twitterCard: initialData?.twitterCard || "summary_large_image",
+    twitterTitle: initialData?.twitterTitle || "",
+    twitterDescription: initialData?.twitterDescription || "",
+    twitterImage: initialData?.twitterImage || "",
+    canonicalUrl: initialData?.canonicalUrl || "",
+    robots: initialData?.robots || "index, follow",
+    isActive: initialData?.isActive ?? true,
   });
 
-  useEffect(() => {
-    if (!isOpen) return;
-    reset(
-      isEdit
-        ? {
-            pagePath: initialData!.pagePath,
-            pageName: initialData!.pageName ?? "",
-            title: initialData!.title,
-            description: initialData!.description,
-            keywords: initialData!.keywords ?? "",
-            ogTitle: initialData!.ogTitle ?? "",
-            ogDescription: initialData!.ogDescription ?? "",
-            ogImage: initialData!.ogImage ?? "",
-            ogType: initialData!.ogType ?? "website",
-            twitterCard: initialData!.twitterCard ?? "summary_large_image",
-            twitterTitle: initialData!.twitterTitle ?? "",
-            twitterDescription: initialData!.twitterDescription ?? "",
-            twitterImage: initialData!.twitterImage ?? "",
-            canonicalUrl: initialData!.canonicalUrl ?? "",
-            robots: initialData!.robots ?? "index, follow",
-            isActive: initialData!.isActive,
-          }
-        : emptyDefaults
-    );
-  }, [isOpen]); // eslint-disable-line react-hooks/exhaustive-deps
-
-  const titleValue = watch("title");
-  const isActiveValue = watch("isActive");
+  const updateField = <K extends keyof ICreatePageMetadataDTO>(key: K, value: ICreatePageMetadataDTO[K]) => {
+    setForm((prev) => ({ ...prev, [key]: value }));
+  };
 
   const syncOGAndTwitter = () => {
-    const vals = getValues();
-    if (!vals.ogTitle) setValue("ogTitle", vals.title);
-    if (!vals.ogDescription) setValue("ogDescription", vals.description);
-    if (!vals.twitterTitle) setValue("twitterTitle", vals.ogTitle || vals.title);
-    if (!vals.twitterDescription) setValue("twitterDescription", vals.ogDescription || vals.description);
-    if (!vals.twitterImage) setValue("twitterImage", vals.ogImage || "");
+    setForm((prev) => ({
+      ...prev,
+      ogTitle: prev.ogTitle || prev.title,
+      ogDescription: prev.ogDescription || prev.description,
+      twitterTitle: prev.twitterTitle || prev.ogTitle || prev.title,
+      twitterDescription: prev.twitterDescription || prev.ogDescription || prev.description,
+      twitterImage: prev.twitterImage || prev.ogImage,
+    }));
     toast.success("Đã đồng bộ nội dung SEO sang thẻ OG/Twitter!");
   };
 
-  const onSubmit = async (data: FormData) => {
+  const handleSubmit = async () => {
+    if (!form.pagePath || !form.title || !form.description) {
+      toast.error("Vui lòng nhập Đường dẫn, Tiêu đề và Mô tả SEO");
+      return;
+    }
+
+    setIsSubmitting(true);
     try {
-      const payload: ICreatePageMetadataDTO = data;
       const result = isEdit
-        ? await updatePageMetadataAction(initialData!.id, payload)
-        : await createPageMetadataAction(payload);
+        ? await updatePageMetadataAction(initialData!.id, form)
+        : await createPageMetadataAction(form);
 
       if (!result.success) throw new Error(result.error);
       toast.success(isEdit ? "Cập nhật SEO cho trang thành công!" : "Tạo thiết lập SEO thành công!");
@@ -136,6 +80,8 @@ export default function PageMetadataFormModal({
       onClose();
     } catch (error) {
       toast.error(error instanceof Error ? error.message : "Thao tác thất bại");
+    } finally {
+      setIsSubmitting(false);
     }
   };
 
@@ -148,12 +94,12 @@ export default function PageMetadataFormModal({
       scrollBehavior="inside"
       footer={
         <div className="flex justify-between w-full">
-          <Button variant="flat" color="secondary" onPress={syncOGAndTwitter}>
+          <Button variant="secondary" onClick={syncOGAndTwitter}>
             Đồng bộ (Điền nhanh)
           </Button>
           <div className="space-x-2">
-            <Button variant="flat" onPress={onClose}>Hủy</Button>
-            <Button color="primary" isLoading={isSubmitting} onPress={() => void handleSubmit(onSubmit)()}>
+            <Button variant="secondary" onClick={onClose}>Hủy</Button>
+            <Button variant="primary" isLoading={isSubmitting} onClick={handleSubmit}>
               {isEdit ? "Cập nhật" : "Tạo mới"}
             </Button>
           </div>
@@ -161,84 +107,67 @@ export default function PageMetadataFormModal({
       }
     >
       <div className="space-y-6">
-        {/* Section 1: Cài đặt Trang */}
+        {/* Thông tin xác định trang */}
         <section className="bg-(--color-paper) p-4 rounded-xl border border-(--color-smoke)">
           <h4 className="text-sm font-semibold mb-3 border-b pb-1">Cài đặt Trang</h4>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <Input
               label="Tên Quản Lý"
               placeholder="VD: Trang chủ, Khóa học..."
-              {...register("pageName")}
-              error={errors.pageName?.message}
+              value={form.pageName}
+              onChange={(e) => updateField("pageName", e.target.value)}
             />
             <Input
               label="Đường dẫn (Path)"
               placeholder="VD: / hoặc /courses"
+              value={form.pagePath}
+              onChange={(e) => updateField("pagePath", e.target.value)}
               required
-              {...register("pagePath")}
-              error={errors.pagePath?.message}
               hint="Phải trùng khớp với URL của trang, bắt đầu bằng /"
             />
+
             <div className="flex items-center">
               <Switch
-                checked={isActiveValue ?? true}
-                onChange={(v) => setValue("isActive", v)}
+                checked={form.isActive}
+                onChange={(v) => updateField("isActive", v)}
                 label="Kích hoạt áp dụng SEO cho trang này"
               />
             </div>
           </div>
         </section>
 
-        {/* Section 2: Thẻ Meta Chính */}
+        {/* SEO Cơ bản */}
         <section>
           <h4 className="text-sm font-semibold mb-3 border-b pb-1 text-(--color-vermillion)">Thẻ Meta Chính (Google Title/Description)</h4>
           <div className="space-y-4">
-            <FormField
-              control={control}
-              name="title"
-              render={({ field }) => (
-                <Input
-                  label="Tiêu đề (Title)"
-                  required
-                  placeholder="Tiêu đề hiển thị trên Google (tối đa ~60 ký tự)"
-                  maxLength={70}
-                  hint={`${(field.value?.length || 0)}/70 ký tự (Đề xuất: 50-60 ký tự)`}
-                  error={errors.title?.message}
-                  value={field.value}
-                  onChange={field.onChange}
-                  onBlur={field.onBlur}
-                  ref={field.ref}
-                />
-              )}
+            <Input
+              label="Tiêu đề (Title)"
+              placeholder="Tiêu đề hiển thị trên Google (tối đa ~60 ký tự)"
+              value={form.title}
+              onChange={(e) => updateField("title", e.target.value)}
+              required
+              maxLength={70}
+              hint={`${form.title?.length || 0}/70 ký tự (Đề xuất: 50-60 ký tự)`}
             />
-            <FormField
-              control={control}
-              name="description"
-              render={({ field }) => (
-                <Textarea
-                  label="Mô tả (Description)"
-                  required
-                  placeholder="Đoạn trích giới thiệu (tối đa ~155 ký tự)"
-                  showCount
-                  maxLength={160}
-                  error={errors.description?.message}
-                  value={field.value}
-                  onChange={field.onChange}
-                  onBlur={field.onBlur}
-                  ref={field.ref}
-                />
-              )}
+            <Textarea
+              label="Mô tả (Description)"
+              placeholder="Đoạn trích giới thiệu (tối đa ~155 ký tự)"
+              value={form.description}
+              onChange={(e) => updateField("description", e.target.value)}
+              required
+              maxLength={160}
+              hint={`${form.description?.length || 0}/160 ký tự`}
             />
             <Input
               label="Từ khóa (Keywords)"
               placeholder="Thêm các từ khóa, cách nhau bằng dấu phẩy"
-              {...register("keywords")}
-              error={errors.keywords?.message}
+              value={form.keywords || ""}
+              onChange={(e) => updateField("keywords", e.target.value)}
             />
           </div>
         </section>
 
-        {/* Section 3: Open Graph */}
+        {/* Open Graph / Facebook */}
         <section>
           <h4 className="text-sm font-semibold mb-3 border-b pb-1 text-[#1877F2]">Open Graph (Facebook / Zalo / Linkedin)</h4>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -246,45 +175,34 @@ export default function PageMetadataFormModal({
               <Input
                 label="OG Title"
                 placeholder="Tiêu đề hiển thị khi share lên FB"
-                {...register("ogTitle")}
-                error={errors.ogTitle?.message}
+                value={form.ogTitle || ""}
+                onChange={(e) => updateField("ogTitle", e.target.value)}
               />
-              <FormField
-                control={control}
-                name="ogDescription"
-                render={({ field }) => (
-                  <Textarea
-                    label="OG Description"
-                    placeholder="Mô tả khi share"
-                    error={errors.ogDescription?.message}
-                    value={field.value}
-                    onChange={field.onChange}
-                    onBlur={field.onBlur}
-                    ref={field.ref}
-                  />
-                )}
+              <Textarea
+                label="OG Description"
+                placeholder="Mô tả khi share"
+                value={form.ogDescription || ""}
+                onChange={(e) => updateField("ogDescription", e.target.value)}
               />
               <Input
                 label="OG Type"
                 placeholder="website, article..."
-                {...register("ogType")}
-                error={errors.ogType?.message}
+                value={form.ogType || ""}
+                onChange={(e) => updateField("ogType", e.target.value)}
               />
             </div>
             <div>
               <p className="text-xs font-semibold mb-2">Hình thu nhỏ (OG Image 1200x630)</p>
-              <FormField
-                control={control}
-                name="ogImage"
-                render={({ field }) => (
-                  <ImageUpload value={field.value || ""} onChange={field.onChange} folder="seo" />
-                )}
+              <ImageUpload
+                value={form.ogImage || ""}
+                onChange={(v) => updateField("ogImage", v)}
+                folder="seo"
               />
             </div>
           </div>
         </section>
 
-        {/* Section 4: Twitter Card */}
+        {/* Twitter */}
         <section>
           <h4 className="text-sm font-semibold mb-3 border-b pb-1 text-[#1DA1F2]">Twitter Card</h4>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -292,57 +210,46 @@ export default function PageMetadataFormModal({
               <Input
                 label="Twitter Card Type"
                 placeholder="summary_large_image / summary"
-                {...register("twitterCard")}
-                error={errors.twitterCard?.message}
+                value={form.twitterCard || ""}
+                onChange={(e) => updateField("twitterCard", e.target.value)}
               />
               <Input
                 label="Twitter Title"
-                {...register("twitterTitle")}
-                error={errors.twitterTitle?.message}
+                value={form.twitterTitle || ""}
+                onChange={(e) => updateField("twitterTitle", e.target.value)}
               />
-              <FormField
-                control={control}
-                name="twitterDescription"
-                render={({ field }) => (
-                  <Textarea
-                    label="Twitter Description"
-                    error={errors.twitterDescription?.message}
-                    value={field.value}
-                    onChange={field.onChange}
-                    onBlur={field.onBlur}
-                    ref={field.ref}
-                  />
-                )}
+              <Textarea
+                label="Twitter Description"
+                value={form.twitterDescription || ""}
+                onChange={(e) => updateField("twitterDescription", e.target.value)}
               />
             </div>
             <div>
               <p className="text-xs font-semibold mb-2">Hình thu nhỏ (Twitter Image)</p>
-              <FormField
-                control={control}
-                name="twitterImage"
-                render={({ field }) => (
-                  <ImageUpload value={field.value || ""} onChange={field.onChange} folder="seo" />
-                )}
+              <ImageUpload
+                value={form.twitterImage || ""}
+                onChange={(v) => updateField("twitterImage", v)}
+                folder="seo"
               />
             </div>
           </div>
         </section>
 
-        {/* Section 5: Nâng cao & Lập chỉ mục */}
+        {/* Cấu hình nâng cao */}
         <section>
           <h4 className="text-sm font-semibold mb-3 border-b pb-1">Nâng cao & Lập chỉ mục</h4>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <Input
               label="Robots"
               placeholder="VD: index, follow"
-              {...register("robots")}
-              error={errors.robots?.message}
+              value={form.robots || "index, follow"}
+              onChange={(e) => updateField("robots", e.target.value)}
             />
             <Input
               label="URL Canonical (Canonical URL)"
               placeholder="Chỉ điền nếu muốn Canonical tag khác URL gốc"
-              {...register("canonicalUrl")}
-              error={errors.canonicalUrl?.message}
+              value={form.canonicalUrl || ""}
+              onChange={(e) => updateField("canonicalUrl", e.target.value)}
             />
           </div>
         </section>

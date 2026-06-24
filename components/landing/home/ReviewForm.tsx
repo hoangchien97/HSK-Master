@@ -1,12 +1,13 @@
 "use client";
 
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
 import { useState } from "react";
 import { createReview } from "@/services";
-import { Button, Input, Textarea, Select } from "@/components/landing/common";
+import { Button, Input, Textarea, Select, FormField } from "@/components/ui";
 import { MessageCircle, Send, Star } from "lucide-react";
 import { toast } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
-import { useResponsive } from "@/hooks/useResponsive";
+import { reviewSchema, type ReviewFormData } from "@/lib/validations/review";
 
 const HSK_LEVELS = [
   { value: "HSK 1", label: "HSK 1" },
@@ -29,48 +30,32 @@ interface ReviewFormProps {
 }
 
 export default function ReviewForm({ onReviewAdded }: ReviewFormProps) {
-  const [formData, setFormData] = useState({
-    studentName: "",
-    className: "",
-    content: "",
-    rating: 0,
-  });
-  const [isSubmitting, setIsSubmitting] = useState(false);
   const [hoveredStar, setHoveredStar] = useState(0);
-  const { isMobile } = useResponsive();
-  const handleSubmit = async () => {
-    setIsSubmitting(true);
 
-    // Validation
-    if (!formData.studentName || !formData.className || !formData.content) {
-      toast.error("Vui lòng điền đầy đủ thông tin");
-      setIsSubmitting(false);
-      return;
-    }
+  const {
+    control,
+    handleSubmit,
+    watch,
+    reset,
+    formState: { isSubmitting },
+  } = useForm<ReviewFormData>({
+    resolver: zodResolver(reviewSchema),
+    defaultValues: { studentName: "", className: "", content: "", rating: 0 },
+  });
 
-    if (formData.rating === 0) {
-      toast.error("Vui lòng chọn đánh giá");
-      setIsSubmitting(false);
-      return;
-    }
+  const content = watch("content");
 
-    const result = await createReview(formData);
-
+  const onSubmit = async (data: ReviewFormData) => {
+    const result = await createReview(data);
     if (result.success) {
       toast.success(
         "Cảm ơn bạn đã chia sẻ! Review của bạn đã được đăng thành công 🎉"
       );
-      setFormData({ studentName: "", className: "", content: "", rating: 0 });
-
-      // Add review to list without reloading
-      if (result.review && onReviewAdded) {
-        onReviewAdded(result.review);
-      }
+      reset();
+      if (result.review && onReviewAdded) onReviewAdded(result.review);
     } else {
       toast.error("Có lỗi xảy ra. Vui lòng thử lại.");
     }
-
-    setIsSubmitting(false);
   };
 
   return (
@@ -83,7 +68,6 @@ export default function ReviewForm({ onReviewAdded }: ReviewFormProps) {
             Chia sẻ trải nghiệm
           </span>
         </div>
-
         <h3 className="text-lg md:text-2xl lg:text-3xl font-bold text-gray-900 dark:text-white mb-1.5 md:mb-2">
           Học viên nói gì về cô Ngoc?
         </h3>
@@ -92,103 +76,116 @@ export default function ReviewForm({ onReviewAdded }: ReviewFormProps) {
         </p>
       </div>
 
-      {/* Form */}
-      <div className="space-y-4 md:space-y-6">
+      <form onSubmit={handleSubmit(onSubmit)} className="space-y-4 md:space-y-6">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6">
-          {/* Student Name */}
-          <div>
-            <Input
-              label="Tên học viên"
-              type="text"
-              placeholder="Nhập tên của bạn"
-              value={formData.studentName}
-              onChange={(e) =>
-                setFormData({ ...formData, studentName: e.target.value })
-              }
-              disabled={isSubmitting}
-              required
-            />
-          </div>
+          <FormField
+            name="studentName"
+            control={control}
+            render={({ field, fieldState }) => (
+              <Input
+                {...field}
+                label="Tên học viên"
+                type="text"
+                placeholder="Nhập tên của bạn"
+                error={fieldState.error?.message}
+                disabled={isSubmitting}
+                required
+              />
+            )}
+          />
 
-          {/* Class Selection */}
-          <div>
-            <Select
-              label="Lớp học"
-              placeholder="VD: HSK 1, HSK 2..."
-              options={HSK_LEVELS}
-              value={formData.className}
-              onChange={(value) =>
-                setFormData({ ...formData, className: value })
-              }
-              disabled={isSubmitting}
-              required
-            />
-          </div>
-        </div>
-
-        {/* Review Content */}
-        <div>
-          <Textarea
-            label="Nội dung review"
-            rows={5}
-            placeholder="Chia sẻ trải nghiệm học tập của bạn với cô Ngoc... 😊 Ban có thể thêm emoji vào review!"
-            value={formData.content}
-            onChange={(e) =>
-              setFormData({ ...formData, content: e.target.value })
-            }
-            maxLength={500}
-            disabled={isSubmitting}
-            helperText={`Có thể sử dụng emoji để làm review sinh động hơn (${formData.content.length}/500)`}
-            required
+          <FormField
+            name="className"
+            control={control}
+            render={({ field, fieldState }) => (
+              <Select
+                label="Lớp học"
+                placeholder="VD: HSK 1, HSK 2..."
+                options={HSK_LEVELS}
+                value={field.value}
+                onChange={(value) => field.onChange(value)}
+                error={fieldState.error?.message}
+                disabled={isSubmitting}
+                required
+              />
+            )}
           />
         </div>
 
-        {/* Rating */}
-        <div>
-          <label className="block text-xs md:text-sm font-medium text-gray-700 dark:text-gray-300 mb-1.5 md:mb-2">
-            Đánh giá
-          </label>
-          <div className="flex items-center gap-1.5 md:gap-2">
-            {[1, 2, 3, 4, 5].map((star) => (
-              <button
-                key={star}
-                type="button"
-                onMouseEnter={() => setHoveredStar(star)}
-                onMouseLeave={() => setHoveredStar(0)}
-                onClick={() => setFormData({ ...formData, rating: star })}
-                disabled={isSubmitting}
-                className="focus:outline-none transition-transform hover:scale-110 disabled:opacity-50"
-              >
-                <Star
-                  className={`h-6 w-6 md:h-7 md:w-7 lg:h-8 lg:w-8 ${
-                    star <= (hoveredStar || formData.rating)
-                      ? "fill-yellow-400 text-yellow-400 cursor-pointer"
-                      : "text-gray-300 dark:text-gray-600"
-                  }`}
-                />
-              </button>
-            ))}
-            {formData.rating > 0 && (
-              <span className="ml-2 text-sm text-gray-600 dark:text-gray-400">
-                Chọn đánh giá
-              </span>
-            )}
-          </div>
-        </div>
+        <FormField
+          name="content"
+          control={control}
+          render={({ field, fieldState }) => (
+            <Textarea
+              {...field}
+              label="Nội dung review"
+              rows={5}
+              placeholder="Chia sẻ trải nghiệm học tập của bạn với cô Ngoc... 😊 Bạn có thể thêm emoji vào review!"
+              maxLength={500}
+              error={fieldState.error?.message}
+              helperText={`Có thể sử dụng emoji để làm review sinh động hơn (${content?.length ?? 0}/500)`}
+              disabled={isSubmitting}
+              required
+            />
+          )}
+        />
 
-        {/* Submit Button */}
+        {/* Star rating */}
+        <FormField
+          name="rating"
+          control={control}
+          render={({ field, fieldState }) => (
+            <div>
+              <label className="block text-xs md:text-sm font-medium text-gray-700 dark:text-gray-300 mb-1.5 md:mb-2">
+                Đánh giá
+              </label>
+              <div className="flex items-center gap-1.5 md:gap-2">
+                {[1, 2, 3, 4, 5].map((star) => (
+                  <button
+                    key={star}
+                    type="button"
+                    onMouseEnter={() => setHoveredStar(star)}
+                    onMouseLeave={() => setHoveredStar(0)}
+                    onClick={() => field.onChange(star)}
+                    disabled={isSubmitting}
+                    className="focus:outline-none transition-transform hover:scale-110 disabled:opacity-50"
+                  >
+                    <Star
+                      className={`h-6 w-6 md:h-7 md:w-7 lg:h-8 lg:w-8 ${
+                        star <= (hoveredStar || field.value)
+                          ? "fill-yellow-400 text-yellow-400 cursor-pointer"
+                          : "text-gray-300 dark:text-gray-600"
+                      }`}
+                    />
+                  </button>
+                ))}
+                {field.value > 0 && (
+                  <span className="ml-2 text-sm text-gray-600 dark:text-gray-400">
+                    Đã chọn {field.value} sao
+                  </span>
+                )}
+              </div>
+              {fieldState.error && (
+                <p className="mt-1 text-xs text-red-600">
+                  {fieldState.error.message}
+                </p>
+              )}
+            </div>
+          )}
+        />
+
         <Button
-          type="button"
-          onClick={handleSubmit}
+          type="submit"
           variant="gradient"
           size="lg"
           className="w-full"
+          isLoading={isSubmitting}
           disabled={isSubmitting}
         >
           <Send className="h-4 w-4 md:h-5 md:w-5 mr-1.5 md:mr-2" />
-          {isSubmitting ? "Đang gửi..." : "Gửi dánh giá ngay"}
+          {isSubmitting ? "Đang gửi..." : "Gửi đánh giá ngay"}
         </Button>
-      </div>
+      </form>
     </div>
   );
 }

@@ -11,17 +11,25 @@ interface SwitchProps
   > {
   label?: string;
   description?: string;
+  helperText?: string;
+  error?: string;
+  size?: string;
   onChange?: (checked: boolean) => void;
 }
 
 export function Switch({
   label,
   description,
+  helperText,
+  error,
+  size: _size,
   onChange,
   onCheckedChange,
   className,
   ...props
 }: SwitchProps) {
+  void _size;
+  const resolvedDescription = description ?? helperText;
   const autoId = useId();
   const id = props.id ?? autoId;
 
@@ -42,7 +50,7 @@ export function Switch({
           className="pointer-events-none block h-5 w-5 rounded-full bg-white shadow-lg ring-0 transition-transform data-[state=checked]:translate-x-5 data-[state=unchecked]:translate-x-0"
         />
       </SwitchPrimitives.Root>
-      {(label || description) && (
+      {(label || resolvedDescription || error) && (
         <div>
           {label && (
             <label
@@ -52,9 +60,10 @@ export function Switch({
               {label}
             </label>
           )}
-          {description && (
-            <p className="text-xs text-muted-foreground">{description}</p>
+          {resolvedDescription && (
+            <p className="text-xs text-muted-foreground">{resolvedDescription}</p>
           )}
+          {error && <p className="text-xs text-red-600">{error}</p>}
         </div>
       )}
     </div>

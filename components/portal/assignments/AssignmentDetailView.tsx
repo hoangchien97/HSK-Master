@@ -3,22 +3,12 @@
 import { useState, useMemo } from "react"
 import { useRouter } from "next/navigation"
 import Link from "next/link"
-import {
-  Card,
-  CardBody,
-  CardHeader,
-  Button,
-  Chip,
-  Avatar,
-  Divider,
-  Textarea,
-  Input,
-  Tabs,
-  Tab,
-  Select,
-  SelectItem,
-  useDisclosure,
-} from "@heroui/react"
+import { Badge } from "@/components/ui"
+import { Button } from "@/components/ui"
+import { Avatar } from "@/components/ui"
+import { Textarea } from "@/components/ui"
+import { Input } from "@/components/ui"
+import { Select, type SelectOption } from "@/components/ui"
 import {
   ArrowLeft,
   Calendar,
@@ -113,25 +103,25 @@ interface AssignmentDetailViewProps {
 
 /* ──────────────────── config ──────────────────────── */
 
-const STATUS_CONFIG: Record<string, { label: string; color: "success" | "default" | "warning" | "danger" }> = {
-  PUBLISHED: { label: "Đã công bố", color: "success" },
-  DRAFT: { label: "Nháp", color: "default" },
-  CLOSED: { label: "Đã đóng", color: "warning" },
-  ARCHIVED: { label: "Lưu trữ", color: "warning" },
+const STATUS_CONFIG: Record<string, { label: string; variant: "success" | "default" | "warning" | "danger" }> = {
+  PUBLISHED: { label: "Đã công bố", variant: "success" },
+  DRAFT: { label: "Nháp", variant: "default" },
+  CLOSED: { label: "Đã đóng", variant: "warning" },
+  ARCHIVED: { label: "Lưu trữ", variant: "warning" },
 }
 
 /** v2 submission statuses + backward compat with v1 */
-const SUBMISSION_STATUS_CONFIG: Record<string, { label: string; color: "primary" | "success" | "warning" | "danger" | "secondary" | "default" }> = {
-  NOT_SUBMITTED: { label: "Chưa nộp", color: "warning" },
-  SUBMITTED: { label: "Đã nộp", color: "primary" },
-  REVIEWED: { label: "Đã xem xét", color: "secondary" },
-  COMPLETED: { label: "Hoàn thành", color: "success" },
-  REVISION_REQUIRED: { label: "Cần sửa lại", color: "danger" },
-  OVERDUE: { label: "Quá hạn", color: "danger" },
+const SUBMISSION_STATUS_CONFIG: Record<string, { label: string; variant: "primary" | "success" | "warning" | "danger" | "default" }> = {
+  NOT_SUBMITTED: { label: "Chưa nộp", variant: "warning" },
+  SUBMITTED: { label: "Đã nộp", variant: "primary" },
+  REVIEWED: { label: "Đã xem xét", variant: "default" },
+  COMPLETED: { label: "Hoàn thành", variant: "success" },
+  REVISION_REQUIRED: { label: "Cần sửa lại", variant: "danger" },
+  OVERDUE: { label: "Quá hạn", variant: "danger" },
   // Backward compat v1
-  RESUBMITTED: { label: "Đã nộp lại", color: "primary" },
-  GRADED: { label: "Đã chấm", color: "success" },
-  RETURNED: { label: "Trả lại", color: "danger" },
+  RESUBMITTED: { label: "Đã nộp lại", variant: "primary" },
+  GRADED: { label: "Đã chấm", variant: "success" },
+  RETURNED: { label: "Trả lại", variant: "danger" },
 }
 
 /* ──────────────────── component ──────────────────────── */
@@ -171,44 +161,36 @@ export default function AssignmentDetailView({
     <div className="space-y-6 max-w-5xl mx-auto">
       {/* ═══════ Header ═══════ */}
       <div className="flex items-start gap-4">
-        <Button
-          as={Link}
-          href={backUrl}
-          isIconOnly
-          variant="flat"
-          size="sm"
-          className="mt-1"
-        >
+        <Link href={backUrl} className="mt-1 p-1.5 rounded-md hover:bg-(--color-smoke) text-(--color-ink) transition-colors">
           <ArrowLeft className="w-4 h-4" />
-        </Button>
+        </Link>
         <div className="flex-1">
           <div className="flex items-center gap-2 flex-wrap mb-1">
-            <Chip
+            <Badge
               size="sm"
-              color={STATUS_CONFIG[assignment.status]?.color ?? "default"}
-              variant="flat"
+              variant={STATUS_CONFIG[assignment.status]?.variant ?? "default"}
             >
               {STATUS_CONFIG[assignment.status]?.label ?? assignment.status}
-            </Chip>
+            </Badge>
             {isOverdue && !mySubmission && isStudent && (
-              <Chip size="sm" color="danger" variant="flat">
+              <Badge size="sm" variant="danger">
                 <AlertCircle className="w-3 h-3 mr-1" />Quá hạn
-              </Chip>
+              </Badge>
             )}
             {isClosed && (
-              <Chip size="sm" color="warning" variant="flat">
+              <Badge size="sm" variant="warning">
                 <Lock className="w-3 h-3 mr-1" />Đã khóa nộp bài
-              </Chip>
+              </Badge>
             )}
           </div>
           <h1 className="text-2xl font-bold">{assignment.title}</h1>
-          <div className="flex items-center gap-4 mt-2 text-sm text-default-500 flex-wrap">
+          <div className="flex items-center gap-4 mt-2 text-sm text-(--color-muted) flex-wrap">
             <span className="flex items-center gap-1">
               <BookOpen className="w-4 h-4" />
               {assignment.class.className}
             </span>
             {dueDate && (
-              <span className={`flex items-center gap-1 ${isOverdue ? "text-danger font-medium" : ""}`}>
+              <span className={`flex items-center gap-1 ${isOverdue ? "text-red-600 font-medium" : ""}`}>
                 <Calendar className="w-4 h-4" />
                 Hạn nộp: {dayjs(dueDate).format("DD/MM/YYYY HH:mm")}
                 {isOverdue && " (Quá hạn)"}
@@ -229,11 +211,11 @@ export default function AssignmentDetailView({
           {/* Tags — full width 100% per spec */}
           {assignment.tags && assignment.tags.length > 0 && (
             <div className="flex items-center gap-1.5 mt-2 flex-wrap w-full">
-              <Hash className="w-3.5 h-3.5 text-default-400" />
+              <Hash className="w-3.5 h-3.5 text-gray-400" />
               {assignment.tags.map((tag) => (
-                <Chip key={tag} size="sm" variant="flat" color="primary">
+                <Badge key={tag} size="sm" variant="primary">
                   #{tag}
-                </Chip>
+                </Badge>
               ))}
             </div>
           )}
@@ -247,52 +229,50 @@ export default function AssignmentDetailView({
 
       {/* ═══════ Teacher info (for students) ═══════ */}
       {isStudent && (
-        <Card shadow="sm">
-          <CardBody className="flex flex-row items-center gap-3">
-            <Avatar
-              src={assignment.teacher.image || undefined}
-              name={assignment.teacher.name?.charAt(0)}
-              size="sm"
-            />
-            <div>
-              <p className="text-sm font-medium">Giáo viên: {assignment.teacher.name}</p>
-              <p className="text-xs text-default-400">{assignment.teacher.email}</p>
-            </div>
-          </CardBody>
-        </Card>
+        <div className="rounded-xl border border-(--color-smoke) bg-white p-4 shadow-sm flex flex-row items-center gap-3">
+          <Avatar
+            src={assignment.teacher.image || undefined}
+            name={assignment.teacher.name?.charAt(0)}
+            size="sm"
+          />
+          <div>
+            <p className="text-sm font-medium">Giáo viên: {assignment.teacher.name}</p>
+            <p className="text-xs text-gray-400">{assignment.teacher.email}</p>
+          </div>
+        </div>
       )}
 
       {/* ═══════ v2 Statistics Summary (teachers) ═══════ */}
       {isTeacher && (
         <div className="grid grid-cols-2 sm:grid-cols-5 gap-3">
           <StatBox
-            icon={<Users className="w-5 h-5 text-primary" />}
-            bg="bg-primary-100"
+            icon={<Users className="w-5 h-5 text-(--color-vermillion)" />}
+            bg="bg-red-100"
             value={totalEnrolled}
             label="Học viên"
           />
           <StatBox
-            icon={<Upload className="w-5 h-5 text-warning" />}
-            bg="bg-warning-100"
+            icon={<Upload className="w-5 h-5 text-amber-600" />}
+            bg="bg-amber-100"
             value={`${totalSubmitted}/${totalEnrolled}`}
             label="Đã nộp"
           />
           <StatBox
-            icon={<Clock className="w-5 h-5 text-secondary" />}
-            bg="bg-secondary-100"
+            icon={<Clock className="w-5 h-5 text-gray-500" />}
+            bg="bg-gray-100"
             value={pendingReview}
             label="Chờ chấm"
             highlight={pendingReview > 0}
           />
           <StatBox
-            icon={<CheckCircle className="w-5 h-5 text-success" />}
-            bg="bg-success-100"
+            icon={<CheckCircle className="w-5 h-5 text-green-600" />}
+            bg="bg-green-100"
             value={totalCompleted}
             label="Hoàn thành"
           />
           <StatBox
-            icon={<AlertTriangle className="w-5 h-5 text-danger" />}
-            bg="bg-danger-100"
+            icon={<AlertTriangle className="w-5 h-5 text-red-600" />}
+            bg="bg-red-100"
             value={overdueCount}
             label="Quá hạn"
             highlight={overdueCount > 0}
@@ -333,15 +313,13 @@ function StatBox({
   highlight?: boolean
 }) {
   return (
-    <Card shadow="sm" className={highlight ? "ring-2 ring-warning" : ""}>
-      <CardBody className="flex flex-row items-center gap-3 py-3 px-4">
-        <div className={`p-2 rounded-lg ${bg}`}>{icon}</div>
-        <div>
-          <p className="text-xl font-bold">{value}</p>
-          <p className="text-xs text-default-500">{label}</p>
-        </div>
-      </CardBody>
-    </Card>
+    <div className={`rounded-xl border border-(--color-smoke) bg-white p-4 shadow-sm flex flex-row items-center gap-3 py-3 px-4 ${highlight ? "ring-2 ring-amber-400" : ""}`}>
+      <div className={`p-2 rounded-lg ${bg}`}>{icon}</div>
+      <div>
+        <p className="text-xl font-bold">{value}</p>
+        <p className="text-xs text-(--color-muted)">{label}</p>
+      </div>
+    </div>
   )
 }
 
@@ -370,12 +348,11 @@ function CloseAssignmentButton({ assignmentId }: { assignmentId: string }) {
 
   return (
     <Button
-      color="warning"
-      variant="flat"
+      variant="secondary"
       size="sm"
       isLoading={loading}
-      onPress={handleClose}
-      startContent={!loading && <Lock className="w-4 h-4" />}
+      onClick={handleClose}
+      leftIcon={!loading ? <Lock className="w-4 h-4" /> : undefined}
     >
       Đóng bài tập
     </Button>
@@ -395,53 +372,39 @@ function TeacherTabs({
 }) {
   const [selectedTab, setSelectedTab] = useState("overview")
 
+  const tabs = [
+    { key: "overview", title: "Tổng quan", icon: <FileText className="w-4 h-4" /> },
+    { key: "submissions", title: `Bài nộp (${assignment.submissions.length})`, icon: <ClipboardCheck className="w-4 h-4" /> },
+    { key: "comments", title: "Bình luận", icon: <MessageSquare className="w-4 h-4" /> },
+  ]
+
   return (
-    <Tabs
-      selectedKey={selectedTab}
-      onSelectionChange={(key) => setSelectedTab(key as string)}
-      variant="underlined"
-      classNames={{ tabList: "gap-6" }}
-    >
-      <Tab
-        key="overview"
-        title={
-          <span className="flex items-center gap-1.5">
-            <FileText className="w-4 h-4" />
-            Tổng quan
-          </span>
-        }
-      >
+    <div>
+      <div className="flex gap-1 border-b border-(--color-smoke) mb-4">
+        {tabs.map(tab => (
+          <button key={tab.key} type="button" onClick={() => setSelectedTab(tab.key)}
+            className={`px-4 py-2 text-sm font-medium border-b-2 -mb-px transition-colors flex items-center gap-1.5 ${selectedTab === tab.key ? "border-(--color-vermillion) text-(--color-vermillion)" : "border-transparent text-(--color-muted) hover:text-(--color-ink)"}`}>
+            {tab.icon}
+            {tab.title}
+          </button>
+        ))}
+      </div>
+      {selectedTab === "overview" && (
         <div className="space-y-4 mt-4">
           <AssignmentContentCard assignment={assignment} />
         </div>
-      </Tab>
-      <Tab
-        key="submissions"
-        title={
-          <span className="flex items-center gap-1.5">
-            <ClipboardCheck className="w-4 h-4" />
-            Bài nộp ({assignment.submissions.length})
-          </span>
-        }
-      >
+      )}
+      {selectedTab === "submissions" && (
         <div className="mt-4">
           <TeacherSubmissionsSection assignment={assignment} isOverdue={isOverdue} />
         </div>
-      </Tab>
-      <Tab
-        key="comments"
-        title={
-          <span className="flex items-center gap-1.5">
-            <MessageSquare className="w-4 h-4" />
-            Bình luận
-          </span>
-        }
-      >
+      )}
+      {selectedTab === "comments" && (
         <div className="mt-4">
           <CommentsPlaceholder />
         </div>
-      </Tab>
-    </Tabs>
+      )}
+    </div>
   )
 }
 
@@ -462,22 +425,23 @@ function StudentTabs({
 }) {
   const [selectedTab, setSelectedTab] = useState("overview")
 
+  const tabs = [
+    { key: "overview", title: "Tổng quan", icon: <FileText className="w-4 h-4" /> },
+    { key: "comments", title: "Bình luận", icon: <MessageSquare className="w-4 h-4" /> },
+  ]
+
   return (
-    <Tabs
-      selectedKey={selectedTab}
-      onSelectionChange={(key) => setSelectedTab(key as string)}
-      variant="underlined"
-      classNames={{ tabList: "gap-6" }}
-    >
-      <Tab
-        key="overview"
-        title={
-          <span className="flex items-center gap-1.5">
-            <FileText className="w-4 h-4" />
-            Tổng quan
-          </span>
-        }
-      >
+    <div>
+      <div className="flex gap-1 border-b border-(--color-smoke) mb-4">
+        {tabs.map(tab => (
+          <button key={tab.key} type="button" onClick={() => setSelectedTab(tab.key)}
+            className={`px-4 py-2 text-sm font-medium border-b-2 -mb-px transition-colors flex items-center gap-1.5 ${selectedTab === tab.key ? "border-(--color-vermillion) text-(--color-vermillion)" : "border-transparent text-(--color-muted) hover:text-(--color-ink)"}`}>
+            {tab.icon}
+            {tab.title}
+          </button>
+        ))}
+      </div>
+      {selectedTab === "overview" && (
         <div className="space-y-4 mt-4">
           <AssignmentContentCard assignment={assignment} />
           <StudentSubmissionSection
@@ -487,21 +451,13 @@ function StudentTabs({
             isClosed={isClosed}
           />
         </div>
-      </Tab>
-      <Tab
-        key="comments"
-        title={
-          <span className="flex items-center gap-1.5">
-            <MessageSquare className="w-4 h-4" />
-            Bình luận
-          </span>
-        }
-      >
+      )}
+      {selectedTab === "comments" && (
         <div className="mt-4">
           <CommentsPlaceholder />
         </div>
-      </Tab>
-    </Tabs>
+      )}
+    </div>
   )
 }
 
@@ -511,21 +467,21 @@ function StudentTabs({
 
 function AssignmentContentCard({ assignment }: { assignment: AssignmentData }) {
   return (
-    <Card shadow="sm">
-      <CardHeader>
+    <div className="rounded-xl border border-(--color-smoke) bg-white p-4 shadow-sm">
+      <div className="mb-3 font-semibold">
         <h2 className="text-lg font-semibold flex items-center gap-2">
-          <FileText className="w-5 h-5 text-primary" />
+          <FileText className="w-5 h-5 text-(--color-vermillion)" />
           Nội dung bài tập
         </h2>
-      </CardHeader>
-      <Divider />
-      <CardBody className="gap-4">
+      </div>
+      <hr className="border-t border-(--color-smoke)" />
+      <div className="gap-4 mt-4">
         {assignment.description ? (
           <div className="prose prose-sm max-w-none whitespace-pre-wrap">
             {assignment.description}
           </div>
         ) : (
-          <p className="text-default-400 italic">Không có mô tả</p>
+          <p className="text-gray-400 italic">Không có mô tả</p>
         )}
 
         {/* External link */}
@@ -534,7 +490,7 @@ function AssignmentContentCard({ assignment }: { assignment: AssignmentData }) {
             href={assignment.externalLink}
             target="_blank"
             rel="noopener noreferrer"
-            className="flex items-center gap-2 text-sm text-primary hover:underline"
+            className="flex items-center gap-2 text-sm text-(--color-vermillion) hover:underline mt-4"
           >
             <ExternalLink className="w-4 h-4" />
             {assignment.externalLink}
@@ -543,7 +499,7 @@ function AssignmentContentCard({ assignment }: { assignment: AssignmentData }) {
 
         {assignment.attachments.length > 0 && (
           <>
-            <Divider />
+            <hr className="border-t border-(--color-smoke) my-4" />
             <FilePreviewList
               urls={assignment.attachments}
               title="Tài liệu đính kèm"
@@ -551,8 +507,8 @@ function AssignmentContentCard({ assignment }: { assignment: AssignmentData }) {
             />
           </>
         )}
-      </CardBody>
-    </Card>
+      </div>
+    </div>
   )
 }
 
@@ -562,15 +518,13 @@ function AssignmentContentCard({ assignment }: { assignment: AssignmentData }) {
 
 function CommentsPlaceholder() {
   return (
-    <Card shadow="sm">
-      <CardBody className="py-12 text-center">
-        <MessageSquare className="w-12 h-12 mx-auto mb-3 text-default-300" />
-        <p className="text-default-500 font-medium">Hệ thống bình luận</p>
-        <p className="text-sm text-default-400 mt-1">
-          Tính năng bình luận & @mention sẽ được cập nhật trong phiên bản tiếp theo.
-        </p>
-      </CardBody>
-    </Card>
+    <div className="rounded-xl border border-(--color-smoke) bg-white p-4 shadow-sm py-12 text-center">
+      <MessageSquare className="w-12 h-12 mx-auto mb-3 text-gray-300" />
+      <p className="text-(--color-muted) font-medium">Hệ thống bình luận</p>
+      <p className="text-sm text-gray-400 mt-1">
+        Tính năng bình luận & @mention sẽ được cập nhật trong phiên bản tiếp theo.
+      </p>
+    </div>
   )
 }
 
@@ -631,108 +585,98 @@ function StudentSubmissionSection({
   }
 
   return (
-    <Card shadow="sm">
-      <CardHeader className="flex items-center justify-between">
+    <div className="rounded-xl border border-(--color-smoke) bg-white p-4 shadow-sm">
+      <div className="flex items-center justify-between mb-3">
         <h2 className="text-lg font-semibold flex items-center gap-2">
-          <Upload className="w-5 h-5 text-primary" />
+          <Upload className="w-5 h-5 text-(--color-vermillion)" />
           {submission ? "Bài nộp của bạn" : "Nộp bài tập"}
         </h2>
         {submission && (
-          <Chip
+          <Badge
             size="sm"
-            color={SUBMISSION_STATUS_CONFIG[submission.status]?.color ?? "default"}
-            variant="flat"
+            variant={SUBMISSION_STATUS_CONFIG[submission.status]?.variant ?? "default"}
           >
             {SUBMISSION_STATUS_CONFIG[submission.status]?.label ?? submission.status}
-          </Chip>
+          </Badge>
         )}
-      </CardHeader>
-      <Divider />
-      <CardBody className="gap-4">
+      </div>
+      <hr className="border-t border-(--color-smoke)" />
+      <div className="gap-4 mt-4 flex flex-col">
         {/* COMPLETED result */}
         {isCompleted && submission && (
-          <Card shadow="none" className="bg-success-50 border border-success-200">
-            <CardBody>
-              <div className="flex items-center justify-between mb-2">
-                <span className="font-medium text-success-800 flex items-center gap-2">
-                  <CheckCircle className="w-5 h-5" /> Hoàn thành
+          <div className="rounded-xl border border-green-200 bg-green-50 p-4">
+            <div className="flex items-center justify-between mb-2">
+              <span className="font-medium text-green-800 flex items-center gap-2">
+                <CheckCircle className="w-5 h-5" /> Hoàn thành
+              </span>
+              {submission.score != null && (
+                <span className="text-2xl font-bold text-green-700">
+                  {submission.score}/{assignment.maxScore}
                 </span>
-                {submission.score != null && (
-                  <span className="text-2xl font-bold text-success-700">
-                    {submission.score}/{assignment.maxScore}
-                  </span>
-                )}
-              </div>
-              {submission.feedback && (
-                <div className="mt-2 p-3 bg-white/50 rounded-lg">
-                  <p className="text-sm font-medium text-success-800 mb-1 flex items-center gap-1">
-                    <MessageSquare className="w-4 h-4" /> Nhận xét:
-                  </p>
-                  <p className="text-sm text-success-700">{submission.feedback}</p>
-                </div>
               )}
-            </CardBody>
-          </Card>
+            </div>
+            {submission.feedback && (
+              <div className="mt-2 p-3 bg-white/50 rounded-lg">
+                <p className="text-sm font-medium text-green-800 mb-1 flex items-center gap-1">
+                  <MessageSquare className="w-4 h-4" /> Nhận xét:
+                </p>
+                <p className="text-sm text-green-700">{submission.feedback}</p>
+              </div>
+            )}
+          </div>
         )}
 
         {/* REVIEWED — reviewed but not finalized */}
         {isReviewed && submission && (
-          <Card shadow="none" className="bg-secondary-50 border border-secondary-200">
-            <CardBody className="flex flex-row items-center gap-3">
-              <Eye className="w-5 h-5 text-secondary" />
-              <div>
-                <p className="text-sm font-medium text-secondary-800">
-                  Giáo viên đã xem xét bài nộp, đang chờ kết quả cuối cùng
-                </p>
-              </div>
-            </CardBody>
-          </Card>
+          <div className="rounded-xl border border-gray-200 bg-gray-50 p-4 flex flex-row items-center gap-3">
+            <Eye className="w-5 h-5 text-gray-500" />
+            <div>
+              <p className="text-sm font-medium text-gray-800">
+                Giáo viên đã xem xét bài nộp, đang chờ kết quả cuối cùng
+              </p>
+            </div>
+          </div>
         )}
 
         {/* REVISION_REQUIRED — teacher returned for revision */}
         {isRevisionRequired && submission && (
-          <Card shadow="none" className="bg-danger-50 border border-danger-200">
-            <CardBody>
-              <div className="flex items-center gap-2 mb-2">
-                <RotateCcw className="w-5 h-5 text-danger" />
-                <span className="font-medium text-danger-800">Giáo viên yêu cầu sửa lại bài nộp</span>
+          <div className="rounded-xl border border-red-200 bg-red-50 p-4">
+            <div className="flex items-center gap-2 mb-2">
+              <RotateCcw className="w-5 h-5 text-red-600" />
+              <span className="font-medium text-red-800">Giáo viên yêu cầu sửa lại bài nộp</span>
+            </div>
+            {submission.feedback && (
+              <div className="mt-1 p-3 bg-white/50 rounded-lg">
+                <p className="text-sm font-medium text-red-800 mb-1 flex items-center gap-1">
+                  <MessageSquare className="w-4 h-4" /> Nhận xét:
+                </p>
+                <p className="text-sm text-red-700">{submission.feedback}</p>
               </div>
-              {submission.feedback && (
-                <div className="mt-1 p-3 bg-white/50 rounded-lg">
-                  <p className="text-sm font-medium text-danger-800 mb-1 flex items-center gap-1">
-                    <MessageSquare className="w-4 h-4" /> Nhận xét:
-                  </p>
-                  <p className="text-sm text-danger-700">{submission.feedback}</p>
-                </div>
-              )}
-            </CardBody>
-          </Card>
+            )}
+          </div>
         )}
 
         {/* Waiting for review (SUBMITTED) */}
         {submission && submission.status === SUBMISSION_STATUS.SUBMITTED && (
-          <Card shadow="none" className="bg-primary-50 border border-primary-200">
-            <CardBody className="flex flex-row items-center gap-3">
-              <Clock className="w-5 h-5 text-primary" />
-              <div>
-                <p className="text-sm font-medium text-primary-800">
-                  Đang chờ giáo viên chấm bài
-                </p>
-                <p className="text-xs text-primary-600">
-                  Đã nộp lúc: {dayjs(submission.submittedAt).format("DD/MM/YYYY HH:mm")}
-                </p>
-              </div>
-            </CardBody>
-          </Card>
+          <div className="rounded-xl border border-blue-200 bg-blue-50 p-4 flex flex-row items-center gap-3">
+            <Clock className="w-5 h-5 text-blue-600" />
+            <div>
+              <p className="text-sm font-medium text-blue-800">
+                Đang chờ giáo viên chấm bài
+              </p>
+              <p className="text-xs text-blue-600">
+                Đã nộp lúc: {dayjs(submission.submittedAt).format("DD/MM/YYYY HH:mm")}
+              </p>
+            </div>
+          </div>
         )}
 
         {/* Content */}
         <Textarea
           label="Nội dung bài làm"
           value={content}
-          onValueChange={setContent}
-          minRows={4}
-          isDisabled={!canSubmit}
+          onChange={(e) => setContent(e.target.value)}
+          disabled={!canSubmit}
           placeholder={canSubmit ? "Nhập bài làm của bạn..." : ""}
         />
 
@@ -757,12 +701,12 @@ function StudentSubmissionSection({
         {canSubmit && (
           <div className="flex justify-end">
             <Button
-              color={isResubmit ? "warning" : "primary"}
-              size="lg"
+              variant={isResubmit ? "secondary" : "primary"}
+              size="sm"
               isLoading={loading}
               isDisabled={!content.trim() && attachments.length === 0}
-              onPress={handleSubmit}
-              startContent={!loading && (isResubmit ? <RotateCcw className="w-4 h-4" /> : <Upload className="w-4 h-4" />)}
+              onClick={handleSubmit}
+              leftIcon={!loading ? (isResubmit ? <RotateCcw className="w-4 h-4" /> : <Upload className="w-4 h-4" />) : undefined}
             >
               {isResubmit ? "Nộp lại bài" : "Nộp bài"}
             </Button>
@@ -771,29 +715,25 @@ function StudentSubmissionSection({
 
         {/* Closed notice */}
         {isClosed && !submission && (
-          <Card shadow="none" className="bg-warning-50 border border-warning-200">
-            <CardBody className="flex flex-row items-center gap-3">
-              <Lock className="w-5 h-5 text-warning" />
-              <p className="text-sm text-warning-700">
-                Bài tập đã đóng. Không thể nộp bài.
-              </p>
-            </CardBody>
-          </Card>
+          <div className="rounded-xl border border-amber-200 bg-amber-50 p-4 flex flex-row items-center gap-3">
+            <Lock className="w-5 h-5 text-amber-600" />
+            <p className="text-sm text-amber-700">
+              Bài tập đã đóng. Không thể nộp bài.
+            </p>
+          </div>
         )}
 
         {/* Overdue notice */}
         {!submission && isOverdue && !isClosed && (
-          <Card shadow="none" className="bg-danger-50 border border-danger-200">
-            <CardBody className="flex flex-row items-center gap-3">
-              <AlertCircle className="w-5 h-5 text-danger" />
-              <p className="text-sm text-danger-700">
-                Bài tập đã quá hạn nộp. Vui lòng liên hệ giáo viên nếu cần gia hạn.
-              </p>
-            </CardBody>
-          </Card>
+          <div className="rounded-xl border border-red-200 bg-red-50 p-4 flex flex-row items-center gap-3">
+            <AlertCircle className="w-5 h-5 text-red-600" />
+            <p className="text-sm text-red-700">
+              Bài tập đã quá hạn nộp. Vui lòng liên hệ giáo viên nếu cần gia hạn.
+            </p>
+          </div>
         )}
-      </CardBody>
-    </Card>
+      </div>
+    </div>
   )
 }
 
@@ -802,13 +742,13 @@ function StudentSubmissionSection({
    Filterable tabs + grading actions
    ════════════════════════════════════════════════════ */
 
-const SUBMISSION_FILTER_OPTIONS = [
-  { key: "ALL", label: "Tất cả" },
-  { key: SUBMISSION_STATUS.NOT_SUBMITTED, label: "Chưa nộp" },
-  { key: SUBMISSION_STATUS.SUBMITTED, label: "Đã nộp (chờ chấm)" },
-  { key: SUBMISSION_STATUS.COMPLETED, label: "Hoàn thành" },
-  { key: SUBMISSION_STATUS.REVISION_REQUIRED, label: "Cần sửa lại" },
-  { key: SUBMISSION_STATUS.OVERDUE, label: "Quá hạn" },
+const SUBMISSION_FILTER_OPTIONS: SelectOption[] = [
+  { value: "ALL", label: "Tất cả" },
+  { value: SUBMISSION_STATUS.NOT_SUBMITTED, label: "Chưa nộp" },
+  { value: SUBMISSION_STATUS.SUBMITTED, label: "Đã nộp (chờ chấm)" },
+  { value: SUBMISSION_STATUS.COMPLETED, label: "Hoàn thành" },
+  { value: SUBMISSION_STATUS.REVISION_REQUIRED, label: "Cần sửa lại" },
+  { value: SUBMISSION_STATUS.OVERDUE, label: "Quá hạn" },
 ]
 
 function TeacherSubmissionsSection({
@@ -856,21 +796,17 @@ function TeacherSubmissionsSection({
       {/* Filter bar */}
       <div className="flex items-center gap-3">
         <Select
-          size="sm"
-          selectedKeys={[filter]}
-          onSelectionChange={(keys) => setFilter(Array.from(keys)[0] as string)}
-          className="w-56"
+          value={filter}
+          onChange={(v) => setFilter(v)}
+          options={SUBMISSION_FILTER_OPTIONS}
           label="Lọc bài nộp"
-        >
-          {SUBMISSION_FILTER_OPTIONS.map((opt) => (
-            <SelectItem key={opt.key}>{opt.label}</SelectItem>
-          ))}
-        </Select>
-        <Chip size="sm" variant="flat" color="default">
+          className="w-56"
+        />
+        <Badge size="sm" variant="default">
           {filter === "NOT_SUBMITTED" || filter === "OVERDUE"
             ? `${notSubmitted.length} kết quả`
             : `${filteredSubmissions.length} bài nộp`}
-        </Chip>
+        </Badge>
       </div>
 
       {/* Submissions list */}
@@ -889,18 +825,18 @@ function TeacherSubmissionsSection({
 
       {/* Not submitted list */}
       {showNotSubmitted && notSubmitted.length > 0 && (
-        <Card shadow="sm">
-          <CardHeader>
+        <div className="rounded-xl border border-(--color-smoke) bg-white p-4 shadow-sm">
+          <div className="mb-3 font-semibold">
             <h3 className="text-sm font-semibold flex items-center gap-2">
-              <AlertCircle className="w-4 h-4 text-warning" />
+              <AlertCircle className="w-4 h-4 text-amber-600" />
               Chưa nộp ({notSubmitted.length})
             </h3>
-          </CardHeader>
-          <Divider />
-          <CardBody>
+          </div>
+          <hr className="border-t border-(--color-smoke)" />
+          <div className="mt-4">
             <div className="space-y-2">
               {notSubmitted.map((e) => (
-                <div key={e.studentId} className="flex items-center gap-3 p-3 rounded-lg bg-default-50">
+                <div key={e.studentId} className="flex items-center gap-3 p-3 rounded-lg bg-(--color-paper)">
                   <Avatar
                     src={e.student.image || undefined}
                     name={e.student.name?.charAt(0)}
@@ -908,28 +844,28 @@ function TeacherSubmissionsSection({
                   />
                   <div>
                     <p className="text-sm font-medium">{e.student.name}</p>
-                    <p className="text-xs text-default-400">{e.student.username || e.student.email}</p>
+                    <p className="text-xs text-gray-400">{e.student.username || e.student.email}</p>
                   </div>
-                  <Chip size="sm" color={isOverdue ? "danger" : "warning"} variant="flat" className="ml-auto">
+                  <Badge size="sm" variant={isOverdue ? "danger" : "warning"} className="ml-auto">
                     {isOverdue ? "Quá hạn" : "Chưa nộp"}
-                  </Chip>
+                  </Badge>
                 </div>
               ))}
             </div>
-          </CardBody>
-        </Card>
+          </div>
+        </div>
       )}
 
       {/* Empty states */}
       {filteredSubmissions.length === 0 && !showNotSubmitted && (
-        <div className="text-center py-12 text-default-400">
+        <div className="text-center py-12 text-gray-400">
           <FileText className="w-12 h-12 mx-auto mb-2" />
           <p>Không có bài nộp nào phù hợp bộ lọc</p>
         </div>
       )}
       {filteredSubmissions.length === 0 && filter === "ALL" && notSubmitted.length === 0 && (
-        <div className="text-center py-12 text-default-400">
-          <CheckCircle className="w-12 h-12 mx-auto mb-2 text-success" />
+        <div className="text-center py-12 text-gray-400">
+          <CheckCircle className="w-12 h-12 mx-auto mb-2 text-green-600" />
           <p>Tất cả học viên đã nộp bài</p>
         </div>
       )}
@@ -951,7 +887,7 @@ function SubmissionCard({
   maxScore: number
   onGraded: () => void
 }) {
-  const gradeModal = useDisclosure()
+  const [gradeOpen, setGradeOpen] = useState(false)
   const [score, setScore] = useState(String(submission.score ?? ""))
   const [feedback, setFeedback] = useState(submission.feedback || "")
   const [loading, setLoading] = useState(false)
@@ -977,7 +913,7 @@ function SubmissionCard({
         })
         if (!result.success) throw new Error(result.error)
         toast.success("Đã hoàn thành chấm bài!")
-        gradeModal.onClose()
+        setGradeOpen(false)
         onGraded()
       } catch (err) {
         toast.error(err instanceof Error ? err.message : "Có lỗi xảy ra")
@@ -994,7 +930,7 @@ function SubmissionCard({
         })
         if (!result.success) throw new Error(result.error)
         toast.success("Đã yêu cầu học viên sửa lại!")
-        gradeModal.onClose()
+        setGradeOpen(false)
         onGraded()
       } catch (err) {
         toast.error(err instanceof Error ? err.message : "Có lỗi xảy ra")
@@ -1005,167 +941,156 @@ function SubmissionCard({
   }
 
   return (
-    <Card shadow="sm" className="border border-default-200">
-      <CardBody className="gap-3">
-        {/* Student info */}
-        <div className="flex items-center justify-between">
-          <div className="flex items-center gap-3">
-            <Avatar
-              src={submission.student.image || undefined}
-              name={submission.student.name?.charAt(0)}
-              size="sm"
-            />
-            <div>
-              <p className="text-sm font-medium">{submission.student.name}</p>
-              <p className="text-xs text-default-400">
-                Nộp lúc: {dayjs(submission.submittedAt).format("DD/MM/YYYY HH:mm")}
-                {" · "}
-                {dayjs(submission.submittedAt).fromNow()}
-              </p>
-            </div>
-          </div>
-          <div className="flex items-center gap-2">
-            <Chip
-              size="sm"
-              color={SUBMISSION_STATUS_CONFIG[submission.status]?.color ?? "default"}
-              variant="flat"
-            >
-              {SUBMISSION_STATUS_CONFIG[submission.status]?.label ?? submission.status}
-            </Chip>
-            {isCompleted && submission.score != null && (
-              <Chip size="sm" color="success" variant="solid">
-                {submission.score}/{maxScore}
-              </Chip>
-            )}
+    <div className="rounded-xl border border-(--color-smoke) bg-white p-4 shadow-sm gap-3 flex flex-col">
+      {/* Student info */}
+      <div className="flex items-center justify-between">
+        <div className="flex items-center gap-3">
+          <Avatar
+            src={submission.student.image || undefined}
+            name={submission.student.name?.charAt(0)}
+            size="sm"
+          />
+          <div>
+            <p className="text-sm font-medium">{submission.student.name}</p>
+            <p className="text-xs text-gray-400">
+              Nộp lúc: {dayjs(submission.submittedAt).format("DD/MM/YYYY HH:mm")}
+              {" · "}
+              {dayjs(submission.submittedAt).fromNow()}
+            </p>
           </div>
         </div>
+        <div className="flex items-center gap-2">
+          <Badge
+            size="sm"
+            variant={SUBMISSION_STATUS_CONFIG[submission.status]?.variant ?? "default"}
+          >
+            {SUBMISSION_STATUS_CONFIG[submission.status]?.label ?? submission.status}
+          </Badge>
+          {isCompleted && submission.score != null && (
+            <Badge size="sm" variant="success">
+              {submission.score}/{maxScore}
+            </Badge>
+          )}
+        </div>
+      </div>
 
-        {/* Content */}
-        {submission.content && (
-          <div className="p-3 bg-default-50 rounded-lg text-sm whitespace-pre-wrap">
-            {submission.content}
-          </div>
-        )}
+      {/* Content */}
+      {submission.content && (
+        <div className="p-3 bg-(--color-paper) rounded-lg text-sm whitespace-pre-wrap">
+          {submission.content}
+        </div>
+      )}
 
-        {/* Attachments */}
-        {submission.attachments.length > 0 && (
-          <FilePreviewList
-            urls={submission.attachments}
-            title="File đính kèm"
-            showPreview
-          />
-        )}
+      {/* Attachments */}
+      {submission.attachments.length > 0 && (
+        <FilePreviewList
+          urls={submission.attachments}
+          title="File đính kèm"
+          showPreview
+        />
+      )}
 
-        {/* Feedback display (when completed or revision required) */}
-        {(isCompleted || isRevisionRequired) && submission.feedback && (
-          <div className={`p-3 rounded-lg border ${isCompleted ? "bg-success-50 border-success-200" : "bg-danger-50 border-danger-200"}`}>
-            <p className={`text-xs font-medium mb-1 ${isCompleted ? "text-success-700" : "text-danger-700"}`}>
-              Nhận xét:
-            </p>
-            <p className={`text-sm ${isCompleted ? "text-success-700" : "text-danger-700"}`}>
-              {submission.feedback}
-            </p>
-          </div>
-        )}
+      {/* Feedback display (when completed or revision required) */}
+      {(isCompleted || isRevisionRequired) && submission.feedback && (
+        <div className={`p-3 rounded-lg border ${isCompleted ? "bg-green-50 border-green-200" : "bg-red-50 border-red-200"}`}>
+          <p className={`text-xs font-medium mb-1 ${isCompleted ? "text-green-700" : "text-red-700"}`}>
+            Nhận xét:
+          </p>
+          <p className={`text-sm ${isCompleted ? "text-green-700" : "text-red-700"}`}>
+            {submission.feedback}
+          </p>
+        </div>
+      )}
 
-        {/* Grade / Return buttons */}
-        {!gradeModal.isOpen ? (
-          <div className="flex justify-end gap-2">
-            {isPending && (
-              <>
-                <Button
-                  size="sm"
-                  color="warning"
-                  variant="flat"
-                  startContent={<RotateCcw className="w-4 h-4" />}
-                  onPress={gradeModal.onOpen}
-                >
-                  Yêu cầu sửa lại
-                </Button>
-                <Button
-                  size="sm"
-                  color="primary"
-                  startContent={<CheckCircle className="w-4 h-4" />}
-                  onPress={gradeModal.onOpen}
-                >
-                  Chấm điểm
-                </Button>
-              </>
-            )}
-            {isCompleted && (
+      {/* Grade / Return buttons */}
+      {!gradeOpen ? (
+        <div className="flex justify-end gap-2">
+          {isPending && (
+            <>
               <Button
                 size="sm"
-                color="default"
-                variant="flat"
-                startContent={<Star className="w-4 h-4" />}
-                onPress={gradeModal.onOpen}
+                variant="secondary"
+                leftIcon={<RotateCcw className="w-4 h-4" />}
+                onClick={() => setGradeOpen(true)}
               >
-                Chấm lại
+                Yêu cầu sửa lại
               </Button>
-            )}
-            {isRevisionRequired && (
               <Button
                 size="sm"
-                color="default"
-                variant="flat"
-                startContent={<Clock className="w-4 h-4" />}
-                isDisabled
+                variant="primary"
+                leftIcon={<CheckCircle className="w-4 h-4" />}
+                onClick={() => setGradeOpen(true)}
               >
-                Đang chờ nộp lại
+                Chấm điểm
               </Button>
-            )}
-          </div>
-        ) : (
-          <>
-            <Divider />
-            <div className="space-y-3 p-3 bg-primary-50 rounded-lg border border-primary-200">
-              <p className="text-sm font-medium text-primary-800">Chấm điểm / Yêu cầu sửa lại</p>
-              <Input
-                type="number"
-                label={`Điểm (0 - ${maxScore})`}
-                value={score}
-                onValueChange={setScore}
-                min={0}
-                max={maxScore}
+            </>
+          )}
+          {isCompleted && (
+            <Button
+              size="sm"
+              variant="ghost"
+              leftIcon={<Star className="w-4 h-4" />}
+              onClick={() => setGradeOpen(true)}
+            >
+              Chấm lại
+            </Button>
+          )}
+          {isRevisionRequired && (
+            <Button
+              size="sm"
+              variant="ghost"
+              leftIcon={<Clock className="w-4 h-4" />}
+              isDisabled
+            >
+              Đang chờ nộp lại
+            </Button>
+          )}
+        </div>
+      ) : (
+        <>
+          <hr className="border-t border-(--color-smoke)" />
+          <div className="space-y-3 p-3 bg-blue-50 rounded-lg border border-blue-200">
+            <p className="text-sm font-medium text-blue-800">Chấm điểm / Yêu cầu sửa lại</p>
+            <Input
+              type="number"
+              label={`Điểm (0 - ${maxScore})`}
+              value={score}
+              onChange={(e) => setScore(e.target.value)}
+              min={0}
+              max={maxScore}
+            />
+            <Textarea
+              label="Nhận xét"
+              value={feedback}
+              onChange={(e) => setFeedback(e.target.value)}
+              placeholder="Nhận xét bài làm của học viên..."
+            />
+            <div className="flex justify-end gap-2">
+              <Button size="sm" variant="ghost" onClick={() => setGradeOpen(false)}>
+                Hủy
+              </Button>
+              <Button
                 size="sm"
-              />
-              <Textarea
-                label="Nhận xét"
-                value={feedback}
-                onValueChange={setFeedback}
-                minRows={2}
+                variant="secondary"
+                isLoading={loading}
+                onClick={() => handleGrade("REVISION_REQUIRED")}
+                leftIcon={!loading ? <RotateCcw className="w-4 h-4" /> : undefined}
+              >
+                Yêu cầu sửa lại
+              </Button>
+              <Button
                 size="sm"
-                placeholder="Nhận xét bài làm của học viên..."
-              />
-              <div className="flex justify-end gap-2">
-                <Button size="sm" variant="flat" onPress={gradeModal.onClose}>
-                  Hủy
-                </Button>
-                <Button
-                  size="sm"
-                  color="warning"
-                  variant="flat"
-                  isLoading={loading}
-                  onPress={() => handleGrade("REVISION_REQUIRED")}
-                  startContent={!loading && <RotateCcw className="w-4 h-4" />}
-                >
-                  Yêu cầu sửa lại
-                </Button>
-                <Button
-                  size="sm"
-                  color="primary"
-                  isLoading={loading}
-                  onPress={() => handleGrade("COMPLETED")}
-                  startContent={!loading && <CheckCircle className="w-4 h-4" />}
-                >
-                  Hoàn thành
-                </Button>
-              </div>
+                variant="primary"
+                isLoading={loading}
+                onClick={() => handleGrade("COMPLETED")}
+                leftIcon={!loading ? <CheckCircle className="w-4 h-4" /> : undefined}
+              >
+                Hoàn thành
+              </Button>
             </div>
-          </>
-        )}
-      </CardBody>
-    </Card>
+          </div>
+        </>
+      )}
+    </div>
   )
 }
-

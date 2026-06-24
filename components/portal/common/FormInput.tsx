@@ -39,10 +39,12 @@ export const FormInput = forwardRef<HTMLInputElement, FormInputProps>((
     validationBehavior: _vb,
     leftIcon,
     rightIcon,
+    size: _htmlSize, // HTML size (number) — consumed to prevent type clash with ui/Input size
     ...props
   },
   ref
 ) => {
+  void _htmlSize;
   // Bridge isInvalid + errorMessage → error string
   //   triggers the error border style without visible text when isInvalid but no message
   const derivedError = error ?? (isInvalid ? (errorMessage ?? " ") : undefined);

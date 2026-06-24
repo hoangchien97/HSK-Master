@@ -8,6 +8,7 @@ export { Spinner } from "./primitives/Spinner";
 export { Skeleton, SkeletonText } from "./primitives/Skeleton";
 export { Progress } from "./primitives/Progress";
 export { Chip } from "./primitives/Chip";
+export { OptimizedImage } from "./primitives/OptimizedImage";
 
 // Forms
 export { Label } from "./forms/Label";

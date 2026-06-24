@@ -1,7 +1,7 @@
 "use client"
 
 import { useState, useEffect, useCallback, useRef } from "react"
-import { Button, Card, CardBody, Chip, Progress, Switch } from "@heroui/react"
+import { Button, Badge, Progress, Switch } from "@/components/ui"
 import { ChevronLeft, ChevronRight } from "lucide-react"
 import {
   startPracticeSessionAction,
@@ -184,7 +184,9 @@ export default function WriteTab({ vocabularies, lessonId, onProgressUpdate, isC
 
   if (totalItems === 0) {
     return (
-      <Card><CardBody className="py-12 text-center"><p className="text-default-500">{L.empty.noWriteVocab}</p></CardBody></Card>
+      <div className="rounded-xl border border-(--color-smoke) bg-white p-4 shadow-sm">
+        <div className="py-12 text-center"><p className="text-(--color-muted)">{L.empty.noWriteVocab}</p></div>
+      </div>
     )
   }
 
@@ -221,11 +223,10 @@ export default function WriteTab({ vocabularies, lessonId, onProgressUpdate, isC
         </span>
         <div className="flex items-center gap-3">
           <div className="flex items-center gap-1.5">
-            <span className="text-xs text-default-400">{L.nav.shuffle}</span>
+            <span className="text-xs text-gray-400">{L.nav.shuffle}</span>
             <Switch
-              size="sm"
-              isSelected={shuffled}
-              onValueChange={(val) => {
+              checked={shuffled}
+              onChange={(val) => {
                 setShuffled(val)
                 setCurrentIdx(0)
                 setItems(val ? shuffleArray([...vocabularies]) : [...vocabularies])
@@ -233,15 +234,15 @@ export default function WriteTab({ vocabularies, lessonId, onProgressUpdate, isC
             />
           </div>
           {mode === WriteMode.TYPE_PINYIN && (
-            <Chip size="sm" variant="flat" color="primary">{L.write.typePinyinChip}</Chip>
+            <Badge size="sm" variant="primary">{L.write.typePinyinChip}</Badge>
           )}
           {mode === WriteMode.PRACTICE && (
-            <Chip size="sm" variant="flat" color="primary">{L.write.practiceWriteChip}</Chip>
+            <Badge size="sm" variant="primary">{L.write.practiceWriteChip}</Badge>
           )}
         </div>
       </div>
 
-      <Progress value={((currentIdx + 1) / totalItems) * 100} size="sm" color="primary" className="mb-4" aria-label="write progress" />
+      <Progress value={((currentIdx + 1) / totalItems) * 100} size="sm" variant="default" className="mb-4" />
 
       {/* Mode content */}
       {mode === WriteMode.ANIMATION && (
@@ -279,23 +280,23 @@ export default function WriteTab({ vocabularies, lessonId, onProgressUpdate, isC
       {/* Prev/Next Navigation */}
       <div className="flex items-center justify-between mt-4">
         <Button
-          variant="bordered"
+          variant="secondary"
           size="sm"
           isDisabled={currentIdx === 0}
-          onPress={goPrev}
-          startContent={<ChevronLeft className="w-4 h-4" />}
+          onClick={goPrev}
+          leftIcon={<ChevronLeft className="w-4 h-4" />}
         >
           {L.nav.prev}
         </Button>
-        <span className="text-xs text-default-400">
+        <span className="text-xs text-gray-400">
           {currentIdx + 1}/{totalItems}
         </span>
         <Button
-          variant="bordered"
+          variant="secondary"
           size="sm"
           isDisabled={currentIdx >= totalItems - 1}
-          onPress={goNext}
-          endContent={<ChevronRight className="w-4 h-4" />}
+          onClick={goNext}
+          rightIcon={<ChevronRight className="w-4 h-4" />}
         >
           {L.nav.next}
         </Button>

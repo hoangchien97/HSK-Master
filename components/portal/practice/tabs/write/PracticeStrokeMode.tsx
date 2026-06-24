@@ -1,7 +1,7 @@
 "use client"
 
 import { useState, useEffect, useCallback, useRef } from "react"
-import { Button, Card, CardBody } from "@heroui/react"
+import { Button } from "@/components/ui"
 import { CheckCircle, XCircle, SkipForward, RotateCcw, Volume2 } from "lucide-react"
 import { useSpeech } from "@/hooks/useSpeech"
 import { getDisplayMeaning } from "@/enums/portal/common"
@@ -95,41 +95,41 @@ export default function PracticeStrokeMode({ item, currentIdx, totalItems, onCom
   return (
     <>
       {/* Prompt */}
-      <Card className="mb-4">
-        <CardBody className="p-4 sm:p-6 text-center">
-          <p className="text-sm text-default-400 mb-1">Luyện viết theo nét</p>
-          <p className="text-primary text-sm mb-1">{item.pinyin}</p>
-          <p className="text-default-500 text-sm">{getDisplayMeaning(item)}</p>
+      <div className="rounded-xl border border-(--color-smoke) bg-white p-4 shadow-sm mb-4">
+        <div className="p-4 sm:p-6 text-center">
+          <p className="text-sm text-gray-400 mb-1">Luyện viết theo nét</p>
+          <p className="text-(--color-vermillion) text-sm mb-1">{item.pinyin}</p>
+          <p className="text-(--color-muted) text-sm">{getDisplayMeaning(item)}</p>
           <button
             onClick={() => speak(item.word)}
-            className="mt-2 p-2 rounded-full bg-primary-100 dark:bg-primary-900/30 text-primary hover:bg-primary-200 transition mx-auto inline-flex"
+            className="mt-2 p-2 rounded-full bg-red-100 dark:bg-red-900/30 text-(--color-vermillion) hover:bg-red-200 transition mx-auto inline-flex"
             aria-label="Nghe phát âm"
           >
             <Volume2 className="w-4 h-4" />
           </button>
-        </CardBody>
-      </Card>
+        </div>
+      </div>
 
       {/* Stroke canvas */}
-      <Card className="mb-4">
-        <CardBody className="flex flex-col items-center p-4">
+      <div className="rounded-xl border border-(--color-smoke) bg-white p-4 shadow-sm mb-4">
+        <div className="flex flex-col items-center p-4">
           <div
             ref={containerRef}
-            className="border-2 border-dashed border-default-200 rounded-xl bg-default-50 mx-auto"
+            className="border-2 border-dashed border-(--color-smoke) rounded-xl bg-(--color-paper) mx-auto"
             style={{ width: HANZI_WRITER.CANVAS_SIZE, maxWidth: "100%", aspectRatio: "1/1", touchAction: "none" }}
           />
 
           {strokeComplete && (
             <div className="mt-3 text-center">
               {strokeMistakes <= 2 ? (
-                <div className="flex items-center gap-2 text-success justify-center">
+                <div className="flex items-center gap-2 text-green-600 justify-center">
                   <CheckCircle className="w-5 h-5" />
                   <span className="font-medium">
                     {strokeMistakes === 0 ? "Hoàn hảo!" : `Tốt! (${strokeMistakes} lỗi)`}
                   </span>
                 </div>
               ) : (
-                <div className="flex items-center gap-2 text-warning justify-center">
+                <div className="flex items-center gap-2 text-amber-600 justify-center">
                   <XCircle className="w-5 h-5" />
                   <span className="font-medium">{strokeMistakes} lỗi — Luyện thêm nhé</span>
                 </div>
@@ -137,14 +137,13 @@ export default function PracticeStrokeMode({ item, currentIdx, totalItems, onCom
               <div className="flex items-center gap-2 mt-2 justify-center">
                 <Button
                   size="sm"
-                  color="secondary"
-                  variant="bordered"
-                  onPress={handleRetry}
-                  startContent={<RotateCcw className="w-3.5 h-3.5" />}
+                  variant="secondary"
+                  onClick={handleRetry}
+                  leftIcon={<RotateCcw className="w-3.5 h-3.5" />}
                 >
                   Thử lại
                 </Button>
-                <Button size="sm" color="primary" onPress={handleNext}>
+                <Button size="sm" variant="primary" onClick={handleNext}>
                   {currentIdx < totalItems - 1 ? "Từ tiếp theo" : "Xem kết quả"}
                 </Button>
               </div>
@@ -154,16 +153,16 @@ export default function PracticeStrokeMode({ item, currentIdx, totalItems, onCom
           {!strokeComplete && (
             <Button
               size="sm"
-              variant="light"
+              variant="ghost"
               className="mt-2"
-              onPress={onSkip}
-              startContent={<SkipForward className="w-3.5 h-3.5" />}
+              onClick={onSkip}
+              leftIcon={<SkipForward className="w-3.5 h-3.5" />}
             >
               Bỏ qua
             </Button>
           )}
-        </CardBody>
-      </Card>
+        </div>
+      </div>
     </>
   )
 }

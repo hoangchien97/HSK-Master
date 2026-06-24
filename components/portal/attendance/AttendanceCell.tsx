@@ -1,14 +1,10 @@
 "use client";
 
 import { memo } from "react";
-import {
-  Button,
-  Tooltip,
-  Popover,
-  PopoverTrigger,
-  PopoverContent,
-  Textarea,
-} from "@heroui/react";
+import { Tooltip } from "@/components/ui";
+import { Popover } from "@/components/ui";
+import { Button } from "@/components/ui";
+import { Textarea } from "@/components/ui";
 import { Check, X, StickyNote } from "lucide-react";
 
 /* ───────────────── Types ───────────────── */
@@ -75,7 +71,7 @@ function AttendanceCell({
         <div className="relative">
           <div className="flex items-center justify-center gap-1.5">
             {/* PRESENT button */}
-            <Tooltip content="Có mặt" placement="top" delay={300}>
+            <Tooltip content="Có mặt" placement="top" delayMs={300}>
               <button
                 type="button"
                 onClick={() => onStatusChange(studentId, date, "PRESENT")}
@@ -92,7 +88,7 @@ function AttendanceCell({
             </Tooltip>
 
             {/* ABSENT button */}
-            <Tooltip content="Vắng" placement="top" delay={300}>
+            <Tooltip content="Vắng" placement="top" delayMs={300}>
               <button
                 type="button"
                 onClick={() => onStatusChange(studentId, date, "ABSENT")}
@@ -118,9 +114,9 @@ function AttendanceCell({
                   onNotePopoverClose();
                 }
               }}
-              placement="bottom-start"
-            >
-              <PopoverTrigger>
+              side="bottom"
+              align="start"
+              trigger={
                 <button
                   type="button"
                   className={`w-4 h-4 flex items-center justify-center rounded transition-colors ${
@@ -132,27 +128,26 @@ function AttendanceCell({
                 >
                   <StickyNote className="w-3 h-3 cursor-pointer" />
                 </button>
-              </PopoverTrigger>
-              <PopoverContent className="p-3 w-64">
-                <div className="space-y-2">
-                  <p className="text-sm font-medium">Ghi chú</p>
-                  <Textarea
-                    size="sm"
-                    placeholder="Nhập ghi chú..."
-                    value={noteText}
-                    onValueChange={onNoteTextChange}
-                    minRows={2}
-                  />
-                  <Button
-                    size="sm"
-                    color="primary"
-                    className="w-full"
-                    onPress={() => onNoteSave(studentId, date, noteText)}
-                  >
-                    Lưu ghi chú
-                  </Button>
-                </div>
-              </PopoverContent>
+              }
+            >
+              <div className="space-y-2">
+                <p className="text-sm font-medium">Ghi chú</p>
+                <Textarea
+                  placeholder="Nhập ghi chú..."
+                  value={noteText}
+                  onChange={(e) => onNoteTextChange(e.target.value)}
+                  rows={2}
+                  className="text-sm"
+                />
+                <Button
+                  size="sm"
+                  variant="primary"
+                  className="w-full"
+                  onClick={() => onNoteSave(studentId, date, noteText)}
+                >
+                  Lưu ghi chú
+                </Button>
+              </div>
             </Popover>
           </div>
         </div>
@@ -203,13 +198,13 @@ function AttendanceCell({
                 : "Chưa điểm danh"
           }
           placement="top"
-          delay={300}
+          delayMs={300}
         >
           <span className="cursor-default">{renderPastIcon()}</span>
         </Tooltip>
         {
           note && (
-            <Tooltip content={note} placement="bottom" delay={300}>
+            <Tooltip content={note} placement="bottom" delayMs={300}>
               <StickyNote className="absolute -bottom-1.5 right-[4px] w-3 h-3 text-amber-500 cursor-default" />
             </Tooltip>
           )

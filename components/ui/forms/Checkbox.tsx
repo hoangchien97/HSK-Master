@@ -9,16 +9,19 @@ interface CheckboxProps
   label?: string;
   description?: string;
   error?: string;
+  size?: string;
 }
 
 export function Checkbox({
   label,
   description,
   error,
+  size: _size,
   className,
   id,
   ...props
 }: CheckboxProps) {
+  void _size;
   const inputId =
     id ?? `checkbox-${label?.toLowerCase().replace(/\s+/g, "-")}`;
 

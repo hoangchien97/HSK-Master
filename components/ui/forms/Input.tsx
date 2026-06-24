@@ -5,14 +5,25 @@ import { cn } from "@/lib/utils";
 import type { InputHTMLAttributes, ReactNode } from "react";
 import { Label } from "./Label";
 
-interface InputProps extends InputHTMLAttributes<HTMLInputElement> {
+interface InputProps extends Omit<InputHTMLAttributes<HTMLInputElement>, "size"> {
   label?: string;
   error?: string;
   hint?: string;
+  helperText?: string;
   leftIcon?: ReactNode;
   rightIcon?: ReactNode;
   wrapperClassName?: string;
+  // Landing compat aliases
+  icon?: ReactNode;
+  size?: "sm" | "md" | "lg";
+  variant?: string;
 }
+
+const sizeClasses = {
+  sm: "h-8 text-xs",
+  md: "h-10 text-sm",
+  lg: "h-12 text-base",
+};
 
 export const Input = forwardRef<HTMLInputElement, InputProps>(
   (
@@ -20,8 +31,12 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(
       label,
       error,
       hint,
+      helperText,
       leftIcon,
       rightIcon,
+      icon,
+      size = "md",
+      variant: _variant, // consumed here — prevents spreading to native <input>
       type = "text",
       wrapperClassName,
       className,
@@ -32,9 +47,12 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(
     ref
   ) => {
     const [showPwd, setShowPwd] = useState(false);
+    void _variant; // consumed to prevent leaking to native <input>
+    const resolvedHint = hint ?? helperText;
     const isPassword = type === "password";
     const inputType = isPassword ? (showPwd ? "text" : "password") : type;
     const inputId = id ?? label?.toLowerCase().replace(/\s+/g, "-");
+    const resolvedLeft = leftIcon ?? icon;
 
     return (
       <div className={cn("w-full", wrapperClassName)}>
@@ -45,15 +63,16 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(
         )}
         <div
           className={cn(
-            "flex items-center h-10 w-full rounded-sm border bg-white px-3 text-sm transition-colors",
+            "flex items-center w-full rounded-sm border bg-white px-3 transition-colors",
+            sizeClasses[size],
             "border-(--color-smoke) focus-within:border-(--color-vermillion) focus-within:ring-1 focus-within:ring-(--color-vermillion)",
             error &&
               "border-red-500 focus-within:border-red-500 focus-within:ring-red-500"
           )}
         >
-          {leftIcon && (
+          {resolvedLeft && (
             <span className="mr-2 text-muted-foreground shrink-0">
-              {leftIcon}
+              {resolvedLeft}
             </span>
           )}
           <input
@@ -69,7 +88,7 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(
             aria-describedby={
               error
                 ? `${inputId}-error`
-                : hint
+                : resolvedHint
                   ? `${inputId}-hint`
                   : undefined
             }
@@ -95,12 +114,12 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(
             {error}
           </p>
         )}
-        {!error && hint && (
+        {!error && resolvedHint && (
           <p
             id={`${inputId}-hint`}
             className="mt-1 text-xs text-muted-foreground"
           >
-            {hint}
+            {resolvedHint}
           </p>
         )}
       </div>

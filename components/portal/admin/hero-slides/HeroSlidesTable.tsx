@@ -1,17 +1,8 @@
 "use client";
 
 import { useState, useEffect, useCallback, useMemo } from "react";
-import {
-  Button,
-  Chip,
-  useDisclosure,
-  Dropdown,
-  DropdownTrigger,
-  DropdownMenu,
-  DropdownItem,
-  Input,
-} from "@heroui/react";
-import { Plus, Edit2, Trash2, MoreVertical, Image, Search } from "lucide-react";
+import { Button, Badge, Dropdown } from "@/components/ui";
+import { Plus, Edit2, Trash2, MoreVertical, Image, Search, X } from "lucide-react";
 import { toast } from "react-toastify";
 import { useRouter, useSearchParams, usePathname } from "next/navigation";
 import type { IHeroSlide, IGetHeroSlideResponse } from "@/interfaces/portal";
@@ -37,10 +28,10 @@ export default function HeroSlidesTable() {
   const [data, setData] = useState<IGetHeroSlideResponse>({ items: [], total: 0 });
   const [isLoading, setIsLoading] = useState(true);
 
-  const createModal = useDisclosure();
-  const editModal = useDisclosure();
-  const deleteModal = useDisclosure();
-  const previewModal = useDisclosure();
+  const [isCreateOpen, setIsCreateOpen] = useState(false);
+  const [isEditOpen, setIsEditOpen] = useState(false);
+  const [isDeleteOpen, setIsDeleteOpen] = useState(false);
+  const [isPreviewOpen, setIsPreviewOpen] = useState(false);
   const [selected, setSelected] = useState<IHeroSlide | null>(null);
   const [previewUrl, setPreviewUrl] = useState("");
 
@@ -105,13 +96,13 @@ export default function HeroSlidesTable() {
 
   const handleEdit = useCallback((item: IHeroSlide) => {
     setSelected(item);
-    editModal.onOpen();
-  }, [editModal]);
+    setIsEditOpen(true);
+  }, []);
 
   const handleDelete = useCallback((item: IHeroSlide) => {
     setSelected(item);
-    deleteModal.onOpen();
-  }, [deleteModal]);
+    setIsDeleteOpen(true);
+  }, []);
 
   const columns: CTableColumn<IHeroSlide & Record<string, unknown>>[] = useMemo(() => [
     {
@@ -120,7 +111,7 @@ export default function HeroSlidesTable() {
       align: "center" as const,
       headerClassName: "w-[50px]",
       render: (_v: unknown, _row: unknown, index: number) => (
-        <span className="text-sm text-default-500">{(urlPage - 1) * urlPageSize + index + 1}</span>
+        <span className="text-sm text-(--color-muted)">{(urlPage - 1) * urlPageSize + index + 1}</span>
       ),
     },
     {
@@ -132,7 +123,7 @@ export default function HeroSlidesTable() {
           className="w-16 h-10 rounded-lg overflow-hidden bg-gray-100 cursor-pointer hover:opacity-80 transition-opacity"
           onClick={() => {
             setPreviewUrl(row.image);
-            previewModal.onOpen();
+            setIsPreviewOpen(true);
           }}
         >
           <img src={row.image} alt={row.title} className="w-full h-full object-cover" />
@@ -146,7 +137,7 @@ export default function HeroSlidesTable() {
       render: (_v: unknown, row: IHeroSlide) => (
         <div className="max-w-[200px]">
           <p className="font-semibold text-sm truncate">{row.title}</p>
-          <p className="text-xs text-default-400 truncate">{row.badge}</p>
+          <p className="text-xs text-gray-400 truncate">{row.badge}</p>
         </div>
       ),
     },
@@ -157,7 +148,7 @@ export default function HeroSlidesTable() {
       sortable: true,
       headerClassName: "w-[80px]",
       render: (_v: unknown, row: IHeroSlide) => (
-        <Chip size="sm" variant="flat">{row.order}</Chip>
+        <Badge size="sm">{row.order}</Badge>
       ),
     },
     {
@@ -165,9 +156,9 @@ export default function HeroSlidesTable() {
       label: "Trạng thái",
       headerClassName: "w-[100px]",
       render: (_v: unknown, row: IHeroSlide) => (
-        <Chip size="sm" color={row.isActive ? "success" : "default"} variant="flat">
+        <Badge size="sm" variant={row.isActive ? "success" : undefined}>
           {row.isActive ? "Hiển thị" : "Ẩn"}
-        </Chip>
+        </Badge>
       ),
     },
     {
@@ -176,19 +167,17 @@ export default function HeroSlidesTable() {
       align: "end" as const,
       headerClassName: "w-[60px]",
       render: (_v: unknown, row: IHeroSlide) => (
-        <Dropdown>
-          <DropdownTrigger>
-            <Button isIconOnly size="sm" variant="light"><MoreVertical className="w-4 h-4" /></Button>
-          </DropdownTrigger>
-          <DropdownMenu aria-label="Thao tác">
-            <DropdownItem key="edit" startContent={<Edit2 className="w-4 h-4" />} onPress={() => handleEdit(row)}>
-              Chỉnh sửa
-            </DropdownItem>
-            <DropdownItem key="delete" startContent={<Trash2 className="w-4 h-4" />} className="text-danger" color="danger" onPress={() => handleDelete(row)}>
-              Xóa
-            </DropdownItem>
-          </DropdownMenu>
-        </Dropdown>
+        <Dropdown
+          trigger={
+            <button type="button" className="p-1.5 rounded-md hover:bg-(--color-smoke) text-(--color-ink) transition-colors">
+              <MoreVertical className="w-4 h-4" />
+            </button>
+          }
+          items={[
+            { label: "Chỉnh sửa", icon: <Edit2 className="w-4 h-4" />, onClick: () => handleEdit(row) },
+            { label: "Xóa", icon: <Trash2 className="w-4 h-4" />, onClick: () => handleDelete(row) },
+          ]}
+        />
       ),
     },
   ], [urlPage, urlPageSize, handleEdit, handleDelete]);
@@ -214,43 +203,52 @@ export default function HeroSlidesTable() {
           description: "Tạo slide mới để bắt đầu",
         }}
         actions={
-          <Button color="primary" size="sm" startContent={<Plus className="w-4 h-4" />} onPress={createModal.onOpen}>
+          <Button variant="primary" size="sm" leftIcon={<Plus className="w-4 h-4" />} onClick={() => setIsCreateOpen(true)}>
             Thêm slide
           </Button>
         }
         toolbar={
           <div className="rounded-xl bg-white border border-gray-200 px-4 py-3 shadow-sm">
-            <Input
-              isClearable
-              className="w-full sm:max-w-xs"
-              placeholder="Tìm kiếm slide..."
-              startContent={<Search className="w-4 h-4 text-default-400" />}
-              value={search}
-              onValueChange={setSearch}
-              onClear={() => setSearch("")}
-              size="sm"
-            />
+            <div className="relative w-full sm:max-w-xs">
+              <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-(--color-muted) pointer-events-none" />
+              <input
+                type="text"
+                placeholder="Tìm kiếm slide..."
+                value={search}
+                onChange={(e) => setSearch(e.target.value)}
+                className="h-9 w-full pl-9 pr-8 rounded-md border border-(--color-smoke) bg-white text-sm text-(--color-ink) placeholder:text-(--color-muted) focus:outline-none focus:ring-2 focus:ring-(--color-vermillion) focus:border-(--color-vermillion)"
+              />
+              {search && (
+                <button
+                  type="button"
+                  onClick={() => setSearch("")}
+                  className="absolute right-2 top-1/2 -translate-y-1/2 text-(--color-muted) hover:text-(--color-ink) transition-colors"
+                >
+                  <X className="w-3.5 h-3.5" />
+                </button>
+              )}
+            </div>
           </div>
         }
       />
 
       <HeroSlideFormModal
-        isOpen={createModal.isOpen}
-        onClose={createModal.onClose}
+        isOpen={isCreateOpen}
+        onClose={() => setIsCreateOpen(false)}
         onSuccess={handleCreateSuccess}
       />
       {selected && (
         <HeroSlideFormModal
-          isOpen={editModal.isOpen}
-          onClose={() => { editModal.onClose(); setSelected(null); }}
+          isOpen={isEditOpen}
+          onClose={() => { setIsEditOpen(false); setSelected(null); }}
           onSuccess={handleUpdateSuccess}
           initialData={selected}
         />
       )}
       {selected && (
         <DeleteConfirmModal
-          isOpen={deleteModal.isOpen}
-          onClose={() => { deleteModal.onClose(); setSelected(null); }}
+          isOpen={isDeleteOpen}
+          onClose={() => { setIsDeleteOpen(false); setSelected(null); }}
           onSuccess={handleDeleteSuccess}
           itemId={selected.id}
           itemName={selected.title}
@@ -259,8 +257,8 @@ export default function HeroSlidesTable() {
         />
       )}
       <ImagePreviewModal
-        isOpen={previewModal.isOpen}
-        onOpenChange={previewModal.onOpenChange}
+        isOpen={isPreviewOpen}
+        onOpenChange={() => setIsPreviewOpen(false)}
         url={previewUrl}
       />
     </>

@@ -2,7 +2,7 @@
 
 import Link from "next/link"
 import { useRouter, usePathname } from "next/navigation"
-import { Button } from "@heroui/react"
+import { Button } from "@/components/ui"
 import { Home, ArrowLeft, Search } from "lucide-react"
 
 export default function RoleNotFound() {
@@ -39,20 +39,17 @@ export default function RoleNotFound() {
 
         <div className="flex gap-3 justify-center">
           <Button
-            variant="bordered"
-            startContent={<ArrowLeft className="w-4 h-4" />}
-            onPress={() => router.back()}
+            variant="secondary"
+            leftIcon={<ArrowLeft className="w-4 h-4" />}
+            onClick={() => router.back()}
           >
             Quay lại
           </Button>
-          <Button
-            as={Link}
-            href={dashboardHref}
-            color="primary"
-            startContent={<Home className="w-4 h-4" />}
-          >
-            Bảng điều khiển
-          </Button>
+          <Link href={dashboardHref}>
+            <Button variant="primary" leftIcon={<Home className="w-4 h-4" />}>
+              Bảng điều khiển
+            </Button>
+          </Link>
         </div>
 
         <p className="mt-8 text-xs text-gray-400">

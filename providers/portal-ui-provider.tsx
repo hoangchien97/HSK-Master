@@ -39,16 +39,23 @@ const PortalUIContext = createContext<PortalUIContextValue | undefined>(undefine
 
 export function PortalUIProvider({ children }: { children: ReactNode }) {
   const pathname = usePathname()
-  const [count, setCount] = useState(0)
+  const loadingKeys = useRef(new Map<string, number>())
+  const [isLoading, setIsLoading] = useState(false)
   const [dynamicLabels, setDynamicLabels] = useState<Record<string, string>>({})
   const prevPathRef = useRef(pathname)
 
-  const startLoading = useCallback(() => {
-    setCount((c) => c + 1)
+  const startLoading = useCallback((key = "__global__") => {
+    const map = loadingKeys.current
+    map.set(key, (map.get(key) ?? 0) + 1)
+    setIsLoading(map.size > 0)
   }, [])
 
-  const stopLoading = useCallback(() => {
-    setCount((c) => Math.max(0, c - 1))
+  const stopLoading = useCallback((key = "__global__") => {
+    const map = loadingKeys.current
+    const next = Math.max(0, (map.get(key) ?? 0) - 1)
+    if (next === 0) map.delete(key)
+    else map.set(key, next)
+    setIsLoading(map.size > 0)
   }, [])
 
   /* ──────────────────────────────────────────────────────────────────
@@ -68,7 +75,8 @@ export function PortalUIProvider({ children }: { children: ReactNode }) {
     if (prevPathRef.current !== pathname) {
       prevPathRef.current = pathname
       // Reset any stuck loading from the previous page
-      setCount(0)
+      loadingKeys.current.clear()
+      setIsLoading(false)
     }
   }, [pathname])
 
@@ -88,7 +96,7 @@ export function PortalUIProvider({ children }: { children: ReactNode }) {
   return (
     <PortalUIContext.Provider
       value={{
-        isLoading: count > 0,
+        isLoading,
         startLoading,
         stopLoading,
         dynamicLabels,

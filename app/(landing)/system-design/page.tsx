@@ -2,8 +2,10 @@
 
 import { useState } from 'react';
 import { motion } from 'framer-motion';
-import { Button, Input, Select, Checkbox, Radio, Switch, Pagination, Tooltip } from "@/components/landing/common";
-import LoadingSpinner from '@/components/landing/common/LoadingSpinner';
+import { Button, Input, Select, Checkbox, Pagination, Tooltip } from "@/components/ui";
+import { RadioGroup as Radio } from "@/components/ui";
+import { Switch } from "@/components/ui";
+import { Spinner as LoadingSpinner } from "@/components/ui";
 import {
   Palette,
   Type,
@@ -1173,53 +1175,41 @@ export default function SystemDesignPage() {
                   <div className="bg-white p-8 rounded-3xl shadow-soft border border-gray-100">
                     <h3 className="text-sm font-black text-gray-400 uppercase tracking-widest mb-6">Radio Component - All States</h3>
                     <div className="space-y-6">
-                      <div className="space-y-3">
-                        <Radio
-                          name="course-level"
-                          label="Lựa chọn A - Khóa học cơ bản"
-                          description="Phù hợp cho người mới bắt đầu"
-                          defaultChecked
-                        />
-                        <Radio
-                          name="course-level"
-                          label="Lựa chọn B - Khóa học nâng cao"
-                          description="Dành cho người có kinh nghiệm"
-                        />
-                        <Radio
-                          name="course-level"
-                          label="Lựa chọn C - Khóa học chuyên sâu"
-                          description="Trình độ chuyên nghiệp"
-                        />
-                      </div>
+                      <Radio
+                        name="course-level"
+                        defaultValue="a"
+                        items={[
+                          { value: "a", label: "Lựa chọn A - Khóa học cơ bản", description: "Phù hợp cho người mới bắt đầu" },
+                          { value: "b", label: "Lựa chọn B - Khóa học nâng cao", description: "Dành cho người có kinh nghiệm" },
+                          { value: "c", label: "Lựa chọn C - Khóa học chuyên sâu", description: "Trình độ chuyên nghiệp" },
+                        ]}
+                      />
 
                       {/* Disabled */}
                       <div className="pt-6 border-t border-gray-100">
                         <p className="text-xs font-bold text-gray-500 mb-4">Disabled State</p>
-                        <div className="space-y-3">
-                          <Radio
-                            name="disabled-radio"
-                            label="Radio - Disabled"
-                            description="Không thể chọn"
-                            disabled
-                          />
-                          <Radio
-                            name="disabled-radio"
-                            label="Radio - Disabled Checked"
-                            description="Đã chọn và không thể thay đổi"
-                            disabled
-                            defaultChecked
-                          />
-                        </div>
+                        <Radio
+                          name="disabled-radio"
+                          items={[
+                            { value: "d1", label: "Radio - Disabled", description: "Không thể chọn", disabled: true },
+                            { value: "d2", label: "Radio - Disabled Checked", description: "Đã chọn và không thể thay đổi", disabled: true },
+                          ]}
+                        />
                       </div>
 
                       {/* Sizes */}
                       <div className="pt-6 border-t border-gray-100">
                         <p className="text-xs font-bold text-gray-500 mb-4">Radio Sizes</p>
-                        <div className="flex flex-wrap items-center gap-6">
-                          <Radio name="size-demo" size="sm" label="Small" />
-                          <Radio name="size-demo" size="md" label="Medium" defaultChecked />
-                          <Radio name="size-demo" size="lg" label="Large" />
-                        </div>
+                        <Radio
+                          name="size-demo"
+                          orientation="horizontal"
+                          defaultValue="md"
+                          items={[
+                            { value: "sm", label: "Small" },
+                            { value: "md", label: "Medium" },
+                            { value: "lg", label: "Large" },
+                          ]}
+                        />
                       </div>
                     </div>
                   </div>

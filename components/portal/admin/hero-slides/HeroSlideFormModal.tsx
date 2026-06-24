@@ -1,51 +1,15 @@
 "use client";
 
-import { useEffect } from "react";
-import { useForm } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { z } from "zod";
-import { Button } from "@heroui/react";
-import { toast } from "react-toastify";
-import type { IHeroSlide } from "@/interfaces/portal";
-import { CModal } from "@/components/portal/common";
-import { createHeroSlideAction, updateHeroSlideAction } from "@/actions/admin.actions";
-import ImageUpload from "@/components/portal/admin/common/ImageUpload";
+import { useState } from "react";
+import { Button } from "@/components/ui";
 import { Input } from "@/components/ui/forms/Input";
 import { Textarea } from "@/components/ui/forms/Textarea";
 import { Switch } from "@/components/ui/forms/Switch";
-import { FormField } from "@/components/ui/forms/FormField";
-
-const schema = z.object({
-  title: z.string().min(1, "Nhập tiêu đề slide"),
-  badge: z.string().min(1, "Nhập badge"),
-  image: z.string().min(1, "Chọn hình ảnh"),
-  description: z.string().default(""),
-  primaryCtaText: z.string().default("Đăng ký ngay"),
-  primaryCtaHref: z.string().default("/contact"),
-  secondaryCtaText: z.string().optional(),
-  secondaryCtaHref: z.string().optional(),
-  badgeColor: z.string().default("#EF4444"),
-  order: z.coerce.number().min(1).default(1),
-  overlayGradient: z.string().default("from-black/60 via-black/30 to-transparent"),
-  isActive: z.boolean().default(true),
-});
-
-type FormData = z.infer<typeof schema>;
-
-const emptyDefaults: FormData = {
-  title: "",
-  badge: "",
-  image: "",
-  description: "",
-  primaryCtaText: "Đăng ký ngay",
-  primaryCtaHref: "/contact",
-  secondaryCtaText: "",
-  secondaryCtaHref: "",
-  badgeColor: "#EF4444",
-  order: 1,
-  overlayGradient: "from-black/60 via-black/30 to-transparent",
-  isActive: true,
-};
+import { toast } from "react-toastify";
+import type { IHeroSlide, ICreateHeroSlideDTO } from "@/interfaces/portal";
+import { CModal } from "@/components/portal/common";
+import { createHeroSlideAction, updateHeroSlideAction } from "@/actions/admin.actions";
+import ImageUpload from "@/components/portal/admin/common/ImageUpload";
 
 interface HeroSlideFormModalProps {
   isOpen: boolean;
@@ -61,47 +25,38 @@ export default function HeroSlideFormModal({
   initialData,
 }: HeroSlideFormModalProps) {
   const isEdit = !!initialData;
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
-  const {
-    register,
-    control,
-    handleSubmit,
-    reset,
-    formState: { errors, isSubmitting },
-  } = useForm<z.input<typeof schema>, unknown, FormData>({
-    resolver: zodResolver(schema),
-    defaultValues: emptyDefaults,
+  const [form, setForm] = useState<ICreateHeroSlideDTO>({
+    image: initialData?.image || "",
+    badge: initialData?.badge || "",
+    badgeColor: initialData?.badgeColor || "#EF4444",
+    title: initialData?.title || "",
+    description: initialData?.description || "",
+    primaryCtaText: initialData?.primaryCtaText || "Đăng ký ngay",
+    primaryCtaHref: initialData?.primaryCtaHref || "/contact",
+    secondaryCtaText: initialData?.secondaryCtaText || "",
+    secondaryCtaHref: initialData?.secondaryCtaHref || "",
+    overlayGradient: initialData?.overlayGradient || "from-black/60 via-black/30 to-transparent",
+    order: initialData?.order || 1,
+    isActive: initialData?.isActive ?? true,
   });
 
-  useEffect(() => {
-    if (!isOpen) return;
-    reset(
-      isEdit
-        ? {
-            title: initialData.title ?? "",
-            badge: initialData.badge ?? "",
-            image: initialData.image ?? "",
-            description: initialData.description ?? "",
-            primaryCtaText: initialData.primaryCtaText ?? "Đăng ký ngay",
-            primaryCtaHref: initialData.primaryCtaHref ?? "/contact",
-            secondaryCtaText: initialData.secondaryCtaText ?? "",
-            secondaryCtaHref: initialData.secondaryCtaHref ?? "",
-            badgeColor: initialData.badgeColor ?? "#EF4444",
-            order: initialData.order ?? 1,
-            overlayGradient:
-              initialData.overlayGradient ??
-              "from-black/60 via-black/30 to-transparent",
-            isActive: initialData.isActive ?? true,
-          }
-        : emptyDefaults,
-    );
-  }, [isOpen]); // eslint-disable-line react-hooks/exhaustive-deps
+  const updateField = <K extends keyof ICreateHeroSlideDTO>(key: K, value: ICreateHeroSlideDTO[K]) => {
+    setForm((prev) => ({ ...prev, [key]: value }));
+  };
 
-  const onSubmit = async (data: FormData) => {
+  const handleSubmit = async () => {
+    if (!form.title || !form.image || !form.badge) {
+      toast.error("Vui lòng điền đầy đủ thông tin bắt buộc");
+      return;
+    }
+
+    setIsSubmitting(true);
     try {
       const result = isEdit
-        ? await updateHeroSlideAction(initialData!.id, data)
-        : await createHeroSlideAction(data);
+        ? await updateHeroSlideAction(initialData!.id, form)
+        : await createHeroSlideAction(form);
 
       if (!result.success) throw new Error(result.error);
       toast.success(isEdit ? "Cập nhật slide thành công!" : "Tạo slide thành công!");
@@ -109,6 +64,8 @@ export default function HeroSlideFormModal({
       onClose();
     } catch (error) {
       toast.error(error instanceof Error ? error.message : "Thao tác thất bại");
+    } finally {
+      setIsSubmitting(false);
     }
   };
 
@@ -120,14 +77,8 @@ export default function HeroSlideFormModal({
       title={isEdit ? "Chỉnh sửa Hero Slide" : "Thêm Hero Slide mới"}
       footer={
         <>
-          <Button variant="flat" onPress={onClose}>
-            Hủy
-          </Button>
-          <Button
-            color="primary"
-            isLoading={isSubmitting}
-            onPress={() => void handleSubmit(onSubmit)()}
-          >
+          <Button variant="secondary" onClick={onClose}>Hủy</Button>
+          <Button variant="primary" isLoading={isSubmitting} onClick={handleSubmit}>
             {isEdit ? "Cập nhật" : "Tạo mới"}
           </Button>
         </>
@@ -138,54 +89,46 @@ export default function HeroSlideFormModal({
           <Input
             label="Tiêu đề"
             placeholder="Nhập tiêu đề slide"
+            value={form.title}
+            onChange={(e) => updateField("title", e.target.value)}
             required
-            error={errors.title?.message}
-            {...register("title")}
           />
           <Input
             label="Badge"
             placeholder="VD: Ưu đãi"
+            value={form.badge}
+            onChange={(e) => updateField("badge", e.target.value)}
             required
-            error={errors.badge?.message}
-            {...register("badge")}
           />
         </div>
 
-        <FormField
-          control={control}
-          name="image"
-          render={({ field }) => (
-            <div className="space-y-1">
-              <label className="text-sm font-medium">
-                Hình ảnh <span className="text-red-500">*</span>
-              </label>
-              <ImageUpload value={field.value} onChange={field.onChange} />
-              {errors.image && (
-                <p className="text-xs text-red-600">{errors.image.message}</p>
-              )}
-            </div>
-          )}
-        />
+        <div className="space-y-1">
+          <label className="text-sm font-medium">Hình ảnh</label>
+          <ImageUpload
+            value={form.image}
+            onChange={(url) => updateField("image", url)}
+          />
+        </div>
 
         <Textarea
           label="Mô tả"
           placeholder="Nhập mô tả slide"
-          error={errors.description?.message}
-          {...register("description")}
+          value={form.description}
+          onChange={(e) => updateField("description", e.target.value)}
         />
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           <Input
             label="CTA chính - Text"
             placeholder="Đăng ký ngay"
-            error={errors.primaryCtaText?.message}
-            {...register("primaryCtaText")}
+            value={form.primaryCtaText}
+            onChange={(e) => updateField("primaryCtaText", e.target.value)}
           />
           <Input
             label="CTA chính - URL"
             placeholder="/contact"
-            error={errors.primaryCtaHref?.message}
-            {...register("primaryCtaHref")}
+            value={form.primaryCtaHref}
+            onChange={(e) => updateField("primaryCtaHref", e.target.value)}
           />
         </div>
 
@@ -193,14 +136,14 @@ export default function HeroSlideFormModal({
           <Input
             label="CTA phụ - Text"
             placeholder="Tìm hiểu thêm"
-            error={errors.secondaryCtaText?.message}
-            {...register("secondaryCtaText")}
+            value={form.secondaryCtaText || ""}
+            onChange={(e) => updateField("secondaryCtaText", e.target.value)}
           />
           <Input
             label="CTA phụ - URL"
             placeholder="/about"
-            error={errors.secondaryCtaHref?.message}
-            {...register("secondaryCtaHref")}
+            value={form.secondaryCtaHref || ""}
+            onChange={(e) => updateField("secondaryCtaHref", e.target.value)}
           />
         </div>
 
@@ -208,35 +151,31 @@ export default function HeroSlideFormModal({
           <Input
             label="Màu badge"
             placeholder="#EF4444"
-            error={errors.badgeColor?.message}
-            {...register("badgeColor")}
+            value={form.badgeColor}
+            onChange={(e) => updateField("badgeColor", e.target.value)}
           />
           <Input
             label="Thứ tự"
             type="number"
             placeholder="1"
-            error={errors.order?.message}
-            {...register("order")}
+            value={String(form.order)}
+            onChange={(e) => updateField("order", Number(e.target.value) || 0)}
           />
           <Input
             label="Overlay gradient"
             placeholder="from-black/60..."
-            error={errors.overlayGradient?.message}
-            {...register("overlayGradient")}
+            value={form.overlayGradient}
+            onChange={(e) => updateField("overlayGradient", e.target.value)}
           />
         </div>
 
-        <FormField
-          control={control}
-          name="isActive"
-          render={({ field }) => (
-            <Switch
-              checked={field.value ?? true}
-              onChange={field.onChange}
-              label="Hiển thị"
-            />
-          )}
-        />
+        <div className="flex items-center gap-3">
+          <Switch
+            checked={form.isActive}
+            onChange={(v) => updateField("isActive", v)}
+            label="Hiển thị"
+          />
+        </div>
       </div>
     </CModal>
   );

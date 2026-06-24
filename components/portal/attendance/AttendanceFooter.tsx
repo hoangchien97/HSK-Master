@@ -1,6 +1,7 @@
 "use client"
 
-import { Button, Chip } from "@heroui/react"
+import { Button } from "@/components/ui"
+import { Badge } from "@/components/ui"
 import { Save, Check, X } from "lucide-react"
 
 /* ───────────────── Types ───────────────── */
@@ -51,20 +52,20 @@ export default function AttendanceFooter({
           <span>VẮNG</span>
         </div>
 
-        {/* Overall summary chips — inline horizontal */}
+        {/* Overall summary badges — inline horizontal */}
         {overallSummary && (
           <>
             <span className="w-px h-4 bg-gray-300" />
-            <Chip size="sm" variant="flat" color="success">
+            <Badge size="sm" variant="success">
               Tổng có mặt: {overallSummary.totalPresent}
-            </Chip>
-            <Chip size="sm" variant="flat" color="danger">
+            </Badge>
+            <Badge size="sm" variant="danger">
               Tổng vắng: {overallSummary.totalAbsent}
-            </Chip>
+            </Badge>
             {overallSummary.totalUnmarked > 0 && (
-              <Chip size="sm" variant="flat">
+              <Badge size="sm">
                 Chưa điểm danh: {overallSummary.totalUnmarked}
-              </Chip>
+              </Badge>
             )}
           </>
         )}
@@ -72,11 +73,11 @@ export default function AttendanceFooter({
 
       {/* Right: Save button */}
       <Button
-        color="primary"
-        startContent={!isSaving && <Save className="w-4 h-4" />}
+        variant="primary"
+        leftIcon={!isSaving ? <Save className="w-4 h-4" /> : undefined}
         isLoading={isSaving}
         isDisabled={pendingCount === 0}
-        onPress={onSave}
+        onClick={onSave}
       >
         Điểm danh
       </Button>

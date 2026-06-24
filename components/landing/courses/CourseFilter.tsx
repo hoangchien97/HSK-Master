@@ -1,6 +1,6 @@
 "use client";
 
-import { Checkbox } from "@/components/landing/common/Checkbox";
+import { Checkbox } from "@/components/ui";
 import { SlidersHorizontal, ChevronDown } from "lucide-react";
 
 interface CourseFilterProps {
@@ -43,22 +43,22 @@ export default function CourseFilter({
                 <Checkbox
                   label="Tất cả"
                   checked={selectedHskLevel === null}
-                  onChange={() => onHskLevelChange(null)}
+                  onCheckedChange={() => onHskLevelChange(null)}
                 />
                 <Checkbox
                   label="Sơ cấp (HSK 1-2)"
                   checked={selectedHskLevel === 'beginner'}
-                  onChange={() => onHskLevelChange(selectedHskLevel === 'beginner' ? null : 'beginner')}
+                  onCheckedChange={() => onHskLevelChange(selectedHskLevel === 'beginner' ? null : 'beginner')}
                 />
                 <Checkbox
                   label="Trung cấp (HSK 3-4)"
                   checked={selectedHskLevel === 'intermediate'}
-                  onChange={() => onHskLevelChange(selectedHskLevel === 'intermediate' ? null : 'intermediate')}
+                  onCheckedChange={() => onHskLevelChange(selectedHskLevel === 'intermediate' ? null : 'intermediate')}
                 />
                 <Checkbox
                   label="Cao cấp (HSK 5-6)"
                   checked={selectedHskLevel === 'advanced'}
-                  onChange={() => onHskLevelChange(selectedHskLevel === 'advanced' ? null : 'advanced')}
+                  onCheckedChange={() => onHskLevelChange(selectedHskLevel === 'advanced' ? null : 'advanced')}
                 />
               </div>
             </div>
@@ -74,7 +74,7 @@ export default function CourseFilter({
                     key={category.id}
                     label={category.name}
                     checked={selectedCategory === category.id}
-                    onChange={() => onCategoryChange(selectedCategory === category.id ? null : category.id)}
+                    onCheckedChange={() => onCategoryChange(selectedCategory === category.id ? null : category.id)}
                   />
                 ))}
               </div>

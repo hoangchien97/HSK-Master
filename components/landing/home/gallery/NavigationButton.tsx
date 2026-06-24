@@ -1,5 +1,5 @@
 import { ChevronLeft, ChevronRight } from "lucide-react";
-import Button from "@/components/landing/common/Button";
+import { Button } from "@/components/ui";
 
 interface NavigationButtonProps {
   direction: "left" | "right";

@@ -6,7 +6,7 @@ import { useState } from "react";
 import MobileMenu from "./MobileMenu";
 import { Menu } from "lucide-react";
 import Image from "next/image";
-import { Button } from "@/components/landing/common";
+import { Button } from "@/components/ui";
 import { BRAND_NAME } from "@/constants/brand";
 import { LANDING_NAV_ITEMS } from "@/constants/landing";
 

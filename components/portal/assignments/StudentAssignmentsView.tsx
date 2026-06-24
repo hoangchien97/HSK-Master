@@ -3,13 +3,8 @@
 import { useState, useEffect, useMemo, useCallback } from "react"
 import { useRouter, useSearchParams, usePathname } from "next/navigation"
 import Link from "next/link"
-import {
-  Button,
-  Chip,
-  Input,
-  Select,
-  SelectItem,
-} from "@heroui/react"
+import { Badge } from "@/components/ui"
+import { Select, type SelectOption } from "@/components/ui"
 import {
   FileText,
   Search,
@@ -19,6 +14,7 @@ import {
   Clock,
   CheckCircle,
   AlertCircle,
+  X,
 } from "lucide-react"
 import { toast } from "react-toastify"
 import dayjs from "dayjs"
@@ -65,10 +61,10 @@ interface AssignmentData {
 /* ──────────────────── config ──────────────────────────── */
 
 /** v2 submission statuses + backward compat */
-const SUBMISSION_STATUS_CONFIG: Record<string, { label: string; color: "primary" | "success" | "warning" | "danger" | "secondary" | "default"; icon?: React.ReactNode }> = {
+const SUBMISSION_STATUS_CONFIG: Record<string, { label: string; color: "primary" | "success" | "warning" | "danger" | "default"; icon?: React.ReactNode }> = {
   [SUBMISSION_STATUS.NOT_SUBMITTED]: { label: "Chưa nộp", color: "warning", icon: <AlertCircle className="w-3 h-3" /> },
   [SUBMISSION_STATUS.SUBMITTED]: { label: "Đã nộp", color: "primary", icon: <Clock className="w-3 h-3" /> },
-  [SUBMISSION_STATUS.REVIEWED]: { label: "Đã xem xét", color: "secondary", icon: <Eye className="w-3 h-3" /> },
+  [SUBMISSION_STATUS.REVIEWED]: { label: "Đã xem xét", color: "default", icon: <Eye className="w-3 h-3" /> },
   [SUBMISSION_STATUS.COMPLETED]: { label: "Hoàn thành", color: "success", icon: <CheckCircle className="w-3 h-3" /> },
   [SUBMISSION_STATUS.REVISION_REQUIRED]: { label: "Cần sửa lại", color: "danger", icon: <AlertCircle className="w-3 h-3" /> },
   [SUBMISSION_STATUS.OVERDUE]: { label: "Quá hạn", color: "danger" },
@@ -176,7 +172,7 @@ export default function StudentAssignmentsView() {
       align: "center" as const,
       headerClassName: "w-[50px]",
       render: (_v, _row, index) => (
-        <span className="text-sm text-default-500">{(urlPage - 1) * urlPageSize + index + 1}</span>
+        <span className="text-sm text-(--color-muted)">{(urlPage - 1) * urlPageSize + index + 1}</span>
       ),
     },
     {
@@ -186,21 +182,21 @@ export default function StudentAssignmentsView() {
         <div className="max-w-xs">
           <Link
             href={`/portal/student/assignments/${row.slug || row.id}`}
-            className="font-medium text-foreground hover:text-primary transition"
+            className="font-medium text-foreground hover:text-(--color-vermillion) transition"
           >
             {row.title}
           </Link>
           {row.tags && row.tags.length > 0 && (
             <div className="flex flex-wrap gap-1 mt-1">
               {row.tags.slice(0, 2).map((tag) => (
-                <Chip key={tag} size="sm" variant="flat" color="secondary" className="text-[11px]">
+                <Badge key={tag} size="sm" className="text-[11px]">
                   #{tag}
-                </Chip>
+                </Badge>
               ))}
               {row.tags.length > 2 && (
-                <Chip size="sm" variant="flat" className="text-[11px]">
+                <Badge size="sm" className="text-[11px]">
                   +{row.tags.length - 2}
-                </Chip>
+                </Badge>
               )}
             </div>
           )}
@@ -218,15 +214,15 @@ export default function StudentAssignmentsView() {
       label: "Hạn nộp",
       headerClassName: "w-[140px]",
       render: (_v, row) => {
-        if (!row.dueDate) return <span className="text-default-400 text-sm">—</span>
+        if (!row.dueDate) return <span className="text-gray-400 text-sm">—</span>
         const isOverdue = new Date(row.dueDate) < new Date()
         const subStatus = getSubmissionStatus(row)
         const showWarning = isOverdue && subStatus === SUBMISSION_STATUS.NOT_SUBMITTED
         return (
-          <span className={`text-sm ${showWarning ? "text-danger font-medium" : ""}`}>
+          <span className={`text-sm ${showWarning ? "text-red-600 font-medium" : ""}`}>
             {dayjs(row.dueDate).format("DD/MM/YYYY HH:mm")}
             {showWarning && (
-              <span className="block text-[11px] text-danger">Quá hạn</span>
+              <span className="block text-[11px] text-red-600">Quá hạn</span>
             )}
           </span>
         )
@@ -240,11 +236,11 @@ export default function StudentAssignmentsView() {
       render: (_v, row) => {
         const count = row.attachments?.length || 0
         const hasLink = !!row.externalLink
-        if (!count && !hasLink) return <span className="text-default-300">—</span>
+        if (!count && !hasLink) return <span className="text-gray-400">—</span>
         return (
-          <span className="flex items-center justify-center gap-1 text-sm text-default-500">
+          <span className="flex items-center justify-center gap-1 text-sm text-(--color-muted)">
             {count > 0 && <><Paperclip className="w-3.5 h-3.5" />{count}</>}
-            {hasLink && <ExternalLink className="w-3.5 h-3.5 text-primary" />}
+            {hasLink && <ExternalLink className="w-3.5 h-3.5 text-(--color-vermillion)" />}
           </span>
         )
       },
@@ -260,11 +256,11 @@ export default function StudentAssignmentsView() {
 
         return (
           <div className="flex flex-col gap-1">
-            <Chip size="sm" color={config?.color ?? "default"} variant="flat" className="min-w-24 text-center">
+            <Badge size="sm" variant={config?.color ?? "default"} className="min-w-24 text-center">
               {config?.label ?? subStatus}
-            </Chip>
+            </Badge>
             {subStatus === SUBMISSION_STATUS.COMPLETED && sub?.score != null && (
-              <span className="text-xs text-success-600 font-medium">
+              <span className="text-xs text-green-600 font-medium">
                 {sub.score}/{row.maxScore}
               </span>
             )}
@@ -278,73 +274,63 @@ export default function StudentAssignmentsView() {
       align: "center" as const,
       headerClassName: "w-[60px]",
       render: (_v, row) => (
-        <Button
-          as={Link}
+        <Link
           href={`/portal/student/assignments/${row.slug || row.id}`}
-          isIconOnly
-          size="sm"
-          variant="flat"
-          color="primary"
           title="Chi tiết"
+          className="p-1.5 rounded-md hover:bg-(--color-smoke) text-(--color-ink) transition-colors inline-flex items-center"
         >
           <Eye className="w-4 h-4" />
-        </Button>
+        </Link>
       ),
     },
   ], [urlPage, urlPageSize, getSubmissionStatus])
+
+  /* ─── Select options ─── */
+  const classOptions: SelectOption[] = useMemo(() => [
+    { value: "ALL", label: "Tất cả lớp" },
+    ...classes.map((c) => ({ value: c.id, label: c.className })),
+  ], [classes])
+
+  const statusOptions: SelectOption[] = STATUS_OPTIONS.map((opt) => ({ value: opt.key, label: opt.label }))
 
   /* ─── Toolbar ─── */
   const toolbarContent = useMemo(() => (
     <div className="rounded-xl bg-white border border-gray-200 px-4 py-3 shadow-sm">
       <div className="flex flex-col gap-2 sm:flex-row sm:items-center">
-        <Input
-          isClearable
-          placeholder="Tìm kiếm bài tập..."
-          startContent={<Search className="w-4 h-4 text-default-400" />}
-          value={search}
-          onValueChange={setSearch}
-          onClear={() => setSearch("")}
-          className="w-full sm:max-w-xs"
-          size="sm"
-        />
+        <div className="relative w-full sm:max-w-xs">
+          <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-(--color-muted) pointer-events-none" />
+          <input
+            type="text"
+            value={search}
+            onChange={(e) => setSearch(e.target.value)}
+            placeholder="Tìm kiếm bài tập..."
+            className="h-9 w-full pl-9 pr-8 rounded-md border border-(--color-smoke) bg-white text-sm text-(--color-ink) placeholder:text-(--color-muted) focus:outline-none focus:ring-2 focus:ring-(--color-vermillion)"
+          />
+          {search && (
+            <button type="button" onClick={() => setSearch("")} className="absolute right-2 top-1/2 -translate-y-1/2 text-(--color-muted) hover:text-(--color-ink)">
+              <X className="w-3.5 h-3.5" />
+            </button>
+          )}
+        </div>
         <div className="flex gap-2">
           <Select
+            value={urlClassFilter}
+            onChange={(v) => updateUrl({ classId: v || "ALL" })}
+            options={classOptions}
             placeholder="Tất cả lớp"
-            size="sm"
-            aria-label="Lọc theo lớp học"
-            selectedKeys={[urlClassFilter]}
-            onSelectionChange={(keys) => {
-              const val = Array.from(keys)[0] as string
-              updateUrl({ classId: val || "ALL" })
-            }}
             className="w-full sm:w-40"
-          >
-            {[
-              <SelectItem key="ALL">Tất cả lớp</SelectItem>,
-              ...classes.map((c) => (
-                <SelectItem key={c.id}>{c.className}</SelectItem>
-              )),
-            ]}
-          </Select>
+          />
           <Select
+            value={urlStatusFilter}
+            onChange={(v) => updateUrl({ status: v || "ALL" })}
+            options={statusOptions}
             placeholder="Trạng thái"
-            size="sm"
-            aria-label="Lọc theo trạng thái"
-            selectedKeys={[urlStatusFilter]}
-            onSelectionChange={(keys) => {
-              const val = Array.from(keys)[0] as string
-              updateUrl({ status: val || "ALL" })
-            }}
             className="w-full sm:w-44"
-          >
-            {STATUS_OPTIONS.map((opt) => (
-              <SelectItem key={opt.key}>{opt.label}</SelectItem>
-            ))}
-          </Select>
+          />
         </div>
       </div>
     </div>
-  ), [search, urlClassFilter, urlStatusFilter, classes, updateUrl])
+  ), [search, urlClassFilter, urlStatusFilter, classOptions, updateUrl])
 
   return (
     <CTable<AssignmentData & Record<string, unknown>>

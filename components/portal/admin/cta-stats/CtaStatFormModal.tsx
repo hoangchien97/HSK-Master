@@ -1,27 +1,13 @@
 "use client";
 
-import { useEffect } from "react";
-import { useForm } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { z } from "zod";
-import { Button } from "@heroui/react";
+import { useState } from "react";
+import { Button } from "@/components/ui";
+import { Input } from "@/components/ui/forms/Input";
+import { Switch } from "@/components/ui/forms/Switch";
 import { toast } from "react-toastify";
-import type { ICtaStat } from "@/interfaces/portal";
+import type { ICtaStat, ICreateCtaStatDTO } from "@/interfaces/portal";
 import { CModal } from "@/components/portal/common";
 import { createCtaStatAction, updateCtaStatAction } from "@/actions/admin.actions";
-import { Input } from "@/components/ui/forms/Input";
-import { FormField } from "@/components/ui/forms/FormField";
-import { Switch } from "@/components/ui/forms/Switch";
-
-const schema = z.object({
-  value: z.coerce.number().min(0),
-  suffix: z.string().optional(),
-  label: z.string().min(1, "Nhập tên/nhãn chỉ số"),
-  order: z.coerce.number().default(1),
-  isActive: z.boolean(),
-});
-
-type FormData = z.infer<typeof schema>;
 
 interface CtaStatFormModalProps {
   isOpen: boolean;
@@ -37,40 +23,31 @@ export default function CtaStatFormModal({
   initialData,
 }: CtaStatFormModalProps) {
   const isEdit = !!initialData;
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
-  const {
-    register,
-    control,
-    handleSubmit,
-    reset,
-    formState: { errors, isSubmitting },
-  } = useForm<z.input<typeof schema>, unknown, FormData>({
-    resolver: zodResolver(schema),
-    defaultValues: {
-      value: initialData?.value ?? 0,
-      suffix: initialData?.suffix ?? "",
-      label: initialData?.label ?? "",
-      order: initialData?.order ?? 1,
-      isActive: initialData?.isActive ?? true,
-    },
+  const [form, setForm] = useState<ICreateCtaStatDTO>({
+    value: initialData?.value || 0,
+    suffix: initialData?.suffix || "",
+    label: initialData?.label || "",
+    order: initialData?.order || 1,
+    isActive: initialData?.isActive ?? true,
   });
 
-  useEffect(() => {
-    if (!isOpen) return;
-    reset({
-      value: initialData?.value ?? 0,
-      suffix: initialData?.suffix ?? "",
-      label: initialData?.label ?? "",
-      order: initialData?.order ?? 1,
-      isActive: initialData?.isActive ?? true,
-    });
-  }, [isOpen]); // eslint-disable-line react-hooks/exhaustive-deps
+  const updateField = <K extends keyof ICreateCtaStatDTO>(key: K, value: ICreateCtaStatDTO[K]) => {
+    setForm((prev) => ({ ...prev, [key]: value }));
+  };
 
-  const onSubmit = async (data: FormData) => {
+  const handleSubmit = async () => {
+    if (!form.label) {
+      toast.error("Vui lòng nhập tên/nhãn chỉ số");
+      return;
+    }
+
+    setIsSubmitting(true);
     try {
       const result = isEdit
-        ? await updateCtaStatAction(initialData!.id, data)
-        : await createCtaStatAction(data);
+        ? await updateCtaStatAction(initialData!.id, form)
+        : await createCtaStatAction(form);
 
       if (!result.success) throw new Error(result.error);
       toast.success(isEdit ? "Cập nhật chỉ số thành công!" : "Tạo chỉ số thành công!");
@@ -78,6 +55,8 @@ export default function CtaStatFormModal({
       onClose();
     } catch (error) {
       toast.error(error instanceof Error ? error.message : "Thao tác thất bại");
+    } finally {
+      setIsSubmitting(false);
     }
   };
 
@@ -89,8 +68,8 @@ export default function CtaStatFormModal({
       title={isEdit ? "Chỉnh sửa Chỉ số" : "Thêm Chỉ số mới"}
       footer={
         <>
-          <Button variant="flat" onPress={onClose}>Hủy</Button>
-          <Button color="primary" isLoading={isSubmitting} onPress={() => void handleSubmit(onSubmit)()}>
+          <Button variant="secondary" onClick={onClose}>Hủy</Button>
+          <Button variant="primary" isLoading={isSubmitting} onClick={handleSubmit}>
             {isEdit ? "Cập nhật" : "Tạo mới"}
           </Button>
         </>
@@ -102,24 +81,24 @@ export default function CtaStatFormModal({
             label="Giá trị (số)"
             type="number"
             placeholder="Ví dụ: 50"
+            value={String(form.value)}
+            onChange={(e) => updateField("value", Number(e.target.value) || 0)}
             required
-            error={errors.value?.message}
-            {...register("value")}
           />
           <Input
             label="Hậu tố"
             placeholder="Ví dụ: +, %"
-            error={errors.suffix?.message}
-            {...register("suffix")}
+            value={form.suffix || ""}
+            onChange={(e) => updateField("suffix", e.target.value)}
           />
         </div>
 
         <Input
           label="Tên / Nhãn"
           placeholder="Ví dụ: Bài giảng, Học viên..."
+          value={form.label}
+          onChange={(e) => updateField("label", e.target.value)}
           required
-          error={errors.label?.message}
-          {...register("label")}
         />
 
         <div className="grid grid-cols-2 gap-4 items-center">
@@ -127,20 +106,14 @@ export default function CtaStatFormModal({
             label="Thứ tự hiển thị"
             type="number"
             placeholder="1"
-            error={errors.order?.message}
-            {...register("order")}
+            value={String(form.order)}
+            onChange={(e) => updateField("order", Number(e.target.value) || 0)}
           />
           <div className="px-2 pt-2">
-            <FormField
-              control={control}
-              name="isActive"
-              render={({ field }) => (
-                <Switch
-                  checked={field.value ?? true}
-                  onChange={field.onChange}
-                  label="Hiển thị"
-                />
-              )}
+            <Switch
+              checked={form.isActive}
+              onChange={(v) => updateField("isActive", v)}
+              label="Hiển thị"
             />
           </div>
         </div>

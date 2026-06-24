@@ -2,7 +2,7 @@
 
 import { useState, useTransition, useEffect } from "react";
 import { CourseFilter } from "@/components/landing/courses";
-import { Select, Input, Pagination } from "@/components/landing/common";
+import { Select, Input, Pagination } from "@/components/ui";
 import { useRouter, useSearchParams } from "next/navigation";
 import { getCoursesAction } from "./actions";
 import { CoursesGrid } from "./CoursesGrid";
@@ -215,8 +215,7 @@ export function CoursesContainer({
               totalItems={totalCount}
               itemsPerPage={itemsPerPage}
               currentItemsCount={courses.length}
-              basePath="/courses"
-              showInfo={true}
+showInfo={true}
               onPageChange={handlePageChange}
             />
           </div>

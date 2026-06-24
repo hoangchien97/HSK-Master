@@ -1,7 +1,7 @@
 "use client"
 
 import { useState, useEffect, useCallback, useRef } from "react"
-import { Button, Card, CardBody, Chip, Progress } from "@heroui/react"
+import { Button, Badge, Progress } from "@/components/ui"
 import { Volume2, Eye, EyeOff, Lock, ChevronLeft, ChevronRight } from "lucide-react"
 import {
   startPracticeSessionAction,
@@ -240,11 +240,11 @@ export default function ListenTab({ vocabularies, lessonId, onProgressUpdate, is
   // Empty state: not enough vocab
   if (totalQ === 0) {
     return (
-      <Card>
-        <CardBody className="py-12 text-center">
-          <p className="text-default-500">{L.empty.minVocabListen}</p>
-        </CardBody>
-      </Card>
+      <div className="rounded-xl border border-(--color-smoke) bg-white p-4 shadow-sm">
+        <div className="py-12 text-center">
+          <p className="text-(--color-muted)">{L.empty.minVocabListen}</p>
+        </div>
+      </div>
     )
   }
 
@@ -279,32 +279,33 @@ export default function ListenTab({ vocabularies, lessonId, onProgressUpdate, is
 
       {/* Header */}
       <div className="flex items-center justify-between mb-3">
-        <span className="text-sm text-default-500">
-          {L.quiz.questionLabel} <span className="font-medium text-foreground">{currentIdx + 1}</span>/{totalQ}
+        <span className="text-sm text-(--color-muted)">
+          {L.quiz.questionLabel} <span className="font-medium text-(--color-ink)">{currentIdx + 1}</span>/{totalQ}
         </span>
-        <Chip size="sm" variant="flat" startContent={<Volume2 className="w-3 h-3" />}>
+        <Badge size="sm" className="gap-1">
+          <Volume2 className="w-3 h-3" />
           {L.listen.chipLabel}
-        </Chip>
+        </Badge>
       </div>
 
-      <Progress value={((currentIdx + 1) / totalQ) * 100} size="sm" color="secondary" className="mb-4" aria-label="listen progress" />
+      <Progress value={((currentIdx + 1) / totalQ) * 100} size="sm" variant="default" className="mb-4" />
 
       {/* Audio card */}
-      <Card className="mb-4">
-        <CardBody className="p-6 sm:p-8 text-center">
-          <Button
-            isIconOnly
-            size="lg"
-            radius="full"
-            color="secondary"
-            variant={isPlaying ? "solid" : "bordered"}
-            className="w-16 h-16 sm:w-20 sm:h-20 mb-4"
-            onPress={playAudio}
+      <div className="rounded-xl border border-(--color-smoke) bg-white p-4 shadow-sm mb-4">
+        <div className="p-6 sm:p-8 text-center">
+          <button
+            type="button"
+            onClick={playAudio}
+            className={`w-16 h-16 sm:w-20 sm:h-20 mb-4 rounded-full inline-flex items-center justify-center transition-colors ${
+              isPlaying
+                ? "bg-purple-600 text-white"
+                : "border-2 border-purple-600 text-purple-600 hover:bg-purple-50"
+            }`}
             aria-label="Phát audio"
           >
             <Volume2 className={`w-6 h-6 sm:w-8 sm:h-8 ${isPlaying ? "animate-pulse" : ""}`} />
-          </Button>
-          <p className="text-sm text-default-400 mb-2">
+          </button>
+          <p className="text-sm text-gray-400 mb-2">
             {hasListened
               ? L.listen.instructionListened
               : L.listen.instructionNotListened}
@@ -314,21 +315,21 @@ export default function ListenTab({ vocabularies, lessonId, onProgressUpdate, is
           <div className="flex items-center justify-center gap-2">
             <Button
               size="sm"
-              variant="light"
-              onPress={() => setShowTranscript((v) => !v)}
-              startContent={showTranscript ? <EyeOff className="w-3.5 h-3.5" /> : <Eye className="w-3.5 h-3.5" />}
+              variant="ghost"
+              onClick={() => setShowTranscript((v) => !v)}
+              leftIcon={showTranscript ? <EyeOff className="w-3.5 h-3.5" /> : <Eye className="w-3.5 h-3.5" />}
             >
               {showTranscript ? L.listen.hideTranscript : L.listen.showTranscript}
             </Button>
           </div>
           {showTranscript && (
-            <div className="mt-2 p-2 rounded bg-default-100">
+            <div className="mt-2 p-2 rounded bg-(--color-paper)">
               <p className="text-xl sm:text-2xl font-bold">{currentQ.vocab.word}</p>
-              <p className="text-primary text-sm">{currentQ.vocab.pinyin}</p>
+              <p className="text-(--color-vermillion) text-sm">{currentQ.vocab.pinyin}</p>
             </div>
           )}
-        </CardBody>
-      </Card>
+        </div>
+      </div>
 
       {/* Listen-first lock notice */}
       {!hasListened && !showResult && (
@@ -386,7 +387,7 @@ export default function ListenTab({ vocabularies, lessonId, onProgressUpdate, is
 
             {/* Next */}
             <div className="flex justify-center mb-4">
-              <Button color="secondary" onPress={handleNext}>
+              <Button variant="primary" onClick={handleNext}>
                 {currentIdx < totalQ - 1 ? L.nav.nextQuestion : L.nav.viewResult}
               </Button>
             </div>
@@ -395,10 +396,10 @@ export default function ListenTab({ vocabularies, lessonId, onProgressUpdate, is
           /* Prev/Next Navigation — forward requires answering */
           <div className="flex items-center justify-between">
             <Button
-              variant="bordered"
+              variant="secondary"
               size="sm"
               isDisabled={currentIdx === 0}
-              onPress={() => {
+              onClick={() => {
                 if (currentIdx > 0) {
                   setCurrentIdx((i) => i - 1)
                   setSelectedKey(null)
@@ -408,17 +409,17 @@ export default function ListenTab({ vocabularies, lessonId, onProgressUpdate, is
                   questionStartRef.current = Date.now()
                 }
               }}
-              startContent={<ChevronLeft className="w-4 h-4" />}
+              leftIcon={<ChevronLeft className="w-4 h-4" />}
             >
               {L.nav.prev}
             </Button>
-            <span className="text-xs text-default-400">{currentIdx + 1}/{totalQ}</span>
+            <span className="text-xs text-gray-400">{currentIdx + 1}/{totalQ}</span>
             {/* Forward button disabled — must answer the question to proceed */}
             <Button
-              variant="bordered"
+              variant="secondary"
               size="sm"
               isDisabled
-              endContent={<ChevronRight className="w-4 h-4" />}
+              rightIcon={<ChevronRight className="w-4 h-4" />}
             >
               {L.nav.next}
             </Button>

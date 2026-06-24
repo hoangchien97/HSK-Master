@@ -6,20 +6,33 @@ import { cn } from "@/lib/utils";
 type TooltipPlacement = "top" | "bottom" | "left" | "right";
 
 interface TooltipProps {
-  content: React.ReactNode;
+  content?: React.ReactNode;
+  title?: React.ReactNode;
   placement?: TooltipPlacement;
   delayMs?: number;
   children: React.ReactElement;
   className?: string;
+  // Landing compat no-ops
+  arrow?: boolean;
+  animation?: string;
+  duration?: number;
 }
 
 export function Tooltip({
   content,
+  title,
   placement = "top",
   delayMs = 400,
   children,
   className,
+  arrow: _arrow,
+  animation: _animation,
+  duration: _duration,
 }: TooltipProps) {
+  void _arrow;
+  void _animation;
+  void _duration;
+  const resolvedContent = content ?? title;
   return (
     <TooltipPrimitive.Provider delayDuration={delayMs}>
       <TooltipPrimitive.Root>
@@ -36,7 +49,7 @@ export function Tooltip({
             className
           )}
         >
-          {content}
+          {resolvedContent}
         </TooltipPrimitive.Content>
       </TooltipPrimitive.Root>
     </TooltipPrimitive.Provider>

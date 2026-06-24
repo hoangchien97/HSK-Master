@@ -1,7 +1,7 @@
 "use client"
 
 import { useRouter } from "next/navigation"
-import { Chip, Progress, Tooltip } from "@heroui/react"
+import { Badge, Progress, Tooltip } from "@/components/ui"
 import { ChevronRight, CheckCircle2, BookOpen, Layers, HelpCircle, Headphones, PenLine } from "lucide-react"
 
 interface LessonItem {
@@ -34,10 +34,10 @@ interface Props {
 }
 
 const MODE_ICONS: Record<string, { icon: React.ReactNode; label: string; color: string; bg: string }> = {
-  FLASHCARD: { icon: <Layers className="w-3 h-3" />, label: "Flashcard", color: "text-primary", bg: "bg-primary-50 dark:bg-primary-900/20" },
-  QUIZ: { icon: <HelpCircle className="w-3 h-3" />, label: "Quiz", color: "text-secondary", bg: "bg-secondary-50 dark:bg-secondary-900/20" },
-  LISTEN: { icon: <Headphones className="w-3 h-3" />, label: "Nghe", color: "text-warning", bg: "bg-warning-50 dark:bg-warning-900/20" },
-  WRITE: { icon: <PenLine className="w-3 h-3" />, label: "Viết", color: "text-danger", bg: "bg-danger-50 dark:bg-danger-900/20" },
+  FLASHCARD: { icon: <Layers className="w-3 h-3" />, label: "Flashcard", color: "text-(--color-vermillion)", bg: "bg-red-50 dark:bg-red-900/20" },
+  QUIZ: { icon: <HelpCircle className="w-3 h-3" />, label: "Quiz", color: "text-purple-600", bg: "bg-purple-50 dark:bg-purple-900/20" },
+  LISTEN: { icon: <Headphones className="w-3 h-3" />, label: "Nghe", color: "text-amber-600", bg: "bg-amber-50 dark:bg-amber-900/20" },
+  WRITE: { icon: <PenLine className="w-3 h-3" />, label: "Viết", color: "text-red-600", bg: "bg-red-50 dark:bg-red-900/20" },
 }
 
 export default function PracticeLessonItem({ lesson, progress, levelSlug, skillProgress }: Props) {
@@ -84,9 +84,9 @@ export default function PracticeLessonItem({ lesson, progress, levelSlug, skillP
           <div className="flex items-center gap-2">
             <p className="text-sm font-medium truncate">{lesson.title}</p>
             {isTest && (
-              <Chip size="sm" variant="flat" color="danger" className="text-[10px] h-5">
+              <Badge size="sm" variant="danger" className="text-[10px]">
                 {lesson.title.includes("KIỂM TRA") ? "Kiểm tra" : "Ôn tập"}
-              </Chip>
+              </Badge>
             )}
           </div>
           {lesson.titleChinese && (
@@ -106,12 +106,11 @@ export default function PracticeLessonItem({ lesson, progress, levelSlug, skillP
                   <Progress
                     value={mastery}
                     size="sm"
-                    color={mastery >= 80 ? "success" : mastery >= 40 ? "warning" : "primary"}
+                    variant={mastery >= 80 ? "success" : mastery >= 40 ? "warning" : "default"}
                     className="flex-1"
-                    aria-label="Tiến độ bài học"
                   />
                   <span className={`text-[10px] font-semibold tabular-nums ${
-                    mastery >= 80 ? "text-success" : mastery >= 40 ? "text-warning" : "text-primary"
+                    mastery >= 80 ? "text-green-600" : mastery >= 40 ? "text-amber-600" : "text-(--color-vermillion)"
                   }`}>
                     {Math.round(mastery)}%
                   </span>
@@ -127,7 +126,7 @@ export default function PracticeLessonItem({ lesson, progress, levelSlug, skillP
                 const sp = skillProgress[mode]
                 if (!sp) return null
                 return (
-                  <Tooltip key={mode} content={`${label}: ${sp.masteredCount}/${sp.totalCount} thành thạo`} size="sm">
+                  <Tooltip key={mode} content={`${label}: ${sp.masteredCount}/${sp.totalCount} thành thạo`}>
                     <span className={`inline-flex items-center gap-0.5 text-[10px] px-1.5 py-0.5 rounded-md ${bg} ${color}`}>
                       {icon}
                       <span className="font-medium tabular-nums">{sp.masteryPercent}%</span>

@@ -1,8 +1,8 @@
 import { prisma } from "@/lib/prisma";
 import { notFound } from "next/navigation";
 import Link from "next/link";
-import Button from "@/components/landing/common/Button";
-import { Breadcrumb } from "@/components/landing/common";
+import { Button } from "@/components/ui";
+import { Breadcrumb } from "@/components/ui";
 import { AnimatedSection } from "@/components/landing/shared/AnimatedSection";
 import LessonList from "./LessonList";
 import { CourseStatsGrid } from "./CourseStatsGrid";

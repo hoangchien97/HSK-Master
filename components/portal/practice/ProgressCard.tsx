@@ -1,6 +1,6 @@
 "use client"
 
-import { Card, CardBody, Progress, Tooltip } from "@heroui/react"
+import { Progress, Tooltip } from "@/components/ui"
 import { BookOpen, Award, Clock, Layers, HelpCircle, Headphones, PenTool } from "lucide-react"
 import { PracticeMode } from "@/enums/portal/common"
 import { PRACTICE_LABELS } from "@/constants/portal/practice"
@@ -23,11 +23,11 @@ interface ProgressCardProps {
   skillProgress?: Partial<Record<string, SkillInfo>>
 }
 
-const SKILL_CONFIG: { mode: string; label: string; icon: React.ReactNode; color: string; progressColor: "primary" | "warning" | "secondary" | "success" }[] = [
-  { mode: PracticeMode.FLASHCARD, label: L.tabLabels[PracticeMode.FLASHCARD], icon: <Layers className="w-3.5 h-3.5" />, color: "text-primary", progressColor: "primary" },
-  { mode: PracticeMode.QUIZ, label: L.tabLabels[PracticeMode.QUIZ], icon: <HelpCircle className="w-3.5 h-3.5" />, color: "text-warning", progressColor: "warning" },
-  { mode: PracticeMode.LISTEN, label: L.tabLabels[PracticeMode.LISTEN], icon: <Headphones className="w-3.5 h-3.5" />, color: "text-secondary", progressColor: "secondary" },
-  { mode: PracticeMode.WRITE, label: L.tabLabels[PracticeMode.WRITE], icon: <PenTool className="w-3.5 h-3.5" />, color: "text-success", progressColor: "success" },
+const SKILL_CONFIG: { mode: string; label: string; icon: React.ReactNode; color: string; progressVariant: "default" | "warning" | "success" }[] = [
+  { mode: PracticeMode.FLASHCARD, label: L.tabLabels[PracticeMode.FLASHCARD], icon: <Layers className="w-3.5 h-3.5" />, color: "text-(--color-vermillion)", progressVariant: "default" },
+  { mode: PracticeMode.QUIZ, label: L.tabLabels[PracticeMode.QUIZ], icon: <HelpCircle className="w-3.5 h-3.5" />, color: "text-amber-600", progressVariant: "warning" },
+  { mode: PracticeMode.LISTEN, label: L.tabLabels[PracticeMode.LISTEN], icon: <Headphones className="w-3.5 h-3.5" />, color: "text-purple-600", progressVariant: "default" },
+  { mode: PracticeMode.WRITE, label: L.tabLabels[PracticeMode.WRITE], icon: <PenTool className="w-3.5 h-3.5" />, color: "text-green-600", progressVariant: "success" },
 ]
 
 function formatTime(sec: number): string {
@@ -50,8 +50,8 @@ export default function ProgressCard({
   const hasSkillData = skillProgress && Object.keys(skillProgress).length > 0
 
   return (
-    <Card className="border border-default-200 dark:border-default-700/50 shadow-sm">
-      <CardBody className="p-3 sm:p-4 space-y-3">
+    <div className="rounded-xl border border-(--color-smoke) bg-white shadow-sm">
+      <div className="p-3 sm:p-4 space-y-3">
         {/* Top row: mastery + stats */}
         <div className="flex items-center gap-3 sm:gap-4">
           {/* Mastery circle */}
@@ -60,20 +60,20 @@ export default function ProgressCard({
               <circle
                 cx="18" cy="18" r="15"
                 fill="none" stroke="currentColor"
-                className="text-default-100 dark:text-default-800"
+                className="text-gray-100 dark:text-gray-800"
                 strokeWidth="2.5"
               />
               <circle
                 cx="18" cy="18" r="15"
                 fill="none" stroke="currentColor"
-                className={masteryPercent >= 80 ? "text-success" : masteryPercent >= 40 ? "text-warning" : "text-primary"}
+                className={masteryPercent >= 80 ? "text-green-600" : masteryPercent >= 40 ? "text-amber-600" : "text-(--color-vermillion)"}
                 strokeWidth="2.5"
                 strokeDasharray={`${(masteryPercent / 100) * 94.25}, 94.25`}
                 strokeLinecap="round"
               />
             </svg>
             <div className="absolute inset-0 flex items-center justify-center">
-              <span className={`text-sm sm:text-base font-bold ${masteryPercent >= 80 ? "text-success" : masteryPercent >= 40 ? "text-warning" : "text-primary"}`}>
+              <span className={`text-sm sm:text-base font-bold ${masteryPercent >= 80 ? "text-green-600" : masteryPercent >= 40 ? "text-amber-600" : "text-(--color-vermillion)"}`}>
                 {Math.round(masteryPercent)}%
               </span>
             </div>
@@ -83,24 +83,24 @@ export default function ProgressCard({
           <div className="flex-1 grid grid-cols-3 gap-2 sm:gap-4">
             <div className="text-center">
               <div className="flex items-center justify-center gap-1 mb-0.5">
-                <BookOpen className="w-3.5 h-3.5 text-primary" />
+                <BookOpen className="w-3.5 h-3.5 text-(--color-vermillion)" />
               </div>
-              <p className="text-base sm:text-lg font-bold text-foreground leading-none">{learnedCount}<span className="text-xs font-normal text-default-400">/{totalItems}</span></p>
-              <p className="text-[9px] sm:text-[10px] text-default-400 mt-0.5">{L.progress.learnedLabel}</p>
+              <p className="text-base sm:text-lg font-bold text-(--color-ink) leading-none">{learnedCount}<span className="text-xs font-normal text-gray-400">/{totalItems}</span></p>
+              <p className="text-[9px] sm:text-[10px] text-gray-400 mt-0.5">{L.progress.learnedLabel}</p>
             </div>
             <div className="text-center">
               <div className="flex items-center justify-center gap-1 mb-0.5">
-                <Award className="w-3.5 h-3.5 text-success" />
+                <Award className="w-3.5 h-3.5 text-green-600" />
               </div>
-              <p className="text-base sm:text-lg font-bold text-foreground leading-none">{masteredCount}</p>
-              <p className="text-[9px] sm:text-[10px] text-default-400 mt-0.5">{L.progress.masteredLabel}</p>
+              <p className="text-base sm:text-lg font-bold text-(--color-ink) leading-none">{masteredCount}</p>
+              <p className="text-[9px] sm:text-[10px] text-gray-400 mt-0.5">{L.progress.masteredLabel}</p>
             </div>
             <div className="text-center">
               <div className="flex items-center justify-center gap-1 mb-0.5">
-                <Clock className="w-3.5 h-3.5 text-warning" />
+                <Clock className="w-3.5 h-3.5 text-amber-600" />
               </div>
-              <p className="text-base sm:text-lg font-bold text-foreground leading-none">{formatTime(totalTimeSec)}</p>
-              <p className="text-[9px] sm:text-[10px] text-default-400 mt-0.5">{L.progress.timeLabel}</p>
+              <p className="text-base sm:text-lg font-bold text-(--color-ink) leading-none">{formatTime(totalTimeSec)}</p>
+              <p className="text-[9px] sm:text-[10px] text-gray-400 mt-0.5">{L.progress.timeLabel}</p>
             </div>
           </div>
         </div>
@@ -110,23 +110,22 @@ export default function ProgressCard({
           <div className="flex items-center gap-2">
             <Progress
               value={masteryPercent}
-              color={masteryPercent >= 80 ? "success" : masteryPercent >= 40 ? "warning" : "primary"}
+              variant={masteryPercent >= 80 ? "success" : masteryPercent >= 40 ? "warning" : "default"}
               size="sm"
               className="flex-1"
-              aria-label={L.progress.ariaLabel}
             />
             {remaining > 0 ? (
-              <span className="text-[10px] text-default-400 shrink-0 tabular-nums">{L.progress.remainingTpl(remaining)}</span>
+              <span className="text-[10px] text-gray-400 shrink-0 tabular-nums">{L.progress.remainingTpl(remaining)}</span>
             ) : totalItems > 0 ? (
-              <span className="text-[10px] text-success-600 font-medium shrink-0">✓ {L.progress.allLearned}</span>
+              <span className="text-[10px] text-green-600 font-medium shrink-0">✓ {L.progress.allLearned}</span>
             ) : null}
           </div>
         )}
 
         {/* Per-mode skill progress */}
         {hasSkillData && (
-          <div className="grid grid-cols-4 gap-2 pt-2 border-t border-default-100 dark:border-default-800">
-            {SKILL_CONFIG.map(({ mode, label, icon, color, progressColor }) => {
+          <div className="grid grid-cols-4 gap-2 pt-2 border-t border-gray-100 dark:border-gray-800">
+            {SKILL_CONFIG.map(({ mode, label, icon, color, progressVariant }) => {
               const info = skillProgress?.[mode]
               const pct = info?.masteryPercent ?? 0
 
@@ -141,11 +140,10 @@ export default function ProgressCard({
                     <Progress
                       value={pct}
                       size="sm"
-                      color={pct >= 80 ? "success" : progressColor}
+                      variant={pct >= 80 ? "success" : progressVariant}
                       className="w-full"
-                      aria-label={`${label} progress`}
                     />
-                    <span className={`text-[9px] font-medium tabular-nums ${pct >= 80 ? "text-success" : pct > 0 ? "text-default-600" : "text-default-300"}`}>
+                    <span className={`text-[9px] font-medium tabular-nums ${pct >= 80 ? "text-green-600" : pct > 0 ? "text-gray-600" : "text-gray-300"}`}>
                       {Math.round(pct)}%
                     </span>
                   </div>
@@ -154,7 +152,7 @@ export default function ProgressCard({
             })}
           </div>
         )}
-      </CardBody>
-    </Card>
+      </div>
+    </div>
   )
 }

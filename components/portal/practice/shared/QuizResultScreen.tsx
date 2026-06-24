@@ -1,6 +1,6 @@
 "use client"
 
-import { Button, Card, CardBody } from "@heroui/react"
+import { Button } from "@/components/ui"
 import { RotateCcw, Trophy } from "lucide-react"
 import { PracticeMode } from "@/enums/portal"
 import type { IVocabularyItem } from "@/interfaces/portal/practice"
@@ -75,17 +75,17 @@ export default function QuizResultScreen({
 
   return (
     <div className="max-w-lg mx-auto">
-      <Card className="overflow-visible">
-        <CardBody className="text-center p-6 sm:p-8">
+      <div className="rounded-xl border border-(--color-smoke) bg-white p-4 shadow-sm overflow-visible">
+        <div className="text-center p-6 sm:p-8">
           <div className="relative -mt-12 mb-4">
             <div
               className={`w-20 h-20 rounded-full mx-auto flex items-center justify-center ${
-                score >= 80 ? "bg-success-100" : score >= 50 ? "bg-warning-100" : "bg-danger-100"
+                score >= 80 ? "bg-green-100" : score >= 50 ? "bg-amber-100" : "bg-red-100"
               }`}
             >
               <Trophy
                 className={`w-10 h-10 ${
-                  score >= 80 ? "text-success" : score >= 50 ? "text-warning" : "text-danger"
+                  score >= 80 ? "text-green-600" : score >= 50 ? "text-amber-600" : "text-red-600"
                 }`}
               />
             </div>
@@ -94,35 +94,35 @@ export default function QuizResultScreen({
           <h2 className="text-xl sm:text-2xl font-bold mb-1">
             {score >= 80 ? titles.excellent : score >= 50 ? titles.good : titles.needWork}
           </h2>
-          <p className="text-default-500 mb-4">
+          <p className="text-(--color-muted) mb-4">
             {L.result.scoreTpl(correctCount, totalQuestions)}
           </p>
 
           <div className="flex items-center justify-center gap-4 sm:gap-6 mb-4">
             <div className="text-center">
-              <p className="text-2xl sm:text-3xl font-bold text-primary">{score}%</p>
-              <p className="text-xs text-default-400">{L.result.scoreLabel}</p>
+              <p className="text-2xl sm:text-3xl font-bold text-(--color-vermillion)">{score}%</p>
+              <p className="text-xs text-gray-400">{L.result.scoreLabel}</p>
             </div>
             <div className="text-center">
-              <p className="text-2xl sm:text-3xl font-bold text-default-600">{elapsedSec}s</p>
-              <p className="text-xs text-default-400">{L.result.timeLabel}</p>
+              <p className="text-2xl sm:text-3xl font-bold text-gray-600">{elapsedSec}s</p>
+              <p className="text-xs text-gray-400">{L.result.timeLabel}</p>
             </div>
           </div>
 
           {wrongItems.length > 0 && (
             <div className="text-left mt-4">
-              <p className="text-sm font-medium mb-2 text-danger">
+              <p className="text-sm font-medium mb-2 text-red-600">
                 {wrongItemsLabel} ({wrongItems.length})
               </p>
               <div className="grid gap-2">
                 {wrongItems.map((item, i) => (
                   <div
                     key={i}
-                    className="flex items-center gap-2 p-2 rounded-lg bg-danger-50 dark:bg-danger-950/20"
+                    className="flex items-center gap-2 p-2 rounded-lg bg-red-50 dark:bg-red-950/20"
                   >
                     <span className="text-lg font-bold text-red-600 dark:text-red-400">{item.vocab.word}</span>
-                    <span className="text-sm text-primary">{item.vocab.pinyin}</span>
-                    <span className="text-sm text-default-500">— {item.vocab.meaningVi || item.vocab.meaning}</span>
+                    <span className="text-sm text-(--color-vermillion)">{item.vocab.pinyin}</span>
+                    <span className="text-sm text-(--color-muted)">— {item.vocab.meaningVi || item.vocab.meaning}</span>
                   </div>
                 ))}
               </div>
@@ -132,24 +132,23 @@ export default function QuizResultScreen({
           <div className="flex gap-3 justify-center mt-6 flex-wrap">
             {wrongItems.length > 0 && onRetryWrong && (
               <Button
-                color="warning"
-                variant="flat"
-                onPress={() => onRetryWrong(wrongItems.map((r) => r.vocab))}
-                startContent={<RotateCcw className="w-4 h-4" />}
+                variant="secondary"
+                onClick={() => onRetryWrong(wrongItems.map((r) => r.vocab))}
+                leftIcon={<RotateCcw className="w-4 h-4" />}
               >
                 {L.result.retryWrongTpl(wrongItems.length)}
               </Button>
             )}
             <Button
-              color={restartColor}
-              onPress={onRestart}
-              startContent={<RotateCcw className="w-4 h-4" />}
+              variant="primary"
+              onClick={onRestart}
+              leftIcon={<RotateCcw className="w-4 h-4" />}
             >
               {L.result.retryAllBtn}
             </Button>
           </div>
-        </CardBody>
-      </Card>
+        </div>
+      </div>
     </div>
   )
 }

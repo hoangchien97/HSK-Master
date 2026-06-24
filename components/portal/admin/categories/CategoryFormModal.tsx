@@ -1,44 +1,31 @@
 "use client";
 
-import { useEffect } from "react";
-import { useForm } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { z } from "zod";
-import { Button } from "@heroui/react";
+import { useState, useEffect } from "react";
+import { Button } from "@/components/ui";
+import { Input } from "@/components/ui/forms/Input";
+import { Textarea } from "@/components/ui/forms/Textarea";
 import { toast } from "react-toastify";
 import type { ICategory, ICreateCategoryDTO } from "@/interfaces/portal";
 import { CModal } from "@/components/portal/common";
 import { createCategoryAction, updateCategoryAction } from "@/actions/admin.actions";
-import { Input } from "@/components/ui/forms/Input";
-import { Textarea } from "@/components/ui/forms/Textarea";
-
-// Chuyển tiếng Việt có dấu thành không dấu và tạo slug
-function generateSlug(text: string) {
-  return text
-    .toLowerCase()
-    .normalize("NFD")
-    .replace(/[̀-ͯ]/g, "")
-    .replace(/đ/g, "d")
-    .replace(/[^a-z0-9\s-]/g, "")
-    .trim()
-    .replace(/\s+/g, "-");
-}
-
-const schema = z.object({
-  name: z.string().min(1, "Nhập tên danh mục"),
-  slug: z.string().min(1, "Slug không được trống"),
-  description: z.string().optional(),
-  metaTitle: z.string().optional(),
-  metaDescription: z.string().optional(),
-});
-
-type FormData = z.infer<typeof schema>;
 
 interface CategoryFormModalProps {
   isOpen: boolean;
   onClose: () => void;
   onSuccess: (item: ICategory) => void;
   initialData?: ICategory;
+}
+
+// Chuyển tiếng Việt có dấu thành không dấu và tạo slug
+function generateSlug(text: string) {
+  return text
+    .toLowerCase()
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "")
+    .replace(/đ/g, "d")
+    .replace(/[^a-z0-9\s-]/g, "")
+    .trim()
+    .replace(/\s+/g, "-");
 }
 
 export default function CategoryFormModal({
@@ -48,62 +35,44 @@ export default function CategoryFormModal({
   initialData,
 }: CategoryFormModalProps) {
   const isEdit = !!initialData;
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
-  const emptyDefaults: FormData = {
-    name: "",
-    slug: "",
-    description: "",
-    metaTitle: "",
-    metaDescription: "",
-  };
-
-  const {
-    register,
-    handleSubmit,
-    watch,
-    setValue,
-    reset,
-    formState: { errors, isSubmitting },
-  } = useForm<FormData>({
-    resolver: zodResolver(schema),
-    defaultValues: emptyDefaults,
+  const [form, setForm] = useState<ICreateCategoryDTO>({
+    name: initialData?.name || "",
+    slug: initialData?.slug || "",
+    description: initialData?.description || "",
+    metaTitle: initialData?.metaTitle || "",
+    metaDescription: initialData?.metaDescription || "",
   });
 
+  // Tự động generate slug khi sửa name
   useEffect(() => {
-    if (!isOpen) return;
-    reset(
-      isEdit
-        ? {
-            name: initialData.name,
-            slug: initialData.slug,
-            description: initialData.description ?? "",
-            metaTitle: initialData.metaTitle ?? "",
-            metaDescription: initialData.metaDescription ?? "",
-          }
-        : emptyDefaults,
-    );
-  }, [isOpen]); // eslint-disable-line react-hooks/exhaustive-deps
-
-  const nameValue = watch("name");
-  useEffect(() => {
-    if (!isEdit && nameValue) {
-      setValue("slug", generateSlug(nameValue), { shouldValidate: false });
+    if (!isEdit && form.name) {
+      setForm((prev) => ({ ...prev, slug: generateSlug(prev.name) }));
     }
-  }, [nameValue, isEdit, setValue]);
+  }, [form.name, isEdit]);
 
-  const onSubmit = async (data: FormData) => {
+  const updateField = <K extends keyof ICreateCategoryDTO>(key: K, value: ICreateCategoryDTO[K]) => {
+    setForm((prev) => {
+      const next = { ...prev, [key]: value };
+      if (key === "name" && !isEdit) {
+        next.slug = generateSlug(value as string);
+      }
+      return next;
+    });
+  };
+
+  const handleSubmit = async () => {
+    if (!form.name || !form.slug) {
+      toast.error("Vui lòng nhập tên danh mục");
+      return;
+    }
+
+    setIsSubmitting(true);
     try {
-      const dto: ICreateCategoryDTO = {
-        name: data.name,
-        slug: data.slug,
-        description: data.description,
-        metaTitle: data.metaTitle,
-        metaDescription: data.metaDescription,
-      };
-
       const result = isEdit
-        ? await updateCategoryAction(initialData!.id, dto)
-        : await createCategoryAction(dto);
+        ? await updateCategoryAction(initialData!.id, form)
+        : await createCategoryAction(form);
 
       if (!result.success) throw new Error(result.error);
       toast.success(isEdit ? "Cập nhật danh mục thành công!" : "Tạo danh mục thành công!");
@@ -111,6 +80,8 @@ export default function CategoryFormModal({
       onClose();
     } catch (error) {
       toast.error(error instanceof Error ? error.message : "Thao tác thất bại");
+    } finally {
+      setIsSubmitting(false);
     }
   };
 
@@ -122,8 +93,8 @@ export default function CategoryFormModal({
       title={isEdit ? "Chỉnh sửa Danh mục" : "Tạo Danh mục mới"}
       footer={
         <>
-          <Button variant="flat" onPress={onClose}>Hủy</Button>
-          <Button color="primary" isLoading={isSubmitting} onPress={() => void handleSubmit(onSubmit)()}>
+          <Button variant="secondary" onClick={onClose}>Hủy</Button>
+          <Button variant="primary" isLoading={isSubmitting} onClick={handleSubmit}>
             {isEdit ? "Cập nhật" : "Tạo mới"}
           </Button>
         </>
@@ -134,25 +105,24 @@ export default function CategoryFormModal({
           <Input
             label="Tên danh mục"
             placeholder="Ví dụ: Khóa học HSK"
+            value={form.name}
+            onChange={(e) => updateField("name", e.target.value)}
             required
-            error={errors.name?.message}
-            {...register("name")}
           />
           <Input
             label="Slug (tự động)"
             placeholder="khoa-hoc-hsk"
+            value={form.slug}
             hint="Dùng làm đường dẫn URL"
-            readOnly={!isEdit}
-            error={errors.slug?.message}
-            {...register("slug")}
+            disabled
           />
         </div>
 
         <Textarea
           label="Mô tả"
           placeholder="Nhập mô tả cho danh mục (hiển thị trên trang chủ)"
-          error={errors.description?.message}
-          {...register("description")}
+          value={form.description || ""}
+          onChange={(e) => updateField("description", e.target.value)}
         />
 
         <div className="pt-4 border-t border-default-200 space-y-4">
@@ -160,14 +130,14 @@ export default function CategoryFormModal({
           <Input
             label="SEO Title"
             placeholder="Tiêu đề hiển thị trên Google"
-            error={errors.metaTitle?.message}
-            {...register("metaTitle")}
+            value={form.metaTitle || ""}
+            onChange={(e) => updateField("metaTitle", e.target.value)}
           />
           <Textarea
             label="SEO Description"
             placeholder="Mô tả cho công cụ tìm kiếm"
-            error={errors.metaDescription?.message}
-            {...register("metaDescription")}
+            value={form.metaDescription || ""}
+            onChange={(e) => updateField("metaDescription", e.target.value)}
           />
         </div>
       </div>

@@ -1,11 +1,9 @@
 "use client"
 
 import { useState, useEffect, useCallback, useMemo } from "react"
+import { Badge, Avatar, Dropdown, Tooltip } from "@/components/ui"
 import {
-  Chip, Avatar, Dropdown, DropdownTrigger, DropdownMenu, DropdownItem, Button, Tooltip,
-} from "@heroui/react"
-import {
-  MoreVertical, Eye, Mail, Phone, GraduationCap, Users, UserPlus,
+  MoreVertical, Eye, Mail, Phone, GraduationCap, Users,
 } from "lucide-react"
 import { toast } from "react-toastify"
 import { useSearchParams, useRouter, usePathname } from "next/navigation"
@@ -105,7 +103,7 @@ export default function StudentsTable() {
     {
       key: "stt", label: "STT", align: "center" as const, headerClassName: "w-[50px]",
       render: (_v, _row, index) => (
-        <span className="text-sm text-default-500">{(urlPage - 1) * urlPageSize + index + 1}</span>
+        <span className="text-sm text-(--color-muted)">{(urlPage - 1) * urlPageSize + index + 1}</span>
       ),
     },
     {
@@ -114,10 +112,10 @@ export default function StudentsTable() {
         <div className="flex items-center gap-3 max-w-50">
           <Avatar src={row.image || undefined} name={(row.name)?.charAt(0)} size="sm" className="shrink-0" />
           <div className="min-w-0">
-            <Tooltip content={row.name} placement="top" delay={500}>
+            <Tooltip content={row.name as string} placement="top" delayMs={500}>
               <p className="font-medium text-sm truncate">{row.name}</p>
             </Tooltip>
-            <p className="text-xs text-default-400 truncate">@{row.username || row.email}</p>
+            <p className="text-xs text-gray-400 truncate">@{row.username || row.email}</p>
           </div>
         </div>
       ),
@@ -126,20 +124,20 @@ export default function StudentsTable() {
       key: "level", label: "Trình độ", sortable: true, headerClassName: "w-[100px]",
       render: (_v, row) =>
         row.level ? (
-          <Chip size="sm" color="primary" variant="flat">
-            {row.level}
-          </Chip>
-        ) : (<span className="text-default-400">—</span>),
+          <Badge variant="primary" size="sm">
+            {row.level as string}
+          </Badge>
+        ) : (<span className="text-(--color-muted)">—</span>),
     },
     {
       key: "classes", label: "Lớp học", headerClassName: "w-[160px]",
       render: (_v, row) => {
-        if (!row.classes || row.classes.length === 0) {
-          return <span className="text-default-400 text-sm">Chưa có lớp</span>
+        if (!row.classes || (row.classes as unknown[]).length === 0) {
+          return <span className="text-(--color-muted) text-sm">Chưa có lớp</span>
         }
-        const displayText = row.classes.map(c => c.classCode).join(", ")
+        const displayText = (row.classes as { classCode: string }[]).map(c => c.classCode).join(", ")
         return (
-          <Tooltip content={displayText} placement="top" delay={500}>
+          <Tooltip content={displayText} placement="top" delayMs={500}>
             <span className="text-sm truncate block max-w-40">{displayText}</span>
           </Tooltip>
         )
@@ -148,9 +146,12 @@ export default function StudentsTable() {
     {
       key: "status", label: "Trạng thái", sortable: true, headerClassName: "w-[110px]",
       render: (_v, row) => (
-        <Chip size="sm" color={STUDENT_STATUS_CONFIG[row.status]?.color ?? "default"} variant="flat">
-          {STUDENT_STATUS_CONFIG[row.status]?.label ?? row.status}
-        </Chip>
+        <Badge
+          size="sm"
+          variant={STUDENT_STATUS_CONFIG[row.status as string]?.color ?? "default"}
+        >
+          {STUDENT_STATUS_CONFIG[row.status as string]?.label ?? row.status as string}
+        </Badge>
       ),
     },
     {
@@ -158,28 +159,34 @@ export default function StudentsTable() {
       render: (_v, row) => (
         <div className="flex justify-end items-center gap-1">
           {row.email && (
-            <Button as="a" href={`mailto:${row.email}`} isIconOnly size="sm" variant="light" title="Gửi email">
+            <a href={`mailto:${row.email}`} title="Gửi email" className="p-1.5 rounded-md hover:bg-(--color-smoke) text-(--color-ink) transition-colors">
               <Mail className="w-4 h-4" />
-            </Button>
+            </a>
           )}
           {row.phoneNumber && (
-            <Button as="a" href={`tel:${row.phoneNumber}`} isIconOnly size="sm" variant="light" title="Gọi điện">
+            <a href={`tel:${row.phoneNumber}`} title="Gọi điện" className="p-1.5 rounded-md hover:bg-(--color-smoke) text-(--color-ink) transition-colors">
               <Phone className="w-4 h-4" />
-            </Button>
+            </a>
           )}
-          <Dropdown>
-            <DropdownTrigger>
-              <Button isIconOnly size="sm" variant="light"><MoreVertical className="w-4 h-4" /></Button>
-            </DropdownTrigger>
-            <DropdownMenu aria-label="Thao tác">
-              <DropdownItem key="view" startContent={<Eye className="w-4 h-4" />} href={`/portal/teacher/students/${row.id}`}>
-                Xem chi tiết
-              </DropdownItem>
-              <DropdownItem key="progress" startContent={<GraduationCap className="w-4 h-4" />} href={`/portal/teacher/students/${row.id}/progress`}>
-                Xem tiến độ
-              </DropdownItem>
-            </DropdownMenu>
-          </Dropdown>
+          <Dropdown
+            trigger={
+              <button type="button" className="p-1.5 rounded-md hover:bg-(--color-smoke) text-(--color-ink) transition-colors">
+                <MoreVertical className="w-4 h-4" />
+              </button>
+            }
+            items={[
+              {
+                label: "Xem chi tiết",
+                icon: <Eye className="w-4 h-4" />,
+                onClick: () => { window.location.href = `/portal/teacher/students/${row.id}` },
+              },
+              {
+                label: "Xem tiến độ",
+                icon: <GraduationCap className="w-4 h-4" />,
+                onClick: () => { window.location.href = `/portal/teacher/students/${row.id}/progress` },
+              },
+            ]}
+          />
         </div>
       ),
     },

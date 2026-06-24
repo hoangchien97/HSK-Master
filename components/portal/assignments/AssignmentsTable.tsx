@@ -3,20 +3,12 @@
 import { useState, useEffect, useCallback, useMemo } from "react"
 import { useRouter, useSearchParams, usePathname } from "next/navigation"
 import Link from "next/link"
-import {
-  Button,
-  Input,
-  Select,
-  SelectItem,
-  Chip,
-  Dropdown,
-  DropdownTrigger,
-  DropdownMenu,
-  DropdownItem,
-  useDisclosure,
-  Progress,
-  Tooltip,
-} from "@heroui/react"
+import { Button } from "@/components/ui"
+import { Badge } from "@/components/ui"
+import { Dropdown } from "@/components/ui"
+import { Select, type SelectOption } from "@/components/ui"
+import { Tooltip } from "@/components/ui"
+import { Progress } from "@/components/ui"
 import {
   Plus,
   Search,
@@ -28,6 +20,7 @@ import {
   CheckCircle,
   Lock,
   Eye,
+  X,
 } from "lucide-react"
 import { toast } from "react-toastify"
 import {
@@ -130,8 +123,8 @@ export default function AssignmentsTable({
   const router = useRouter()
   const searchParams = useSearchParams()
   const pathname = usePathname()
-  const createModal = useDisclosure()
-  const editModal = useDisclosure()
+  const [isCreateOpen, setIsCreateOpen] = useState(false)
+  const [isEditOpen, setIsEditOpen] = useState(false)
 
   /* ─── URL params ─── */
   const urlSearch = searchParams.get("search") || ""
@@ -266,7 +259,7 @@ export default function AssignmentsTable({
       align: "center" as const,
       headerClassName: "w-[50px]",
       render: (_v, _row, index) => (
-        <span className="text-sm text-default-500">{(urlPage - 1) * urlPageSize + index + 1}</span>
+        <span className="text-sm text-(--color-muted)">{(urlPage - 1) * urlPageSize + index + 1}</span>
       ),
     },
     {
@@ -276,7 +269,7 @@ export default function AssignmentsTable({
       render: (_v, row) => (
         <Link
           href={`/portal/${role}/assignments/${row.slug || row.id}`}
-          className="font-medium text-foreground hover:text-primary transition truncate block max-w-50"
+          className="font-medium text-foreground hover:text-(--color-vermillion) transition truncate block max-w-50"
         >
           {row.title}
         </Link>
@@ -287,18 +280,18 @@ export default function AssignmentsTable({
       label: "Hashtag",
       headerClassName: "w-[140px]",
       render: (_v, row) => {
-        if (!row.tags || row.tags.length === 0) return <span className="text-default-300">—</span>
+        if (!row.tags || row.tags.length === 0) return <span className="text-gray-400">—</span>
         return (
           <div className="flex flex-wrap gap-1 max-w-40">
             {row.tags.slice(0, 2).map((tag) => (
-              <Chip key={tag} size="sm" variant="flat" color="secondary" className="text-[11px]">
+              <Badge key={tag} size="sm" className="text-[11px]">
                 #{tag}
-              </Chip>
+              </Badge>
             ))}
             {row.tags.length > 2 && (
-              <Chip size="sm" variant="flat" className="text-[11px]">
+              <Badge size="sm" className="text-[11px]">
                 +{row.tags.length - 2}
-              </Chip>
+              </Badge>
             )}
           </div>
         )
@@ -316,21 +309,20 @@ export default function AssignmentsTable({
       sortable: true,
       headerClassName: "w-[120px]",
       render: (_v, row) => {
-        if (!row.dueDate) return <span className="text-default-400 text-sm">—</span>
+        if (!row.dueDate) return <span className="text-gray-400 text-sm">—</span>
         const deadlineStatus = getDeadlineStatus(row.dueDate, row.status)
         const formattedDate = dayjs(row.dueDate).format("DD/MM/YYYY HH:mm")
         return (
-          <Tooltip content={formattedDate} placement="top" delay={300}>
-            <div className="cursor-default">
-              <Chip
+          <Tooltip content={formattedDate} placement="top" delayMs={300}>
+            <span className="cursor-default inline-block min-w-20 text-center">
+              <Badge
+                variant={DEADLINE_STATUS_COLOR[deadlineStatus] as "success" | "warning" | "danger" | "default" | "primary" | "info" | undefined}
                 size="sm"
-                color={DEADLINE_STATUS_COLOR[deadlineStatus]}
-                variant="flat"
                 className="min-w-20 text-center"
               >
                 {DEADLINE_STATUS_LABEL[deadlineStatus]}
-              </Chip>
-            </div>
+              </Badge>
+            </span>
           </Tooltip>
         )
       },
@@ -342,22 +334,22 @@ export default function AssignmentsTable({
       render: (_v, row) => {
         const meta = computeMeta(row as AssignmentData)
         if (meta.totalStudents === 0) {
-          return <span className="text-default-300 text-sm">—</span>
+          return <span className="text-gray-400 text-sm">—</span>
         }
         const pct = Math.round((meta.submittedCount / meta.totalStudents) * 100)
         return (
           <div className="min-w-28">
             <div className="flex items-center justify-between text-xs mb-1">
-              <span className="flex items-center gap-1 text-default-600">
+              <span className="flex items-center gap-1 text-(--color-muted)">
                 <Users className="w-3 h-3" />
                 {meta.submittedCount} / {meta.totalStudents}
               </span>
-              <span className="text-default-400">{pct}%</span>
+              <span className="text-gray-400">{pct}%</span>
             </div>
             <Progress
               size="sm"
               value={pct}
-              color={pct === 100 ? "success" : pct >= 50 ? "primary" : "warning"}
+              variant={pct === 100 ? "success" : pct >= 50 ? "default" : "warning"}
               className="max-w-full"
             />
           </div>
@@ -372,12 +364,12 @@ export default function AssignmentsTable({
       render: (_v, row) => {
         const meta = computeMeta(row as AssignmentData)
         if (meta.pendingReview === 0) {
-          return <span className="text-default-300 text-sm">0</span>
+          return <span className="text-gray-400 text-sm">0</span>
         }
         return (
-          <Chip size="sm" color="warning" variant="flat" className="font-medium">
+          <Badge size="sm" variant="warning" className="font-medium">
             {meta.pendingReview}
-          </Chip>
+          </Badge>
         )
       },
     },
@@ -389,10 +381,10 @@ export default function AssignmentsTable({
       render: (_v, row) => {
         const meta = computeMeta(row as AssignmentData)
         if (meta.completedCount === 0) {
-          return <span className="text-default-300 text-sm">0</span>
+          return <span className="text-gray-400 text-sm">0</span>
         }
         return (
-          <span className="flex items-center justify-center gap-1 text-sm text-success font-medium">
+          <span className="flex items-center justify-center gap-1 text-sm text-green-600 font-medium">
             <CheckCircle className="w-3.5 h-3.5" />
             {meta.completedCount}
           </span>
@@ -405,14 +397,13 @@ export default function AssignmentsTable({
       sortable: true,
       headerClassName: "w-[110px]",
       render: (_v, row) => (
-        <Chip
+        <Badge
           size="sm"
-          color={STATUS_CONFIG[row.status]?.color ?? "default"}
-          variant="flat"
+          variant={STATUS_CONFIG[row.status]?.color ?? "default"}
           className="min-w-20 text-center"
         >
           {STATUS_CONFIG[row.status]?.label ?? row.status}
-        </Chip>
+        </Badge>
       ),
     },
     {
@@ -422,109 +413,91 @@ export default function AssignmentsTable({
       headerClassName: "w-[60px]",
       render: (_v, row) => (
         <div className="flex justify-end">
-          <Dropdown>
-            <DropdownTrigger>
-              <Button isIconOnly size="sm" variant="light">
+          <Dropdown
+            trigger={
+              <button type="button" className="p-1.5 rounded-md hover:bg-(--color-smoke) text-(--color-ink) transition-colors">
                 <MoreVertical className="w-4 h-4" />
-              </Button>
-            </DropdownTrigger>
-            <DropdownMenu aria-label="Thao tác">
-              <DropdownItem
-                key="view"
-                startContent={<Eye className="w-4 h-4" />}
-                href={`/portal/${role}/assignments/${row.slug || row.id}`}
-              >
-                Xem chi tiết
-              </DropdownItem>
-              <DropdownItem
-                key="edit"
-                startContent={<Edit2 className="w-4 h-4" />}
-                isDisabled={row.status === ASSIGNMENT_STATUS.CLOSED}
-                onPress={() => {
+              </button>
+            }
+            items={[
+              {
+                label: "Xem chi tiết",
+                icon: <Eye className="w-4 h-4" />,
+                onClick: () => { window.location.href = `/portal/${role}/assignments/${row.slug || row.id}` },
+              },
+              {
+                label: "Chỉnh sửa",
+                icon: <Edit2 className="w-4 h-4" />,
+                disabled: row.status === ASSIGNMENT_STATUS.CLOSED,
+                onClick: () => {
                   setEditData(row as AssignmentData)
-                  editModal.onOpen()
-                }}
-              >
-                Chỉnh sửa
-              </DropdownItem>
-              <DropdownItem
-                key="close"
-                startContent={<Lock className="w-4 h-4" />}
-                className="text-warning"
-                color="warning"
-                isDisabled={row.status !== ASSIGNMENT_STATUS.PUBLISHED}
-                onPress={() => handleClose(row.id)}
-              >
-                Đóng bài tập
-              </DropdownItem>
-              <DropdownItem
-                key="delete"
-                color="danger"
-                className="text-danger"
-                startContent={<Trash2 className="w-4 h-4" />}
-                onPress={() => handleDelete(row.id)}
-              >
-                Xóa
-              </DropdownItem>
-            </DropdownMenu>
-          </Dropdown>
+                  setIsEditOpen(true)
+                },
+              },
+              {
+                label: "Đóng bài tập",
+                icon: <Lock className="w-4 h-4" />,
+                disabled: row.status !== ASSIGNMENT_STATUS.PUBLISHED,
+                onClick: () => handleClose(row.id),
+              },
+              {
+                label: "Xóa",
+                icon: <Trash2 className="w-4 h-4" />,
+                onClick: () => handleDelete(row.id),
+              },
+            ]}
+          />
         </div>
       ),
     },
-  ], [urlPage, urlPageSize, role, handleDelete, handleClose, editModal])
+  ], [urlPage, urlPageSize, role, handleDelete, handleClose])
+
+  /* ─── Class options ─── */
+  const classOptions: SelectOption[] = useMemo(() => [
+    { value: "ALL", label: "Tất cả lớp" },
+    ...classes.map((c) => ({ value: c.id, label: c.className })),
+  ], [classes])
+
+  const statusOptions: SelectOption[] = STATUS_OPTIONS.map((opt) => ({ value: opt.key, label: opt.label }))
 
   /* ─── Toolbar ─── */
   const toolbarContent = useMemo(() => (
     <div className="rounded-xl bg-white border border-gray-200 px-4 py-3 shadow-sm">
       <div className="flex flex-col gap-2 sm:flex-row sm:items-center">
-        <Input
-          isClearable
-          placeholder="Tìm kiếm bài tập..."
-          startContent={<Search className="w-4 h-4 text-default-400" />}
-          value={search}
-          onValueChange={setSearch}
-          onClear={() => setSearch("")}
-          className="w-full sm:max-w-xs"
-          size="sm"
-        />
+        <div className="relative w-full sm:max-w-xs">
+          <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-(--color-muted) pointer-events-none" />
+          <input
+            type="text"
+            value={search}
+            onChange={(e) => setSearch(e.target.value)}
+            placeholder="Tìm kiếm bài tập..."
+            className="h-9 w-full pl-9 pr-8 rounded-md border border-(--color-smoke) bg-white text-sm text-(--color-ink) placeholder:text-(--color-muted) focus:outline-none focus:ring-2 focus:ring-(--color-vermillion)"
+          />
+          {search && (
+            <button type="button" onClick={() => setSearch("")} className="absolute right-2 top-1/2 -translate-y-1/2 text-(--color-muted) hover:text-(--color-ink)">
+              <X className="w-3.5 h-3.5" />
+            </button>
+          )}
+        </div>
         <div className="flex gap-2">
           <Select
+            value={urlClassFilter}
+            onChange={(v) => updateUrl({ classId: v || "ALL" })}
+            options={classOptions}
             placeholder="Tất cả lớp"
-            size="sm"
-            aria-label="Lọc theo lớp học"
-            selectedKeys={[urlClassFilter]}
-            onSelectionChange={(keys) => {
-              const val = Array.from(keys)[0] as string
-              updateUrl({ classId: val || "ALL" })
-            }}
             className="w-full sm:w-40"
-          >
-            {[
-              <SelectItem key="ALL">Tất cả lớp</SelectItem>,
-              ...classes.map((c) => (
-                <SelectItem key={c.id}>{c.className}</SelectItem>
-              )),
-            ]}
-          </Select>
+          />
           <Select
+            value={urlStatusFilter}
+            onChange={(v) => updateUrl({ status: v || "ALL" })}
+            options={statusOptions}
             placeholder="Trạng thái"
-            size="sm"
-            aria-label="Lọc theo trạng thái"
-            selectedKeys={[urlStatusFilter]}
-            onSelectionChange={(keys) => {
-              const val = Array.from(keys)[0] as string
-              updateUrl({ status: val || "ALL" })
-            }}
             className="w-full sm:w-48"
-          >
-            {STATUS_OPTIONS.map((opt) => (
-              <SelectItem key={opt.key}>{opt.label}</SelectItem>
-            ))}
-          </Select>
+          />
         </div>
       </div>
     </div>
-  ), [search, urlClassFilter, urlStatusFilter, classes, updateUrl])
+  ), [search, urlClassFilter, urlStatusFilter, classOptions, updateUrl])
 
   return (
     <>
@@ -547,28 +520,28 @@ export default function AssignmentsTable({
           description: "Tạo bài tập mới để bắt đầu",
         }}
         actions={
-          <Button color="primary" size="sm" startContent={<Plus className="w-4 h-4" />} onPress={createModal.onOpen}>
+          <Button variant="primary" size="sm" leftIcon={<Plus className="w-4 h-4" />} onClick={() => setIsCreateOpen(true)}>
             Tạo bài tập
           </Button>
         }
         toolbar={toolbarContent}
       />
 
-      {createModal.isOpen && (
+      {isCreateOpen && (
         <AssignmentFormModal
           classes={classes}
-          isOpen={createModal.isOpen}
-          onClose={createModal.onClose}
+          isOpen={isCreateOpen}
+          onClose={() => setIsCreateOpen(false)}
           onSuccess={(assignment: unknown) => handleCreateSuccess(assignment as AssignmentData)}
         />
       )}
 
-      {editModal.isOpen && editData && (
+      {isEditOpen && editData && (
         <AssignmentFormModal
           classes={classes}
-          isOpen={editModal.isOpen}
+          isOpen={isEditOpen}
           onClose={() => {
-            editModal.onClose()
+            setIsEditOpen(false)
             setEditData(null)
           }}
           onSuccess={(assignment: unknown) => handleUpdateSuccess(assignment as AssignmentData)}

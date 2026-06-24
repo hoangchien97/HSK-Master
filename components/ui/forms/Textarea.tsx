@@ -7,6 +7,7 @@ interface TextareaProps extends TextareaHTMLAttributes<HTMLTextAreaElement> {
   label?: string;
   error?: string;
   hint?: string;
+  helperText?: string;
   wrapperClassName?: string;
   showCount?: boolean;
 }
@@ -17,6 +18,7 @@ export const Textarea = forwardRef<HTMLTextAreaElement, TextareaProps>(
       label,
       error,
       hint,
+      helperText,
       wrapperClassName,
       showCount,
       maxLength,
@@ -30,6 +32,7 @@ export const Textarea = forwardRef<HTMLTextAreaElement, TextareaProps>(
   ) => {
     const inputId = id ?? label?.toLowerCase().replace(/\s+/g, "-");
     const charCount = typeof value === "string" ? value.length : 0;
+    const resolvedHint = hint ?? helperText;
 
     return (
       <div className={cn("w-full", wrapperClassName)}>
@@ -57,8 +60,8 @@ export const Textarea = forwardRef<HTMLTextAreaElement, TextareaProps>(
         <div className="flex justify-between mt-1">
           <div>
             {error && <p className="text-xs text-red-600">{error}</p>}
-            {!error && hint && (
-              <p className="text-xs text-muted-foreground">{hint}</p>
+            {!error && resolvedHint && (
+              <p className="text-xs text-muted-foreground">{resolvedHint}</p>
             )}
           </div>
           {showCount && maxLength && (

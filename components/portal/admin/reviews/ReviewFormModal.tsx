@@ -1,30 +1,14 @@
 "use client";
 
-import { useEffect } from "react";
-import { useForm } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { z } from "zod";
-import { Button } from "@heroui/react";
-import { toast } from "react-toastify";
-import type { IReview } from "@/interfaces/portal";
-import { CModal } from "@/components/portal/common";
-import { createReviewAction, updateReviewAction } from "@/actions/admin.actions";
+import { useState } from "react";
+import { Button } from "@/components/ui";
 import { Input } from "@/components/ui/forms/Input";
 import { Textarea } from "@/components/ui/forms/Textarea";
-import { FormField } from "@/components/ui/forms/FormField";
+import { Switch } from "@/components/ui/forms/Switch";
 import { Select } from "@/components/ui/forms/Select";
 import type { SelectOption } from "@/components/ui/forms/Select";
-import { Switch } from "@/components/ui/forms/Switch";
-
-const schema = z.object({
-  studentName: z.string().min(1, "Nhập tên học viên"),
-  className: z.string().min(1, "Nhập tên khóa học"),
-  content: z.string().min(1, "Nhập nội dung đánh giá"),
-  rating: z.coerce.number().min(1).max(5).default(5),
-  isApproved: z.boolean(),
-});
-
-type FormData = z.infer<typeof schema>;
+import { toast } from "react-toastify";
+import type { IReview, ICreateReviewDTO } from "@/interfaces/portal";
 
 const ratingOptions: SelectOption[] = [
   { value: "5", label: "5 Sao (Tuyệt vời)" },
@@ -33,6 +17,8 @@ const ratingOptions: SelectOption[] = [
   { value: "2", label: "2 Sao (Kém)" },
   { value: "1", label: "1 Sao (Tệ)" },
 ];
+import { CModal } from "@/components/portal/common";
+import { createReviewAction, updateReviewAction } from "@/actions/admin.actions";
 
 interface ReviewFormModalProps {
   isOpen: boolean;
@@ -48,40 +34,31 @@ export default function ReviewFormModal({
   initialData,
 }: ReviewFormModalProps) {
   const isEdit = !!initialData;
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
-  const {
-    register,
-    control,
-    handleSubmit,
-    reset,
-    formState: { errors, isSubmitting },
-  } = useForm<z.input<typeof schema>, unknown, FormData>({
-    resolver: zodResolver(schema),
-    defaultValues: {
-      studentName: initialData?.studentName ?? "",
-      className: initialData?.className ?? "",
-      content: initialData?.content ?? "",
-      rating: initialData?.rating ?? 5,
-      isApproved: initialData?.isApproved ?? true,
-    },
+  const [form, setForm] = useState<ICreateReviewDTO>({
+    studentName: initialData?.studentName || "",
+    className: initialData?.className || "",
+    content: initialData?.content || "",
+    rating: initialData?.rating || 5,
+    isApproved: initialData?.isApproved ?? true,
   });
 
-  useEffect(() => {
-    if (!isOpen) return;
-    reset({
-      studentName: initialData?.studentName ?? "",
-      className: initialData?.className ?? "",
-      content: initialData?.content ?? "",
-      rating: initialData?.rating ?? 5,
-      isApproved: initialData?.isApproved ?? true,
-    });
-  }, [isOpen]); // eslint-disable-line react-hooks/exhaustive-deps
+  const updateField = <K extends keyof ICreateReviewDTO>(key: K, value: ICreateReviewDTO[K]) => {
+    setForm((prev) => ({ ...prev, [key]: value }));
+  };
 
-  const onSubmit = async (data: FormData) => {
+  const handleSubmit = async () => {
+    if (!form.studentName || !form.className || !form.content) {
+      toast.error("Vui lòng nhập đủ thông tin bắt buộc");
+      return;
+    }
+
+    setIsSubmitting(true);
     try {
       const result = isEdit
-        ? await updateReviewAction(initialData!.id, data)
-        : await createReviewAction(data);
+        ? await updateReviewAction(initialData!.id, form)
+        : await createReviewAction(form);
 
       if (!result.success) throw new Error(result.error);
       toast.success(isEdit ? "Cập nhật đánh giá thành công!" : "Tạo đánh giá thành công!");
@@ -89,6 +66,8 @@ export default function ReviewFormModal({
       onClose();
     } catch (error) {
       toast.error(error instanceof Error ? error.message : "Thao tác thất bại");
+    } finally {
+      setIsSubmitting(false);
     }
   };
 
@@ -100,8 +79,8 @@ export default function ReviewFormModal({
       title={isEdit ? "Chỉnh sửa Đánh giá" : "Thêm Đánh giá mới"}
       footer={
         <>
-          <Button variant="flat" onPress={onClose}>Hủy</Button>
-          <Button color="primary" isLoading={isSubmitting} onPress={() => void handleSubmit(onSubmit)()}>
+          <Button variant="secondary" onClick={onClose}>Hủy</Button>
+          <Button variant="primary" isLoading={isSubmitting} onClick={handleSubmit}>
             {isEdit ? "Cập nhật" : "Tạo mới"}
           </Button>
         </>
@@ -112,58 +91,41 @@ export default function ReviewFormModal({
           <Input
             label="Tên học viên"
             placeholder="Ví dụ: Nguyễn Văn A"
+            value={form.studentName}
+            onChange={(e) => updateField("studentName", e.target.value)}
             required
-            error={errors.studentName?.message}
-            {...register("studentName")}
           />
           <Input
             label="Tên khóa học"
             placeholder="Ví dụ: HSK 4 Đầu ra"
+            value={form.className}
+            onChange={(e) => updateField("className", e.target.value)}
             required
-            error={errors.className?.message}
-            {...register("className")}
           />
         </div>
 
         <Textarea
           label="Nội dung đánh giá"
           placeholder="Nhập nhận xét của học viên..."
+          value={form.content}
+          onChange={(e) => updateField("content", e.target.value)}
           required
-          error={errors.content?.message}
-          {...register("content")}
         />
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4 items-center border-t border-default-200 pt-4">
-          <FormField
-            control={control}
-            name="rating"
-            render={({ field, fieldState }) => (
-              <Select
-                label="Số sao"
-                options={ratingOptions}
-                value={String(field.value)}
-                onChange={(v) => field.onChange(Number(v))}
-                error={fieldState.error?.message}
-              />
-            )}
+          <Select
+            label="Số sao"
+            options={ratingOptions}
+            value={String(form.rating)}
+            onChange={(v) => updateField("rating", Number(v) || 5)}
           />
 
           <div className="px-2 pt-2">
-            <FormField
-              control={control}
-              name="isApproved"
-              render={({ field, fieldState: _fs }) => (
-                <Switch
-                  checked={field.value ?? true}
-                  onChange={field.onChange}
-                  label="Phê duyệt (Hiển thị)"
-                  description={
-                    field.value
-                      ? "Đánh giá sẽ được hiển thị trên trang chủ"
-                      : "Đánh giá đang ẩn chờ duyệt"
-                  }
-                />
-              )}
+            <Switch
+              checked={form.isApproved}
+              onChange={(v) => updateField("isApproved", v)}
+              label="Phê duyệt (Hiển thị)"
+              description={form.isApproved ? "Đánh giá sẽ được hiển thị trên trang chủ" : "Đánh giá đang ẩn chờ duyệt"}
             />
           </div>
         </div>

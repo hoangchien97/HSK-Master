@@ -1,7 +1,7 @@
 import React from "react";
 import { cn } from "@/lib/utils";
 
-type SpinnerSize = "sm" | "md" | "lg";
+type SpinnerSize = "xs" | "sm" | "md" | "lg" | "xl";
 
 interface SpinnerProps {
   size?: SpinnerSize;
@@ -9,7 +9,7 @@ interface SpinnerProps {
   className?: string;
 }
 
-const sizeMap: Record<SpinnerSize, number> = { sm: 16, md: 24, lg: 32 };
+const sizeMap: Record<SpinnerSize, number> = { xs: 12, sm: 16, md: 24, lg: 32, xl: 48 };
 
 export function Spinner({ size = "md", color = "currentColor", className }: SpinnerProps) {
   const px = sizeMap[size];
@@ -19,7 +19,7 @@ export function Spinner({ size = "md", color = "currentColor", className }: Spin
       height={px}
       viewBox="0 0 24 24"
       fill="none"
-      className={cn("animate-spin inline-block flex-shrink-0", className)}
+      className={cn("animate-spin inline-block shrink-0", className)}
       aria-hidden="true"
     >
       <circle cx="12" cy="12" r="10" stroke={color} strokeWidth="2.5" strokeOpacity="0.2" />

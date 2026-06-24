@@ -1,7 +1,7 @@
 'use client';
 
 import Image from 'next/image';
-import { Button, Badge } from '@/components/landing/common';
+import { Button, Badge } from "@/components/ui";
 import TypingText from './TypingText';
 import type { HeroSlide } from '@/services';
 

@@ -17,7 +17,7 @@ interface OptimizedImageProps {
   objectFit?: "cover" | "contain" | "fill" | "none" | "scale-down";
 }
 
-export default function OptimizedImage({
+export function OptimizedImage({
   src,
   alt,
   width,
@@ -32,15 +32,6 @@ export default function OptimizedImage({
   const [isLoading, setIsLoading] = useState(true);
   const [hasError, setHasError] = useState(false);
 
-  const handleLoad = () => {
-    setIsLoading(false);
-  };
-
-  const handleError = () => {
-    setIsLoading(false);
-    setHasError(true);
-  };
-
   if (hasError) {
     return (
       <div
@@ -48,18 +39,9 @@ export default function OptimizedImage({
           "flex items-center justify-center bg-gray-100 text-gray-400",
           className
         )}
-        style={
-          fill
-            ? undefined
-            : { width: `${width}px`, height: `${height}px` }
-        }
+        style={fill ? undefined : { width: `${width}px`, height: `${height}px` }}
       >
-        <svg
-          className="w-1/3 h-1/3"
-          fill="none"
-          stroke="currentColor"
-          viewBox="0 0 24 24"
-        >
+        <svg className="w-1/3 h-1/3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <path
             strokeLinecap="round"
             strokeLinejoin="round"
@@ -94,8 +76,8 @@ export default function OptimizedImage({
           objectFit === "contain" && "object-contain",
           objectFit === "fill" && "object-fill"
         )}
-        onLoad={handleLoad}
-        onError={handleError}
+        onLoad={() => setIsLoading(false)}
+        onError={() => { setIsLoading(false); setHasError(true); }}
         priority={priority}
         sizes={sizes}
         quality={quality}
@@ -103,3 +85,4 @@ export default function OptimizedImage({
     </div>
   );
 }
+export default OptimizedImage;

@@ -3,7 +3,7 @@
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { X } from "lucide-react";
-import Tooltip from "@/components/landing/common/Tooltip";
+import { Tooltip } from "@/components/ui";
 import { ZaloIcon, MessengerIcon } from "@/components/landing/icons";
 
 interface ContactItem {

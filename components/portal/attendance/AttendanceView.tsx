@@ -2,26 +2,15 @@
 
 import { useState, useMemo, useCallback } from "react"
 import { useRouter } from "next/navigation"
+import { Button, Avatar, Badge, Select, type SelectOption } from "@/components/ui"
 import {
   Table,
   TableHeader,
-  TableColumn,
+  TableHead,
   TableBody,
   TableRow,
   TableCell,
-  Button,
-  Select,
-  SelectItem,
-  Chip,
-  Card,
-  CardBody,
-  CardHeader,
-  Avatar,
-  ButtonGroup,
-  Input,
-  Divider,
-  Pagination,
-} from "@heroui/react"
+} from "@/components/ui"
 import {
   Calendar,
   Users,
@@ -94,13 +83,6 @@ const HISTORY_STATUS: Record<string, { label: string; color: "success" | "danger
   LATE: { label: "Muộn", color: "warning" },
   EXCUSED: { label: "Có phép", color: "primary" },
 }
-
-const HISTORY_COLUMNS = [
-  { key: "date", label: "Ngày" },
-  { key: "class", label: "Lớp" },
-  { key: "student", label: "Học viên" },
-  { key: "status", label: "Trạng thái" },
-]
 
 /* ──────────────────── component ──────────────────────── */
 
@@ -200,14 +182,19 @@ export default function AttendanceView({
     return recentAttendances.slice(start, start + historyRowsPerPage)
   }, [recentAttendances, historyPage])
 
+  const classOptions: SelectOption[] = classes.map((c) => ({
+    value: c.id,
+    label: `${c.className} (${c.classCode})`,
+  }))
+
   /* ──────────────────── render ──────────────────────── */
 
   if (classes.length === 0) {
     return (
       <div className="flex-1 bg-white rounded-xl shadow-sm border border-gray-200 flex flex-col items-center justify-center min-h-[400px] gap-4">
-        <Users className="w-16 h-16 text-default-300" />
-        <p className="text-lg font-semibold text-default-500">Chưa có lớp học nào</p>
-        <p className="text-sm text-default-400">Tạo lớp học để bắt đầu điểm danh</p>
+        <Users className="w-16 h-16 text-gray-400" />
+        <p className="text-lg font-semibold text-(--color-muted)">Chưa có lớp học nào</p>
+        <p className="text-sm text-gray-400">Tạo lớp học để bắt đầu điểm danh</p>
       </div>
     )
   }
@@ -218,48 +205,40 @@ export default function AttendanceView({
       <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
         <div>
           <h1 className="text-2xl font-bold">Điểm danh</h1>
-          <p className="text-default-500 text-sm mt-1">
+          <p className="text-(--color-muted) text-sm mt-1">
             Điểm danh học viên theo buổi học
           </p>
         </div>
         <Button
-          variant="bordered"
-          startContent={<Download className="w-4 h-4" />}
+          variant="secondary"
+          leftIcon={<Download className="w-4 h-4" />}
         >
           Xuất báo cáo
         </Button>
       </div>
 
       {/* ─── Filters ─── */}
-      <Card shadow="sm">
-        <CardBody>
-          <div className="flex flex-col md:flex-row gap-4">
-            <Select
-              label="Lớp học"
-              selectedKeys={selectedClassId ? [selectedClassId] : []}
-              onSelectionChange={(keys) => {
-                const val = Array.from(keys)[0] as string
-                if (val) handleClassChange(val)
-              }}
-              className="flex-1"
-            >
-              {classes.map((c) => (
-                <SelectItem key={c.id}>
-                  {c.className} ({c.classCode})
-                </SelectItem>
-              ))}
-            </Select>
+      <div className="rounded-xl border border-(--color-smoke) bg-white p-4 shadow-sm">
+        <div className="flex flex-col md:flex-row gap-4">
+          <Select
+            label="Lớp học"
+            value={selectedClassId}
+            onChange={(val) => { if (val) handleClassChange(val) }}
+            options={classOptions}
+            className="flex-1"
+          />
 
-            <Input
+          <div className="flex-1 max-w-xs">
+            <label className="block text-sm font-medium text-(--color-ink) mb-1">Ngày điểm danh</label>
+            <input
               type="date"
-              label="Ngày điểm danh"
               value={selectedDate}
               onChange={(e) => setSelectedDate(e.target.value)}
-              className="flex-1 max-w-xs"
+              className="h-10 w-full rounded-sm border border-(--color-smoke) bg-white px-3 py-2 text-sm text-(--color-ink) focus:outline-none focus:ring-1 focus:ring-(--color-vermillion) focus:border-(--color-vermillion)"
             />
           </div>
-        </CardBody>
-      </Card>
+        </div>
+      </div>
 
       {/* ─── Summary ─── */}
       {students.length > 0 && (
@@ -270,184 +249,180 @@ export default function AttendanceView({
             { key: "late" as const, icon: Clock, label: "Muộn" },
             { key: "excused" as const, icon: AlertCircle, label: "Có phép" },
           ] as const).map(({ key, icon: Icon, label }) => (
-            <Card key={key} shadow="sm">
-              <CardBody className="flex flex-row items-center gap-3">
-                <div
-                  className={`p-2 rounded-lg ${
-                    key === "present"
-                      ? "bg-success-100 text-success-600"
-                      : key === "absent"
-                        ? "bg-danger-100 text-danger-600"
-                        : key === "late"
-                          ? "bg-warning-100 text-warning-600"
-                          : "bg-primary-100 text-primary-600"
-                  }`}
-                >
-                  <Icon className="w-5 h-5" />
-                </div>
-                <div>
-                  <p className="text-2xl font-bold">{summary[key]}</p>
-                  <p className="text-xs text-default-500">{label}</p>
-                </div>
-              </CardBody>
-            </Card>
+            <div key={key} className="rounded-xl border border-(--color-smoke) bg-white p-4 shadow-sm flex flex-row items-center gap-3">
+              <div
+                className={`p-2 rounded-lg ${
+                  key === "present"
+                    ? "bg-green-100 text-green-600"
+                    : key === "absent"
+                      ? "bg-red-100 text-red-600"
+                      : key === "late"
+                        ? "bg-amber-100 text-amber-600"
+                        : "bg-(--color-vermillion)/10 text-(--color-vermillion)"
+                }`}
+              >
+                <Icon className="w-5 h-5" />
+              </div>
+              <div>
+                <p className="text-2xl font-bold">{summary[key]}</p>
+                <p className="text-xs text-(--color-muted)">{label}</p>
+              </div>
+            </div>
           ))}
         </div>
       )}
 
       {/* ─── Attendance Table ─── */}
-      <Card shadow="sm">
-        <CardHeader className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-2">
+      <div className="rounded-xl border border-(--color-smoke) bg-white shadow-sm">
+        <div className="pb-4 border-b border-(--color-smoke) p-5 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-2">
           <div>
             <h3 className="text-lg font-semibold">Danh sách học viên</h3>
-            <p className="text-sm text-default-500">
+            <p className="text-sm text-(--color-muted)">
               {selectedClass?.className} –{" "}
               {dayjs(selectedDate).format("dddd, DD/MM/YYYY")}
             </p>
           </div>
           <Button
-            color="primary"
+            variant="primary"
             isLoading={loading}
             isDisabled={students.length === 0}
-            startContent={!loading && <Save className="w-4 h-4" />}
-            onPress={handleSubmit}
+            leftIcon={!loading ? <Save className="w-4 h-4" /> : undefined}
+            onClick={handleSubmit}
           >
             {loading ? "Đang lưu..." : "Lưu điểm danh"}
           </Button>
-        </CardHeader>
+        </div>
 
-        <Divider />
+        <hr className="border-t border-(--color-smoke)" />
 
         {students.length === 0 ? (
-          <CardBody>
+          <div className="py-4 p-5">
             <div className="flex flex-col items-center py-8 gap-2">
-              <Users className="w-12 h-12 text-default-300" />
-              <p className="text-default-500">Lớp học chưa có học viên</p>
+              <Users className="w-12 h-12 text-gray-400" />
+              <p className="text-(--color-muted)">Lớp học chưa có học viên</p>
             </div>
-          </CardBody>
+          </div>
         ) : (
           <div className="overflow-x-auto">
-          <Table
-            aria-label="Bảng điểm danh"
-            removeWrapper
-            isStriped
-          >
-            <TableHeader>
-              <TableColumn>STT</TableColumn>
-              <TableColumn>Học viên</TableColumn>
-              <TableColumn className="text-center">Trạng thái</TableColumn>
-            </TableHeader>
-            <TableBody>
-              {students.map((student, idx) => {
-                const currentStatus = attendance[student.id] || "present"
-                return (
-                  <TableRow key={student.id}>
-                    <TableCell className="w-14">{idx + 1}</TableCell>
-                    <TableCell>
-                      <div className="flex items-center gap-3">
-                        <Avatar
-                          src={student.image || undefined}
-                          name={student.name.charAt(0)}
-                          size="sm"
-                        />
-                        <span className="font-medium">{student.name}</span>
-                      </div>
-                    </TableCell>
-                    <TableCell>
-                      <div className="flex flex-wrap gap-1 justify-center sm:gap-0">
-                      <ButtonGroup size="sm" className="justify-center flex-wrap">
-                        {(Object.keys(STATUS_CONFIG) as AttendanceStatus[]).map(
-                          (status) => (
-                            <Button
-                              key={status}
-                              color={STATUS_CONFIG[status].color}
-                              variant={currentStatus === status ? "solid" : "bordered"}
-                              onPress={() => handleStatusChange(student.id, status)}
-                              size="sm"
-                              className="min-w-fit text-xs sm:text-sm"
-                            >
-                              {STATUS_CONFIG[status].label}
-                            </Button>
-                          ),
-                        )}
-                      </ButtonGroup>
-                      </div>
-                    </TableCell>
-                  </TableRow>
-                )
-              })}
-            </TableBody>
-          </Table>
+            <table className="w-full text-sm border-collapse">
+              <thead className="bg-(--color-paper)">
+                <tr>
+                  <th className="px-4 py-3 text-left text-xs font-semibold text-muted-foreground uppercase tracking-wide whitespace-nowrap">STT</th>
+                  <th className="px-4 py-3 text-left text-xs font-semibold text-muted-foreground uppercase tracking-wide whitespace-nowrap">Học viên</th>
+                  <th className="px-4 py-3 text-center text-xs font-semibold text-muted-foreground uppercase tracking-wide whitespace-nowrap">Trạng thái</th>
+                </tr>
+              </thead>
+              <tbody className="divide-y divide-(--color-smoke)">
+                {students.map((student, idx) => {
+                  const currentStatus = attendance[student.id] || "present"
+                  return (
+                    <tr key={student.id} className="hover:bg-(--color-paper) transition-colors">
+                      <td className="px-4 py-3 text-(--color-ink) w-14">{idx + 1}</td>
+                      <td className="px-4 py-3 text-(--color-ink)">
+                        <div className="flex items-center gap-3">
+                          <Avatar
+                            src={student.image || undefined}
+                            name={student.name}
+                            size="sm"
+                          />
+                          <span className="font-medium">{student.name}</span>
+                        </div>
+                      </td>
+                      <td className="px-4 py-3 text-(--color-ink)">
+                        <div className="flex flex-wrap gap-1 justify-center">
+                          {(Object.keys(STATUS_CONFIG) as AttendanceStatus[]).map(
+                            (status) => (
+                              <Button
+                                key={status}
+                                variant={currentStatus === status ? STATUS_CONFIG[status].color as "primary" | "secondary" | "ghost" | "danger" : "secondary"}
+                                onClick={() => handleStatusChange(student.id, status)}
+                                size="sm"
+                                className="min-w-fit text-xs sm:text-sm"
+                              >
+                                {STATUS_CONFIG[status].label}
+                              </Button>
+                            ),
+                          )}
+                        </div>
+                      </td>
+                    </tr>
+                  )
+                })}
+              </tbody>
+            </table>
           </div>
         )}
-      </Card>
+      </div>
 
       {/* ─── Recent History ─── */}
-      <Card shadow="sm">
-        <CardHeader>
+      <div className="rounded-xl border border-(--color-smoke) bg-white shadow-sm">
+        <div className="pb-4 border-b border-(--color-smoke) p-5">
           <h3 className="text-lg font-semibold">Lịch sử điểm danh gần đây</h3>
-        </CardHeader>
-        <Divider />
+        </div>
+        <hr className="border-t border-(--color-smoke)" />
 
         {recentAttendances.length === 0 ? (
-          <CardBody>
+          <div className="py-4 p-5">
             <div className="flex flex-col items-center py-8 gap-2">
-              <Calendar className="w-12 h-12 text-default-300" />
-              <p className="text-default-500">Chưa có lịch sử điểm danh</p>
+              <Calendar className="w-12 h-12 text-gray-400" />
+              <p className="text-(--color-muted)">Chưa có lịch sử điểm danh</p>
             </div>
-          </CardBody>
+          </div>
         ) : (
           <>
-            <Table
-              aria-label="Lịch sử điểm danh"
-              removeWrapper
-              isStriped
-            >
-              <TableHeader columns={HISTORY_COLUMNS}>
-                {(column) => (
-                  <TableColumn key={column.key}>{column.label}</TableColumn>
-                )}
-              </TableHeader>
-              <TableBody items={paginatedHistory}>
-                {(record) => (
-                  <TableRow key={record.id}>
-                    <TableCell>
-                      {dayjs(record.date).format("DD/MM/YYYY")}
-                    </TableCell>
-                    <TableCell>{record.class.className}</TableCell>
-                    <TableCell>
-                      {record.student.name}
-                    </TableCell>
-                    <TableCell>
-                      <Chip
-                        size="sm"
-                        color={
-                          HISTORY_STATUS[record.status]?.color ?? "default"
-                        }
-                        variant="flat"
-                      >
-                        {HISTORY_STATUS[record.status]?.label ?? record.status}
-                      </Chip>
-                    </TableCell>
-                  </TableRow>
-                )}
-              </TableBody>
-            </Table>
+            <div className="overflow-x-auto">
+              <table className="w-full text-sm border-collapse">
+                <thead className="bg-(--color-paper)">
+                  <tr>
+                    <th className="px-4 py-3 text-left text-xs font-semibold text-muted-foreground uppercase tracking-wide whitespace-nowrap">Ngày</th>
+                    <th className="px-4 py-3 text-left text-xs font-semibold text-muted-foreground uppercase tracking-wide whitespace-nowrap">Lớp</th>
+                    <th className="px-4 py-3 text-left text-xs font-semibold text-muted-foreground uppercase tracking-wide whitespace-nowrap">Học viên</th>
+                    <th className="px-4 py-3 text-left text-xs font-semibold text-muted-foreground uppercase tracking-wide whitespace-nowrap">Trạng thái</th>
+                  </tr>
+                </thead>
+                <tbody className="divide-y divide-(--color-smoke)">
+                  {paginatedHistory.map((record) => (
+                    <tr key={record.id} className="hover:bg-(--color-paper) transition-colors">
+                      <td className="px-4 py-3 text-(--color-ink)">
+                        {dayjs(record.date).format("DD/MM/YYYY")}
+                      </td>
+                      <td className="px-4 py-3 text-(--color-ink)">{record.class.className}</td>
+                      <td className="px-4 py-3 text-(--color-ink)">{record.student.name}</td>
+                      <td className="px-4 py-3 text-(--color-ink)">
+                        <Badge
+                          size="sm"
+                          variant={HISTORY_STATUS[record.status]?.color ?? "default"}
+                        >
+                          {HISTORY_STATUS[record.status]?.label ?? record.status}
+                        </Badge>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
 
             {historyPages > 1 && (
-              <CardBody className="flex items-center justify-center">
-                <Pagination
-                  total={historyPages}
-                  page={historyPage}
-                  onChange={setHistoryPage}
-                  showControls
-                  color="primary"
-                />
-              </CardBody>
+              <div className="flex items-center justify-center p-4 gap-2">
+                {Array.from({ length: historyPages }, (_, i) => i + 1).map((p) => (
+                  <button
+                    key={p}
+                    type="button"
+                    onClick={() => setHistoryPage(p)}
+                    className={`inline-flex items-center justify-center w-9 h-9 rounded-md text-sm font-medium transition-colors ${
+                      p === historyPage
+                        ? "bg-(--color-vermillion) text-white"
+                        : "hover:bg-(--color-paper) text-(--color-ink) border border-(--color-smoke)"
+                    }`}
+                  >
+                    {p}
+                  </button>
+                ))}
+              </div>
             )}
           </>
         )}
-      </Card>
+      </div>
     </div>
   )
 }

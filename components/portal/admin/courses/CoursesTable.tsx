@@ -1,8 +1,8 @@
 "use client";
 
 import { useState, useEffect, useCallback, useMemo } from "react";
-import { Button, Chip, useDisclosure, Dropdown, DropdownTrigger, DropdownMenu, DropdownItem, Input } from "@heroui/react";
-import { Plus, Edit2, Trash2, MoreVertical, BookOpen, Search } from "lucide-react";
+import { Badge } from "@/components/ui";
+import { BookOpen, Search, X } from "lucide-react";
 import { toast } from "react-toastify";
 import { useRouter, useSearchParams, usePathname } from "next/navigation";
 import type { ICourseAdmin, IGetCourseAdminResponse } from "@/interfaces/portal";
@@ -59,14 +59,14 @@ export default function CoursesTable() {
   const columns: CTableColumn<ICourseAdmin & Record<string, unknown>>[] = useMemo(() => [
     {
       key: "stt", label: "STT", align: "center" as const, headerClassName: "w-[50px]",
-      render: (_v: unknown, _row: unknown, index: number) => <span className="text-sm text-default-500">{(urlPage - 1) * urlPageSize + index + 1}</span>,
+      render: (_v: unknown, _row: unknown, index: number) => <span className="text-sm text-(--color-muted)">{(urlPage - 1) * urlPageSize + index + 1}</span>,
     },
     {
       key: "title", label: "Khóa học", sortable: true,
       render: (_v: unknown, row: ICourseAdmin) => (
         <div className="max-w-[250px]">
           <p className="font-semibold text-sm truncate">{row.title}</p>
-          <p className="text-xs text-default-400 truncate">{row.slug}</p>
+          <p className="text-xs text-gray-400 truncate">{row.slug}</p>
         </div>
       ),
     },
@@ -76,11 +76,11 @@ export default function CoursesTable() {
     },
     {
       key: "level", label: "HSK", headerClassName: "w-[80px]",
-      render: (_v: unknown, row: ICourseAdmin) => row.hskLevel ? <Chip size="sm" color="primary" variant="flat">{row.hskLevel.title}</Chip> : <span className="text-default-300">—</span>,
+      render: (_v: unknown, row: ICourseAdmin) => row.hskLevel ? <Badge size="sm" variant="primary">{row.hskLevel.title}</Badge> : <span className="text-gray-300">—</span>,
     },
     {
       key: "isPublished", label: "Trạng thái", headerClassName: "w-[100px]",
-      render: (_v: unknown, row: ICourseAdmin) => <Chip size="sm" color={row.isPublished ? "success" : "warning"} variant="flat">{row.isPublished ? "Đã xuất bản" : "Nháp"}</Chip>,
+      render: (_v: unknown, row: ICourseAdmin) => <Badge size="sm" variant={row.isPublished ? "success" : "warning"}>{row.isPublished ? "Đã xuất bản" : "Nháp"}</Badge>,
     },
     {
       key: "enrollmentCount", label: "Đăng ký", align: "center" as const, headerClassName: "w-[80px]",
@@ -105,7 +105,25 @@ export default function CoursesTable() {
       emptyContent={{ icon: <BookOpen className="w-12 h-12" />, title: "Chưa có khóa học nào", description: "Khóa học sẽ xuất hiện ở đây" }}
       toolbar={
         <div className="rounded-xl bg-white border border-gray-200 px-4 py-3 shadow-sm">
-          <Input isClearable className="w-full sm:max-w-xs" placeholder="Tìm kiếm khóa học..." startContent={<Search className="w-4 h-4 text-default-400" />} value={search} onValueChange={setSearch} onClear={() => setSearch("")} size="sm" />
+          <div className="relative w-full sm:max-w-xs">
+            <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-(--color-muted) pointer-events-none" />
+            <input
+              type="text"
+              placeholder="Tìm kiếm khóa học..."
+              value={search}
+              onChange={(e) => setSearch(e.target.value)}
+              className="h-9 w-full pl-9 pr-8 rounded-md border border-(--color-smoke) bg-white text-sm text-(--color-ink) placeholder:text-(--color-muted) focus:outline-none focus:ring-2 focus:ring-(--color-vermillion) focus:border-(--color-vermillion)"
+            />
+            {search && (
+              <button
+                type="button"
+                onClick={() => setSearch("")}
+                className="absolute right-2 top-1/2 -translate-y-1/2 text-(--color-muted) hover:text-(--color-ink) transition-colors"
+              >
+                <X className="w-3.5 h-3.5" />
+              </button>
+            )}
+          </div>
         </div>
       }
     />

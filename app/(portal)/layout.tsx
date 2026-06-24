@@ -1,7 +1,6 @@
 import { auth } from "@/auth"
 import { redirect } from "next/navigation"
 import { SessionProvider } from "next-auth/react"
-import { HeroUIProvider } from "@/providers"
 import { ToastContainer } from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.css'
 import { Suspense } from "react"
@@ -23,34 +22,32 @@ export default async function PortalLayout({
 
   return (
     <SessionProvider refetchInterval={300} refetchOnWindowFocus={false}>
-      <HeroUIProvider>
-          <Suspense fallback={null}>
-            <WebVitals />
-          </Suspense>
-          <PortalLayoutClient
-            user={{
-              id: session.user.id || "",
-              name: session.user.name || "User",
-              email: session.user.email || "",
-              role: session.user.role || UserRole.STUDENT,
-              image: session.user.image,
-            }}
-          >
-            {children}
-          </PortalLayoutClient>
-          <ToastContainer
-            position="top-right"
-            autoClose={3000}
-            hideProgressBar={false}
-            newestOnTop={false}
-            closeOnClick
-            rtl={false}
-            pauseOnFocusLoss
-            draggable
-            pauseOnHover
-            theme="colored"
-          />
-      </HeroUIProvider>
+      <Suspense fallback={null}>
+        <WebVitals />
+      </Suspense>
+      <PortalLayoutClient
+        user={{
+          id: session.user.id || "",
+          name: session.user.name || "User",
+          email: session.user.email || "",
+          role: session.user.role || UserRole.STUDENT,
+          image: session.user.image,
+        }}
+      >
+        {children}
+      </PortalLayoutClient>
+      <ToastContainer
+        position="top-right"
+        autoClose={3000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+        theme="colored"
+      />
     </SessionProvider>
   )
 }

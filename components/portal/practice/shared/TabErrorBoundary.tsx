@@ -1,7 +1,6 @@
 "use client"
 
 import { Component, type ReactNode } from "react"
-import { Button, Card, CardBody } from "@heroui/react"
 import { AlertTriangle, RotateCcw } from "lucide-react"
 import { PRACTICE_LABELS } from "@/constants/portal/practice"
 
@@ -45,31 +44,30 @@ export default class TabErrorBoundary extends Component<Props, State> {
   render() {
     if (this.state.hasError) {
       return (
-        <Card className="border border-danger-200 dark:border-danger-800/40">
-          <CardBody className="py-12 text-center">
-            <AlertTriangle className="w-12 h-12 text-danger mx-auto mb-4" />
-            <h3 className="text-lg font-semibold text-danger mb-1">
+        <div className="rounded-xl border border-red-200 dark:border-red-800/40 bg-white p-4 shadow-sm">
+          <div className="py-12 text-center">
+            <AlertTriangle className="w-12 h-12 text-red-600 mx-auto mb-4" />
+            <h3 className="text-lg font-semibold text-red-600 mb-1">
               {L.error.headingTpl(this.props.tabName)}
             </h3>
-            <p className="text-sm text-default-500 mb-1 max-w-sm mx-auto">
+            <p className="text-sm text-(--color-muted) mb-1 max-w-sm mx-auto">
               {L.error.helpText}
             </p>
             {process.env.NODE_ENV === "development" && this.state.error && (
-              <p className="text-xs text-default-400 mb-4 font-mono max-w-md mx-auto truncate">
+              <p className="text-xs text-gray-400 mb-4 font-mono max-w-md mx-auto truncate">
                 {this.state.error.message}
               </p>
             )}
-            <Button
-              color="primary"
-              variant="flat"
-              onPress={this.handleRetry}
-              startContent={<RotateCcw className="w-4 h-4" />}
-              className="mt-2"
+            <button
+              type="button"
+              onClick={this.handleRetry}
+              className="mt-2 inline-flex items-center gap-1.5 px-4 py-2 rounded-md bg-(--color-vermillion) text-white hover:bg-(--color-vermillion-hover) transition-colors"
             >
+              <RotateCcw className="w-4 h-4" />
               {L.error.retryBtn}
-            </Button>
-          </CardBody>
-        </Card>
+            </button>
+          </div>
+        </div>
       )
     }
 
