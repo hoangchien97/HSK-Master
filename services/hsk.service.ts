@@ -7,7 +7,7 @@ export interface HSKLevel {
   badge: string
   badgeColor: string
   description: string
-  vocabularyCount: string
+  vocabularyCount: number
   lessonCount: number
   duration: string
   targetAudience: string

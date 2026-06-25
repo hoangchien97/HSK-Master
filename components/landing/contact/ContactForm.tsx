@@ -49,6 +49,8 @@ export default function ContactForm({ submitAction }: ContactFormProps) {
       </p>
 
       <form onSubmit={handleSubmit(onSubmit)} className="space-y-5">
+        {/* Honeypot — hidden from real users; bots will fill this */}
+        <input type="text" name="website" tabIndex={-1} aria-hidden="true" className="hidden" autoComplete="off" />
         <div className="grid grid-cols-1 gap-5 sm:grid-cols-2">
           <FormField
             name="name"

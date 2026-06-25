@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from "next/server"
 import { prisma } from "@/lib/prisma"
 import { auth } from "@/auth"
 import { ASSIGNMENT_STATUS } from "@/constants/portal/roles"
-import type { Prisma } from "@prisma/client"
+import type { Prisma, AssignmentStatus } from "@prisma/client"
 
 // GET - Fetch assignments with server-side filtering & pagination
 export async function GET(request: NextRequest) {
@@ -36,7 +36,7 @@ export async function GET(request: NextRequest) {
         title: { contains: search, mode: "insensitive" as const },
       }),
       ...(classId && { classId }),
-      ...(status && { status }),
+      ...(status && { status: status as AssignmentStatus }),
     }
 
     const [items, total, classes] = await Promise.all([

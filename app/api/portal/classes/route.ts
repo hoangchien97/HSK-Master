@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from "next/server"
 import { auth } from "@/auth"
 import { prisma } from "@/lib/prisma"
 import { CLASS_STATUS, USER_ROLE, ENROLLMENT_STATUS } from "@/constants/portal/roles"
-import type { Prisma } from "@prisma/client"
+import type { Prisma, ClassStatus } from "@prisma/client"
 
 // GET - Fetch classes with server-side filtering & pagination
 export async function GET(request: NextRequest) {
@@ -54,7 +54,7 @@ export async function GET(request: NextRequest) {
       // Teachers/admins see their own classes
       where = {
         teacherId: user.id,
-        ...(status && { status }),
+        ...(status && { status: status as ClassStatus }),
         ...(search && {
           OR: [
             { className: { contains: search, mode: "insensitive" as const } },

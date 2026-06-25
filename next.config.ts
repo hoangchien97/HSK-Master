@@ -1,4 +1,5 @@
 import type { NextConfig } from "next";
+import withPWA from "@ducanh2912/next-pwa";
 
 const nextConfig: NextConfig = {
   images: {
@@ -55,11 +56,11 @@ const nextConfig: NextConfig = {
     contentDispositionType: 'attachment',
     contentSecurityPolicy: "default-src 'self'; script-src 'none'; sandbox;",
   },
-  // Compiler optimizations
   compiler: {
     removeConsole: process.env.NODE_ENV === 'production',
   },
-  // Performance optimizations
+  // Acknowledge Turbopack for dev; PWA webpack plugin only runs in production builds
+  turbopack: {},
   experimental: {
     optimizePackageImports: [
       'lucide-react',
@@ -70,7 +71,6 @@ const nextConfig: NextConfig = {
       'zod',
     ],
   },
-  // Headers for caching & SEO
   async headers() {
     return [
       {
@@ -83,7 +83,6 @@ const nextConfig: NextConfig = {
         ],
       },
       {
-        // Cache font files
         source: '/:path*.woff2',
         headers: [
           {
@@ -96,4 +95,33 @@ const nextConfig: NextConfig = {
   },
 };
 
-export default nextConfig;
+export default withPWA({
+  dest: "public",
+  disable: process.env.NODE_ENV === "development",
+  reloadOnOnline: true,
+  workboxOptions: {
+    // Portal pages must never be served from SW cache
+    navigateFallbackDenylist: [/^\/portal/],
+    exclude: [/\/portal\//],
+    runtimeCaching: [
+      {
+        // Landing shell pages — stale-while-revalidate, 10 min TTL
+        urlPattern: /^https:\/\/[^/]+\/(|about|contact|courses|privacy|terms)(\?.*)?$/,
+        handler: "StaleWhileRevalidate",
+        options: {
+          cacheName: "landing-pages",
+          expiration: { maxEntries: 20, maxAgeSeconds: 600 },
+        },
+      },
+      {
+        // Course detail pages — stale-while-revalidate, 10 min TTL
+        urlPattern: /^https:\/\/[^/]+\/courses\/.+$/,
+        handler: "StaleWhileRevalidate",
+        options: {
+          cacheName: "course-detail-pages",
+          expiration: { maxEntries: 50, maxAgeSeconds: 600 },
+        },
+      },
+    ],
+  },
+})(nextConfig);

@@ -405,6 +405,20 @@
 
 html {
   scroll-behavior: smooth;
+  overflow-y: scroll; /* html is the permanent scroll container — scrollbar never disappears, so no layout shift */
+  scrollbar-gutter: stable;
+}
+
+/* react-remove-scroll-bar sets body { overflow:hidden !important; margin-right:Xpx !important }
+   when Radix overlays (Select, Dialog…) open. With html as the scroll container two problems arise:
+   1. overflow:hidden on body creates a scroll container → kills position:sticky inside body → header disappears
+   2. margin-right:Xpx on body causes a right-side gap (the scrollbar lives on html, not body)
+   Fix: override both with higher specificity (0-1-2 vs their 0-1-1) so our !important wins.
+   overflow:clip clips content visually like hidden but does NOT create a scroll container,
+   so sticky elements inside body still stick to html (the real scroll container). */
+html body[data-scroll-locked] {
+  overflow: clip !important;
+  margin-right: 0 !important;
 }
 
 /* Respect user motion preference — guards all CSS animations */
@@ -440,6 +454,36 @@ body {
 }
 
 @layer utilities {
+
+  /* Hero slide fade-in-up (used by HeroSlideContent) */
+  @keyframes heroFadeInUp {
+    from { opacity: 0; transform: translateY(20px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+  .animate-heroFadeInUp {
+    animation: heroFadeInUp 0.5s ease both;
+  }
+
+  /* Ken Burns zoom — background image slowly zooms in on active slide.
+     CSS animation (not transition) so it restarts cleanly on each activation:
+     removing the class snaps back to scale(1.08); re-adding it restarts from the
+     from-keyframe which matches, so there is no visible jump. */
+  @keyframes kenBurns {
+    from { transform: scale(1.08); }
+    to   { transform: scale(1.0); }
+  }
+  .animate-kenBurns {
+    animation: kenBurns 7s ease-out forwards;
+  }
+  .ken-burns-reset {
+    transform: scale(1.08);
+  }
+
+  /* TypingText fade-in (replaces <style jsx> in TypingText.tsx) */
+  @keyframes typingFadeIn {
+    from { opacity: 0; transform: translateY(8px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
 
   /* Animation for SectionHeader */
   @keyframes fade-in {

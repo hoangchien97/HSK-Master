@@ -2,6 +2,7 @@
 
 import { motion } from "framer-motion";
 import { CourseCard } from "@/components/landing/courses";
+import type { CourseWithCategory } from "@/services/course.service";
 
 const staggerContainer = {
   hidden: { opacity: 0 },
@@ -22,12 +23,7 @@ const staggerItem = {
   }
 };
 
-interface Course {
-  id: string;
-  [key: string]: any;
-}
-
-export function CoursesGrid({ courses }: { courses: Course[] }) {
+export function CoursesGrid({ courses }: { courses: CourseWithCategory[] }) {
   return (
     <motion.div
       key={courses.map(c => c.id).join(',')}
@@ -37,7 +33,7 @@ export function CoursesGrid({ courses }: { courses: Course[] }) {
       className="grid grid-cols-1 gap-6 sm:grid-cols-2 xl:grid-cols-3"
     >
       {courses.length > 0 ? (
-        courses.map((course: any) => (
+        courses.map((course) => (
           <motion.div key={course.id} variants={staggerItem}>
             <CourseCard course={course} />
           </motion.div>

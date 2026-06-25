@@ -3,6 +3,9 @@
 import { prisma } from "@/lib/prisma"
 
 export async function submitContact(formData: FormData) {
+  // Honeypot: bots fill hidden fields, real users don't
+  if (formData.get("website")?.toString()) return
+
   const name = formData.get("name")?.toString().trim() ?? ""
   const phone = formData.get("phone")?.toString().trim() ?? ""
   const email = formData.get("email")?.toString().trim() ?? ""

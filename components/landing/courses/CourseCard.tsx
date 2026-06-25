@@ -8,12 +8,12 @@ interface CourseCardProps {
     id: string;
     title: string;
     slug: string;
-    description: string | null;
-    image: string | null;
-    instructor: string | null;
-    instructorAvatar: string | null;
-    tag: string | null;
-    badgeText: string | null;
+    description?: string | null;
+    image?: string | null;
+    instructor?: string | null;
+    instructorAvatar?: string | null;
+    tag?: string | null;
+    badgeText?: string | null;
     lectures: number;
     durationHours: number;
   };

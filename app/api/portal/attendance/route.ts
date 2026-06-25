@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from "next/server"
 import { prisma } from "@/lib/prisma"
 import { auth } from "@/auth"
 import { USER_ROLE, ENROLLMENT_STATUS } from "@/constants/portal/roles"
+import type { AttendanceStatus } from "@prisma/client"
 
 // GET - Fetch attendance matrix for a class in a month
 export async function GET(request: NextRequest) {
@@ -207,7 +208,7 @@ export async function POST(request: NextRequest) {
             },
           },
           update: {
-            status: record.status.toUpperCase(),
+            status: record.status.toUpperCase() as AttendanceStatus,
             notes: record.notes || null,
             teacherId: user.id,
           },
@@ -216,7 +217,7 @@ export async function POST(request: NextRequest) {
             classId,
             teacherId: user.id,
             date: attendanceDate,
-            status: record.status.toUpperCase(),
+            status: record.status.toUpperCase() as AttendanceStatus,
             notes: record.notes || null,
           },
         })

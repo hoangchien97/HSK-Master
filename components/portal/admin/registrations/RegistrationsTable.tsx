@@ -64,6 +64,19 @@ export default function RegistrationsTable() {
     },
     { key: "course", label: "Khóa học", render: (_v: unknown, row: IRegistration) => row.course ? <Badge size="sm" variant="primary">{row.course.title}</Badge> : <span className="text-gray-300">—</span> },
     { key: "note", label: "Ghi chú", render: (_v: unknown, row: IRegistration) => <p className="text-sm text-(--color-muted) truncate max-w-[150px]">{row.note || "—"}</p> },
+    {
+      key: "status", label: "Trạng thái", headerClassName: "w-[120px]",
+      render: (_v: unknown, row: IRegistration) => {
+        const map: Record<IRegistration['status'], { label: string; variant: 'warning' | 'primary' | 'success' | 'default' }> = {
+          PENDING:    { label: "Chờ xử lý",  variant: "warning" },
+          CONTACTED:  { label: "Đã liên hệ", variant: "primary" },
+          ENROLLED:   { label: "Đã đăng ký", variant: "success" },
+          CANCELLED:  { label: "Đã hủy",     variant: "default" },
+        };
+        const { label, variant } = map[row.status] ?? map.PENDING;
+        return <Badge size="sm" variant={variant}>{label}</Badge>;
+      },
+    },
     { key: "createdAt", label: "Ngày đăng ký", sortable: true, headerClassName: "w-[120px]", render: (_v: unknown, row: IRegistration) => <span className="text-sm text-(--color-muted)">{dayjs(row.createdAt).format("DD/MM/YYYY HH:mm")}</span> },
     {
       key: "actions", label: "", align: "end" as const, headerClassName: "w-[60px]",

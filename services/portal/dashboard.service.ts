@@ -5,6 +5,7 @@
  */
 
 import { prisma } from "@/lib/prisma"
+import type { EnrollmentStatus } from "@prisma/client"
 
 /* ─────────── Types ─────────── */
 
@@ -88,7 +89,7 @@ export async function getStudentDashboardStats(studentId: string): Promise<Dashb
       where: {
         class: {
           enrollments: {
-            some: { studentId, status: "ACTIVE" },
+            some: { studentId, status: "ACTIVE" as EnrollmentStatus },
           },
         },
         submissions: {

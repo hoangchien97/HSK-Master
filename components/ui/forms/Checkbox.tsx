@@ -26,11 +26,11 @@ export function Checkbox({
     id ?? `checkbox-${label?.toLowerCase().replace(/\s+/g, "-")}`;
 
   return (
-    <div className="flex items-start gap-2">
+    <div className="flex items-center gap-2">
       <CheckboxPrimitive.Root
         id={inputId}
         className={cn(
-          "mt-0.5 grid place-content-center h-4 w-4 shrink-0 rounded-sm border transition-colors",
+          "grid place-content-center h-4 w-4 shrink-0 rounded-sm border transition-colors",
           "border-(--color-smoke) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--color-vermillion) focus-visible:ring-offset-1",
           "disabled:cursor-not-allowed disabled:opacity-50",
           "data-[state=checked]:bg-(--color-vermillion) data-[state=checked]:border-(--color-vermillion) data-[state=checked]:text-white",
@@ -49,7 +49,7 @@ export function Checkbox({
           {label && (
             <label
               htmlFor={inputId}
-              className="text-sm font-medium text-(--color-ink) cursor-pointer leading-none"
+              className="text-sm font-medium text-(--color-ink) cursor-pointer leading-tight"
             >
               {label}
             </label>

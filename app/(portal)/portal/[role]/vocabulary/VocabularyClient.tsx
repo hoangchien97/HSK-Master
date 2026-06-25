@@ -25,7 +25,7 @@ interface HSKLevel {
   level: number
   name: string
   description?: string | null
-  vocabularyCount: string
+  vocabularyCount: number
 }
 
 interface VocabularyProgress {

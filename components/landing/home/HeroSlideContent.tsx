@@ -1,6 +1,7 @@
 'use client';
 
 import Image from 'next/image';
+import Link from 'next/link';
 import { Button, Badge } from "@/components/ui";
 import TypingText from './TypingText';
 import type { HeroSlide } from '@/services';
@@ -22,9 +23,7 @@ export default function HeroSlideContent({
     <div className="relative flex items-center h-full overflow-hidden bg-gray-900">
       {/* Background Image with Ken Burns Effect — Next.js Image for LCP */}
       <div
-        className={`absolute inset-0 transition-transform duration-[8000ms] ease-linear ${
-          animated && isActive ? 'scale-100' : 'scale-105'
-        }`}
+        className={`absolute inset-0 ${animated && isActive ? 'animate-kenBurns' : 'ken-burns-reset'}`}
         style={{ opacity: 0.85 }}
       >
         <Image
@@ -64,26 +63,24 @@ export default function HeroSlideContent({
         )}
 
         {/* Description */}
-        <div className={animClass} style={{ animationDelay: '0.5s' }}>
-          {animated && isActive ? (
-            <TypingText
-              text={slide.description}
-              className="md:block text-white text-sm md:text-base lg:text-lg mb-4 md:mb-6 max-w-2xl font-medium leading-relaxed drop-shadow-[0_2px_15px_rgba(0,0,0,0.8)]"
-              delay={0.8}
-            />
-          ) : (
-            <p className="md:block text-white text-sm md:text-base lg:text-lg mb-4 md:mb-6 max-w-2xl font-medium leading-relaxed drop-shadow-[0_2px_15px_rgba(0,0,0,0.8)]">
-              {slide.description}
-            </p>
-          )}
-        </div>
+        {animated && isActive ? (
+          <TypingText
+            text={slide.description}
+            className="md:block text-white text-sm md:text-base lg:text-lg mb-4 md:mb-6 max-w-2xl font-medium leading-relaxed drop-shadow-[0_2px_15px_rgba(0,0,0,0.8)]"
+            delay={0.6}
+          />
+        ) : (
+          <p className="md:block text-white text-sm md:text-base lg:text-lg mb-4 md:mb-6 max-w-2xl font-medium leading-relaxed drop-shadow-[0_2px_15px_rgba(0,0,0,0.8)]">
+            {slide.description}
+          </p>
+        )}
 
         {/* CTA Buttons */}
         <div
           className={`flex flex-wrap gap-2 sm:gap-3 md:gap-4 ${animClass}`}
           style={{ animationDelay: '0.8s' }}
         >
-          <a href={slide.primaryCTA.href}>
+          <Link href={slide.primaryCTA.href}>
             <Button
               variant="gradient"
               size="md"
@@ -93,9 +90,9 @@ export default function HeroSlideContent({
             >
               {slide.primaryCTA.text}
             </Button>
-          </a>
+          </Link>
           {slide.secondaryCTA && (
-            <a href={slide.secondaryCTA.href}>
+            <Link href={slide.secondaryCTA.href}>
               <Button
                 variant="outline-white"
                 size="md"
@@ -103,26 +100,10 @@ export default function HeroSlideContent({
               >
                 {slide.secondaryCTA.text}
               </Button>
-            </a>
+            </Link>
           )}
         </div>
       </div>
-
-      <style jsx>{`
-        @keyframes heroFadeInUp {
-          from {
-            opacity: 0;
-            transform: translateY(20px);
-          }
-          to {
-            opacity: 1;
-            transform: translateY(0);
-          }
-        }
-        .animate-heroFadeInUp {
-          animation: heroFadeInUp 0.5s ease both;
-        }
-      `}</style>
     </div>
   );
 }

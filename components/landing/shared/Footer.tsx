@@ -2,7 +2,7 @@ import Link from "next/link";
 import { HSK_LEVEL_GROUPS } from "@/types/filters";
 import { Phone, Mail, MapPin, Linkedin, Instagram, Facebook } from "lucide-react";
 import Image from "next/image";
-import { BRAND_NAME } from "@/constants/brand";
+import { BRAND_NAME, CONTACT_INFO, SOCIAL_LINKS } from "@/constants/brand";
 import FooterFAQ from "./FooterFAQ";
 
 export default function Footer() {
@@ -19,27 +19,39 @@ export default function Footer() {
               Nền tảng học tiếng Trung trực tuyến hàng đầu, giúp bạn chinh phục HSK từ con số 0 đến thành thạo.
             </p>
             <div className="flex gap-2.5">
-              <a
-                href="#"
-                className="p-2 bg-white/10 rounded-lg hover:bg-white/20 transition-all hover:scale-110 hover:rotate-6"
-                aria-label="LinkedIn"
-              >
-                <Linkedin className="w-5 h-5" />
-              </a>
-              <a
-                href="#"
-                className="p-2 bg-white/10 rounded-lg hover:bg-white/20 transition-all hover:scale-110 hover:rotate-6"
-                aria-label="Instagram"
-              >
-                <Instagram className="w-5 h-5" />
-              </a>
-              <a
-                href="#"
-                className="p-2 bg-white/10 rounded-lg hover:bg-white/20 transition-all hover:scale-110 hover:rotate-6"
-                aria-label="Facebook"
-              >
-                <Facebook className="w-5 h-5" />
-              </a>
+              {SOCIAL_LINKS.linkedin && (
+                <a
+                  href={SOCIAL_LINKS.linkedin}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="p-2 bg-white/10 rounded-lg hover:bg-white/20 transition-all hover:scale-110 hover:rotate-6"
+                  aria-label="LinkedIn"
+                >
+                  <Linkedin className="w-5 h-5" />
+                </a>
+              )}
+              {SOCIAL_LINKS.instagram && (
+                <a
+                  href={SOCIAL_LINKS.instagram}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="p-2 bg-white/10 rounded-lg hover:bg-white/20 transition-all hover:scale-110 hover:rotate-6"
+                  aria-label="Instagram"
+                >
+                  <Instagram className="w-5 h-5" />
+                </a>
+              )}
+              {SOCIAL_LINKS.facebook && (
+                <a
+                  href={SOCIAL_LINKS.facebook}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="p-2 bg-white/10 rounded-lg hover:bg-white/20 transition-all hover:scale-110 hover:rotate-6"
+                  aria-label="Facebook"
+                >
+                  <Facebook className="w-5 h-5" />
+                </a>
+              )}
             </div>
           </div>
 
@@ -89,19 +101,19 @@ export default function Footer() {
             <ul className="space-y-2.5">
               <li className="flex items-start gap-2.5 group">
                 <Phone className="text-white/90 w-4 h-4 shrink-0 mt-0.5 group-hover:scale-110 transition-transform" />
-                <a href="tel:0965322136" className="text-sm font-semibold text-white/90 hover:text-white hover:brightness-125 hover:underline transition-all">
-                  0965322136
+                <a href={`tel:${CONTACT_INFO.phone}`} className="text-sm font-semibold text-white/90 hover:text-white hover:brightness-125 hover:underline transition-all">
+                  {CONTACT_INFO.phone}
                 </a>
               </li>
               <li className="flex items-start gap-2.5 group">
                 <Mail className="text-white/90 w-4 h-4 shrink-0 mt-0.5 group-hover:scale-110 transition-transform" />
-                <a href="mailto:tranhongngoc19122001@gmail.com" className="text-sm text-white/90 hover:text-white hover:brightness-125 hover:underline break-all transition-all">
-                  tranhongngoc19122001@gmail.com
+                <a href={`mailto:${CONTACT_INFO.email}`} className="text-sm text-white/90 hover:text-white hover:brightness-125 hover:underline break-all transition-all">
+                  {CONTACT_INFO.email}
                 </a>
               </li>
               <li className="flex items-start gap-2.5 group">
                 <MapPin className="text-white/90 w-4 h-4 shrink-0 mt-0.5 group-hover:scale-110 transition-transform" />
-                <span className="text-sm text-white/90">Hà Nội, Việt Nam</span>
+                <span className="text-sm text-white/90">{CONTACT_INFO.address}</span>
               </li>
             </ul>
           </div>

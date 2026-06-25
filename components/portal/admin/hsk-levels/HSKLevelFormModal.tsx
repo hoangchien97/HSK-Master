@@ -32,7 +32,7 @@ export default function HSKLevelFormModal({
     badge: initialData?.badge || "",
     badgeColor: initialData?.badgeColor || "default",
     description: initialData?.description || "",
-    vocabularyCount: initialData?.vocabularyCount || "",
+    vocabularyCount: initialData?.vocabularyCount || 0,
     lessonCount: initialData?.lessonCount || 0,
     duration: initialData?.duration || "",
     targetAudience: initialData?.targetAudience || "",
@@ -139,9 +139,10 @@ export default function HSKLevelFormModal({
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
             <Input
               label="Số từ vựng"
-              placeholder="VD: 150 từ vựng"
-              value={form.vocabularyCount}
-              onChange={(e) => updateField("vocabularyCount", e.target.value)}
+              type="number"
+              placeholder="VD: 150"
+              value={String(form.vocabularyCount)}
+              onChange={(e) => updateField("vocabularyCount", Number(e.target.value) || 0)}
             />
             <Input
               label="Số bài học"

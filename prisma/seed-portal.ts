@@ -1,4 +1,5 @@
 import { PrismaClient } from "@prisma/client"
+import type { AssignmentType } from "@prisma/client"
 import bcrypt from "bcryptjs"
 import {
   UserRole,
@@ -202,7 +203,7 @@ export async function seedPortal() {
           title: template.title,
           slug: getUniqueAssignmentSlug(template.title),
           description: template.desc,
-          assignmentType: template.type,
+          assignmentType: template.type as AssignmentType,
           dueDate,
           maxScore: template.maxScore,
           attachments: [],
@@ -364,7 +365,7 @@ export async function seedPortal() {
             correctCount,
             wrongCount,
             masteryScore,
-            status,
+            status: status as ItemProgressStatus,
             lastSeenAt,
             nextReviewAt: new Date(lastSeenAt.getTime() + (status === ItemProgressStatus.MASTERED ? 3 : 1) * 24 * 60 * 60 * 1000),
           },

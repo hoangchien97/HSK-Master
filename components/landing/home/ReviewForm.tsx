@@ -2,7 +2,7 @@
 
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useState } from "react";
+import { useRef, useState } from "react";
 import { createReview } from "@/services";
 import { Button, Input, Textarea, Select, FormField } from "@/components/ui";
 import { MessageCircle, Send, Star } from "lucide-react";
@@ -31,6 +31,7 @@ interface ReviewFormProps {
 
 export default function ReviewForm({ onReviewAdded }: ReviewFormProps) {
   const [hoveredStar, setHoveredStar] = useState(0);
+  const honeypotRef = useRef<HTMLInputElement>(null);
 
   const {
     control,
@@ -46,7 +47,7 @@ export default function ReviewForm({ onReviewAdded }: ReviewFormProps) {
   const content = watch("content");
 
   const onSubmit = async (data: ReviewFormData) => {
-    const result = await createReview(data);
+    const result = await createReview({ ...data, honeypot: honeypotRef.current?.value ?? "" });
     if (result.success) {
       toast.success(
         "Cảm ơn bạn đã chia sẻ! Review của bạn đã được đăng thành công 🎉"
@@ -77,6 +78,8 @@ export default function ReviewForm({ onReviewAdded }: ReviewFormProps) {
       </div>
 
       <form onSubmit={handleSubmit(onSubmit)} className="space-y-4 md:space-y-6">
+        {/* Honeypot — hidden from real users; bots will fill this */}
+        <input ref={honeypotRef} type="text" name="website" tabIndex={-1} aria-hidden="true" className="hidden" autoComplete="off" />
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6">
           <FormField
             name="studentName"
@@ -148,7 +151,8 @@ export default function ReviewForm({ onReviewAdded }: ReviewFormProps) {
                     onMouseLeave={() => setHoveredStar(0)}
                     onClick={() => field.onChange(star)}
                     disabled={isSubmitting}
-                    className="focus:outline-none transition-transform hover:scale-110 disabled:opacity-50"
+                    aria-label={`${star} sao`}
+                    className="focus:outline-none focus:ring-2 focus:ring-yellow-400 focus:rounded-sm transition-transform hover:scale-110 disabled:opacity-50"
                   >
                     <Star
                       className={`h-6 w-6 md:h-7 md:w-7 lg:h-8 lg:w-8 ${

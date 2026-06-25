@@ -12,8 +12,8 @@ interface HeroSlideShowClientProps {
 
 export default function HeroSlideShowClient({ slides }: HeroSlideShowClientProps) {
   const [emblaRef, emblaApi] = useEmblaCarousel(
-    { loop: true, duration: 20 },
-    [Autoplay({ delay: 5000, stopOnInteraction: false })]
+    { loop: true, duration: 35 },
+    [Autoplay({ delay: 6500, stopOnInteraction: false })]
   );
   const [selectedIndex, setSelectedIndex] = useState(0);
   const [mounted, setMounted] = useState(false);
@@ -71,6 +71,11 @@ export default function HeroSlideShowClient({ slides }: HeroSlideShowClientProps
                     </div>
                   ))}
                 </div>
+              </div>
+
+              {/* Live region — announces active slide to screen readers */}
+              <div aria-live="polite" aria-atomic="true" className="sr-only">
+                {slides[selectedIndex]?.title ?? `Slide ${selectedIndex + 1}`}
               </div>
 
               {/* Navigation Dots - Pure CSS, no framer-motion */}

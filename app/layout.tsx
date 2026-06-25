@@ -9,6 +9,7 @@ import { MaterialIconsLoader } from "@/components/landing/shared/MaterialIconsLo
 const geistSans = Geist({
   variable: "--font-geist-sans",
   subsets: ["latin"],
+  display: "swap",
 });
 
 const inter = Inter({
@@ -135,7 +136,6 @@ export const metadata: Metadata = {
     "theme-color": "#ec131e",
     "msapplication-TileColor": "#ec131e",
     "msapplication-config": "/browserconfig.xml",
-
   },
 };
 

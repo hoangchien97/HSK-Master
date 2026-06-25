@@ -1,5 +1,6 @@
 import SectionHeader from '@/components/landing/shared/SectionHeader';
 import Link from 'next/link';
+import { Button } from '@/components/ui';
 import { Route, BookOpenCheck, Headphones, PenLine } from 'lucide-react';
 
 const SOLUTIONS = [
@@ -63,12 +64,16 @@ export default function SolutionSection() {
 
         {/* CTA */}
         <div className="text-center mt-8 md:mt-10">
-          <Link
-            href="/courses"
-            className="inline-flex items-center gap-2 px-6 py-3 md:px-8 md:py-3.5 bg-linear-to-r from-orange-500 to-red-500 hover:from-orange-600 hover:to-red-600 text-white font-semibold text-sm md:text-base rounded-full shadow-lg hover:shadow-xl transition-all duration-300 hover:-translate-y-0.5"
-          >
-            Bắt đầu học ngay hôm nay
-            <span aria-hidden="true">→</span>
+          <Link href="/courses">
+            <Button
+              variant="gradient"
+              size="md"
+              className="rounded-full"
+              icon={<span aria-hidden="true">→</span>}
+              iconPosition="right"
+            >
+              Bắt đầu học ngay hôm nay
+            </Button>
           </Link>
         </div>
       </div>

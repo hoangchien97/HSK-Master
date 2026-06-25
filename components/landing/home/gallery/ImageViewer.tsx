@@ -1,5 +1,5 @@
+import Image from "next/image";
 import { LightboxSlide } from "./types";
-import { OptimizedImage } from "@/components/ui";
 
 interface ImageViewerProps {
   slide: LightboxSlide;
@@ -16,17 +16,17 @@ export function ImageViewer({ slide, zoom, rotation }: ImageViewerProps) {
           cursor: zoom > 1 ? "grab" : "default",
           transition: "transform 0.3s cubic-bezier(0.4, 0, 0.2, 1)",
         }}
-        className="relative max-w-full max-h-full"
+        className="relative w-full max-h-[70vh] md:max-h-[80vh] lg:max-h-[85vh] aspect-video"
       >
-        <div className="relative max-w-full max-h-[70vh] md:max-h-[80vh] lg:max-h-[85vh]">
-          <img
-            src={slide.url}
-            alt={slide.title || slide.description || ""}
-            className="max-w-full max-h-[70vh] md:max-h-[80vh] lg:max-h-[85vh] object-contain select-none"
-            draggable={false}
-            loading="eager"
-          />
-        </div>
+        <Image
+          src={slide.url}
+          alt={slide.title || slide.description || ""}
+          fill
+          className="object-contain select-none"
+          draggable={false}
+          priority
+          sizes="100vw"
+        />
       </div>
     </div>
   );

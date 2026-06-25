@@ -2,17 +2,11 @@ import { prisma } from "@/lib/prisma";
 import { notFound } from "next/navigation";
 import Link from "next/link";
 import { Button } from "@/components/ui";
-import { Breadcrumb } from "@/components/ui";
 import { AnimatedSection } from "@/components/landing/shared/AnimatedSection";
 import LessonList from "./LessonList";
 import { CourseStatsGrid } from "./CourseStatsGrid";
 import { generateCourseSchema, generateBreadcrumbSchema } from "@/lib/structured-data";
 import { DEFAULT_IMAGE_PREVIEW, OG_IMAGE, SITE_URL } from "@/constants/brand";
-
-// Animation variants
-
-
-
 
 export const revalidate = 600; // ISR - revalidate every 10 minutes
 
@@ -24,6 +18,7 @@ type Props = {
 export async function generateStaticParams() {
   try {
     const courses = await prisma.course.findMany({
+      where: { isPublished: true },
       select: { slug: true },
     });
     return courses.map((course: { slug: string }) => ({
@@ -148,18 +143,6 @@ export default async function CourseDetail({ params }: Props) {
           __html: JSON.stringify(breadcrumbSchema),
         }}
       />
-      {/* Breadcrumb Section */}
-      <div className="bg-gray-50 dark:bg-surface-dark border-b border-border-light dark:border-border-dark">
-        <div className="mx-auto max-w-[1400px] px-3 sm:px-4 md:px-6 lg:px-8 py-3">
-          <Breadcrumb
-            items={[
-              { label: "Trang chủ", href: "/" },
-              { label: "Khóa học", href: "/courses" },
-              { label: course.level || course.title, href: `/courses/${course.slug}` },
-            ]}
-          />
-        </div>
-      </div>
 
       {/* Main Content */}
       <div className="mx-auto max-w-[1400px] px-3 sm:px-4 md:px-6 lg:px-8 py-12">

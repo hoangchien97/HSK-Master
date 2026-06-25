@@ -7,7 +7,7 @@
  */
 
 import { prisma } from '@/lib/prisma';
-import type { Prisma } from '@prisma/client';
+import type { Prisma, PracticeMode as PrismaPracticeMode, QuestionType as PrismaQuestionType } from '@prisma/client';
 import {
   ItemProgressStatus,
   PracticeMode,
@@ -127,7 +127,7 @@ export async function startPracticeSession(studentId: string, lessonIdOrSlug: st
     lessonId = lesson.id;
   }
   return prisma.portalPracticeSession.create({
-    data: { studentId, lessonId, mode },
+    data: { studentId, lessonId, mode: mode as PrismaPracticeMode },
   });
 }
 
@@ -161,7 +161,7 @@ export async function recordPracticeAttempt(
     data: {
       sessionId,
       vocabularyId,
-      questionType,
+      questionType: questionType as PrismaQuestionType,
       userAnswer,
       correctAnswer,
       isCorrect,

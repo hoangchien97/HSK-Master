@@ -41,8 +41,8 @@ export interface CourseWithCategory extends Course {
 }
 
 export interface CourseFilters {
-  categoryId?: string;
-  hskLevelGroup?: "beginner" | "intermediate" | "advanced"; // HSK 1-2, 3-4, 5-6
+  categoryIds?: string[];
+  hskLevelGroups?: ("beginner" | "intermediate" | "advanced")[];
   search?: string;
   sortBy?: "featured" | "newest";
   page?: number;
@@ -82,23 +82,22 @@ export async function getFilteredCourses(
   filters: CourseFilters = {}
 ): Promise<CourseWithCategory[]> {
   try {
-    const { categoryId, hskLevelGroup, search, sortBy, page, limit } = filters;
+    const { categoryIds, hskLevelGroups, search, sortBy, page, limit } = filters;
 
     // Build where clause
     const where: Record<string, unknown> = { isPublished: true };
 
-    if (categoryId) {
-      where.categoryId = categoryId;
+    if (categoryIds && categoryIds.length > 0) {
+      where.categoryId = { in: categoryIds };
     }
 
-    // Use nested relation filter instead of separate query
-    if (hskLevelGroup) {
-      const levelRange =
-        hskLevelGroup === "beginner"
-          ? [1, 2]
-          : hskLevelGroup === "intermediate"
-            ? [3, 4]
-            : [5, 6];
+    if (hskLevelGroups && hskLevelGroups.length > 0) {
+      const GROUP_LEVELS: Record<string, number[]> = {
+        beginner: [1, 2],
+        intermediate: [3, 4],
+        advanced: [5, 6],
+      };
+      const levelRange = hskLevelGroups.flatMap((g) => GROUP_LEVELS[g] ?? []);
       where.hskLevel = { level: { in: levelRange } };
     }
 
@@ -153,6 +152,66 @@ export async function getFilteredCourses(
   } catch (error) {
     console.error("Failed to fetch filtered courses:", error);
     return [];
+  }
+}
+
+export interface FilteredCoursesResult {
+  items: CourseWithCategory[];
+  total: number;
+}
+
+export async function getFilteredCoursesWithCount(
+  filters: CourseFilters = {}
+): Promise<FilteredCoursesResult> {
+  try {
+    const { categoryIds, hskLevelGroups, search, sortBy, page, limit } = filters;
+
+    const where: Record<string, unknown> = { isPublished: true };
+    if (categoryIds && categoryIds.length > 0) {
+      where.categoryId = { in: categoryIds };
+    }
+    if (hskLevelGroups && hskLevelGroups.length > 0) {
+      const GROUP_LEVELS: Record<string, number[]> = {
+        beginner: [1, 2],
+        intermediate: [3, 4],
+        advanced: [5, 6],
+      };
+      const levelRange = hskLevelGroups.flatMap((g) => GROUP_LEVELS[g] ?? []);
+      where.hskLevel = { level: { in: levelRange } };
+    }
+    if (search) {
+      where.OR = [
+        { title: { contains: search, mode: "insensitive" } },
+        { description: { contains: search, mode: "insensitive" } },
+      ];
+    }
+
+    const orderBy: Record<string, string>[] = [];
+    if (sortBy === "featured") orderBy.push({ isFeatured: "desc" });
+    orderBy.push({ createdAt: "desc" });
+
+    const skip = page && limit ? (page - 1) * limit : undefined;
+    const take = limit;
+
+    const include = {
+      category: { select: { id: true, name: true, slug: true } },
+      hskLevel: { select: { id: true, level: true, title: true } },
+    };
+
+    const [courses, total] = await prisma.$transaction([
+      prisma.course.findMany({ where, include, orderBy, skip, take }),
+      prisma.course.count({ where }),
+    ]);
+
+    const hskCourses = courses
+      .filter((c) => c.hskLevel)
+      .sort((a, b) => a.hskLevel!.level - b.hskLevel!.level);
+    const otherCourses = courses.filter((c) => !c.hskLevel);
+
+    return { items: [...hskCourses, ...otherCourses], total };
+  } catch (error) {
+    console.error("Failed to fetch filtered courses with count:", error);
+    return { items: [], total: 0 };
   }
 }
 

@@ -59,6 +59,16 @@ export function Select({
     onChange?.(v);
   };
 
+  // react-remove-scroll-bar resets html viewport scroll Y when it hides the
+  // body scrollbar (body[data-scroll-locked]{overflow:hidden}). Save the
+  // position before the lock fires and restore it on the next paint frame.
+  const handleOpenChange = (open: boolean) => {
+    if (open && typeof window !== "undefined") {
+      const y = window.scrollY;
+      requestAnimationFrame(() => window.scrollTo(0, y));
+    }
+  };
+
   return (
     <div className={cn("w-full", className)}>
       {label && (
@@ -66,7 +76,7 @@ export function Select({
           {label}
         </Label>
       )}
-      <SelectPrimitive.Root value={value} onValueChange={handleChange} disabled={disabled}>
+      <SelectPrimitive.Root value={value} onValueChange={handleChange} disabled={disabled} onOpenChange={handleOpenChange}>
         <SelectPrimitive.Trigger
           id={id}
           className={cn(
@@ -85,7 +95,7 @@ export function Select({
           <SelectPrimitive.Content
             position="popper"
             className={cn(
-              "relative z-50 max-h-[--radix-select-content-available-height] min-w-32 overflow-y-auto overflow-x-hidden rounded-md border bg-white text-(--color-ink) shadow-md",
+              "relative z-50 max-h-[--radix-select-content-available-height] min-w-(--radix-select-trigger-width) overflow-y-auto overflow-x-hidden rounded-md border bg-white text-(--color-ink) shadow-md",
               "data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0",
               "data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95",
               "data-[side=bottom]:slide-in-from-top-2 data-[side=top]:slide-in-from-bottom-2",
@@ -95,7 +105,7 @@ export function Select({
             <SelectPrimitive.ScrollUpButton className="flex cursor-default items-center justify-center py-1">
               <ChevronUp className="h-4 w-4" />
             </SelectPrimitive.ScrollUpButton>
-            <SelectPrimitive.Viewport className="p-1 h-(--radix-select-trigger-height) w-full min-w-(--radix-select-trigger-width)">
+            <SelectPrimitive.Viewport className="p-1 w-full">
               {options.map((opt) => (
                 <SelectPrimitive.Item
                   key={opt.value}
