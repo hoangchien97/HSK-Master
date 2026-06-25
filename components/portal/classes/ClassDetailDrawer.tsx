@@ -1,12 +1,8 @@
 "use client"
 
 import { useState, useEffect, useCallback } from "react"
-import {
-  Avatar,
-  AvatarGroup,
-  Chip,
-  Divider,
-} from "@heroui/react"
+import { Badge } from "@/components/ui"
+import { Avatar } from "@/components/ui"
 import {
   GraduationCap,
   Users,
@@ -106,17 +102,16 @@ export default function ClassDetailDrawer({
       <div className="space-y-6">
         {/* Status & Level */}
         <div className="flex items-center gap-2 flex-wrap">
-          <Chip
+          <Badge
             size="sm"
-            color={CLASS_STATUS_COLOR_MAP[classData.status] || "default"}
-            variant="flat"
+            variant={CLASS_STATUS_COLOR_MAP[classData.status] || "default"}
           >
             {CLASS_STATUS_LABEL_MAP[classData.status] || classData.status}
-          </Chip>
+          </Badge>
           {classData.level && (
-            <Chip size="sm" color="primary" variant="flat">
+            <Badge size="sm" variant="primary">
               {classData.level.replace("HSK", "HSK ")}
-            </Chip>
+            </Badge>
           )}
         </div>
 
@@ -142,10 +137,6 @@ export default function ClassDetailDrawer({
                 src={classData.teacher.image || undefined}
                 name={classData.teacher.name?.charAt(0)}
                 size="md"
-                classNames={{
-                  base: "bg-gradient-to-br from-red-400 to-red-600",
-                  name: "text-white font-bold",
-                }}
               />
               <div>
                 <p className="text-sm font-medium text-gray-900">
@@ -181,7 +172,7 @@ export default function ClassDetailDrawer({
           </div>
         </div>
 
-        <Divider />
+        <hr className="border-t border-(--color-smoke)" />
 
         {/* Students */}
         <div>
@@ -200,10 +191,6 @@ export default function ClassDetailDrawer({
                     src={enrollment.student?.image || undefined}
                     name={enrollment.student?.name?.charAt(0)}
                     size="sm"
-                    classNames={{
-                      base: "bg-gradient-to-br from-blue-400 to-blue-600",
-                      name: "text-white text-[10px] font-bold",
-                    }}
                   />
                   <div className="min-w-0 flex-1">
                     <p className="text-sm font-medium text-gray-900 truncate">
@@ -213,13 +200,12 @@ export default function ClassDetailDrawer({
                       {enrollment.student?.email}
                     </p>
                   </div>
-                  <Chip
+                  <Badge
                     size="sm"
-                    variant="flat"
-                    color={ENROLLMENT_STATUS_COLOR_MAP[enrollment.status] || "default"}
+                    variant={ENROLLMENT_STATUS_COLOR_MAP[enrollment.status] || "default"}
                   >
                     {ENROLLMENT_STATUS_LABEL_MAP[enrollment.status] || enrollment.status}
-                  </Chip>
+                  </Badge>
                 </div>
               ))}
             </div>
@@ -228,7 +214,7 @@ export default function ClassDetailDrawer({
           )}
         </div>
 
-        <Divider />
+        <hr className="border-t border-(--color-smoke)" />
 
         {/* Upcoming Schedules */}
         <div>

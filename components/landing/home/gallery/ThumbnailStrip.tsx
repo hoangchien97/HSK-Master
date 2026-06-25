@@ -1,3 +1,4 @@
+import Image from "next/image";
 import { LightboxSlide } from "./types";
 
 interface ThumbnailStripProps {
@@ -29,17 +30,18 @@ export function ThumbnailStrip({
         <button
           key={slide.id}
           onClick={() => onSelectSlide(idx)}
-          className={`shrink-0 w-12 h-9 md:w-16 md:h-12 rounded-md overflow-hidden border-2 transition-all duration-300 ${
+          className={`relative shrink-0 w-12 h-9 md:w-16 md:h-12 rounded-md overflow-hidden border-2 transition-all duration-300 ${
             idx === currentIndex
               ? "border-primary-500 scale-110 shadow-lg shadow-primary-500/50 ring-2 ring-primary-500/30"
               : "border-white/30 opacity-60 hover:opacity-100 hover:border-white/60 hover:scale-105"
           }`}
         >
-          <img
+          <Image
             src={slide.url}
             alt={slide.title || ""}
-            className="w-full h-full object-cover"
-            loading="lazy"
+            fill
+            className="object-cover"
+            sizes="64px"
           />
         </button>
       ))}

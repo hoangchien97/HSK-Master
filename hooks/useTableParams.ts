@@ -3,7 +3,8 @@
 import { useCallback, useMemo, useRef, useEffect, useState } from "react"
 import { useSearchParams, useRouter, usePathname } from "next/navigation"
 import { PAGINATION } from "@/constants/portal/pagination"
-import type { SortDescriptor } from "@heroui/react"
+import type { SortDescriptor } from "@/components/portal/common/CTable"
+export type { SortDescriptor }
 
 /**
  * Generic hook that syncs table filter/pagination state with URL search params.

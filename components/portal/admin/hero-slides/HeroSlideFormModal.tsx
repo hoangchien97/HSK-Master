@@ -1,7 +1,10 @@
 "use client";
 
 import { useState } from "react";
-import { Button, Input, Textarea, Switch } from "@heroui/react";
+import { Button } from "@/components/ui";
+import { Input } from "@/components/ui/forms/Input";
+import { Textarea } from "@/components/ui/forms/Textarea";
+import { Switch } from "@/components/ui/forms/Switch";
 import { toast } from "react-toastify";
 import type { IHeroSlide, ICreateHeroSlideDTO } from "@/interfaces/portal";
 import { CModal } from "@/components/portal/common";
@@ -74,8 +77,8 @@ export default function HeroSlideFormModal({
       title={isEdit ? "Chỉnh sửa Hero Slide" : "Thêm Hero Slide mới"}
       footer={
         <>
-          <Button variant="flat" onPress={onClose}>Hủy</Button>
-          <Button color="primary" isLoading={isSubmitting} onPress={handleSubmit}>
+          <Button variant="secondary" onClick={onClose}>Hủy</Button>
+          <Button variant="primary" isLoading={isSubmitting} onClick={handleSubmit}>
             {isEdit ? "Cập nhật" : "Tạo mới"}
           </Button>
         </>
@@ -87,15 +90,15 @@ export default function HeroSlideFormModal({
             label="Tiêu đề"
             placeholder="Nhập tiêu đề slide"
             value={form.title}
-            onValueChange={(v) => updateField("title", v)}
-            isRequired
+            onChange={(e) => updateField("title", e.target.value)}
+            required
           />
           <Input
             label="Badge"
             placeholder="VD: Ưu đãi"
             value={form.badge}
-            onValueChange={(v) => updateField("badge", v)}
-            isRequired
+            onChange={(e) => updateField("badge", e.target.value)}
+            required
           />
         </div>
 
@@ -111,8 +114,7 @@ export default function HeroSlideFormModal({
           label="Mô tả"
           placeholder="Nhập mô tả slide"
           value={form.description}
-          onValueChange={(v) => updateField("description", v)}
-          minRows={2}
+          onChange={(e) => updateField("description", e.target.value)}
         />
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -120,13 +122,13 @@ export default function HeroSlideFormModal({
             label="CTA chính - Text"
             placeholder="Đăng ký ngay"
             value={form.primaryCtaText}
-            onValueChange={(v) => updateField("primaryCtaText", v)}
+            onChange={(e) => updateField("primaryCtaText", e.target.value)}
           />
           <Input
             label="CTA chính - URL"
             placeholder="/contact"
             value={form.primaryCtaHref}
-            onValueChange={(v) => updateField("primaryCtaHref", v)}
+            onChange={(e) => updateField("primaryCtaHref", e.target.value)}
           />
         </div>
 
@@ -135,13 +137,13 @@ export default function HeroSlideFormModal({
             label="CTA phụ - Text"
             placeholder="Tìm hiểu thêm"
             value={form.secondaryCtaText || ""}
-            onValueChange={(v) => updateField("secondaryCtaText", v)}
+            onChange={(e) => updateField("secondaryCtaText", e.target.value)}
           />
           <Input
             label="CTA phụ - URL"
             placeholder="/about"
             value={form.secondaryCtaHref || ""}
-            onValueChange={(v) => updateField("secondaryCtaHref", v)}
+            onChange={(e) => updateField("secondaryCtaHref", e.target.value)}
           />
         </div>
 
@@ -150,30 +152,29 @@ export default function HeroSlideFormModal({
             label="Màu badge"
             placeholder="#EF4444"
             value={form.badgeColor}
-            onValueChange={(v) => updateField("badgeColor", v)}
+            onChange={(e) => updateField("badgeColor", e.target.value)}
           />
           <Input
             label="Thứ tự"
             type="number"
             placeholder="1"
             value={String(form.order)}
-            onValueChange={(v) => updateField("order", Number(v) || 0)}
+            onChange={(e) => updateField("order", Number(e.target.value) || 0)}
           />
           <Input
             label="Overlay gradient"
             placeholder="from-black/60..."
             value={form.overlayGradient}
-            onValueChange={(v) => updateField("overlayGradient", v)}
+            onChange={(e) => updateField("overlayGradient", e.target.value)}
           />
         </div>
 
         <div className="flex items-center gap-3">
           <Switch
-            isSelected={form.isActive}
-            onValueChange={(v) => updateField("isActive", v)}
-          >
-            Hiển thị
-          </Switch>
+            checked={form.isActive}
+            onChange={(v) => updateField("isActive", v)}
+            label="Hiển thị"
+          />
         </div>
       </div>
     </CModal>

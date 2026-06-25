@@ -1,8 +1,8 @@
 "use client";
 
 import { useState, useEffect, useCallback, useMemo } from "react";
-import { Button, Chip, useDisclosure, Dropdown, DropdownTrigger, DropdownMenu, DropdownItem, Input } from "@heroui/react";
-import { Plus, Edit2, Trash2, MoreVertical, BarChart, Search } from "lucide-react";
+import { Button, Badge, Dropdown } from "@/components/ui";
+import { Plus, Edit2, Trash2, MoreVertical, BarChart, Search, X } from "lucide-react";
 import { toast } from "react-toastify";
 import { useRouter, useSearchParams, usePathname } from "next/navigation";
 import type { ICtaStat, IGetCtaStatResponse } from "@/interfaces/portal";
@@ -26,9 +26,9 @@ export default function CtaStatsTable() {
   const [data, setData] = useState<IGetCtaStatResponse>({ items: [], total: 0 });
   const [isLoading, setIsLoading] = useState(true);
 
-  const createModal = useDisclosure();
-  const editModal = useDisclosure();
-  const deleteModal = useDisclosure();
+  const [isCreateOpen, setIsCreateOpen] = useState(false);
+  const [isEditOpen, setIsEditOpen] = useState(false);
+  const [isDeleteOpen, setIsDeleteOpen] = useState(false);
   const [selected, setSelected] = useState<ICtaStat | null>(null);
 
   const updateUrl = useCallback((updates: Record<string, string>) => {
@@ -62,33 +62,37 @@ export default function CtaStatsTable() {
 
   const handleEdit = useCallback((item: ICtaStat) => {
     setSelected(item);
-    editModal.onOpen();
-  }, [editModal]);
+    setIsEditOpen(true);
+  }, []);
 
   const handleDelete = useCallback((item: ICtaStat) => {
     setSelected(item);
-    deleteModal.onOpen();
-  }, [deleteModal]);
+    setIsDeleteOpen(true);
+  }, []);
 
   const columns: CTableColumn<ICtaStat & Record<string, unknown>>[] = useMemo(() => [
-    { key: "stt", label: "STT", align: "center" as const, headerClassName: "w-[50px]", render: (_v: unknown, _r: unknown, i: number) => <span className="text-sm text-default-500">{(urlPage - 1) * urlPageSize + i + 1}</span> },
+    { key: "stt", label: "STT", align: "center" as const, headerClassName: "w-[50px]", render: (_v: unknown, _r: unknown, i: number) => <span className="text-sm text-(--color-muted)">{(urlPage - 1) * urlPageSize + i + 1}</span> },
     {
       key: "label", label: "Nhãn hiển thị", sortable: true,
       render: (_v: unknown, row: ICtaStat) => <span className="font-semibold text-sm">{row.label}</span>,
     },
-    { key: "value", label: "Giá trị", render: (_v: unknown, row: ICtaStat) => <span className="font-bold text-primary">{row.value}{row.suffix}</span> },
-    { key: "order", label: "Thứ tự", align: "center" as const, sortable: true, headerClassName: "w-[80px]", render: (_v: unknown, row: ICtaStat) => <Chip size="sm" variant="flat">{row.order}</Chip> },
-    { key: "isActive", label: "Trạng thái", headerClassName: "w-[100px]", render: (_v: unknown, row: ICtaStat) => <Chip size="sm" color={row.isActive ? "success" : "default"} variant="flat">{row.isActive ? "Hiển thị" : "Ẩn"}</Chip> },
+    { key: "value", label: "Giá trị", render: (_v: unknown, row: ICtaStat) => <span className="font-bold text-(--color-vermillion)">{row.value}{row.suffix}</span> },
+    { key: "order", label: "Thứ tự", align: "center" as const, sortable: true, headerClassName: "w-[80px]", render: (_v: unknown, row: ICtaStat) => <Badge size="sm">{row.order}</Badge> },
+    { key: "isActive", label: "Trạng thái", headerClassName: "w-[100px]", render: (_v: unknown, row: ICtaStat) => <Badge size="sm" variant={row.isActive ? "success" : undefined}>{row.isActive ? "Hiển thị" : "Ẩn"}</Badge> },
     {
       key: "actions", label: "", align: "end" as const, headerClassName: "w-[60px]",
       render: (_v: unknown, row: ICtaStat) => (
-        <Dropdown>
-          <DropdownTrigger><Button isIconOnly size="sm" variant="light"><MoreVertical className="w-4 h-4" /></Button></DropdownTrigger>
-          <DropdownMenu aria-label="Thao tác">
-            <DropdownItem key="edit" startContent={<Edit2 className="w-4 h-4" />} onPress={() => handleEdit(row)}>Chỉnh sửa</DropdownItem>
-            <DropdownItem key="delete" startContent={<Trash2 className="w-4 h-4" />} className="text-danger" color="danger" onPress={() => handleDelete(row)}>Xóa</DropdownItem>
-          </DropdownMenu>
-        </Dropdown>
+        <Dropdown
+          trigger={
+            <button type="button" className="p-1.5 rounded-md hover:bg-(--color-smoke) text-(--color-ink) transition-colors">
+              <MoreVertical className="w-4 h-4" />
+            </button>
+          }
+          items={[
+            { label: "Chỉnh sửa", icon: <Edit2 className="w-4 h-4" />, onClick: () => handleEdit(row) },
+            { label: "Xóa", icon: <Trash2 className="w-4 h-4" />, onClick: () => handleDelete(row) },
+          ]}
+        />
       ),
     },
   ], [urlPage, urlPageSize, handleEdit, handleDelete]);
@@ -102,14 +106,32 @@ export default function CtaStatsTable() {
         ariaLabel="CtaStats" emptyContent={{ icon: <BarChart className="w-12 h-12" />, title: "Chưa có thống kê", description: "Thống kê nổi bật sẽ xuất hiện ở đây" }}
         toolbar={
           <div className="flex justify-between items-center rounded-xl bg-white border border-gray-200 px-4 py-3 shadow-sm w-full">
-            <Input isClearable className="w-full sm:max-w-xs" placeholder="Tìm theo nhãn..." startContent={<Search className="w-4 h-4 text-default-400" />} value={search} onValueChange={setSearch} onClear={() => setSearch("")} size="sm" />
-            <Button color="primary" size="sm" startContent={<Plus className="w-4 h-4" />} onPress={createModal.onOpen}>Thêm chỉ số</Button>
+            <div className="relative w-full sm:max-w-xs">
+              <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-(--color-muted) pointer-events-none" />
+              <input
+                type="text"
+                placeholder="Tìm theo nhãn..."
+                value={search}
+                onChange={(e) => setSearch(e.target.value)}
+                className="h-9 w-full pl-9 pr-8 rounded-md border border-(--color-smoke) bg-white text-sm text-(--color-ink) placeholder:text-(--color-muted) focus:outline-none focus:ring-2 focus:ring-(--color-vermillion) focus:border-(--color-vermillion)"
+              />
+              {search && (
+                <button
+                  type="button"
+                  onClick={() => setSearch("")}
+                  className="absolute right-2 top-1/2 -translate-y-1/2 text-(--color-muted) hover:text-(--color-ink) transition-colors"
+                >
+                  <X className="w-3.5 h-3.5" />
+                </button>
+              )}
+            </div>
+            <Button variant="primary" size="sm" leftIcon={<Plus className="w-4 h-4" />} onClick={() => setIsCreateOpen(true)}>Thêm chỉ số</Button>
           </div>
         }
       />
-      <CtaStatFormModal isOpen={createModal.isOpen} onClose={createModal.onClose} onSuccess={handleCreateSuccess} />
-      {selected && <CtaStatFormModal isOpen={editModal.isOpen} onClose={() => { editModal.onClose(); setSelected(null); }} onSuccess={handleUpdateSuccess} initialData={selected} />}
-      {selected && <DeleteConfirmModal isOpen={deleteModal.isOpen} onClose={() => { deleteModal.onClose(); setSelected(null); }} onSuccess={(id) => setData((p) => ({ items: p.items.filter((i) => i.id !== id), total: p.total - 1 }))} itemId={selected.id} itemName={selected.label} entityLabel="chỉ số" deleteAction={deleteCtaStatAction} />}
+      <CtaStatFormModal isOpen={isCreateOpen} onClose={() => setIsCreateOpen(false)} onSuccess={handleCreateSuccess} />
+      {selected && <CtaStatFormModal isOpen={isEditOpen} onClose={() => { setIsEditOpen(false); setSelected(null); }} onSuccess={handleUpdateSuccess} initialData={selected} />}
+      {selected && <DeleteConfirmModal isOpen={isDeleteOpen} onClose={() => { setIsDeleteOpen(false); setSelected(null); }} onSuccess={(id) => setData((p) => ({ items: p.items.filter((i) => i.id !== id), total: p.total - 1 }))} itemId={selected.id} itemName={selected.label} entityLabel="chỉ số" deleteAction={deleteCtaStatAction} />}
     </>
   );
 }

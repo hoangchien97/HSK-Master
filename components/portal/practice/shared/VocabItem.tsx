@@ -1,8 +1,8 @@
 "use client"
 
-import { Chip } from "@heroui/react"
+import { Badge } from "@/components/ui"
 import { Volume2 } from "lucide-react"
-import { WORD_TYPE_COLORS, WORD_TYPE_LABELS, STATUS_LABELS, ItemProgressStatus, getDisplayMeaning } from "@/enums/portal/common"
+import { WORD_TYPE_LABELS, STATUS_LABELS, ItemProgressStatus, getDisplayMeaning } from "@/enums/portal/common"
 import type { IVocabularyItem, IStudentItemProgress } from "@/interfaces/portal/practice"
 
 interface Props {
@@ -16,7 +16,6 @@ interface Props {
 export default function VocabItem({ vocab, progress, onSelect, onPlayAudio }: Props) {
   const status = progress?.status || ItemProgressStatus.NEW
   const wordTypeLabel = vocab.wordType ? (WORD_TYPE_LABELS[vocab.wordType] ?? vocab.wordType) : null
-  const wordTypeColor = vocab.wordType ? (WORD_TYPE_COLORS[vocab.wordType] ?? "default") : "default"
 
   return (
     <div
@@ -26,10 +25,10 @@ export default function VocabItem({ vocab, progress, onSelect, onPlayAudio }: Pr
       onKeyDown={(e) => { if (e.key === "Enter" || e.key === " ") onSelect(vocab) }}
       className={`w-full text-left p-3 sm:p-4 rounded-lg border transition-all group cursor-pointer ${
         status === ItemProgressStatus.MASTERED
-          ? "border-success-200 bg-success-50/30 dark:bg-success-950/10 hover:border-success-400"
+          ? "border-green-200 bg-green-50/30 dark:bg-green-950/10 hover:border-green-400"
           : status === ItemProgressStatus.LEARNING
-            ? "border-warning-200 bg-warning-50/20 dark:bg-warning-950/10 hover:border-warning-400"
-            : "border-default-200 hover:border-primary-300 hover:bg-primary-50/30 dark:hover:bg-primary-950/20"
+            ? "border-amber-200 bg-amber-50/20 dark:bg-amber-950/10 hover:border-amber-400"
+            : "border-(--color-smoke) hover:border-red-300 hover:bg-red-50/30 dark:hover:bg-red-950/20"
       }`}
     >
       <div className="flex items-center gap-3">
@@ -41,34 +40,33 @@ export default function VocabItem({ vocab, progress, onSelect, onPlayAudio }: Pr
         {/* Info */}
         <div className="flex-1 min-w-0">
           <div className="flex items-center gap-1.5">
-            <span className="text-sm text-primary font-medium">{vocab.pinyin}</span>
+            <span className="text-sm text-(--color-vermillion) font-medium">{vocab.pinyin}</span>
             {status !== ItemProgressStatus.NEW && (
-              <Chip
+              <Badge
                 size="sm"
-                variant="dot"
-                color={STATUS_LABELS[status]?.color ?? "default"}
-                className="text-[10px] h-5"
+                variant={STATUS_LABELS[status]?.color ?? "default"}
+                className="text-[10px]"
               >
                 {STATUS_LABELS[status]?.label}
-              </Chip>
+              </Badge>
             )}
           </div>
-          <p className="text-sm text-default-600 truncate">{getDisplayMeaning(vocab)}</p>
+          <p className="text-sm text-(--color-ink) truncate">{getDisplayMeaning(vocab)}</p>
         </div>
 
         {/* Right side: word type + mastery + speaker */}
         <div className="shrink-0 flex items-center gap-1.5 sm:gap-2">
           {wordTypeLabel && (
-            <Chip size="sm" variant="flat" color={wordTypeColor} className="text-[10px] h-5 hidden sm:inline-flex">
+            <Badge size="sm" className="text-[10px] hidden sm:inline-flex">
               {wordTypeLabel}
-            </Chip>
+            </Badge>
           )}
           {progress && progress.masteryScore > 0 && (
-            <div className="text-xs font-bold text-primary">{Math.round(progress.masteryScore * 100)}%</div>
+            <div className="text-xs font-bold text-(--color-vermillion)">{Math.round(progress.masteryScore * 100)}%</div>
           )}
           <button
             onClick={(e) => onPlayAudio(vocab.word, e)}
-            className="p-2 rounded-full transition hover:bg-primary-100 dark:hover:bg-primary-900/30 text-primary cursor-pointer"
+            className="p-2 rounded-full transition hover:bg-red-100 dark:hover:bg-red-900/30 text-(--color-vermillion) cursor-pointer"
             aria-label="Nghe phát âm"
           >
             <Volume2 className="w-4 h-4 sm:w-5 sm:h-5" />

@@ -3,7 +3,7 @@
 import { useState, useEffect, useCallback } from "react"
 import { format } from "date-fns"
 import { vi } from "date-fns/locale"
-import { Button } from "@heroui/react"
+import { Button } from "@/components/ui"
 import {
   Calendar,
   MapPin,
@@ -165,29 +165,29 @@ export default function EventDetailDrawer({
               <div className="flex gap-3 w-full flex-wrap">
                 {!event.syncedToGoogle && (
                   <Button
-                    variant="flat"
-                    color="primary"
-                    onPress={handleSyncToGoogle}
+                    variant="secondary"
+                    onClick={handleSyncToGoogle}
                     isLoading={isSyncing}
+                    leftIcon={<Cloud className="h-4 w-4" />}
                     className="flex-1 min-w-[140px]"
                   >
-                    <Cloud className="mr-2 h-4 w-4" />
                     Đồng bộ Google
                   </Button>
                 )}
                 <Button
-                  variant="bordered"
-                  onPress={handleDelete}
+                  variant="secondary"
+                  onClick={handleDelete}
+                  leftIcon={<Trash2 className="h-4 w-4" />}
                   className="flex-1 min-w-[100px] text-red-600 border-red-300 hover:bg-red-50 cursor-pointer"
                 >
-                  <Trash2 className="mr-2 h-4 w-4" />
                   Xóa
                 </Button>
                 <Button
-                  onPress={handleEdit}
-                  className="flex-1 min-w-[100px] bg-red-600 hover:bg-red-700 text-white cursor-pointer"
+                  variant="danger"
+                  onClick={handleEdit}
+                  leftIcon={<Edit className="h-4 w-4" />}
+                  className="flex-1 min-w-[100px] cursor-pointer"
                 >
-                  <Edit className="mr-2 h-4 w-4" />
                   Chỉnh sửa
                 </Button>
               </div>
@@ -326,11 +326,11 @@ export default function EventDetailDrawer({
                 Link họp trực tuyến
               </h3>
               <Button
-                variant="bordered"
+                variant="secondary"
                 onClick={openMeetingLink}
+                leftIcon={<ExternalLink className="h-4 w-4" />}
                 className="w-full justify-start text-blue-600 hover:text-blue-700 hover:bg-blue-50"
               >
-                <ExternalLink className="mr-2 h-4 w-4" />
                 <span className="truncate">{event.meetingLink}</span>
               </Button>
             </div>

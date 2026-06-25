@@ -3,11 +3,7 @@
 import Link from "next/link"
 import { usePathname } from "next/navigation"
 import { signOut } from "next-auth/react"
-import {
-  Button,
-  Divider,
-  Chip,
-} from "@heroui/react"
+import { Button } from "@/components/ui"
 import { LogOut, X } from "lucide-react"
 import { cn } from "@/lib/utils"
 import { getNavItemsByRole } from "@/constants/portal/navigation"
@@ -15,6 +11,7 @@ import { PORTAL_ROUTES, portalRoleRoute, MSG_AUTH } from "@/constants/portal"
 import { type UserRole } from "@/constants/portal/roles"
 import Image from "next/image"
 import { BRAND_NAME } from "@/constants/brand"
+import { Badge } from "@/components/ui"
 
 interface PortalSidebarProps {
   userRole: string
@@ -62,18 +59,16 @@ export default function PortalSidebar({ userRole, isOpen = true, onClose }: Port
             <Image src="/logo.svg" alt={BRAND_NAME} width={160} height={40} priority />
           </Link>
           {/* Mobile close button */}
-          <Button
-            isIconOnly
-            variant="light"
-            size="sm"
-            onPress={onClose}
-            className="lg:hidden"
+          <button
+            type="button"
+            onClick={onClose}
+            className="lg:hidden p-1.5 rounded-md hover:bg-(--color-smoke) text-(--color-ink) transition-colors"
           >
             <X className="w-5 h-5" />
-          </Button>
+          </button>
         </div>
 
-        <Divider />
+        <hr className="border-t border-(--color-smoke)" />
 
         {/* Navigation - Scrollable */}
         <nav className="flex-1 overflow-y-auto px-3 py-4">
@@ -97,9 +92,9 @@ export default function PortalSidebar({ userRole, isOpen = true, onClose }: Port
                   <Icon className={cn("w-5 h-5", isActive ? "text-red-500" : "text-gray-400")} />
                   <span className="text-sm flex-1">{item.label}</span>
                   {item.badge && (
-                    <Chip color="danger" size="sm" variant="flat">
+                    <Badge variant="danger" size="sm">
                       {item.badge}
-                    </Chip>
+                    </Badge>
                   )}
                 </Link>
               )
@@ -107,16 +102,15 @@ export default function PortalSidebar({ userRole, isOpen = true, onClose }: Port
           </div>
         </nav>
 
-        <Divider />
+        <hr className="border-t border-(--color-smoke)" />
 
         {/* Bottom actions - Fixed at bottom */}
         <div className="p-3 shrink-0">
           <Button
-            variant="light"
-            color="danger"
-            startContent={<LogOut className="w-5 h-5" />}
-            onPress={handleSignOut}
-            className="w-full justify-start hover:bg-red-50"
+            variant="ghost"
+            leftIcon={<LogOut className="w-5 h-5" />}
+            onClick={handleSignOut}
+            className="w-full justify-start hover:bg-red-50 text-red-600 hover:text-red-600"
           >
             {MSG_AUTH.LOGOUT}
           </Button>

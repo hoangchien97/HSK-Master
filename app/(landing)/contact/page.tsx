@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { submitContact } from "./actions";
 import { ContactInfo, ContactForm, FAQ_DATA } from "@/components/landing/contact";
-import { Breadcrumb } from "@/components/landing/common";
+import { Breadcrumb } from "@/components/ui";
 import { AnimatedSection } from "@/components/landing/shared";
 import { OG_IMAGE, SITE_URL } from "@/constants/brand";
 import { getPageMetadata } from "@/services/metadata.service";

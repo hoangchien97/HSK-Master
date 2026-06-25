@@ -1,7 +1,10 @@
 "use client";
 
 import { useState } from "react";
-import { Button, Input, Textarea, Switch } from "@heroui/react";
+import { Button } from "@/components/ui";
+import { Input } from "@/components/ui/forms/Input";
+import { Textarea } from "@/components/ui/forms/Textarea";
+import { Switch } from "@/components/ui/forms/Switch";
 import { toast } from "react-toastify";
 import type { IHSKLevel, ICreateHSKLevelDTO } from "@/interfaces/portal";
 import { CModal } from "@/components/portal/common";
@@ -29,7 +32,7 @@ export default function HSKLevelFormModal({
     badge: initialData?.badge || "",
     badgeColor: initialData?.badgeColor || "default",
     description: initialData?.description || "",
-    vocabularyCount: initialData?.vocabularyCount || "",
+    vocabularyCount: initialData?.vocabularyCount || 0,
     lessonCount: initialData?.lessonCount || 0,
     duration: initialData?.duration || "",
     targetAudience: initialData?.targetAudience || "",
@@ -80,8 +83,8 @@ export default function HSKLevelFormModal({
       scrollBehavior="inside"
       footer={
         <>
-          <Button variant="flat" onPress={onClose}>Hủy</Button>
-          <Button color="primary" isLoading={isSubmitting} onPress={handleSubmit}>
+          <Button variant="secondary" onClick={onClose}>Hủy</Button>
+          <Button variant="primary" isLoading={isSubmitting} onClick={handleSubmit}>
             {isEdit ? "Cập nhật" : "Tạo mới"}
           </Button>
         </>
@@ -96,29 +99,29 @@ export default function HSKLevelFormModal({
               label="Tên cấp độ"
               placeholder="VD: HSK 1 - Sơ cấp"
               value={form.title}
-              onValueChange={(v) => updateField("title", v)}
-              isRequired
+              onChange={(e) => updateField("title", e.target.value)}
+              required
             />
             <Input
               label="Level (Số)"
               type="number"
               placeholder="1"
               value={String(form.level)}
-              onValueChange={(v) => updateField("level", Number(v) || 1)}
-              isRequired
+              onChange={(e) => updateField("level", Number(e.target.value) || 1)}
+              required
             />
             <Input
               label="Badge / Nhãn"
               placeholder="VD: Nền tảng vững chắc"
               value={form.badge}
-              onValueChange={(v) => updateField("badge", v)}
-              isRequired
+              onChange={(e) => updateField("badge", e.target.value)}
+              required
             />
             <Input
               label="Màu nhãn (Tailwind color)"
               placeholder="VD: text-blue-600 bg-blue-100"
               value={form.badgeColor}
-              onValueChange={(v) => updateField("badgeColor", v)}
+              onChange={(e) => updateField("badgeColor", e.target.value)}
             />
           </div>
           <Textarea
@@ -126,8 +129,7 @@ export default function HSKLevelFormModal({
             placeholder="Nhập mô tả cho cấp độ"
             className="mt-4"
             value={form.description}
-            onValueChange={(v) => updateField("description", v)}
-            minRows={2}
+            onChange={(e) => updateField("description", e.target.value)}
           />
         </div>
 
@@ -137,22 +139,23 @@ export default function HSKLevelFormModal({
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
             <Input
               label="Số từ vựng"
-              placeholder="VD: 150 từ vựng"
-              value={form.vocabularyCount}
-              onValueChange={(v) => updateField("vocabularyCount", v)}
+              type="number"
+              placeholder="VD: 150"
+              value={String(form.vocabularyCount)}
+              onChange={(e) => updateField("vocabularyCount", Number(e.target.value) || 0)}
             />
             <Input
               label="Số bài học"
               type="number"
               placeholder="VD: 15"
               value={String(form.lessonCount)}
-              onValueChange={(v) => updateField("lessonCount", Number(v) || 0)}
+              onChange={(e) => updateField("lessonCount", Number(e.target.value) || 0)}
             />
             <Input
               label="Thời lượng"
               placeholder="VD: 3 tháng"
               value={form.duration}
-              onValueChange={(v) => updateField("duration", v)}
+              onChange={(e) => updateField("duration", e.target.value)}
             />
           </div>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
@@ -160,13 +163,13 @@ export default function HSKLevelFormModal({
               label="Mục tiêu / Đối tượng"
               placeholder="VD: Dành cho người mới bắt đầu"
               value={form.targetAudience}
-              onValueChange={(v) => updateField("targetAudience", v)}
+              onChange={(e) => updateField("targetAudience", e.target.value)}
             />
             <Input
               label="Lucide Icon (cho mục tiêu)"
               placeholder="VD: Target, Users"
               value={form.targetIcon}
-              onValueChange={(v) => updateField("targetIcon", v)}
+              onChange={(e) => updateField("targetIcon", e.target.value)}
             />
           </div>
         </div>
@@ -179,21 +182,21 @@ export default function HSKLevelFormModal({
               label="Màu chủ đạo (Tailwind)"
               placeholder="VD: blue-500"
               value={form.accentColor}
-              onValueChange={(v) => updateField("accentColor", v)}
+              onChange={(e) => updateField("accentColor", e.target.value)}
             />
             <Input
               label="Link liên kết"
               placeholder="VD: /khoa-hoc/hsk-1"
               value={form.href}
-              onValueChange={(v) => updateField("href", v)}
-              description="Nơi người dùng được chuyển đến khi click"
+              onChange={(e) => updateField("href", e.target.value)}
+              hint="Nơi người dùng được chuyển đến khi click"
             />
             <div className="md:col-span-2">
               <Input
                 label="Gradient nền (Tailwind)"
                 placeholder="VD: from-blue-50 to-transparent"
                 value={form.bgGradient}
-                onValueChange={(v) => updateField("bgGradient", v)}
+                onChange={(e) => updateField("bgGradient", e.target.value)}
               />
             </div>
 
@@ -202,42 +205,40 @@ export default function HSKLevelFormModal({
               label="SEO Title"
               placeholder="Tiêu đề SEO"
               value={form.metaTitle || ""}
-              onValueChange={(v) => updateField("metaTitle", v)}
+              onChange={(e) => updateField("metaTitle", e.target.value)}
             />
             <Input
               label="SEO Keywords"
               placeholder="Tách nhau bằng dấu phẩy"
               value={form.keywords || ""}
-              onValueChange={(v) => updateField("keywords", v)}
+              onChange={(e) => updateField("keywords", e.target.value)}
             />
             <div className="md:col-span-2">
               <Textarea
                 label="SEO Description"
                 placeholder="Mô tả SEO"
                 value={form.metaDescription || ""}
-                onValueChange={(v) => updateField("metaDescription", v)}
-                minRows={2}
+                onChange={(e) => updateField("metaDescription", e.target.value)}
               />
             </div>
           </div>
         </div>
 
         {/* Cài đặt chung */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 items-center bg-default-50 p-4 rounded-xl border border-default-200">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 items-center bg-(--color-paper) p-4 rounded-xl border border-(--color-smoke)">
           <Input
             label="Thứ tự hiển thị"
             type="number"
             placeholder="1"
             value={String(form.order)}
-            onValueChange={(v) => updateField("order", Number(v) || 0)}
+            onChange={(e) => updateField("order", Number(e.target.value) || 0)}
           />
           <div className="px-2 pt-2 text-sm font-medium">
             <Switch
-              isSelected={form.isActive}
-              onValueChange={(v) => updateField("isActive", v)}
-            >
-              Hiển thị cấp độ này
-            </Switch>
+              checked={form.isActive}
+              onChange={(v) => updateField("isActive", v)}
+              label="Hiển thị cấp độ này"
+            />
           </div>
         </div>
       </div>

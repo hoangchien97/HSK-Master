@@ -11,7 +11,7 @@ import {
   RotateCcw,
   ArrowRight,
 } from "lucide-react"
-import { Card, CardBody, Button, Chip, Input } from "@heroui/react"
+import { Badge } from "@/components/ui"
 import { PageHeader } from "@/components/portal/common/PageHeader"
 import { EmptyState } from "@/components/portal/common/EmptyState"
 import { cn } from "@/lib/utils"
@@ -107,12 +107,11 @@ export default function BookmarksClient({
         </PageHeader>
 
         <div className="max-w-xl mx-auto">
-          <Card
-            isPressable
-            onPress={() => setShowAnswer(!showAnswer)}
-            className="min-h-[300px] flex flex-col items-center justify-center relative"
+          <button
+            type="button"
+            onClick={() => setShowAnswer(!showAnswer)}
+            className="w-full min-h-75 flex flex-col items-center justify-center relative rounded-xl border border-gray-200 bg-white shadow-sm p-4 cursor-pointer hover:shadow-md transition-shadow"
           >
-            <CardBody className="flex flex-col items-center justify-center">
               <button
                 onClick={(e) => {
                   e.stopPropagation()
@@ -132,16 +131,15 @@ export default function BookmarksClient({
                   <p className="text-xl text-red-600 mb-2">{currentVocab.pinyin}</p>
                   <p className="text-lg text-gray-600">{currentVocab.meaning}</p>
                   {currentVocab.hskLevel && (
-                    <Chip size="sm" color="danger" variant="flat" className="mt-3">
+                    <Badge variant="danger" size="sm" className="mt-3">
                       HSK {currentVocab.hskLevel.level}
-                    </Chip>
+                    </Badge>
                   )}
                 </div>
               ) : (
                 <p className="text-gray-400">Nhấp để xem đáp án</p>
               )}
-            </CardBody>
-          </Card>
+          </button>
 
           <div className="flex items-center justify-between mt-6">
             <button
@@ -199,17 +197,16 @@ export default function BookmarksClient({
       </PageHeader>
 
       {/* Filters */}
-      <Card className="mb-6">
-        <CardBody>
+      <div className="rounded-xl border border-gray-200 bg-white p-4 shadow-sm mb-6">
           <div className="flex flex-col md:flex-row gap-4">
             <div className="flex-1">
-              <Input
+              <label className="block text-sm font-medium text-(--color-ink) mb-1">Tìm kiếm</label>
+              <input
                 type="text"
-                label="Tìm kiếm"
-                labelPlacement="outside"
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
                 placeholder="Tìm kiếm từ vựng..."
+                className="w-full px-3 py-2 border border-(--color-smoke) rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-(--color-vermillion)"
               />
             </div>
             <div className="w-full md:w-48">
@@ -225,8 +222,7 @@ export default function BookmarksClient({
               </select>
             </div>
           </div>
-        </CardBody>
-      </Card>
+      </div>
 
       {/* Bookmarked Vocabulary List */}
       {filteredBookmarks.length === 0 ? (
@@ -238,8 +234,8 @@ export default function BookmarksClient({
       ) : (
         <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4">
           {filteredBookmarks.map((bookmark) => (
-            <Card key={bookmark.id} className="group hover:shadow-md transition-shadow">
-              <CardBody>
+            <div key={bookmark.id} className="group rounded-xl border border-gray-200 bg-white p-4 shadow-sm hover:shadow-md transition-shadow">
+              <div>
                 <div className="flex items-start justify-between">
                   <div className="flex-1">
                     <div className="flex items-center gap-2 mb-2">
@@ -257,7 +253,7 @@ export default function BookmarksClient({
 
                   <div className="flex flex-col gap-1">
                     {bookmark.vocabulary.hskLevel && (
-                      <Chip size="sm" color="danger" variant="flat">HSK {bookmark.vocabulary.hskLevel.level}</Chip>
+                      <Badge variant="danger" size="sm">HSK {bookmark.vocabulary.hskLevel.level}</Badge>
                     )}
                     <button
                       onClick={() => handleRemoveBookmark(bookmark.id)}
@@ -272,8 +268,8 @@ export default function BookmarksClient({
                 <div className="mt-3 pt-3 border-t border-gray-100 text-xs text-gray-400">
                   Đã ôn: {bookmark.reviewCount} lần
                 </div>
-              </CardBody>
-            </Card>
+              </div>
+            </div>
           ))}
         </div>
       )}

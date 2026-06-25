@@ -30,10 +30,10 @@ function toOgImage(img?: string | null) {
  */
 export async function getPageMetadata(pagePath: string): Promise<Metadata | null> {
   try {
-    const pageMetadata = await prisma.pageMetadata.findUnique({
+    const pageMetadata = await prisma.pageMetadata.findFirst({
       where: {
         pagePath,
-        isActive: true
+        isActive: true,
       },
     });
 

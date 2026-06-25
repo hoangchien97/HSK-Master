@@ -17,7 +17,7 @@
 import { useState, useCallback, useEffect, useRef, useTransition } from "react"
 import dynamic from "next/dynamic"
 import { useRouter, useSearchParams, usePathname } from "next/navigation"
-import { Tabs, Tab, Chip, Button, Skeleton } from "@heroui/react"
+import { Badge, Button } from "@/components/ui"
 import { Search, Layers, HelpCircle, Headphones, PenTool, RotateCcw, CheckCircle2 } from "lucide-react"
 import { toast } from "react-toastify"
 import { CSpinner } from "@/components/portal/common"
@@ -50,10 +50,10 @@ import type { IVocabularyItem, IStudentItemProgress, IQueueVocabItem, ISkillProg
 function TabSkeleton() {
   return (
     <div className="space-y-3 p-4 flex flex-col items-center justify-center min-h-[50vh]">
-      <Skeleton className="w-full max-w-lg h-48 rounded-xl" />
+      <div className="animate-pulse bg-gray-200 rounded-xl w-full max-w-lg h-48" />
       <div className="flex gap-2">
-        <Skeleton className="w-24 h-10 rounded-lg" />
-        <Skeleton className="w-24 h-10 rounded-lg" />
+        <div className="animate-pulse bg-gray-200 rounded-lg w-24 h-10" />
+        <div className="animate-pulse bg-gray-200 rounded-lg w-24 h-10" />
       </div>
     </div>
   )
@@ -309,16 +309,16 @@ export default function LessonPracticeView({
       <div className="flex flex-col gap-1 pt-1">
         <div className="flex items-start sm:items-center justify-between gap-2">
           <h1 className="text-base sm:text-lg font-bold leading-snug">
-            <span className="text-default-400 font-normal">{L.lessonView.lessonPrefix} {lesson.order}:</span>{" "}
+            <span className="text-gray-400 font-normal">{L.lessonView.lessonPrefix} {lesson.order}:</span>{" "}
             {lesson.title}
           </h1>
           <div className="flex items-center gap-1.5 shrink-0">
-            <Chip size="sm" variant="flat" color="primary" className="text-[10px] sm:text-xs">{lesson.course.title}</Chip>
-            <Chip size="sm" variant="flat" className="text-[10px] sm:text-xs">{totalItems} {L.lessonView.wordCountSuffix}</Chip>
+            <Badge size="sm" variant="primary" className="text-[10px] sm:text-xs">{lesson.course.title}</Badge>
+            <Badge size="sm" className="text-[10px] sm:text-xs">{totalItems} {L.lessonView.wordCountSuffix}</Badge>
           </div>
         </div>
         {lesson.titleChinese && (
-          <p className="text-sm text-default-400">{lesson.titleChinese}</p>
+          <p className="text-sm text-gray-400">{lesson.titleChinese}</p>
         )}
       </div>
 
@@ -334,31 +334,23 @@ export default function LessonPracticeView({
 
       {/* Practice Tabs */}
       <div>
-        <Tabs
-          selectedKey={activeTab}
-          onSelectionChange={handleTabChange}
-          aria-label={L.lessonView.tabsAriaLabel}
-          variant="bordered"
-          fullWidth
-          size="lg"
-          classNames={{
-            tabList: "gap-0 bg-default-100/60 dark:bg-default-800/40 p-1 rounded-xl border border-default-200 dark:border-default-700/50",
-            tab: "px-2 sm:px-3 py-2 sm:py-2.5 text-sm font-medium min-w-0 data-[hover=true]:opacity-80",
-            cursor: "bg-white dark:bg-default-900 shadow-sm rounded-lg",
-          }}
-        >
+        <div className="flex gap-0 border-b border-(--color-smoke) mb-0" aria-label={L.lessonView.tabsAriaLabel}>
           {TAB_KEYS.map((key) => (
-            <Tab
+            <button
               key={key}
-              title={
-                <div className="flex items-center gap-1 sm:gap-1.5 justify-center">
-                  {TAB_CONFIG[key].icon}
-                  <span className="hidden sm:inline text-xs sm:text-sm">{TAB_CONFIG[key].label}</span>
-                </div>
-              }
-            />
+              type="button"
+              onClick={() => handleTabChange(key)}
+              className={`flex-1 flex items-center gap-1 sm:gap-1.5 justify-center px-2 sm:px-3 py-2 sm:py-2.5 text-sm font-medium border-b-2 -mb-px transition-colors ${
+                activeTab === key
+                  ? "border-(--color-vermillion) text-(--color-vermillion)"
+                  : "border-transparent text-(--color-muted) hover:text-(--color-ink)"
+              }`}
+            >
+              {TAB_CONFIG[key].icon}
+              <span className="hidden sm:inline text-xs sm:text-sm">{TAB_CONFIG[key].label}</span>
+            </button>
           ))}
-        </Tabs>
+        </div>
 
         {/* Tab content */}
         <div className="relative mt-3 min-h-120">
@@ -370,19 +362,18 @@ export default function LessonPracticeView({
 
           {/* Completed overlay for practice modes */}
           {activeTab !== PracticeMode.LOOKUP && activeData.isCompleted && !modeLoading && activeData.queue.length > 0 && (
-            <div className="mb-4 p-5 rounded-xl bg-success-50 dark:bg-success-950/20 border border-success-200 dark:border-success-800/30 text-center">
-              <CheckCircle2 className="w-12 h-12 text-success mx-auto mb-3" />
-              <h3 className="text-lg font-bold text-success-700 dark:text-success-300">
+            <div className="mb-4 p-5 rounded-xl bg-green-50 dark:bg-green-950/20 border border-green-200 dark:border-green-800/30 text-center">
+              <CheckCircle2 className="w-12 h-12 text-green-600 mx-auto mb-3" />
+              <h3 className="text-lg font-bold text-green-700 dark:text-green-300">
                 {L.completion.heading}
               </h3>
-              <p className="text-sm text-default-500 mt-1 mb-4 max-w-sm mx-auto">
+              <p className="text-sm text-(--color-muted) mt-1 mb-4 max-w-sm mx-auto">
                 {L.completion.descriptionTpl(TAB_CONFIG[activeTab]?.label)}
               </p>
               <Button
-                color="primary"
-                variant="flat"
-                onPress={handleResetSession}
-                startContent={<RotateCcw className="w-4 h-4" />}
+                variant="primary"
+                onClick={handleResetSession}
+                leftIcon={<RotateCcw className="w-4 h-4" />}
               >
                 {L.completion.resetBtn}
               </Button>
@@ -489,27 +480,29 @@ export default function LessonPracticeView({
 
       {/* Sibling lessons nav */}
       {siblings.length > 1 && (
-        <div className="border-t border-divider pt-3">
-          <p className="text-[10px] text-default-400 mb-2 uppercase tracking-wide font-medium">{L.lessonView.siblingHeading}</p>
+        <div className="border-t border-(--color-smoke) pt-3">
+          <p className="text-[10px] text-gray-400 mb-2 uppercase tracking-wide font-medium">{L.lessonView.siblingHeading}</p>
           <div ref={siblingScrollRef} className="flex gap-1.5 overflow-x-auto scrollbar-hide pb-safe">
             {siblings.map((s) => {
               const isCurrent = s.id === lessonId
               return (
-                <Button
+                <button
                   key={s.id}
-                  size="sm"
-                  variant={isCurrent ? "flat" : "bordered"}
-                  color={isCurrent ? "primary" : "default"}
-                  className={`shrink-0 text-xs min-w-0 ${isCurrent ? "font-semibold" : ""}`}
+                  type="button"
+                  className={`shrink-0 text-xs min-w-0 h-8 px-3 rounded-md border transition-colors ${
+                    isCurrent
+                      ? "bg-(--color-vermillion) text-white border-(--color-vermillion) font-semibold"
+                      : "bg-transparent border-(--color-smoke) text-(--color-ink) hover:bg-(--color-paper)"
+                  }`}
                   {...(isCurrent ? { "data-active-lesson": true } : {})}
-                  onPress={() => {
+                  onClick={() => {
                     if (!isCurrent) {
                       router.push(`${practiceBasePath}/${s.slug}`)
                     }
                   }}
                 >
                   {L.lessonView.lessonPrefix} {s.order}
-                </Button>
+                </button>
               )
             })}
           </div>

@@ -1,8 +1,10 @@
 "use client";
 
 import { useState, useEffect, useCallback, useMemo } from "react";
-import { Button, Chip, useDisclosure, Dropdown, DropdownTrigger, DropdownMenu, DropdownItem, Input } from "@heroui/react";
-import { Plus, Edit2, Trash2, MoreVertical, BookOpen, Search } from "lucide-react";
+import { Button } from "@/components/ui";
+import { Badge } from "@/components/ui";
+import { Dropdown } from "@/components/ui";
+import { Plus, Edit2, Trash2, MoreVertical, BookOpen, Search, X } from "lucide-react";
 import { toast } from "react-toastify";
 import { useRouter, useSearchParams, usePathname } from "next/navigation";
 import type { IHSKLevel, IGetHSKLevelResponse } from "@/interfaces/portal";
@@ -26,9 +28,9 @@ export default function HSKLevelsTable() {
   const [data, setData] = useState<IGetHSKLevelResponse>({ items: [], total: 0 });
   const [isLoading, setIsLoading] = useState(true);
 
-  const createModal = useDisclosure();
-  const editModal = useDisclosure();
-  const deleteModal = useDisclosure();
+  const [isCreateOpen, setIsCreateOpen] = useState(false);
+  const [isEditOpen, setIsEditOpen] = useState(false);
+  const [isDeleteOpen, setIsDeleteOpen] = useState(false);
   const [selected, setSelected] = useState<IHSKLevel | null>(null);
 
   const updateUrl = useCallback((updates: Record<string, string>) => {
@@ -62,34 +64,38 @@ export default function HSKLevelsTable() {
 
   const handleEdit = useCallback((item: IHSKLevel) => {
     setSelected(item);
-    editModal.onOpen();
-  }, [editModal]);
+    setIsEditOpen(true);
+  }, []);
 
   const handleDelete = useCallback((item: IHSKLevel) => {
     setSelected(item);
-    deleteModal.onOpen();
-  }, [deleteModal]);
+    setIsDeleteOpen(true);
+  }, []);
 
   const columns: CTableColumn<IHSKLevel & Record<string, unknown>>[] = useMemo(() => [
-    { key: "stt", label: "STT", align: "center" as const, headerClassName: "w-[50px]", render: (_v: unknown, _r: unknown, i: number) => <span className="text-sm text-default-500">{(urlPage - 1) * urlPageSize + i + 1}</span> },
+    { key: "stt", label: "STT", align: "center" as const, headerClassName: "w-[50px]", render: (_v: unknown, _r: unknown, i: number) => <span className="text-sm text-(--color-muted)">{(urlPage - 1) * urlPageSize + i + 1}</span> },
     {
       key: "title", label: "Cấp độ", sortable: true,
-      render: (_v: unknown, row: IHSKLevel) => <div><p className="font-semibold text-sm">{row.title}</p><p className="text-xs text-default-400 mt-1">{row.badge}</p></div>,
+      render: (_v: unknown, row: IHSKLevel) => <div><p className="font-semibold text-sm">{row.title}</p><p className="text-xs text-gray-400 mt-1">{row.badge}</p></div>,
     },
     { key: "vocabularyCount", label: "Học phần", render: (_v: unknown, row: IHSKLevel) => <p className="text-sm">{row.vocabularyCount} - {row.lessonCount} bài</p> },
     { key: "duration", label: "Thời lượng", render: (_v: unknown, row: IHSKLevel) => <span className="text-sm">{row.duration}</span> },
-    { key: "order", label: "Thứ tự", align: "center" as const, sortable: true, headerClassName: "w-[80px]", render: (_v: unknown, row: IHSKLevel) => <Chip size="sm" variant="flat">{row.order}</Chip> },
-    { key: "isActive", label: "Trạng thái", headerClassName: "w-[100px]", render: (_v: unknown, row: IHSKLevel) => <Chip size="sm" color={row.isActive ? "success" : "default"} variant="flat">{row.isActive ? "Hiển thị" : "Ẩn"}</Chip> },
+    { key: "order", label: "Thứ tự", align: "center" as const, sortable: true, headerClassName: "w-[80px]", render: (_v: unknown, row: IHSKLevel) => <Badge size="sm">{row.order}</Badge> },
+    { key: "isActive", label: "Trạng thái", headerClassName: "w-[100px]", render: (_v: unknown, row: IHSKLevel) => <Badge size="sm" variant={row.isActive ? "success" : "default"}>{row.isActive ? "Hiển thị" : "Ẩn"}</Badge> },
     {
       key: "actions", label: "", align: "end" as const, headerClassName: "w-[60px]",
       render: (_v: unknown, row: IHSKLevel) => (
-        <Dropdown>
-          <DropdownTrigger><Button isIconOnly size="sm" variant="light"><MoreVertical className="w-4 h-4" /></Button></DropdownTrigger>
-          <DropdownMenu aria-label="Thao tác">
-            <DropdownItem key="edit" startContent={<Edit2 className="w-4 h-4" />} onPress={() => handleEdit(row)}>Chỉnh sửa</DropdownItem>
-            <DropdownItem key="delete" startContent={<Trash2 className="w-4 h-4" />} className="text-danger" color="danger" onPress={() => handleDelete(row)}>Xóa</DropdownItem>
-          </DropdownMenu>
-        </Dropdown>
+        <Dropdown
+          trigger={
+            <button type="button" className="p-1.5 rounded-md hover:bg-(--color-smoke) text-(--color-ink) transition-colors">
+              <MoreVertical className="w-4 h-4" />
+            </button>
+          }
+          items={[
+            { label: "Chỉnh sửa", icon: <Edit2 className="w-4 h-4" />, onClick: () => handleEdit(row) },
+            { label: "Xóa", icon: <Trash2 className="w-4 h-4" />, onClick: () => handleDelete(row) },
+          ]}
+        />
       ),
     },
   ], [urlPage, urlPageSize, handleEdit, handleDelete]);
@@ -103,14 +109,32 @@ export default function HSKLevelsTable() {
         ariaLabel="HSK Levels" emptyContent={{ icon: <BookOpen className="w-12 h-12" />, title: "Chưa có cấp độ nào", description: "Các cấp độ HSK sẽ xuất hiện ở đây" }}
         toolbar={
           <div className="flex justify-between items-center rounded-xl bg-white border border-gray-200 px-4 py-3 shadow-sm w-full">
-            <Input isClearable className="w-full sm:max-w-xs" placeholder="Tìm theo tên..." startContent={<Search className="w-4 h-4 text-default-400" />} value={search} onValueChange={setSearch} onClear={() => setSearch("")} size="sm" />
-            <Button color="primary" size="sm" startContent={<Plus className="w-4 h-4" />} onPress={createModal.onOpen}>Thêm cấp độ</Button>
+            <div className="relative w-full sm:max-w-xs">
+              <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-(--color-muted) pointer-events-none" />
+              <input
+                type="text"
+                placeholder="Tìm theo tên..."
+                value={search}
+                onChange={(e) => setSearch(e.target.value)}
+                className="h-9 w-full pl-9 pr-8 rounded-md border border-(--color-smoke) bg-white text-sm text-(--color-ink) placeholder:text-(--color-muted) focus:outline-none focus:ring-2 focus:ring-(--color-vermillion) focus:border-(--color-vermillion)"
+              />
+              {search && (
+                <button
+                  type="button"
+                  onClick={() => setSearch("")}
+                  className="absolute right-2 top-1/2 -translate-y-1/2 text-(--color-muted) hover:text-(--color-ink) transition-colors"
+                >
+                  <X className="w-3.5 h-3.5" />
+                </button>
+              )}
+            </div>
+            <Button variant="primary" size="sm" leftIcon={<Plus className="w-4 h-4" />} onClick={() => setIsCreateOpen(true)}>Thêm cấp độ</Button>
           </div>
         }
       />
-      <HSKLevelFormModal isOpen={createModal.isOpen} onClose={createModal.onClose} onSuccess={handleCreateSuccess} />
-      {selected && <HSKLevelFormModal isOpen={editModal.isOpen} onClose={() => { editModal.onClose(); setSelected(null); }} onSuccess={handleUpdateSuccess} initialData={selected} />}
-      {selected && <DeleteConfirmModal isOpen={deleteModal.isOpen} onClose={() => { deleteModal.onClose(); setSelected(null); }} onSuccess={(id) => setData((p) => ({ items: p.items.filter((i) => i.id !== id), total: p.total - 1 }))} itemId={selected.id} itemName={selected.title} entityLabel="cấp độ" deleteAction={deleteHSKLevelAction} />}
+      <HSKLevelFormModal isOpen={isCreateOpen} onClose={() => setIsCreateOpen(false)} onSuccess={handleCreateSuccess} />
+      {selected && <HSKLevelFormModal isOpen={isEditOpen} onClose={() => { setIsEditOpen(false); setSelected(null); }} onSuccess={handleUpdateSuccess} initialData={selected} />}
+      {selected && <DeleteConfirmModal isOpen={isDeleteOpen} onClose={() => { setIsDeleteOpen(false); setSelected(null); }} onSuccess={(id) => setData((p) => ({ items: p.items.filter((i) => i.id !== id), total: p.total - 1 }))} itemId={selected.id} itemName={selected.title} entityLabel="cấp độ" deleteAction={deleteHSKLevelAction} />}
     </>
   );
 }

@@ -12,20 +12,12 @@ export async function getStudents(
 ): Promise<IGetStudentResponse> {
   const { search = '', level = '', classId = '', page = 1, pageSize = 10 } = params;
 
-  // Find all class IDs belonging to this teacher
-  const teacherClassIds = await prisma.portalClass.findMany({
-    where: { teacherId },
-    select: { id: true },
-  });
-
-  const classIds = teacherClassIds.map((c) => c.id);
-  if (classIds.length === 0) return { items: [], total: 0 };
-
   const enrollmentFilter: Prisma.PortalClassEnrollmentWhereInput = {
-    classId: classId ? { equals: classId } : { in: classIds },
-    ...(level && {
-      class: { level: { equals: level, mode: 'insensitive' as const } },
-    }),
+    class: {
+      teacherId,
+      ...(level && { level: { equals: level, mode: 'insensitive' as const } }),
+    },
+    ...(classId && { classId }),
   };
 
   const where: Prisma.PortalUserWhereInput = {
@@ -43,7 +35,7 @@ export async function getStudents(
       where,
       include: {
         enrollments: {
-          where: { classId: { in: classIds } },
+          where: { class: { teacherId }, ...(classId && { classId }) },
           include: {
             class: { select: { id: true, className: true, classCode: true, level: true } },
           },

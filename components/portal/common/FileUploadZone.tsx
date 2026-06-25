@@ -1,7 +1,7 @@
 "use client"
 
 import { useState, useRef, useCallback } from "react"
-import { Button, Chip } from "@heroui/react"
+import { Badge } from "@/components/ui"
 import { Upload, X, FileText, Image as ImageIcon, File, Loader2 } from "lucide-react"
 import { toast } from "react-toastify"
 
@@ -10,15 +10,15 @@ const FILE_ACCEPT =
   "image/*,.pdf,.doc,.docx,.ppt,.pptx,.xls,.xlsx,.txt,.csv"
 
 const ICON_MAP: Record<string, React.ReactNode> = {
-  image: <ImageIcon className="w-4 h-4 text-success" />,
-  pdf: <FileText className="w-4 h-4 text-danger" />,
-  doc: <FileText className="w-4 h-4 text-primary" />,
-  docx: <FileText className="w-4 h-4 text-primary" />,
-  ppt: <FileText className="w-4 h-4 text-warning" />,
-  pptx: <FileText className="w-4 h-4 text-warning" />,
-  xls: <FileText className="w-4 h-4 text-success" />,
-  xlsx: <FileText className="w-4 h-4 text-success" />,
-  default: <File className="w-4 h-4 text-default-400" />,
+  image: <ImageIcon className="w-4 h-4 text-green-600" />,
+  pdf: <FileText className="w-4 h-4 text-red-600" />,
+  doc: <FileText className="w-4 h-4 text-(--color-vermillion)" />,
+  docx: <FileText className="w-4 h-4 text-(--color-vermillion)" />,
+  ppt: <FileText className="w-4 h-4 text-amber-600" />,
+  pptx: <FileText className="w-4 h-4 text-amber-600" />,
+  xls: <FileText className="w-4 h-4 text-green-600" />,
+  xlsx: <FileText className="w-4 h-4 text-green-600" />,
+  default: <File className="w-4 h-4 text-gray-400" />,
 }
 
 function getFileIcon(name: string, type: string) {
@@ -169,23 +169,23 @@ export default function FileUploadZone({
         onDrop={onDrop}
         className={`
           border-2 border-dashed rounded-xl p-6 text-center transition-colors
-          ${dragOver ? "border-primary bg-primary-50" : "border-default-300 hover:border-primary"}
+          ${dragOver ? "border-(--color-vermillion) bg-(--color-paper)" : "border-(--color-smoke) hover:border-(--color-vermillion)"}
           ${disabled ? "opacity-50 cursor-not-allowed" : "cursor-pointer"}
         `}
         onClick={() => !disabled && !uploading && inputRef.current?.click()}
       >
         {uploading ? (
-          <div className="flex flex-col items-center gap-2 text-default-500">
+          <div className="flex flex-col items-center gap-2 text-(--color-muted)">
             <Loader2 className="w-8 h-8 animate-spin" />
             <p className="text-sm">Đang tải lên...</p>
           </div>
         ) : (
-          <div className="flex flex-col items-center gap-2 text-default-500">
+          <div className="flex flex-col items-center gap-2 text-(--color-muted)">
             <Upload className="w-8 h-8" />
             <p className="text-sm">
-              Kéo thả file vào đây hoặc <span className="text-primary font-medium">chọn file</span>
+              Kéo thả file vào đây hoặc <span className="text-(--color-vermillion) font-medium">chọn file</span>
             </p>
-            <p className="text-xs text-default-400">
+            <p className="text-xs text-gray-400">
               Hỗ trợ: ảnh, PDF, Word, PowerPoint, Excel (tối đa 10MB/file)
             </p>
           </div>
@@ -215,32 +215,29 @@ export default function FileUploadZone({
             return (
               <div
                 key={url}
-                className="flex items-center gap-3 p-2 rounded-lg bg-default-100 group"
+                className="flex items-center gap-3 p-2 rounded-lg bg-(--color-paper) group"
               >
                 {getFileIcon(name, isImage ? "image/" : "")}
                 <a
                   href={url}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="flex-1 text-sm text-foreground hover:text-primary truncate"
+                  className="flex-1 text-sm text-(--color-ink) hover:text-(--color-vermillion) truncate"
                   title={name}
                 >
                   {name}
                 </a>
-                <Chip size="sm" variant="flat" className="shrink-0">
+                <Badge size="sm" className="shrink-0">
                   {ext.toUpperCase()}
-                </Chip>
+                </Badge>
                 {!disabled && (
-                  <Button
-                    isIconOnly
-                    size="sm"
-                    variant="light"
-                    color="danger"
-                    className="opacity-0 group-hover:opacity-100 transition-opacity"
-                    onPress={() => removeFile(url)}
+                  <button
+                    type="button"
+                    onClick={() => removeFile(url)}
+                    className="opacity-0 group-hover:opacity-100 p-1.5 rounded-md hover:bg-(--color-smoke) text-red-600 transition-all"
                   >
                     <X className="w-3.5 h-3.5" />
-                  </Button>
+                  </button>
                 )}
               </div>
             )

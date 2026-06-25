@@ -1,7 +1,7 @@
 "use client"
 
 import { useState, useEffect, useCallback, useRef, useMemo } from "react"
-import { Button, Card, CardBody, Chip, Progress } from "@heroui/react"
+import { Button, Badge, Progress } from "@/components/ui"
 import { Volume2, ChevronLeft, ChevronRight } from "lucide-react"
 import {
   startPracticeSessionAction,
@@ -244,7 +244,9 @@ export default function QuizTab({
 
   if (totalQ === 0) {
     return (
-      <Card><CardBody className="py-12 text-center"><p className="text-default-500">{L.empty.minVocabQuiz}</p></CardBody></Card>
+      <div className="rounded-xl border border-(--color-smoke) bg-white p-4 shadow-sm">
+        <div className="py-12 text-center"><p className="text-(--color-muted)">{L.empty.minVocabQuiz}</p></div>
+      </div>
     )
   }
 
@@ -283,35 +285,35 @@ export default function QuizTab({
 
       {/* Header */}
       <div className="flex items-center justify-between mb-3">
-        <span className="text-sm text-default-500">
-          {L.quiz.questionLabel} <span className="font-medium text-foreground">{currentIdx + 1}</span>/{totalQ}
+        <span className="text-sm text-(--color-muted)">
+          {L.quiz.questionLabel} <span className="font-medium text-(--color-ink)">{currentIdx + 1}</span>/{totalQ}
         </span>
-        <Chip size="sm" variant="flat">{QUESTION_TYPE_LABELS[currentQ.type]}</Chip>
+        <Badge size="sm">{QUESTION_TYPE_LABELS[currentQ.type]}</Badge>
       </div>
 
-      <Progress value={((currentIdx + 1) / totalQ) * 100} size="sm" color="primary" className="mb-4" aria-label="quiz progress" />
+      <Progress value={((currentIdx + 1) / totalQ) * 100} size="sm" variant="default" className="mb-4" />
 
       {/* Question card */}
-      <Card className="mb-4">
-        <CardBody className="p-6 sm:p-8 text-center">
+      <div className="rounded-xl border border-(--color-smoke) bg-white p-4 shadow-sm mb-4">
+        <div className="p-6 sm:p-8 text-center">
           <p className={`font-bold ${isChinPrompt ? "text-3xl sm:text-5xl text-red-600 dark:text-red-400" : currentQ.type === QuestionType.MCQ_EXAMPLE ? "text-lg sm:text-xl text-red-600 dark:text-red-400" : "text-xl sm:text-2xl"}`}>
             {currentQ.prompt}
           </p>
           {currentQ.promptSub && (
-            <p className="text-sm text-default-400 mt-2">{currentQ.promptSub}</p>
+            <p className="text-sm text-gray-400 mt-2">{currentQ.promptSub}</p>
           )}
           {/* Speaker button for Chinese prompts */}
           {(isChinPrompt || currentQ.type === QuestionType.MCQ_EXAMPLE) && (
             <button
               onClick={handlePlayPromptAudio}
-              className="mt-3 p-2 rounded-full bg-primary-100 dark:bg-primary-900/30 text-primary hover:bg-primary-200 transition mx-auto inline-flex"
+              className="mt-3 p-2 rounded-full bg-red-100 dark:bg-red-900/30 text-(--color-vermillion) hover:bg-red-200 transition mx-auto inline-flex"
               aria-label="Nghe phát âm"
             >
               <Volume2 className="w-5 h-5" />
             </button>
           )}
-        </CardBody>
-      </Card>
+        </div>
+      </div>
 
       {/* Options */}
       <div className="mb-4">
@@ -353,7 +355,7 @@ export default function QuizTab({
             </div>
 
             {/* Next button — always visible, clicking cancels auto-next timer */}
-            <Button color="primary" onPress={handleNext} size="lg" className="font-medium">
+            <Button variant="primary" onClick={handleNext} size="lg" className="font-medium">
               {currentIdx < totalQ - 1 ? `${L.nav.nextQuestion} →` : L.nav.viewResult}
             </Button>
           </div>
@@ -361,29 +363,29 @@ export default function QuizTab({
           /* Prev/Next navigation — only go back to review, forward requires answering */
           <div className="flex items-center justify-between">
             <Button
-              variant="bordered"
+              variant="secondary"
               size="sm"
               isDisabled={currentIdx === 0}
-              onPress={() => {
+              onClick={() => {
                 if (currentIdx > 0) {
                   setCurrentIdx((i) => i - 1)
                   setSelectedKey(null)
                   setShowResult(false)
                 }
               }}
-              startContent={<ChevronLeft className="w-4 h-4" />}
+              leftIcon={<ChevronLeft className="w-4 h-4" />}
             >
               {L.nav.prev}
             </Button>
-            <span className="text-xs text-default-400">
+            <span className="text-xs text-gray-400">
               {currentIdx + 1}/{totalQ}
             </span>
             {/* Forward button disabled — must answer the question to proceed */}
             <Button
-              variant="bordered"
+              variant="secondary"
               size="sm"
               isDisabled
-              endContent={<ChevronRight className="w-4 h-4" />}
+              rightIcon={<ChevronRight className="w-4 h-4" />}
             >
               {L.nav.next}
             </Button>

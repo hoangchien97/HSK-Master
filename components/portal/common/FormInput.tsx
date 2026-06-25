@@ -1,31 +1,63 @@
 "use client";
 
-import { Input, type InputProps } from "@heroui/react";
+import { Input } from "@/components/ui/forms/Input";
 import { forwardRef } from "react";
+import type { InputHTMLAttributes, ReactNode } from "react";
 
-/**
- * Standardized Input wrapper for Portal forms
- * 
- * Features:
- * - labelPlacement="outside" by default
- * - validationBehavior="native" for inline validation messages
- * - Integrates with react-hook-form + zod
- * 
- * Usage:
- * <FormInput
- *   label="Email"
- *   isRequired
- *   isInvalid={!!errors.email}
- *   errorMessage={errors.email?.message}
- *   {...register("email")}
- * />
- */
-export const FormInput = forwardRef<HTMLInputElement, InputProps>((props, ref) => {
+interface FormInputProps extends InputHTMLAttributes<HTMLInputElement> {
+  label?: string;
+  // HeroUI-compatible props — bridged to new Input API
+  isRequired?: boolean;
+  isInvalid?: boolean;
+  errorMessage?: string;
+  isReadOnly?: boolean;
+  isDisabled?: boolean;
+  startContent?: ReactNode;
+  endContent?: ReactNode;
+  // New Input API
+  error?: string;
+  hint?: string;
+  leftIcon?: ReactNode;
+  rightIcon?: ReactNode;
+  wrapperClassName?: string;
+  // HeroUI layout props — silently dropped (no-ops in new system)
+  labelPlacement?: string;
+  validationBehavior?: string;
+}
+
+export const FormInput = forwardRef<HTMLInputElement, FormInputProps>((
+  {
+    isRequired,
+    isInvalid,
+    errorMessage,
+    isReadOnly,
+    isDisabled,
+    startContent,
+    endContent,
+    error,
+    labelPlacement: _lp,
+    validationBehavior: _vb,
+    leftIcon,
+    rightIcon,
+    size: _htmlSize, // HTML size (number) — consumed to prevent type clash with ui/Input size
+    ...props
+  },
+  ref
+) => {
+  void _htmlSize;
+  // Bridge isInvalid + errorMessage → error string
+  //   triggers the error border style without visible text when isInvalid but no message
+  const derivedError = error ?? (isInvalid ? (errorMessage ?? " ") : undefined);
+
   return (
     <Input
       ref={ref}
-      labelPlacement="outside"
-      validationBehavior="native"
+      required={isRequired ?? props.required}
+      readOnly={isReadOnly ?? props.readOnly}
+      disabled={isDisabled ?? props.disabled}
+      error={derivedError}
+      leftIcon={leftIcon ?? startContent}
+      rightIcon={rightIcon ?? endContent}
       {...props}
     />
   );

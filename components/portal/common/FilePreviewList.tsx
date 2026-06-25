@@ -1,14 +1,8 @@
 "use client"
 
 import { useState, useCallback } from "react"
-import {
-  Modal,
-  ModalContent,
-  ModalHeader,
-  ModalBody,
-  ModalFooter,
-  Button,
-} from "@heroui/react"
+import { Button } from "@/components/ui"
+import { CModal } from "@/components/portal/common/CModal"
 import {
   FileText,
   Image as ImageIcon,
@@ -49,20 +43,20 @@ function isPreviewable(name: string): boolean {
 }
 
 const EXT_ICON_MAP: Record<string, { icon: React.ReactNode; color: string }> = {
-  pdf: { icon: <FileText className="w-5 h-5" />, color: "text-danger" },
-  doc: { icon: <FileText className="w-5 h-5" />, color: "text-primary" },
-  docx: { icon: <FileText className="w-5 h-5" />, color: "text-primary" },
-  ppt: { icon: <FileText className="w-5 h-5" />, color: "text-warning" },
-  pptx: { icon: <FileText className="w-5 h-5" />, color: "text-warning" },
-  xls: { icon: <FileText className="w-5 h-5" />, color: "text-success" },
-  xlsx: { icon: <FileText className="w-5 h-5" />, color: "text-success" },
-  image: { icon: <ImageIcon className="w-5 h-5" />, color: "text-success" },
+  pdf: { icon: <FileText className="w-5 h-5" />, color: "text-red-600" },
+  doc: { icon: <FileText className="w-5 h-5" />, color: "text-(--color-vermillion)" },
+  docx: { icon: <FileText className="w-5 h-5" />, color: "text-(--color-vermillion)" },
+  ppt: { icon: <FileText className="w-5 h-5" />, color: "text-amber-600" },
+  pptx: { icon: <FileText className="w-5 h-5" />, color: "text-amber-600" },
+  xls: { icon: <FileText className="w-5 h-5" />, color: "text-green-600" },
+  xlsx: { icon: <FileText className="w-5 h-5" />, color: "text-green-600" },
+  image: { icon: <ImageIcon className="w-5 h-5" />, color: "text-green-600" },
 }
 
 function getFileIcon(name: string) {
   const ext = getFileExtension(name)
   if (isImageFile(name)) return EXT_ICON_MAP.image
-  return EXT_ICON_MAP[ext] || { icon: <File className="w-5 h-5" />, color: "text-default-400" }
+  return EXT_ICON_MAP[ext] || { icon: <File className="w-5 h-5" />, color: "text-gray-400" }
 }
 
 /* ─── FilePreviewModal ─── */
@@ -77,62 +71,65 @@ function FilePreviewModal({ url, isOpen, onClose }: FilePreviewModalProps) {
   const name = getFileName(url)
 
   return (
-    <Modal isOpen={isOpen} onClose={onClose} size="full" scrollBehavior="inside">
-      <ModalContent>
-        <ModalHeader className="flex items-center gap-2 border-b">
-          <Eye className="w-5 h-5 text-primary" />
+    <CModal
+      isOpen={isOpen}
+      onClose={onClose}
+      size="full"
+      scrollBehavior="inside"
+      title={
+        <span className="flex items-center gap-2">
+          <Eye className="w-5 h-5 text-(--color-vermillion)" />
           <span className="truncate">{name}</span>
-        </ModalHeader>
-        <ModalBody className="p-0 flex-1">
-          {isImageFile(name) ? (
-            <div className="flex items-center justify-center min-h-[60vh] bg-default-50 p-4">
-              {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img
-                src={url}
-                alt={name}
-                className="max-w-full max-h-[80vh] object-contain rounded-lg shadow-lg"
-              />
-            </div>
-          ) : isPdfFile(name) ? (
-            <iframe
-              src={url}
-              className="w-full h-full min-h-[80vh]"
-              title={name}
-            />
-          ) : (
-            <div className="flex flex-col items-center justify-center min-h-[40vh] gap-4 text-default-500">
-              <File className="w-16 h-16" />
-              <p>Không thể xem trước file này</p>
-              <Button
-                as="a"
-                href={url}
-                target="_blank"
-                rel="noopener noreferrer"
-                color="primary"
-                startContent={<Download className="w-4 h-4" />}
-              >
-                Tải xuống
-              </Button>
-            </div>
-          )}
-        </ModalBody>
-        <ModalFooter className="border-t">
-          <Button variant="flat" onPress={onClose} startContent={<X className="w-4 h-4" />}>
+        </span>
+      }
+      footer={
+        <>
+          <Button variant="secondary" onClick={onClose} leftIcon={<X className="w-4 h-4" />}>
             Đóng
           </Button>
-          <Button
-            as="a"
+          <a
             href={url}
             target="_blank"
             rel="noopener noreferrer"
-            color="primary"
-            startContent={<ExternalLink className="w-4 h-4" />}
+            className="inline-flex items-center gap-2 h-10 px-4 text-sm font-medium rounded-md bg-(--color-vermillion) text-white hover:bg-(--color-vermillion-hover) transition-all"
           >
+            <ExternalLink className="w-4 h-4" />
             Mở tab mới
-          </Button>
-        </ModalFooter>
-      </ModalContent>
-    </Modal>
+          </a>
+        </>
+      }
+    >
+      {isImageFile(name) ? (
+        <div className="flex items-center justify-center min-h-[60vh] bg-(--color-paper) p-4">
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img
+            src={url}
+            alt={name}
+            className="max-w-full max-h-[80vh] object-contain rounded-lg shadow-lg"
+          />
+        </div>
+      ) : isPdfFile(name) ? (
+        <iframe
+          src={url}
+          className="w-full h-full min-h-[80vh]"
+          title={name}
+        />
+      ) : (
+        <div className="flex flex-col items-center justify-center min-h-[40vh] gap-4 text-(--color-muted)">
+          <File className="w-16 h-16" />
+          <p>Không thể xem trước file này</p>
+          <a
+            href={url}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="inline-flex items-center gap-2 h-10 px-4 text-sm font-medium rounded-md bg-(--color-vermillion) text-white hover:bg-(--color-vermillion-hover) transition-all"
+          >
+            <Download className="w-4 h-4" />
+            Tải xuống
+          </a>
+        </div>
+      )}
+    </CModal>
   )
 }
 
@@ -162,7 +159,7 @@ export default function FilePreviewList({ urls, title, showPreview = true }: Fil
     <div>
       {title && (
         <p className="text-sm font-medium mb-2 flex items-center gap-1.5">
-          <FileText className="w-4 h-4 text-default-500" />
+          <FileText className="w-4 h-4 text-(--color-muted)" />
           {title} ({urls.length})
         </p>
       )}
@@ -176,43 +173,39 @@ export default function FilePreviewList({ urls, title, showPreview = true }: Fil
           return (
             <div
               key={url}
-              className="flex items-center gap-3 p-2.5 rounded-lg bg-default-50 hover:bg-default-100 transition-colors group"
+              className="flex items-center gap-3 p-2.5 rounded-lg bg-(--color-paper) hover:bg-(--color-smoke) transition-colors group"
             >
               <span className={color}>{icon}</span>
               <button
-                className="flex-1 text-left text-sm text-foreground hover:text-primary truncate transition-colors"
+                className="flex-1 text-left text-sm text-(--color-ink) hover:text-(--color-vermillion) truncate transition-colors"
                 title={canPreview ? "Click để xem" : name}
                 onClick={() => handlePreview(url)}
               >
                 {name}
               </button>
-              <span className="text-xs text-default-400 uppercase font-medium shrink-0">
+              <span className="text-xs text-gray-400 uppercase font-medium shrink-0">
                 {ext}
               </span>
               <div className="flex items-center gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
                 {canPreview && showPreview && (
-                  <Button
-                    isIconOnly
-                    size="sm"
-                    variant="light"
-                    onPress={() => handlePreview(url)}
+                  <button
+                    type="button"
+                    onClick={() => handlePreview(url)}
                     title="Xem trước"
+                    className="p-1.5 rounded-md hover:bg-(--color-smoke) text-(--color-ink) transition-colors"
                   >
                     <Eye className="w-3.5 h-3.5" />
-                  </Button>
+                  </button>
                 )}
-                <Button
-                  isIconOnly
-                  size="sm"
-                  variant="light"
-                  as="a"
+                <a
                   href={url}
                   target="_blank"
                   rel="noopener noreferrer"
                   title="Tải xuống"
+                  className="p-1.5 rounded-md hover:bg-(--color-smoke) text-(--color-ink) transition-colors"
                 >
                   <Download className="w-3.5 h-3.5" />
-                </Button>
+                </a>
               </div>
             </div>
           )

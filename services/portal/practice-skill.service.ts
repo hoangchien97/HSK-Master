@@ -10,6 +10,7 @@
 
 import { prisma } from '@/lib/prisma';
 import { ItemProgressStatus, PracticeMode } from '@/enums/portal';
+import type { PracticeMode as PrismaPracticeMode, ItemProgressStatus as PrismaItemProgressStatus } from '@prisma/client';
 
 /* ───────── Constants ───────── */
 
@@ -132,7 +133,7 @@ export async function buildPracticeQueue(
   ];
 
   const skillRows = await prisma.portalItemSkillProgress.findMany({
-    where: { studentId, vocabularyId: { in: allVocabIds }, mode },
+    where: { studentId, vocabularyId: { in: allVocabIds }, mode: mode as PrismaPracticeMode },
   });
 
   const progressMap = new Map<string, (typeof skillRows)[0]>();
@@ -149,12 +150,12 @@ export async function buildPracticeQueue(
   // ── 6. Upsert session state ──
   const sessionState = await prisma.portalLessonSessionState.upsert({
     where: {
-      studentId_lessonId_mode: { studentId, lessonId, mode },
+      studentId_lessonId_mode: { studentId, lessonId, mode: mode as PrismaPracticeMode },
     },
     create: {
       studentId,
       lessonId,
-      mode,
+      mode: mode as PrismaPracticeMode,
       includePrevLessonCount: prevLessonCount,
     },
     update: {},
@@ -216,7 +217,7 @@ export async function updateSkillProgress(
 ): Promise<{ oldStatus: string; newStatus: string; statusChanged: boolean }> {
   const existing = await prisma.portalItemSkillProgress.findUnique({
     where: {
-      studentId_vocabularyId_mode: { studentId, vocabularyId, mode },
+      studentId_vocabularyId_mode: { studentId, vocabularyId, mode: mode as PrismaPracticeMode },
     },
   });
 
@@ -271,17 +272,17 @@ export async function updateSkillProgress(
 
   await prisma.portalItemSkillProgress.upsert({
     where: {
-      studentId_vocabularyId_mode: { studentId, vocabularyId, mode },
+      studentId_vocabularyId_mode: { studentId, vocabularyId, mode: mode as PrismaPracticeMode },
     },
     create: {
       studentId,
       vocabularyId,
-      mode,
+      mode: mode as PrismaPracticeMode,
       seenCount: 1,
       correctCount: isCorrect ? 1 : 0,
       wrongCount: isCorrect ? 0 : 1,
       masteryScore,
-      status: newStatus,
+      status: newStatus as PrismaItemProgressStatus,
       lastSeenAt: now,
       nextReviewAt,
     },
@@ -290,7 +291,7 @@ export async function updateSkillProgress(
       correctCount: isCorrect ? { increment: 1 } : undefined,
       wrongCount: isCorrect ? undefined : { increment: 1 },
       masteryScore,
-      status: newStatus,
+      status: newStatus as PrismaItemProgressStatus,
       lastSeenAt: now,
       nextReviewAt,
     },
@@ -412,7 +413,7 @@ export async function updateLessonSkillProgress(
   ).map((v) => v.id);
 
   const items = await prisma.portalItemSkillProgress.findMany({
-    where: { studentId, vocabularyId: { in: vocabIds }, mode },
+    where: { studentId, vocabularyId: { in: vocabIds }, mode: mode as PrismaPracticeMode },
   });
 
   const masteredCount = items.filter(
@@ -431,12 +432,12 @@ export async function updateLessonSkillProgress(
   try {
     await prisma.portalLessonSkillProgress.upsert({
       where: {
-        studentId_lessonId_mode: { studentId, lessonId, mode },
+        studentId_lessonId_mode: { studentId, lessonId, mode: mode as PrismaPracticeMode },
       },
       create: {
         studentId,
         lessonId,
-        mode,
+        mode: mode as PrismaPracticeMode,
         totalCount,
         masteredCount,
         learningCount,
@@ -472,12 +473,12 @@ export async function updateSessionState(
 ) {
   await prisma.portalLessonSessionState.upsert({
     where: {
-      studentId_lessonId_mode: { studentId, lessonId, mode },
+      studentId_lessonId_mode: { studentId, lessonId, mode: mode as PrismaPracticeMode },
     },
     create: {
       studentId,
       lessonId,
-      mode,
+      mode: mode as PrismaPracticeMode,
       lastIndex: currentIndex,
       lastVocabularyId: currentVocabularyId,
       isCompleted,
@@ -501,12 +502,12 @@ export async function resetSessionPointer(
 ) {
   return prisma.portalLessonSessionState.upsert({
     where: {
-      studentId_lessonId_mode: { studentId, lessonId, mode },
+      studentId_lessonId_mode: { studentId, lessonId, mode: mode as PrismaPracticeMode },
     },
     create: {
       studentId,
       lessonId,
-      mode,
+      mode: mode as PrismaPracticeMode,
       lastIndex: 0,
       lastVocabularyId: null,
       isCompleted: false,
@@ -536,7 +537,7 @@ export async function getSkillProgressForLesson(
   ).map((v) => v.id);
 
   const items = await prisma.portalItemSkillProgress.findMany({
-    where: { studentId, vocabularyId: { in: vocabIds }, mode },
+    where: { studentId, vocabularyId: { in: vocabIds }, mode: mode as PrismaPracticeMode },
   });
 
   const map: Record<string, SkillProgressRecord> = {};
@@ -567,7 +568,7 @@ export async function getLessonSkillProgress(
   try {
     return await prisma.portalLessonSkillProgress.findUnique({
       where: {
-        studentId_lessonId_mode: { studentId, lessonId, mode },
+        studentId_lessonId_mode: { studentId, lessonId, mode: mode as PrismaPracticeMode },
       },
     });
   } catch (error) {

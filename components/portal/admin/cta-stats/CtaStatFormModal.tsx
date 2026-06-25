@@ -1,7 +1,9 @@
 "use client";
 
 import { useState } from "react";
-import { Button, Input, Switch } from "@heroui/react";
+import { Button } from "@/components/ui";
+import { Input } from "@/components/ui/forms/Input";
+import { Switch } from "@/components/ui/forms/Switch";
 import { toast } from "react-toastify";
 import type { ICtaStat, ICreateCtaStatDTO } from "@/interfaces/portal";
 import { CModal } from "@/components/portal/common";
@@ -66,8 +68,8 @@ export default function CtaStatFormModal({
       title={isEdit ? "Chỉnh sửa Chỉ số" : "Thêm Chỉ số mới"}
       footer={
         <>
-          <Button variant="flat" onPress={onClose}>Hủy</Button>
-          <Button color="primary" isLoading={isSubmitting} onPress={handleSubmit}>
+          <Button variant="secondary" onClick={onClose}>Hủy</Button>
+          <Button variant="primary" isLoading={isSubmitting} onClick={handleSubmit}>
             {isEdit ? "Cập nhật" : "Tạo mới"}
           </Button>
         </>
@@ -80,14 +82,14 @@ export default function CtaStatFormModal({
             type="number"
             placeholder="Ví dụ: 50"
             value={String(form.value)}
-            onValueChange={(v) => updateField("value", Number(v) || 0)}
-            isRequired
+            onChange={(e) => updateField("value", Number(e.target.value) || 0)}
+            required
           />
           <Input
             label="Hậu tố"
             placeholder="Ví dụ: +, %"
             value={form.suffix || ""}
-            onValueChange={(v) => updateField("suffix", v)}
+            onChange={(e) => updateField("suffix", e.target.value)}
           />
         </div>
 
@@ -95,8 +97,8 @@ export default function CtaStatFormModal({
           label="Tên / Nhãn"
           placeholder="Ví dụ: Bài giảng, Học viên..."
           value={form.label}
-          onValueChange={(v) => updateField("label", v)}
-          isRequired
+          onChange={(e) => updateField("label", e.target.value)}
+          required
         />
 
         <div className="grid grid-cols-2 gap-4 items-center">
@@ -105,15 +107,14 @@ export default function CtaStatFormModal({
             type="number"
             placeholder="1"
             value={String(form.order)}
-            onValueChange={(v) => updateField("order", Number(v) || 0)}
+            onChange={(e) => updateField("order", Number(e.target.value) || 0)}
           />
           <div className="px-2 pt-2">
             <Switch
-              isSelected={form.isActive}
-              onValueChange={(v) => updateField("isActive", v)}
-            >
-              Hiển thị
-            </Switch>
+              checked={form.isActive}
+              onChange={(v) => updateField("isActive", v)}
+              label="Hiển thị"
+            />
           </div>
         </div>
       </div>

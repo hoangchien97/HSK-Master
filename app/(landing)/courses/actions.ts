@@ -2,17 +2,21 @@
 
 import { getFilteredCourses } from '@/services/course.service'
 
+type HskGroup = 'beginner' | 'intermediate' | 'advanced'
+
 export async function getCoursesAction(filters: {
-  category?: string | null
-  hskLevel?: string | null
+  categories?: string[]
+  hskLevels?: string[]
   search?: string | null
   sort?: string | null
   page?: number
   limit?: number
 }) {
   const courseFilters = {
-    categoryId: filters.category || undefined,
-    hskLevelGroup: filters.hskLevel as 'beginner' | 'intermediate' | 'advanced' | undefined,
+    categoryIds: filters.categories && filters.categories.length > 0 ? filters.categories : undefined,
+    hskLevelGroups: filters.hskLevels && filters.hskLevels.length > 0
+      ? (filters.hskLevels as HskGroup[])
+      : undefined,
     search: filters.search || undefined,
     sortBy: (filters.sort as 'featured' | 'newest') || undefined,
     page: filters.page,

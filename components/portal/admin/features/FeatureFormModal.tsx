@@ -1,7 +1,10 @@
 "use client";
 
 import { useState } from "react";
-import { Button, Input, Textarea, Switch } from "@heroui/react";
+import { Button } from "@/components/ui";
+import { Input } from "@/components/ui/forms/Input";
+import { Textarea } from "@/components/ui/forms/Textarea";
+import { Switch } from "@/components/ui/forms/Switch";
 import { toast } from "react-toastify";
 import type { IFeature, ICreateFeatureDTO } from "@/interfaces/portal";
 import { CModal } from "@/components/portal/common";
@@ -69,8 +72,8 @@ export default function FeatureFormModal({
       title={isEdit ? "Chỉnh sửa Tính năng nổi bật" : "Thêm Tính năng nổi bật"}
       footer={
         <>
-          <Button variant="flat" onPress={onClose}>Hủy</Button>
-          <Button color="primary" isLoading={isSubmitting} onPress={handleSubmit}>
+          <Button variant="secondary" onClick={onClose}>Hủy</Button>
+          <Button variant="primary" isLoading={isSubmitting} onClick={handleSubmit}>
             {isEdit ? "Cập nhật" : "Tạo mới"}
           </Button>
         </>
@@ -81,17 +84,16 @@ export default function FeatureFormModal({
           label="Tên tính năng"
           placeholder="Ví dụ: Lộ trình học rõ ràng"
           value={form.title}
-          onValueChange={(v) => updateField("title", v)}
-          isRequired
+          onChange={(e) => updateField("title", e.target.value)}
+          required
         />
 
         <Textarea
           label="Mô tả"
           placeholder="Nhập mô tả cho tính năng"
           value={form.description || ""}
-          onValueChange={(v) => updateField("description", v)}
-          minRows={2}
-          isRequired
+          onChange={(e) => updateField("description", e.target.value)}
+          required
         />
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -99,10 +101,10 @@ export default function FeatureFormModal({
             label="Tên Lucide Icon"
             placeholder="Ví dụ: Star, BookOpen, User..."
             value={form.iconName}
-            onValueChange={(v) => updateField("iconName", v)}
-            description="Tìm tên icon tại lucide.dev"
-            endContent={
-              <div className="p-1 bg-default-100 rounded-md text-primary">
+            onChange={(e) => updateField("iconName", e.target.value)}
+            hint="Tìm tên icon tại lucide.dev"
+            rightIcon={
+              <div className="p-1 bg-default-100 rounded-md text-(--color-vermillion)">
                 <IconComponent className="w-5 h-5" />
               </div>
             }
@@ -115,16 +117,14 @@ export default function FeatureFormModal({
             type="number"
             placeholder="1"
             value={String(form.order)}
-            onValueChange={(v) => updateField("order", Number(v) || 0)}
+            onChange={(e) => updateField("order", Number(e.target.value) || 0)}
           />
           <div className="px-2 pt-2 text-sm font-medium">
             <Switch
-              isSelected={form.isActive}
-              onValueChange={(v) => updateField("isActive", v)}
-              size="sm"
-            >
-              Hiển thị tính năng này
-            </Switch>
+              checked={form.isActive}
+              onChange={(v) => updateField("isActive", v)}
+              label="Hiển thị tính năng này"
+            />
           </div>
         </div>
       </div>

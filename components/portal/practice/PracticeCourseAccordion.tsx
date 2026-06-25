@@ -1,7 +1,8 @@
 "use client"
 
 import { useMemo, useState, useCallback } from "react"
-import { Accordion, AccordionItem, Chip, Progress } from "@heroui/react"
+import { Badge, Progress } from "@/components/ui"
+import { ChevronDown } from "lucide-react"
 import PracticeLessonItem from "./PracticeLessonItem"
 
 interface LessonItem {
@@ -38,10 +39,10 @@ interface Props {
   skillProgressMap?: Record<string, Record<string, { masteredCount: number; totalCount: number }>>
 }
 
-function getLevelColor(level: number): "warning" | "danger" | "secondary" {
+function getLevelBadgeVariant(level: number): "warning" | "danger" | "default" {
   if (level <= 2) return "warning"
   if (level <= 4) return "danger"
-  return "secondary"
+  return "default"
 }
 
 export default function PracticeCourseAccordion({ courses, progressMap, skillProgressMap }: Props) {
@@ -81,97 +82,96 @@ export default function PracticeCourseAccordion({ courses, progressMap, skillPro
   // Controlled expanded keys
   const [expandedKeys, setExpandedKeys] = useState<Set<string>>(new Set([defaultExpanded]))
 
-  const handleSelectionChange = useCallback((keys: "all" | Set<React.Key>) => {
-    if (keys === "all") {
-      setExpandedKeys(new Set(courses.map(c => c.id)))
-    } else {
-      setExpandedKeys(new Set(Array.from(keys).map(String)))
-    }
-  }, [courses])
+  const toggle = useCallback((key: string) => {
+    setExpandedKeys(prev => {
+      const next = new Set(prev)
+      if (next.has(key)) {
+        next.delete(key)
+      } else {
+        next.add(key)
+      }
+      return next
+    })
+  }, [])
 
   return (
-    <Accordion
-      variant="splitted"
-      selectedKeys={expandedKeys}
-      onSelectionChange={handleSelectionChange}
-      selectionMode="multiple"
-      className="gap-3"
-    >
+    <div className="flex flex-col gap-3">
       {courses.map((course) => {
         const hskLevel = course.hskLevel?.level ?? 0
         const cp = courseProgress[course.id]
+        const isOpen = expandedKeys.has(course.id)
 
         return (
-          <AccordionItem
-            key={course.id}
-            aria-label={course.title}
-            classNames={{
-              base: "shadow-sm border border-default-200 dark:border-default-700/50",
-              title: "text-sm",
-              trigger: "py-3 px-4",
-              content: "px-3 pb-3",
-            }}
-            title={
-              <div className="flex items-center gap-2 flex-wrap w-full">
-                <Chip
-                  size="sm"
-                  color={getLevelColor(hskLevel)}
-                  variant="flat"
-                  className="font-bold"
-                >
-                  HSK {hskLevel}
-                </Chip>
-                <span className="font-semibold text-sm sm:text-base">{course.title}</span>
-                <span className="text-xs text-default-400 hidden sm:inline">
-                  {course.lessons.length} bài · {course.vocabularyCount} từ vựng
-                </span>
-                {cp && cp.started > 0 && (
-                  <div className="flex items-center gap-2 ml-auto">
-                    <Progress
-                      value={cp.avgMastery}
-                      size="sm"
-                      color={cp.avgMastery >= 70 ? "success" : cp.avgMastery >= 30 ? "warning" : "primary"}
-                      className="w-20 hidden sm:block"
-                      aria-label="Tiến độ khóa học"
-                    />
-                    <span className="text-xs font-semibold tabular-nums text-default-500">
-                      {Math.round(cp.avgMastery)}%
-                    </span>
-                  </div>
-                )}
-              </div>
-            }
-          >
-            <div className="grid gap-2 pb-2">
-              {course.lessons.map((lesson) => {
-                // Build per-mode skill progress for this lesson
-                const rawSkill = skillProgressMap?.[lesson.id]
-                const lessonSkill = rawSkill
-                  ? Object.fromEntries(
-                      Object.entries(rawSkill).map(([mode, v]) => [
-                        mode,
-                        {
-                          masteryPercent: v.totalCount > 0 ? Math.round((v.masteredCount / v.totalCount) * 100) : 0,
-                          masteredCount: v.masteredCount,
-                          totalCount: v.totalCount,
-                        },
-                      ]),
-                    )
-                  : undefined
-                return (
-                  <PracticeLessonItem
-                    key={lesson.id}
-                    lesson={lesson}
-                    progress={progressMap[lesson.id]}
-                    levelSlug={`hsk${hskLevel || 0}`}
-                    skillProgress={lessonSkill}
+          <div key={course.id} className="rounded-xl shadow-sm border border-(--color-smoke) dark:border-gray-700/50 bg-white overflow-hidden">
+            {/* Trigger */}
+            <button
+              type="button"
+              aria-expanded={isOpen}
+              onClick={() => toggle(course.id)}
+              className="w-full text-left py-3 px-4 flex items-center gap-2 flex-wrap hover:bg-(--color-paper) transition-colors"
+            >
+              <Badge
+                size="sm"
+                variant={getLevelBadgeVariant(hskLevel)}
+                className="font-bold"
+              >
+                HSK {hskLevel}
+              </Badge>
+              <span className="font-semibold text-sm sm:text-base">{course.title}</span>
+              <span className="text-xs text-gray-400 hidden sm:inline">
+                {course.lessons.length} bài · {course.vocabularyCount} từ vựng
+              </span>
+              {cp && cp.started > 0 && (
+                <div className="flex items-center gap-2 ml-auto">
+                  <Progress
+                    value={cp.avgMastery}
+                    size="sm"
+                    variant={cp.avgMastery >= 70 ? "success" : cp.avgMastery >= 30 ? "warning" : "default"}
+                    className="w-20 hidden sm:block"
                   />
-                )
-              })}
-            </div>
-          </AccordionItem>
+                  <span className="text-xs font-semibold tabular-nums text-(--color-muted)">
+                    {Math.round(cp.avgMastery)}%
+                  </span>
+                </div>
+              )}
+              <ChevronDown className={`w-4 h-4 text-gray-400 transition-transform duration-200 ml-auto shrink-0 ${isOpen ? "rotate-180" : ""}`} />
+            </button>
+
+            {/* Content */}
+            {isOpen && (
+              <div className="px-3 pb-3">
+                <div className="grid gap-2 pb-2">
+                  {course.lessons.map((lesson) => {
+                    // Build per-mode skill progress for this lesson
+                    const rawSkill = skillProgressMap?.[lesson.id]
+                    const lessonSkill = rawSkill
+                      ? Object.fromEntries(
+                          Object.entries(rawSkill).map(([mode, v]) => [
+                            mode,
+                            {
+                              masteryPercent: v.totalCount > 0 ? Math.round((v.masteredCount / v.totalCount) * 100) : 0,
+                              masteredCount: v.masteredCount,
+                              totalCount: v.totalCount,
+                            },
+                          ]),
+                        )
+                      : undefined
+                    return (
+                      <PracticeLessonItem
+                        key={lesson.id}
+                        lesson={lesson}
+                        progress={progressMap[lesson.id]}
+                        levelSlug={`hsk${hskLevel || 0}`}
+                        skillProgress={lessonSkill}
+                      />
+                    )
+                  })}
+                </div>
+              </div>
+            )}
+          </div>
         )
       })}
-    </Accordion>
+    </div>
   )
 }

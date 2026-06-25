@@ -1,16 +1,10 @@
 "use client";
 
 import { useState, useEffect, useCallback, useMemo } from "react";
-import {
-  Button,
-  Chip,
-  useDisclosure,
-  Dropdown,
-  DropdownTrigger,
-  DropdownMenu,
-  DropdownItem,
-  Tooltip,
-} from "@heroui/react";
+import { Button } from "@/components/ui";
+import { Badge } from "@/components/ui";
+import { Dropdown } from "@/components/ui";
+import { Tooltip } from "@/components/ui";
 import { Plus, Edit2, Trash2, MoreVertical, Users, Calendar } from "lucide-react";
 import { toast } from "react-toastify";
 import dayjs from "dayjs";
@@ -39,9 +33,9 @@ export default function ClassesTable() {
   const [data, setData] = useState<IGetClassResponse>({ items: [], total: 0 });
   const [isLoading, setIsLoading] = useState(true);
 
-  const createModal = useDisclosure();
-  const editModal = useDisclosure();
-  const deleteModal = useDisclosure();
+  const [isCreateOpen, setIsCreateOpen] = useState(false);
+  const [isEditOpen, setIsEditOpen] = useState(false);
+  const [isDeleteOpen, setIsDeleteOpen] = useState(false);
   const [selectedClass, setSelectedClass] = useState<IClass | null>(null);
 
   const updateUrl = useCallback(
@@ -130,8 +124,15 @@ export default function ClassesTable() {
     [],
   );
 
-  const handleEdit = useCallback((cls: IClass) => { setSelectedClass(cls); editModal.onOpen(); }, [editModal]);
-  const handleDelete = useCallback((cls: IClass) => { setSelectedClass(cls); deleteModal.onOpen(); }, [deleteModal]);
+  const handleEdit = useCallback((cls: IClass) => {
+    setSelectedClass(cls);
+    setIsEditOpen(true);
+  }, []);
+
+  const handleDelete = useCallback((cls: IClass) => {
+    setSelectedClass(cls);
+    setIsDeleteOpen(true);
+  }, []);
 
   const columns: CTableColumn<IClass & Record<string, unknown>>[] = useMemo(() => [
     {
@@ -140,7 +141,7 @@ export default function ClassesTable() {
       align: "center" as const,
       headerClassName: "w-[50px]",
       render: (_v, _row, index) => (
-        <span className="text-sm text-default-500">{(urlPage - 1) * urlPageSize + index + 1}</span>
+        <span className="text-sm text-(--color-muted)">{(urlPage - 1) * urlPageSize + index + 1}</span>
       ),
     },
     {
@@ -149,10 +150,10 @@ export default function ClassesTable() {
       sortable: true,
       render: (_v, row) => (
         <button
-          className="text-left hover:text-primary transition-colors max-w-50"
+          className="text-left hover:text-(--color-vermillion) transition-colors max-w-50"
           onClick={() => router.push(`/portal/teacher/classes/${row.id}`)}
         >
-          <Tooltip content={row.className} placement="top" delay={500}>
+          <Tooltip content={row.className} placement="top" delayMs={500}>
             <p className="font-semibold text-sm truncate">{row.className}</p>
           </Tooltip>
         </button>
@@ -163,8 +164,8 @@ export default function ClassesTable() {
       label: "Mã lớp",
       headerClassName: "w-[120px]",
       render: (_v, row) => (
-        <Tooltip content={row.classCode} placement="top" delay={500}>
-          <span className="text-sm text-default-600 truncate block max-w-30">{row.classCode}</span>
+        <Tooltip content={row.classCode} placement="top" delayMs={500}>
+          <span className="text-sm text-(--color-ink) truncate block max-w-30">{row.classCode}</span>
         </Tooltip>
       ),
     },
@@ -174,8 +175,8 @@ export default function ClassesTable() {
       sortable: true,
       headerClassName: "w-[100px]",
       render: (_v, row) => row.level
-        ? <Chip size="sm" color="primary" variant="flat">{row.level}</Chip>
-        : <span className="text-default-300">—</span>,
+        ? <Badge size="sm" variant="primary">{row.level}</Badge>
+        : <span className="text-gray-300">—</span>,
     },
     {
       key: "students",
@@ -184,7 +185,7 @@ export default function ClassesTable() {
       headerClassName: "w-[90px]",
       render: (_v, row) => (
         <div className="flex items-center gap-1.5 justify-center">
-          <Users className="w-4 h-4 text-default-400" />
+          <Users className="w-4 h-4 text-gray-400" />
           <span className="text-sm">{row._count?.enrollments ?? 0}</span>
         </div>
       ),
@@ -196,7 +197,7 @@ export default function ClassesTable() {
       headerClassName: "w-[140px]",
       render: (_v, row) => (
         <div className="flex items-center gap-1.5">
-          <Calendar className="w-4 h-4 text-default-400 shrink-0" />
+          <Calendar className="w-4 h-4 text-gray-400 shrink-0" />
           <span className="text-sm whitespace-nowrap">{dayjs(row.startDate).format("DD/MM/YYYY")}</span>
         </div>
       ),
@@ -207,9 +208,9 @@ export default function ClassesTable() {
       sortable: true,
       headerClassName: "w-[110px]",
       render: (_v, row) => (
-        <Chip size="sm" color={CLASS_STATUS_COLOR_MAP[row.status] || "default"} variant="flat">
+        <Badge size="sm" variant={CLASS_STATUS_COLOR_MAP[row.status] || "default"}>
           {CLASS_STATUS_LABEL_MAP[row.status] || row.status}
-        </Chip>
+        </Badge>
       ),
     },
     {
@@ -219,19 +220,17 @@ export default function ClassesTable() {
       headerClassName: "w-[60px]",
       render: (_v, row) => (
         <div className="flex justify-end">
-          <Dropdown>
-            <DropdownTrigger>
-              <Button isIconOnly size="sm" variant="light"><MoreVertical className="w-4 h-4" /></Button>
-            </DropdownTrigger>
-            <DropdownMenu aria-label="Thao tác">
-              <DropdownItem key="edit" startContent={<Edit2 className="w-4 h-4" />} onPress={() => handleEdit(row as IClass)}>
-                Chỉnh sửa
-              </DropdownItem>
-              <DropdownItem key="delete" startContent={<Trash2 className="w-4 h-4" />} className="text-danger" color="danger" onPress={() => handleDelete(row as IClass)}>
-                Xóa
-              </DropdownItem>
-            </DropdownMenu>
-          </Dropdown>
+          <Dropdown
+            trigger={
+              <button type="button" className="p-1.5 rounded-md hover:bg-(--color-smoke) text-(--color-ink) transition-colors">
+                <MoreVertical className="w-4 h-4" />
+              </button>
+            }
+            items={[
+              { label: "Chỉnh sửa", icon: <Edit2 className="w-4 h-4" />, onClick: () => handleEdit(row as IClass) },
+              { label: "Xóa", icon: <Trash2 className="w-4 h-4" />, onClick: () => handleDelete(row as IClass) },
+            ]}
+          />
         </div>
       ),
     },
@@ -258,7 +257,7 @@ export default function ClassesTable() {
           description: "Tạo lớp học mới để bắt đầu",
         }}
         actions={
-          <Button color="primary" size="sm" startContent={<Plus className="w-4 h-4" />} onPress={createModal.onOpen}>
+          <Button variant="primary" size="sm" leftIcon={<Plus className="w-4 h-4" />} onClick={() => setIsCreateOpen(true)}>
             Tạo lớp mới
           </Button>
         }
@@ -273,22 +272,22 @@ export default function ClassesTable() {
       />
 
       <ClassFormModal
-        isOpen={createModal.isOpen}
-        onClose={createModal.onClose}
+        isOpen={isCreateOpen}
+        onClose={() => setIsCreateOpen(false)}
         onSuccess={handleCreateSuccess}
       />
       {selectedClass && (
         <ClassFormModal
-          isOpen={editModal.isOpen}
-          onClose={() => { editModal.onClose(); setSelectedClass(null); }}
+          isOpen={isEditOpen}
+          onClose={() => { setIsEditOpen(false); setSelectedClass(null); }}
           onSuccess={handleUpdateSuccess}
           initialData={selectedClass}
         />
       )}
       {selectedClass && (
         <DeleteClassModal
-          isOpen={deleteModal.isOpen}
-          onClose={() => { deleteModal.onClose(); setSelectedClass(null); }}
+          isOpen={isDeleteOpen}
+          onClose={() => { setIsDeleteOpen(false); setSelectedClass(null); }}
           onSuccess={handleDeleteSuccess}
           classData={selectedClass}
         />

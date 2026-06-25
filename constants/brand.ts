@@ -2,6 +2,23 @@
  * Brand constants — single source of truth
  */
 export const BRAND_NAME = 'Ruby HSK';
+
+/** Contact information — update here to reflect everywhere */
+export const CONTACT_INFO = {
+  phone: '0965322136',
+  email: 'tranhongngoc19122001@gmail.com',
+  address: 'Hà Nội, Việt Nam',
+} as const;
+
+/**
+ * Social media links — set to "" to hide the icon in Footer.
+ * Supports: Facebook, Instagram, LinkedIn.
+ */
+export const SOCIAL_LINKS = {
+  facebook: '',
+  instagram: '',
+  linkedin: '',
+} as const;
 export const SITE_URL =
   process.env.NEXT_PUBLIC_SITE_URL ||
   process.env.NEXTAUTH_URL ||

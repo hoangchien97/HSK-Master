@@ -1,7 +1,10 @@
 "use client";
 
 import { useState } from "react";
-import { Button, Input, Textarea, Switch } from "@heroui/react";
+import { Button } from "@/components/ui";
+import { Input } from "@/components/ui/forms/Input";
+import { Textarea } from "@/components/ui/forms/Textarea";
+import { Switch } from "@/components/ui/forms/Switch";
 import { toast } from "react-toastify";
 import type { IAlbum, ICreateAlbumDTO } from "@/interfaces/portal";
 import { CModal } from "@/components/portal/common";
@@ -67,8 +70,8 @@ export default function AlbumFormModal({
       title={isEdit ? "Chỉnh sửa Album" : "Tạo Album mới"}
       footer={
         <>
-          <Button variant="flat" onPress={onClose}>Hủy</Button>
-          <Button color="primary" isLoading={isSubmitting} onPress={handleSubmit}>
+          <Button variant="secondary" onClick={onClose}>Hủy</Button>
+          <Button variant="primary" isLoading={isSubmitting} onClick={handleSubmit}>
             {isEdit ? "Cập nhật" : "Tạo mới"}
           </Button>
         </>
@@ -79,16 +82,15 @@ export default function AlbumFormModal({
           label="Tên album"
           placeholder="Nhập tên album"
           value={form.title}
-          onValueChange={(v) => updateField("title", v)}
-          isRequired
+          onChange={(e) => updateField("title", e.target.value)}
+          required
         />
 
         <Textarea
           label="Mô tả"
           placeholder="Nhập mô tả album"
           value={form.description || ""}
-          onValueChange={(v) => updateField("description", v)}
-          minRows={2}
+          onChange={(e) => updateField("description", e.target.value)}
         />
 
         <div className="space-y-1">
@@ -105,15 +107,14 @@ export default function AlbumFormModal({
             type="number"
             placeholder="1"
             value={String(form.order)}
-            onValueChange={(v) => updateField("order", Number(v) || 0)}
+            onChange={(e) => updateField("order", Number(e.target.value) || 0)}
           />
           <div className="flex items-center h-full px-2">
             <Switch
-              isSelected={form.isActive}
-              onValueChange={(v) => updateField("isActive", v)}
-            >
-              Hiển thị
-            </Switch>
+              checked={form.isActive}
+              onChange={(v) => updateField("isActive", v)}
+              label="Hiển thị"
+            />
           </div>
         </div>
       </div>

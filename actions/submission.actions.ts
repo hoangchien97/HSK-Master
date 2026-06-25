@@ -10,7 +10,7 @@ import { prisma } from '@/lib/prisma';
 import { auth } from '@/auth';
 import { createNotification } from '@/services/portal/notification.service';
 import { SUBMISSION_STATUS, ASSIGNMENT_STATUS } from '@/constants/portal/roles';
-import { NotificationType } from '@/enums/portal/common';
+import { NotificationType } from '@prisma/client';
 
 /**
  * Submit or re-submit an assignment
@@ -74,7 +74,7 @@ export async function submitAssignmentAction(
     });
 
     let submission;
-    let notificationType: string;
+    let notificationType: NotificationType;
     let notificationTitle: string;
 
     if (existing) {
@@ -94,7 +94,7 @@ export async function submitAssignmentAction(
           student: { select: { id: true, name: true, email: true, image: true } },
         },
       });
-      notificationType = 'SUBMISSION_RESUBMITTED';
+      notificationType = NotificationType.SUBMISSION_RESUBMITTED;
       notificationTitle = 'Bài nộp lại';
     } else {
       // First submit → status = SUBMITTED
@@ -111,7 +111,7 @@ export async function submitAssignmentAction(
           student: { select: { id: true, name: true, email: true, image: true } },
         },
       });
-      notificationType = 'SUBMISSION_SUBMITTED';
+      notificationType = NotificationType.SUBMISSION_SUBMITTED;
       notificationTitle = 'Bài nộp mới';
     }
 

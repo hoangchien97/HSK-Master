@@ -3,7 +3,7 @@
 import { useState } from 'react';
 import dayjs from 'dayjs';
 import { Trash2, AlertTriangle, Repeat } from 'lucide-react';
-import { Button, RadioGroup, Radio } from '@heroui/react';
+import { Button, RadioGroup } from '@/components/ui';
 import type { ISchedule } from '@/interfaces/portal';
 import { CModal } from '@/components/portal/common';
 
@@ -59,17 +59,16 @@ export default function DeleteScheduleModal({
       size="md"
       title={
         <div className="flex items-center gap-2">
-          <AlertTriangle className="w-5 h-5 text-danger" />
+          <AlertTriangle className="w-5 h-5 text-red-600" />
           Xác nhận xóa lịch học
         </div>
       }
       footer={
         <>
-          <Button variant="flat" onPress={handleClose} isDisabled={isDeleting}>
+          <Button variant="secondary" onClick={handleClose} isDisabled={isDeleting}>
             Hủy
           </Button>
-          <Button color="danger" onPress={handleDelete} isLoading={isDeleting}>
-            <Trash2 className="w-4 h-4" />
+          <Button variant="danger" onClick={handleDelete} isLoading={isDeleting} leftIcon={<Trash2 className="w-4 h-4" />}>
             {deleteMode === 'group' ? 'Xóa tất cả' : 'Xóa lịch'}
           </Button>
         </>
@@ -121,17 +120,11 @@ export default function DeleteScheduleModal({
             <RadioGroup
               value={deleteMode}
               onValueChange={(value) => setDeleteMode(value as DeleteMode)}
-              size="sm"
-            >
-              <Radio value="single">
-                <span className="text-sm">Chỉ xóa buổi học này</span>
-              </Radio>
-              <Radio value="group" className="mt-1">
-                <span className="text-sm text-red-600 font-medium">
-                  Xóa tất cả buổi học trong nhóm lặp lại
-                </span>
-              </Radio>
-            </RadioGroup>
+              items={[
+                { value: 'single', label: 'Chỉ xóa buổi học này' },
+                { value: 'group', label: 'Xóa tất cả buổi học trong nhóm lặp lại' },
+              ]}
+            />
           </div>
         )}
 

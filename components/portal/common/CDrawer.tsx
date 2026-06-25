@@ -1,9 +1,25 @@
 "use client";
 
-import { Drawer, DrawerContent, DrawerHeader, DrawerBody, DrawerFooter } from "@heroui/react";
+import { Drawer as VaulDrawer } from "vaul";
 import { X } from "lucide-react";
+import { cn } from "@/lib/utils";
 import type { ReactNode } from "react";
 import type { LucideIcon } from "lucide-react";
+
+type DrawerSize = "xs" | "sm" | "md" | "lg" | "xl" | "2xl" | "3xl" | "4xl" | "5xl" | "full";
+
+const WIDTH_CLASSES: Record<DrawerSize, string> = {
+  xs: "w-64",
+  sm: "w-80",
+  md: "w-96",
+  lg: "w-[32rem]",
+  xl: "w-[40rem]",
+  "2xl": "w-[48rem]",
+  "3xl": "w-[56rem]",
+  "4xl": "w-[64rem]",
+  "5xl": "w-[72rem]",
+  full: "w-full",
+};
 
 interface CDrawerProps {
   isOpen: boolean;
@@ -12,7 +28,7 @@ interface CDrawerProps {
   title: ReactNode;
   children: ReactNode | ((onClose: () => void) => ReactNode);
   footer?: ReactNode | ((onClose: () => void) => ReactNode);
-  size?: "xs" | "sm" | "md" | "lg" | "xl" | "2xl" | "3xl" | "4xl" | "5xl" | "full";
+  size?: DrawerSize;
   closeIcon?: LucideIcon;
   placement?: "left" | "right" | "top" | "bottom";
   isDismissable?: boolean;
@@ -33,58 +49,70 @@ export function CDrawer({
   hideCloseButton = false,
 }: CDrawerProps) {
   const handleOpenChange = (open: boolean) => {
+    if (!open && !isDismissable) return;
     onOpenChange?.(open);
-    if (!open) {
-      onClose?.();
-    }
+    if (!open) onClose?.();
   };
 
-  return (
-    <Drawer
-      isOpen={isOpen}
-      onOpenChange={onOpenChange || handleOpenChange}
-      size={size}
-      placement={placement}
-      isDismissable={isDismissable}
-      hideCloseButton={hideCloseButton}
-      classNames={{
-        header: "border-b-[1px] border-[#292f46] sticky top-0 z-10 bg-content1",
-        body: "overflow-y-auto scrollbar-thin scrollbar-thumb-gray-300 scrollbar-track-transparent hover:scrollbar-thumb-gray-400",
-        footer: "sticky bottom-0 z-10 bg-content1",
-      }}
-    >
-      <DrawerContent>
-        {(drawerOnClose) => {
-          const handleClose = onClose || drawerOnClose;
-          const renderedChildren = typeof children === "function" ? children(handleClose) : children;
-          const renderedFooter = typeof footer === "function" ? footer(handleClose) : footer;
+  const handleClose = () => {
+    onOpenChange?.(false);
+    onClose?.();
+  };
 
-          return (
-            <>
-              {!hideCloseButton && (
-                <button
-                  onClick={handleClose}
-                  className="absolute top-[14px] right-4 z-50 p-1.5 rounded-lg hover:bg-default-100 transition-colors"
-                  aria-label="Close"
-                >
-                  <CloseIcon className="w-5 h-5 text-default-500" />
-                </button>
-              )}
-              <DrawerHeader className="flex items-center gap-2">
-                {title}
-              </DrawerHeader>
-              <DrawerBody>
-                {renderedChildren}
-              </DrawerBody>
-              {renderedFooter && (
-                <DrawerFooter>
-                  {renderedFooter}
-                </DrawerFooter>
-              )}
-            </>
-          );
-        }}
-      </DrawerContent>
-    </Drawer>
+  const isVertical = placement === "top" || placement === "bottom";
+  const renderedChildren = typeof children === "function" ? children(handleClose) : children;
+  const renderedFooter = typeof footer === "function" ? footer(handleClose) : footer;
+
+  return (
+    <VaulDrawer.Root
+      open={isOpen}
+      onOpenChange={handleOpenChange}
+      direction={placement}
+    >
+      <VaulDrawer.Portal>
+        <VaulDrawer.Overlay className="fixed inset-0 bg-black/40 z-40" />
+        <VaulDrawer.Content
+          className={cn(
+            "fixed z-50 bg-[var(--color-surface)] flex flex-col shadow-xl",
+            isVertical
+              ? "inset-x-0 max-h-[85vh]"
+              : cn("top-0 bottom-0", WIDTH_CLASSES[size]),
+            placement === "right" && "right-0",
+            placement === "left" && "left-0",
+            placement === "bottom" && "bottom-0 rounded-t-2xl",
+            placement === "top" && "top-0 rounded-b-2xl",
+          )}
+        >
+          {/* Header */}
+          <div className="flex items-center justify-between px-4 py-3 sm:px-6 sm:py-4 border-b border-[var(--color-smoke)] flex-shrink-0">
+            <VaulDrawer.Title className="text-base font-semibold text-[var(--color-ink)] flex items-center gap-2">
+              {title}
+            </VaulDrawer.Title>
+            {!hideCloseButton && (
+              <button
+                type="button"
+                onClick={handleClose}
+                className="ml-4 p-1.5 rounded-md hover:bg-[var(--color-smoke)] text-[var(--color-muted)] transition-colors"
+                aria-label="Đóng"
+              >
+                <CloseIcon className="w-5 h-5" />
+              </button>
+            )}
+          </div>
+
+          {/* Body */}
+          <div className="flex-1 overflow-y-auto px-4 py-3 sm:px-6 sm:py-5 scrollbar-thin scrollbar-thumb-gray-300 scrollbar-track-transparent hover:scrollbar-thumb-gray-400">
+            {renderedChildren}
+          </div>
+
+          {/* Footer */}
+          {renderedFooter && (
+            <div className="flex justify-end gap-2 px-4 py-3 sm:px-6 sm:py-4 border-t border-[var(--color-smoke)] flex-shrink-0">
+              {renderedFooter}
+            </div>
+          )}
+        </VaulDrawer.Content>
+      </VaulDrawer.Portal>
+    </VaulDrawer.Root>
   );
 }

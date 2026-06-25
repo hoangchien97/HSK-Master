@@ -3,7 +3,7 @@
 import { prisma } from '@/lib/prisma';
 import type { IClass, ICreateClassDTO, IUpdateClassDTO, IGetClassResponse } from '@/interfaces/portal';
 import { CLASS_STATUS, ENROLLMENT_STATUS } from '@/constants/portal/roles';
-import type { Prisma } from '@prisma/client';
+import type { Prisma, ClassStatus } from '@prisma/client';
 
 /* ───────── Fetch classes with filtering & pagination ───────── */
 
@@ -15,7 +15,7 @@ export async function getClasses(
 
   const where: Prisma.PortalClassWhereInput = {
     teacherId,
-    ...(status && { status }),
+    ...(status && { status: status as ClassStatus }),
     ...(search && {
       OR: [
         { className: { contains: search, mode: 'insensitive' as const } },

@@ -13,7 +13,6 @@ import {
   Brain,
   Plus,
 } from "lucide-react"
-import { Card, CardBody, Button, Chip, Progress } from "@heroui/react"
 import { PageHeader } from "@/components/portal/common/PageHeader"
 import { StatCard } from "@/components/portal/common/StatCard"
 import { EmptyState } from "@/components/portal/common/EmptyState"
@@ -26,7 +25,7 @@ interface HSKLevel {
   level: number
   name: string
   description?: string | null
-  vocabularyCount: string
+  vocabularyCount: number
 }
 
 interface VocabularyProgress {
@@ -161,12 +160,11 @@ export default function VocabularyClient({
         </PageHeader>
 
         <div className="max-w-xl mx-auto">
-          <Card
-            isPressable
-            onPress={() => setShowAnswer(!showAnswer)}
-            className="min-h-75 flex flex-col items-center justify-center relative"
+          <button
+            type="button"
+            onClick={() => setShowAnswer(!showAnswer)}
+            className="w-full min-h-75 flex flex-col items-center justify-center relative rounded-xl border border-gray-200 bg-white shadow-sm p-4 cursor-pointer hover:shadow-md transition-shadow"
           >
-            <CardBody className="flex flex-col items-center justify-center">
               <button
                 onClick={(e) => {
                   e.stopPropagation()
@@ -197,8 +195,7 @@ export default function VocabularyClient({
                   Nhấp để xem đáp án
                 </p>
               )}
-            </CardBody>
-          </Card>
+          </button>
 
           <div className="flex items-center justify-between mt-6">
             <button
@@ -307,8 +304,8 @@ export default function VocabularyClient({
         </div>
 
         {/* Filters */}
-        <Card className="mb-6">
-          <CardBody>
+        <div className="rounded-xl border border-gray-200 bg-white p-4 shadow-sm mb-6">
+          <div>
             <div className="flex flex-col md:flex-row gap-4">
               <div className="flex-1">
                 <input
@@ -336,8 +333,8 @@ export default function VocabularyClient({
                 </div>
               )}
             </div>
-          </CardBody>
-        </Card>
+          </div>
+        </div>
 
         {/* Vocabulary Grid */}
         {filteredVocabs.length === 0 ? (
@@ -353,8 +350,8 @@ export default function VocabularyClient({
         ) : (
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4">
             {filteredVocabs.map((vocab) => (
-              <Card key={vocab.id} className="group hover:shadow-md transition-shadow">
-                <CardBody>
+              <div key={vocab.id} className="group rounded-xl border border-gray-200 bg-white p-4 shadow-sm hover:shadow-md transition-shadow">
+                <div>
                   <div className="flex items-start justify-between">
                     <div className="flex-1">
                       <div className="flex items-center gap-2 mb-2">
@@ -396,8 +393,8 @@ export default function VocabularyClient({
                   <div className="mt-3 pt-3 border-t border-gray-100 text-xs text-gray-400">
                     Đã ôn: {vocab.reviewCount} lần
                   </div>
-                </CardBody>
-              </Card>
+                </div>
+              </div>
             ))}
           </div>
         )}
@@ -434,8 +431,8 @@ export default function VocabularyClient({
               key={level.id}
               href={`/portal/student/practice/hsk${level.level}`}
             >
-              <Card className="h-full hover:shadow-md transition-shadow">
-                <CardBody>
+              <div className="h-full rounded-xl border border-gray-200 bg-white p-4 shadow-sm hover:shadow-md transition-shadow">
+                <div>
                   <div className="flex items-center justify-between mb-4">
                     <div className="w-14 h-14 bg-linear-to-br from-red-500 to-red-600 rounded-xl flex items-center justify-center">
                       <span className="text-white text-2xl font-bold">{level.level}</span>
@@ -460,8 +457,8 @@ export default function VocabularyClient({
                       </div>
                     )}
                   </div>
-                </CardBody>
-              </Card>
+                </div>
+              </div>
             </Link>
           )
         })}

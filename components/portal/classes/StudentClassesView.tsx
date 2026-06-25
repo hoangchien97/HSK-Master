@@ -1,7 +1,7 @@
 "use client"
 
 import { useState, useEffect, useCallback, useMemo } from "react"
-import { Chip, useDisclosure } from "@heroui/react"
+import { Badge } from "@/components/ui"
 import { Users, Calendar } from "lucide-react"
 import { toast } from "react-toastify"
 import dayjs from "dayjs"
@@ -32,7 +32,7 @@ export default function StudentClassesView() {
   const [data, setData] = useState<IGetClassResponse>({ items: [], total: 0 })
   const [isLoading, setIsLoading] = useState(true)
 
-  const detailDrawer = useDisclosure()
+  const [isDetailOpen, setIsDetailOpen] = useState(false)
   const [selectedClass, setSelectedClass] = useState<IClass | null>(null)
 
   const updateUrl = useCallback(
@@ -94,9 +94,9 @@ export default function StudentClassesView() {
   const handleViewDetail = useCallback(
     (cls: IClass) => {
       setSelectedClass(cls)
-      detailDrawer.onOpen()
+      setIsDetailOpen(true)
     },
-    [detailDrawer],
+    [],
   )
 
   /* ─── Columns (read-only — no actions column) ─── */
@@ -107,7 +107,7 @@ export default function StudentClassesView() {
       align: "center" as const,
       headerClassName: "w-[50px]",
       render: (_v, _row, index) => (
-        <span className="text-sm text-default-500">{(urlPage - 1) * urlPageSize + index + 1}</span>
+        <span className="text-sm text-(--color-muted)">{(urlPage - 1) * urlPageSize + index + 1}</span>
       ),
     },
     {
@@ -116,12 +116,12 @@ export default function StudentClassesView() {
       sortable: true,
       render: (_v, row) => (
         <button
-          className="text-left hover:text-primary transition-colors"
+          className="text-left hover:text-(--color-vermillion) transition-colors"
           onClick={() => handleViewDetail(row as IClass)}
         >
           <p className="font-semibold text-sm">{row.className}</p>
           {row.teacher && (
-            <p className="text-xs text-default-400">GV: {row.teacher.name || row.teacher.email}</p>
+            <p className="text-xs text-gray-400">GV: {row.teacher.name || row.teacher.email}</p>
           )}
         </button>
       ),
@@ -130,15 +130,15 @@ export default function StudentClassesView() {
       key: "classCode",
       label: "Mã lớp",
       headerClassName: "w-[120px]",
-      render: (_v, row) => <Chip size="sm" variant="flat">{row.classCode}</Chip>,
+      render: (_v, row) => <Badge size="sm">{row.classCode}</Badge>,
     },
     {
       key: "level",
       label: "Trình độ",
       headerClassName: "w-[100px]",
       render: (_v, row) => row.level
-        ? <Chip size="sm" color="primary" variant="flat">{row.level}</Chip>
-        : <span className="text-default-300">—</span>,
+        ? <Badge size="sm" variant="primary">{row.level}</Badge>
+        : <span className="text-gray-300">—</span>,
     },
     {
       key: "students",
@@ -146,7 +146,7 @@ export default function StudentClassesView() {
       headerClassName: "w-[90px]",
       render: (_v, row) => (
         <div className="flex items-center gap-1.5">
-          <Users className="w-4 h-4 text-default-400" />
+          <Users className="w-4 h-4 text-gray-400" />
           <span className="text-sm">{row._count?.enrollments ?? 0}</span>
         </div>
       ),
@@ -158,7 +158,7 @@ export default function StudentClassesView() {
       headerClassName: "w-[140px]",
       render: (_v, row) => (
         <div className="flex items-center gap-1.5">
-          <Calendar className="w-4 h-4 text-default-400" />
+          <Calendar className="w-4 h-4 text-gray-400" />
           <span className="text-sm">{dayjs(row.startDate).format("DD/MM/YYYY")}</span>
         </div>
       ),
@@ -168,9 +168,9 @@ export default function StudentClassesView() {
       label: "Trạng thái",
       headerClassName: "w-[110px]",
       render: (_v, row) => (
-        <Chip size="sm" color={CLASS_STATUS_COLOR_MAP[row.status] || "default"} variant="flat">
+        <Badge size="sm" variant={CLASS_STATUS_COLOR_MAP[row.status] || "default"}>
           {CLASS_STATUS_LABEL_MAP[row.status] || row.status}
-        </Chip>
+        </Badge>
       ),
     },
   ], [urlPage, urlPageSize, handleViewDetail])
@@ -206,8 +206,8 @@ export default function StudentClassesView() {
       />
 
       <ClassDetailDrawer
-        isOpen={detailDrawer.isOpen}
-        onOpenChange={detailDrawer.onOpenChange}
+        isOpen={isDetailOpen}
+        onOpenChange={setIsDetailOpen}
         classData={selectedClass}
       />
     </>

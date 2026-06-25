@@ -1,21 +1,17 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import {
-  Button,
-  Form,
-  Input,
-  Textarea,
-  Select,
-  SelectItem,
-  Avatar,
-  Chip,
-} from "@heroui/react";
+import { Button } from "@/components/ui";
+import { Badge } from "@/components/ui";
+import { Avatar } from "@/components/ui";
+import { Input } from "@/components/ui/forms/Input";
+import { Textarea } from "@/components/ui/forms/Textarea";
+import { Select, type SelectOption } from "@/components/ui";
 import { toast } from "react-toastify";
 import type { IClass } from "@/interfaces/portal";
 import dayjs from "dayjs";
 import { CModal } from "@/components/portal/common";
-import { FileEdit, PlusCircle, Users } from "lucide-react";
+import { FileEdit, PlusCircle, Users, X } from "lucide-react";
 import { createClassAction, updateClassAction } from "@/actions/class.actions";
 import { FORMAT_DATE_INPUT } from "@/constants/portal/date";
 import { USER_ROLE } from "@/constants/portal/roles";
@@ -31,7 +27,7 @@ interface ClassFormModalProps {
 }
 
 /** Map HSK_LEVELS to Select-friendly format (skip the 'ALL' entry) */
-const LEVEL_OPTIONS = HSK_LEVELS
+const LEVEL_OPTIONS: SelectOption[] = HSK_LEVELS
   .filter((l) => l.key !== "ALL")
   .map((l) => ({ value: l.key, label: l.label }));
 
@@ -49,6 +45,9 @@ export default function ClassFormModal({
   const [selectedStudents, setSelectedStudents] = useState<UserItem[]>([]);
   const [showUserPopup, setShowUserPopup] = useState(false);
 
+  // Form field state
+  const [level, setLevel] = useState(initialData?.level || "HSK1");
+
   // Load enrolled students when editing
   useEffect(() => {
     if (isOpen && isEdit && initialData?.enrollments) {
@@ -63,9 +62,11 @@ export default function ClassFormModal({
         };
       });
       setSelectedStudents(enrolled);
+      setLevel(initialData.level || "HSK1");
     } else if (!isOpen) {
       setSelectedStudents([]);
       setShowUserPopup(false);
+      setLevel("HSK1");
     }
   }, [isOpen, isEdit, initialData]);
 
@@ -85,7 +86,7 @@ export default function ClassFormModal({
         className: formData.className as string,
         classCode: formData.classCode as string,
         description: (formData.description as string) || "",
-        level: formData.level as string,
+        level: level,
         startDate: formData.startDate as string,
         endDate: (formData.endDate as string) || "",
         studentIds: selectedStudents.map((s) => s.id),
@@ -126,93 +127,71 @@ export default function ClassFormModal({
         }
         footer={
           <>
-            <Button variant="flat" onPress={onClose}>
+            <Button variant="secondary" onClick={onClose}>
               Hủy
             </Button>
-            <Button color="primary" type="submit" isLoading={isSubmitting} form="class-form">
+            <Button variant="primary" type="submit" isLoading={isSubmitting} form="class-form">
               {isEdit ? "Cập nhật" : "Tạo lớp"}
             </Button>
           </>
         }
       >
-        <Form
+        <form
           id="class-form"
-          validationErrors={errors}
           onSubmit={onSubmit}
           className="flex flex-col gap-4"
         >
           <Input
-            isRequired
+            required
             label="Tên lớp"
             name="className"
             placeholder="HSK 1 - Sáng thứ 2, 4, 6"
-            labelPlacement="outside"
             defaultValue={initialData?.className || ""}
-            errorMessage={({ validationDetails }) => {
-              if (validationDetails.valueMissing) {
-                return "Vui lòng nhập tên lớp";
-              }
-            }}
+            error={errors.className}
           />
 
           <Input
-            isRequired
+            required
             label="Mã lớp"
             name="classCode"
             placeholder="HSK1-MWF-AM-2025"
-            labelPlacement="outside"
             defaultValue={initialData?.classCode || ""}
-            errorMessage={({ validationDetails }) => {
-              if (validationDetails.valueMissing) {
-                return "Vui lòng nhập mã lớp";
-              }
-            }}
+            error={errors.classCode}
           />
 
           <Textarea
             label="Mô tả"
             name="description"
             placeholder="Mô tả về lớp học..."
-            labelPlacement="outside"
             defaultValue={initialData?.description || ""}
           />
 
           <Select
             label="Trình độ"
-            name="level"
-            labelPlacement="outside"
-            defaultSelectedKeys={initialData?.level ? [initialData.level] : ["HSK1"]}
-          >
-            {LEVEL_OPTIONS.map((level) => (
-              <SelectItem key={level.value}>{level.label}</SelectItem>
-            ))}
-          </Select>
+            options={LEVEL_OPTIONS}
+            value={level}
+            onChange={setLevel}
+          />
 
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <Input
-              isRequired
+              required
               type="date"
               label="Ngày bắt đầu"
               name="startDate"
-              labelPlacement="outside"
               placeholder="dd/mm/yyyy"
               defaultValue={
                 initialData?.startDate
                   ? dayjs(initialData.startDate).format(FORMAT_DATE_INPUT)
                   : ""
               }
-              errorMessage={({ validationDetails }) => {
-                if (validationDetails.valueMissing) {
-                  return "Vui lòng chọn ngày bắt đầu";
-                }
-              }}
+              error={errors.startDate}
             />
 
             <Input
               type="date"
               label="Ngày kết thúc"
               name="endDate"
-              labelPlacement="outside"
               placeholder="dd/mm/yyyy"
               defaultValue={
                 initialData?.endDate
@@ -228,31 +207,35 @@ export default function ClassFormModal({
               Học viên {selectedStudents.length > 0 && `(${selectedStudents.length})`}
             </label>
             <div
-              className="w-full border border-default-200 rounded-lg p-3 cursor-pointer hover:border-primary hover:bg-primary-50/30 transition-colors min-h-15 flex items-center gap-2 flex-wrap"
+              className="w-full border border-(--color-smoke) rounded-lg p-3 cursor-pointer hover:border-(--color-vermillion) hover:bg-red-50/30 transition-colors min-h-[60px] flex items-center gap-2 flex-wrap"
               onClick={() => setShowUserPopup(true)}
             >
               {selectedStudents.length > 0 ? (
                 selectedStudents.map((s) => (
-                  <Chip
+                  <span
                     key={s.id}
-                    size="sm"
-                    variant="flat"
-                    color="primary"
-                    onClose={() => removeStudent(s.id)}
-                    avatar={<Avatar src={s.image || undefined} name={s.name?.charAt(0)} size="sm" />}
+                    className="inline-flex items-center gap-1 bg-red-50 border border-red-200 text-red-700 rounded-full px-2 py-0.5 text-xs font-medium"
                   >
+                    <Avatar src={s.image || undefined} name={s.name?.charAt(0)} size="sm" />
                     {s.username || s.name}
-                  </Chip>
+                    <button
+                      type="button"
+                      onClick={(e) => { e.stopPropagation(); removeStudent(s.id); }}
+                      className="ml-0.5 hover:text-red-900"
+                    >
+                      <X className="w-3 h-3" />
+                    </button>
+                  </span>
                 ))
               ) : (
-                <span className="text-default-400 text-sm flex items-center gap-2">
+                <span className="text-(--color-muted) text-sm flex items-center gap-2">
                   <Users className="w-4 h-4" />
                   Nhấn để chọn học viên...
                 </span>
               )}
             </div>
           </div>
-        </Form>
+        </form>
       </CModal>
 
       {/* User Selection Popup - separate component */}
@@ -266,4 +249,3 @@ export default function ClassFormModal({
     </>
   );
 }
-

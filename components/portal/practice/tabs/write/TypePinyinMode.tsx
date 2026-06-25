@@ -1,7 +1,8 @@
 "use client"
 
 import { useState, useCallback } from "react"
-import { Button, Card, CardBody, Input } from "@heroui/react"
+import { Button } from "@/components/ui"
+import { Input } from "@/components/ui/forms/Input"
 import { CheckCircle, XCircle, Lightbulb, Volume2 } from "lucide-react"
 import { useSpeech } from "@/hooks/useSpeech"
 import { getDisplayMeaning } from "@/enums/portal/common"
@@ -56,47 +57,46 @@ export default function TypePinyinMode({ item, currentIdx, totalItems, onComplet
   return (
     <>
       {/* Prompt */}
-      <Card className="mb-4">
-        <CardBody className="p-4 sm:p-6 text-center">
-          <p className="text-sm text-default-400 mb-1">Gõ phiên âm Pinyin cho chữ</p>
+      <div className="rounded-xl border border-(--color-smoke) bg-white p-4 shadow-sm mb-4">
+        <div className="p-4 sm:p-6 text-center">
+          <p className="text-sm text-gray-400 mb-1">Gõ phiên âm Pinyin cho chữ</p>
           <p className="text-4xl sm:text-5xl font-bold text-red-600 dark:text-red-400 mb-1">{item.word}</p>
-          <p className="text-default-500 text-sm">{getDisplayMeaning(item)}</p>
+          <p className="text-(--color-muted) text-sm">{getDisplayMeaning(item)}</p>
           <button
             onClick={() => speak(item.word)}
-            className="mt-2 p-2 rounded-full bg-primary-100 dark:bg-primary-900/30 text-primary hover:bg-primary-200 transition mx-auto inline-flex"
+            className="mt-2 p-2 rounded-full bg-red-100 dark:bg-red-900/30 text-(--color-vermillion) hover:bg-red-200 transition mx-auto inline-flex"
             aria-label="Nghe phát âm"
           >
             <Volume2 className="w-4 h-4" />
           </button>
-        </CardBody>
-      </Card>
+        </div>
+      </div>
 
       {/* Input + controls */}
-      <Card className="mb-4">
-        <CardBody className="p-4">
+      <div className="rounded-xl border border-(--color-smoke) bg-white p-4 shadow-sm mb-4">
+        <div className="p-4">
           <div className="flex flex-col sm:flex-row gap-2 sm:items-end mb-3">
             <Input
               label="Nhập Pinyin"
               placeholder="vd: nǐ hǎo"
               value={answer}
-              onValueChange={setAnswer}
-              isDisabled={checked}
-              className="flex-1"
+              onChange={(e) => setAnswer(e.target.value)}
+              disabled={checked}
+              wrapperClassName="flex-1"
               onKeyDown={(e) => {
                 if (e.key === "Enter" && !checked && answer.trim()) handleCheck()
               }}
-              color={checked ? (isCorrect ? "success" : "danger") : "default"}
             />
             {!checked ? (
               <Button
-                color="primary"
-                onPress={handleCheck}
+                variant="primary"
+                onClick={handleCheck}
                 isDisabled={!answer.trim()}
               >
                 Kiểm tra
               </Button>
             ) : (
-              <Button color="primary" onPress={handleNext}>
+              <Button variant="primary" onClick={handleNext}>
                 {currentIdx < totalItems - 1 ? "Tiếp" : "Kết quả"}
               </Button>
             )}
@@ -106,16 +106,16 @@ export default function TypePinyinMode({ item, currentIdx, totalItems, onComplet
           {!checked && (
             <Button
               size="sm"
-              variant="light"
-              onPress={useHint}
+              variant="ghost"
+              onClick={useHint}
               isDisabled={hintsUsed >= 2}
-              startContent={<Lightbulb className="w-3.5 h-3.5" />}
+              leftIcon={<Lightbulb className="w-3.5 h-3.5" />}
             >
               Gợi ý ({2 - hintsUsed} lượt)
             </Button>
           )}
           {showHint && !checked && (
-            <p className="text-sm text-warning mt-1">
+            <p className="text-sm text-amber-600 mt-1">
               Bắt đầu bằng: <span className="font-medium">{(item.pinyin || "").charAt(0)}</span>...
             </p>
           )}
@@ -141,8 +141,8 @@ export default function TypePinyinMode({ item, currentIdx, totalItems, onComplet
               )}
             </div>
           )}
-        </CardBody>
-      </Card>
+        </div>
+      </div>
     </>
   )
 }

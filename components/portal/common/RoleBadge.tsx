@@ -1,13 +1,15 @@
 "use client"
 
-import { Chip } from "@heroui/react"
+import { Badge } from "@/components/ui/primitives/Badge"
 import { type UserRole } from "@/constants/portal/roles"
 import { ROLE_LABELS } from "@/constants/portal"
 
-const ROLE_CHIP_COLOR: Record<string, "secondary" | "primary" | "success" | "default"> = {
-  SYSTEM_ADMIN: "secondary",
-  TEACHER: "primary",
-  STUDENT: "success",
+type BadgeVariant = "default" | "primary" | "success" | "warning" | "danger" | "info"
+
+const ROLE_BADGE_VARIANT: Record<string, BadgeVariant> = {
+  SYSTEM_ADMIN: "primary",
+  TEACHER: "info",
+  STUDENT: "default",
 }
 
 interface RoleBadgeProps {
@@ -18,17 +20,12 @@ interface RoleBadgeProps {
 
 export function RoleBadge({ role, size = "md", className }: RoleBadgeProps) {
   const label = ROLE_LABELS[role as UserRole] || role
-  const chipColor = ROLE_CHIP_COLOR[role] || "default"
-  const chipSize = size === "lg" ? "md" : "sm"
+  const variant = ROLE_BADGE_VARIANT[role] || "default"
+  const badgeSize = size === "lg" ? "md" : "sm"
 
   return (
-    <Chip
-      color={chipColor}
-      variant="flat"
-      size={chipSize}
-      className={className}
-    >
+    <Badge variant={variant} size={badgeSize} className={className}>
       {label}
-    </Chip>
+    </Badge>
   )
 }

@@ -2,7 +2,7 @@
 
 import { prisma } from '@/lib/prisma';
 import { ASSIGNMENT_STATUS, SUBMISSION_STATUS, CLASS_STATUS } from '@/constants/portal/roles';
-import type { Prisma } from '@prisma/client';
+import type { Prisma, AssignmentStatus } from '@prisma/client';
 import { generateUniqueSlug } from '@/utils/slug';
 
 /* ───────── Types ───────── */
@@ -72,7 +72,7 @@ export async function getAssignments(
     where.dueDate = { lt: new Date() };
     where.status = ASSIGNMENT_STATUS.PUBLISHED;
   } else if (status) {
-    where.status = status;
+    where.status = status as AssignmentStatus;
   }
 
   const [items, total, classes] = await Promise.all([
@@ -208,7 +208,7 @@ export async function createAssignment(
       attachments: data.attachments || [],
       tags: data.tags || [],
       externalLink: data.externalLink || null,
-      status: data.status || ASSIGNMENT_STATUS.DRAFT,
+      status: (data.status || ASSIGNMENT_STATUS.DRAFT) as AssignmentStatus,
       publishedAt: isPublished ? new Date() : null,
     },
     include: {
@@ -263,7 +263,7 @@ export async function updateAssignment(
       ...(data.attachments !== undefined && { attachments: data.attachments }),
       ...(data.tags !== undefined && { tags: data.tags }),
       ...(data.externalLink !== undefined && { externalLink: data.externalLink || null }),
-      ...(data.status && { status: data.status }),
+      ...(data.status && { status: data.status as AssignmentStatus }),
       ...(isPublishTransition && { publishedAt: new Date() }),
     },
     include: {

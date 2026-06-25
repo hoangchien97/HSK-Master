@@ -1,6 +1,5 @@
-@plugin "../hero.ts";
-@source '../node_modules/@heroui/theme/dist/**/*.{js,ts,jsx,tsx}';
 @import "tailwindcss";
+@import "tw-animate-css";
 @custom-variant dark (&:is(.dark *));
 
 @theme inline {
@@ -24,186 +23,187 @@
   --primary-card: 24 95% 53%;        /* Orange for card hover glow */
 
   /* Tailwind Standard Colors - Red */
-  --color-red-50: lab(96.5005% 4.18511 1.52329);
-  --color-red-100: lab(92.243% 10.2865 3.83865);
-  --color-red-200: lab(86.017% 19.8815 7.75869);
-  --color-red-300: lab(76.5514% 36.4219 15.5335);
-  --color-red-400: lab(63.7053% 60.7449 31.3109);
-  --color-red-500: lab(55.4814% 75.0732 48.8528);
-  --color-red-600: lab(48.4493% 77.4328 61.5452);
-  --color-red-700: lab(40.4273% 67.2623 53.7441);
-  --color-red-800: lab(33.7174% 55.8993 41.0293);
-  --color-red-900: lab(28.5139% 44.5539 29.0463);
-  --color-red-950: lab(13.003% 29.04 16.7519);
+  --color-red-50: #fef2f2;
+  --color-red-100: #fee2e2;
+  --color-red-200: #fecaca;
+  --color-red-300: #fca5a5;
+  --color-red-400: #f87171;
+  --color-red-500: #ef4444;
+  --color-red-600: #dc2626;
+  --color-red-700: #b91c1c;
+  --color-red-800: #991b1b;
+  --color-red-900: #7f1d1d;
+  --color-red-950: #450a0a;
 
   /* Tailwind Standard Colors - Orange */
-  --color-orange-50: lab(97.7008% 1.53738 5.90646);
-  --color-orange-100: lab(94.7127% 3.58391 14.3151);
-  --color-orange-200: lab(88.4871% 9.94918 28.8378);
-  --color-orange-300: lab(80.8059% 21.7313 50.4455);
-  --color-orange-400: lab(70.0429% 42.5156 75.8207);
-  --color-orange-500: lab(64.272% 57.1788 90.3583);
-  --color-orange-600: lab(57.1026% 64.2584 89.8886);
-  --color-orange-700: lab(46.4615% 57.7275 70.8507);
-  --color-orange-800: lab(37.1566% 46.6433 50.5562);
-  --color-orange-900: lab(30.2951% 36.0434 37.671);
-  --color-orange-950: lab(14.1747% 23.4515 19.4461);
+  --color-orange-50: #fff7ed;
+  --color-orange-100: #ffedd5;
+  --color-orange-200: #fed7aa;
+  --color-orange-300: #fdba74;
+  --color-orange-400: #fb923c;
+  --color-orange-500: #f97316;
+  --color-orange-600: #ea580c;
+  --color-orange-700: #c2410c;
+  --color-orange-800: #9a3412;
+  --color-orange-900: #7c2d12;
+  --color-orange-950: #431407;
 
   /* Tailwind Standard Colors - Amber */
-  --color-amber-50: lab(98.6846% -1.79058 9.77662);
-  --color-amber-100: lab(97.3564% -4.51407 27.344);
-  --color-amber-200: lab(94.3433% -5.00426 52.9663);
-  --color-amber-300: lab(89.7033% -.480324 84.4917);
-  --color-amber-400: lab(83.2664% 8.65132 106.895);
-  --color-amber-500: lab(72.7183% 31.8672 97.9407);
-  --color-amber-600: lab(62.7799% 22.4198 86.1544);
-  --color-amber-700: lab(47.8202% 25.2426 66.5015);
-  --color-amber-800: lab(38.7484% 23.5833 51.4916);
-  --color-amber-900: lab(32.3865% 21.1274 38.5958);
+  --color-amber-50: #fffbeb;
+  --color-amber-100: #fef3c7;
+  --color-amber-200: #fde68a;
+  --color-amber-300: #fcd34d;
+  --color-amber-400: #fbbf24;
+  --color-amber-500: #f59e0b;
+  --color-amber-600: #d97706;
+  --color-amber-700: #b45309;
+  --color-amber-800: #92400e;
+  --color-amber-900: #78350f;
+  --color-amber-950: #451a03;
 
   /* Tailwind Standard Colors - Yellow */
-  --color-yellow-50: lab(98.6846% -1.79058 9.77662);
-  --color-yellow-100: lab(97.3564% -4.51407 27.344);
-  --color-yellow-200: lab(94.3433% -5.00426 52.9663);
-  --color-yellow-300: lab(89.7033% -.480324 84.4917);
-  --color-yellow-400: lab(83.2664% 8.65132 106.895);
-  --color-yellow-500: lab(76.3898% 14.5258 98.4589);
-  --color-yellow-600: lab(62.7799% 22.4198 86.1544);
-  --color-yellow-700: lab(47.8202% 25.2426 66.5015);
-  --color-yellow-800: lab(38.7484% 23.5833 51.4916);
-  --color-yellow-900: lab(32.3865% 21.1274 38.5958);
+  --color-yellow-50: #fefce8;
+  --color-yellow-100: #fef9c3;
+  --color-yellow-200: #fef08a;
+  --color-yellow-300: #fde047;
+  --color-yellow-400: #facc15;
+  --color-yellow-500: #eab308;
+  --color-yellow-600: #ca8a04;
+  --color-yellow-700: #a16207;
+  --color-yellow-800: #854d0e;
+  --color-yellow-900: #713f12;
 
   /* Tailwind Standard Colors - Green */
-  --color-green-50: lab(98.1563% -5.60117 2.75913);
-  --color-green-100: lab(96.186% -13.8464 6.52362);
-  --color-green-200: lab(92.4222% -26.4702 12.9427);
-  --color-green-300: lab(85.1236% -43.967 25.8865);
-  --color-green-400: lab(78.503% -64.9265 39.7492);
-  --color-green-500: lab(70.5521% -66.5147 45.8072);
-  --color-green-600: lab(59.0978% -58.6621 41.2579);
-  --color-green-700: lab(47.0329% -47.0239 31.4788);
-  --color-green-800: lab(37.4616% -36.7971 22.9692);
-  --color-green-900: lab(30.797% -29.6927 17.382);
+  --color-green-50: #f0fdf4;
+  --color-green-100: #dcfce7;
+  --color-green-200: #bbf7d0;
+  --color-green-300: #86efac;
+  --color-green-400: #4ade80;
+  --color-green-500: #22c55e;
+  --color-green-600: #16a34a;
+  --color-green-700: #15803d;
+  --color-green-800: #166534;
+  --color-green-900: #14532d;
 
   /* Tailwind Standard Colors - Emerald */
-  --color-emerald-50: lab(97.8462% -6.94963 1.85487);
-  --color-emerald-100: lab(93.5864% -15.8418 4.6371);
-  --color-emerald-200: lab(90.2247% -31.039 9.47084);
-  --color-emerald-300: lab(83.4329% -47.8754 14.5335);
-  --color-emerald-400: lab(74.503% -64.9265 19.7492);
-  --color-emerald-500: lab(66.9756% -58.27 19.5419);
-  --color-emerald-600: lab(55.0481% -49.9246 15.93);
-  --color-emerald-700: lab(44.0329% -41.0239 12.4788);
-  --color-emerald-800: lab(35.4616% -32.7971 9.9692);
-  --color-emerald-900: lab(28.8637% -26.9249 5.45986);
+  --color-emerald-50: #ecfdf5;
+  --color-emerald-100: #d1fae5;
+  --color-emerald-200: #a7f3d0;
+  --color-emerald-300: #6ee7b7;
+  --color-emerald-400: #34d399;
+  --color-emerald-500: #10b981;
+  --color-emerald-600: #059669;
+  --color-emerald-700: #047857;
+  --color-emerald-800: #065f46;
+  --color-emerald-900: #064e3b;
 
   /* Tailwind Standard Colors - Teal */
-  --color-teal-50: lab(98.3303% -5.97429 -2.62109);
-  --color-teal-100: lab(95.186% -13.8464 -6.52362);
-  --color-teal-200: lab(91.0821% -24.0435 -12.8306);
-  --color-teal-300: lab(84.4329% -35.18974 -19.9688);
-  --color-teal-400: lab(75.866% -45.4833 -28.4485);
-  --color-teal-500: lab(67.3859% -49.0983 -2.63511);
-  --color-teal-600: lab(55.1767% -26.7496 -30.5138);
-  --color-teal-700: lab(44.9089% -22.0961 -25.6872);
-  --color-teal-800: lab(36.2514% -17.7854 -20.2699);
-  --color-teal-900: lab(30.372% -13.1853 -18.7887);
+  --color-teal-50: #f0fdfa;
+  --color-teal-100: #ccfbf1;
+  --color-teal-200: #99f6e4;
+  --color-teal-300: #5eead4;
+  --color-teal-400: #2dd4bf;
+  --color-teal-500: #14b8a6;
+  --color-teal-600: #0d9488;
+  --color-teal-700: #0f766e;
+  --color-teal-800: #115e59;
+  --color-teal-900: #134e4a;
 
   /* Tailwind Standard Colors - Cyan */
-  --color-cyan-50: lab(98.3303% -5.97429 -2.62109);
-  --color-cyan-100: lab(95.0301% -12.24757 -6.6453);
-  --color-cyan-200: lab(91.0821% -24.0435 -12.8306);
-  --color-cyan-300: lab(85.15% -32.04379 -18.0797);
-  --color-cyan-400: lab(75.0361% -41.42062 -26.9803);
-  --color-cyan-500: lab(67.805% -35.3952 -30.2018);
-  --color-cyan-600: lab(55.1767% -26.7496 -30.5138);
-  --color-cyan-700: lab(44.0605% -19.0279 -26.0352);
-  --color-cyan-800: lab(36.2514% -14.7854 -20.2699);
-  --color-cyan-900: lab(30.372% -13.1853 -18.7887);
+  --color-cyan-50: #ecfeff;
+  --color-cyan-100: #cffafe;
+  --color-cyan-200: #a5f3fc;
+  --color-cyan-300: #67e8f9;
+  --color-cyan-400: #22d3ee;
+  --color-cyan-500: #06b6d4;
+  --color-cyan-600: #0891b2;
+  --color-cyan-700: #0e7490;
+  --color-cyan-800: #155e75;
+  --color-cyan-900: #164e63;
 
   /* Tailwind Standard Colors - Blue */
-  --color-blue-50: lab(96.492% -1.14647 -5.11479);
-  --color-blue-100: lab(92.0301% -2.24757 -11.6453);
-  --color-blue-200: lab(86.15% -4.04379 -21.0797);
-  --color-blue-300: lab(76.5514% -6.4219 -35.5335);
-  --color-blue-400: lab(65.0361% -1.42062 -56.9803);
-  --color-blue-500: lab(54.1736% 13.3368 -74.6839);
-  --color-blue-600: lab(44.0605% 29.0279 -86.0352);
-  --color-blue-700: lab(36.9089% 35.0961 -85.6872);
-  --color-blue-800: lab(30.2514% 27.7854 -70.2699);
-  --color-blue-900: lab(26.1542% 15.7545 -51.5504);
+  --color-blue-50: #eff6ff;
+  --color-blue-100: #dbeafe;
+  --color-blue-200: #bfdbfe;
+  --color-blue-300: #93c5fd;
+  --color-blue-400: #60a5fa;
+  --color-blue-500: #3b82f6;
+  --color-blue-600: #2563eb;
+  --color-blue-700: #1d4ed8;
+  --color-blue-800: #1e40af;
+  --color-blue-900: #1e3a8a;
 
   /* Tailwind Standard Colors - Indigo */
-  --color-indigo-50: lab(95.4818% .411302 -6.78529);
-  --color-indigo-100: lab(91.6577% 1.04591 -12.7199);
-  --color-indigo-200: lab(84.4329% 3.18974 -23.9688);
-  --color-indigo-300: lab(72.5514% 12.4219 -42.5335);
-  --color-indigo-400: lab(59.866% 22.4833 -64.4485);
-  --color-indigo-500: lab(48.295% 38.3129 -81.9673);
-  --color-indigo-600: lab(38.4009% 52.6132 -92.3857);
-  --color-indigo-700: lab(32.9089% 45.0961 -82.6872);
-  --color-indigo-800: lab(26.6645% 37.9804 -68.6402);
-  --color-indigo-900: lab(23.3911% 24.6978 -50.4719);
+  --color-indigo-50: #eef2ff;
+  --color-indigo-100: #e0e7ff;
+  --color-indigo-200: #c7d2fe;
+  --color-indigo-300: #a5b4fc;
+  --color-indigo-400: #818cf8;
+  --color-indigo-500: #6366f1;
+  --color-indigo-600: #4f46e5;
+  --color-indigo-700: #4338ca;
+  --color-indigo-800: #3730a3;
+  --color-indigo-900: #312e81;
 
   /* Tailwind Standard Colors - Violet */
-  --color-violet-50: lab(97.1626% 2.99937 -4.13398);
-  --color-violet-100: lab(93.3333% 6.9744 -9.83434);
-  --color-violet-200: lab(87.8405% 13.4282 -18.7159);
-  --color-violet-300: lab(75.6946% 27.6127 -39.2066);
-  --color-violet-400: lab(63.6946% 47.6127 -59.2066);
-  --color-violet-500: lab(49.9355% 55.1777 -81.8963);
-  --color-violet-600: lab(41.088% 68.9966 -91.995);
-  --color-violet-700: lab(36.1758% 69.8525 -80.0381);
-  --color-violet-800: lab(30.6017% 56.7637 -64.4751);
-  --color-violet-900: lab(24.9401% 45.2703 -51.2728);
+  --color-violet-50: #f5f3ff;
+  --color-violet-100: #ede9fe;
+  --color-violet-200: #ddd6fe;
+  --color-violet-300: #c4b5fd;
+  --color-violet-400: #a78bfa;
+  --color-violet-500: #8b5cf6;
+  --color-violet-600: #7c3aed;
+  --color-violet-700: #6d28d9;
+  --color-violet-800: #5b21b6;
+  --color-violet-900: #4c1d95;
 
   /* Tailwind Standard Colors - Purple */
-  --color-purple-50: lab(97.1626% 2.99937 -4.13398);
-  --color-purple-100: lab(93.3333% 6.9744 -9.83434);
-  --color-purple-200: lab(87.8405% 13.4282 -18.7159);
-  --color-purple-300: lab(75.6946% 27.6127 -39.2066);
-  --color-purple-400: lab(63.6946% 47.6127 -59.2066);
-  --color-purple-500: lab(52.0183% 66.11 -78.2316);
-  --color-purple-600: lab(43.0295% 75.21 -86.5669);
-  --color-purple-700: lab(36.1758% 69.8525 -80.0381);
-  --color-purple-800: lab(30.6017% 56.7637 -64.4751);
-  --color-purple-900: lab(24.9401% 45.2703 -51.2728);
+  --color-purple-50: #faf5ff;
+  --color-purple-100: #f3e8ff;
+  --color-purple-200: #e9d5ff;
+  --color-purple-300: #d8b4fe;
+  --color-purple-400: #c084fc;
+  --color-purple-500: #a855f7;
+  --color-purple-600: #9333ea;
+  --color-purple-700: #7e22ce;
+  --color-purple-800: #6b21a8;
+  --color-purple-900: #581c87;
 
   /* Tailwind Standard Colors - Pink */
-  --color-pink-50: lab(96.4459% 4.53997 -1.49434);
-  --color-pink-100: lab(93.5864% 9.01193 -3.15077);
-  --color-pink-200: lab(87.4504% 19.6 -6.46662);
-  --color-pink-300: lab(76.5597% 38.3615 -9.7988);
-  --color-pink-400: lab(64.5597% 64.3615 -12.7988);
-  --color-pink-500: lab(56.9303% 76.8162 -8.07021);
-  --color-pink-600: lab(49.5493% 79.8381 2.31769);
-  --color-pink-700: lab(42.4273% 67.2623 3.7441);
-  --color-pink-800: lab(35.7174% 55.8993 3.0293);
-  --color-pink-900: lab(29.4367% 49.3962 3.35757);
+  --color-pink-50: #fdf2f8;
+  --color-pink-100: #fce7f3;
+  --color-pink-200: #fbcfe8;
+  --color-pink-300: #f9a8d4;
+  --color-pink-400: #f472b6;
+  --color-pink-500: #ec4899;
+  --color-pink-600: #db2777;
+  --color-pink-700: #be185d;
+  --color-pink-800: #9d174d;
+  --color-pink-900: #831843;
 
   /* Tailwind Standard Colors - Rose */
-  --color-rose-50: lab(96.2369% 4.94152 1.28012);
-  --color-rose-100: lab(92.243% 10.2865 2.83865);
-  --color-rose-200: lab(86.017% 19.8815 6.75869);
-  --color-rose-300: lab(76.5514% 36.4219 12.5335);
-  --color-rose-400: lab(63.7053% 60.7449 21.3109);
-  --color-rose-500: lab(56.101% 79.4329 31.4532);
-  --color-rose-600: lab(49.1882% 81.577 36.0311);
-  --color-rose-700: lab(42.4273% 67.2623 28.7441);
-  --color-rose-800: lab(35.7174% 55.8993 21.0293);
-  --color-rose-900: lab(29.7104% 51.514 12.6253);
+  --color-rose-50: #fff1f2;
+  --color-rose-100: #ffe4e6;
+  --color-rose-200: #fecdd3;
+  --color-rose-300: #fda4af;
+  --color-rose-400: #fb7185;
+  --color-rose-500: #f43f5e;
+  --color-rose-600: #e11d48;
+  --color-rose-700: #be123c;
+  --color-rose-800: #9f1239;
+  --color-rose-900: #881337;
 
   /* Tailwind Standard Colors - Gray */
-  --color-gray-50: lab(98.2596% -.247031 -.706708);
-  --color-gray-100: lab(96.1596% -.082314 -1.13575);
-  --color-gray-200: lab(91.6229% -.159085 -2.26791);
-  --color-gray-300: lab(85.1236% -.612259 -3.7138);
-  --color-gray-400: lab(65.9269% -.832707 -8.17474);
-  --color-gray-500: lab(47.7841% -.393212 -10.0268);
-  --color-gray-600: lab(35.6337% -1.58697 -10.8425);
-  --color-gray-700: lab(27.1134% -.956401 -12.3224);
-  --color-gray-800: lab(16.1051% -1.18239 -11.7533);
-  --color-gray-900: lab(8.11897% .811279 -12.254);
+  --color-gray-50: #f9fafb;
+  --color-gray-100: #f3f4f6;
+  --color-gray-200: #e5e7eb;
+  --color-gray-300: #d1d5db;
+  --color-gray-400: #9ca3af;
+  --color-gray-500: #6b7280;
+  --color-gray-600: #4b5563;
+  --color-gray-700: #374151;
+  --color-gray-800: #1f2937;
+  --color-gray-900: #111827;
 
   /* Custom Colors - Secondary (Blue) */
   --color-secondary-50: #f0f9ff;
@@ -268,7 +268,7 @@
   --color-error-900: #7f1d1d;
   --color-error-950: #450a0a;
 
-  /* Info Colors — NOT in HeroUI palette */
+  /* Info Colors */
   --color-info-50: #eff6ff;
   --color-info-100: #dbeafe;
   --color-info-200: #bfdbfe;
@@ -309,39 +309,126 @@
   --color-chinese-gold: #ffd700;
   --color-chinese-jade: #00a86b;
 
-  /* Font Families */
-  --font-sans: var(--font-geist-sans), var(--font-noto-sans), system-ui, sans-serif;
+  /* ── Font Families ── */
+  /* Primary stack: Inter for UI, Noto Sans SC as Chinese fallback */
+  --font-sans: var(--font-inter), var(--font-noto-sans-sc), system-ui, -apple-system, sans-serif;
+  /* UI-only stack without Chinese fallback */
+  --font-ui: var(--font-inter), system-ui, -apple-system, sans-serif;
   --font-mono: Menlo, Monaco, Consolas, monospace;
-  --font-vietnamese: var(--font-noto-sans), -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-  --font-chinese: var(--font-noto-sans), 'Microsoft YaHei', 'PingFang SC', SimHei, sans-serif;
-  --font-display: var(--font-noto-sans), sans-serif;
-  --font-body: var(--font-noto-sans), sans-serif;
+  /* Chinese (Hanzi) text — use with lang="zh" on the element */
+  --font-chinese: var(--font-noto-sans-sc), "Microsoft YaHei", "PingFang SC", sans-serif;
+  /* Serif display headings */
+  --font-serif: var(--font-noto-serif), "Noto Serif", Georgia, serif;
+  --font-display: var(--font-noto-serif), "Noto Serif", Georgia, serif;
+  --font-vietnamese: var(--font-noto-sans), "Noto Sans", system-ui, sans-serif;
+  --font-heading: var(--font-sans);
 
-  /* Custom Font Sizes */
-  --font-size-2xs: 0.625rem;
-  --font-size-xs: 0.75rem;
-  --font-size-sm: 0.875rem;
-  --font-size-base: 1rem;
-  --font-size-lg: 1.125rem;
-  --font-size-xl: 1.25rem;
-  --font-size-2xl: 1.5rem;
-  --font-size-3xl: 1.875rem;
-  --font-size-4xl: 2.25rem;
-  --font-size-5xl: 3rem;
-  --font-size-6xl: 3.75rem;
-  --font-size-7xl: 4.5rem;
-  --font-size-8xl: 6rem;
-  --font-size-9xl: 8rem;
+  /* ── Font Sizes ──
+     All map to standard Tailwind text-* classes.
+     Only text-2xs is custom (not in Tailwind default scale).
+     Usage: text-xs, text-sm, text-base, text-lg, text-xl, text-2xl … */
+  --font-size-2xs: 0.625rem; /* 10px → text-2xs (custom) */
+  --font-size-xs: 0.75rem;   /* 12px → text-xs */
+  --font-size-sm: 0.875rem;  /* 14px → text-sm */
+  --font-size-base: 1rem;    /* 16px → text-base */
+  --font-size-lg: 1.125rem;  /* 18px → text-lg */
+  --font-size-xl: 1.25rem;   /* 20px → text-xl */
+  --font-size-2xl: 1.5rem;   /* 24px → text-2xl */
+  --font-size-3xl: 1.875rem; /* 30px → text-3xl */
+  --font-size-4xl: 2.25rem;  /* 36px → text-4xl */
+  --font-size-5xl: 3rem;     /* 48px → text-5xl */
+  --font-size-6xl: 3.75rem;  /* 60px → text-6xl */
+  --font-size-7xl: 4.5rem;   /* 72px → text-7xl */
+  --font-size-8xl: 6rem;     /* 96px → text-8xl */
+  --font-size-9xl: 8rem;     /* 128px → text-9xl */
 
   /* Border Radius */
   --radius-4xl: 2rem;
 
   /* Brand Gradient */
   --gradient-brand: linear-gradient(to right, #facc15, #dc2626);
+
+  /* ── UI System Tokens (components/ui/ design system) ── */
+  --color-vermillion: #e31b1e;
+  --color-vermillion-hover: #c91018;
+  --color-gold: #f0b429;
+  --color-ink: #1c0e0f;
+  --color-paper: #faf8f5;
+  --color-surface: #ffffff;
+  --color-smoke: #ede9e5;
+  --color-muted: #ede9e5;
+
+  /* HSK Level Colors (HSK 1→6 progression: fresh → mastery) */
+  --color-hsk-1: #16a34a;
+  --color-hsk-2: #0891b2;
+  --color-hsk-3: #2563eb;
+  --color-hsk-4: #7c3aed;
+  --color-hsk-5: #d97706;
+  --color-hsk-6: #e31b1e;
+
+  --color-sidebar-ring: var(--sidebar-ring);
+  --color-sidebar-border: var(--sidebar-border);
+  --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
+  --color-sidebar-accent: var(--sidebar-accent);
+  --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
+  --color-sidebar-primary: var(--sidebar-primary);
+  --color-sidebar-foreground: var(--sidebar-foreground);
+  --color-sidebar: var(--sidebar);
+  --color-chart-5: var(--chart-5);
+  --color-chart-4: var(--chart-4);
+  --color-chart-3: var(--chart-3);
+  --color-chart-2: var(--chart-2);
+  --color-chart-1: var(--chart-1);
+  --color-ring: var(--ring);
+  --color-input: var(--input);
+  --color-border: var(--border);
+  --color-destructive: var(--destructive);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-accent: var(--accent);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-secondary: var(--secondary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-popover: var(--popover);
+  --color-card-foreground: var(--card-foreground);
+  --color-card: var(--card);
+  --color-foreground: var(--foreground);
+  --color-background: var(--background);
+  --radius-sm: calc(var(--radius) * 0.6);
+  --radius-md: calc(var(--radius) * 0.8);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) * 1.4);
+  --radius-2xl: calc(var(--radius) * 1.8);
+  --radius-3xl: calc(var(--radius) * 2.2);
 }
 
 html {
   scroll-behavior: smooth;
+  overflow-y: scroll; /* html is the permanent scroll container — scrollbar never disappears, so no layout shift */
+  scrollbar-gutter: stable;
+}
+
+/* react-remove-scroll-bar sets body { overflow:hidden !important; margin-right:Xpx !important }
+   when Radix overlays (Select, Dialog…) open. With html as the scroll container two problems arise:
+   1. overflow:hidden on body creates a scroll container → kills position:sticky inside body → header disappears
+   2. margin-right:Xpx on body causes a right-side gap (the scrollbar lives on html, not body)
+   Fix: override both with higher specificity (0-1-2 vs their 0-1-1) so our !important wins.
+   overflow:clip clips content visually like hidden but does NOT create a scroll container,
+   so sticky elements inside body still stick to html (the real scroll container). */
+html body[data-scroll-locked] {
+  overflow: clip !important;
+  margin-right: 0 !important;
+}
+
+/* Respect user motion preference — guards all CSS animations */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
 }
 
 /* Custom Scrollbar with Gradient (Yellow to Red) */
@@ -363,10 +450,40 @@ html {
 }
 
 body {
-  font-family: var(--font-vietnamese);
+  font-family: var(--font-sans);
 }
 
 @layer utilities {
+
+  /* Hero slide fade-in-up (used by HeroSlideContent) */
+  @keyframes heroFadeInUp {
+    from { opacity: 0; transform: translateY(20px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+  .animate-heroFadeInUp {
+    animation: heroFadeInUp 0.5s ease both;
+  }
+
+  /* Ken Burns zoom — background image slowly zooms in on active slide.
+     CSS animation (not transition) so it restarts cleanly on each activation:
+     removing the class snaps back to scale(1.08); re-adding it restarts from the
+     from-keyframe which matches, so there is no visible jump. */
+  @keyframes kenBurns {
+    from { transform: scale(1.08); }
+    to   { transform: scale(1.0); }
+  }
+  .animate-kenBurns {
+    animation: kenBurns 7s ease-out forwards;
+  }
+  .ken-burns-reset {
+    transform: scale(1.08);
+  }
+
+  /* TypingText fade-in (replaces <style jsx> in TypingText.tsx) */
+  @keyframes typingFadeIn {
+    from { opacity: 0; transform: translateY(8px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
 
   /* Animation for SectionHeader */
   @keyframes fade-in {
@@ -648,128 +765,99 @@ body {
 
   /* Custom Tooltip Animations */
   @keyframes tooltip-fadeIn {
-    from {
-      opacity: 0;
-    }
-
-    to {
-      opacity: 1;
-    }
+    from { opacity: 0; }
+    to { opacity: 1; }
   }
 
   @keyframes tooltip-fadeOut {
-    from {
-      opacity: 1;
-    }
-
-    to {
-      opacity: 0;
-    }
+    from { opacity: 1; }
+    to { opacity: 0; }
   }
 
   @keyframes tooltip-scaleIn {
-    from {
-      opacity: 0;
-      transform: scale(0.9);
-    }
-
-    to {
-      opacity: 1;
-      transform: scale(1);
-    }
+    from { opacity: 0; transform: scale(0.9); }
+    to { opacity: 1; transform: scale(1); }
   }
 
   @keyframes tooltip-scaleOut {
-    from {
-      opacity: 1;
-      transform: scale(1);
-    }
-
-    to {
-      opacity: 0;
-      transform: scale(0.9);
-    }
+    from { opacity: 1; transform: scale(1); }
+    to { opacity: 0; transform: scale(0.9); }
   }
 
   @keyframes tooltip-slideUp {
-    from {
-      opacity: 0;
-      transform: translateY(8px);
-    }
-
-    to {
-      opacity: 1;
-      transform: translateY(0);
-    }
+    from { opacity: 0; transform: translateY(8px); }
+    to { opacity: 1; transform: translateY(0); }
   }
 
   @keyframes tooltip-slideDown {
-    from {
-      opacity: 1;
-      transform: translateY(0);
-    }
-
-    to {
-      opacity: 0;
-      transform: translateY(8px);
-    }
+    from { opacity: 1; transform: translateY(0); }
+    to { opacity: 0; transform: translateY(8px); }
   }
 
   @keyframes tooltip-perspective {
-    from {
-      opacity: 0;
-      transform: perspective(600px) rotateX(-10deg);
-    }
-
-    to {
-      opacity: 1;
-      transform: perspective(600px) rotateX(0);
-    }
+    from { opacity: 0; transform: perspective(600px) rotateX(-10deg); }
+    to { opacity: 1; transform: perspective(600px) rotateX(0); }
   }
 
   @keyframes tooltip-perspectiveOut {
-    from {
-      opacity: 1;
-      transform: perspective(600px) rotateX(0);
-    }
-
-    to {
-      opacity: 0;
-      transform: perspective(600px) rotateX(-10deg);
-    }
+    from { opacity: 1; transform: perspective(600px) rotateX(0); }
+    to { opacity: 0; transform: perspective(600px) rotateX(-10deg); }
   }
 
-  .animate-fadeIn {
-    animation: tooltip-fadeIn 200ms ease-out forwards;
-  }
+  .animate-fadeIn { animation: tooltip-fadeIn 200ms ease-out forwards; }
+  .animate-fadeOut { animation: tooltip-fadeOut 200ms ease-out forwards; }
+  .animate-scaleIn { animation: tooltip-scaleIn 200ms cubic-bezier(0.34, 1.56, 0.64, 1) forwards; }
+  .animate-scaleOut { animation: tooltip-scaleOut 200ms ease-out forwards; }
+  .animate-slideUp { animation: tooltip-slideUp 200ms ease-out forwards; }
+  .animate-slideDown { animation: tooltip-slideDown 200ms ease-out forwards; }
+  .animate-perspective { animation: tooltip-perspective 200ms ease-out forwards; }
+  .animate-perspectiveOut { animation: tooltip-perspectiveOut 200ms ease-out forwards; }
 
-  .animate-fadeOut {
-    animation: tooltip-fadeOut 200ms ease-out forwards;
+  /* accordion animations for shadcn base-nova */
+  .animate-accordion-down {
+    animation: accordion-down 200ms ease-out;
   }
+  .animate-accordion-up {
+    animation: accordion-up 200ms ease-out;
+  }
+}
 
-  .animate-scaleIn {
-    animation: tooltip-scaleIn 200ms cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
-  }
+@keyframes accordion-down {
+  from { height: 0; overflow: hidden; }
+  to { height: var(--accordion-panel-height, auto); overflow: hidden; }
+}
 
-  .animate-scaleOut {
-    animation: tooltip-scaleOut 200ms ease-out forwards;
-  }
+@keyframes accordion-up {
+  from { height: var(--accordion-panel-height, auto); overflow: hidden; }
+  to { height: 0; overflow: hidden; }
+}
 
-  .animate-slideUp {
-    animation: tooltip-slideUp 200ms ease-out forwards;
-  }
+/* ───── 田字格 (character grid) pattern — practice module + landing watermark ───── */
+/* Full grid for practice write module */
+.tian-zi-ge {
+  background-image:
+    linear-gradient(var(--color-smoke) 1px, transparent 1px),
+    linear-gradient(90deg, var(--color-smoke) 1px, transparent 1px),
+    linear-gradient(rgba(237,233,229,0.4) 0.5px, transparent 0.5px),
+    linear-gradient(90deg, rgba(237,233,229,0.4) 0.5px, transparent 0.5px);
+  background-size: 48px 48px, 48px 48px, 24px 24px, 24px 24px;
+}
 
-  .animate-slideDown {
-    animation: tooltip-slideDown 200ms ease-out forwards;
-  }
-
-  .animate-perspective {
-    animation: tooltip-perspective 200ms ease-out forwards;
-  }
-
-  .animate-perspectiveOut {
-    animation: tooltip-perspectiveOut 200ms ease-out forwards;
-  }
+/* Subtle watermark variant for landing section backgrounds */
+.section-tian-zi-ge {
+  position: relative;
+}
+.section-tian-zi-ge::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-image:
+    linear-gradient(rgba(237,233,229,0.6) 0.5px, transparent 0.5px),
+    linear-gradient(90deg, rgba(237,233,229,0.6) 0.5px, transparent 0.5px);
+  background-size: 80px 80px;
+  opacity: 0.06;
+  pointer-events: none;
+  z-index: 0;
 }
 
 /* ───── Flashcard 3D flip utilities ───── */
@@ -787,4 +875,49 @@ body {
 
 .rotate-y-180 {
   transform: rotateY(180deg);
+}
+
+:root {
+  /* ── Ruby HSK brand tokens ── */
+  --background: #ffffff;
+  --foreground: #1c0e0f;
+  --card: #ffffff;
+  --card-foreground: #1c0e0f;
+  --popover: #ffffff;
+  --popover-foreground: #1c0e0f;
+  --primary: #e31b1e;
+  --primary-foreground: #ffffff;
+  --secondary: #faf8f5;
+  --secondary-foreground: #1c0e0f;
+  --muted: #ede9e5;
+  --muted-foreground: #6b5558;
+  --accent: #faf8f5;
+  --accent-foreground: #1c0e0f;
+  --destructive: #dc2626;
+  --border: #ede9e5;
+  --input: #ede9e5;
+  --ring: #e31b1e;
+  --chart-1: #e31b1e;
+  --chart-2: #f0b429;
+  --chart-3: #16a34a;
+  --chart-4: #2563eb;
+  --chart-5: #7c3aed;
+  --radius: 0.5rem;
+  --sidebar: #faf8f5;
+  --sidebar-foreground: #1c0e0f;
+  --sidebar-primary: #e31b1e;
+  --sidebar-primary-foreground: #ffffff;
+  --sidebar-accent: #ede9e5;
+  --sidebar-accent-foreground: #1c0e0f;
+  --sidebar-border: #ede9e5;
+  --sidebar-ring: #e31b1e;
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+  body {
+    @apply bg-background text-foreground;
+  }
 }

@@ -11,6 +11,7 @@ import { USER_ROLE, ENROLLMENT_STATUS } from '@/constants/portal/roles';
 import { revalidatePath } from 'next/cache';
 import { createBulkNotifications, createNotification } from '@/services/portal/notification.service';
 import { NotificationType } from '@/enums/portal/common';
+import type { AttendanceStatus } from '@prisma/client';
 
 export interface AttendanceMatrixData {
   class: {
@@ -357,7 +358,7 @@ export async function saveAttendance(
             },
           },
           update: {
-            status: record.status.toUpperCase(),
+            status: record.status.toUpperCase() as AttendanceStatus,
             notes: record.notes || null,
             teacherId: user.id,
           },
@@ -366,7 +367,7 @@ export async function saveAttendance(
             classId,
             teacherId: user.id,
             date: attendanceDate,
-            status: record.status.toUpperCase(),
+            status: record.status.toUpperCase() as AttendanceStatus,
             notes: record.notes || null,
           },
         });

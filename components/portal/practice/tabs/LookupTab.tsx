@@ -1,20 +1,13 @@
 "use client"
 
 import { useState, useMemo, useCallback } from "react"
-import {
-  Input,
-  Card,
-  CardBody,
-  Chip,
-  Divider,
-  Tabs,
-  Tab,
-} from "@heroui/react"
+import { Input } from "@/components/ui/forms/Input"
+import { Badge } from "@/components/ui"
 import { Search, Volume2, BookOpen, Award, Filter } from "lucide-react"
 import { CDrawer } from "@/components/portal/common"
 import { recordVocabSeenAction } from "@/actions/practice.actions"
 import { useSpeech } from "@/hooks/useSpeech"
-import { WORD_TYPE_COLORS, WORD_TYPE_LABELS, STATUS_LABELS, getDisplayMeaning, ItemProgressStatus } from "@/enums/portal/common"
+import { WORD_TYPE_LABELS, STATUS_LABELS, getDisplayMeaning, ItemProgressStatus } from "@/enums/portal/common"
 import { PRACTICE_LABELS } from "@/constants/portal/practice"
 import type { IVocabularyItem, IStudentItemProgress } from "@/interfaces/portal/practice"
 import { VocabItem } from "../shared"
@@ -110,61 +103,52 @@ export default function LookupTab({ vocabularies, lessonId, itemProgress, onProg
     <div>
       {/* Search */}
       <Input
-        isClearable
         placeholder={L.lookup.searchPlaceholder}
-        startContent={<Search className="w-4 h-4 text-default-400" />}
+        leftIcon={<Search className="w-4 h-4 text-gray-400" />}
         value={search}
-        onValueChange={setSearch}
-        onClear={() => setSearch("")}
-        className="mb-3"
-        size="sm"
+        onChange={(e) => setSearch(e.target.value)}
+        wrapperClassName="mb-3"
       />
 
       {/* Status filter tabs */}
       <div className="flex items-center gap-2 mb-3 overflow-x-auto scrollbar-hide pb-1">
-        <Filter className="w-4 h-4 text-default-400 shrink-0" />
-        <Tabs
-          selectedKey={statusFilter}
-          onSelectionChange={(key) => setStatusFilter(key as StatusFilter)}
-          variant="light"
-          size="sm"
-          classNames={{
-            tabList: "gap-1 p-0",
-            tab: "px-2.5 py-1.5 h-auto min-h-0",
-            cursor: "rounded-full",
-          }}
-        >
-          {STATUS_FILTER_CONFIG.map(({ key, label, color }) => (
-            <Tab
+        <Filter className="w-4 h-4 text-gray-400 shrink-0" />
+        <div className="flex gap-1">
+          {STATUS_FILTER_CONFIG.map(({ key, label }) => (
+            <button
               key={key}
-              title={
-                <div className="flex items-center gap-1.5">
-                  <span className="text-xs">{label}</span>
-                  <Chip size="sm" variant="flat" color={color} className="min-w-5 h-5 px-1.5 text-[10px]">
-                    {statusCounts[key]}
-                  </Chip>
-                </div>
-              }
-            />
+              type="button"
+              onClick={() => setStatusFilter(key)}
+              className={`inline-flex items-center gap-1.5 px-2.5 py-1.5 rounded-full text-xs font-medium transition-colors ${
+                statusFilter === key
+                  ? "bg-(--color-vermillion) text-white"
+                  : "bg-(--color-paper) text-(--color-ink) hover:bg-(--color-smoke)"
+              }`}
+            >
+              <span>{label}</span>
+              <Badge size="sm" className="min-w-5 px-1.5 text-[10px]">
+                {statusCounts[key]}
+              </Badge>
+            </button>
           ))}
-        </Tabs>
+        </div>
       </div>
 
       {/* Count */}
       <div className="flex items-center gap-2 mb-3">
-        <Chip size="sm" variant="flat" color="primary">{L.lookup.countTpl(filteredVocabs.length)}</Chip>
+        <Badge size="sm" variant="primary">{L.lookup.countTpl(filteredVocabs.length)}</Badge>
       </div>
 
       {/* Vocabulary list — internal scroll on desktop, natural scroll on mobile */}
       {filteredVocabs.length === 0 ? (
-        <Card>
-          <CardBody className="py-12 text-center">
-            <BookOpen className="w-10 h-10 mx-auto text-default-300 mb-2" />
-            <p className="text-default-500 text-sm">
+        <div className="rounded-xl border border-(--color-smoke) bg-white p-4 shadow-sm">
+          <div className="py-12 text-center">
+            <BookOpen className="w-10 h-10 mx-auto text-gray-300 mb-2" />
+            <p className="text-(--color-muted) text-sm">
               {vocabularies.length === 0 ? L.empty.noVocab : L.empty.noVocabFound}
             </p>
-          </CardBody>
-        </Card>
+          </div>
+        </div>
       ) : (
         <div>
           <div className="grid gap-2">
@@ -211,15 +195,15 @@ export default function LookupTab({ vocabularies, lessonId, itemProgress, onProg
               </button>
             </div>
 
-            <Divider />
+            <hr className="border-t border-(--color-smoke)" />
 
             {/* Word type */}
             {selectedVocab.wordType && (
               <div className="flex items-center gap-2">
-                <span className="text-sm text-default-500">{L.lookup.wordTypeLabel}:</span>
-                <Chip size="sm" variant="flat" color={WORD_TYPE_COLORS[selectedVocab.wordType] ?? "default"}>
+                <span className="text-sm text-(--color-muted)">{L.lookup.wordTypeLabel}:</span>
+                <Badge size="sm">
                   {WORD_TYPE_LABELS[selectedVocab.wordType] ?? selectedVocab.wordType}
-                </Chip>
+                </Badge>
               </div>
             )}
 
@@ -265,10 +249,10 @@ export default function LookupTab({ vocabularies, lessonId, itemProgress, onProg
                 </div>
                 <div className="flex items-center gap-2 mt-3">
                   <span className="text-sm text-default-500">{L.lookup.statusLabel}:</span>
-                  <Chip size="sm" variant="flat" color={STATUS_LABELS[selectedProgress.status]?.color ?? "default"}>
+                  <Badge size="sm">
                     {STATUS_LABELS[selectedProgress.status]?.label ?? selectedProgress.status}
-                  </Chip>
-                  <span className="text-sm font-medium text-primary ml-auto">
+                  </Badge>
+                  <span className="text-sm font-medium text-(--color-vermillion) ml-auto">
                     {L.lookup.masteryTpl(Math.round(selectedProgress.masteryScore * 100))}
                   </span>
                 </div>

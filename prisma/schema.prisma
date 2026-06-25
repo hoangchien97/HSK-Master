@@ -84,6 +84,7 @@ model Lesson {
   isLocked     Boolean      @default(false)
   progress     Int          @default(0)
   createdAt    DateTime     @default(now())
+  updatedAt    DateTime     @updatedAt
   course       Course       @relation(fields: [courseId], references: [id])
   vocabularies Vocabulary[]
 
@@ -111,6 +112,7 @@ model Vocabulary {
   examplePinyin    String?  // Pinyin of example sentence
   exampleMeaning   String?  // Meaning of example sentence (Vietnamese)
   createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
   lesson       Lesson   @relation(fields: [lessonId], references: [id])
 
   itemProgress      PortalItemProgress[]
@@ -151,7 +153,7 @@ model PortalItemProgress {
   correctCount    Int      @default(0)
   wrongCount      Int      @default(0)
   masteryScore    Float    @default(0) // 0..1
-  status          String   @default("NEW") // NEW, LEARNING, MASTERED
+  status          ItemProgressStatus @default(NEW)
   lastSeenAt      DateTime?
   nextReviewAt    DateTime?
   createdAt       DateTime @default(now())
@@ -170,12 +172,12 @@ model PortalItemSkillProgress {
   id              String   @id @default(cuid())
   studentId       String
   vocabularyId    String
-  mode            String   // FLASHCARD, QUIZ, LISTEN, WRITE
+  mode            PracticeMode
   seenCount       Int      @default(0)
   correctCount    Int      @default(0)
   wrongCount      Int      @default(0)
   masteryScore    Float    @default(0) // 0..1
-  status          String   @default("NEW") // NEW, LEARNING, MASTERED
+  status          ItemProgressStatus @default(NEW)
   lastSeenAt      DateTime?
   nextReviewAt    DateTime?
   createdAt       DateTime @default(now())
@@ -194,7 +196,7 @@ model PortalLessonSkillProgress {
   id              String   @id @default(cuid())
   studentId       String
   lessonId        String
-  mode            String   // FLASHCARD, QUIZ, LISTEN, WRITE
+  mode            PracticeMode
   totalCount      Int      @default(0)
   masteredCount   Int      @default(0)
   learningCount   Int      @default(0)
@@ -217,7 +219,7 @@ model PortalLessonSessionState {
   id                    String   @id @default(cuid())
   studentId             String
   lessonId              String
-  mode                  String
+  mode                  PracticeMode
   lastIndex             Int      @default(0)
   lastVocabularyId      String?
   isCompleted           Boolean  @default(false)
@@ -237,7 +239,7 @@ model PortalPracticeSession {
   id              String   @id @default(cuid())
   studentId       String
   lessonId        String
-  mode            String   // LOOKUP, FLASHCARD, QUIZ, LISTEN, WRITE
+  mode            PracticeMode
   startedAt       DateTime @default(now())
   endedAt         DateTime?
   durationSec     Int      @default(0)
@@ -257,7 +259,7 @@ model PortalPracticeAttempt {
   id              String   @id @default(cuid())
   sessionId       String
   vocabularyId    String
-  questionType    String   // MCQ_MEANING, MCQ_HANZI, MCQ_PINYIN, TYPE_PINYIN, TYPE_HANZI, LISTEN_MCQ, FLASHCARD
+  questionType    QuestionType
   userAnswer      String?
   correctAnswer   String
   isCorrect       Boolean
@@ -272,14 +274,15 @@ model PortalPracticeAttempt {
 }
 
 model Registration {
-  id        String   @id @default(uuid())
+  id        String             @id @default(uuid())
   name      String
   phone     String
   email     String?
   note      String?
-  createdAt DateTime @default(now())
+  status    RegistrationStatus @default(PENDING)
+  createdAt DateTime           @default(now())
   courseId  String?
-  course    Course?  @relation(fields: [courseId], references: [id])
+  course    Course?            @relation(fields: [courseId], references: [id])
 }
 
 // Hero Slideshow
@@ -309,7 +312,7 @@ model HSKLevel {
   badge           String
   badgeColor      String
   description     String
-  vocabularyCount String
+  vocabularyCount Int
   lessonCount     Int      @default(0)
   duration        String   @default("")
   targetAudience  String
@@ -376,6 +379,7 @@ model Photo {
   description String?
   order       Int
   createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
   album       Album    @relation(fields: [albumId], references: [id], onDelete: Cascade)
 }
 
@@ -388,6 +392,7 @@ model GrammarPoint {
   description String?
   order       Int
   createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
   course      Course   @relation(fields: [courseId], references: [id], onDelete: Cascade)
 }
 
@@ -493,6 +498,127 @@ enum UserStatus {
   LOCKED
 }
 
+enum RegistrationStatus {
+  PENDING
+  CONTACTED
+  ENROLLED
+  CANCELLED
+}
+
+enum ClassStatus {
+  ACTIVE
+  COMPLETED
+  CANCELLED
+}
+
+enum EnrollmentStatus {
+  ENROLLED
+  COMPLETED
+  DROPPED
+}
+
+enum AttendanceStatus {
+  PRESENT
+  ABSENT
+  LATE
+  EXCUSED
+}
+
+enum AssignmentType {
+  HOMEWORK
+  QUIZ
+  PROJECT
+  READING
+  WRITING
+  SPEAKING
+  LISTENING
+}
+
+enum AssignmentStatus {
+  DRAFT
+  PUBLISHED
+  CLOSED
+  ARCHIVED
+}
+
+enum SubmissionStatus {
+  NOT_SUBMITTED
+  SUBMITTED
+  RESUBMITTED
+  REVIEWED
+  GRADED
+  RETURNED
+  COMPLETED
+  REVISION_REQUIRED
+}
+
+enum NotificationType {
+  ASSIGNMENT_CREATED
+  ASSIGNMENT_PUBLISHED
+  ASSIGNMENT_DEADLINE
+  ASSIGNMENT_DELETED
+  SUBMISSION_RECEIVED
+  SUBMISSION_SUBMITTED
+  SUBMISSION_RESUBMITTED
+  SUBMISSION_GRADED
+  SUBMISSION_RETURNED
+  CLASS_ENROLLED
+  CLASS_REMOVED
+  CLASS_COMPLETED
+  SCHEDULE_CREATED
+  SCHEDULE_UPDATED
+  SCHEDULE_CANCELLED
+  SCHEDULE_REMINDER
+  ATTENDANCE_RECORDED
+  ATTENDANCE_ABSENT
+  PRACTICE_LESSON_MASTERED
+  PRACTICE_STREAK
+  SYSTEM_ANNOUNCEMENT
+  PROFILE_UPDATED
+}
+
+enum ChatRole {
+  user
+  assistant
+}
+
+enum SessionStatus {
+  SCHEDULED
+  COMPLETED
+  CANCELLED
+}
+
+enum OverrideType {
+  moved
+  cancelled
+  extra
+}
+
+enum ItemProgressStatus {
+  NEW
+  LEARNING
+  MASTERED
+}
+
+enum PracticeMode {
+  LOOKUP
+  FLASHCARD
+  QUIZ
+  LISTEN
+  WRITE
+}
+
+enum QuestionType {
+  MCQ_MEANING
+  MCQ_HANZI
+  MCQ_PINYIN
+  MCQ_EXAMPLE
+  TYPE_PINYIN
+  TYPE_HANZI
+  LISTEN_MCQ
+  FLASHCARD
+}
+
 // Portal User (Unified user model with all profile fields)
 model PortalUser {
   id            String     @id @default(cuid())
@@ -562,7 +688,7 @@ model PortalClass {
   level            String?  // HSK level
   startDate        DateTime
   endDate          DateTime?
-  status           String   @default("ACTIVE") // ACTIVE, COMPLETED, CANCELLED
+  status           ClassStatus @default(ACTIVE)
   createdAt        DateTime @default(now())
   updatedAt        DateTime @updatedAt
 
@@ -582,7 +708,7 @@ model PortalClassEnrollment {
   studentId        String
   classId          String
   enrolledAt       DateTime @default(now())
-  status           String   @default("ENROLLED") // ENROLLED, COMPLETED, DROPPED
+  status           EnrollmentStatus @default(ENROLLED)
   finalGrade       Float?
   createdAt        DateTime @default(now())
   updatedAt        DateTime @updatedAt
@@ -649,11 +775,11 @@ model PortalSchedule {
   description      String?  @db.Text
   startAt          DateTime // timestamptz — actual scheduled start
   endAt            DateTime // timestamptz — actual scheduled end
-  status           String   @default("SCHEDULED") // SCHEDULED, COMPLETED, CANCELLED
+  status           SessionStatus @default(SCHEDULED)
 
   // Override tracking (for individual session modifications)
   isOverride       Boolean  @default(false)
-  overrideType     String?  // "moved", "cancelled", "extra"
+  overrideType     OverrideType?
   overrideReason   String?
 
   location         String?
@@ -677,7 +803,7 @@ model PortalAttendance {
   classId          String
   teacherId        String
   date             DateTime @default(now())
-  status           String   // PRESENT, ABSENT, LATE, EXCUSED
+  status           AttendanceStatus
   notes            String?  @db.Text
   createdAt        DateTime @default(now())
   updatedAt        DateTime @updatedAt
@@ -699,13 +825,13 @@ model PortalAssignment {
   title            String
   slug             String?  @unique
   description      String?  @db.Text
-  assignmentType   String   // HOMEWORK, QUIZ, PROJECT, READING, WRITING, SPEAKING, LISTENING
+  assignmentType   AssignmentType
   dueDate          DateTime?
   maxScore         Float    @default(100)
   attachments      String[] // Array of file URLs
   tags             String[] // Hashtags / labels
   externalLink     String?  // Optional external resource link
-  status           String   @default("DRAFT") // DRAFT, PUBLISHED, CLOSED
+  status           AssignmentStatus @default(DRAFT)
   publishedAt      DateTime?
   createdAt        DateTime @default(now())
   updatedAt        DateTime @updatedAt
@@ -728,7 +854,7 @@ model PortalAssignmentSubmission {
   submittedAt      DateTime @default(now())
   score            Float?
   feedback         String?  @db.Text
-  status           String   @default("NOT_SUBMITTED") // NOT_SUBMITTED, SUBMITTED, REVIEWED, COMPLETED, REVISION_REQUIRED
+  status           SubmissionStatus @default(NOT_SUBMITTED)
   createdAt        DateTime @default(now())
   updatedAt        DateTime @updatedAt
 
@@ -748,7 +874,7 @@ model PortalAssignmentSubmission {
 model PortalNotification {
   id               String   @id @default(cuid())
   userId           String
-  type             String   // ASSIGNMENT_CREATED, SUBMISSION_GRADED, SUBMISSION_RECEIVED
+  type             NotificationType
   title            String
   message          String   @db.Text
   link             String?  // URL to navigate when clicked
@@ -784,7 +910,7 @@ model ChatSession {
 model ChatMessage {
   id        String      @id @default(cuid())
   sessionId String
-  role      String      // "user" | "assistant"
+  role      ChatRole
   content   String      @db.Text
   createdAt DateTime    @default(now())
 

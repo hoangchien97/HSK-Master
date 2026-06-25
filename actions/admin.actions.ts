@@ -136,6 +136,7 @@ export async function deleteHSKLevelAction(id: string): Promise<ActionResult> {
     await requireAdmin();
     await adminService.deleteHSKLevel(id);
     revalidatePath("/portal/admin/hsk-levels");
+    revalidatePath("/");
     return { success: true };
   } catch (error) {
     return { success: false, error: error instanceof Error ? error.message : "Xóa cấp độ thất bại" };
@@ -303,6 +304,7 @@ export async function deleteReviewAction(id: string): Promise<ActionResult> {
     await requireAdmin();
     await adminService.deleteReview(id);
     revalidatePath("/portal/admin/reviews");
+    revalidatePath("/");
     return { success: true };
   } catch (error) {
     return { success: false, error: error instanceof Error ? error.message : "Xóa đánh giá thất bại" };
@@ -354,6 +356,7 @@ export async function deleteFeatureAction(id: string): Promise<ActionResult> {
     await requireAdmin();
     await adminService.deleteFeature(id);
     revalidatePath("/portal/admin/features");
+    revalidatePath("/");
     return { success: true };
   } catch (error) {
     return { success: false, error: error instanceof Error ? error.message : "Xóa tính năng thất bại" };
@@ -405,6 +408,7 @@ export async function deleteCtaStatAction(id: string): Promise<ActionResult> {
     await requireAdmin();
     await adminService.deleteCtaStat(id);
     revalidatePath("/portal/admin/cta-stats");
+    revalidatePath("/");
     return { success: true };
   } catch (error) {
     return { success: false, error: error instanceof Error ? error.message : "Xóa CTA stat thất bại" };
@@ -459,6 +463,7 @@ export async function createPageMetadataAction(data: ICreatePageMetadataDTO): Pr
     await requireAdmin();
     const result = await adminService.createPageMetadata(data);
     revalidatePath("/portal/admin/seo");
+    revalidatePath(result.pagePath);
     return { success: true, data: result };
   } catch (error) {
     return { success: false, error: error instanceof Error ? error.message : "Tạo metadata thất bại" };
@@ -470,6 +475,7 @@ export async function updatePageMetadataAction(id: string, data: IUpdatePageMeta
     await requireAdmin();
     const result = await adminService.updatePageMetadata(id, data);
     revalidatePath("/portal/admin/seo");
+    revalidatePath(result.pagePath);
     return { success: true, data: result };
   } catch (error) {
     return { success: false, error: error instanceof Error ? error.message : "Cập nhật metadata thất bại" };
@@ -481,6 +487,7 @@ export async function deletePageMetadataAction(id: string): Promise<ActionResult
     await requireAdmin();
     await adminService.deletePageMetadata(id);
     revalidatePath("/portal/admin/seo");
+    revalidatePath("/");
     return { success: true };
   } catch (error) {
     return { success: false, error: error instanceof Error ? error.message : "Xóa metadata thất bại" };

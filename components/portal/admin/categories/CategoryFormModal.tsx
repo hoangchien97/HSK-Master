@@ -1,7 +1,9 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { Button, Input, Textarea } from "@heroui/react";
+import { Button } from "@/components/ui";
+import { Input } from "@/components/ui/forms/Input";
+import { Textarea } from "@/components/ui/forms/Textarea";
 import { toast } from "react-toastify";
 import type { ICategory, ICreateCategoryDTO } from "@/interfaces/portal";
 import { CModal } from "@/components/portal/common";
@@ -91,8 +93,8 @@ export default function CategoryFormModal({
       title={isEdit ? "Chỉnh sửa Danh mục" : "Tạo Danh mục mới"}
       footer={
         <>
-          <Button variant="flat" onPress={onClose}>Hủy</Button>
-          <Button color="primary" isLoading={isSubmitting} onPress={handleSubmit}>
+          <Button variant="secondary" onClick={onClose}>Hủy</Button>
+          <Button variant="primary" isLoading={isSubmitting} onClick={handleSubmit}>
             {isEdit ? "Cập nhật" : "Tạo mới"}
           </Button>
         </>
@@ -104,15 +106,15 @@ export default function CategoryFormModal({
             label="Tên danh mục"
             placeholder="Ví dụ: Khóa học HSK"
             value={form.name}
-            onValueChange={(v) => updateField("name", v)}
-            isRequired
+            onChange={(e) => updateField("name", e.target.value)}
+            required
           />
           <Input
             label="Slug (tự động)"
             placeholder="khoa-hoc-hsk"
             value={form.slug}
-            description="Dùng làm đường dẫn URL"
-            isDisabled
+            hint="Dùng làm đường dẫn URL"
+            disabled
           />
         </div>
 
@@ -120,8 +122,7 @@ export default function CategoryFormModal({
           label="Mô tả"
           placeholder="Nhập mô tả cho danh mục (hiển thị trên trang chủ)"
           value={form.description || ""}
-          onValueChange={(v) => updateField("description", v)}
-          minRows={2}
+          onChange={(e) => updateField("description", e.target.value)}
         />
 
         <div className="pt-4 border-t border-default-200 space-y-4">
@@ -130,14 +131,13 @@ export default function CategoryFormModal({
             label="SEO Title"
             placeholder="Tiêu đề hiển thị trên Google"
             value={form.metaTitle || ""}
-            onValueChange={(v) => updateField("metaTitle", v)}
+            onChange={(e) => updateField("metaTitle", e.target.value)}
           />
           <Textarea
             label="SEO Description"
             placeholder="Mô tả cho công cụ tìm kiếm"
             value={form.metaDescription || ""}
-            onValueChange={(v) => updateField("metaDescription", v)}
-            minRows={2}
+            onChange={(e) => updateField("metaDescription", e.target.value)}
           />
         </div>
       </div>

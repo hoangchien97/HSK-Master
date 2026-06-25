@@ -1,7 +1,7 @@
 "use client"
 
 import { useState, useEffect, useCallback, useRef, useMemo } from "react"
-import { Button, Card, CardBody, Chip, Switch, Progress } from "@heroui/react"
+import { Button, Badge, Switch, Progress } from "@/components/ui"
 import { RotateCcw, ChevronLeft, ChevronRight, Volume2, BookOpen } from "lucide-react"
 import { toast } from "react-toastify"
 import {
@@ -243,11 +243,11 @@ export default function FlashcardTab({
 
   if (total === 0) {
     return (
-      <Card>
-        <CardBody className="py-12 text-center">
-          <p className="text-default-500">{L.empty.noVocab}</p>
-        </CardBody>
-      </Card>
+      <div className="rounded-xl border border-(--color-smoke) bg-white p-4 shadow-sm">
+        <div className="py-12 text-center">
+          <p className="text-(--color-muted)">{L.empty.noVocab}</p>
+        </div>
+      </div>
     )
   }
 
@@ -255,29 +255,29 @@ export default function FlashcardTab({
   if (roundComplete) {
     return (
       <div className="max-w-lg mx-auto">
-        <Card>
-          <CardBody className="text-center p-8">
+        <div className="rounded-xl border border-(--color-smoke) bg-white p-4 shadow-sm">
+          <div className="text-center p-8">
             <div className="text-5xl mb-4">🎉</div>
             <h2 className="text-xl font-bold mb-2">{L.flashcard.completionTitle}</h2>
-            <p className="text-default-500 mb-1">
-              {L.flashcard.knownLabel} <span className="text-success font-bold">{knownSet.size}</span>/{vocabularies.length}
+            <p className="text-(--color-muted) mb-1">
+              {L.flashcard.knownLabel} <span className="text-green-600 font-bold">{knownSet.size}</span>/{vocabularies.length}
             </p>
             {unknownSet.size > 0 && (
-              <p className="text-default-500 mb-4">
-                {L.flashcard.unknownLabel} <span className="text-danger font-bold">{unknownSet.size}</span>
+              <p className="text-(--color-muted) mb-4">
+                {L.flashcard.unknownLabel} <span className="text-red-600 font-bold">{unknownSet.size}</span>
               </p>
             )}
             <div className="flex gap-3 justify-center mt-4">
               <Button
-                color="primary"
-                onPress={handleRestart}
-                startContent={<RotateCcw className="w-4 h-4" />}
+                variant="primary"
+                onClick={handleRestart}
+                leftIcon={<RotateCcw className="w-4 h-4" />}
               >
                 {L.nav.restart}
               </Button>
             </div>
-          </CardBody>
-        </Card>
+          </div>
+        </div>
       </div>
     )
   }
@@ -310,11 +310,10 @@ export default function FlashcardTab({
         <div className="flex items-center gap-3">
           {phase === FlashcardPhase.MAIN && (
             <div className="flex items-center gap-1.5">
-              <span className="text-xs text-default-400">{L.nav.shuffle}</span>
+              <span className="text-xs text-gray-400">{L.nav.shuffle}</span>
               <Switch
-                size="sm"
-                isSelected={shuffled}
-                onValueChange={(val) => {
+                checked={shuffled}
+                onChange={(val) => {
                   setShuffled(val)
                   setCurrentIndex(0)
                   setIsFlipped(false)
@@ -329,9 +328,8 @@ export default function FlashcardTab({
       <Progress
         value={((currentIndex + 1) / total) * 100}
         size="sm"
-        color={phase === FlashcardPhase.REVIEW_UNKNOWN ? "warning" : "primary"}
+        variant={phase === FlashcardPhase.REVIEW_UNKNOWN ? "warning" : "default"}
         className="mb-4"
-        aria-label="progress"
       />
 
       {/* Flashcard — Click to flip */}
@@ -346,11 +344,11 @@ export default function FlashcardTab({
           style={{ transformStyle: "preserve-3d" }}
         >
           {/* ───────── FRONT: Chinese character + word type + speaker ───────── */}
-          <Card
-            className="col-start-1 row-start-1 backface-hidden"
+          <div
+            className="col-start-1 row-start-1 rounded-xl border border-(--color-smoke) bg-white shadow-sm"
             style={{ backfaceVisibility: "hidden" }}
           >
-            <CardBody className="flex flex-col items-center justify-center p-6 sm:p-8">
+            <div className="flex flex-col items-center justify-center p-6 sm:p-8">
               {/* Chinese character — large, red */}
               <p className="text-5xl sm:text-7xl font-bold text-red-600 dark:text-red-400 text-center leading-tight">
                 {currentItem.word}
@@ -358,26 +356,25 @@ export default function FlashcardTab({
 
               {/* Word type badge */}
               {currentItem.wordType && (
-                <Chip size="sm" variant="flat" color={WORD_TYPE_COLORS[currentItem.wordType] ?? "secondary"} className="mt-3">
+                <Badge size="sm" className="mt-3">
                   {WORD_TYPE_LABELS[currentItem.wordType] ?? currentItem.wordType}
-                </Chip>
+                </Badge>
               )}
 
               {/* Speaker icon */}
               <button
                 onClick={(e) => handlePlayAudio(currentItem.word, e)}
-                className="mt-3 p-2.5 rounded-full bg-primary-100 dark:bg-primary-900/30 text-primary hover:bg-primary-200 dark:hover:bg-primary-800/40 transition cursor-pointer"
+                className="mt-3 p-2.5 rounded-full bg-red-100 dark:bg-red-900/30 text-(--color-vermillion) hover:bg-red-200 dark:hover:bg-red-800/40 transition cursor-pointer"
                 aria-label="Nghe phát âm"
               >
                 <Volume2 className="w-5 h-5" />
               </button>
 
-              {/* Mastery chip — prefer skill progress over legacy */}
+              {/* Mastery badge — prefer skill progress over legacy */}
               {(skillProg || progress) && (
-                <Chip
+                <Badge
                   size="sm"
-                  variant="dot"
-                  color={
+                  variant={
                     (skillProg?.status ?? progress?.status) === ItemProgressStatus.MASTERED ? "success"
                     : (skillProg?.status ?? progress?.status) === ItemProgressStatus.LEARNING ? "warning"
                     : "default"
@@ -385,52 +382,52 @@ export default function FlashcardTab({
                   className="mt-2"
                 >
                   {Math.round((skillProg?.masteryScore ?? progress?.masteryScore ?? 0) * 100)}%
-                </Chip>
+                </Badge>
               )}
 
               {/* Interleaved vocab indicator */}
               {isFromPrev && (
-                <Chip size="sm" variant="flat" color="secondary" className="mt-1.5">
+                <Badge size="sm" className="mt-1.5">
                   {L.flashcard.reviewPrevLesson}
-                </Chip>
+                </Badge>
               )}
 
-              <p className="text-sm text-default-400 mt-4">{L.flashcard.flipHint}</p>
-            </CardBody>
-          </Card>
+              <p className="text-sm text-gray-400 mt-4">{L.flashcard.flipHint}</p>
+            </div>
+          </div>
 
           {/* ───────── BACK: Pinyin + Meaning + Example ───────── */}
-          <Card
-            className="col-start-1 row-start-1"
+          <div
+            className="col-start-1 row-start-1 rounded-xl border border-(--color-smoke) bg-red-50 dark:bg-red-950/20 shadow-sm"
             style={{ backfaceVisibility: "hidden", transform: "rotateY(180deg)" }}
           >
-            <CardBody className="flex flex-col items-center justify-center p-6 sm:p-8 bg-primary-50 dark:bg-primary-950/20">
+            <div className="flex flex-col items-center justify-center p-6 sm:p-8">
               {/* Chinese character (smaller on back) */}
               <p className="text-2xl sm:text-3xl font-bold text-red-600 dark:text-red-400 mb-1">
                 {currentItem.word}
               </p>
 
               {/* Pinyin */}
-              <p className="text-lg sm:text-xl text-primary font-medium">
+              <p className="text-lg sm:text-xl text-(--color-vermillion) font-medium">
                 {currentItem.pinyin}
               </p>
 
               {/* Meaning */}
-              <p className="text-base sm:text-lg text-default-700 dark:text-default-300 text-center mt-1">
+              <p className="text-base sm:text-lg text-gray-700 dark:text-gray-300 text-center mt-1">
                 {meaningText}
               </p>
 
               {/* Word type */}
               {currentItem.wordType && (
-                <Chip size="sm" variant="flat" color={WORD_TYPE_COLORS[currentItem.wordType] ?? "default"} className="mt-2">
+                <Badge size="sm" className="mt-2">
                   {WORD_TYPE_LABELS[currentItem.wordType] ?? currentItem.wordType}
-                </Chip>
+                </Badge>
               )}
 
               {/* Audio button */}
               <button
                 onClick={(e) => handlePlayAudio(currentItem.word, e)}
-                className="mt-2 p-2 rounded-full bg-primary-100 dark:bg-primary-900/30 text-primary hover:bg-primary-200 transition"
+                className="mt-2 p-2 rounded-full bg-red-100 dark:bg-red-900/30 text-(--color-vermillion) hover:bg-red-200 transition"
                 aria-label="Nghe phát âm"
               >
                 <Volume2 className="w-5 h-5" />
@@ -438,24 +435,24 @@ export default function FlashcardTab({
 
               {/* Example sentence */}
               {currentItem.exampleSentence && (
-                <div className="mt-3 p-3 rounded-lg bg-white/60 dark:bg-default-800/50 text-center max-w-xs w-full">
+                <div className="mt-3 p-3 rounded-lg bg-white/60 dark:bg-gray-800/50 text-center max-w-xs w-full">
                   <div className="flex items-center justify-center gap-1.5 mb-1">
-                    <BookOpen className="w-3.5 h-3.5 text-primary" />
-                    <span className="text-xs text-default-400">{L.flashcard.exampleLabel}</span>
+                    <BookOpen className="w-3.5 h-3.5 text-(--color-vermillion)" />
+                    <span className="text-xs text-gray-400">{L.flashcard.exampleLabel}</span>
                   </div>
                   <p className="text-sm font-medium text-red-600 dark:text-red-400">
                     {currentItem.exampleSentence}
                   </p>
                   {currentItem.examplePinyin && (
-                    <p className="text-xs text-primary mt-0.5">{currentItem.examplePinyin}</p>
+                    <p className="text-xs text-(--color-vermillion) mt-0.5">{currentItem.examplePinyin}</p>
                   )}
                   {currentItem.exampleMeaning && (
-                    <p className="text-xs text-default-500 mt-0.5">{currentItem.exampleMeaning}</p>
+                    <p className="text-xs text-(--color-muted) mt-0.5">{currentItem.exampleMeaning}</p>
                   )}
                   {/* Speaker for example sentence */}
                   <button
                     onClick={(e) => handlePlayAudio(currentItem.exampleSentence!, e)}
-                    className="mt-1.5 p-1.5 rounded-full bg-secondary-100 dark:bg-secondary-900/30 text-secondary hover:bg-secondary-200 transition mx-auto block"
+                    className="mt-1.5 p-1.5 rounded-full bg-purple-100 dark:bg-purple-900/30 text-purple-600 hover:bg-purple-200 transition mx-auto block"
                     aria-label="Nghe câu ví dụ"
                   >
                     <Volume2 className="w-3.5 h-3.5" />
@@ -463,9 +460,9 @@ export default function FlashcardTab({
                 </div>
               )}
 
-              <p className="text-xs text-default-400 mt-3">{L.flashcard.flipBackHint}</p>
-            </CardBody>
-          </Card>
+              <p className="text-xs text-gray-400 mt-3">{L.flashcard.flipBackHint}</p>
+            </div>
+          </div>
         </div>
       </div>
 
@@ -475,38 +472,34 @@ export default function FlashcardTab({
         {!swipeDir && (
           <div className="grid grid-cols-4 gap-1.5 mb-4">
             <Button
-              color="default"
-              variant="flat"
+              variant="secondary"
               size="lg"
-              className="font-medium text-xs sm:text-sm bg-default-200 dark:bg-default-700"
-              onPress={() => handleAction(FlashcardAction.AGAIN)}
+              className="font-medium text-xs sm:text-sm"
+              onClick={() => handleAction(FlashcardAction.AGAIN)}
             >
               {L.flashcard.againBtn}<KeyHint>(1)</KeyHint>
             </Button>
             <Button
-              color="danger"
-              variant="flat"
+              variant="danger"
               size="lg"
               className="font-medium text-xs sm:text-sm"
-              onPress={() => handleAction(FlashcardAction.HARD)}
+              onClick={() => handleAction(FlashcardAction.HARD)}
             >
               {L.flashcard.hardBtn}<KeyHint>(2)</KeyHint>
             </Button>
             <Button
-              color="warning"
-              variant="flat"
+              variant="secondary"
               size="lg"
               className="font-medium text-xs sm:text-sm"
-              onPress={() => handleAction(FlashcardAction.GOOD)}
+              onClick={() => handleAction(FlashcardAction.GOOD)}
             >
               {L.flashcard.goodBtn}<KeyHint>(3)</KeyHint>
             </Button>
             <Button
-              color="success"
-              variant="flat"
+              variant="primary"
               size="lg"
               className="font-medium text-xs sm:text-sm"
-              onPress={() => handleAction(FlashcardAction.EASY)}
+              onClick={() => handleAction(FlashcardAction.EASY)}
             >
               {L.flashcard.easyBtn}<KeyHint>(4)</KeyHint>
             </Button>
@@ -516,28 +509,28 @@ export default function FlashcardTab({
         {/* Navigation */}
         <div className="flex items-center justify-between">
           <Button
-            variant="bordered"
+            variant="secondary"
             size="sm"
             isDisabled={currentIndex === 0}
-            onPress={() => goTo("prev")}
-            startContent={<ChevronLeft className="w-4 h-4" />}
+            onClick={() => goTo("prev")}
+            leftIcon={<ChevronLeft className="w-4 h-4" />}
           >
             {L.nav.prev}
           </Button>
           <Button
-            variant="light"
+            variant="ghost"
             size="sm"
-            onPress={handleRestart}
-            startContent={<RotateCcw className="w-4 h-4" />}
+            onClick={handleRestart}
+            leftIcon={<RotateCcw className="w-4 h-4" />}
           >
             {L.nav.startOver}
           </Button>
           <Button
-            variant="bordered"
+            variant="secondary"
             size="sm"
             isDisabled={currentIndex >= total - 1}
-            onPress={() => goTo("next")}
-            endContent={<ChevronRight className="w-4 h-4" />}
+            onClick={() => goTo("next")}
+            rightIcon={<ChevronRight className="w-4 h-4" />}
           >
             {L.nav.next}
           </Button>

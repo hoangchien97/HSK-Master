@@ -5,7 +5,9 @@ import { Camera, Save, X, User, Pencil } from "lucide-react"
 import Image from "next/image"
 import { toast } from "react-toastify"
 import type { PortalUser } from "@/interfaces/portal/profile"
-import { Form, Input, Button, Chip, Card, CardBody, Textarea, Divider } from "@heroui/react"
+import { Button, Badge } from "@/components/ui"
+import { Input } from "@/components/ui/forms/Input"
+import { Textarea } from "@/components/ui/forms/Textarea"
 import { uploadAvatar } from "@/utils/upload"
 import { validateFile } from "@/utils/validation"
 import { updateProfileAction } from "@/actions/profile.actions"
@@ -113,7 +115,7 @@ export default function ProfileClient({ user }: ProfileClientProps) {
     return roleConfig[currentUser.role] ?? currentUser.role
   }
 
-  const getRoleColor = () => {
+  const getRoleColor = (): "primary" | "success" | "warning" => {
     const colorMap: Record<string, "primary" | "success" | "warning"> = {
       SYSTEM_ADMIN: "warning",
       TEACHER: "success",
@@ -130,10 +132,10 @@ export default function ProfileClient({ user }: ProfileClientProps) {
         <p className="text-gray-500 mt-2">Quản lý thông tin cá nhân của bạn</p>
       </div>
 
-      <Form validationErrors={errors} onSubmit={onSubmit} className="space-y-6 w-full items-stretch">
+      <form onSubmit={onSubmit} className="space-y-6 w-full items-stretch">
         {/* Avatar Section */}
-        <Card shadow="sm">
-          <CardBody className="py-10 px-6">
+        <div className="rounded-xl border border-gray-200 bg-white shadow-sm">
+          <div className="py-10 px-6">
             <div className="flex flex-col items-center text-center">
               {/* Avatar with edit badge */}
               <div className="relative group cursor-pointer" onClick={handleAvatarClick}>
@@ -147,7 +149,7 @@ export default function ProfileClient({ user }: ProfileClientProps) {
                       className="w-full h-full object-cover"
                     />
                   ) : (
-                    <div className="w-full h-full bg-gradient-to-br from-primary-400 to-primary-600 flex items-center justify-center text-white text-3xl font-bold">
+                    <div className="w-full h-full bg-linear-to-br from-red-400 to-red-600 flex items-center justify-center text-white text-3xl font-bold">
                       {currentUser.name[0] || "U"}
                     </div>
                   )}
@@ -182,30 +184,25 @@ export default function ProfileClient({ user }: ProfileClientProps) {
               </h2>
               <p className="text-sm text-gray-500 mt-0.5">{currentUser.email}</p>
 
-              <Chip
-                color={getRoleColor()}
-                variant="flat"
-                size="sm"
-                className="mt-3"
-              >
+              <Badge variant={getRoleColor()} size="sm" className="mt-3">
                 {getRoleLabel()}
-              </Chip>
+              </Badge>
 
               <p className="text-xs text-gray-400 mt-3">
                 Nhấn vào ảnh đại diện để thay đổi
               </p>
             </div>
-          </CardBody>
-        </Card>
+          </div>
+        </div>
 
         {/* Personal Information */}
-        <Card shadow="sm">
-          <CardBody className="p-6">
+        <div className="rounded-xl border border-gray-200 bg-white shadow-sm">
+          <div className="p-6">
             <h3 className="text-lg font-semibold text-gray-900 flex items-center gap-2">
               <User className="w-5 h-5 text-gray-500" />
               Thông tin cá nhân
             </h3>
-            <Divider className="my-4" />
+            <hr className="border-t border-(--color-smoke) my-4" />
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
               {/* Full Name */}
@@ -214,16 +211,10 @@ export default function ProfileClient({ user }: ProfileClientProps) {
                   name="name"
                   label="Họ và tên"
                   placeholder="Nguyễn Văn A"
-                  labelPlacement="outside"
-                  variant="bordered"
                   defaultValue={currentUser.name || ""}
-                  isRequired
+                  required
                   onChange={() => setIsDirty(true)}
-                  errorMessage={({ validationDetails }) => {
-                    if (validationDetails.valueMissing) {
-                      return "Vui lòng nhập họ và tên"
-                    }
-                  }}
+                  error={errors.name}
                 />
               </div>
 
@@ -234,8 +225,6 @@ export default function ProfileClient({ user }: ProfileClientProps) {
                   label="Số điện thoại"
                   type="tel"
                   placeholder="0901234567"
-                  labelPlacement="outside"
-                  variant="bordered"
                   defaultValue={currentUser.phoneNumber || ""}
                   onChange={() => setIsDirty(true)}
                 />
@@ -247,8 +236,6 @@ export default function ProfileClient({ user }: ProfileClientProps) {
                   name="dateOfBirth"
                   label="Ngày sinh"
                   type="date"
-                  labelPlacement="outside"
-                  variant="bordered"
                   defaultValue={currentUser.dateOfBirth ? new Date(currentUser.dateOfBirth).toISOString().split('T')[0] : ""}
                   onChange={() => setIsDirty(true)}
                 />
@@ -260,8 +247,6 @@ export default function ProfileClient({ user }: ProfileClientProps) {
                   name="address"
                   label="Địa chỉ"
                   placeholder="123 Đường ABC, Quận 1, TP.HCM"
-                  labelPlacement="outside"
-                  variant="bordered"
                   defaultValue={currentUser.address || ""}
                   onChange={() => setIsDirty(true)}
                 />
@@ -273,42 +258,39 @@ export default function ProfileClient({ user }: ProfileClientProps) {
                   name="biography"
                   label="Giới thiệu bản thân"
                   placeholder="Viết một vài dòng giới thiệu về bản thân..."
-                  labelPlacement="outside"
-                  variant="bordered"
                   defaultValue={currentUser.biography || ""}
-                  minRows={4}
+                  rows={4}
                   onChange={() => setIsDirty(true)}
                 />
               </div>
             </div>
-          </CardBody>
-        </Card>
+          </div>
+        </div>
 
         {/* Action Buttons — centered */}
         <div className="flex items-center justify-center gap-3 pt-2 pb-8">
           <Button
             type="button"
-            variant="bordered"
-            radius="full"
-            onPress={handleCancel}
+            variant="secondary"
+            onClick={handleCancel}
             isDisabled={loading || (!isDirty && !avatarFile)}
-            startContent={<X className="w-4 h-4" />}
+            leftIcon={<X className="w-4 h-4" />}
+            className="rounded-full"
           >
             Hủy
           </Button>
           <Button
             type="submit"
             isDisabled={loading || (!isDirty && !avatarFile)}
-            color="danger"
-            radius="full"
+            variant="danger"
             isLoading={loading}
-            startContent={!loading ? <Save className="w-4 h-4" /> : undefined}
-            className="px-6"
+            leftIcon={!loading ? <Save className="w-4 h-4" /> : undefined}
+            className="rounded-full px-6"
           >
             {loading ? "Đang lưu..." : "Lưu thay đổi"}
           </Button>
         </div>
-      </Form>
+      </form>
     </div>
   )
 }

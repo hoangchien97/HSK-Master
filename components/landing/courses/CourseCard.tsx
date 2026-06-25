@@ -1,19 +1,19 @@
 import Link from "next/link";
 import Image from "next/image";
 import { PlayCircle, Clock } from "lucide-react";
-import { Tooltip } from "@/components/landing/common";
+import { Tooltip } from "@/components/ui";
 
 interface CourseCardProps {
   course: {
     id: string;
     title: string;
     slug: string;
-    description: string | null;
-    image: string | null;
-    instructor: string | null;
-    instructorAvatar: string | null;
-    tag: string | null;
-    badgeText: string | null;
+    description?: string | null;
+    image?: string | null;
+    instructor?: string | null;
+    instructorAvatar?: string | null;
+    tag?: string | null;
+    badgeText?: string | null;
     lectures: number;
     durationHours: number;
   };

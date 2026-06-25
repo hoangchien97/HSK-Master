@@ -1,8 +1,9 @@
 "use client";
 import React from 'react';
 import Link from 'next/link';
-import Button from '@/components/landing/common/Button';
+import { Button } from "@/components/ui";
 import CountUp from './CountUp';
+import { SCHOOL_STATS } from "@/constants/landing";
 
 interface CtaStat {
   id: string;
@@ -31,7 +32,7 @@ export default function CTASectionClient({ stats }: Props) {
           </div>
 
           {/* Heading */}
-          <h2 className="text-xl md:text-2xl lg:text-3xl xl:text-4xl font-bold text-white mb-2 md:mb-3 leading-tight">
+          <h2 className="font-serif text-xl md:text-2xl lg:text-3xl xl:text-4xl font-bold text-white mb-2 md:mb-3 leading-tight">
             Sẵn sàng bắt đầu{' '}
             <span className="bg-gradient-to-r from-yellow-200 via-yellow-100 to-white bg-clip-text text-transparent">
               hành trình học
@@ -91,23 +92,23 @@ export default function CTASectionClient({ stats }: Props) {
             ) : (
               <div className="flex gap-6 md:gap-10">
                 <div className="text-center min-w-[80px]">
-                  <CountUp value={500} suffix="+" />
+                  <CountUp value={parseInt(SCHOOL_STATS.students.value)} suffix="+" />
                   <div className="text-white/90 text-[10px] md:text-xs lg:text-sm font-medium">
-                    Học viên
+                    {SCHOOL_STATS.students.label}
                   </div>
                 </div>
                 <div className="hidden sm:block w-px h-10 bg-white/30" />
                 <div className="text-center min-w-[80px]">
-                  <CountUp value={10} suffix="+" />
+                  <CountUp value={parseInt(SCHOOL_STATS.yearsActive.value)} suffix="+" />
                   <div className="text-white/90 text-[10px] md:text-xs lg:text-sm font-medium">
-                    Năm kinh nghiệm
+                    {SCHOOL_STATS.yearsActive.label}
                   </div>
                 </div>
                 <div className="hidden sm:block w-px h-10 bg-white/30" />
                 <div className="text-center min-w-[80px]">
-                  <CountUp value={95} suffix="%" />
+                  <CountUp value={parseInt(SCHOOL_STATS.passRate.value)} suffix="%" />
                   <div className="text-white/90 text-[10px] md:text-xs lg:text-sm font-medium">
-                    Học viên hài lòng
+                    {SCHOOL_STATS.passRate.label}
                   </div>
                 </div>
               </div>

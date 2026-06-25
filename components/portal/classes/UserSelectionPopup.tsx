@@ -1,8 +1,9 @@
 "use client";
 
 import { useState, useEffect, useCallback, useRef } from "react";
-import { Avatar, Button, Input } from "@heroui/react";
-import { Check, Search, Users } from "lucide-react";
+import { Avatar } from "@/components/ui";
+import { Button } from "@/components/ui";
+import { Check, Search, Users, X } from "lucide-react";
 import { CModal } from "@/components/portal/common/CModal";
 import { CSpinner } from "@/components/portal/common";
 import api from "@/lib/http/client";
@@ -103,7 +104,7 @@ export default function UserSelectionPopup({
       onClose={onClose}
       title={
         <div className="flex items-center gap-2">
-          <Users className="w-5 h-5 text-primary" />
+          <Users className="w-5 h-5 text-(--color-vermillion)" />
           <span>Chọn học viên</span>
         </div>
       }
@@ -111,10 +112,10 @@ export default function UserSelectionPopup({
       scrollBehavior="inside"
       footer={
         <div className="flex items-center justify-between w-full">
-          <span className="text-sm text-default-500">
+          <span className="text-sm text-(--color-muted)">
             Đã chọn: <strong>{selectedUsers.length}</strong> học viên
           </span>
-          <Button size="sm" color="primary" onPress={onClose}>
+          <Button size="sm" variant="primary" onClick={onClose}>
             Xong
           </Button>
         </div>
@@ -123,15 +124,25 @@ export default function UserSelectionPopup({
       <div className="flex flex-col h-[50vh]">
         {/* Search - Sticky */}
         <div className="sticky top-0 z-10 bg-white dark:bg-content1 pb-3">
-          <Input
-            placeholder="Tìm theo tên hoặc username..."
-            startContent={<Search className="w-4 h-4 text-default-400" />}
-            size="sm"
-            value={search}
-            onValueChange={setSearch}
-            isClearable
-            onClear={() => setSearch("")}
-          />
+          <div className="relative w-full">
+            <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-(--color-muted) pointer-events-none" />
+            <input
+              type="text"
+              value={search}
+              onChange={(e) => setSearch(e.target.value)}
+              placeholder="Tìm theo tên hoặc username..."
+              className="h-9 w-full pl-9 pr-8 rounded-md border border-(--color-smoke) bg-white text-sm text-(--color-ink) placeholder:text-(--color-muted) focus:outline-none focus:ring-2 focus:ring-(--color-vermillion)"
+            />
+            {search && (
+              <button
+                type="button"
+                onClick={() => setSearch("")}
+                className="absolute right-2 top-1/2 -translate-y-1/2 text-(--color-muted) hover:text-(--color-ink)"
+              >
+                <X className="w-3.5 h-3.5" />
+              </button>
+            )}
+          </div>
         </div>
 
         {/* User List - Scrollable */}
@@ -149,8 +160,8 @@ export default function UserSelectionPopup({
                 className={`flex items-center gap-3 px-3 py-2.5 rounded-xl cursor-pointer transition-all my-0.5
                   ${
                     isSelected
-                      ? "bg-primary-50 border-2 border-primary"
-                      : "border-2 border-transparent hover:bg-primary-50/60"
+                      ? "bg-red-50 border-2 border-(--color-vermillion)"
+                      : "border-2 border-transparent hover:bg-red-50/60"
                   }`}
               >
                 <Avatar
@@ -161,10 +172,10 @@ export default function UserSelectionPopup({
                 />
                 <div className="flex-1 min-w-0">
                   <p className="text-sm font-medium truncate">{user.name}</p>
-                  <p className="text-xs text-default-400 truncate">@{user.username}</p>
+                  <p className="text-xs text-gray-400 truncate">@{user.username}</p>
                 </div>
                 {isSelected && (
-                  <div className="w-5 h-5 rounded-full bg-primary flex items-center justify-center shrink-0">
+                  <div className="w-5 h-5 rounded-full bg-(--color-vermillion) flex items-center justify-center shrink-0">
                     <Check className="w-3 h-3 text-white" />
                   </div>
                 )}
@@ -175,7 +186,7 @@ export default function UserSelectionPopup({
             <CSpinner size="sm" className="py-3" />
           )}
           {!isLoading && users.length === 0 && (
-            <p className="text-center text-sm text-default-400 py-8">
+            <p className="text-center text-sm text-(--color-muted) py-8">
               Không tìm thấy học viên
             </p>
           )}

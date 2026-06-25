@@ -1,11 +1,12 @@
 import Image from "next/image";
 import { Award, Users, TrendingUp, Sparkles } from "lucide-react";
+import { SCHOOL_STATS, TEACHER_INFO } from "@/constants/landing";
 
 export default function AboutHero() {
   const stats = [
-    { icon: TrendingUp, value: "5+", label: "Năm hoạt động", color: "from-blue-500 to-cyan-500" },
-    { icon: Users, value: "10k+", label: "Học viên", color: "from-purple-500 to-pink-500" },
-    { icon: Award, value: "98%", label: "Đậu HSK/HSKK", color: "from-orange-500 to-red-500" },
+    { icon: TrendingUp, value: SCHOOL_STATS.yearsActive.value, label: SCHOOL_STATS.yearsActive.label, color: "from-blue-500 to-cyan-500" },
+    { icon: Users, value: SCHOOL_STATS.students.value, label: SCHOOL_STATS.students.label, color: "from-purple-500 to-pink-500" },
+    { icon: Award, value: SCHOOL_STATS.passRate.value, label: SCHOOL_STATS.passRate.label, color: "from-orange-500 to-red-500" },
   ];
 
   return (
@@ -90,8 +91,8 @@ export default function AboutHero() {
           {/* Image container */}
           <div className="relative overflow-hidden rounded-2xl shadow-2xl aspect-[4/3] ring-1 ring-gray-200 dark:ring-gray-800">
             <Image
-              src="https://images.unsplash.com/photo-1522202176988-66273c2fd55f?w=800&h=600&fit=crop"
-              alt="Students learning Chinese together"
+              src={TEACHER_INFO.heroImageUrl}
+              alt={`${TEACHER_INFO.fullName} – Giảng viên Ruby HSK`}
               width={800}
               height={600}
               className="object-cover w-full h-full transform transition-all duration-700 group-hover:scale-110 group-hover:rotate-1"
@@ -108,7 +109,7 @@ export default function AboutHero() {
                 <Award className="w-6 h-6 text-white" />
               </div>
               <div>
-                <div className="text-xl md:text-2xl font-bold text-gray-900 dark:text-white">98%</div>
+                <div className="text-xl md:text-2xl font-bold text-gray-900 dark:text-white">{SCHOOL_STATS.passRate.value}</div>
                 <div className="text-xs text-gray-600 dark:text-gray-400">Tỷ lệ đậu</div>
               </div>
             </div>

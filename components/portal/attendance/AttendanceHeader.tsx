@@ -1,15 +1,11 @@
 "use client"
 
 import { useState, useCallback } from "react"
-import {
-  Input,
-  Select,
-  SelectItem,
-  Chip,
-  Button,
-  Tooltip,
-} from "@heroui/react"
-import { Search, FileSpreadsheet, Loader2 } from "lucide-react"
+import { Select, type SelectOption } from "@/components/ui"
+import { Badge } from "@/components/ui"
+import { Button } from "@/components/ui"
+import { Tooltip } from "@/components/ui"
+import { Search, FileSpreadsheet, Loader2, X } from "lucide-react"
 import { toast } from "react-toastify"
 import type { AttendanceMatrixData } from "@/actions/attendance.actions"
 
@@ -120,6 +116,11 @@ export default function AttendanceHeader({
     }
   }, [canExport, matrixData, scheduleDates, selectedClassId])
 
+  const classOptions: SelectOption[] = classes.map((c) => ({
+    value: c.id,
+    label: `${c.className} (${c.classCode}) — ${c._count.enrollments} HV`,
+  }))
+
   return (
     <div className="shrink-0 flex flex-col gap-3">
       {/* Filter bar */}
@@ -127,42 +128,35 @@ export default function AttendanceHeader({
         <div className="flex flex-col gap-3 sm:flex-row sm:items-center">
           {/* Class selector */}
           <Select
+            value={selectedClassId}
+            onChange={(val) => { if (val) onClassChange(val) }}
+            options={classOptions}
             placeholder="Chọn lớp học"
-            size="sm"
-            selectedKeys={selectedClassId ? new Set([selectedClassId]) : new Set()}
-            onSelectionChange={(keys) => {
-              const val = Array.from(keys)[0] as string
-              if (val) onClassChange(val)
-            }}
             className="w-full sm:w-64"
-          >
-            {classes.map((c) => (
-              <SelectItem key={c.id} textValue={`${c.className} (${c.classCode})`}>
-                <div className="flex justify-between items-center">
-                  <span>{c.className} ({c.classCode})</span>
-                  <Chip size="sm" variant="flat">{c._count.enrollments} HV</Chip>
-                </div>
-              </SelectItem>
-            ))}
-          </Select>
+          />
 
           {/* Search */}
-          <Input
-            isClearable
-            className="w-full sm:max-w-xs"
-            placeholder="Tìm tên học viên..."
-            startContent={<Search className="w-4 h-4 text-default-400" />}
-            value={searchQuery}
-            onValueChange={onSearchChange}
-            onClear={() => onSearchChange("")}
-            size="sm"
-          />
+          <div className="relative w-full sm:max-w-xs">
+            <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-(--color-muted) pointer-events-none" />
+            <input
+              type="text"
+              value={searchQuery}
+              onChange={(e) => onSearchChange(e.target.value)}
+              placeholder="Tìm tên học viên..."
+              className="h-9 w-full pl-9 pr-8 rounded-md border border-(--color-smoke) bg-white text-sm text-(--color-ink) placeholder:text-(--color-muted) focus:outline-none focus:ring-2 focus:ring-(--color-vermillion)"
+            />
+            {searchQuery && (
+              <button type="button" onClick={() => onSearchChange("")} className="absolute right-2 top-1/2 -translate-y-1/2 text-(--color-muted) hover:text-(--color-ink)">
+                <X className="w-3.5 h-3.5" />
+              </button>
+            )}
+          </div>
 
           {/* Pending count indicator */}
           {pendingCount > 0 && (
-            <Chip color="warning" variant="flat" size="sm" className="shrink-0">
+            <Badge variant="warning" size="sm" className="shrink-0">
               Chưa lưu: {pendingCount}
-            </Chip>
+            </Badge>
           )}
         </div>
       </div>
@@ -174,24 +168,21 @@ export default function AttendanceHeader({
             content="Export điểm danh ra Excel"
             placement="bottom"
           >
-            <div>
-              <Button
-                size="sm"
-                variant="flat"
-                color="success"
-                isDisabled={isExporting}
-                onPress={handleExport}
-                startContent={
-                  isExporting ? (
-                    <Loader2 className="w-4 h-4 animate-spin" />
-                  ) : (
-                    <FileSpreadsheet className="w-4 h-4" />
-                  )
-                }
-              >
-                {isExporting ? `${exportProgress}%` : "Export"}
-              </Button>
-            </div>
+            <Button
+              size="sm"
+              variant="secondary"
+              isDisabled={isExporting}
+              onClick={handleExport}
+              leftIcon={
+                isExporting ? (
+                  <Loader2 className="w-4 h-4 animate-spin" />
+                ) : (
+                  <FileSpreadsheet className="w-4 h-4" />
+                )
+              }
+            >
+              {isExporting ? `${exportProgress}%` : "Export"}
+            </Button>
           </Tooltip>
         </div>
       )}

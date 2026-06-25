@@ -1,23 +1,11 @@
 "use client";
 
 import { useState, useEffect, useCallback } from "react";
-import {
-  Table,
-  TableHeader,
-  TableColumn,
-  TableBody,
-  TableRow,
-  TableCell,
-  Button,
-  Input,
-  Chip,
-  Card,
-  CardBody,
-  CardHeader,
-  User as UserAvatar,
-  Divider,
-  Pagination,
-} from "@heroui/react";
+import { Button } from "@/components/ui";
+import { Badge } from "@/components/ui";
+import { Avatar } from "@/components/ui";
+import { Input } from "@/components/ui/forms/Input";
+import { ChevronLeft, ChevronRight } from "lucide-react";
 import { ArrowLeft, Users, Calendar, BookOpen, UserPlus, Trash2 } from "lucide-react";
 import { toast } from "react-toastify";
 import dayjs from "dayjs";
@@ -119,177 +107,179 @@ export default function ClassDetailView({ classId, role }: ClassDetailViewProps)
     <div className="space-y-6">
       {/* Header */}
       <div className="flex items-center gap-3">
-        <Button
-          isIconOnly
-          variant="flat"
-          size="sm"
-          onPress={() => router.back()}
+        <button
+          type="button"
+          onClick={() => router.back()}
+          className="p-1.5 rounded-md hover:bg-(--color-smoke) text-(--color-ink) transition-colors"
         >
           <ArrowLeft className="w-4 h-4" />
-        </Button>
+        </button>
         <div>
           <h1 className="text-2xl font-bold">{classData.className}</h1>
-          <p className="text-default-500 text-sm">Mã: {classData.classCode}</p>
+          <p className="text-(--color-muted) text-sm">Mã: {classData.classCode}</p>
         </div>
       </div>
 
       {/* Stats Cards */}
       <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-        <Card>
-          <CardBody className="flex flex-row items-center gap-3">
-            <div className="p-2 bg-primary-50 rounded-lg">
-              <Users className="w-5 h-5 text-primary" />
+        <div className="rounded-xl border border-(--color-smoke) bg-white p-4 shadow-sm">
+          <div className="flex flex-row items-center gap-3">
+            <div className="p-2 bg-red-50 rounded-lg">
+              <Users className="w-5 h-5 text-(--color-vermillion)" />
             </div>
             <div>
-              <p className="text-sm text-default-500">Học viên</p>
+              <p className="text-sm text-(--color-muted)">Học viên</p>
               <p className="text-xl font-bold">
                 {classData._count?.enrollments ?? 0}
               </p>
             </div>
-          </CardBody>
-        </Card>
-        <Card>
-          <CardBody className="flex flex-row items-center gap-3">
-            <div className="p-2 bg-primary-50 rounded-lg">
-              <Calendar className="w-5 h-5 text-primary" />
+          </div>
+        </div>
+        <div className="rounded-xl border border-(--color-smoke) bg-white p-4 shadow-sm">
+          <div className="flex flex-row items-center gap-3">
+            <div className="p-2 bg-red-50 rounded-lg">
+              <Calendar className="w-5 h-5 text-(--color-vermillion)" />
             </div>
             <div>
-              <p className="text-sm text-default-500">Buổi học</p>
+              <p className="text-sm text-(--color-muted)">Buổi học</p>
               <p className="text-xl font-bold">
                 {classData._count?.schedules ?? 0}
               </p>
             </div>
-          </CardBody>
-        </Card>
-        <Card>
-          <CardBody className="flex flex-row items-center gap-3">
-            <div className="p-2 bg-primary-50 rounded-lg">
-              <BookOpen className="w-5 h-5 text-primary" />
+          </div>
+        </div>
+        <div className="rounded-xl border border-(--color-smoke) bg-white p-4 shadow-sm">
+          <div className="flex flex-row items-center gap-3">
+            <div className="p-2 bg-red-50 rounded-lg">
+              <BookOpen className="w-5 h-5 text-(--color-vermillion)" />
             </div>
             <div>
-              <p className="text-sm text-default-500">Trình độ</p>
+              <p className="text-sm text-(--color-muted)">Trình độ</p>
               <p className="text-xl font-bold">{classData.level || "—"}</p>
             </div>
-          </CardBody>
-        </Card>
+          </div>
+        </div>
       </div>
 
       {/* Description */}
       {classData.description && (
-        <Card>
-          <CardHeader>
-            <h3 className="font-semibold">Mô tả</h3>
-          </CardHeader>
-          <Divider />
-          <CardBody>
-            <p className="text-default-600">{classData.description}</p>
-          </CardBody>
-        </Card>
+        <div className="rounded-xl border border-(--color-smoke) bg-white p-4 shadow-sm">
+          <h3 className="font-semibold mb-2">Mô tả</h3>
+          <hr className="border-t border-(--color-smoke) mb-3" />
+          <p className="text-(--color-ink)">{classData.description}</p>
+        </div>
       )}
 
       {/* Enrollment Management */}
-      <Card>
-        <CardHeader className="flex justify-between items-center">
+      <div className="rounded-xl border border-(--color-smoke) bg-white shadow-sm">
+        <div className="flex justify-between items-center p-4 border-b border-(--color-smoke)">
           <h3 className="font-semibold">Danh sách học viên</h3>
           {role === USER_ROLE.TEACHER.toLowerCase() && (
             <div className="flex flex-col sm:flex-row items-start sm:items-center gap-2">
               <Input
-                size="sm"
                 placeholder="Email học viên..."
                 value={enrollEmail}
-                onValueChange={setEnrollEmail}
-                className="w-full sm:w-64"
+                onChange={(e) => setEnrollEmail(e.target.value)}
+                wrapperClassName="w-full sm:w-64"
                 onKeyDown={(e) => e.key === "Enter" && handleEnroll()}
               />
               <Button
                 size="sm"
-                color="primary"
+                variant="primary"
                 isLoading={isEnrolling}
-                startContent={<UserPlus className="w-4 h-4" />}
-                onPress={handleEnroll}
+                leftIcon={<UserPlus className="w-4 h-4" />}
+                onClick={handleEnroll}
               >
                 Thêm
               </Button>
             </div>
           )}
-        </CardHeader>
-        <Divider />
-        <CardBody className="p-0">
-          <Table
-            aria-label="Danh sách học viên"
-            removeWrapper
-            bottomContent={
-              totalPages > 1 ? (
-                <div className="flex w-full justify-center py-2">
-                  <Pagination
-                    isCompact
-                    showControls
-                    color="primary"
-                    page={page}
-                    total={totalPages}
-                    onChange={setPage}
-                  />
-                </div>
-              ) : null
-            }
-          >
-            <TableHeader>
-              <TableColumn>Học viên</TableColumn>
-              <TableColumn>Trạng thái</TableColumn>
-              <TableColumn>Ngày tham gia</TableColumn>
-              {role === USER_ROLE.TEACHER.toLowerCase() ? (
-                <TableColumn align="end">Thao tác</TableColumn>
+        </div>
+        <div className="p-0">
+          <table className="w-full text-sm">
+            <thead>
+              <tr className="border-b border-(--color-smoke) text-(--color-muted) text-xs">
+                <th className="text-left px-4 py-2 font-medium">Học viên</th>
+                <th className="text-left px-4 py-2 font-medium">Trạng thái</th>
+                <th className="text-left px-4 py-2 font-medium">Ngày tham gia</th>
+                {role === USER_ROLE.TEACHER.toLowerCase() && (
+                  <th className="text-right px-4 py-2 font-medium">Thao tác</th>
+                )}
+              </tr>
+            </thead>
+            <tbody>
+              {paginatedEnrollments.length === 0 ? (
+                <tr>
+                  <td colSpan={role === USER_ROLE.TEACHER.toLowerCase() ? 4 : 3} className="text-center py-8 text-(--color-muted)">
+                    Chưa có học viên nào
+                  </td>
+                </tr>
               ) : (
-                <TableColumn className="hidden">_</TableColumn>
-              )}
-            </TableHeader>
-            <TableBody
-              items={paginatedEnrollments}
-              emptyContent="Chưa có học viên nào"
-            >
-              {(enrollment: IEnrollment) => (
-                <TableRow key={enrollment.id}>
-                  <TableCell>
-                    <UserAvatar
-                      name={enrollment.student?.name || enrollment.student?.email || ""}
-                      description={enrollment.student?.username ? `@${enrollment.student.username}` : enrollment.student?.email}
-                      avatarProps={{
-                        src: enrollment.student?.image || undefined,
-                        size: "sm",
-                      }}
-                    />
-                  </TableCell>
-                  <TableCell>
-                    <Chip
-                      size="sm"
-                      color={ENROLLMENT_STATUS_COLOR_MAP[enrollment.status] || "default"}
-                      variant="flat"
-                    >
-                      {ENROLLMENT_STATUS_LABEL_MAP[enrollment.status] || enrollment.status}
-                    </Chip>
-                  </TableCell>
-                  <TableCell>
-                    {dayjs(enrollment.enrolledAt).format("DD/MM/YYYY")}
-                  </TableCell>
-                  <TableCell>
-                    {role === USER_ROLE.TEACHER.toLowerCase() && (
-                      <Button
-                        isIconOnly
+                paginatedEnrollments.map((enrollment: IEnrollment) => (
+                  <tr key={enrollment.id} className="border-b border-(--color-smoke) last:border-0 hover:bg-(--color-paper) transition-colors">
+                    <td className="px-4 py-3">
+                      <div className="flex items-center gap-2">
+                        <Avatar
+                          src={enrollment.student?.image || undefined}
+                          name={enrollment.student?.name || enrollment.student?.email || ""}
+                          size="sm"
+                        />
+                        <div>
+                          <p className="text-sm font-medium">{enrollment.student?.name || enrollment.student?.email || ""}</p>
+                          <p className="text-xs text-gray-400">{enrollment.student?.username ? `@${enrollment.student.username}` : enrollment.student?.email}</p>
+                        </div>
+                      </div>
+                    </td>
+                    <td className="px-4 py-3">
+                      <Badge
                         size="sm"
-                        variant="light"
-                        color="danger"
-                        onPress={() => handleRemoveStudent(enrollment.id)}
+                        variant={ENROLLMENT_STATUS_COLOR_MAP[enrollment.status] || "default"}
                       >
-                        <Trash2 className="w-4 h-4" />
-                      </Button>
+                        {ENROLLMENT_STATUS_LABEL_MAP[enrollment.status] || enrollment.status}
+                      </Badge>
+                    </td>
+                    <td className="px-4 py-3">
+                      {dayjs(enrollment.enrolledAt).format("DD/MM/YYYY")}
+                    </td>
+                    {role === USER_ROLE.TEACHER.toLowerCase() && (
+                      <td className="px-4 py-3 text-right">
+                        <button
+                          type="button"
+                          onClick={() => handleRemoveStudent(enrollment.id)}
+                          className="p-1.5 rounded-md hover:bg-(--color-smoke) text-red-600 transition-colors"
+                        >
+                          <Trash2 className="w-4 h-4" />
+                        </button>
+                      </td>
                     )}
-                  </TableCell>
-                </TableRow>
+                  </tr>
+                ))
               )}
-            </TableBody>
-          </Table>
-        </CardBody>
-      </Card>
+            </tbody>
+          </table>
+          {totalPages > 1 && (
+            <div className="flex w-full justify-center items-center gap-2 py-3 border-t border-(--color-smoke)">
+              <button
+                type="button"
+                onClick={() => setPage((p) => Math.max(1, p - 1))}
+                disabled={page <= 1}
+                className="inline-flex items-center justify-center w-8 h-8 rounded-md border border-(--color-smoke) disabled:opacity-40 hover:bg-(--color-paper) transition-colors"
+              >
+                <ChevronLeft className="w-4 h-4" />
+              </button>
+              <span className="text-sm text-(--color-muted)">{page} / {totalPages}</span>
+              <button
+                type="button"
+                onClick={() => setPage((p) => Math.min(totalPages, p + 1))}
+                disabled={page >= totalPages}
+                className="inline-flex items-center justify-center w-8 h-8 rounded-md border border-(--color-smoke) disabled:opacity-40 hover:bg-(--color-paper) transition-colors"
+              >
+                <ChevronRight className="w-4 h-4" />
+              </button>
+            </div>
+          )}
+        </div>
+      </div>
     </div>
   );
 }

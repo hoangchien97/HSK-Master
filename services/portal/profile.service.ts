@@ -1,21 +1,23 @@
 import { prisma } from '@/lib/prisma'
 import type { PortalUser, UpdateProfileDTO, ProfileUpdateResponse } from '@/interfaces/portal/profile'
 
+const PROFILE_SELECT = {
+  id: true, name: true, username: true, email: true,
+  image: true, role: true, status: true,
+  phoneNumber: true, address: true, dateOfBirth: true,
+  biography: true, createdAt: true, updatedAt: true,
+  // password and notes excluded
+} as const
+
 export class ProfileService {
-  /**
-   * Get complete user profile
-   */
   static async getUserProfile(userId: string): Promise<PortalUser | null> {
     const user = await prisma.portalUser.findUnique({
       where: { id: userId },
+      select: PROFILE_SELECT,
     })
-
     return user as unknown as PortalUser
   }
 
-  /**
-   * Update user profile
-   */
   static async updateProfile(
     userId: string,
     data: UpdateProfileDTO
@@ -31,8 +33,8 @@ export class ProfileService {
           biography: data.biography,
           image: data.image,
         },
+        select: PROFILE_SELECT,
       })
-
       return {
         success: true,
         message: "Cập nhật hồ sơ thành công",
@@ -47,13 +49,11 @@ export class ProfileService {
     }
   }
 
-  /**
-   * Update avatar
-   */
   static async updateAvatar(userId: string, imageUrl: string): Promise<PortalUser | null> {
     const user = await prisma.portalUser.update({
       where: { id: userId },
       data: { image: imageUrl },
+      select: PROFILE_SELECT,
     })
     return user as unknown as PortalUser
   }

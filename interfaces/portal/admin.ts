@@ -56,7 +56,7 @@ export interface IHSKLevel {
   badge: string;
   badgeColor: string;
   description: string;
-  vocabularyCount: string;
+  vocabularyCount: number;
   lessonCount: number;
   duration: string;
   targetAudience: string;
@@ -79,7 +79,7 @@ export interface ICreateHSKLevelDTO {
   badge: string;
   badgeColor: string;
   description: string;
-  vocabularyCount: string;
+  vocabularyCount: number;
   lessonCount?: number;
   duration?: string;
   targetAudience: string;
@@ -238,6 +238,7 @@ export interface IRegistration {
   phone: string;
   email?: string | null;
   note?: string | null;
+  status: 'PENDING' | 'CONTACTED' | 'ENROLLED' | 'CANCELLED';
   courseId?: string | null;
   course?: { id: string; title: string } | null;
   createdAt: Date | string;

@@ -1,13 +1,7 @@
 "use client"
 
 import { useMemo } from "react"
-import {
-  Card,
-  CardBody,
-  Avatar,
-  Tooltip,
-  Chip,
-} from "@heroui/react"
+import { Avatar, Tooltip, Badge } from "@/components/ui"
 import { Calendar, CheckCheck, Check, X } from "lucide-react"
 import dayjs from "dayjs"
 import AttendanceCell from "./AttendanceCell"
@@ -139,24 +133,24 @@ export default function AttendanceTable({
 
   if (scheduleDates.length === 0) {
     return (
-      <Card shadow="sm" className="flex-1">
-        <CardBody>
+      <div className="rounded-xl border border-(--color-smoke) bg-white shadow-sm flex-1">
+        <div className="p-4">
           <div className="flex flex-col items-center py-12 gap-3">
-            <Calendar className="w-12 h-12 text-default-300" />
-            <p className="text-default-500 font-medium">Chưa có buổi học nào</p>
-            <p className="text-sm text-default-400">
+            <Calendar className="w-12 h-12 text-gray-400" />
+            <p className="text-(--color-muted) font-medium">Chưa có buổi học nào</p>
+            <p className="text-sm text-gray-400">
               Hãy tạo lịch học cho lớp trước khi điểm danh
             </p>
           </div>
-        </CardBody>
-      </Card>
+        </div>
+      </div>
     )
   }
 
   return (
     <div className="flex-1 flex flex-col min-h-0 gap-2">
       {/* Table card with mobile scroll */}
-      <Card shadow="sm" className="flex-1 overflow-hidden flex flex-col min-h-0">
+      <div className="rounded-xl border border-(--color-smoke) bg-white shadow-sm flex-1 overflow-hidden flex flex-col min-h-0">
         {/* Scrollable table — horizontal scroll for mobile */}
         <div className="flex-1 overflow-auto min-h-0 -webkit-overflow-scrolling-touch">
         <table className="w-full border-collapse">
@@ -234,13 +228,9 @@ export default function AttendanceTable({
                   <div className="flex items-center gap-3">
                     <Avatar
                       src={student.image || undefined}
-                      name={student.name.substring(0, 2).toUpperCase()}
+                      name={student.name}
                       size="sm"
                       className="shrink-0"
-                      classNames={{
-                        base: "bg-gradient-to-br from-blue-400 to-blue-600",
-                        name: "text-white text-[10px] font-bold",
-                      }}
                     />
                     <div className="min-w-0">
                       <p className="text-sm font-medium text-gray-900 truncate">
@@ -344,18 +334,18 @@ export default function AttendanceTable({
             {overallSummary && (
               <>
                 <span className="w-px h-4 bg-gray-300" />
-                <Chip size="sm" variant="flat" color="success">
+                <Badge size="sm" variant="success">
                   Tổng có mặt: {overallSummary.totalPresent}
-                </Chip>
-                <Chip size="sm" variant="flat" color="danger">
+                </Badge>
+                <Badge size="sm" variant="danger">
                   Tổng vắng: {overallSummary.totalAbsent}
-                </Chip>
+                </Badge>
               </>
             )}
           </div>
         </div>
       )}
-    </Card>
+    </div>
     </div>
   )
 }

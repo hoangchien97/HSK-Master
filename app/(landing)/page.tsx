@@ -9,6 +9,7 @@ import {
   ReviewsSection,
 } from "@/components/landing";
 import { AnimatedSection } from "@/components/landing/shared/AnimatedSection";
+import { Divider } from "@/components/ui";
 import { getPageMetadata } from "@/services/metadata.service";
 import { generateFAQSchema } from "@/lib/structured-data";
 import { FAQ_DATA } from "@/components/landing/contact/ContactFAQ";
@@ -61,15 +62,21 @@ export default async function Home() {
         <PainPointsSection />
       </AnimatedSection>
 
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8"><Divider /></div>
+
       {/* 3. Solution – "Giải pháp từ Ruby HSK" */}
       <AnimatedSection variant="fadeInUp">
         <SolutionSection />
       </AnimatedSection>
 
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8"><Divider /></div>
+
       {/* 4. HSK Levels – Lộ trình học rõ ràng */}
       <AnimatedSection variant="fadeInUp">
         <HSKLevelsSection />
       </AnimatedSection>
+
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8"><Divider /></div>
 
       {/* 5. Why Choose Us */}
       <AnimatedSection variant="fadeInUp">
@@ -78,10 +85,14 @@ export default async function Home() {
 
       {/* Below-fold sections wrapped in Suspense for streaming */}
       <Suspense fallback={null}>
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8"><Divider /></div>
+
         {/* 6. Gallery */}
         <AnimatedSection variant="fadeInUp">
           <GallerySection />
         </AnimatedSection>
+
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8"><Divider /></div>
 
         {/* 7. Reviews / Social Proof */}
         <AnimatedSection variant="fadeInUp">

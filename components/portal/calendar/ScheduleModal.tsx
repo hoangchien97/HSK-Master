@@ -1,16 +1,10 @@
 "use client";
 
 import { useState, useEffect, useCallback } from "react";
-import {
-  Button,
-  Form,
-  Input,
-  Textarea,
-  Select,
-  SelectItem,
-  Switch,
-  Chip,
-} from "@heroui/react";
+import { Button, Select } from "@/components/ui";
+import { Input } from "@/components/ui/forms/Input";
+import { Textarea } from "@/components/ui/forms/Textarea";
+import { Switch } from "@/components/ui/forms/Switch";
 import { Calendar, Repeat } from "lucide-react";
 import { CModal } from "../common";
 import dayjs from "dayjs";
@@ -193,7 +187,7 @@ export default function ScheduleModal({
             <p className="text-lg font-semibold">
               {editMode ? "Cập nhật buổi học" : "Tạo buổi học mới"}
             </p>
-            <p className="text-sm text-default-400 font-normal">
+            <p className="text-sm text-gray-400 font-normal">
               {editMode
                 ? "Cập nhật thông tin buổi học"
                 : "Điền thông tin để tạo buổi học"}
@@ -203,11 +197,11 @@ export default function ScheduleModal({
       }
       footer={
         <>
-          <Button variant="flat" onPress={onClose} isDisabled={isSubmitting}>
+          <Button variant="secondary" onClick={onClose} isDisabled={isSubmitting}>
             Hủy
           </Button>
           <Button
-            color="primary"
+            variant="primary"
             type="submit"
             form="schedule-form"
             isLoading={isSubmitting}
@@ -217,50 +211,30 @@ export default function ScheduleModal({
         </>
       }
     >
-      <Form
+      <form
         id="schedule-form"
-        validationErrors={errors}
         onSubmit={handleFormSubmit}
         className="gap-4 flex flex-col"
       >
         {/* Class Selection */}
         <Select
           label="Lớp học"
-          name="classId"
           placeholder="Chọn lớp học"
-          labelPlacement="outside"
-          isRequired
-          isDisabled={editMode}
-          selectedKeys={classId ? new Set([classId]) : new Set()}
-          onSelectionChange={(keys: "all" | Set<React.Key>) => {
-            if (keys !== "all") {
-              const val = Array.from(keys)[0] as string;
-              setClassId(val || "");
-            }
-          }}
-          isInvalid={!!errors.classId}
-          errorMessage={errors.classId || undefined}
-        >
-          {classes.map((c) => (
-            <SelectItem key={c.id}>
-              {c.className}
-            </SelectItem>
-          ))}
-        </Select>
+          required
+          disabled={editMode}
+          value={classId}
+          onChange={(val) => setClassId(val)}
+          error={errors.classId}
+          options={classes.map((c) => ({ value: c.id, label: c.className }))}
+        />
 
         {/* Title */}
         <Input
           name="title"
           label="Tiêu đề"
           placeholder="VD: Bài 1 - Chào hỏi cơ bản"
-          labelPlacement="outside"
-          isRequired
+          required
           defaultValue={initialData?.title || ""}
-          errorMessage={({ validationDetails }) => {
-            if (validationDetails.valueMissing) {
-              return "Vui lòng nhập tiêu đề";
-            }
-          }}
         />
 
         {/* Description */}
@@ -268,7 +242,6 @@ export default function ScheduleModal({
           name="description"
           label="Mô tả"
           placeholder="Nội dung buổi học..."
-          labelPlacement="outside"
           defaultValue={initialData?.description || ""}
         />
 
@@ -278,44 +251,27 @@ export default function ScheduleModal({
             type="date"
             name="startDate"
             label="Ngày học"
-            labelPlacement="outside"
-            isRequired
+            required
             value={startDate}
             onChange={(e: React.ChangeEvent<HTMLInputElement>) => setStartDate(e.target.value)}
             min={editMode ? undefined : today}
-            errorMessage={({ validationDetails }) => {
-              if (validationDetails.valueMissing) {
-                return "Vui lòng chọn ngày";
-              }
-            }}
           />
           <Input
             type="time"
             name="startTime"
             label="Giờ bắt đầu"
-            labelPlacement="outside"
-            isRequired
+            required
             defaultValue={defaultStartTime}
             key={`start-${defaultStartTime}`}
-            errorMessage={({ validationDetails }) => {
-              if (validationDetails.valueMissing) {
-                return "Vui lòng chọn giờ bắt đầu";
-              }
-            }}
           />
           <Input
             type="time"
             name="endTime"
             label="Giờ kết thúc"
-            labelPlacement="outside"
-            isRequired
+            required
             defaultValue={defaultEndTime}
             key={`end-${defaultEndTime}`}
-            errorMessage={({ validationDetails }) => {
-              if (validationDetails.valueMissing) {
-                return "Vui lòng chọn giờ kết thúc";
-              }
-            }}
+            error={errors.endTime}
           />
         </div>
 
@@ -323,62 +279,57 @@ export default function ScheduleModal({
 
         {/* Recurrence (create mode only) */}
         {!editMode && (
-          <div className="p-4 bg-default-50 rounded-xl border border-default-200 space-y-4 w-full">
+          <div className="p-4 bg-(--color-paper) rounded-xl border border-(--color-smoke) space-y-4 w-full">
             <div className="flex items-center justify-between gap-4">
               <div className="flex items-center gap-3">
-                <div className="p-2.5 bg-primary-50 rounded-lg">
-                  <Repeat className="w-4 h-4 text-primary" />
+                <div className="p-2.5 bg-red-50 rounded-lg">
+                  <Repeat className="w-4 h-4 text-(--color-vermillion)" />
                 </div>
                 <div>
                   <p className="text-sm font-semibold">Lặp lại buổi học</p>
-                  <p className="text-xs text-default-400 mt-0.5">
+                  <p className="text-xs text-gray-400 mt-0.5">
                     Tạo nhiều buổi học theo lịch hàng tuần
                   </p>
                 </div>
               </div>
               <Switch
-                isSelected={enableRecurrence}
-                onValueChange={setEnableRecurrence}
-                size="sm"
-                color="primary"
+                checked={enableRecurrence}
+                onCheckedChange={setEnableRecurrence}
               />
             </div>
 
             {enableRecurrence && (
-              <div className="space-y-3 pt-3 border-t border-default-200">
+              <div className="space-y-3 pt-3 border-t border-(--color-smoke)">
                 <p className="text-sm font-medium">Chọn các ngày trong tuần</p>
                 <div className="flex gap-2 flex-wrap">
                   {WEEKDAYS.map((day) => (
-                    <Chip
+                    <button
                       key={day.value}
-                      variant={
-                        selectedWeekdays.includes(day.value) ? "solid" : "bordered"
-                      }
-                      color={
-                        selectedWeekdays.includes(day.value) ? "primary" : "default"
-                      }
-                      className="cursor-pointer"
+                      type="button"
                       onClick={() => handleWeekdayToggle(day.value)}
+                      className={`px-3 py-1 rounded-full text-xs font-medium border transition-colors cursor-pointer ${
+                        selectedWeekdays.includes(day.value)
+                          ? 'bg-(--color-vermillion) text-white border-(--color-vermillion)'
+                          : 'bg-white text-(--color-ink) border-(--color-smoke) hover:bg-(--color-paper)'
+                      }`}
                     >
                       {day.label}
-                    </Chip>
+                    </button>
                   ))}
                 </div>
                 <Input
                   type="date"
                   label="Ngày kết thúc lặp lại"
-                  labelPlacement="outside"
                   value={endDate}
                   onChange={(e: React.ChangeEvent<HTMLInputElement>) => setEndDate(e.target.value)}
                   min={startDate || today}
-                  size="sm"
                 />
                 {previewCount > 0 && (
-                  <Chip color="primary" variant="flat" size="sm">
-                    ��� {previewCount} buổi học sẽ được tạo
+                  <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-medium bg-red-50 text-(--color-vermillion) border border-red-200">
+                    📅 {previewCount} buổi học sẽ được tạo
                     {selectedWeekdays.length > 0 &&
                       ` vào: ${formatWeekdays(selectedWeekdays)}`}
-                  </Chip>
+                  </span>
                 )}
               </div>
             )}
@@ -386,26 +337,24 @@ export default function ScheduleModal({
         )}
 
         {/* Google Sync */}
-        <div className="flex items-center justify-between p-4 bg-default-50 rounded-xl border border-default-200 w-full">
+        <div className="flex items-center justify-between p-4 bg-(--color-paper) rounded-xl border border-(--color-smoke) w-full">
           <div className="flex items-center gap-3">
-            <div className="p-2 bg-primary-50 rounded-lg">
-              <Calendar className="w-4 h-4 text-primary" />
+            <div className="p-2 bg-red-50 rounded-lg">
+              <Calendar className="w-4 h-4 text-(--color-vermillion)" />
             </div>
             <div>
               <p className="text-sm font-semibold">Đồng bộ Google Calendar</p>
-              <p className="text-xs text-default-400">
+              <p className="text-xs text-gray-400">
                 Tự động thêm vào lịch của bạn
               </p>
             </div>
           </div>
           <Switch
-            isSelected={syncToGoogle}
-            onValueChange={setSyncToGoogle}
-            size="sm"
-            color="primary"
+            checked={syncToGoogle}
+            onCheckedChange={setSyncToGoogle}
           />
         </div>
-      </Form>
+      </form>
     </CModal>
   );
 }

@@ -7,13 +7,13 @@
  */
 
 import { prisma } from '@/lib/prisma';
-import { Prisma } from '@prisma/client';
+import { Prisma, NotificationType } from '@prisma/client';
 
 /* ───────── Types ───────── */
 
 export interface NotificationData {
   userId: string;
-  type: string;
+  type: NotificationType;
   title: string;
   message: string;
   link?: string;

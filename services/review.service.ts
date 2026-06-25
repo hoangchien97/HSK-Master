@@ -8,9 +8,13 @@ export interface ReviewData {
   className: string;
   content: string;
   rating: number;
+  honeypot?: string;
 }
 
 export async function createReview(data: ReviewData) {
+  // Honeypot: silently succeed for bots so they don't retry
+  if (data.honeypot) return { success: true, review: null };
+
   try {
     const review = await prisma.review.create({
       data: {

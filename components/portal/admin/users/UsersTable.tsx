@@ -1,8 +1,9 @@
 "use client";
 
 import { useState, useEffect, useCallback, useMemo } from "react";
-import { Button, Chip, useDisclosure, Dropdown, DropdownTrigger, DropdownMenu, DropdownItem, Input, Select, SelectItem } from "@heroui/react";
-import { Trash2, MoreVertical, Users, Search } from "lucide-react";
+import { Badge } from "@/components/ui";
+import { Select, type SelectOption } from "@/components/ui";
+import { Trash2, MoreVertical, Users, Search, X } from "lucide-react";
 import { toast } from "react-toastify";
 import dayjs from "dayjs";
 import { useRouter, useSearchParams, usePathname } from "next/navigation";
@@ -11,6 +12,13 @@ import { CTable, type CTableColumn } from "@/components/portal/common";
 import { useDebouncedValue, useSyncSearchToUrl, useTableSort } from "@/hooks/useTableParams";
 import { fetchUsersAdmin } from "@/actions/admin.actions";
 
+const ROLE_OPTIONS_SELECT: SelectOption[] = [
+  { value: "ALL", label: "Tất cả" },
+  { value: "STUDENT", label: "Học viên" },
+  { value: "TEACHER", label: "Giáo viên" },
+  { value: "SYSTEM_ADMIN", label: "Admin" },
+];
+
 const ROLE_OPTIONS = [
   { key: "ALL", label: "Tất cả" },
   { key: "STUDENT", label: "Học viên" },
@@ -18,7 +26,7 @@ const ROLE_OPTIONS = [
   { key: "SYSTEM_ADMIN", label: "Admin" },
 ];
 
-const ROLE_COLOR_MAP: Record<string, "primary" | "success" | "danger" | "default"> = {
+const ROLE_BADGE_MAP: Record<string, "primary" | "success" | "danger" | "default"> = {
   STUDENT: "primary",
   TEACHER: "success",
   SYSTEM_ADMIN: "danger",
@@ -74,7 +82,7 @@ export default function UsersTable() {
   useSyncSearchToUrl(debouncedSearch, updateUrl);
 
   const columns: CTableColumn<UserRow & Record<string, unknown>>[] = useMemo(() => [
-    { key: "stt", label: "STT", align: "center" as const, headerClassName: "w-[50px]", render: (_v: unknown, _r: unknown, i: number) => <span className="text-sm text-default-500">{(urlPage - 1) * urlPageSize + i + 1}</span> },
+    { key: "stt", label: "STT", align: "center" as const, headerClassName: "w-[50px]", render: (_v: unknown, _r: unknown, i: number) => <span className="text-sm text-(--color-muted)">{(urlPage - 1) * urlPageSize + i + 1}</span> },
     {
       key: "name", label: "Người dùng", sortable: true,
       render: (_v: unknown, row: UserRow) => (
@@ -82,14 +90,14 @@ export default function UsersTable() {
           <div className="w-8 h-8 rounded-full bg-gray-200 flex items-center justify-center overflow-hidden shrink-0">
             {row.image ? <img src={row.image} alt="" className="w-full h-full object-cover" /> : <span className="text-xs font-semibold text-gray-500">{row.name?.charAt(0)}</span>}
           </div>
-          <div><p className="font-semibold text-sm">{row.name}</p><p className="text-xs text-default-400">{row.email}</p></div>
+          <div><p className="font-semibold text-sm">{row.name}</p><p className="text-xs text-gray-400">{row.email}</p></div>
         </div>
       ),
     },
-    { key: "username", label: "Username", headerClassName: "w-[120px]", render: (_v: unknown, row: UserRow) => <span className="text-sm text-default-500">{row.username}</span> },
-    { key: "role", label: "Vai trò", headerClassName: "w-[120px]", render: (_v: unknown, row: UserRow) => <Chip size="sm" color={ROLE_COLOR_MAP[row.role] || "default"} variant="flat">{ROLE_OPTIONS.find(r => r.key === row.role)?.label || row.role}</Chip> },
-    { key: "status", label: "Trạng thái", headerClassName: "w-[100px]", render: (_v: unknown, row: UserRow) => <Chip size="sm" color={row.status === "ACTIVE" ? "success" : "warning"} variant="flat">{row.status === "ACTIVE" ? "Hoạt động" : row.status}</Chip> },
-    { key: "createdAt", label: "Ngày tạo", headerClassName: "w-[120px]", render: (_v: unknown, row: UserRow) => <span className="text-sm text-default-500">{dayjs(row.createdAt).format("DD/MM/YYYY")}</span> },
+    { key: "username", label: "Username", headerClassName: "w-[120px]", render: (_v: unknown, row: UserRow) => <span className="text-sm text-(--color-muted)">{row.username}</span> },
+    { key: "role", label: "Vai trò", headerClassName: "w-[120px]", render: (_v: unknown, row: UserRow) => <Badge size="sm" variant={ROLE_BADGE_MAP[row.role] || "default"}>{ROLE_OPTIONS.find(r => r.key === row.role)?.label || row.role}</Badge> },
+    { key: "status", label: "Trạng thái", headerClassName: "w-[100px]", render: (_v: unknown, row: UserRow) => <Badge size="sm" variant={row.status === "ACTIVE" ? "success" : "warning"}>{row.status === "ACTIVE" ? "Hoạt động" : row.status}</Badge> },
+    { key: "createdAt", label: "Ngày tạo", headerClassName: "w-[120px]", render: (_v: unknown, row: UserRow) => <span className="text-sm text-(--color-muted)">{dayjs(row.createdAt).format("DD/MM/YYYY")}</span> },
   ], [urlPage, urlPageSize]);
 
   return (
@@ -101,10 +109,33 @@ export default function UsersTable() {
       toolbar={
         <div className="rounded-xl bg-white border border-gray-200 px-4 py-3 shadow-sm">
           <div className="flex flex-col gap-3 sm:flex-row sm:items-center">
-            <Input isClearable className="w-full sm:max-w-xs" placeholder="Tìm người dùng..." startContent={<Search className="w-4 h-4 text-default-400" />} value={search} onValueChange={setSearch} onClear={() => setSearch("")} size="sm" />
-            <Select placeholder="Vai trò" size="sm" aria-label="Lọc vai trò" selectedKeys={[urlRole]} onSelectionChange={(keys) => updateUrl({ role: (Array.from(keys)[0] as string) || "ALL" })} className="w-full sm:w-40">
-              {ROLE_OPTIONS.map((opt) => <SelectItem key={opt.key}>{opt.label}</SelectItem>)}
-            </Select>
+            <div className="relative w-full sm:max-w-xs">
+              <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-(--color-muted) pointer-events-none" />
+              <input
+                type="text"
+                placeholder="Tìm người dùng..."
+                value={search}
+                onChange={(e) => setSearch(e.target.value)}
+                className="h-9 w-full pl-9 pr-8 rounded-md border border-(--color-smoke) bg-white text-sm text-(--color-ink) placeholder:text-(--color-muted) focus:outline-none focus:ring-2 focus:ring-(--color-vermillion) focus:border-(--color-vermillion)"
+              />
+              {search && (
+                <button
+                  type="button"
+                  onClick={() => setSearch("")}
+                  className="absolute right-2 top-1/2 -translate-y-1/2 text-(--color-muted) hover:text-(--color-ink) transition-colors"
+                >
+                  <X className="w-3.5 h-3.5" />
+                </button>
+              )}
+            </div>
+            <div className="w-full sm:w-40">
+              <Select
+                options={ROLE_OPTIONS_SELECT}
+                value={urlRole}
+                onChange={(v) => updateUrl({ role: v || "ALL" })}
+                placeholder="Vai trò"
+              />
+            </div>
           </div>
         </div>
       }

@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Geist, Noto_Sans } from "next/font/google";
+import { Geist, Inter, Noto_Sans_SC, Noto_Sans, Noto_Serif } from "next/font/google";
 import "./globals.css";
 import { OG_IMAGE, SITE_URL } from "@/constants/brand";
 import NextTopLoader from 'nextjs-toploader';
@@ -9,12 +9,34 @@ import { MaterialIconsLoader } from "@/components/landing/shared/MaterialIconsLo
 const geistSans = Geist({
   variable: "--font-geist-sans",
   subsets: ["latin"],
+  display: "swap",
+});
+
+const inter = Inter({
+  variable: "--font-inter",
+  subsets: ["latin"],
+  weight: ["400", "500", "700"],
+  display: "swap",
+});
+
+const notoSansSC = Noto_Sans_SC({
+  variable: "--font-noto-sans-sc",
+  subsets: ["latin"],
+  weight: ["400", "500", "700"],
+  display: "swap",
 });
 
 const notoSans = Noto_Sans({
   variable: "--font-noto-sans",
   subsets: ["latin", "vietnamese"],
   weight: ["400", "500", "700"],
+  display: "swap",
+});
+
+const notoSerif = Noto_Serif({
+  variable: "--font-noto-serif",
+  subsets: ["latin", "vietnamese"],
+  weight: ["400", "500", "600", "700"],
   display: "swap",
 });
 
@@ -114,7 +136,6 @@ export const metadata: Metadata = {
     "theme-color": "#ec131e",
     "msapplication-TileColor": "#ec131e",
     "msapplication-config": "/browserconfig.xml",
-
   },
 };
 
@@ -146,7 +167,7 @@ export default function RootLayout({
         />
       </head>
       <body
-        className={`${geistSans.variable} ${notoSans.variable} antialiased min-h-screen bg-background-light dark:bg-background-dark text-text-main-light dark:text-text-main-dark flex flex-col`}
+        className={`${geistSans.variable} ${inter.variable} ${notoSansSC.variable} ${notoSans.variable} ${notoSerif.variable} antialiased min-h-screen bg-background-light dark:bg-background-dark text-text-main-light dark:text-text-main-dark flex flex-col`}
         suppressHydrationWarning
       >
         <NextTopLoader

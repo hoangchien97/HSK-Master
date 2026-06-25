@@ -1,7 +1,7 @@
 "use client";
 
 import { motion } from "framer-motion";
-import Button from "@/components/landing/common/Button";
+import { Button } from "@/components/ui";
 
 const staggerContainer = {
   hidden: { opacity: 0 },

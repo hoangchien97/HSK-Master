@@ -1,0 +1,35 @@
+-- Phase 2 addendum: Expand 4 enums to cover all values used in application code.
+-- Uses ADD VALUE IF NOT EXISTS — safe to re-run; no data conversion needed.
+-- Cannot run inside a transaction (PostgreSQL restriction for pre-existing enum types).
+
+-- AssignmentStatus: add ARCHIVED (used in enums/portal/common.ts)
+ALTER TYPE "AssignmentStatus" ADD VALUE IF NOT EXISTS 'ARCHIVED';
+
+-- SubmissionStatus: add RESUBMITTED, GRADED, RETURNED (used in submission.actions.ts + common.ts)
+ALTER TYPE "SubmissionStatus" ADD VALUE IF NOT EXISTS 'RESUBMITTED';
+ALTER TYPE "SubmissionStatus" ADD VALUE IF NOT EXISTS 'GRADED';
+ALTER TYPE "SubmissionStatus" ADD VALUE IF NOT EXISTS 'RETURNED';
+
+-- QuestionType: add MCQ_EXAMPLE (used in enums/portal/common.ts)
+ALTER TYPE "QuestionType" ADD VALUE IF NOT EXISTS 'MCQ_EXAMPLE';
+
+-- NotificationType: add all values from enums/portal/common.ts
+ALTER TYPE "NotificationType" ADD VALUE IF NOT EXISTS 'ASSIGNMENT_PUBLISHED';
+ALTER TYPE "NotificationType" ADD VALUE IF NOT EXISTS 'ASSIGNMENT_DEADLINE';
+ALTER TYPE "NotificationType" ADD VALUE IF NOT EXISTS 'ASSIGNMENT_DELETED';
+ALTER TYPE "NotificationType" ADD VALUE IF NOT EXISTS 'SUBMISSION_SUBMITTED';
+ALTER TYPE "NotificationType" ADD VALUE IF NOT EXISTS 'SUBMISSION_RESUBMITTED';
+ALTER TYPE "NotificationType" ADD VALUE IF NOT EXISTS 'SUBMISSION_RETURNED';
+ALTER TYPE "NotificationType" ADD VALUE IF NOT EXISTS 'CLASS_ENROLLED';
+ALTER TYPE "NotificationType" ADD VALUE IF NOT EXISTS 'CLASS_REMOVED';
+ALTER TYPE "NotificationType" ADD VALUE IF NOT EXISTS 'CLASS_COMPLETED';
+ALTER TYPE "NotificationType" ADD VALUE IF NOT EXISTS 'SCHEDULE_CREATED';
+ALTER TYPE "NotificationType" ADD VALUE IF NOT EXISTS 'SCHEDULE_UPDATED';
+ALTER TYPE "NotificationType" ADD VALUE IF NOT EXISTS 'SCHEDULE_CANCELLED';
+ALTER TYPE "NotificationType" ADD VALUE IF NOT EXISTS 'SCHEDULE_REMINDER';
+ALTER TYPE "NotificationType" ADD VALUE IF NOT EXISTS 'ATTENDANCE_RECORDED';
+ALTER TYPE "NotificationType" ADD VALUE IF NOT EXISTS 'ATTENDANCE_ABSENT';
+ALTER TYPE "NotificationType" ADD VALUE IF NOT EXISTS 'PRACTICE_LESSON_MASTERED';
+ALTER TYPE "NotificationType" ADD VALUE IF NOT EXISTS 'PRACTICE_STREAK';
+ALTER TYPE "NotificationType" ADD VALUE IF NOT EXISTS 'SYSTEM_ANNOUNCEMENT';
+ALTER TYPE "NotificationType" ADD VALUE IF NOT EXISTS 'PROFILE_UPDATED';

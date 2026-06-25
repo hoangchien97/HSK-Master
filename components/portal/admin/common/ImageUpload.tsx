@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useRef } from "react";
-import { Button } from "@heroui/react";
+import { Button } from "@/components/ui";
 import { Upload, X, Loader2 } from "lucide-react";
 import { toast } from "react-toastify";
 
@@ -63,7 +63,7 @@ export default function ImageUpload({
   return (
     <div className="space-y-3">
       {value ? (
-        <div className="relative inline-block w-full max-w-[200px] h-[200px] border rounded-xl overflow-hidden group border-default-200">
+        <div className="relative inline-block w-full max-w-[200px] h-[200px] border rounded-xl overflow-hidden group border-gray-200">
           <img
             src={value}
             alt="Preview"
@@ -71,16 +71,13 @@ export default function ImageUpload({
           />
           {!disabled && (
             <div className="absolute inset-0 bg-black/40 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
-              <Button
-                isIconOnly
-                size="sm"
-                color="danger"
-                variant="flat"
-                className="rounded-full"
-                onPress={removeImage}
+              <button
+                type="button"
+                onClick={removeImage}
+                className="p-1.5 rounded-md hover:bg-(--color-smoke) text-(--color-ink) transition-colors bg-white/80"
               >
                 <X className="w-4 h-4" />
-              </Button>
+              </button>
             </div>
           )}
         </div>
@@ -100,21 +97,21 @@ export default function ImageUpload({
           }}
           className={`
             border-2 border-dashed rounded-xl p-6 text-center transition-colors h-[200px] flex flex-col items-center justify-center
-            ${dragOver ? "border-primary bg-primary-50" : "border-default-300 hover:border-primary"}
+            ${dragOver ? "border-(--color-vermillion) bg-red-50" : "border-gray-300 hover:border-(--color-vermillion)"}
             ${disabled ? "opacity-50 cursor-not-allowed" : "cursor-pointer"}
           `}
           onClick={() => !disabled && !uploading && inputRef.current?.click()}
         >
           {uploading ? (
-            <div className="flex flex-col items-center gap-2 text-default-500">
+            <div className="flex flex-col items-center gap-2 text-(--color-muted)">
               <Loader2 className="w-8 h-8 animate-spin" />
               <p className="text-sm">Đang tải lên...</p>
             </div>
           ) : (
-            <div className="flex flex-col items-center gap-2 text-default-500">
+            <div className="flex flex-col items-center gap-2 text-(--color-muted)">
               <Upload className="w-8 h-8" />
               <p className="text-sm">
-                Kéo thả ảnh hoặc <span className="text-primary font-medium">chọn ảnh</span>
+                Kéo thả ảnh hoặc <span className="text-(--color-vermillion) font-medium">chọn ảnh</span>
               </p>
             </div>
           )}

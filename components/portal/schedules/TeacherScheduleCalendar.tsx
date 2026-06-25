@@ -17,7 +17,7 @@ import {
   deleteScheduleGroup,
 } from '@/actions/schedule.actions';
 import { CSpinner } from '@/components/portal/common';
-import { Button } from '@heroui/react';
+import { Button } from '@/components/ui';
 import { Plus } from 'lucide-react';
 import type {
   ISchedule,
@@ -218,9 +218,9 @@ export default function TeacherScheduleCalendar() {
       {/* Action bar */}
       <div className="flex justify-end">
         <Button
-          color="primary"
-          startContent={<Plus size={18} />}
-          onPress={() => {
+          variant="primary"
+          leftIcon={<Plus size={18} />}
+          onClick={() => {
             setScheduleToEdit(null);
             setSlotInitialTime(null);
             setShowModal(true);
