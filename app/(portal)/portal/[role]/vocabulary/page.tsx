@@ -1,7 +1,8 @@
 import { auth } from "@/auth"
-import { redirect } from "next/navigation"
+import { redirect, notFound } from "next/navigation"
 import { prisma } from "@/lib/prisma"
 import VocabularyClient from "./VocabularyClient"
+import { USER_ROLE } from "@/constants/portal/roles"
 
 async function getVocabularyData(email: string) {
   // Get HSK levels
@@ -50,6 +51,10 @@ export default async function StudentVocabularyPage() {
 
   if (!session?.user?.email) {
     redirect("/portal/login")
+  }
+
+  if (session.user.role !== USER_ROLE.STUDENT) {
+    notFound()
   }
 
   const { hskLevels, progress, studentId } = await getVocabularyData(session.user.email)

@@ -1,0 +1,85 @@
+graph TD
+  subgraph LANDING["🌐 Landing / Public Site"]
+    direction TB
+    L_EXIST["✅ Hero · Features · Courses · Reviews · Stats · About · SEO"]
+    L_P1["⚡ P1: Inline lead form · Trial CTA · Sitemap+robots"]
+    L_P2["📋 P2: FAQ · HSK path visual · Vocab preview · Teacher team"]
+  end
+
+  subgraph ADMIN["🔴 Admin Portal — SYSTEM_ADMIN"]
+    direction TB
+    subgraph ADMIN_CMS["CMS (9 modules)"]
+      A_CMS["✅ Hero · Courses · HSK Levels · Categories\nAlbums · Reviews · Features · CTA Stats · SEO"]
+    end
+    subgraph ADMIN_MGMT["Management"]
+      A_DASH["⚠ Dashboard — Improve P2"]
+      A_USERS["✅ Users (CRUD)"]
+      A_REG["⚠ Registrations — Pipeline P1"]
+      A_TEACHERS["❌ Teacher Management — P2"]
+      A_FINANCE["📌 Finance / Tuition — Todo"]
+    end
+  end
+
+  subgraph TEACHER["🟡 Teacher Portal — TEACHER"]
+    direction TB
+    T_DASH["✅ Dashboard"]
+    T_CLASSES["✅ Classes + Class Detail"]
+    T_STUDENTS["✅ Students (own class)"]
+    T_SCHED["✅ Schedule + Google Calendar"]
+    T_ATTEND["✅ Attendance + Excel Export"]
+    T_ASSIGN["✅ Assignments + Grading"]
+    T_GRADE["📌 Grade Book — Todo"]
+    T_QUIZ_BUG["🐛 P0 BUG: Quizzes nav → notFound()"]
+  end
+
+  subgraph STUDENT["🟢 Student Portal — STUDENT"]
+    direction TB
+    S_DASH["✅ Dashboard (continue learning + streak)"]
+    S_SCHED["✅ Schedule"]
+    S_CLASSES["✅ Classes (enrolled)"]
+    S_ATTEND["✅ Attendance (read-only)"]
+    S_ASSIGN["✅ Assignments (submit + view)"]
+    S_PRACTICE["✅ Practice SRS — 5 tabs\n(Flashcard · Quiz · Listen · Write · Lookup)"]
+    S_VOC["✅ Vocabulary Browse"]
+    S_BOOK["⚠ Bookmarks — Verify field mapping"]
+    S_PROG["✅ Progress Tracking"]
+    S_QUIZ["🚧 Quizzes — Stub P2"]
+  end
+
+  subgraph SHARED["⚡ All Roles"]
+    SH_NOTIF["✅ Realtime Notifications (Supabase)"]
+    SH_CHAT["⚠ AI Chatbot (hidden) — Improve P1"]
+    SH_PROFILE["✅ User Profile"]
+  end
+
+  subgraph INTEGRATIONS["🔌 Integrations"]
+    I_GCAL["✅ Google Calendar Sync (Teacher)"]
+    I_EXCEL["✅ ExcelJS Attendance Export"]
+    I_STORAGE["✅ Supabase Storage (Avatar + Docs)"]
+    I_DS["✅ DeepSeek AI (chatbot backend)"]
+    I_OG["✅ OG Image Generation"]
+  end
+
+  subgraph TODO["📌 Todo (not on active roadmap)"]
+    TD_FIN["Finance / Tuition — schema change needed"]
+    TD_SAL["Teacher Salary — schema change needed"]
+    TD_GRADE["Grade Book"]
+    TD_EVAL["Periodic Evaluations / Formal Tests"]
+  end
+
+  subgraph P0_BUGS["🔴 P0 Blockers"]
+    B1["All portal modules: loading.tsx missing"]
+    B2["All portal modules: error.tsx missing"]
+    B3["RBAC Layer 3: not confirmed all pages"]
+    B4["Teacher quizzes nav → notFound()"]
+    B5["documents bucket: public access"]
+    B6["Dual Supabase URLs in next.config.ts"]
+    B7["Verify landing pages build (landing/common deleted)"]
+  end
+
+  LANDING --> ADMIN
+  LANDING --> STUDENT
+  ADMIN --> SHARED
+  TEACHER --> SHARED
+  STUDENT --> SHARED
+  SHARED --> INTEGRATIONS

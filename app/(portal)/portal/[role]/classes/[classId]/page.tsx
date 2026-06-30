@@ -1,6 +1,9 @@
 import { auth } from "@/auth"
-import { redirect } from "next/navigation"
+import { redirect, notFound } from "next/navigation"
+import { prisma } from "@/lib/prisma"
 import ClassDetailView from "@/components/portal/classes/ClassDetailView"
+import { roleToRoute } from "@/lib/utils/auth"
+import { USER_ROLE } from "@/constants/portal/roles"
 
 export default async function ClassDetailPage({
   params,
@@ -13,7 +16,28 @@ export default async function ClassDetailPage({
     redirect("/portal")
   }
 
-  const { classId, role } = await params
+  const { classId, role: urlRole } = await params
 
-  return <ClassDetailView classId={classId} role={role} />
+  const classRecord = await prisma.portalClass.findUnique({
+    where: { id: classId },
+    select: {
+      id: true,
+      teacherId: true,
+      enrollments: {
+        where: { studentId: session.user.id },
+        select: { id: true },
+      },
+    },
+  })
+
+  if (!classRecord) notFound()
+
+  if (urlRole === roleToRoute(USER_ROLE.TEACHER) && classRecord.teacherId !== session.user.id) {
+    notFound()
+  }
+  if (urlRole === roleToRoute(USER_ROLE.STUDENT) && classRecord.enrollments.length === 0) {
+    notFound()
+  }
+
+  return <ClassDetailView classId={classId} role={urlRole} />
 }

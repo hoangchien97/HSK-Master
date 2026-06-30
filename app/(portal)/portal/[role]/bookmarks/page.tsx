@@ -1,11 +1,9 @@
 import { auth } from "@/auth"
-import { redirect } from "next/navigation"
-import { PrismaClient } from "@prisma/client"
+import { redirect, notFound } from "next/navigation"
+import { prisma } from "@/lib/prisma"
 import BookmarksClient from "./BookmarksClient"
-
 import { ItemProgressStatus } from "@/enums/portal/common"
-
-const prisma = new PrismaClient()
+import { USER_ROLE } from "@/constants/portal/roles"
 
 async function getStudentBookmarks(email: string) {
   const user = await prisma.portalUser.findUnique({
@@ -50,6 +48,10 @@ export default async function StudentBookmarksPage() {
 
   if (!session?.user?.email) {
     redirect("/portal/login")
+  }
+
+  if (session.user.role !== USER_ROLE.STUDENT) {
+    notFound()
   }
 
   const { bookmarks, studentId } = await getStudentBookmarks(session.user.email)

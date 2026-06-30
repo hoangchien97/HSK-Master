@@ -148,12 +148,6 @@ const teacherNavItems: NavItem[] = [
     icon: FileText,
     roles: [USER_ROLE.TEACHER],
   },
-  {
-    href: "/portal/teacher/quizzes",
-    label: "Bài kiểm tra",
-    icon: ClipboardCheck,
-    roles: [USER_ROLE.TEACHER],
-  },
 ]
 
 // Student navigation items
